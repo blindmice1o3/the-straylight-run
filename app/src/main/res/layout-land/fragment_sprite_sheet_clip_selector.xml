@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".spritesheetclipselector.SpriteSheetClipSelectorFragment">
+
+    <com.jackingaming.thestraylightrun.spritesheetclipselector.views.MyImageView
+        android:id="@+id/iv_sprite_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:background="@color/teal_200"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_screen_x"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/tv_screen_y"
+        app:layout_constraintStart_toEndOf="@id/iv_sprite_sheet"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_screen_y"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_datasource_x"
+        app:layout_constraintStart_toEndOf="@id/iv_sprite_sheet"
+        app:layout_constraintTop_toBottomOf="@id/tv_screen_x"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_datasource_x"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/tv_datasource_y"
+        app:layout_constraintStart_toEndOf="@id/iv_sprite_sheet"
+        app:layout_constraintTop_toBottomOf="@id/tv_screen_y"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_datasource_y"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_sprite_sheet"
+        app:layout_constraintTop_toBottomOf="@id/tv_datasource_x"
+        app:layout_constraintVertical_weight="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,15 +15,41 @@ import androidx.annotation.Nullable;
 public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
         implements View.OnTouchListener {
     private static final String TAG = MyImageView.class.getSimpleName();
-    private float x = 0f;
-    private float y = 0f;
-    private float width = 160f;
-    private float height = 160f;
 
-    private Paint paintText = new Paint();
-    private Paint paintFill = new Paint();
-    private Paint paintStroke = new Paint();
-    private RectF rectF = new RectF(x, y, x + width, y + height);
+    public interface ValueChangedListener {
+        void onXRectSelectedChanged(float xScreen);
+
+        void onYRectSelectedChanged(float yScreen);
+
+        void onXDatasourceChanged(float xDatasource);
+
+        void onYDatasourceChanged(float yDatasource);
+    }
+
+    private ValueChangedListener listener;
+
+    public void setListener(ValueChangedListener listener) {
+        this.listener = listener;
+    }
+
+    private static final float STROKE_WIDTH_DEFAULT = 1f;
+    private static final float WIDTH_RECT_SELECTED_DEFAULT = 160f;
+    private static final float HEIGHT_RECT_SELECTED_DEFAULT = 160f;
+
+    private float xRectSelected = 0f;
+    private float yRectSelected = 0f;
+    private RectF rectSelected = new RectF(xRectSelected, yRectSelected, WIDTH_RECT_SELECTED_DEFAULT, HEIGHT_RECT_SELECTED_DEFAULT);
+    private Paint paintRectSelectedFill = new Paint();
+    private Paint paintRectSelectedStroke = new Paint();
+    private float xDatasource;
+    private float yDatasource;
+    private float widthDatasource;
+    private float heightDatasource;
+
+    private int widthScreen;
+    private int heightScreen;
+    private float scaleHorizontal;
+    private float scaleVertical;
 
     public MyImageView(Context context) {
         this(context, null);
@@ -37,44 +63,50 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void initPaint() {
-        paintText.setAntiAlias(true);
-        paintText.setColor(Color.RED);
-        paintText.setTextSize(20f);
+        paintRectSelectedFill.setAntiAlias(true);
+        paintRectSelectedFill.setStyle(Paint.Style.FILL);
+        paintRectSelectedFill.setColor(Color.YELLOW);
+        paintRectSelectedFill.setAlpha(0x33);   // 0xff=255 in decimal
 
-        paintFill.setAntiAlias(true);
-        paintFill.setStyle(Paint.Style.FILL);
-        paintFill.setColor(Color.YELLOW);
-        paintFill.setAlpha(0x33);   // 0xff=255 in decimal
+        paintRectSelectedStroke.setAntiAlias(true);
+        paintRectSelectedStroke.setStyle(Paint.Style.STROKE);
+        paintRectSelectedStroke.setColor(Color.BLUE);
+        paintRectSelectedStroke.setStrokeWidth(STROKE_WIDTH_DEFAULT);
+        paintRectSelectedStroke.setAlpha(0x33); // 0xff=255 in decimal
+    }
 
-        paintStroke.setAntiAlias(true);
-        paintStroke.setStyle(Paint.Style.STROKE);
-        paintStroke.setColor(Color.BLUE);
-        paintStroke.setStrokeWidth(1f);
-        paintStroke.setAlpha(0x33); // 0xff=255 in decimal
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        Log.d(TAG, "onSizeChanged()");
+
+        widthScreen = w;
+        heightScreen = h;
+        Log.i(TAG, "widthScreen: " + widthScreen);
+        Log.i(TAG, "heightScreen: " + heightScreen);
+
+        if (getDrawable() != null) {
+            Log.d(TAG, "getDrawable() != null");
+
+            widthDatasource = ((float) getDrawable().getIntrinsicWidth());
+            heightDatasource = ((float) getDrawable().getIntrinsicHeight());
+            Log.i(TAG, "widthDatasource: " + widthDatasource);
+            Log.i(TAG, "heightDatasource: " + heightDatasource);
+
+            scaleHorizontal = widthScreen / widthDatasource;
+            scaleVertical = heightScreen / heightDatasource;
+            Log.i(TAG, "scaleHorizontal: " + scaleHorizontal);
+            Log.i(TAG, "scaleVertical: " + scaleVertical);
+        } else {
+            Log.d(TAG, "getDrawable() == null");
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(rectF, paintFill);
-        canvas.drawRect(rectF, paintStroke);
-
-        Log.i(TAG, "widthScreen: " + getWidth());
-        Log.i(TAG, "heightScreen: " + getHeight());
-
-        Log.i(TAG, "widthDatasource: " + getDrawable().getIntrinsicWidth());
-        Log.i(TAG, "heightDatasource: " + getDrawable().getIntrinsicHeight());
-
-        float ratioHorizontal = getWidth() / getDrawable().getIntrinsicWidth();
-        float ratioVertical = getHeight() / getDrawable().getIntrinsicHeight();
-        Log.i(TAG, "ratioHorizontal: " + ratioHorizontal);
-        Log.i(TAG, "ratioVertical: " + ratioHorizontal);
-
-        canvas.drawText("xScreen: " + x, 250, 200, paintText);
-        canvas.drawText("yScreen: " + y, 250, 230, paintText);
-
-        canvas.drawText("xDatasource: " + (x / ratioHorizontal), 250, 270, paintText);
-        canvas.drawText("yDatasource: " + (y / ratioVertical), 250, 300, paintText);
+        canvas.drawRect(rectSelected, paintRectSelectedFill);
+        canvas.drawRect(rectSelected, paintRectSelectedStroke);
     }
 
     @Override
@@ -82,26 +114,29 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
         Log.d(TAG, "onTouch(View, MotionEvent)");
 
         switch (motionEvent.getAction()) {
+            // DOWN, MOVE, and UP will all do the same thing.
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "onTouch(View, MotionEvent) ACTION_DOWN");
-                return true;
             case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "onTouch(View, MotionEvent) ACTION_MOVE");
-                x = motionEvent.getX();
-                y = motionEvent.getY();
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, MotionEvent.actionToString(motionEvent.getAction()));
 
-                rectF.left = x;
-                rectF.top = y;
-                rectF.right = rectF.left + width;
-                rectF.bottom = rectF.top + height;
+                xRectSelected = motionEvent.getX();
+                yRectSelected = motionEvent.getY();
+                xDatasource = xRectSelected / scaleHorizontal;
+                yDatasource = yRectSelected / scaleVertical;
+                listener.onXRectSelectedChanged(xRectSelected);
+                listener.onYRectSelectedChanged(yRectSelected);
+                listener.onXDatasourceChanged(xDatasource);
+                listener.onYDatasourceChanged(yDatasource);
 
+                rectSelected.left = xRectSelected;
+                rectSelected.top = yRectSelected;
+                rectSelected.right = rectSelected.left + WIDTH_RECT_SELECTED_DEFAULT;
+                rectSelected.bottom = rectSelected.top + HEIGHT_RECT_SELECTED_DEFAULT;
                 view.invalidate();
                 return true;
-            case MotionEvent.ACTION_UP:
-                Log.d(TAG, "onTouch(View, MotionEvent) ACTION_UP");
-                return true;
             default:
-                Log.e(TAG, "onTouch(View, MotionEvent) default-block");
+                Log.e(TAG, "default-block");
                 return false;
         }
     }
