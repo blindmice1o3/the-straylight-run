@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/options_item_sprite_sheet_clip_selector"
+        android:title="sprite sheet 3.0" />
+
+</menu>
