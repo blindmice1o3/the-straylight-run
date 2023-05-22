@@ -1,14 +1,17 @@
 package com.jackingaming.thestraylightrun.spritesheetclipselector;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.spritesheetclipselector.views.MyImageView;
 
 public class SpriteSheetClipSelectorFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
@@ -43,5 +46,12 @@ public class SpriteSheetClipSelectorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_sprite_sheet_clip_selector, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        MyImageView myImageView = view.findViewById(R.id.iv_sprite_sheet);
+        myImageView.setImageResource(R.drawable.pokemon_mystery_dungeon_red_rescue_team_snorlax);
     }
 }
