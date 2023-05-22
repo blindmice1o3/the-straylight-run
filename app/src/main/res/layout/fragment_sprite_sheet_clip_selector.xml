@@ -8,10 +8,11 @@
 
     <com.jackingaming.thestraylightrun.spritesheetclipselector.views.MyImageView
         android:id="@+id/iv_sprite_sheet"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:background="@color/teal_200"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

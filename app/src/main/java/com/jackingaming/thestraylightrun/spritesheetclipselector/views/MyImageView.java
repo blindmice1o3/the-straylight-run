@@ -20,6 +20,7 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
     private float width = 160f;
     private float height = 160f;
 
+    private Paint paintText = new Paint();
     private Paint paintFill = new Paint();
     private Paint paintStroke = new Paint();
     private RectF rectF = new RectF(x, y, x + width, y + height);
@@ -36,6 +37,10 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void initPaint() {
+        paintText.setAntiAlias(true);
+        paintText.setColor(Color.RED);
+        paintText.setTextSize(20f);
+
         paintFill.setAntiAlias(true);
         paintFill.setStyle(Paint.Style.FILL);
         paintFill.setColor(Color.YELLOW);
@@ -53,6 +58,23 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
         super.onDraw(canvas);
         canvas.drawRect(rectF, paintFill);
         canvas.drawRect(rectF, paintStroke);
+
+        Log.i(TAG, "widthScreen: " + getWidth());
+        Log.i(TAG, "heightScreen: " + getHeight());
+
+        Log.i(TAG, "widthDatasource: " + getDrawable().getIntrinsicWidth());
+        Log.i(TAG, "heightDatasource: " + getDrawable().getIntrinsicHeight());
+
+        float ratioHorizontal = getWidth() / getDrawable().getIntrinsicWidth();
+        float ratioVertical = getHeight() / getDrawable().getIntrinsicHeight();
+        Log.i(TAG, "ratioHorizontal: " + ratioHorizontal);
+        Log.i(TAG, "ratioVertical: " + ratioHorizontal);
+
+        canvas.drawText("xScreen: " + x, 250, 200, paintText);
+        canvas.drawText("yScreen: " + y, 250, 230, paintText);
+
+        canvas.drawText("xDatasource: " + (x / ratioHorizontal), 250, 270, paintText);
+        canvas.drawText("yDatasource: " + (y / ratioVertical), 250, 300, paintText);
     }
 
     @Override
@@ -64,11 +86,15 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
                 Log.d(TAG, "onTouch(View, MotionEvent) ACTION_DOWN");
                 return true;
             case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "onTouch(View, MotionEvent) ACTION_MOVE (" + motionEvent.getX() + ", " + motionEvent.getY() + ")");
-                rectF.left = motionEvent.getX();
-                rectF.top = motionEvent.getY();
+                Log.d(TAG, "onTouch(View, MotionEvent) ACTION_MOVE");
+                x = motionEvent.getX();
+                y = motionEvent.getY();
+
+                rectF.left = x;
+                rectF.top = y;
                 rectF.right = rectF.left + width;
                 rectF.bottom = rectF.top + height;
+
                 view.invalidate();
                 return true;
             case MotionEvent.ACTION_UP:
