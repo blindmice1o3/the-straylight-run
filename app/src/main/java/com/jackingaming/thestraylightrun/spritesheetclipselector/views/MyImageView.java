@@ -15,15 +15,17 @@ import androidx.annotation.Nullable;
 public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
         implements View.OnTouchListener {
     private static final String TAG = MyImageView.class.getSimpleName();
+    public static final float DEFAULT_WIDTH_IN_PIXEL = 16f;
+    public static final float DEFAULT_HEIGHT_IN_PIXEL = 16f;
 
     public interface ValueChangedListener {
-        void onXRectSelectedChanged(float xScreen);
+        void onRectSelectedXChanged(float xScreen);
 
-        void onYRectSelectedChanged(float yScreen);
+        void onRectSelectedYChanged(float yScreen);
 
-        void onXDatasourceChanged(float xDatasource);
+        void onDatasourceXChanged(float xDatasource);
 
-        void onYDatasourceChanged(float yDatasource);
+        void onDatasourceYChanged(float yDatasource);
     }
 
     private ValueChangedListener listener;
@@ -33,23 +35,26 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private static final float STROKE_WIDTH_DEFAULT = 1f;
-    private static final float WIDTH_RECT_SELECTED_DEFAULT = 160f;
-    private static final float HEIGHT_RECT_SELECTED_DEFAULT = 160f;
 
-    private float xRectSelected = 0f;
-    private float yRectSelected = 0f;
-    private RectF rectSelected = new RectF(xRectSelected, yRectSelected, WIDTH_RECT_SELECTED_DEFAULT, HEIGHT_RECT_SELECTED_DEFAULT);
     private Paint paintRectSelectedFill = new Paint();
     private Paint paintRectSelectedStroke = new Paint();
-    private float xDatasource;
-    private float yDatasource;
-    private float widthDatasource;
-    private float heightDatasource;
+    private float rectSelectedDatasourceX;
+    private float rectSelectedDatasourceY;
+    private float rectSelectedDatasourceWidth;
+    private float rectSelectedDatasourceHeight;
 
-    private int widthScreen;
-    private int heightScreen;
+    private int screenWidth;
+    private int screenHeight;
+    private float datasourceWidth;
+    private float datasourceHeight;
     private float scaleHorizontal;
     private float scaleVertical;
+
+    private float rectSelectedScreenX;
+    private float rectSelectedScreenY;
+    private float rectSelectedScreenWidth;
+    private float rectSelectedScreenHeight;
+    private RectF rectSelectedScreen;
 
     public MyImageView(Context context) {
         this(context, null);
@@ -80,33 +85,49 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
         super.onSizeChanged(w, h, oldw, oldh);
         Log.d(TAG, "onSizeChanged()");
 
-        widthScreen = w;
-        heightScreen = h;
-        Log.i(TAG, "widthScreen: " + widthScreen);
-        Log.i(TAG, "heightScreen: " + heightScreen);
+        screenWidth = w;
+        screenHeight = h;
+        Log.i(TAG, "widthScreen: " + screenWidth);
+        Log.i(TAG, "heightScreen: " + screenHeight);
 
         if (getDrawable() != null) {
             Log.d(TAG, "getDrawable() != null");
 
-            widthDatasource = ((float) getDrawable().getIntrinsicWidth());
-            heightDatasource = ((float) getDrawable().getIntrinsicHeight());
-            Log.i(TAG, "widthDatasource: " + widthDatasource);
-            Log.i(TAG, "heightDatasource: " + heightDatasource);
+            datasourceWidth = ((float) getDrawable().getIntrinsicWidth());
+            datasourceHeight = ((float) getDrawable().getIntrinsicHeight());
+            Log.i(TAG, "widthDatasource: " + datasourceWidth);
+            Log.i(TAG, "heightDatasource: " + datasourceHeight);
 
-            scaleHorizontal = widthScreen / widthDatasource;
-            scaleVertical = heightScreen / heightDatasource;
+            scaleHorizontal = screenWidth / datasourceWidth;
+            scaleVertical = screenHeight / datasourceHeight;
             Log.i(TAG, "scaleHorizontal: " + scaleHorizontal);
             Log.i(TAG, "scaleVertical: " + scaleVertical);
+
+            rectSelectedScreenWidth = convertToScreenCoordinateSystemHorizontally(DEFAULT_WIDTH_IN_PIXEL);
+            rectSelectedScreenHeight = convertToScreenCoordinateSystemVertically(DEFAULT_HEIGHT_IN_PIXEL);
+            rectSelectedScreen = new RectF(rectSelectedScreenX, rectSelectedScreenY, rectSelectedScreenWidth, rectSelectedScreenHeight);
         } else {
             Log.d(TAG, "getDrawable() == null");
         }
     }
 
+    public void setRectSelectedScreenWidth(float rectSelectedScreenWidth) {
+        this.rectSelectedScreenWidth = rectSelectedScreenWidth;
+        rectSelectedScreen.right = rectSelectedScreen.left + rectSelectedScreenWidth;
+        invalidate();
+    }
+
+    public void setRectSelectedScreenHeight(float rectSelectedScreenHeight) {
+        this.rectSelectedScreenHeight = rectSelectedScreenHeight;
+        rectSelectedScreen.bottom = rectSelectedScreen.top + rectSelectedScreenHeight;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(rectSelected, paintRectSelectedFill);
-        canvas.drawRect(rectSelected, paintRectSelectedStroke);
+        canvas.drawRect(rectSelectedScreen, paintRectSelectedFill);
+        canvas.drawRect(rectSelectedScreen, paintRectSelectedStroke);
     }
 
     @Override
@@ -120,24 +141,40 @@ public class MyImageView extends androidx.appcompat.widget.AppCompatImageView
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, MotionEvent.actionToString(motionEvent.getAction()));
 
-                xRectSelected = motionEvent.getX();
-                yRectSelected = motionEvent.getY();
-                xDatasource = xRectSelected / scaleHorizontal;
-                yDatasource = yRectSelected / scaleVertical;
-                listener.onXRectSelectedChanged(xRectSelected);
-                listener.onYRectSelectedChanged(yRectSelected);
-                listener.onXDatasourceChanged(xDatasource);
-                listener.onYDatasourceChanged(yDatasource);
+                rectSelectedScreenX = motionEvent.getX();
+                rectSelectedScreenY = motionEvent.getY();
+                rectSelectedDatasourceX = convertToDatasourceCoordinateSystemHorizontally(rectSelectedScreenX);
+                rectSelectedDatasourceY = convertToDatasourceCoordinateSystemVertically(rectSelectedScreenY);
+                listener.onRectSelectedXChanged(rectSelectedScreenX);
+                listener.onRectSelectedYChanged(rectSelectedScreenY);
+                listener.onDatasourceXChanged(rectSelectedDatasourceX);
+                listener.onDatasourceYChanged(rectSelectedDatasourceY);
 
-                rectSelected.left = xRectSelected;
-                rectSelected.top = yRectSelected;
-                rectSelected.right = rectSelected.left + WIDTH_RECT_SELECTED_DEFAULT;
-                rectSelected.bottom = rectSelected.top + HEIGHT_RECT_SELECTED_DEFAULT;
+                rectSelectedScreen.left = rectSelectedScreenX;
+                rectSelectedScreen.top = rectSelectedScreenY;
+                rectSelectedScreen.right = rectSelectedScreen.left + rectSelectedScreenWidth;
+                rectSelectedScreen.bottom = rectSelectedScreen.top + rectSelectedScreenHeight;
                 view.invalidate();
                 return true;
             default:
                 Log.e(TAG, "default-block");
                 return false;
         }
+    }
+
+    public float convertToDatasourceCoordinateSystemHorizontally(float valueScreenCoordinateSystem) {
+        return valueScreenCoordinateSystem / scaleHorizontal;
+    }
+
+    public float convertToDatasourceCoordinateSystemVertically(float valueScreenCoordinateSystem) {
+        return valueScreenCoordinateSystem / scaleVertical;
+    }
+
+    public float convertToScreenCoordinateSystemHorizontally(float valueDatasourceCoordinateSystem) {
+        return valueDatasourceCoordinateSystem * scaleHorizontal;
+    }
+
+    public float convertToScreenCoordinateSystemVertically(float valueDatasourceCoordinateSystem) {
+        return valueDatasourceCoordinateSystem * scaleVertical;
     }
 }

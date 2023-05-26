@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".spritesheetclipselector.SpriteSheetClipSelectorFragment">
+    tools:context=".spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment">
 
     <com.jackingaming.thestraylightrun.spritesheetclipselector.views.MyImageView
         android:id="@+id/iv_sprite_sheet"
@@ -21,8 +21,6 @@
         android:id="@+id/tv_screen_x"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/purple_500"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@id/tv_screen_y"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +50,40 @@
         android:id="@+id/tv_datasource_y"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_datasource_x"
         app:layout_constraintTop_toBottomOf="@id/iv_sprite_sheet" />
+
+    <TextView
+        android:id="@+id/tv_datasource_width"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/tv_datasource_height"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_screen_x" />
+
+    <TextView
+        android:id="@+id/tv_datasource_height"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/button_dialog"
+        app:layout_constraintStart_toEndOf="@id/tv_datasource_width"
+        app:layout_constraintTop_toBottomOf="@id/tv_screen_y" />
+
+    <Button
+        android:id="@+id/button_dialog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="dialog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_datasource_height"
+        app:layout_constraintTop_toBottomOf="@id/tv_screen_x" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
