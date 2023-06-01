@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/options_item_sprite_sheet_clip_selector"
-        android:title="sprite sheet 3.0" />
+        android:icon="@drawable/ic_menu_find"
+        android:title="sprite sheet 3.0"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/options_item_next_week_tonight"
+        android:icon="@drawable/ic_menu_emoticons"
+        android:title="next week tonight"
+        app:showAsAction="always" />
 
 </menu>

@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jackingaming.thestraylightrun.accelerometer.AccelerometerFragment;
+import com.jackingaming.thestraylightrun.nextweektonight.controllers.NextWeekTonightFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.options_item_sprite_sheet_clip_selector:
                 replaceFragmentInContainer(SpriteSheetClipSelectorFragment.newInstance(null, null));
+                return true;
+            case R.id.options_item_next_week_tonight:
+                replaceFragmentInContainer(NextWeekTonightFragment.newInstance(null, null));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
