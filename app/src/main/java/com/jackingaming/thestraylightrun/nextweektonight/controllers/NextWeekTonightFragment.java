@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,6 +25,8 @@ import java.util.List;
 
 public class NextWeekTonightFragment extends Fragment {
     public static final String TAG = NextWeekTonightFragment.class.getSimpleName();
+    private static final int CAMERA_ID_BACK_CAMERA = 0;
+    private static final int CAMERA_ID_FRONT_CAMERA = 1;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -91,6 +94,8 @@ public class NextWeekTonightFragment extends Fragment {
                     return;
                 }
 
+                setCameraDisplayOrientation(CAMERA_ID_BACK_CAMERA, camera);
+
                 // The surface has changed size; update the camera preview size
                 Camera.Parameters parameters = camera.getParameters();
                 Camera.Size s = getBestSupportedSize(parameters.getSupportedPreviewSizes(), i1, i2);
@@ -123,6 +128,38 @@ public class NextWeekTonightFragment extends Fragment {
         animation.start();
     }
 
+    private void setCameraDisplayOrientation(int cameraId, Camera camera) {
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+
+        int rotation = getActivity().getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360; // compensate the mirror
+        } else { // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        camera.setDisplayOrientation(result);
+    }
+
     private Camera.Size getBestSupportedSize(List<Camera.Size> sizes, int width, int height) {
         Camera.Size bestSize = sizes.get(0);
         int largestArea = bestSize.width * bestSize.height;
@@ -146,7 +183,7 @@ public class NextWeekTonightFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume()");
-        camera = Camera.open(0);
+        camera = Camera.open(CAMERA_ID_BACK_CAMERA);
     }
 
     @Override
