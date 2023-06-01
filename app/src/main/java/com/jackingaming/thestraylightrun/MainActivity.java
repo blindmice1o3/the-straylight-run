@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.jackingaming.thestraylightrun.accelerometer.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.controllers.NextWeekTonightFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
+import com.jackingaming.thestraylightrun.textviewasmarquee.TextViewAsMarqueeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.options_item_next_week_tonight:
                 replaceFragmentInContainer(NextWeekTonightFragment.newInstance(null, null));
+                return true;
+            case R.id.options_item_text_view_as_marquee:
+                replaceFragmentInContainer(TextViewAsMarqueeFragment.newInstance(null, null));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
