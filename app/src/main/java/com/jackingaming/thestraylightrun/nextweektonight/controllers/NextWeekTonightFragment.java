@@ -120,12 +120,19 @@ public class NextWeekTonightFragment extends Fragment {
         });
 
         animatedLogoView = view.findViewById(R.id.animated_logo_view);
-        ObjectAnimator animation = ObjectAnimator.ofFloat(animatedLogoView, "xLogo", 800f);
-        animation.setInterpolator(new AccelerateDecelerateInterpolator());
-        animation.setDuration(5000L);
-        animation.setRepeatCount(-1);
-        animation.setRepeatMode(ObjectAnimator.REVERSE);
-        animation.start();
+        ObjectAnimator animationRight = ObjectAnimator.ofFloat(animatedLogoView, "xLogo1", -500f, 0f);
+        animationRight.setInterpolator(new AccelerateDecelerateInterpolator());
+        animationRight.setDuration(8000L);
+        animationRight.setRepeatCount(-1);
+        animationRight.setRepeatMode(ObjectAnimator.REVERSE);
+        animationRight.start();
+
+        ObjectAnimator animationLeft = ObjectAnimator.ofFloat(animatedLogoView, "xLogo2", 0f, -500f);
+        animationLeft.setInterpolator(new AccelerateDecelerateInterpolator());
+        animationLeft.setDuration(5000L);
+        animationLeft.setRepeatCount(-1);
+        animationLeft.setRepeatMode(ObjectAnimator.REVERSE);
+        animationLeft.start();
     }
 
     private void setCameraDisplayOrientation(int cameraId, Camera camera) {
