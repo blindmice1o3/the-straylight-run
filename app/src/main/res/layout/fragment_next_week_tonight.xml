@@ -6,34 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".nextweektonight.controllers.NextWeekTonightFragment">
 
-    <com.jackingaming.thestraylightrun.nextweektonight.views.AnimatedLogoView
-        android:id="@+id/animated_logo_view"
+    <SurfaceView
+        android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/invisible_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/surface_view"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.jackingaming.thestraylightrun.nextweektonight.views.AnimatedLogoView
+            android:id="@+id/animated_logo_view"
+            android:layout_width="250dp"
+            android:layout_height="match_parent" />
 
-        <SurfaceView
-            android:id="@+id/surface_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="3"
-            app:layout_constraintStart_toEndOf="@id/invisible_view"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_margin="75dp"
+            android:background="@color/white"
+            android:inset="16dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/harvest_moon_natsume" />
+    </FrameLayout>
 </FrameLayout>
