@@ -1,12 +1,13 @@
-package com.jackingaming.thestraylightrun.nextweektonight.controllers;
+package com.jackingaming.thestraylightrun.nextweektonight;
 
-import android.animation.ObjectAnimator;
 import android.hardware.Camera;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,12 +16,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.nextweektonight.views.AnimatedLogoView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NextWeekTonightFragment extends Fragment {
@@ -34,7 +34,7 @@ public class NextWeekTonightFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private AnimatedLogoView animatedLogoView;
+    private RecyclerView recyclerView;
     private SurfaceView surfaceView;
     private Camera camera;
 
@@ -119,20 +119,21 @@ public class NextWeekTonightFragment extends Fragment {
             }
         });
 
-        animatedLogoView = view.findViewById(R.id.animated_logo_view);
-        ObjectAnimator animationRight = ObjectAnimator.ofFloat(animatedLogoView, "xLogo1", -500f, 0f);
-        animationRight.setInterpolator(new AccelerateDecelerateInterpolator());
-        animationRight.setDuration(8000L);
-        animationRight.setRepeatCount(-1);
-        animationRight.setRepeatMode(ObjectAnimator.REVERSE);
-        animationRight.start();
+        StringBuilder sb = new StringBuilder();
+        String logo = "Next Week Tonight";
+        for (int i = 0; i < 100; i++) {
+            sb.append(logo + " ");
+        }
+        String logoRepeated100Times = sb.toString();
+        List<String> rowsOfLogoRepeated100Times = new ArrayList();
+        for (int i = 0; i < 100; i++) {
+            rowsOfLogoRepeated100Times.add(logoRepeated100Times);
+        }
+        AnimatedTextViewAdapter adapter = new AnimatedTextViewAdapter(rowsOfLogoRepeated100Times);
 
-        ObjectAnimator animationLeft = ObjectAnimator.ofFloat(animatedLogoView, "xLogo2", 0f, -500f);
-        animationLeft.setInterpolator(new AccelerateDecelerateInterpolator());
-        animationLeft.setDuration(5000L);
-        animationLeft.setRepeatCount(-1);
-        animationLeft.setRepeatMode(ObjectAnimator.REVERSE);
-        animationLeft.start();
+        recyclerView = view.findViewById(R.id.rv_animated_textview);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void setCameraDisplayOrientation(int cameraId, Camera camera) {

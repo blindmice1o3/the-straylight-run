@@ -14,10 +14,4 @@
         android:title="next week tonight"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/options_item_text_view_as_marquee"
-        android:icon="@drawable/ic_menu_home"
-        android:title="textview as marquee"
-        app:showAsAction="always" />
-
 </menu>
