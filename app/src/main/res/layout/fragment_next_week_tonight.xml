@@ -21,13 +21,11 @@
             android:layout_height="match_parent"
             android:background="@color/white" />
 
-        <ImageView
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_presentation_box"
             android:layout_width="350dp"
             android:layout_height="350dp"
             android:layout_margin="75dp"
-            android:background="@color/white"
-            android:inset="16dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/harvest_moon_natsume" />
+            android:background="@color/white" />
     </FrameLayout>
 </FrameLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,7 @@ public class NextWeekTonightFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
+    private FragmentContainerView fcvPresentationBox;
     private SurfaceView surfaceView;
     private Camera camera;
 
@@ -134,6 +136,17 @@ public class NextWeekTonightFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rv_animated_textview);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ImageViewFragment fragmentImageView = ImageViewFragment.newInstance(null, null);
+        replaceFragmentInContainer(fragmentImageView);
+    }
+
+    private void replaceFragmentInContainer(Fragment fragment) {
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fcv_presentation_box, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void setCameraDisplayOrientation(int cameraId, Camera camera) {
