@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -20,6 +21,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.jackingaming.thestraylightrun.R;
 
@@ -38,6 +40,7 @@ public class NextWeekTonightFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private FrameLayout frameLayoutParent;
     private RecyclerView recyclerView;
     private FragmentContainerView fcvPresentationBox;
     private SurfaceView surfaceView;
@@ -84,6 +87,16 @@ public class NextWeekTonightFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
+        frameLayoutParent = view.findViewById(R.id.framelayout_parent);
+
+        frameLayoutParent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                VideoViewFragment videoViewFragment = VideoViewFragment.newInstance(null, null);
+                replaceFragmentInContainer(videoViewFragment);
+            }
+        });
+
         surfaceView = view.findViewById(R.id.surface_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -147,8 +160,8 @@ public class NextWeekTonightFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ImageViewFragment fragmentImageView = ImageViewFragment.newInstance(null, null);
-        replaceFragmentInContainer(fragmentImageView);
+        ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(null, null);
+        replaceFragmentInContainer(imageViewFragment);
     }
 
     private void replaceFragmentInContainer(Fragment fragment) {
