@@ -1,10 +1,12 @@
 package com.jackingaming.thestraylightrun.nextweektonight;
 
+import android.content.Context;
 import android.hardware.Camera;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.jackingaming.thestraylightrun.R;
 
@@ -51,6 +54,13 @@ public class NextWeekTonightFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach()");
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override
@@ -124,7 +134,7 @@ public class NextWeekTonightFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         String logo = "Next Week Tonight";
         for (int i = 0; i < 100; i++) {
-            sb.append(logo + " ");
+            sb.append(logo + "    ");
         }
         String logoRepeated100Times = sb.toString();
         List<String> rowsOfLogoRepeated100Times = new ArrayList();
@@ -198,6 +208,9 @@ public class NextWeekTonightFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart()");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+//        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     @Override
@@ -221,11 +234,20 @@ public class NextWeekTonightFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.i(TAG, "onStop()");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+//        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy()");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach()");
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }

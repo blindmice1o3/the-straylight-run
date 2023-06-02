@@ -3,7 +3,7 @@
     android:id="@+id/tv_rtl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="20dp"
     android:ellipsize="marquee"
     android:fadingEdge="horizontal"
     android:focusable="true"
@@ -13,8 +13,8 @@
     android:scrollHorizontally="true"
     android:singleLine="true"
     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-    android:textColor="#777777"
+    android:textColor="#999999"
     android:textDirection="rtl"
-    android:textSize="24sp">
+    android:textSize="16sp">
 
 </TextView>

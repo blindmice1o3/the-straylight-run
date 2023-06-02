@@ -17,15 +17,16 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_animated_textview"
-            android:layout_width="250dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
-            android:background="@color/white" />
+            android:background="#EEEEEE" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv_presentation_box"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
+            android:layout_width="400dp"
+            android:layout_height="300dp"
             android:layout_margin="75dp"
-            android:background="@color/white" />
+            android:background="@color/white"
+            android:padding="4dp" />
     </FrameLayout>
 </FrameLayout>
