@@ -22,7 +22,7 @@ import com.jackingaming.thestraylightrun.R;
 public class VideoViewFragment extends Fragment {
     public static final String TAG = VideoViewFragment.class.getSimpleName();
     private static final String POSITION_CURRENT = "position_current";
-    private static final String VIDEO_SAMPLE = "tv_news_recording_2020_05_01";
+    private static final String VIDEO_SAMPLE = "vid_20230603_145112";
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -134,8 +134,7 @@ public class VideoViewFragment extends Fragment {
 
         Uri videoUri = getMedia((VIDEO_SAMPLE));
         videoView.setVideoURI(videoUri);
-//        videoView.setMediaController(null);
-//        videoView.requestFocus();
+
         if (positionCurrent > 0) {
             // Indicates that the video was playing at some point.
             videoView.seekTo(positionCurrent);
