@@ -26,14 +26,14 @@ public class AnimatedTextViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemViewType(int position) {
-        Log.i(TAG, "getItemViewType() position: " + position);
+//        Log.i(TAG, "getItemViewType() position: " + position);
         return (position % 2 == 0) ? VIEW_TYPE_LTR : VIEW_TYPE_RTL;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.i(TAG, "onCreateViewHolder()");
+//        Log.i(TAG, "onCreateViewHolder()");
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case VIEW_TYPE_LTR:
@@ -51,7 +51,7 @@ public class AnimatedTextViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Log.i(TAG, "onBindViewHolder()");
+//        Log.i(TAG, "onBindViewHolder()");
         String logoRepeated100Times = rowsOfLogoRepeated100Times.get(position);
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_LTR:
@@ -72,7 +72,7 @@ public class AnimatedTextViewAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        Log.i(TAG, "getItemCount()");
+//        Log.i(TAG, "getItemCount()");
         return rowsOfLogoRepeated100Times.size();
     }
 

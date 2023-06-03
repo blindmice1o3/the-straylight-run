@@ -70,6 +70,7 @@ public class NextWeekTonightFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -88,7 +89,6 @@ public class NextWeekTonightFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
         frameLayoutParent = view.findViewById(R.id.framelayout_parent);
-
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,8 +160,13 @@ public class NextWeekTonightFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(null, null);
-        replaceFragmentInContainer(imageViewFragment);
+        if (getChildFragmentManager().findFragmentById(R.id.fcv_presentation_box) == null) {
+            Log.i(TAG, "NO fragment in presentation box");
+            ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(null, null);
+            replaceFragmentInContainer(imageViewFragment);
+        } else {
+            Log.i(TAG, "YES fragment in presentation box");
+        }
     }
 
     private void replaceFragmentInContainer(Fragment fragment) {
