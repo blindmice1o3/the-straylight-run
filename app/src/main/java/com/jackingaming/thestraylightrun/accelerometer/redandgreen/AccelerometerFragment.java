@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer;
+package com.jackingaming.thestraylightrun.accelerometer.redandgreen;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,16 +7,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jackingaming.thestraylightrun.R;
 
@@ -116,15 +114,28 @@ public class AccelerometerFragment extends Fragment
         // Intentionally empty
     }
 
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        sensorManager.unregisterListener(this);
+//    }
+
+
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
         sensorManager.unregisterListener(this);
+        super.onPause();
     }
 }

@@ -14,4 +14,10 @@
         android:title="next week tonight"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/options_item_game_controller"
+        android:icon="@drawable/ic_coins_s"
+        android:title="game controller"
+        app:showAsAction="always" />
+
 </menu>
