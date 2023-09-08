@@ -11,6 +11,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,7 +22,9 @@ import com.jackingaming.thestraylightrun.R;
 
 public class GameControllerActivity extends AppCompatActivity
         implements SensorEventListener {
+    public static final String TAG = GameControllerActivity.class.getSimpleName();
 
+    private float xAccelPrevious, yAccelPrevious = 0f;
     private float xPos, xAccel, xVel = 0.0f;
     private float yPos, yAccel, yVel = 0.0f;
     private float xMax, yMax;
@@ -79,9 +82,16 @@ public class GameControllerActivity extends AppCompatActivity
     }
 
     private void updateBall() {
+        float xAccelDelta = xAccel - xAccelPrevious;
+        float yAccelDelta = yAccel - yAccelPrevious;
+
+//        Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
+
         float frameTime = 0.666f;
-        xVel += (xAccel * frameTime);
-        yVel += (yAccel * frameTime);
+        xVel += (xAccelDelta * frameTime);
+        yVel += (yAccelDelta * frameTime);
+
+        Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
 
         float xDelta = (xVel / 2) * frameTime;
         float yDelta = (yVel / 2) * frameTime;
@@ -100,6 +110,9 @@ public class GameControllerActivity extends AppCompatActivity
         } else if (yPos < 0) {
             yPos = 0;
         }
+
+        xAccelPrevious = xAccel;
+        yAccelPrevious = yAccel;
     }
 
     private class BallView extends View {
