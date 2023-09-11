@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jackingaming.thestraylightrun.R;
 
+import java.util.Random;
+
 public class GameControllerActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameControllerActivity.class.getSimpleName();
@@ -27,13 +29,16 @@ public class GameControllerActivity extends AppCompatActivity
     private enum Direction {UP, DOWN, LEFT, RIGHT;}
 
     private float xAccelPrevious, yAccelPrevious = 0f;
-    private float xPos, xAccel, xVel = 0.0f;
-    private float yPos, yAccel, yVel = 0.0f;
+    private float xPosPlayer, xAccel, xVel = 0.0f;
+    private float yPosPlayer, yAccel, yVel = 0.0f;
+    private float xPosRival, yPosRival = 400f;
+    private int speedRival = 4;
+    private Random random = new Random();
     private float xMax, yMax;
     private SensorManager sensorManager;
 
-    private PlayerView playerView;
-    private Direction direction = Direction.RIGHT;
+    private Viewport viewport;
+    private Direction directionPlayer, directionRival = Direction.RIGHT;
     private Bitmap[][] sprites;
 
     private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
@@ -88,8 +93,8 @@ public class GameControllerActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sprites = initSprites();
-        playerView = new PlayerView(this);
-        setContentView(playerView);
+        viewport = new Viewport(this);
+        setContentView(viewport);
 
         Point sizeDisplay = new Point();
         Display display = getWindowManager().getDefaultDisplay();
@@ -123,7 +128,7 @@ public class GameControllerActivity extends AppCompatActivity
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             xAccel = sensorEvent.values[0];
             yAccel = -sensorEvent.values[1];
-            updatePlayer();
+            updateGameEntities();
         }
     }
 
@@ -132,7 +137,8 @@ public class GameControllerActivity extends AppCompatActivity
         // Intentionally blank.
     }
 
-    private void updatePlayer() {
+    private void updateGameEntities() {
+        // PLAYER
         float xAccelDelta = xAccel - xAccelPrevious;
         float yAccelDelta = yAccel - yAccelPrevious;
 
@@ -152,21 +158,21 @@ public class GameControllerActivity extends AppCompatActivity
         // Update direction
         if (Math.abs(yDelta) >= Math.abs(xDelta)) {
             if (yDelta < 0) {
-                direction = Direction.DOWN;
+                directionPlayer = Direction.DOWN;
             } else {
-                direction = Direction.UP;
+                directionPlayer = Direction.UP;
             }
         } else {
             if (xDelta < 0) {
-                direction = Direction.RIGHT;
+                directionPlayer = Direction.RIGHT;
             } else {
-                direction = Direction.LEFT;
+                directionPlayer = Direction.LEFT;
             }
         }
 
         // Update image (based on direction)
         Bitmap imagePlayer = null;
-        switch (direction) {
+        switch (directionPlayer) {
             case UP:
                 imagePlayer = sprites[4][1];
                 break;
@@ -180,45 +186,127 @@ public class GameControllerActivity extends AppCompatActivity
                 imagePlayer = sprites[8][1];
                 break;
         }
-        playerView.setImage(imagePlayer);
+        viewport.setImagePlayer(imagePlayer);
 
         // Update position
-        xPos -= xDelta;
-        yPos -= yDelta;
+        xPosPlayer -= xDelta;
+        yPosPlayer -= yDelta;
 
-        if (xPos > xMax) {
-            xPos = xMax;
-        } else if (xPos < 0) {
-            xPos = 0;
+        if (xPosPlayer > xMax) {
+            xPosPlayer = xMax;
+        } else if (xPosPlayer < 0) {
+            xPosPlayer = 0;
         }
 
-        if (yPos > yMax) {
-            yPos = yMax;
-        } else if (yPos < 0) {
-            yPos = 0;
+        if (yPosPlayer > yMax) {
+            yPosPlayer = yMax;
+        } else if (yPosPlayer < 0) {
+            yPosPlayer = 0;
         }
 
         // Prepare for next sensor event
         xAccelPrevious = xAccel;
         yAccelPrevious = yAccel;
+
+        // RIVAL
+        // Update direction (changes 10% of the time)
+        if (random.nextInt(10) < 1) {
+            // determine direction
+            switch (random.nextInt(4)) {
+                case 0:
+                    directionRival = Direction.UP;
+                    break;
+                case 1:
+                    directionRival = Direction.DOWN;
+                    break;
+                case 2:
+                    directionRival = Direction.LEFT;
+                    break;
+                case 3:
+                    directionRival = Direction.RIGHT;
+                    break;
+            }
+        }
+        // don't change direction (90% of the time)
+        else {
+            // do nothing
+        }
+        Log.e(TAG, "RIVAL direction: " + directionRival);
+
+        // Update image (based on direction)
+        Bitmap imageRival = null;
+        switch (directionRival) {
+            case UP:
+                imageRival = sprites[4][3];
+                break;
+            case DOWN:
+                imageRival = sprites[1][3];
+                break;
+            case LEFT:
+                imageRival = sprites[6][3];
+                break;
+            case RIGHT:
+                imageRival = sprites[8][3];
+                break;
+        }
+        viewport.setImageRival(imageRival);
+
+        // Update position
+        switch (directionRival) {
+            case UP:
+                yPosRival -= speedRival;
+                Log.e(TAG, "subtract y");
+                break;
+            case DOWN:
+                yPosRival += speedRival;
+                Log.e(TAG, "add y");
+                break;
+            case LEFT:
+                xPosRival -= speedRival;
+                Log.e(TAG, "subtract x");
+                break;
+            case RIGHT:
+                xPosRival += speedRival;
+                Log.e(TAG, "add x");
+                break;
+        }
+
+        if (xPosRival > xMax) {
+            xPosRival = xMax;
+        } else if (xPosRival < 0) {
+            xPosRival = 0;
+        }
+
+        if (yPosRival > yMax) {
+            yPosRival = yMax;
+        } else if (yPosRival < 0) {
+            yPosRival = 0;
+        }
     }
 
-    private class PlayerView extends View {
-        private Bitmap image;
+    private class Viewport extends View {
+        private Bitmap imagePlayer;
+        private Bitmap imageRival;
 
-        public PlayerView(Context context) {
+        public Viewport(Context context) {
             super(context);
-            image = sprites[1][1];
+            imagePlayer = sprites[1][1];
+            imageRival = sprites[1][3];
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawBitmap(image, xPos, yPos, null);
+            canvas.drawBitmap(imagePlayer, xPosPlayer, yPosPlayer, null);
+            canvas.drawBitmap(imageRival, xPosRival, yPosRival, null);
             invalidate();
         }
 
-        public void setImage(Bitmap image) {
-            this.image = image;
+        public void setImagePlayer(Bitmap imagePlayer) {
+            this.imagePlayer = imagePlayer;
+        }
+
+        public void setImageRival(Bitmap imageRival) {
+            this.imageRival = imageRival;
         }
     }
 }
