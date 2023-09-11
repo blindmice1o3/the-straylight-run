@@ -24,12 +24,62 @@ public class GameControllerActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameControllerActivity.class.getSimpleName();
 
+    private enum Direction {UP, DOWN, LEFT, RIGHT;}
+
     private float xAccelPrevious, yAccelPrevious = 0f;
     private float xPos, xAccel, xVel = 0.0f;
     private float yPos, yAccel, yVel = 0.0f;
     private float xMax, yMax;
-    private Bitmap imageBall;
     private SensorManager sensorManager;
+
+    private PlayerView playerView;
+    private Direction direction = Direction.RIGHT;
+    private Bitmap[][] sprites;
+
+    private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
+    private static final int HEIGHT_SPRITE_SHEET_ACTUAL = 1188;
+    private static final int COLUMNS = 10;
+    private static final int ROWS = 56; // section: Characters
+    private static final int X_OFFSET_INIT = 9;
+    private static final int Y_OFFSET_INIT = 34;
+    private static final int WIDTH_SPRITE = 16;
+    private static final int HEIGHT_SPRITE = 16;
+    private static final int WIDTH_DIVIDER = 1;
+    private static final int HEIGHT_DIVIDER = 1;
+    private static final int WIDTH_SPRITE_DST = 100;
+    private static final int HEIGHT_SPRITE_DST = 100;
+
+    private Bitmap[][] initSprites() {
+        Bitmap[][] sprites = new Bitmap[COLUMNS][ROWS];
+
+        Bitmap spriteSheet = BitmapFactory.decodeResource(getResources(),
+                R.drawable.gbc_pokemon_red_blue_characters_overworld);
+
+        float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
+        float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
+
+        int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
+        int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
+
+        int yOffset = Y_OFFSET_INIT;
+        int xOffset = X_OFFSET_INIT;
+        for (int i = 0; i < COLUMNS; i++) {
+            for (int j = 0; j < ROWS; j++) {
+                int xOffsetConverted = (int) (xOffset * ratioHorizontal);
+                int yOffsetConverted = (int) (yOffset * ratioVertical);
+
+                Bitmap sprite = Bitmap.createBitmap(spriteSheet,
+                        xOffsetConverted, yOffsetConverted, widthSpriteConverted, heightSpriteConverted);
+                sprites[i][j] = Bitmap.createScaledBitmap(sprite, WIDTH_SPRITE_DST, HEIGHT_SPRITE_DST, true);
+
+                yOffset += (HEIGHT_SPRITE + HEIGHT_DIVIDER);
+            }
+            yOffset = Y_OFFSET_INIT;
+            xOffset += (WIDTH_SPRITE + WIDTH_DIVIDER);
+        }
+
+        return sprites;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +87,9 @@ public class GameControllerActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        BallView ballView = new BallView(this);
-        setContentView(ballView);
+        sprites = initSprites();
+        playerView = new PlayerView(this);
+        setContentView(playerView);
 
         Point sizeDisplay = new Point();
         Display display = getWindowManager().getDefaultDisplay();
@@ -72,7 +123,7 @@ public class GameControllerActivity extends AppCompatActivity
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             xAccel = sensorEvent.values[0];
             yAccel = -sensorEvent.values[1];
-            updateBall();
+            updatePlayer();
         }
     }
 
@@ -81,21 +132,57 @@ public class GameControllerActivity extends AppCompatActivity
         // Intentionally blank.
     }
 
-    private void updateBall() {
+    private void updatePlayer() {
         float xAccelDelta = xAccel - xAccelPrevious;
         float yAccelDelta = yAccel - yAccelPrevious;
 
-//        Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
+        Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
 
         float frameTime = 0.666f;
         xVel += (xAccelDelta * frameTime);
         yVel += (yAccelDelta * frameTime);
 
-        Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
+//        Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
 
         float xDelta = (xVel / 2) * frameTime;
         float yDelta = (yVel / 2) * frameTime;
 
+        Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
+
+        // Update direction
+        if (Math.abs(yDelta) >= Math.abs(xDelta)) {
+            if (yDelta < 0) {
+                direction = Direction.DOWN;
+            } else {
+                direction = Direction.UP;
+            }
+        } else {
+            if (xDelta < 0) {
+                direction = Direction.RIGHT;
+            } else {
+                direction = Direction.LEFT;
+            }
+        }
+
+        // Update image (based on direction)
+        Bitmap imagePlayer = null;
+        switch (direction) {
+            case UP:
+                imagePlayer = sprites[4][1];
+                break;
+            case DOWN:
+                imagePlayer = sprites[1][1];
+                break;
+            case LEFT:
+                imagePlayer = sprites[6][1];
+                break;
+            case RIGHT:
+                imagePlayer = sprites[8][1];
+                break;
+        }
+        playerView.setImage(imagePlayer);
+
+        // Update position
         xPos -= xDelta;
         yPos -= yDelta;
 
@@ -111,26 +198,27 @@ public class GameControllerActivity extends AppCompatActivity
             yPos = 0;
         }
 
+        // Prepare for next sensor event
         xAccelPrevious = xAccel;
         yAccelPrevious = yAccel;
     }
 
-    private class BallView extends View {
+    private class PlayerView extends View {
+        private Bitmap image;
 
-        public BallView(Context context) {
+        public PlayerView(Context context) {
             super(context);
-
-            Bitmap ballSrc = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.pokemon_mystery_dungeon_red_rescue_team_snorlax);
-            final int dstWidth = 100;
-            final int dstHeight = 100;
-            imageBall = Bitmap.createScaledBitmap(ballSrc, dstWidth, dstHeight, true);
+            image = sprites[1][1];
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawBitmap(imageBall, xPos, yPos, null);
+            canvas.drawBitmap(image, xPos, yPos, null);
             invalidate();
+        }
+
+        public void setImage(Bitmap image) {
+            this.image = image;
         }
     }
 }
