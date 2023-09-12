@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,6 +41,7 @@ public class GameControllerActivity extends AppCompatActivity
     private SensorManager sensorManager;
 
     //    private Viewport viewport;
+    private FrameLayout frameLayout;
     private ImageView ivPlayer, ivRival;
     private Direction directionPlayer, directionRival = Direction.RIGHT;
     private Bitmap[][] sprites;
@@ -102,7 +104,7 @@ public class GameControllerActivity extends AppCompatActivity
         ivRival = new ImageView(this);
         ivPlayer.setImageBitmap(sprites[1][1]);
         ivRival.setImageBitmap(sprites[1][3]);
-        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout = new FrameLayout(this);
         FrameLayout.LayoutParams layoutParams =
                 new FrameLayout.LayoutParams(WIDTH_SPRITE_DST, HEIGHT_SPRITE_DST);
         frameLayout.addView(ivPlayer, layoutParams);
@@ -303,6 +305,17 @@ public class GameControllerActivity extends AppCompatActivity
 
         ivRival.setX(xPosRival);
         ivRival.setY(yPosRival);
+
+        // COLLISION DETECTION
+        int colorBackground = isOverlapping() ? Color.CYAN : Color.WHITE;
+        frameLayout.setBackgroundColor(colorBackground);
+    }
+
+    private boolean isOverlapping() {
+        return xPosPlayer < xPosRival + WIDTH_SPRITE_DST &&
+                xPosPlayer + WIDTH_SPRITE_DST > xPosRival &&
+                yPosPlayer < yPosRival + HEIGHT_SPRITE_DST &&
+                yPosPlayer + HEIGHT_SPRITE_DST > yPosRival;
     }
 
     private class Viewport extends View {
