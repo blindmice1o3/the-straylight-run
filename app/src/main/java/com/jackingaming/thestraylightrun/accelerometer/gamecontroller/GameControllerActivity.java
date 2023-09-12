@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +39,8 @@ public class GameControllerActivity extends AppCompatActivity
     private float xMax, yMax;
     private SensorManager sensorManager;
 
-    private Viewport viewport;
+    //    private Viewport viewport;
+    private ImageView ivPlayer, ivRival;
     private Direction directionPlayer, directionRival = Direction.RIGHT;
     private Bitmap[][] sprites;
 
@@ -93,14 +96,24 @@ public class GameControllerActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         sprites = initSprites();
-        viewport = new Viewport(this);
-        setContentView(viewport);
+//        viewport = new Viewport(this);
+//        setContentView(viewport);
+        ivPlayer = new ImageView(this);
+        ivRival = new ImageView(this);
+        ivPlayer.setImageBitmap(sprites[1][1]);
+        ivRival.setImageBitmap(sprites[1][3]);
+        FrameLayout frameLayout = new FrameLayout(this);
+        FrameLayout.LayoutParams layoutParams =
+                new FrameLayout.LayoutParams(WIDTH_SPRITE_DST, HEIGHT_SPRITE_DST);
+        frameLayout.addView(ivPlayer, layoutParams);
+        frameLayout.addView(ivRival, layoutParams);
+        setContentView(frameLayout);
 
         Point sizeDisplay = new Point();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(sizeDisplay);
-        xMax = (float) sizeDisplay.x - 100;
-        yMax = (float) sizeDisplay.y - 100;
+        xMax = (float) sizeDisplay.x - WIDTH_SPRITE_DST;
+        yMax = (float) sizeDisplay.y - HEIGHT_SPRITE_DST;
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
     }
@@ -186,7 +199,8 @@ public class GameControllerActivity extends AppCompatActivity
                 imagePlayer = sprites[8][1];
                 break;
         }
-        viewport.setImagePlayer(imagePlayer);
+        ivPlayer.setImageBitmap(imagePlayer);
+//        viewport.setImagePlayer(imagePlayer);
 
         // Update position
         xPosPlayer -= xDelta;
@@ -203,6 +217,9 @@ public class GameControllerActivity extends AppCompatActivity
         } else if (yPosPlayer < 0) {
             yPosPlayer = 0;
         }
+
+        ivPlayer.setX(xPosPlayer);
+        ivPlayer.setY(yPosPlayer);
 
         // Prepare for next sensor event
         xAccelPrevious = xAccel;
@@ -249,7 +266,8 @@ public class GameControllerActivity extends AppCompatActivity
                 imageRival = sprites[8][3];
                 break;
         }
-        viewport.setImageRival(imageRival);
+        ivRival.setImageBitmap(imageRival);
+//        viewport.setImageRival(imageRival);
 
         // Update position
         switch (directionRival) {
@@ -282,6 +300,9 @@ public class GameControllerActivity extends AppCompatActivity
         } else if (yPosRival < 0) {
             yPosRival = 0;
         }
+
+        ivRival.setX(xPosRival);
+        ivRival.setY(yPosRival);
     }
 
     private class Viewport extends View {
