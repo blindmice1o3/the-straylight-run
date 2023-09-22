@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class GameControllerActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameControllerActivity.class.getSimpleName();
 
+    private MediaPlayer mediaPlayer;
     private SoundPool soundPool;
     private int indexSfx = 0;
     private int sfxBallPoof, sfxBallToss, sfxCollision,
@@ -49,7 +51,6 @@ public class GameControllerActivity extends AppCompatActivity
     private float xMax, yMax;
     private SensorManager sensorManager;
 
-    //    private Viewport viewport;
     private FrameLayout frameLayout;
     private ImageView ivPlayer, ivRival;
     private Direction directionPlayer, directionRival = Direction.RIGHT;
@@ -107,6 +108,9 @@ public class GameControllerActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        mediaPlayer = MediaPlayer.create(this, R.raw.corporate_ukulele);
+        mediaPlayer.setLooping(true);
+
         soundPool = new SoundPool(
                 6,
                 AudioManager.STREAM_MUSIC,
@@ -155,8 +159,6 @@ public class GameControllerActivity extends AppCompatActivity
         Log.d(TAG, "sfxHorn: " + sfxHorn);
 
         sprites = initSprites();
-//        viewport = new Viewport(this);
-//        setContentView(viewport);
         ivPlayer = new ImageView(this);
         ivRival = new ImageView(this);
         ivPlayer.setImageBitmap(sprites[1][1]);
@@ -205,6 +207,7 @@ public class GameControllerActivity extends AppCompatActivity
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
+        mediaPlayer.start();
     }
 
     // "Perform method calls [BEFORE] the call to the superclass.
@@ -214,7 +217,14 @@ public class GameControllerActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         sensorManager.unregisterListener(this);
+        mediaPlayer.pause();
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mediaPlayer.release();
+        super.onDestroy();
     }
 
     @Override
