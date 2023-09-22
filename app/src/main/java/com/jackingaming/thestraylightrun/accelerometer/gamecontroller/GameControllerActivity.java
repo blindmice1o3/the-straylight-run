@@ -33,6 +33,7 @@ public class GameControllerActivity extends AppCompatActivity
     public static final String TAG = GameControllerActivity.class.getSimpleName();
 
     private MediaPlayer mediaPlayer;
+    private boolean pausedBackgroundMusic;
     private SoundPool soundPool;
     private int indexSfx = 0;
     private int sfxBallPoof, sfxBallToss, sfxCollision,
@@ -185,6 +186,21 @@ public class GameControllerActivity extends AppCompatActivity
                     soundPool.play(indexSfx, 1, 1,
                             0, 0, 1);
                 }
+            }
+        });
+
+        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                pausedBackgroundMusic = !pausedBackgroundMusic;
+
+                if (pausedBackgroundMusic) {
+                    mediaPlayer.pause();
+                } else {
+                    mediaPlayer.start();
+                }
+
+                return true;
             }
         });
 
