@@ -11,6 +11,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -28,6 +30,13 @@ import java.util.Random;
 public class GameControllerActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameControllerActivity.class.getSimpleName();
+
+    private SoundPool soundPool;
+    private int indexSfx = 0;
+    private int sfxBallPoof, sfxBallToss, sfxCollision,
+            sfxEnterPc, sfxGetItem, sfxHorn;
+    private boolean loadedSfxBallPoof, loadedSfxBallToss, loadedSfxCollision,
+            loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
 
     private enum Direction {UP, DOWN, LEFT, RIGHT;}
 
@@ -97,6 +106,54 @@ public class GameControllerActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        soundPool = new SoundPool(
+                6,
+                AudioManager.STREAM_MUSIC,
+                0);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                Log.d(TAG, "SoundPool.OnLoadCompleteListener sampleId: " + i);
+
+                int sampleId = i;
+                if (sampleId == sfxBallPoof) {
+                    loadedSfxBallPoof = true;
+                } else if (sampleId == sfxBallToss) {
+                    loadedSfxBallToss = true;
+                } else if (sampleId == sfxCollision) {
+                    loadedSfxCollision = true;
+                } else if (sampleId == sfxEnterPc) {
+                    loadedSfxEnterPc = true;
+                } else if (sampleId == sfxGetItem) {
+                    loadedSfxGetItem = true;
+                } else if (sampleId == sfxHorn) {
+                    loadedSfxHorn = true;
+                } else {
+                    Log.e(TAG, "sampleId: " + sampleId + " (not a pre-defined sound sample).");
+                }
+            }
+        });
+
+        // load()'s parameters: context, file_name, priority
+        sfxBallPoof = soundPool.load(this, R.raw.sfx_ball_poof, 1);
+        Log.d(TAG, "sfxBallPoof: " + sfxBallPoof);
+
+        sfxBallToss = soundPool.load(this, R.raw.sfx_ball_toss, 1);
+        Log.d(TAG, "sfxBallToss: " + sfxBallToss);
+
+        sfxCollision = soundPool.load(this, R.raw.sfx_collision, 1);
+        Log.d(TAG, "sfxCollision: " + sfxCollision);
+
+        sfxEnterPc = soundPool.load(this, R.raw.sfx_enter_pc, 1);
+        Log.d(TAG, "sfxEnterPc: " + sfxEnterPc);
+
+        sfxGetItem = soundPool.load(this, R.raw.sfx_get_item_1, 1);
+        Log.d(TAG, "sfxGetItem: " + sfxGetItem);
+
+        sfxHorn = soundPool.load(this, R.raw.horn, 1);
+        Log.d(TAG, "sfxHorn: " + sfxHorn);
+
         sprites = initSprites();
 //        viewport = new Viewport(this);
 //        setContentView(viewport);
@@ -109,7 +166,29 @@ public class GameControllerActivity extends AppCompatActivity
                 new FrameLayout.LayoutParams(WIDTH_SPRITE_DST, HEIGHT_SPRITE_DST);
         frameLayout.addView(ivPlayer, layoutParams);
         frameLayout.addView(ivRival, layoutParams);
+
+        frameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (loadedSfxBallPoof && loadedSfxBallToss && loadedSfxCollision
+                        && loadedSfxEnterPc && loadedSfxGetItem && loadedSfxHorn) {
+                    // change selection of sound sample
+                    indexSfx++;
+                    if (indexSfx >= 6) {
+                        indexSfx = 0;
+                    }
+
+                    // play()'s parameters: leftVolume, rightVolume,
+                    // priority, loop, and rate
+                    soundPool.play(indexSfx, 1, 1,
+                            0, 0, 1);
+                }
+            }
+        });
+
+        ////////////////////////////
         setContentView(frameLayout);
+        ////////////////////////////
 
         Point sizeDisplay = new Point();
         Display display = getWindowManager().getDefaultDisplay();
@@ -152,7 +231,37 @@ public class GameControllerActivity extends AppCompatActivity
         // Intentionally blank.
     }
 
+    private boolean colliding;
+    private boolean justCollided;
+    private boolean cantCollide;
+
     private void updateGameEntities() {
+        // COLLISION DETECTION
+        colliding = isOverlapping();
+
+        if (cantCollide && !colliding) {
+            cantCollide = false;
+        } else if (justCollided) {
+            cantCollide = true;
+            justCollided = false;
+        }
+        if (!cantCollide && colliding) {
+            justCollided = true;
+        }
+
+        if (justCollided) {
+            if (loadedSfxGetItem) {
+                int streamId = soundPool.play(sfxGetItem, 1, 1,
+                        0, 0, 1);
+                Log.e(TAG, "streamId: " + streamId);
+            }
+            return;
+        } else if (colliding) {
+            frameLayout.setBackgroundColor(Color.CYAN);
+        } else {
+            frameLayout.setBackgroundColor(Color.WHITE);
+        }
+
         // PLAYER
         float xAccelDelta = xAccel - xAccelPrevious;
         float yAccelDelta = yAccel - yAccelPrevious;
@@ -305,10 +414,6 @@ public class GameControllerActivity extends AppCompatActivity
 
         ivRival.setX(xPosRival);
         ivRival.setY(yPosRival);
-
-        // COLLISION DETECTION
-        int colorBackground = isOverlapping() ? Color.CYAN : Color.WHITE;
-        frameLayout.setBackgroundColor(colorBackground);
     }
 
     private boolean isOverlapping() {
