@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.jackingaming.thestraylightrun.accelerometer.gamecontroller.GameControllerActivity;
+import com.jackingaming.thestraylightrun.accelerometer.game.GameActivity;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.options_item_game_controller:
                 startActivity(
-                        new Intent(this, GameControllerActivity.class)
+                        new Intent(this, GameActivity.class)
                 );
                 return true;
             default:
