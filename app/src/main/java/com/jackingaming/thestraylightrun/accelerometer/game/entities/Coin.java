@@ -14,6 +14,11 @@ public class Coin extends Entity {
     }
 
     @Override
+    public void collided(Entity collider) {
+        collider.setSpeedBonus(2f);
+    }
+
+    @Override
     public void update() {
 
     }

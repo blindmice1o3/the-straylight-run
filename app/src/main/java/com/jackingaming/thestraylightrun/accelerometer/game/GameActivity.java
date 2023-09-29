@@ -35,9 +35,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Rival;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameActivity extends AppCompatActivity
@@ -54,11 +53,10 @@ public class GameActivity extends AppCompatActivity
             loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
 
     private FrameLayout frameLayout;
-    private ImageView ivPlayer, ivRival, ivCoin;
+    private Map<Entity, ImageView> imageViewViaEntity;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
 
-    private Entity player, rival, coin;
     private Controllable controllable;
     private SensorManager sensorManager;
     private float xAccelPrevious, yAccelPrevious = 0f;
@@ -221,7 +219,7 @@ public class GameActivity extends AppCompatActivity
         spritesPlayer.put(LEFT, sprites[6][1]);
         spritesPlayer.put(RIGHT, sprites[8][1]);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        player = new Player(spritesPlayer);
+        Player player = new Player(spritesPlayer);
         controllable = (Controllable) player;
 
         Map<Direction, Bitmap> spritesRival = new HashMap<>();
@@ -229,15 +227,15 @@ public class GameActivity extends AppCompatActivity
         spritesRival.put(DOWN, sprites[1][3]);
         spritesRival.put(LEFT, sprites[6][3]);
         spritesRival.put(RIGHT, sprites[8][3]);
-        rival = new Rival(spritesRival);
+        Rival rival = new Rival(spritesRival);
 
         Map<Direction, Bitmap> spritesCoin = new HashMap<>();
         spritesCoin.put(DOWN, spriteCoin);
-        coin = new Coin(spritesCoin);
+        Coin coin = new Coin(spritesCoin);
 
-        ivPlayer = new ImageView(this);
-        ivRival = new ImageView(this);
-        ivCoin = new ImageView(this);
+        ImageView ivPlayer = new ImageView(this);
+        ImageView ivRival = new ImageView(this);
+        ImageView ivCoin = new ImageView(this);
         ivPlayer.setImageBitmap(player.getFrame());
         ivRival.setImageBitmap(rival.getFrame());
         ivCoin.setImageBitmap(coin.getFrame());
@@ -253,15 +251,15 @@ public class GameActivity extends AppCompatActivity
         setContentView(frameLayout);
         ////////////////////////////
 
+        imageViewViaEntity = new HashMap<>();
+        imageViewViaEntity.put(player, ivPlayer);
+        imageViewViaEntity.put(rival, ivRival);
+        imageViewViaEntity.put(coin, ivCoin);
+
         float xMax = (float) xScreenSize - widthSpriteDst;
         float yMax = (float) yScreenSize - heightSpriteDst;
-        List<Entity> entities = Arrays.asList(
-                player,
-                rival,
-                coin
-        );
         Entity.init(
-                entities,
+                new ArrayList<Entity>(imageViewViaEntity.keySet()),
                 widthSpriteDst, heightSpriteDst,
                 0, xMax, 0, yMax
         );
@@ -331,25 +329,23 @@ public class GameActivity extends AppCompatActivity
     }
 
     private void updateGameEntities() {
-        // PLAYER
-        // Update image (based on speed bonus)
-        if (player.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
-            ivPlayer.setAlpha(0.5f);
+        for (Entity e : imageViewViaEntity.keySet()) {
+            if (!(e instanceof Player)) {
+                e.update();
+            }
+
+            ImageView ivEntity = imageViewViaEntity.get(e);
+            // IMAGE (based on speed bonus)
+            if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
+                ivEntity.setAlpha(0.5f);
+            }
+
+            // IMAGE (based on direction)
+            ivEntity.setImageBitmap(e.getFrame());
+
+            // POSITION
+            ivEntity.setX(e.getxPos());
+            ivEntity.setY(e.getyPos());
         }
-
-        // Update image (based on direction)
-        ivPlayer.setImageBitmap(player.getFrame());
-
-        ivPlayer.setX(player.getxPos());
-        ivPlayer.setY(player.getyPos());
-
-        // RIVAL
-        rival.update();
-
-        // Update image (based on direction)
-        ivRival.setImageBitmap(rival.getFrame());
-
-        ivRival.setX(rival.getxPos());
-        ivRival.setY(rival.getyPos());
     }
 }

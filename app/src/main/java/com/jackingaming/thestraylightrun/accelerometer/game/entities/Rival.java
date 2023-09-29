@@ -17,6 +17,11 @@ public class Rival extends Entity {
     }
 
     @Override
+    public void collided(Entity collider) {
+
+    }
+
+    @Override
     public void update() {
         // DIRECTION (changes 10% of the time)
         if (random.nextInt(10) < 1) {
@@ -78,20 +83,20 @@ public class Rival extends Entity {
         if (!colliding) {
             xPos += xDeltaWithBonus;
             yPos += yDeltaWithBonus;
-        }
 
-        // POSITION (Validate)
-        if (xPos < xMin) {
-            xPos = xMin;
-        }
-        if (xPos > xMax) {
-            xPos = xMax;
-        }
-        if (yPos < yMin) {
-            yPos = yMin;
-        }
-        if (yPos > yMax) {
-            yPos = yMax;
+            // Validate
+            if (xPos < xMin) {
+                xPos = xMin;
+            }
+            if (xPos > xMax) {
+                xPos = xMax;
+            }
+            if (yPos < yMin) {
+                yPos = yMin;
+            }
+            if (yPos > yMax) {
+                yPos = yMax;
+            }
         }
     }
 }

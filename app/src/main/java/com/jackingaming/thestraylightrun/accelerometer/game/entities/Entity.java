@@ -40,6 +40,8 @@ public abstract class Entity {
         Entity.yMax = yMax;
     }
 
+    public abstract void collided(Entity collider);
+
     public abstract void update();
 
     public Bitmap getFrame() {
@@ -57,11 +59,9 @@ public abstract class Entity {
                     yPos + yDelta < e.getyPos() + Entity.getHeightSprite() &&
                     yPos + yDelta + Entity.getHeightSprite() > e.getyPos()) {
 
-                /////////////////////////
-                if (e instanceof Coin) {
-                    speedBonus = 2f;
-                }
-                /////////////////////////
+                ////////////////////////
+                e.collided(this);
+                ////////////////////////
 
                 return true;
             }
