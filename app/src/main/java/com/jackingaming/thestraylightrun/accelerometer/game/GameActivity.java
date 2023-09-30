@@ -14,9 +14,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -34,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Rival;
+import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,14 +41,7 @@ public class GameActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameActivity.class.getSimpleName();
 
-    private MediaPlayer mediaPlayer;
-    private boolean pausedBackgroundMusic;
-    private SoundPool soundPool;
-    private int indexSfx = 0;
-    private int sfxBallPoof, sfxBallToss, sfxCollision,
-            sfxEnterPc, sfxGetItem, sfxHorn;
-    private boolean loadedSfxBallPoof, loadedSfxBallToss, loadedSfxCollision,
-            loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
+    private SoundManager soundManager;
 
     private FrameLayout frameLayout;
     private Map<Entity, ImageView> imageViewViaEntity;
@@ -112,55 +103,7 @@ public class GameActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.corporate_ukulele);
-        mediaPlayer.setLooping(true);
-
-        soundPool = new SoundPool(
-                6,
-                AudioManager.STREAM_MUSIC,
-                0);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                Log.d(TAG, "SoundPool.OnLoadCompleteListener sampleId: " + i);
-
-                int sampleId = i;
-                if (sampleId == sfxBallPoof) {
-                    loadedSfxBallPoof = true;
-                } else if (sampleId == sfxBallToss) {
-                    loadedSfxBallToss = true;
-                } else if (sampleId == sfxCollision) {
-                    loadedSfxCollision = true;
-                } else if (sampleId == sfxEnterPc) {
-                    loadedSfxEnterPc = true;
-                } else if (sampleId == sfxGetItem) {
-                    loadedSfxGetItem = true;
-                } else if (sampleId == sfxHorn) {
-                    loadedSfxHorn = true;
-                } else {
-                    Log.e(TAG, "sampleId: " + sampleId + " (not a pre-defined sound sample).");
-                }
-            }
-        });
-
-        // load()'s parameters: context, file_name, priority
-        sfxBallPoof = soundPool.load(this, R.raw.sfx_ball_poof, 1);
-        Log.d(TAG, "sfxBallPoof: " + sfxBallPoof);
-
-        sfxBallToss = soundPool.load(this, R.raw.sfx_ball_toss, 1);
-        Log.d(TAG, "sfxBallToss: " + sfxBallToss);
-
-        sfxCollision = soundPool.load(this, R.raw.sfx_collision, 1);
-        Log.d(TAG, "sfxCollision: " + sfxCollision);
-
-        sfxEnterPc = soundPool.load(this, R.raw.sfx_enter_pc, 1);
-        Log.d(TAG, "sfxEnterPc: " + sfxEnterPc);
-
-        sfxGetItem = soundPool.load(this, R.raw.sfx_get_item_1, 1);
-        Log.d(TAG, "sfxGetItem: " + sfxGetItem);
-
-        sfxHorn = soundPool.load(this, R.raw.horn, 1);
-        Log.d(TAG, "sfxHorn: " + sfxHorn);
+        soundManager = new SoundManager(this);
 
         ///////////////////////////////////////////////////////////////////////////////
 
@@ -169,33 +112,14 @@ public class GameActivity extends AppCompatActivity
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (loadedSfxBallPoof && loadedSfxBallToss && loadedSfxCollision
-                        && loadedSfxEnterPc && loadedSfxGetItem && loadedSfxHorn) {
-                    // change selection of sound sample
-                    indexSfx++;
-                    if (indexSfx >= 6) {
-                        indexSfx = 0;
-                    }
-
-                    // play()'s parameters: leftVolume, rightVolume,
-                    // priority, loop, and rate
-                    soundPool.play(indexSfx, 1, 1,
-                            0, 0, 1);
-                }
+                soundManager.sfxIterateAndPlay();
             }
         });
 
         frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                pausedBackgroundMusic = !pausedBackgroundMusic;
-
-                if (pausedBackgroundMusic) {
-                    mediaPlayer.pause();
-                } else {
-                    mediaPlayer.start();
-                }
-
+                soundManager.backgroundMusicTogglePause();
                 return true;
             }
         });
@@ -219,7 +143,16 @@ public class GameActivity extends AppCompatActivity
         spritesPlayer.put(LEFT, sprites[6][1]);
         spritesPlayer.put(RIGHT, sprites[8][1]);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Player player = new Player(spritesPlayer);
+        Player player = new Player(spritesPlayer, new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                if (collided instanceof Coin) {
+                    soundManager.sfxPlay(soundManager.sfxGetItem);
+                } else if (collided instanceof Rival) {
+                    soundManager.sfxPlay(soundManager.sfxHorn);
+                }
+            }
+        });
         controllable = (Controllable) player;
 
         Map<Direction, Bitmap> spritesRival = new HashMap<>();
@@ -227,11 +160,25 @@ public class GameActivity extends AppCompatActivity
         spritesRival.put(DOWN, sprites[1][3]);
         spritesRival.put(LEFT, sprites[6][3]);
         spritesRival.put(RIGHT, sprites[8][3]);
-        Rival rival = new Rival(spritesRival);
+        Rival rival = new Rival(spritesRival, new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                if (collided instanceof Coin) {
+                    soundManager.sfxPlay(soundManager.sfxGetItem);
+                } else if (collided instanceof Player) {
+                    soundManager.sfxPlay(soundManager.sfxHorn);
+                }
+            }
+        });
 
         Map<Direction, Bitmap> spritesCoin = new HashMap<>();
         spritesCoin.put(DOWN, spriteCoin);
-        Coin coin = new Coin(spritesCoin);
+        Coin coin = new Coin(spritesCoin, new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                // intentionally blank.
+            }
+        });
 
         ImageView ivPlayer = new ImageView(this);
         ImageView ivRival = new ImageView(this);
@@ -271,7 +218,7 @@ public class GameActivity extends AppCompatActivity
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
-        mediaPlayer.start();
+        soundManager.onStart();
     }
 
     // "Perform method calls [BEFORE] the call to the superclass.
@@ -281,13 +228,13 @@ public class GameActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         sensorManager.unregisterListener(this);
-        mediaPlayer.pause();
+        soundManager.onStop();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        mediaPlayer.release();
+        soundManager.onDestroy();
         super.onDestroy();
     }
 

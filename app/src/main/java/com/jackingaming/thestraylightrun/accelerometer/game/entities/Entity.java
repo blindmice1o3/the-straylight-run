@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Entity {
+    public interface CollisionListener {
+        void onJustCollided(Entity collided);
+    }
+
+    private CollisionListener collisionListener;
+
     public static final int DEFAULT_SPEED_MOVEMENT = 2;
     public static final float DEFAULT_SPEED_BONUS = 1f;
 
@@ -24,8 +30,9 @@ public abstract class Entity {
     protected boolean justCollided;
     protected boolean cantCollide;
 
-    public Entity(Map<Direction, Bitmap> sprites) {
+    public Entity(Map<Direction, Bitmap> sprites, CollisionListener collisionListener) {
         this.sprites = sprites;
+        this.collisionListener = collisionListener;
     }
 
     public static void init(List<Entity> entities,
@@ -59,9 +66,13 @@ public abstract class Entity {
                     yPos + yDelta < e.getyPos() + Entity.getHeightSprite() &&
                     yPos + yDelta + Entity.getHeightSprite() > e.getyPos()) {
 
-                ////////////////////////
+                /////////////////////////////////////////////////
                 e.collided(this);
-                ////////////////////////
+
+                if (justCollided && collisionListener != null) {
+                    collisionListener.onJustCollided(e);
+                }
+                /////////////////////////////////////////////////
 
                 return true;
             }

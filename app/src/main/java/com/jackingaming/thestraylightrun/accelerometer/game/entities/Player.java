@@ -7,8 +7,8 @@ import java.util.Map;
 public class Player extends Entity
         implements Controllable {
 
-    public Player(Map<Direction, Bitmap> sprites) {
-        super(sprites);
+    public Player(Map<Direction, Bitmap> sprites, CollisionListener collisionListener) {
+        super(sprites, collisionListener);
     }
 
     @Override

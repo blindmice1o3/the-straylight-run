@@ -9,8 +9,8 @@ public class Rival extends Entity {
 
     private Random random = new Random();
 
-    public Rival(Map<Direction, Bitmap> sprites) {
-        super(sprites);
+    public Rival(Map<Direction, Bitmap> sprites, CollisionListener collisionListener) {
+        super(sprites, collisionListener);
 
         xPos = 400f;
         yPos = 400f;
