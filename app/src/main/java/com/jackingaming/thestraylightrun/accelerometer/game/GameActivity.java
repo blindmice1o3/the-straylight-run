@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Coin;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Controllable;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
@@ -137,11 +138,30 @@ public class GameActivity extends AppCompatActivity
         sprites = initSprites(widthSpriteDst, heightSpriteDst);
         spriteCoin = BitmapFactory.decodeResource(getResources(), R.drawable.ic_coins_l);
 
-        Map<Direction, Bitmap> spritesPlayer = new HashMap<>();
-        spritesPlayer.put(UP, sprites[4][1]);
-        spritesPlayer.put(DOWN, sprites[1][1]);
-        spritesPlayer.put(LEFT, sprites[6][1]);
-        spritesPlayer.put(RIGHT, sprites[8][1]);
+        Bitmap[] upPlayer = new Bitmap[3];
+        upPlayer[0] = sprites[3][1];
+        upPlayer[1] = sprites[4][1];
+        upPlayer[2] = sprites[5][1];
+
+        Bitmap[] downPlayer = new Bitmap[3];
+        downPlayer[0] = sprites[0][1];
+        downPlayer[1] = sprites[1][1];
+        downPlayer[2] = sprites[2][1];
+
+        Bitmap[] leftPlayer = new Bitmap[2];
+        leftPlayer[0] = sprites[6][1];
+        leftPlayer[1] = sprites[7][1];
+
+        Bitmap[] rightPlayer = new Bitmap[2];
+        rightPlayer[0] = sprites[8][1];
+        rightPlayer[1] = sprites[9][1];
+
+
+        Map<Direction, Animation> spritesPlayer = new HashMap<>();
+        spritesPlayer.put(UP, new Animation(upPlayer));
+        spritesPlayer.put(DOWN, new Animation(downPlayer));
+        spritesPlayer.put(LEFT, new Animation(leftPlayer));
+        spritesPlayer.put(RIGHT, new Animation(rightPlayer));
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Player player = new Player(spritesPlayer, new Entity.CollisionListener() {
             @Override
@@ -155,11 +175,29 @@ public class GameActivity extends AppCompatActivity
         });
         controllable = (Controllable) player;
 
-        Map<Direction, Bitmap> spritesRival = new HashMap<>();
-        spritesRival.put(UP, sprites[4][3]);
-        spritesRival.put(DOWN, sprites[1][3]);
-        spritesRival.put(LEFT, sprites[6][3]);
-        spritesRival.put(RIGHT, sprites[8][3]);
+        Bitmap[] upRival = new Bitmap[3];
+        upRival[0] = sprites[3][3];
+        upRival[1] = sprites[4][3];
+        upRival[2] = sprites[5][3];
+
+        Bitmap[] downRival = new Bitmap[3];
+        downRival[0] = sprites[0][3];
+        downRival[1] = sprites[1][3];
+        downRival[2] = sprites[2][3];
+
+        Bitmap[] leftRival = new Bitmap[2];
+        leftRival[0] = sprites[6][3];
+        leftRival[1] = sprites[7][3];
+
+        Bitmap[] rightRival = new Bitmap[2];
+        rightRival[0] = sprites[8][3];
+        rightRival[1] = sprites[9][3];
+
+        Map<Direction, Animation> spritesRival = new HashMap<>();
+        spritesRival.put(UP, new Animation(upRival));
+        spritesRival.put(DOWN, new Animation(downRival));
+        spritesRival.put(LEFT, new Animation(leftRival));
+        spritesRival.put(RIGHT, new Animation(rightRival));
         Rival rival = new Rival(spritesRival, new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
@@ -171,8 +209,11 @@ public class GameActivity extends AppCompatActivity
             }
         });
 
-        Map<Direction, Bitmap> spritesCoin = new HashMap<>();
-        spritesCoin.put(DOWN, spriteCoin);
+        Map<Direction, Animation> spritesCoin = new HashMap<>();
+        Bitmap[] downCoin = new Bitmap[2];
+        downCoin[0] = spriteCoin;
+        downCoin[1] = spriteCoin;
+        spritesCoin.put(DOWN, new Animation(downCoin));
         Coin coin = new Coin(spritesCoin, new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {

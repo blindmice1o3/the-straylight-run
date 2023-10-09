@@ -1,12 +1,10 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.entities;
 
-import android.graphics.Bitmap;
-
 import java.util.Map;
 
 public class Coin extends Entity {
 
-    public Coin(Map<Direction, Bitmap> sprites, CollisionListener collisionListener) {
+    public Coin(Map<Direction, Animation> sprites, CollisionListener collisionListener) {
         super(sprites, collisionListener);
 
         xPos = 200f;

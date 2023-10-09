@@ -24,13 +24,13 @@ public abstract class Entity {
     protected int speedMovement = DEFAULT_SPEED_MOVEMENT;
     protected float speedBonus = DEFAULT_SPEED_BONUS;
     protected Direction direction = Direction.DOWN;
-    protected Map<Direction, Bitmap> sprites;
+    protected Map<Direction, Animation> sprites;
 
     protected boolean colliding;
     protected boolean justCollided;
     protected boolean cantCollide;
 
-    public Entity(Map<Direction, Bitmap> sprites, CollisionListener collisionListener) {
+    public Entity(Map<Direction, Animation> sprites, CollisionListener collisionListener) {
         this.sprites = sprites;
         this.collisionListener = collisionListener;
     }
@@ -52,7 +52,7 @@ public abstract class Entity {
     public abstract void update();
 
     public Bitmap getFrame() {
-        return sprites.get(direction);
+        return sprites.get(direction).getFrame();
     }
 
     protected boolean checkEntityCollision(float xDelta, float yDelta) {
