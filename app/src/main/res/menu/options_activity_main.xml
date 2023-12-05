@@ -20,4 +20,10 @@
         android:title="game controller"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/options_item_hot_bar"
+        android:icon="@drawable/ic_menu_home"
+        android:title="hot bar"
+        app:showAsAction="always" />
+
 </menu>

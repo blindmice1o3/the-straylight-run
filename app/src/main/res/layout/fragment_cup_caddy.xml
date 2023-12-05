@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_cup_caddy"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".sequencetrainer.hotbar.cupcaddy.CupCaddyFragment">
+
+    <ImageView
+        android:id="@+id/iv_trenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drinksize_trenta" />
+
+    <ImageView
+        android:id="@+id/iv_venti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drinksize_venti" />
+
+    <ImageView
+        android:id="@+id/iv_grande"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drinksize_grande" />
+
+    <ImageView
+        android:id="@+id/iv_tall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drinksize_tall" />
+
+    <ImageView
+        android:id="@+id/iv_short"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/drinksize_short" />
+
+</LinearLayout>

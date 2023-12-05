@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameActivity;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +48,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.options_item_game_controller:
                 startActivity(
                         new Intent(this, GameActivity.class)
+                );
+                return true;
+            case R.id.options_item_hot_bar:
+                startActivity(
+                        new Intent(this, SequenceTrainerActivity.class)
                 );
                 return true;
             default:

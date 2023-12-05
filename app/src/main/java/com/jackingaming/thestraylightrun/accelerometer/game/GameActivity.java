@@ -33,6 +33,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Rival;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,8 @@ public class GameActivity extends AppCompatActivity
     private Map<Entity, ImageView> imageViewViaEntity;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
+    private Bitmap tileSolid, tileWalkable, tileBoulder;
+    private GameCamera gameCamera;
 
     private Controllable controllable;
     private SensorManager sensorManager;
@@ -65,8 +68,8 @@ public class GameActivity extends AppCompatActivity
     private static final int WIDTH_DIVIDER = 1;
     private static final int HEIGHT_DIVIDER = 1;
 
-    private Bitmap[][] initSprites(int widthSpriteDst, int heightSpriteDst) {
-        Bitmap[][] sprites = new Bitmap[COLUMNS][ROWS];
+    private void initSprites(int widthSpriteDst, int heightSpriteDst) {
+        sprites = new Bitmap[COLUMNS][ROWS];
 
         Bitmap spriteSheet = BitmapFactory.decodeResource(getResources(),
                 R.drawable.gbc_pokemon_red_blue_characters_overworld);
@@ -94,7 +97,16 @@ public class GameActivity extends AppCompatActivity
             xOffset += (WIDTH_SPRITE + WIDTH_DIVIDER);
         }
 
-        return sprites;
+        spriteCoin = BitmapFactory.decodeResource(getResources(), R.drawable.ic_coins_l);
+        tileSolid = Bitmap.createBitmap(spriteSheet,
+                (int) (10 * ratioHorizontal), (int) (1147 * ratioVertical),
+                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
+        tileWalkable = Bitmap.createBitmap(spriteSheet,
+                (int) (10 * ratioHorizontal), (int) (1164 * ratioVertical),
+                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
+        tileBoulder = Bitmap.createBitmap(spriteSheet,
+                (int) (112 * ratioHorizontal), (int) (1088 * ratioVertical),
+                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
     }
 
     @Override
@@ -107,8 +119,9 @@ public class GameActivity extends AppCompatActivity
         soundManager = new SoundManager(this);
 
         ///////////////////////////////////////////////////////////////////////////////
+        setContentView(R.layout.activity_game);
 
-        frameLayout = new FrameLayout(this);
+        frameLayout = findViewById(R.id.frameLayout);
 
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +148,7 @@ public class GameActivity extends AppCompatActivity
         int heightSpriteDst = widthSpriteDst;
         Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
 
-        sprites = initSprites(widthSpriteDst, heightSpriteDst);
-        spriteCoin = BitmapFactory.decodeResource(getResources(), R.drawable.ic_coins_l);
+        initSprites(widthSpriteDst, heightSpriteDst);
 
         Bitmap[] upPlayer = new Bitmap[3];
         upPlayer[0] = sprites[3][1];
@@ -235,10 +247,6 @@ public class GameActivity extends AppCompatActivity
         frameLayout.addView(ivRival, layoutParams);
         frameLayout.addView(ivCoin, layoutParams);
 
-        ////////////////////////////
-        setContentView(frameLayout);
-        ////////////////////////////
-
         imageViewViaEntity = new HashMap<>();
         imageViewViaEntity.put(player, ivPlayer);
         imageViewViaEntity.put(rival, ivRival);
@@ -251,6 +259,11 @@ public class GameActivity extends AppCompatActivity
                 widthSpriteDst, heightSpriteDst,
                 0, xMax, 0, yMax
         );
+
+        Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
+
+        ((World) frameLayout).init(this, R.raw.world01);
+        gameCamera = new GameCamera(0f, 0f);
     }
 
     @Override
@@ -304,6 +317,8 @@ public class GameActivity extends AppCompatActivity
 
             controllable.updateViaSensorEvent(xDelta, yDelta);
             updateGameEntities();
+//            gameCamera.move(1, 1);
+            frameLayout.invalidate();
 
             // Prepare for next sensor event
             xAccelPrevious = xAccel;
@@ -335,5 +350,9 @@ public class GameActivity extends AppCompatActivity
             ivEntity.setX(e.getxPos());
             ivEntity.setY(e.getyPos());
         }
+    }
+
+    public GameCamera getGameCamera() {
+        return gameCamera;
     }
 }
