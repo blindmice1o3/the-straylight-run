@@ -5,12 +5,14 @@ import android.content.ClipDescription;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +54,9 @@ public class CupCaddyFragment extends Fragment {
 
         llCupCaddy = view.findViewById(R.id.ll_cup_caddy);
 
+        View.OnDragListener cupCaddyDragListener = new CupCaddyDragListener();
+        llCupCaddy.setOnDragListener(cupCaddyDragListener);
+
         ivTrenta = view.findViewById(R.id.iv_trenta);
         ivVenti = view.findViewById(R.id.iv_venti);
         ivGrande = view.findViewById(R.id.iv_grande);
@@ -64,12 +69,12 @@ public class CupCaddyFragment extends Fragment {
         ivTall.setTag(TAG_TALL);
         ivShort.setTag(TAG_SHORT);
 
-        View.OnTouchListener myOnTouchListener = new MyOnTouchListener();
-        ivTrenta.setOnTouchListener(myOnTouchListener);
-        ivVenti.setOnTouchListener(myOnTouchListener);
-        ivGrande.setOnTouchListener(myOnTouchListener);
-        ivTall.setOnTouchListener(myOnTouchListener);
-        ivShort.setOnTouchListener(myOnTouchListener);
+        View.OnTouchListener caddyToMaestranaTouchListener = new CaddyToMaestranaTouchListener();
+        ivTrenta.setOnTouchListener(caddyToMaestranaTouchListener);
+        ivVenti.setOnTouchListener(caddyToMaestranaTouchListener);
+        ivGrande.setOnTouchListener(caddyToMaestranaTouchListener);
+        ivTall.setOnTouchListener(caddyToMaestranaTouchListener);
+        ivShort.setOnTouchListener(caddyToMaestranaTouchListener);
     }
 
     @Override
@@ -81,7 +86,80 @@ public class CupCaddyFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    private class MyOnTouchListener
+    private class CupCaddyDragListener
+            implements View.OnDragListener {
+
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            switch (dragEvent.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Determine whether this View can accept the dragged data.
+                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        Log.d(TAG_DEBUG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+
+                        if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
+                            // do nothing
+                            Log.d(TAG_DEBUG, "label.equals(\"MaestranaToCaddy\")");
+
+                            // Change value of alpha to indicate drop-target.
+                            view.setAlpha(0.5f);
+
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        }
+                    } else {
+                        Log.e(TAG_DEBUG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                    }
+
+                    // Return false to indicate that, during the current drag and drop
+                    // operation, this View doesn't receive events again until
+                    // ACTION_DRAG_ENDED is sent.
+                    return false;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_LOCATION");
+                    // Ignore the event.
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DROP:
+                    Log.d(TAG_DEBUG, "ACTION_DROP Derive ivToBeAdded from dragData");
+                    ImageView ivToBeAdded = (ImageView) dragEvent.getLocalState();
+
+                    ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
+                    owner.removeView(ivToBeAdded);
+
+                    // Return true. DragEvent.getResult() returns true.
+                    return true;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
+
+                    // Do a getResult() and displays what happens.
+                    if (dragEvent.getResult()) {
+                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
+                    // Return true. The value is ignored.
+                    return true;
+                default:
+                    Log.e(TAG_DEBUG, "Unknown action type received by CupCaddyDragListener.");
+                    break;
+            }
+
+            return false;
+        }
+    }
+
+    private class CaddyToMaestranaTouchListener
             implements View.OnTouchListener {
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -92,7 +170,7 @@ public class CupCaddyFragment extends Fragment {
                 // convenience method ClipData.newPlainText() can create a plain text
                 // ClipData in one step.
 
-                String label = view.getTag().toString();
+                String label = "CaddyToMaestrana";
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
                 // Create a new ClipData.Item from the ImageView object's tag.
                 ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());
@@ -115,7 +193,7 @@ public class CupCaddyFragment extends Fragment {
                         0              // Flags. Not currently used, set to 0.
                 );
 
-                Log.e("CupCaddyFragment", "label: " + label);
+                Log.e(TAG_DEBUG, "label: " + label);
 
                 // Indicate that the on-touch event is handled.
                 return true;
