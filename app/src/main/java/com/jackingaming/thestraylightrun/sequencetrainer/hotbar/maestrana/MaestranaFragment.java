@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.os.Build;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,7 +30,10 @@ public class MaestranaFragment extends Fragment {
     public static final String TAG_DEBUG = MaestranaFragment.class.getSimpleName();
 
     private MaestranaViewModel mViewModel;
-    private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
+    private ConstraintLayout constraintLayoutMaestrana;
+    private FrameLayout framelayoutEspressoStreamAndSteamWand,
+            framelayoutLeft, framelayoutCenter, framelayoutRight;
+    private ObjectAnimator animatorEspressoStream;
 
     private View ivToBeAdded;
     private float xTouch, yTouch;
@@ -48,6 +55,8 @@ public class MaestranaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG_DEBUG, "onViewCreated()");
 
+        constraintLayoutMaestrana = view.findViewById(R.id.constraintlayout_maestrana);
+        framelayoutEspressoStreamAndSteamWand = view.findViewById(R.id.framelayout_espresso_stream_and_steam_wand);
         framelayoutLeft = view.findViewById(R.id.framelayout_left);
         framelayoutCenter = view.findViewById(R.id.framelayout_center);
         framelayoutRight = view.findViewById(R.id.framelayout_right);
@@ -55,6 +64,57 @@ public class MaestranaFragment extends Fragment {
         View.OnDragListener maestranaDragListener = new MaestranaDragListener();
         framelayoutLeft.setOnDragListener(maestranaDragListener);
         framelayoutRight.setOnDragListener(maestranaDragListener);
+
+        ImageView espressoStream = new ImageView(getContext());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                16,
+                64);
+        espressoStream.setLayoutParams(params);
+        espressoStream.setBackgroundColor(getResources().getColor(R.color.brown));
+        espressoStream.setX(250);
+//        framelayoutEspressoStreamAndSteamWand.addView(espressoStream);
+        constraintLayoutMaestrana.addView(espressoStream);
+
+        animatorEspressoStream = ObjectAnimator.ofFloat(
+                espressoStream,
+                "y",
+                0f,
+                800f);
+        animatorEspressoStream.setDuration(4000);
+        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
+        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
+        animatorEspressoStream.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorEspressoStream.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
+                    View ivCup = framelayoutLeft.getChildAt(i);
+                    if (isViewOverlapping(espressoStream, ivCup)) {
+                        Log.e(TAG_DEBUG, "OVERLAP");
+
+                        ivCup.setAlpha(0.5f);
+                    } else {
+                        ivCup.setAlpha(1f);
+                    }
+                }
+            }
+        });
+        animatorEspressoStream.start();
+    }
+
+    private boolean isViewOverlapping(View firstView, View secondView) {
+        int[] firstPosition = new int[2];
+        int[] secondPosition = new int[2];
+
+        firstView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        firstView.getLocationOnScreen(firstPosition);
+        secondView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        secondView.getLocationOnScreen(secondPosition);
+
+        return firstPosition[0] < secondPosition[0] + secondView.getMeasuredWidth()
+                && firstPosition[0] + firstView.getMeasuredWidth() > secondPosition[0]
+                && firstPosition[1] < secondPosition[1] + secondView.getMeasuredHeight()
+                && firstPosition[1] + firstView.getMeasuredHeight() > secondPosition[1];
     }
 
     @Override
