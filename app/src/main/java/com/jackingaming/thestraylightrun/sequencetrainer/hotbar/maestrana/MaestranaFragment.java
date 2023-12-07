@@ -68,6 +68,8 @@ public class MaestranaFragment extends Fragment {
 
     private class MaestranaDragListener
             implements View.OnDragListener {
+        int resIdNormal = R.drawable.shape_maestrana;
+        int resIdDropTarget = R.drawable.shape_droptarget;
 
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
@@ -79,8 +81,10 @@ public class MaestranaFragment extends Fragment {
 
                         if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana") ||
                                 dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                            // do nothing
                             Log.d(TAG_DEBUG, "label.equals(\"CaddyToMaestrana\") || label.equals(\"MaestranaToCaddy\")");
+
+                            // Change background drawable to indicate drop-target.
+                            view.setBackgroundResource(resIdDropTarget);
 
                             // Return true to indicate that the View can accept the dragged
                             // data.
@@ -96,8 +100,9 @@ public class MaestranaFragment extends Fragment {
                     return false;
                 case DragEvent.ACTION_DRAG_ENTERED:
                     Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
-                    // Change background drawable to indicate drop-target.
-                    view.setBackgroundResource(R.drawable.shape_droptarget);
+
+                    // Change value of alpha to indicate [ENTERED] state.
+                    view.setAlpha(0.5f);
 
                     if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
                         ivToBeAdded = (ImageView) dragEvent.getLocalState();
@@ -106,13 +111,13 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_LOCATION");
                     // Ignore the event.
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
                     Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
-                    // Reset the background drawable to normal.
-                    view.setBackgroundResource(R.drawable.shape);
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
 
                     // Return true. The value is ignored.
                     return true;
@@ -177,14 +182,13 @@ public class MaestranaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    // Reset the background drawable to normal.
-                    view.setBackgroundResource(R.drawable.shape);
-
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
                     // Reset the background drawable to normal.
-                    view.setBackgroundResource(R.drawable.shape);
+                    view.setBackgroundResource(resIdNormal);
 
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
