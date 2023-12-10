@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImageView;
 
 public class MaestranaFragment extends Fragment {
     public static final String TAG_DEBUG = MaestranaFragment.class.getSimpleName();
@@ -88,13 +89,18 @@ public class MaestranaFragment extends Fragment {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
-                    View ivCup = framelayoutLeft.getChildAt(i);
-                    if (isViewOverlapping(espressoStream, ivCup)) {
-                        Log.e(TAG_DEBUG, "OVERLAP");
+                    CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
 
-                        ivCup.setAlpha(0.5f);
-                    } else {
-                        ivCup.setAlpha(1f);
+                    boolean colliding = isViewOverlapping(espressoStream, ivCup);
+                    if (colliding) {
+                        Log.e(TAG_DEBUG, "OVERLAP");
+                    }
+                    ivCup.update(colliding);
+
+                    if (ivCup.isJustCollided()) {
+                        Log.e(TAG_DEBUG, "ivCup.isJustCollided()");
+
+                        ivCup.onCollided();
                     }
                 }
             }
@@ -165,7 +171,7 @@ public class MaestranaFragment extends Fragment {
                     view.setAlpha(0.5f);
 
                     if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                        ivToBeAdded = (ImageView) dragEvent.getLocalState();
+                        ivToBeAdded = (CupImageView) dragEvent.getLocalState();
                     }
 
                     // Return true. The value is ignored.
@@ -187,8 +193,8 @@ public class MaestranaFragment extends Fragment {
                         Log.d(TAG_DEBUG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\")");
                         Log.d(TAG_DEBUG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
 
-                        // Instantiate ImageView.
-                        ivToBeAdded = new ImageView(getContext());
+                        // Instantiate CupImageView.
+                        ivToBeAdded = new CupImageView(getContext());
                         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                                 FrameLayout.LayoutParams.WRAP_CONTENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -229,7 +235,7 @@ public class MaestranaFragment extends Fragment {
                     } else if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
                         Log.d(TAG_DEBUG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
                         Log.d(TAG_DEBUG, "ACTION_DROP Derive ivToBeAdded from dragData");
-                        ivToBeAdded = (ImageView) dragEvent.getLocalState();
+                        ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
                         ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
                         owner.removeView(ivToBeAdded);
