@@ -32,8 +32,8 @@ public class MaestranaFragment extends Fragment {
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
-    private FrameLayout framelayoutEspressoStreamAndSteamWand,
-            framelayoutLeft, framelayoutCenter, framelayoutRight;
+    private FrameLayout framelayoutEspressoStreamAndSteamWand;
+    private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private ObjectAnimator animatorEspressoStream;
 
     private View ivToBeAdded;
