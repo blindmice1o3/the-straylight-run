@@ -30,13 +30,17 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImag
 public class MaestranaFragment extends Fragment {
     public static final String TAG_DEBUG = MaestranaFragment.class.getSimpleName();
 
+    public static final String TAG_MILK_STEAMING_PITCHER = "milk steaming pitcher";
+    public static final String TAG_ESPRESSO_SHOT = "espresso shot";
+
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
     private FrameLayout framelayoutEspressoStreamAndSteamWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
+    private MilkSteamingPitcher milkSteamingPitcher;
     private ObjectAnimator animatorEspressoStream;
 
-    private View ivToBeAdded;
+    private CupImageView ivToBeAdded;
     private float xTouch, yTouch;
 
     public static MaestranaFragment newInstance() {
@@ -66,18 +70,54 @@ public class MaestranaFragment extends Fragment {
         framelayoutLeft.setOnDragListener(maestranaDragListener);
         framelayoutRight.setOnDragListener(maestranaDragListener);
 
-        ImageView espressoStream = new ImageView(getContext());
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                16,
-                64);
-        espressoStream.setLayoutParams(params);
-        espressoStream.setBackgroundColor(getResources().getColor(R.color.brown));
-        espressoStream.setX(250);
-//        framelayoutEspressoStreamAndSteamWand.addView(espressoStream);
-        constraintLayoutMaestrana.addView(espressoStream);
+        // MILK STEAMING PITCHER
+        milkSteamingPitcher = new MilkSteamingPitcher(getContext());
+        milkSteamingPitcher.setTag(TAG_MILK_STEAMING_PITCHER);
+        milkSteamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
+        milkSteamingPitcher.setBackgroundResource(R.drawable.ic_menu_delete);
+        milkSteamingPitcher.setOnClickListener(new View.OnClickListener() {
+            private int index = 0;
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "MILK STEAMING PITCHER", Toast.LENGTH_SHORT).show();
+
+                if (index == 0) {
+                    milkSteamingPitcher.setMilkTag("coconut");
+                } else if (index == 1) {
+                    milkSteamingPitcher.setMilkTag("almond");
+                } else if (index == 2) {
+                    milkSteamingPitcher.setMilkTag("soy");
+                } else if (index == 3) {
+                    milkSteamingPitcher.setMilkTag(null);
+                }
+                milkSteamingPitcher.invalidate();
+
+                index++;
+
+                if (index > 3) {
+                    index = 0;
+                }
+            }
+        });
+        milkSteamingPitcher.setX(30);
+        milkSteamingPitcher.setY(50);
+        framelayoutRight.addView(milkSteamingPitcher);
+
+        // MILK STEAMING WAND
+        // TODO:
+
+        // ESPRESSO SHOT
+        ImageView espressoShot = new ImageView(getContext());
+        espressoShot.setTag(TAG_ESPRESSO_SHOT);
+        espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
+        espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
+        espressoShot.setX(250);
+//        framelayoutEspressoStreamAndSteamWand.addView(espressoShot);
+        constraintLayoutMaestrana.addView(espressoShot);
 
         animatorEspressoStream = ObjectAnimator.ofFloat(
-                espressoStream,
+                espressoShot,
                 "y",
                 0f,
                 800f);
@@ -91,7 +131,7 @@ public class MaestranaFragment extends Fragment {
                 for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
                     CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
 
-                    boolean colliding = isViewOverlapping(espressoStream, ivCup);
+                    boolean colliding = isViewOverlapping(espressoShot, ivCup);
                     if (colliding) {
                         Log.e(TAG_DEBUG, "OVERLAP");
                     }
@@ -312,7 +352,7 @@ public class MaestranaFragment extends Fragment {
                 view.startDragAndDrop(
                         dragData,           // The data to be dragged.
                         myShadow,           // The drag shadow builder.
-                        view,               // The ImageView.
+                        view,               // The CupImageView.
                         0              // Flags. Not currently used, set to 0.
                 );
                 view.setVisibility(View.INVISIBLE);

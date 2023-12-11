@@ -138,7 +138,7 @@ public class CupCaddyFragment extends Fragment {
                     return true;
                 case DragEvent.ACTION_DROP:
                     Log.d(TAG_DEBUG, "ACTION_DROP Derive ivToBeAdded from dragData");
-                    ImageView ivToBeAdded = (ImageView) dragEvent.getLocalState();
+                    CupImageView ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
                     ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
                     owner.removeView(ivToBeAdded);
