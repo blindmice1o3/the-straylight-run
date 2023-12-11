@@ -74,32 +74,20 @@ public class MaestranaFragment extends Fragment {
         milkSteamingPitcher = new MilkSteamingPitcher(getContext());
         milkSteamingPitcher.setTag(TAG_MILK_STEAMING_PITCHER);
         milkSteamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
-        milkSteamingPitcher.setBackgroundResource(R.drawable.ic_menu_delete);
-        milkSteamingPitcher.setOnClickListener(new View.OnClickListener() {
-            private int index = 0;
-
+        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        milkSteamingPitcher.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "MILK STEAMING PITCHER", Toast.LENGTH_SHORT).show();
+            public boolean onLongClick(View view) {
+                Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
 
-                if (index == 0) {
-                    milkSteamingPitcher.setMilkTag("coconut");
-                } else if (index == 1) {
-                    milkSteamingPitcher.setMilkTag("almond");
-                } else if (index == 2) {
-                    milkSteamingPitcher.setMilkTag("soy");
-                } else if (index == 3) {
-                    milkSteamingPitcher.setMilkTag(null);
-                }
+                milkSteamingPitcher.setMilkTag(null);
+                milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
                 milkSteamingPitcher.invalidate();
 
-                index++;
-
-                if (index > 3) {
-                    index = 0;
-                }
+                return true;
             }
         });
+        milkSteamingPitcher.setOnDragListener(new MilkDragListener());
         milkSteamingPitcher.setX(30);
         milkSteamingPitcher.setY(50);
         framelayoutRight.addView(milkSteamingPitcher);
@@ -172,6 +160,100 @@ public class MaestranaFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    private class MilkDragListener
+            implements View.OnDragListener {
+
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            switch (dragEvent.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Determine whether this View can accept the dragged data.
+                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        Log.d(TAG_DEBUG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+
+                        if (dragEvent.getClipDescription().getLabel().equals("Milk")) {
+                            Log.d(TAG_DEBUG, "label.equals(\"Milk\")");
+
+                            // Change value of alpha to indicate drop-target.
+                            view.setAlpha(0.8f);
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        }
+                    } else {
+                        Log.e(TAG_DEBUG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                    }
+
+                    // Return false to indicate that, during the current drag and drop
+                    // operation, this View doesn't receive events again until
+                    // ACTION_DRAG_ENDED is sent.
+                    return false;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
+
+                    // Change value of alpha to indicate [ENTERED] state.
+                    view.setAlpha(0.5f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    // Ignore the event.
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(0.8f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DROP:
+                    Log.d(TAG_DEBUG, "ACTION_DROP");
+
+                    String dragData = dragEvent.getClipData().getItemAt(0).getText().toString();
+                    Log.e(TAG_DEBUG, dragData);
+
+                    if (dragData.equals("coconut")) {
+                        milkSteamingPitcher.setMilkTag("coconut");
+                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.green));
+                    } else if (dragData.equals("almond")) {
+                        milkSteamingPitcher.setMilkTag("almond");
+                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.brown));
+                    } else if (dragData.equals("soy")) {
+                        milkSteamingPitcher.setMilkTag("soy");
+                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.cream));
+                    } else if (dragData.equals("null")) {
+                        milkSteamingPitcher.setMilkTag(null);
+                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+                    }
+                    milkSteamingPitcher.invalidate();
+
+                    // Return true. DragEvent.getResult() returns true.
+                    return true;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENDED");
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
+
+                    // Do a getResult() and displays what happens.
+                    if (dragEvent.getResult()) {
+                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Return true. The value is ignored.
+                    return true;
+                default:
+                    Log.e(TAG_DEBUG, "Unknown action type received by MilkDragListener.");
+                    break;
+            }
+
+            return false;
+        }
+    }
+
     private class MaestranaDragListener
             implements View.OnDragListener {
         int resIdNormal = R.drawable.shape_maestrana;
@@ -228,7 +310,8 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DROP:
-                    // TODO:
+                    Log.d(TAG_DEBUG, "ACTION_DROP");
+
                     if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana")) {
                         Log.d(TAG_DEBUG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\")");
                         Log.d(TAG_DEBUG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
@@ -291,6 +374,8 @@ public class MaestranaFragment extends Fragment {
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
+                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENDED");
+
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
                     // Reset the background drawable to normal.

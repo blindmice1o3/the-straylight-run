@@ -29,7 +29,7 @@ public class MilkSteamingPitcher extends androidx.appcompat.widget.AppCompatImag
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.STROKE);
-        textPaint.setColor(getResources().getColor(R.color.brown));
+        textPaint.setColor(getResources().getColor(R.color.purple_700));
         textPaint.setTextSize(18);
     }
 
