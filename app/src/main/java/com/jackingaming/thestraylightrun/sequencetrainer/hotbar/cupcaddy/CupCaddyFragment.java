@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.jackingaming.thestraylightrun.R;
 
 public class CupCaddyFragment extends Fragment {
-    public static final String TAG_DEBUG = CupCaddyFragment.class.getSimpleName();
+    public static final String TAG = CupCaddyFragment.class.getSimpleName();
 
     public static final String TAG_TRENTA = "trenta";
     public static final String TAG_VENTI = "venti";
@@ -36,21 +36,21 @@ public class CupCaddyFragment extends Fragment {
     private ImageView ivTrenta, ivVenti, ivGrande, ivTall, ivShort;
 
     public static CupCaddyFragment newInstance() {
-        Log.e(TAG_DEBUG, "newInstance()");
+        Log.e(TAG, "newInstance()");
         return new CupCaddyFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.e(TAG_DEBUG, "onCreateView()");
+        Log.e(TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_cup_caddy, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG_DEBUG, "onViewCreated()");
+        Log.e(TAG, "onViewCreated()");
 
         llCupCaddy = view.findViewById(R.id.ll_cup_caddy);
 
@@ -80,7 +80,7 @@ public class CupCaddyFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG_DEBUG, "onActivityCreated()");
+        Log.e(TAG, "onActivityCreated()");
 
         mViewModel = new ViewModelProvider(this).get(CupCaddyViewModel.class);
         // TODO: Use the ViewModel
@@ -97,10 +97,10 @@ public class CupCaddyFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // Determine whether this View can accept the dragged data.
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.d(TAG_DEBUG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                            Log.d(TAG_DEBUG, "label.equals(\"MaestranaToCaddy\")");
+                            Log.d(TAG, "label.equals(\"MaestranaToCaddy\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -110,7 +110,7 @@ public class CupCaddyFragment extends Fragment {
                             return true;
                         }
                     } else {
-                        Log.e(TAG_DEBUG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
                     }
 
                     // Return false to indicate that, during the current drag and drop
@@ -118,7 +118,7 @@ public class CupCaddyFragment extends Fragment {
                     // ACTION_DRAG_ENDED is sent.
                     return false;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
+                    Log.d(TAG, "ACTION_DRAG_ENTERED");
 
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
@@ -129,7 +129,7 @@ public class CupCaddyFragment extends Fragment {
                     // Ignore the event.
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
+                    Log.d(TAG, "ACTION_DRAG_EXITED");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -137,7 +137,7 @@ public class CupCaddyFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DROP:
-                    Log.d(TAG_DEBUG, "ACTION_DROP Derive ivToBeAdded from dragData");
+                    Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
                     CupImageView ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
                     ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
@@ -160,7 +160,7 @@ public class CupCaddyFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 default:
-                    Log.e(TAG_DEBUG, "Unknown action type received by CupCaddyDragListener.");
+                    Log.e(TAG, "Unknown action type received by CupCaddyDragListener.");
                     break;
             }
 
@@ -202,7 +202,7 @@ public class CupCaddyFragment extends Fragment {
                         0              // Flags. Not currently used, set to 0.
                 );
 
-                Log.e(TAG_DEBUG, "label: " + label);
+                Log.e(TAG, "label: " + label);
 
                 // Indicate that the on-touch event is handled.
                 return true;

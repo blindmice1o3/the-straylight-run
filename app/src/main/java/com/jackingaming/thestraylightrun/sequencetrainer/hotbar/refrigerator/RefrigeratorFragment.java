@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.R;
 
 public class RefrigeratorFragment extends Fragment {
-    public static final String TAG_DEBUG = RefrigeratorFragment.class.getSimpleName();
+    public static final String TAG = RefrigeratorFragment.class.getSimpleName();
 
     public static final String TAG_MILK_COCONUT = "coconut";
     public static final String TAG_MILK_ALMOND = "almond";
@@ -28,21 +28,21 @@ public class RefrigeratorFragment extends Fragment {
     private View viewCoconutMilk, viewAlmondMilk, viewSoyMilk;
 
     public static RefrigeratorFragment newInstance() {
-        Log.e(TAG_DEBUG, "newInstance()");
+        Log.e(TAG, "newInstance()");
         return new RefrigeratorFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e(TAG_DEBUG, "onCreateView()");
+        Log.e(TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_refrigerator, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG_DEBUG, "onViewCreated()");
+        Log.e(TAG, "onViewCreated()");
 
         clRefrigerator = view.findViewById(R.id.clRefrigerator);
 
@@ -80,8 +80,8 @@ public class RefrigeratorFragment extends Fragment {
                         0              // Flags. Not currently used, set to 0.
                 );
 
-                Log.e(TAG_DEBUG, "label: " + label);
-                Log.e(TAG_DEBUG, "view.getTag(): " + view.getTag());
+                Log.e(TAG, "label: " + label);
+                Log.e(TAG, "view.getTag(): " + view.getTag());
 
                 // Indicate that the on-touch event is handled.
                 return true;

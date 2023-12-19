@@ -12,12 +12,12 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.Maestr
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 public class SequenceTrainerActivity extends AppCompatActivity {
-    public static final String TAG_DEBUG = SequenceTrainerActivity.class.getSimpleName();
+    public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG_DEBUG, "onCreate()");
+        Log.e(TAG, "onCreate()");
         setContentView(R.layout.activity_sequence_trainer);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

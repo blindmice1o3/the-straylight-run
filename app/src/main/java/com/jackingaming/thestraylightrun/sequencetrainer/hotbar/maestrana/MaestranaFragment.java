@@ -26,9 +26,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
 
 public class MaestranaFragment extends Fragment {
-    public static final String TAG_DEBUG = MaestranaFragment.class.getSimpleName();
+    public static final String TAG = MaestranaFragment.class.getSimpleName();
 
     public static final String TAG_MILK_STEAMING_PITCHER = "milk steaming pitcher";
     public static final String TAG_ESPRESSO_SHOT = "espresso shot";
@@ -44,21 +45,21 @@ public class MaestranaFragment extends Fragment {
     private float xTouch, yTouch;
 
     public static MaestranaFragment newInstance() {
-        Log.e(TAG_DEBUG, "newInstance()");
+        Log.e(TAG, "newInstance()");
         return new MaestranaFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.e(TAG_DEBUG, "onCreateView()");
+        Log.e(TAG, "onCreateView()");
         return inflater.inflate(R.layout.fragment_maestrana, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG_DEBUG, "onViewCreated()");
+        Log.e(TAG, "onViewCreated()");
 
         constraintLayoutMaestrana = view.findViewById(R.id.constraintlayout_maestrana);
         framelayoutEspressoStreamAndSteamWand = view.findViewById(R.id.framelayout_espresso_stream_and_steam_wand);
@@ -121,12 +122,12 @@ public class MaestranaFragment extends Fragment {
 
                     boolean colliding = isViewOverlapping(espressoShot, ivCup);
                     if (colliding) {
-                        Log.e(TAG_DEBUG, "OVERLAP");
+                        Log.e(TAG, "OVERLAP");
                     }
                     ivCup.update(colliding);
 
                     if (ivCup.isJustCollided()) {
-                        Log.e(TAG_DEBUG, "ivCup.isJustCollided()");
+                        Log.e(TAG, "ivCup.isJustCollided()");
 
                         ivCup.onCollided();
                     }
@@ -154,7 +155,7 @@ public class MaestranaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e(TAG_DEBUG, "onActivityCreated()");
+        Log.e(TAG, "onActivityCreated()");
 
         mViewModel = new ViewModelProvider(this).get(MaestranaViewModel.class);
         // TODO: Use the ViewModel
@@ -169,10 +170,10 @@ public class MaestranaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // Determine whether this View can accept the dragged data.
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.d(TAG_DEBUG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         if (dragEvent.getClipDescription().getLabel().equals("Milk")) {
-                            Log.d(TAG_DEBUG, "label.equals(\"Milk\")");
+                            Log.d(TAG, "label.equals(\"Milk\")");
 
                             // Change value of alpha to indicate drop-target.
                             view.setAlpha(0.8f);
@@ -181,7 +182,7 @@ public class MaestranaFragment extends Fragment {
                             return true;
                         }
                     } else {
-                        Log.e(TAG_DEBUG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
                     }
 
                     // Return false to indicate that, during the current drag and drop
@@ -189,7 +190,7 @@ public class MaestranaFragment extends Fragment {
                     // ACTION_DRAG_ENDED is sent.
                     return false;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
+                    Log.d(TAG, "ACTION_DRAG_ENTERED");
 
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
@@ -200,7 +201,7 @@ public class MaestranaFragment extends Fragment {
                     // Ignore the event.
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
+                    Log.d(TAG, "ACTION_DRAG_EXITED");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(0.8f);
@@ -208,10 +209,10 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DROP:
-                    Log.d(TAG_DEBUG, "ACTION_DROP");
+                    Log.d(TAG, "ACTION_DROP");
 
                     String dragData = dragEvent.getClipData().getItemAt(0).getText().toString();
-                    Log.e(TAG_DEBUG, dragData);
+                    Log.e(TAG, dragData);
 
                     if (dragData.equals("coconut")) {
                         milkSteamingPitcher.setMilkTag("coconut");
@@ -231,7 +232,7 @@ public class MaestranaFragment extends Fragment {
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENDED");
+                    Log.d(TAG, "ACTION_DRAG_ENDED");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -239,6 +240,9 @@ public class MaestranaFragment extends Fragment {
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+
+                        new FillSteamingPitcherDialogFragment().show(
+                                getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
@@ -246,7 +250,7 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 default:
-                    Log.e(TAG_DEBUG, "Unknown action type received by MilkDragListener.");
+                    Log.e(TAG, "Unknown action type received by MilkDragListener.");
                     break;
             }
 
@@ -265,11 +269,11 @@ public class MaestranaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_STARTED:
                     // Determine whether this View can accept the dragged data.
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.d(TAG_DEBUG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana") ||
                                 dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                            Log.d(TAG_DEBUG, "label.equals(\"CaddyToMaestrana\") || label.equals(\"MaestranaToCaddy\")");
+                            Log.d(TAG, "label.equals(\"CaddyToMaestrana\") || label.equals(\"MaestranaToCaddy\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -279,7 +283,7 @@ public class MaestranaFragment extends Fragment {
                             return true;
                         }
                     } else {
-                        Log.e(TAG_DEBUG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
                     }
 
                     // Return false to indicate that, during the current drag and drop
@@ -287,7 +291,7 @@ public class MaestranaFragment extends Fragment {
                     // ACTION_DRAG_ENDED is sent.
                     return false;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENTERED");
+                    Log.d(TAG, "ACTION_DRAG_ENTERED");
 
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
@@ -302,7 +306,7 @@ public class MaestranaFragment extends Fragment {
                     // Ignore the event.
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_EXITED");
+                    Log.d(TAG, "ACTION_DRAG_EXITED");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -310,11 +314,11 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DROP:
-                    Log.d(TAG_DEBUG, "ACTION_DROP");
+                    Log.d(TAG, "ACTION_DROP");
 
                     if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana")) {
-                        Log.d(TAG_DEBUG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\")");
-                        Log.d(TAG_DEBUG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
+                        Log.d(TAG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\")");
+                        Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
 
                         // Instantiate CupImageView.
                         ivToBeAdded = new CupImageView(getContext());
@@ -322,6 +326,7 @@ public class MaestranaFragment extends Fragment {
                                 FrameLayout.LayoutParams.WRAP_CONTENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT);
                         ivToBeAdded.setLayoutParams(layoutParams);
+                        ivToBeAdded.setOnTouchListener(new MaestranaToCaddyTouchListener());
 
                         // Get the item containing the dragged data.
                         ClipData.Item item = dragEvent.getClipData().getItemAt(0);
@@ -351,13 +356,13 @@ public class MaestranaFragment extends Fragment {
                             resId = R.drawable.drinksize_short;
                             tag = "short";
                         } else {
-                            Log.e(TAG_DEBUG, "else-clause (generating ImageView to add to LinearLayout).");
+                            Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
                         }
                         ivToBeAdded.setBackgroundResource(resId);
                         ivToBeAdded.setTag(tag);
                     } else if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                        Log.d(TAG_DEBUG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
-                        Log.d(TAG_DEBUG, "ACTION_DROP Derive ivToBeAdded from dragData");
+                        Log.d(TAG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
+                        Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
                         ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
                         ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
@@ -374,7 +379,7 @@ public class MaestranaFragment extends Fragment {
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG_DEBUG, "ACTION_DRAG_ENDED");
+                    Log.d(TAG, "ACTION_DRAG_ENDED");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -386,34 +391,25 @@ public class MaestranaFragment extends Fragment {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
 
                         if (ivToBeAdded != null) {
-                            View.OnTouchListener maestranaToCaddyTouchListener = new MaestranaToCaddyTouchListener();
-                            ivToBeAdded.setOnTouchListener(maestranaToCaddyTouchListener);
-
                             ivToBeAdded.setX(xTouch - (ivToBeAdded.getWidth() / 2));
                             ivToBeAdded.setY(yTouch - (ivToBeAdded.getHeight() / 2));
-
-                            ivToBeAdded.setVisibility(View.VISIBLE);
-
-                            ivToBeAdded = null;
-                            xTouch = -1f;
-                            yTouch = -1f;
                         }
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
 
-                        if (ivToBeAdded != null) {
-                            ivToBeAdded.setVisibility(View.VISIBLE);
+                    if (ivToBeAdded != null) {
+                        ivToBeAdded.setVisibility(View.VISIBLE);
 
-                            ivToBeAdded = null;
-                            xTouch = -1f;
-                            yTouch = -1f;
-                        }
+                        ivToBeAdded = null;
+                        xTouch = -1f;
+                        yTouch = -1f;
                     }
 
                     // Return true. The value is ignored.
                     return true;
                 default:
-                    Log.e(TAG_DEBUG, "Unknown action type received by MaestranaDragListener.");
+                    Log.e(TAG, "Unknown action type received by MaestranaDragListener.");
                     break;
             }
 
@@ -442,7 +438,7 @@ public class MaestranaFragment extends Fragment {
                 );
                 view.setVisibility(View.INVISIBLE);
 
-                Log.e(TAG_DEBUG, "label: " + label);
+                Log.e(TAG, "label: " + label);
 
                 // Indicate that the on-touch event is handled.
                 return true;
