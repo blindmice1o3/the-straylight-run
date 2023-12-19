@@ -13,6 +13,7 @@ import com.jackingaming.thestraylightrun.R;
 public class MilkSteamingPitcher extends androidx.appcompat.widget.AppCompatImageView {
 
     private String milkTag;
+    private int currentMilkLevel;
     private Paint textPaint;
 
     public MilkSteamingPitcher(@NonNull Context context) {
@@ -38,6 +39,7 @@ public class MilkSteamingPitcher extends androidx.appcompat.widget.AppCompatImag
         super.onDraw(canvas);
         String milkData = (milkTag == null) ? "null" : milkTag;
         canvas.drawText(milkData, 5, 20, textPaint);
+        canvas.drawText(Integer.toString(currentMilkLevel), 5, 40, textPaint);
     }
 
     public String getMilkTag() {
@@ -46,5 +48,13 @@ public class MilkSteamingPitcher extends androidx.appcompat.widget.AppCompatImag
 
     public void setMilkTag(String milkTag) {
         this.milkTag = milkTag;
+    }
+
+    public int getCurrentMilkLevel() {
+        return currentMilkLevel;
+    }
+
+    public void setCurrentMilkLevel(int currentMilkLevel) {
+        this.currentMilkLevel = currentMilkLevel;
     }
 }

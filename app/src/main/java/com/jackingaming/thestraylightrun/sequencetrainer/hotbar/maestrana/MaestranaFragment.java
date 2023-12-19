@@ -28,7 +28,8 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
 
-public class MaestranaFragment extends Fragment {
+public class MaestranaFragment extends Fragment
+        implements FillSteamingPitcherDialogFragment.FillSteamingPitcherDialogListener {
     public static final String TAG = MaestranaFragment.class.getSimpleName();
 
     public static final String TAG_MILK_STEAMING_PITCHER = "milk steaming pitcher";
@@ -82,6 +83,7 @@ public class MaestranaFragment extends Fragment {
                 Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
 
                 milkSteamingPitcher.setMilkTag(null);
+                milkSteamingPitcher.setCurrentMilkLevel(0);
                 milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
                 milkSteamingPitcher.invalidate();
 
@@ -241,8 +243,7 @@ public class MaestranaFragment extends Fragment {
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
 
-                        new FillSteamingPitcherDialogFragment().show(
-                                getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
+                        showFillSteamingPitcherDialog();
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
@@ -256,6 +257,25 @@ public class MaestranaFragment extends Fragment {
 
             return false;
         }
+    }
+
+    @Override
+    public void onFinishFillDialog(int current) {
+        Log.e(TAG, "onFinishFillDialog(int)");
+
+        // TODO:
+        int currentMilkLevel = current;
+        Toast.makeText(getContext(), "currentMilkLevel: " + currentMilkLevel, Toast.LENGTH_SHORT).show();
+        milkSteamingPitcher.setCurrentMilkLevel(currentMilkLevel);
+        milkSteamingPitcher.invalidate();
+    }
+
+    private void showFillSteamingPitcherDialog() {
+        int currentMilkLevelOfMilkSteamingPitcher = milkSteamingPitcher.getCurrentMilkLevel();
+        FillSteamingPitcherDialogFragment dialogFragment =
+                FillSteamingPitcherDialogFragment.newInstance(currentMilkLevelOfMilkSteamingPitcher);
+        dialogFragment.setTargetFragment(MaestranaFragment.this, 300);
+        dialogFragment.show(getParentFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
     }
 
     private class MaestranaDragListener
