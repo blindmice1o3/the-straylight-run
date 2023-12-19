@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -32,11 +33,13 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvDisplayer = view.findViewById(R.id.tv_displayer);
+        ImageView ivSteamingCup = view.findViewById(R.id.iv_steaming_cup);
         AppCompatSeekBar seekBar = view.findViewById(R.id.seekbar);
 
         int min = 0;
         int max = 100;
-        current = 20;
+        current = 0;
+        ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_empty);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekBar.setMin(min);
@@ -50,6 +53,24 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 current = i;
                 tvDisplayer.setText(Integer.toString(i));
+
+                int bracket1 = 25;
+                int bracket2 = 50;
+                int bracket3 = 75;
+                int bracket4 = 100;
+                if (current == 0) {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_empty);
+                } else if (current > 0 && current < bracket1) {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_short);
+                } else if (current > bracket1 && current < bracket2) {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_tall);
+                } else if (current > bracket2 && current < bracket3) {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_grande);
+                } else if (current > bracket3 && current < bracket4) {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_venti);
+                } else {
+                    ivSteamingCup.setBackgroundResource(R.drawable.steaming_pitcher_max);
+                }
             }
 
             @Override
