@@ -32,7 +32,7 @@ public class CupCaddyFragment extends Fragment {
     public static final String TAG_SHORT = "short";
 
     private CupCaddyViewModel mViewModel;
-    private LinearLayout llCupCaddy;
+    private LinearLayout linearLayoutCupCaddy;
     private ImageView ivTrenta, ivVenti, ivGrande, ivTall, ivShort;
 
     public static CupCaddyFragment newInstance() {
@@ -52,10 +52,8 @@ public class CupCaddyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        llCupCaddy = view.findViewById(R.id.ll_cup_caddy);
-
-        View.OnDragListener cupCaddyDragListener = new CupCaddyDragListener();
-        llCupCaddy.setOnDragListener(cupCaddyDragListener);
+        linearLayoutCupCaddy = view.findViewById(R.id.linearlayout_cup_caddy);
+        linearLayoutCupCaddy.setOnDragListener(new CupCaddyDragListener());
 
         ivTrenta = view.findViewById(R.id.iv_trenta);
         ivVenti = view.findViewById(R.id.iv_venti);

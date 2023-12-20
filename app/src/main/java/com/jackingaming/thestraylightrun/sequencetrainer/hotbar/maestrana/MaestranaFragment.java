@@ -32,14 +32,14 @@ public class MaestranaFragment extends Fragment
         implements FillSteamingPitcherDialogFragment.FillSteamingPitcherDialogListener {
     public static final String TAG = MaestranaFragment.class.getSimpleName();
 
-    public static final String TAG_MILK_STEAMING_PITCHER = "milk steaming pitcher";
-    public static final String TAG_ESPRESSO_SHOT = "espresso shot";
+    public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
+    public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
     private FrameLayout framelayoutEspressoStreamAndSteamWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
-    private MilkSteamingPitcher milkSteamingPitcher;
+    private SteamingPitcher steamingPitcher;
     private ObjectAnimator animatorEspressoStream;
 
     private CupImageView ivToBeAdded;
@@ -73,27 +73,15 @@ public class MaestranaFragment extends Fragment
         framelayoutRight.setOnDragListener(maestranaDragListener);
 
         // MILK STEAMING PITCHER
-        milkSteamingPitcher = new MilkSteamingPitcher(getContext());
-        milkSteamingPitcher.setTag(TAG_MILK_STEAMING_PITCHER);
-        milkSteamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
-        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-        milkSteamingPitcher.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
-
-                milkSteamingPitcher.setMilkTag(null);
-                milkSteamingPitcher.setCurrentMilkLevel(0);
-                milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-                milkSteamingPitcher.invalidate();
-
-                return true;
-            }
-        });
-        milkSteamingPitcher.setOnDragListener(new MilkDragListener());
-        milkSteamingPitcher.setX(30);
-        milkSteamingPitcher.setY(50);
-        framelayoutRight.addView(milkSteamingPitcher);
+        steamingPitcher = new SteamingPitcher(getContext());
+        steamingPitcher.setTag(TAG_STEAMING_PITCHER);
+        steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
+        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        steamingPitcher.setOnTouchListener(new SteamingPitcherTouchListener());
+        steamingPitcher.setOnDragListener(new MilkDragListener());
+        steamingPitcher.setX(30);
+        steamingPitcher.setY(50);
+        framelayoutRight.addView(steamingPitcher);
 
         // MILK STEAMING WAND
         // TODO:
@@ -217,19 +205,19 @@ public class MaestranaFragment extends Fragment
                     Log.e(TAG, dragData);
 
                     if (dragData.equals("coconut")) {
-                        milkSteamingPitcher.setMilkTag("coconut");
-                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.green));
+                        steamingPitcher.setMilkTag("coconut");
+                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.green));
                     } else if (dragData.equals("almond")) {
-                        milkSteamingPitcher.setMilkTag("almond");
-                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.brown));
+                        steamingPitcher.setMilkTag("almond");
+                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.brown));
                     } else if (dragData.equals("soy")) {
-                        milkSteamingPitcher.setMilkTag("soy");
-                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.cream));
+                        steamingPitcher.setMilkTag("soy");
+                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.cream));
                     } else if (dragData.equals("null")) {
-                        milkSteamingPitcher.setMilkTag(null);
-                        milkSteamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+                        steamingPitcher.setMilkTag(null);
+                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
                     }
-                    milkSteamingPitcher.invalidate();
+                    steamingPitcher.invalidate();
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;
@@ -266,12 +254,12 @@ public class MaestranaFragment extends Fragment
         // TODO:
         int currentMilkLevel = current;
         Toast.makeText(getContext(), "currentMilkLevel: " + currentMilkLevel, Toast.LENGTH_SHORT).show();
-        milkSteamingPitcher.setCurrentMilkLevel(currentMilkLevel);
-        milkSteamingPitcher.invalidate();
+        steamingPitcher.setCurrentMilkLevel(currentMilkLevel);
+        steamingPitcher.invalidate();
     }
 
     private void showFillSteamingPitcherDialog() {
-        int currentMilkLevelOfMilkSteamingPitcher = milkSteamingPitcher.getCurrentMilkLevel();
+        int currentMilkLevelOfMilkSteamingPitcher = steamingPitcher.getCurrentMilkLevel();
         FillSteamingPitcherDialogFragment dialogFragment =
                 FillSteamingPitcherDialogFragment.newInstance(currentMilkLevelOfMilkSteamingPitcher);
         dialogFragment.setTargetFragment(MaestranaFragment.this, 300);
@@ -431,6 +419,36 @@ public class MaestranaFragment extends Fragment
                 default:
                     Log.e(TAG, "Unknown action type received by MaestranaDragListener.");
                     break;
+            }
+
+            return false;
+        }
+    }
+
+    private class SteamingPitcherTouchListener
+            implements View.OnTouchListener {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                String label = "SteamingPitcher";
+
+                ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
+
+                // Start the drag.
+                view.startDragAndDrop(
+                        dragData,           // The data to be dragged.
+                        myShadow,           // The drag shadow builder.
+                        view,               // The SteamingPitcher.
+                        0              // Flags. Not currently used, set to 0.
+                );
+
+                Log.e(TAG, "label: " + label);
+
+                // Indicate that the on-touch event is handled.
+                return true;
             }
 
             return false;

@@ -10,6 +10,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.MaestranaFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragment;
 
 public class SequenceTrainerActivity extends AppCompatActivity {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
@@ -22,7 +23,8 @@ public class SequenceTrainerActivity extends AppCompatActivity {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fcv_main, MaestranaFragment.newInstance());
-        ft.add(R.id.fcv_right, CupCaddyFragment.newInstance());
+        ft.add(R.id.fcv_right_top, CupCaddyFragment.newInstance());
+        ft.add(R.id.fcv_right_bottom, SinkFragment.newInstance("", ""));
         ft.add(R.id.fcv_bottom, RefrigeratorFragment.newInstance());
         ft.commit();
     }

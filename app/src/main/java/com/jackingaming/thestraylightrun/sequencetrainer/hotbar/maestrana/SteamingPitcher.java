@@ -10,18 +10,18 @@ import androidx.annotation.Nullable;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class MilkSteamingPitcher extends androidx.appcompat.widget.AppCompatImageView {
+public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView {
 
     private String milkTag;
     private int currentMilkLevel;
     private Paint textPaint;
 
-    public MilkSteamingPitcher(@NonNull Context context) {
+    public SteamingPitcher(@NonNull Context context) {
         super(context);
         init();
     }
 
-    public MilkSteamingPitcher(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SteamingPitcher(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }

@@ -44,7 +44,7 @@ public class RefrigeratorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        clRefrigerator = view.findViewById(R.id.clRefrigerator);
+        clRefrigerator = view.findViewById(R.id.constraintlayout_refrigerator);
 
         viewCoconutMilk = view.findViewById(R.id.milk_coconut);
         viewAlmondMilk = view.findViewById(R.id.milk_almond);
