@@ -20,10 +20,8 @@ import com.jackingaming.thestraylightrun.R;
 
 public class FillSteamingPitcherDialogFragment extends DialogFragment {
     public static final String TAG = FillSteamingPitcherDialogFragment.class.getSimpleName();
-
-    public interface FillSteamingPitcherDialogListener {
-        void onFinishFillDialog(int current);
-    }
+    public static final String REQUEST_KEY = "fillSteamingPitcher";
+    public static final String BUNDLE_KEY = "current";
 
     private static final String CURRENT = "current";
     private static final int MIN = 0;
@@ -109,8 +107,11 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
     }
 
     private void sendBackResult() {
-        FillSteamingPitcherDialogListener listener = (FillSteamingPitcherDialogListener) getTargetFragment();
-        listener.onFinishFillDialog(current);
+        Log.e(TAG, "sendBackResult()");
+
+        Bundle result = new Bundle();
+        result.putInt(BUNDLE_KEY, current);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 
     private void refreshBackgroundResourceImage(ImageView imageView) {

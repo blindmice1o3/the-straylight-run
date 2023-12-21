@@ -22,14 +22,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
 
-public class MaestranaFragment extends Fragment
-        implements FillSteamingPitcherDialogFragment.FillSteamingPitcherDialogListener {
+public class MaestranaFragment extends Fragment {
     public static final String TAG = MaestranaFragment.class.getSimpleName();
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
@@ -48,6 +48,31 @@ public class MaestranaFragment extends Fragment
     public static MaestranaFragment newInstance() {
         Log.e(TAG, "newInstance()");
         return new MaestranaFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate()");
+
+        // Set the listener on the child fragmentManager.
+        getChildFragmentManager()
+                .setFragmentResultListener(FillSteamingPitcherDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                        if (requestKey.equals(FillSteamingPitcherDialogFragment.REQUEST_KEY)) {
+                            Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
+
+                            // TODO:
+                            int current = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY);
+                            Log.e(TAG, "current: " + current);
+                            steamingPitcher.setCurrentMilkLevel(current);
+                            steamingPitcher.invalidate();
+                        } else {
+                            Log.e(TAG, "onFragmentResult() requestKey is unknown.");
+                        }
+                    }
+                });
     }
 
     @Override
@@ -247,23 +272,11 @@ public class MaestranaFragment extends Fragment
         }
     }
 
-    @Override
-    public void onFinishFillDialog(int current) {
-        Log.e(TAG, "onFinishFillDialog(int)");
-
-        // TODO:
-        int currentMilkLevel = current;
-        Toast.makeText(getContext(), "currentMilkLevel: " + currentMilkLevel, Toast.LENGTH_SHORT).show();
-        steamingPitcher.setCurrentMilkLevel(currentMilkLevel);
-        steamingPitcher.invalidate();
-    }
-
     private void showFillSteamingPitcherDialog() {
         int currentMilkLevelOfMilkSteamingPitcher = steamingPitcher.getCurrentMilkLevel();
         FillSteamingPitcherDialogFragment dialogFragment =
                 FillSteamingPitcherDialogFragment.newInstance(currentMilkLevelOfMilkSteamingPitcher);
-        dialogFragment.setTargetFragment(MaestranaFragment.this, 300);
-        dialogFragment.show(getParentFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
+        dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
     }
 
     private class MaestranaDragListener
