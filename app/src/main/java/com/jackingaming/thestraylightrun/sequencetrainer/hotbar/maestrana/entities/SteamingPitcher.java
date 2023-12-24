@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -19,9 +19,11 @@ import com.jackingaming.thestraylightrun.R;
 public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView {
     public static final String TAG = SteamingPitcher.class.getSimpleName();
 
+    private boolean steamed;
     private String content;
     private int amount;
-    private Paint textPaint;
+    private Paint textPaintPurple;
+    private Paint textPaintRed;
 
     public SteamingPitcher(@NonNull Context context) {
         super(context);
@@ -34,11 +36,17 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     private void init() {
-        textPaint = new Paint();
-        textPaint.setAntiAlias(true);
-        textPaint.setStyle(Paint.Style.STROKE);
-        textPaint.setColor(getResources().getColor(R.color.purple_700));
-        textPaint.setTextSize(18);
+        textPaintPurple = new Paint();
+        textPaintPurple.setAntiAlias(true);
+        textPaintPurple.setStyle(Paint.Style.STROKE);
+        textPaintPurple.setColor(getResources().getColor(R.color.purple_700));
+        textPaintPurple.setTextSize(18);
+
+        textPaintRed = new Paint();
+        textPaintRed.setAntiAlias(true);
+        textPaintRed.setStyle(Paint.Style.STROKE);
+        textPaintRed.setColor(getResources().getColor(R.color.red));
+        textPaintRed.setTextSize(18);
     }
 
     @Override
@@ -46,8 +54,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         super.onDraw(canvas);
 
         String nameOfContent = (content == null) ? "null" : content;
-        canvas.drawText(nameOfContent, 5, 20, textPaint);
-        canvas.drawText(Integer.toString(amount), 5, 40, textPaint);
+        canvas.drawText(nameOfContent, 5, 20, textPaintPurple);
+        canvas.drawText(Integer.toString(amount), 5, 40, textPaintPurple);
+        if (steamed) {
+            canvas.drawText("steamed", 5, 60, textPaintRed);
+        } else {
+            canvas.drawText("unsteamed", 5, 60, textPaintPurple);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -76,8 +89,16 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         return false;
     }
 
+    public void steam() {
+        Log.e(TAG, "steam()");
+
+        steamed = true;
+        invalidate();
+    }
+
     public void empty() {
         Log.e(TAG, "empty()");
+        steamed = false;
         update(null, 0);
     }
 

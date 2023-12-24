@@ -23,13 +23,16 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingWand;
 
 public class MaestranaFragment extends Fragment {
     public static final String TAG = MaestranaFragment.class.getSimpleName();
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
+    public static final String TAG_STEAMING_WAND = "SteamingWand";
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
 
     private MaestranaViewModel mViewModel;
@@ -37,6 +40,7 @@ public class MaestranaFragment extends Fragment {
     private FrameLayout framelayoutEspressoStreamAndSteamWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
+    private SteamingWand steamingWand;
     private ObjectAnimator animatorEspressoStream;
 
     private CupImageView ivToBeAdded;
@@ -93,17 +97,24 @@ public class MaestranaFragment extends Fragment {
         framelayoutLeft.setOnDragListener(maestranaDragListener);
         framelayoutRight.setOnDragListener(maestranaDragListener);
 
-        // MILK STEAMING PITCHER
+        // STEAMING PITCHER
         steamingPitcher = new SteamingPitcher(getContext());
         steamingPitcher.setTag(TAG_STEAMING_PITCHER);
-        steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
-        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-        steamingPitcher.setOnDragListener(new MilkDragListener());
         steamingPitcher.setX(30);
         steamingPitcher.setY(50);
+        steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
+        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        steamingPitcher.setOnDragListener(new ToSteamingPitcherDragListener());
         framelayoutRight.addView(steamingPitcher);
 
-        // MILK STEAMING WAND
+        // STEAMING WAND
+        steamingWand = new SteamingWand(getContext());
+        steamingWand.setTag(TAG_STEAMING_WAND);
+        steamingWand.setX(800);
+        steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
+        steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
+        steamingWand.setOnDragListener(new SteamingWandDragListener());
+        constraintLayoutMaestrana.addView(steamingWand);
         // TODO:
 
         // ESPRESSO SHOT
@@ -171,7 +182,7 @@ public class MaestranaFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    private class MilkDragListener
+    private class ToSteamingPitcherDragListener
             implements View.OnDragListener {
 
         @Override
@@ -221,12 +232,12 @@ public class MaestranaFragment extends Fragment {
                 case DragEvent.ACTION_DROP:
                     Log.d(TAG, "ACTION_DROP");
 
-                    String dragData = dragEvent.getClipData().getItemAt(0).getText().toString();
-                    Log.e(TAG, dragData);
+                    String contentToBeSteamed = dragEvent.getClipData().getItemAt(0).getText().toString();
+                    Log.e(TAG, contentToBeSteamed);
 
                     FillSteamingPitcherDialogFragment dialogFragment =
                             FillSteamingPitcherDialogFragment.newInstance(
-                                    dragData,
+                                    contentToBeSteamed,
                                     steamingPitcher.getAmount());
                     dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
 
@@ -256,10 +267,90 @@ public class MaestranaFragment extends Fragment {
         }
     }
 
-    private void showFillSteamingPitcherDialog() {
-        Log.e(TAG, "showFillSteamingPitcherDialog()");
+    private class SteamingWandDragListener
+            implements View.OnDragListener {
 
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            switch (dragEvent.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Determine whether this View can accept the dragged data.
+                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
+                        if (dragEvent.getClipDescription().getLabel().equals("SteamingPitcher")) {
+                            Log.d(TAG, "label.equals(\"SteamingPitcher\")");
+
+                            SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
+                            if (steamingPitcher.getContent() != null &&
+                                    steamingPitcher.getAmount() > 0) {
+                                // Change value of alpha to indicate drop-target.
+                                view.setAlpha(0.8f);
+
+                                // Return true to indicate that the View can accept the dragged
+                                // data.
+                                return true;
+                            } else {
+                                Log.d(TAG, "steamingPitcher's content is null or amount <= 0.");
+                            }
+                        }
+                    } else {
+                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                    }
+
+                    // Return false to indicate that, during the current drag and drop
+                    // operation, this View doesn't receive events again until
+                    // ACTION_DRAG_ENDED is sent.
+                    return false;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d(TAG, "ACTION_DRAG_ENTERED");
+
+                    // Change value of alpha to indicate [ENTERED] state.
+                    view.setAlpha(0.5f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    // Ignore the event.
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d(TAG, "ACTION_DRAG_EXITED");
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(0.8f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DROP:
+                    Log.d(TAG, "ACTION_DROP");
+
+                    SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
+                    steamingPitcher.steam();
+
+                    // Return true. DragEvent.getResult() returns true.
+                    return true;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    Log.d(TAG, "ACTION_DRAG_ENDED");
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
+
+                    // Do a getResult() and displays what happens.
+                    if (dragEvent.getResult()) {
+                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Return true. The value is ignored.
+                    return true;
+                default:
+                    Log.e(TAG, "Unknown action type received by SteamingWandDragListener.");
+                    break;
+            }
+
+            return false;
+        }
     }
 
     private class MaestranaDragListener

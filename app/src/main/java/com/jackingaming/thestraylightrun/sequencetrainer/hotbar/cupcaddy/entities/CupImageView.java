@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities;
 
 import android.content.ClipData;
 import android.content.Context;
