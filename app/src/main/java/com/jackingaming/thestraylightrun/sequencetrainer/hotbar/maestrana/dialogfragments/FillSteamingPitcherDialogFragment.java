@@ -21,9 +21,11 @@ import com.jackingaming.thestraylightrun.R;
 public class FillSteamingPitcherDialogFragment extends DialogFragment {
     public static final String TAG = FillSteamingPitcherDialogFragment.class.getSimpleName();
     public static final String REQUEST_KEY = "fillSteamingPitcher";
-    public static final String BUNDLE_KEY = "current";
+    public static final String BUNDLE_KEY_CONTENT = "content";
+    public static final String BUNDLE_KEY_AMOUNT = "amount";
 
-    private static final String CURRENT = "current";
+    private static final String CONTENT = "content";
+    private static final String AMOUNT = "amount";
     private static final int MIN = 0;
     private static final int MAX = 25 * 4;
     private static final int BRACKET1 = 8 * 4;
@@ -31,15 +33,17 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
     private static final int BRACKET3 = 16 * 4;
     private static final int BRACKET4 = 20 * 4;
 
-    private int current;
+    private String content;
+    private int amount;
 
-    public static FillSteamingPitcherDialogFragment newInstance(int current) {
-        Log.e(TAG, "newInstance(int)");
+    public static FillSteamingPitcherDialogFragment newInstance(String content, int amount) {
+        Log.e(TAG, "newInstance(String, int)");
 
         FillSteamingPitcherDialogFragment fragment = new FillSteamingPitcherDialogFragment();
 
         Bundle args = new Bundle();
-        args.putInt(CURRENT, current);
+        args.putString(CONTENT, content);
+        args.putInt(AMOUNT, amount);
         fragment.setArguments(args);
 
         return fragment;
@@ -62,21 +66,24 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
         ImageView ivSteamingCup = view.findViewById(R.id.iv_steaming_cup);
         AppCompatSeekBar seekBar = view.findViewById(R.id.seekbar);
 
-        current = getArguments().getInt(CURRENT);
-        tvDisplayer.setText(Integer.toString(current));
+        content = getArguments().getString(CONTENT);
+        amount = getArguments().getInt(AMOUNT);
+
+        tvDisplayer.setText(content + ": " + amount);
         refreshBackgroundResourceImage(ivSteamingCup);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekBar.setMin(MIN);
             seekBar.setMax(MAX);
         }
-        seekBar.setProgress(current);
+        seekBar.setProgress(amount);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                current = i;
-                tvDisplayer.setText(Integer.toString(i));
+                amount = i;
+
+                tvDisplayer.setText(content + ": " + amount);
                 refreshBackgroundResourceImage(ivSteamingCup);
             }
 
@@ -110,20 +117,21 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
         Log.e(TAG, "sendBackResult()");
 
         Bundle result = new Bundle();
-        result.putInt(BUNDLE_KEY, current);
+        result.putString(BUNDLE_KEY_CONTENT, content);
+        result.putInt(BUNDLE_KEY_AMOUNT, amount);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 
     private void refreshBackgroundResourceImage(ImageView imageView) {
-        if (current == 0) {
+        if (amount == 0) {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_empty);
-        } else if (current > 0 && current <= BRACKET1) {
+        } else if (amount > 0 && amount <= BRACKET1) {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_short);
-        } else if (current > BRACKET1 && current <= BRACKET2) {
+        } else if (amount > BRACKET1 && amount <= BRACKET2) {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_tall);
-        } else if (current > BRACKET2 && current <= BRACKET3) {
+        } else if (amount > BRACKET2 && amount <= BRACKET3) {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_grande);
-        } else if (current > BRACKET3 && current <= BRACKET4) {
+        } else if (amount > BRACKET3 && amount <= BRACKET4) {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_venti);
         } else {
             imageView.setBackgroundResource(R.drawable.steaming_pitcher_max);

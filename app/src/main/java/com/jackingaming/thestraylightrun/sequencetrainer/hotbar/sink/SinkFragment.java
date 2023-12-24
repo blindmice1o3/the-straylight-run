@@ -142,10 +142,7 @@ public class SinkFragment extends Fragment {
                     SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
 
                     Toast.makeText(getContext(), "emptying steaming pitcher", Toast.LENGTH_SHORT).show();
-                    steamingPitcher.setMilkTag(null);
-                    steamingPitcher.setCurrentMilkLevel(0);
-                    steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-                    steamingPitcher.invalidate();
+                    steamingPitcher.empty();
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;

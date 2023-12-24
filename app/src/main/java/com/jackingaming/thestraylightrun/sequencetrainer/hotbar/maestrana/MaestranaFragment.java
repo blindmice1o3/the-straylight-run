@@ -4,12 +4,10 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
@@ -63,11 +60,10 @@ public class MaestranaFragment extends Fragment {
                         if (requestKey.equals(FillSteamingPitcherDialogFragment.REQUEST_KEY)) {
                             Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
 
-                            // TODO:
-                            int current = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY);
-                            Log.e(TAG, "current: " + current);
-                            steamingPitcher.setCurrentMilkLevel(current);
-                            steamingPitcher.invalidate();
+                            String content = result.getString(FillSteamingPitcherDialogFragment.BUNDLE_KEY_CONTENT);
+                            int amount = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY_AMOUNT);
+                            Log.e(TAG, content + ": " + amount);
+                            steamingPitcher.update(content, amount);
                         } else {
                             Log.e(TAG, "onFragmentResult() requestKey is unknown.");
                         }
@@ -102,7 +98,6 @@ public class MaestranaFragment extends Fragment {
         steamingPitcher.setTag(TAG_STEAMING_PITCHER);
         steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
         steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-        steamingPitcher.setOnTouchListener(new SteamingPitcherTouchListener());
         steamingPitcher.setOnDragListener(new MilkDragListener());
         steamingPitcher.setX(30);
         steamingPitcher.setY(50);
@@ -229,20 +224,11 @@ public class MaestranaFragment extends Fragment {
                     String dragData = dragEvent.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, dragData);
 
-                    if (dragData.equals("coconut")) {
-                        steamingPitcher.setMilkTag("coconut");
-                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.green));
-                    } else if (dragData.equals("almond")) {
-                        steamingPitcher.setMilkTag("almond");
-                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.brown));
-                    } else if (dragData.equals("soy")) {
-                        steamingPitcher.setMilkTag("soy");
-                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.cream));
-                    } else if (dragData.equals("null")) {
-                        steamingPitcher.setMilkTag(null);
-                        steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-                    }
-                    steamingPitcher.invalidate();
+                    FillSteamingPitcherDialogFragment dialogFragment =
+                            FillSteamingPitcherDialogFragment.newInstance(
+                                    dragData,
+                                    steamingPitcher.getAmount());
+                    dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;
@@ -255,8 +241,6 @@ public class MaestranaFragment extends Fragment {
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
-
-                        showFillSteamingPitcherDialog();
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
@@ -273,10 +257,9 @@ public class MaestranaFragment extends Fragment {
     }
 
     private void showFillSteamingPitcherDialog() {
-        int currentMilkLevelOfMilkSteamingPitcher = steamingPitcher.getCurrentMilkLevel();
-        FillSteamingPitcherDialogFragment dialogFragment =
-                FillSteamingPitcherDialogFragment.newInstance(currentMilkLevelOfMilkSteamingPitcher);
-        dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
+        Log.e(TAG, "showFillSteamingPitcherDialog()");
+
+
     }
 
     private class MaestranaDragListener
@@ -347,7 +330,6 @@ public class MaestranaFragment extends Fragment {
                                 FrameLayout.LayoutParams.WRAP_CONTENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT);
                         ivToBeAdded.setLayoutParams(layoutParams);
-                        ivToBeAdded.setOnTouchListener(new MaestranaToCaddyTouchListener());
 
                         // Get the item containing the dragged data.
                         ClipData.Item item = dragEvent.getClipData().getItemAt(0);
@@ -432,67 +414,6 @@ public class MaestranaFragment extends Fragment {
                 default:
                     Log.e(TAG, "Unknown action type received by MaestranaDragListener.");
                     break;
-            }
-
-            return false;
-        }
-    }
-
-    private class SteamingPitcherTouchListener
-            implements View.OnTouchListener {
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = "SteamingPitcher";
-
-                ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
-
-                // Start the drag.
-                view.startDragAndDrop(
-                        dragData,           // The data to be dragged.
-                        myShadow,           // The drag shadow builder.
-                        view,               // The SteamingPitcher.
-                        0              // Flags. Not currently used, set to 0.
-                );
-
-                Log.e(TAG, "label: " + label);
-
-                // Indicate that the on-touch event is handled.
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    private class MaestranaToCaddyTouchListener
-            implements View.OnTouchListener {
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = "MaestranaToCaddy";
-
-                ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
-
-                // Start the drag.
-                view.startDragAndDrop(
-                        dragData,           // The data to be dragged.
-                        myShadow,           // The drag shadow builder.
-                        view,               // The CupImageView.
-                        0              // Flags. Not currently used, set to 0.
-                );
-                view.setVisibility(View.INVISIBLE);
-
-                Log.e(TAG, "label: " + label);
-
-                // Indicate that the on-touch event is handled.
-                return true;
             }
 
             return false;
