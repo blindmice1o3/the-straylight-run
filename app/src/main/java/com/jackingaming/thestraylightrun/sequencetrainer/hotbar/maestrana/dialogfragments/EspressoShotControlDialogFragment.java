@@ -16,9 +16,17 @@ import com.jackingaming.thestraylightrun.R;
 
 public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String TAG = EspressoShotControlDialogFragment.class.getSimpleName();
+    public static final String REQUEST_KEY = "espressoShotControl";
+    public static final String BUNDLE_KEY_TYPE = "type";
+    public static final String BUNDLE_KEY_QUANTITY = "quantity";
+
+    public enum Type {BLONDE, SIGNATURE, DECAF;}
 
     private Button buttonBlonde, buttonSignature, buttonDecaf;
     private Button buttonSingle, buttonDouble, buttonTriple;
+
+    private Type typeSelected = Type.SIGNATURE;
+    private int quantitySelected = 0;
 
     @Nullable
     @Override
@@ -44,36 +52,42 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "BLONDE");
+                typeSelected = Type.BLONDE;
             }
         });
         buttonSignature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "SIGNATURE");
+                typeSelected = Type.SIGNATURE;
             }
         });
         buttonDecaf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "DECAF");
+                typeSelected = Type.DECAF;
             }
         });
         buttonSingle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "SINGLE");
+                quantitySelected = 1;
             }
         });
         buttonDouble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "DOUBLE");
+                quantitySelected = 2;
             }
         });
         buttonTriple.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "TRIPLE");
+                quantitySelected = 3;
             }
         });
     }
@@ -82,11 +96,22 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
+
+        sendBackResult();
     }
 
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         Log.e(TAG, "onCancel()");
+    }
+
+    private void sendBackResult() {
+        Log.e(TAG, "sendBackResult()");
+
+        Bundle result = new Bundle();
+        result.putSerializable(BUNDLE_KEY_TYPE, typeSelected);
+        result.putInt(BUNDLE_KEY_QUANTITY, quantitySelected);
+        getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 }

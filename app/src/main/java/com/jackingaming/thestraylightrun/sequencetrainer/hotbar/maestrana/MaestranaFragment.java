@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
@@ -63,16 +66,25 @@ public class MaestranaFragment extends Fragment {
                 .setFragmentResultListener(FillSteamingPitcherDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-                        if (requestKey.equals(FillSteamingPitcherDialogFragment.REQUEST_KEY)) {
-                            Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
+                        Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
 
-                            String content = result.getString(FillSteamingPitcherDialogFragment.BUNDLE_KEY_CONTENT);
-                            int amount = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY_AMOUNT);
-                            Log.e(TAG, content + ": " + amount);
-                            steamingPitcher.update(content, amount);
-                        } else {
-                            Log.e(TAG, "onFragmentResult() requestKey is unknown.");
-                        }
+                        String content = result.getString(FillSteamingPitcherDialogFragment.BUNDLE_KEY_CONTENT);
+                        int amount = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY_AMOUNT);
+                        Log.e(TAG, content + ": " + amount);
+                        steamingPitcher.update(content, amount);
+                    }
+                });
+        getChildFragmentManager()
+                .setFragmentResultListener(EspressoShotControlDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
+                    @RequiresApi(api = 33)
+                    @Override
+                    public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
+                        Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
+
+                        EspressoShotControlDialogFragment.Type typeSelected = (EspressoShotControlDialogFragment.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
+                        int quantitySelected = result.getInt(EspressoShotControlDialogFragment.BUNDLE_KEY_QUANTITY);
+                        Log.e(TAG, "type: " + typeSelected.name() + ", quantity: " + quantitySelected);
+                        // TODO:
                     }
                 });
     }
@@ -143,15 +155,28 @@ public class MaestranaFragment extends Fragment {
 //        framelayoutEspressoStreamAndSteamWand.addView(espressoShot);
         constraintLayoutMaestrana.addView(espressoShot);
 
+        int repeatCountSingle = 0;
+        int repeatCountDouble = 1;
+        int repeatCountTriple = 2;
         animatorEspressoStream = ObjectAnimator.ofFloat(
                 espressoShot,
                 "y",
                 0f,
                 800f);
         animatorEspressoStream.setDuration(4000);
-        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
-        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
+        animatorEspressoStream.setRepeatCount(repeatCountSingle);
+//        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
+//        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
         animatorEspressoStream.setInterpolator(new AccelerateDecelerateInterpolator());
+        animatorEspressoStream.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "onAnimationEnd()");
+                // TODO:
+                espressoShot.setY(0);
+            }
+        });
         animatorEspressoStream.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
