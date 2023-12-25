@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingWand;
@@ -33,6 +34,7 @@ public class MaestranaFragment extends Fragment {
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
+    public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
 
     private MaestranaViewModel mViewModel;
@@ -115,14 +117,29 @@ public class MaestranaFragment extends Fragment {
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
         steamingWand.setOnDragListener(new SteamingWandDragListener());
         constraintLayoutMaestrana.addView(steamingWand);
+
         // TODO:
+        // ESPRESSO SHOT CONTROL
+        ImageView espressoShotControl = new ImageView(getContext());
+        espressoShotControl.setTag(TAG_ESPRESSO_SHOT_CONTROL);
+        espressoShotControl.setLayoutParams(new FrameLayout.LayoutParams(128, 128));
+        espressoShotControl.setBackgroundColor(getResources().getColor(R.color.brown));
+        espressoShotControl.setX(250 - (128 / 2));
+        espressoShotControl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EspressoShotControlDialogFragment dialogFragment = new EspressoShotControlDialogFragment();
+                dialogFragment.show(getChildFragmentManager(), EspressoShotControlDialogFragment.TAG);
+            }
+        });
+        constraintLayoutMaestrana.addView(espressoShotControl);
 
         // ESPRESSO SHOT
         ImageView espressoShot = new ImageView(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
-        espressoShot.setX(250);
+        espressoShot.setX(250 - (16 / 2));
 //        framelayoutEspressoStreamAndSteamWand.addView(espressoShot);
         constraintLayoutMaestrana.addView(espressoShot);
 
