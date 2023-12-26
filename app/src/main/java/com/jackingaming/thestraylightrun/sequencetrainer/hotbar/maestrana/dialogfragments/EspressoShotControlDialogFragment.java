@@ -74,6 +74,7 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.e(TAG, "SINGLE");
                 quantitySelected = 1;
+                dismiss();
             }
         });
         buttonDouble.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,7 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.e(TAG, "DOUBLE");
                 quantitySelected = 2;
+                dismiss();
             }
         });
         buttonTriple.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +90,7 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 Log.e(TAG, "TRIPLE");
                 quantitySelected = 3;
+                dismiss();
             }
         });
     }

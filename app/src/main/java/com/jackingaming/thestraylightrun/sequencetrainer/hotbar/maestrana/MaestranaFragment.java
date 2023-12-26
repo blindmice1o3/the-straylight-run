@@ -46,6 +46,7 @@ public class MaestranaFragment extends Fragment {
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
+    private ImageView espressoShot;
     private ObjectAnimator animatorEspressoStream;
 
     private CupImageView ivToBeAdded;
@@ -76,6 +77,10 @@ public class MaestranaFragment extends Fragment {
                 });
         getChildFragmentManager()
                 .setFragmentResultListener(EspressoShotControlDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
+                    private static final int REPEAT_COUNT_SINGLE = 0;
+                    private static final int REPEAT_COUNT_DOUBLE = 1;
+                    private static final int REPEAT_COUNT_TRIPLE = 2;
+
                     @RequiresApi(api = 33)
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
@@ -84,7 +89,77 @@ public class MaestranaFragment extends Fragment {
                         EspressoShotControlDialogFragment.Type typeSelected = (EspressoShotControlDialogFragment.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
                         int quantitySelected = result.getInt(EspressoShotControlDialogFragment.BUNDLE_KEY_QUANTITY);
                         Log.e(TAG, "type: " + typeSelected.name() + ", quantity: " + quantitySelected);
-                        // TODO:
+
+                        if (quantitySelected < 1) {
+                            Log.e(TAG, "quantitySelected < 1 returning.");
+                            return;
+                        }
+
+                        int colorToUse = R.color.brown;
+                        switch (typeSelected) {
+                            case BLONDE:
+                                colorToUse = R.color.cream;
+                                break;
+                            case SIGNATURE:
+                                colorToUse = R.color.light_blue_900;
+                                break;
+                            case DECAF:
+                                colorToUse = R.color.teal_200;
+                                break;
+                        }
+                        espressoShot.setBackgroundColor(getResources().getColor(colorToUse));
+
+                        int repeatCountToUse = -1;
+                        if (quantitySelected == 1) {
+                            repeatCountToUse = REPEAT_COUNT_SINGLE;
+                        } else if (quantitySelected == 2) {
+                            repeatCountToUse = REPEAT_COUNT_DOUBLE;
+                        } else if (quantitySelected == 3) {
+                            repeatCountToUse = REPEAT_COUNT_TRIPLE;
+                        } else {
+                            Log.e(TAG, "repeatCountToUse != 1 or 2 or 3.");
+                        }
+                        animatorEspressoStream = ObjectAnimator.ofFloat(
+                                espressoShot,
+                                "y",
+                                0f,
+                                800f);
+                        animatorEspressoStream.setDuration(4000);
+                        animatorEspressoStream.setRepeatCount(repeatCountToUse);
+//        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
+//        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
+                        animatorEspressoStream.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animatorEspressoStream.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                Log.e(TAG, "onAnimationEnd()");
+                                // TODO:
+                                espressoShot.setY(0);
+                                espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
+                            }
+                        });
+                        animatorEspressoStream.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                                for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
+                                    CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
+
+                                    boolean colliding = isViewOverlapping(espressoShot, ivCup);
+                                    if (colliding) {
+                                        Log.e(TAG, "OVERLAP");
+                                    }
+                                    ivCup.update(colliding);
+
+                                    if (ivCup.isJustCollided()) {
+                                        Log.e(TAG, "ivCup.isJustCollided()");
+
+                                        ivCup.onCollided();
+                                    }
+                                }
+                            }
+                        });
+                        animatorEspressoStream.start();
                     }
                 });
     }
@@ -147,57 +222,13 @@ public class MaestranaFragment extends Fragment {
         constraintLayoutMaestrana.addView(espressoShotControl);
 
         // ESPRESSO SHOT
-        ImageView espressoShot = new ImageView(getContext());
+        espressoShot = new ImageView(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShot.setX(250 - (16 / 2));
 //        framelayoutEspressoStreamAndSteamWand.addView(espressoShot);
         constraintLayoutMaestrana.addView(espressoShot);
-
-        int repeatCountSingle = 0;
-        int repeatCountDouble = 1;
-        int repeatCountTriple = 2;
-        animatorEspressoStream = ObjectAnimator.ofFloat(
-                espressoShot,
-                "y",
-                0f,
-                800f);
-        animatorEspressoStream.setDuration(4000);
-        animatorEspressoStream.setRepeatCount(repeatCountSingle);
-//        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
-//        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
-        animatorEspressoStream.setInterpolator(new AccelerateDecelerateInterpolator());
-        animatorEspressoStream.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Log.e(TAG, "onAnimationEnd()");
-                // TODO:
-                espressoShot.setY(0);
-            }
-        });
-        animatorEspressoStream.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
-                    CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
-
-                    boolean colliding = isViewOverlapping(espressoShot, ivCup);
-                    if (colliding) {
-                        Log.e(TAG, "OVERLAP");
-                    }
-                    ivCup.update(colliding);
-
-                    if (ivCup.isJustCollided()) {
-                        Log.e(TAG, "ivCup.isJustCollided()");
-
-                        ivCup.onCollided();
-                    }
-                }
-            }
-        });
-        animatorEspressoStream.start();
     }
 
     private boolean isViewOverlapping(View firstView, View secondView) {
