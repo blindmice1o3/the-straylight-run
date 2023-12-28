@@ -16,12 +16,16 @@ import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView {
+import java.util.HashMap;
+
+public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView
+        implements LiquidContainable {
     public static final String TAG = SteamingPitcher.class.getSimpleName();
 
     private boolean steamed;
     private String content;
     private int amount;
+
     private Paint textPaintPurple;
     private Paint textPaintRed;
 
@@ -124,6 +128,14 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         invalidate();
     }
 
+    public boolean isSteamed() {
+        return steamed;
+    }
+
+    public void setSteamed(boolean steamed) {
+        this.steamed = steamed;
+    }
+
     public String getContent() {
         return content;
     }
@@ -138,5 +150,39 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public void transferIn(HashMap<String, String> content) {
+        if (content.containsKey("content")) {
+            this.content = content.get("content");
+        }
+        if (content.containsKey("amount")) {
+            this.amount = Integer.parseInt(
+                    content.get("amount")
+            );
+        }
+        if (content.containsKey("steamed")) {
+            this.steamed = Boolean.parseBoolean(
+                    content.get("steamed")
+            );
+        }
+
+        invalidate();
+    }
+
+    @Override
+    public HashMap<String, String> transferOut() {
+        HashMap<String, String> content = new HashMap<>();
+        content.put("content", this.content);
+        content.put("amount", Integer.toString(this.amount));
+        content.put("steamed", Boolean.toString(this.steamed));
+
+        this.content = null;
+        this.amount = 0;
+        this.steamed = false;
+        invalidate();
+
+        return content;
     }
 }

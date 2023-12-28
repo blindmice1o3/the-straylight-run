@@ -29,6 +29,8 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingWand;
 
@@ -39,6 +41,7 @@ public class MaestranaFragment extends Fragment {
     public static final String TAG_STEAMING_WAND = "SteamingWand";
     public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
+    public static final String TAG_SHOT_GLASS = "ShotGlass";
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
@@ -46,7 +49,8 @@ public class MaestranaFragment extends Fragment {
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
-    private ImageView espressoShot;
+    private EspressoShot espressoShot;
+    private ShotGlass shotGlass;
     private ObjectAnimator animatorEspressoStream;
 
     private CupImageView ivToBeAdded;
@@ -143,18 +147,44 @@ public class MaestranaFragment extends Fragment {
                             @Override
                             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                                 for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
-                                    CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
+                                    if (framelayoutLeft.getChildAt(i) instanceof CupImageView) {
+                                        CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
 
-                                    boolean colliding = isViewOverlapping(espressoShot, ivCup);
-                                    if (colliding) {
-                                        Log.e(TAG, "OVERLAP");
-                                    }
-                                    ivCup.update(colliding);
+                                        boolean colliding = isViewOverlapping(espressoShot, ivCup);
+                                        Log.e(TAG, "ivCup x, y: " + ivCup.getX() + ", " + ivCup.getY());
+                                        Log.e(TAG, "colliding: " + colliding);
+                                        Log.e(TAG, "ivCup width, height: " + ivCup.getWidth() + ", " + ivCup.getHeight());
+                                        if (colliding) {
+//                                            Log.e(TAG, "OVERLAP CupImageView");
+                                        }
+                                        ivCup.update(colliding);
 
-                                    if (ivCup.isJustCollided()) {
-                                        Log.e(TAG, "ivCup.isJustCollided()");
+                                        if (ivCup.isJustCollided()) {
+//                                            Log.e(TAG, "ivCup.isJustCollided()");
 
-                                        ivCup.onCollided();
+                                            ivCup.onCollided();
+                                        }
+                                    } else if (framelayoutLeft.getChildAt(i) instanceof ShotGlass) {
+                                        // TODO:
+                                        Log.e(TAG, "framelayoutLeft.getChildAt(i) instanceof ShotGlass");
+                                        ShotGlass myShotGlass = (ShotGlass) framelayoutLeft.getChildAt(i);
+
+                                        boolean colliding = isViewOverlapping(espressoShot, myShotGlass);
+                                        Log.e(TAG, "myShotGlass x, y: " + myShotGlass.getX() + ", " + myShotGlass.getY());
+                                        Log.e(TAG, "colliding: " + colliding);
+                                        Log.e(TAG, "myShotGlass width, height: " + myShotGlass.getWidth() + ", " + myShotGlass.getHeight());
+                                        if (colliding) {
+                                            Log.e(TAG, "OVERLAP ShotGlass");
+                                        }
+                                        myShotGlass.update(colliding);
+
+                                        if (myShotGlass.isJustCollided()) {
+                                            Log.e(TAG, "myShotGlass.isJustCollided()");
+
+                                            myShotGlass.onCollided();
+                                        }
+                                    } else {
+                                        Log.e(TAG, "onAnimationUpdate() else-clause.");
                                     }
                                 }
                             }
@@ -189,9 +219,9 @@ public class MaestranaFragment extends Fragment {
         // STEAMING PITCHER
         steamingPitcher = new SteamingPitcher(getContext());
         steamingPitcher.setTag(TAG_STEAMING_PITCHER);
+        steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
         steamingPitcher.setX(30);
         steamingPitcher.setY(50);
-        steamingPitcher.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
         steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
         steamingPitcher.setOnDragListener(new ToSteamingPitcherDragListener());
         framelayoutRight.addView(steamingPitcher);
@@ -199,8 +229,8 @@ public class MaestranaFragment extends Fragment {
         // STEAMING WAND
         steamingWand = new SteamingWand(getContext());
         steamingWand.setTag(TAG_STEAMING_WAND);
-        steamingWand.setX(800);
         steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
+        steamingWand.setX(800);
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
         steamingWand.setOnDragListener(new SteamingWandDragListener());
         constraintLayoutMaestrana.addView(steamingWand);
@@ -210,8 +240,8 @@ public class MaestranaFragment extends Fragment {
         ImageView espressoShotControl = new ImageView(getContext());
         espressoShotControl.setTag(TAG_ESPRESSO_SHOT_CONTROL);
         espressoShotControl.setLayoutParams(new FrameLayout.LayoutParams(128, 128));
-        espressoShotControl.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShotControl.setX(250 - (128 / 2));
+        espressoShotControl.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShotControl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,13 +252,20 @@ public class MaestranaFragment extends Fragment {
         constraintLayoutMaestrana.addView(espressoShotControl);
 
         // ESPRESSO SHOT
-        espressoShot = new ImageView(getContext());
+        espressoShot = new EspressoShot(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-        espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShot.setX(250 - (16 / 2));
-//        framelayoutEspressoStreamAndSteamWand.addView(espressoShot);
+        espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
         constraintLayoutMaestrana.addView(espressoShot);
+
+        // SHOT GLASS
+        shotGlass = new ShotGlass(getContext());
+        shotGlass.setTag(TAG_SHOT_GLASS);
+        shotGlass.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
+        shotGlass.setX(250 - (64 / 2));
+        shotGlass.setBackgroundColor(getResources().getColor(R.color.cream));
+        framelayoutLeft.addView(shotGlass);
     }
 
     private boolean isViewOverlapping(View firstView, View secondView) {
@@ -426,6 +463,8 @@ public class MaestranaFragment extends Fragment {
         }
     }
 
+    private String currentLabel = null;
+
     private class MaestranaDragListener
             implements View.OnDragListener {
         int resIdNormal = R.drawable.shape_maestrana;
@@ -440,8 +479,11 @@ public class MaestranaFragment extends Fragment {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana") ||
-                                dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                            Log.d(TAG, "label.equals(\"CaddyToMaestrana\") || label.equals(\"MaestranaToCaddy\")");
+                                dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy") ||
+                                dragEvent.getClipDescription().getLabel().equals("ShotGlass")) {
+                            Log.d(TAG, "dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\") || dragEvent.getClipDescription().getLabel().equals(\"MaestranaToCaddy\") || dragEvent.getClipDescription().getLabel().equals(\"ShotGlass\")");
+
+                            currentLabel = dragEvent.getClipDescription().getLabel().toString();
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -464,7 +506,7 @@ public class MaestranaFragment extends Fragment {
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
 
-                    if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
+                    if (currentLabel.equals("MaestranaToCaddy")) {
                         ivToBeAdded = (CupImageView) dragEvent.getLocalState();
                     }
 
@@ -484,64 +526,77 @@ public class MaestranaFragment extends Fragment {
                 case DragEvent.ACTION_DROP:
                     Log.d(TAG, "ACTION_DROP");
 
-                    if (dragEvent.getClipDescription().getLabel().equals("CaddyToMaestrana")) {
-                        Log.d(TAG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"CaddyToMaestrana\")");
-                        Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
-
-                        // Instantiate CupImageView.
-                        ivToBeAdded = new CupImageView(getContext());
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT);
-                        ivToBeAdded.setLayoutParams(layoutParams);
-
-                        // Get the item containing the dragged data.
-                        ClipData.Item item = dragEvent.getClipData().getItemAt(0);
-
-                        // Get the text data from the item.
-                        String dragData = item.getText().toString();
-
-                        // Display a message containing the dragged data.
-                        Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
-
-                        // Set ImageView's background and tag according to dragData.
-                        int resId = -1;
-                        String tag = null;
-                        if (dragData.equals("trenta")) {
-                            resId = R.drawable.drinksize_trenta;
-                            tag = "trenta";
-                        } else if (dragData.equals("venti")) {
-                            resId = R.drawable.drinksize_venti;
-                            tag = "venti";
-                        } else if (dragData.equals("grande")) {
-                            resId = R.drawable.drinksize_grande;
-                            tag = "grande";
-                        } else if (dragData.equals("tall")) {
-                            resId = R.drawable.drinksize_tall;
-                            tag = "tall";
-                        } else if (dragData.equals("short")) {
-                            resId = R.drawable.drinksize_short;
-                            tag = "short";
-                        } else {
-                            Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
-                        }
-                        ivToBeAdded.setBackgroundResource(resId);
-                        ivToBeAdded.setTag(tag);
-                    } else if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                        Log.d(TAG, "ACTION_DROP dragEvent.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
-                        Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
-                        ivToBeAdded = (CupImageView) dragEvent.getLocalState();
-
-                        ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
-                        owner.removeView(ivToBeAdded);
-                    }
-
-                    // Add ImageView to FrameLayout.
-                    ((FrameLayout) view).addView(ivToBeAdded);
-                    ivToBeAdded.setVisibility(View.INVISIBLE);
-
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
+
+                    if (currentLabel.equals("CaddyToMaestrana") || currentLabel.equals("MaestranaToCaddy")) {
+                        if (currentLabel.equals("CaddyToMaestrana")) {
+                            Log.d(TAG, "ACTION_DROP currentLabel.equals(\"CaddyToMaestrana\")");
+                            Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
+
+                            // Instantiate CupImageView.
+                            ivToBeAdded = new CupImageView(getContext());
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                                    FrameLayout.LayoutParams.WRAP_CONTENT);
+                            ivToBeAdded.setLayoutParams(layoutParams);
+
+                            // Get the item containing the dragged data.
+                            ClipData.Item item = dragEvent.getClipData().getItemAt(0);
+
+                            // Get the text data from the item.
+                            String dragData = item.getText().toString();
+
+                            // Display a message containing the dragged data.
+                            Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
+
+                            // Set ImageView's background and tag according to dragData.
+                            int resId = -1;
+                            String tag = null;
+                            if (dragData.equals("trenta")) {
+                                resId = R.drawable.drinksize_trenta;
+                                tag = "trenta";
+                            } else if (dragData.equals("venti")) {
+                                resId = R.drawable.drinksize_venti;
+                                tag = "venti";
+                            } else if (dragData.equals("grande")) {
+                                resId = R.drawable.drinksize_grande;
+                                tag = "grande";
+                            } else if (dragData.equals("tall")) {
+                                resId = R.drawable.drinksize_tall;
+                                tag = "tall";
+                            } else if (dragData.equals("short")) {
+                                resId = R.drawable.drinksize_short;
+                                tag = "short";
+                            } else {
+                                Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
+                            }
+                            ivToBeAdded.setBackgroundResource(resId);
+                            ivToBeAdded.setTag(tag);
+                        } else if (currentLabel.equals("MaestranaToCaddy")) {
+                            Log.d(TAG, "ACTION_DROP currentLabel.equals(\"MaestranaToCaddy\")");
+                            Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
+                            ivToBeAdded = (CupImageView) dragEvent.getLocalState();
+
+                            ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
+                            owner.removeView(ivToBeAdded);
+                        }
+
+                        // Add ImageView to FrameLayout.
+                        ((FrameLayout) view).addView(ivToBeAdded);
+                        ivToBeAdded.setVisibility(View.INVISIBLE);
+                    } else if (currentLabel.equals("ShotGlass")) {
+                        Log.d(TAG, "ACTION_DROP currentLabel.equals(\"ShotGlass\")");
+                        Log.d(TAG, "ACTION_DROP Derive shotGlass from dragData");
+                        shotGlass = (ShotGlass) dragEvent.getLocalState();
+
+                        ViewGroup owner = (ViewGroup) shotGlass.getParent();
+                        owner.removeView(shotGlass);
+
+                        // Add ImageView to FrameLayout.
+                        ((FrameLayout) view).addView(shotGlass);
+                        shotGlass.setVisibility(View.INVISIBLE);
+                    }
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;
@@ -553,25 +608,49 @@ public class MaestranaFragment extends Fragment {
                     // Reset the background drawable to normal.
                     view.setBackgroundResource(resIdNormal);
 
+                    if (currentLabel == null) {
+                        Log.e(TAG, "currentLabel is null.");
+                        return true;
+                    }
+
+                    Log.e(TAG, "currentLabel: " + currentLabel);
+
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
 
-                        if (ivToBeAdded != null) {
-                            ivToBeAdded.setX(xTouch - (ivToBeAdded.getWidth() / 2));
-                            ivToBeAdded.setY(yTouch - (ivToBeAdded.getHeight() / 2));
+                        if (currentLabel.equals("CaddyToMaestrana") || currentLabel.equals("MaestranaToCaddy")) {
+                            if (ivToBeAdded != null) {
+                                ivToBeAdded.setX(xTouch - (ivToBeAdded.getWidth() / 2));
+                                ivToBeAdded.setY(yTouch - (ivToBeAdded.getHeight() / 2));
+                            }
+                        } else if (currentLabel.equals("ShotGlass")) {
+                            if (shotGlass != null) {
+                                shotGlass.setX(xTouch - (shotGlass.getWidth() / 2));
+                                shotGlass.setY(yTouch - (shotGlass.getHeight() / 2));
+                            }
                         }
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
 
-                    if (ivToBeAdded != null) {
-                        ivToBeAdded.setVisibility(View.VISIBLE);
+                    if (currentLabel.equals("CaddyToMaestrana") || currentLabel.equals("MaestranaToCaddy")) {
+                        if (ivToBeAdded != null) {
+                            ivToBeAdded.setVisibility(View.VISIBLE);
 
-                        ivToBeAdded = null;
-                        xTouch = -1f;
-                        yTouch = -1f;
+                            ivToBeAdded = null;
+                        }
+                    } else if (currentLabel.equals("ShotGlass")) {
+                        if (shotGlass != null) {
+                            shotGlass.setVisibility(View.VISIBLE);
+                        }
                     }
+
+                    xTouch = -1f;
+                    yTouch = -1f;
+
+                    Log.e(TAG, "setting currentLabel to null.");
+                    currentLabel = null;
 
                     // Return true. The value is ignored.
                     return true;
