@@ -151,31 +151,17 @@ public class MaestranaFragment extends Fragment {
                                         CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
 
                                         boolean colliding = isViewOverlapping(espressoShot, ivCup);
-                                        Log.e(TAG, "ivCup x, y: " + ivCup.getX() + ", " + ivCup.getY());
-                                        Log.e(TAG, "colliding: " + colliding);
-                                        Log.e(TAG, "ivCup width, height: " + ivCup.getWidth() + ", " + ivCup.getHeight());
-                                        if (colliding) {
-//                                            Log.e(TAG, "OVERLAP CupImageView");
-                                        }
                                         ivCup.update(colliding);
 
                                         if (ivCup.isJustCollided()) {
-//                                            Log.e(TAG, "ivCup.isJustCollided()");
+                                            Log.e(TAG, "ivCup.isJustCollided()");
 
                                             ivCup.onCollided();
                                         }
                                     } else if (framelayoutLeft.getChildAt(i) instanceof ShotGlass) {
-                                        // TODO:
-                                        Log.e(TAG, "framelayoutLeft.getChildAt(i) instanceof ShotGlass");
                                         ShotGlass myShotGlass = (ShotGlass) framelayoutLeft.getChildAt(i);
 
                                         boolean colliding = isViewOverlapping(espressoShot, myShotGlass);
-                                        Log.e(TAG, "myShotGlass x, y: " + myShotGlass.getX() + ", " + myShotGlass.getY());
-                                        Log.e(TAG, "colliding: " + colliding);
-                                        Log.e(TAG, "myShotGlass width, height: " + myShotGlass.getWidth() + ", " + myShotGlass.getHeight());
-                                        if (colliding) {
-                                            Log.e(TAG, "OVERLAP ShotGlass");
-                                        }
                                         myShotGlass.update(colliding);
 
                                         if (myShotGlass.isJustCollided()) {
@@ -272,15 +258,15 @@ public class MaestranaFragment extends Fragment {
         int[] firstPosition = new int[2];
         int[] secondPosition = new int[2];
 
-        firstView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//        firstView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         firstView.getLocationOnScreen(firstPosition);
-        secondView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//        secondView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         secondView.getLocationOnScreen(secondPosition);
 
-        return firstPosition[0] < secondPosition[0] + secondView.getMeasuredWidth()
-                && firstPosition[0] + firstView.getMeasuredWidth() > secondPosition[0]
-                && firstPosition[1] < secondPosition[1] + secondView.getMeasuredHeight()
-                && firstPosition[1] + firstView.getMeasuredHeight() > secondPosition[1];
+        return firstPosition[0] < secondPosition[0] + secondView.getWidth()
+                && firstPosition[0] + firstView.getWidth() > secondPosition[0]
+                && firstPosition[1] < secondPosition[1] + secondView.getHeight()
+                && firstPosition[1] + firstView.getHeight() > secondPosition[1];
     }
 
     @Override
