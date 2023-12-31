@@ -17,7 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LiquidContainable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
 
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
+    private EspressoShot.Type type;
     private int numberOfShots;
     private boolean colliding, cantCollide, justCollided;
 
@@ -33,9 +36,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private String content;
     private int amount;
 
-    private Paint textPaintBrown;
-    private Paint textPaintPurple;
-    private Paint textPaintRed;
+    private Paint textPaint;
 
     public CupImageView(Context context) {
         super(context);
@@ -48,26 +49,17 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void init() {
+        type = EspressoShot.Type.SIGNATURE;
         numberOfShots = 0;
 
-        textPaintBrown = new Paint();
-        textPaintBrown.setAntiAlias(true);
-        textPaintBrown.setStyle(Paint.Style.STROKE);
-        textPaintBrown.setColor(getResources().getColor(R.color.brown));
-        textPaintBrown.setTextSize(18);
-
-        textPaintPurple = new Paint();
-        textPaintPurple.setAntiAlias(true);
-        textPaintPurple.setStyle(Paint.Style.STROKE);
-        textPaintPurple.setColor(getResources().getColor(R.color.purple_700));
-        textPaintPurple.setTextSize(18);
-
-        textPaintRed = new Paint();
-        textPaintRed.setAntiAlias(true);
-        textPaintRed.setStyle(Paint.Style.STROKE);
-        textPaintRed.setColor(getResources().getColor(R.color.red));
-        textPaintRed.setTextSize(18);
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setColor(getResources().getColor(R.color.brown));
+        textPaint.setTextSize(18);
     }
+
+    private String label;
 
     @Override
     public boolean onDragEvent(DragEvent event) {
@@ -77,8 +69,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("SteamingPitcher")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"SteamingPitcher\")");
+                    label = event.getClipDescription().getLabel().toString();
+                    if (label.equals("SteamingPitcher") ||
+                            label.equals("ShotGlass")) {
+                        Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -115,14 +109,24 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 // Return true. The value is ignored.
                 return true;
             case DragEvent.ACTION_DROP:
-                Log.d(TAG, "ACTION_DROP Derive steamingPitcher from dragData");
+                Log.d(TAG, "ACTION_DROP");
 
-                SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
+                if (label.equals("SteamingPitcher")) {
+                    Log.d(TAG, "label.equals(\"SteamingPitcher\"");
 
-                Toast.makeText(getContext(), "transferring content of steaming pitcher", Toast.LENGTH_SHORT).show();
-                transferIn(
-                        steamingPitcher.transferOut()
-                );
+                    SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
+
+                    Toast.makeText(getContext(), "transferring content of steaming pitcher", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            steamingPitcher.transferOut()
+                    );
+                } else if (label.equals("ShotGlass")) {
+                    Log.d(TAG, "label.equals(\"ShotGlass\"");
+
+                    ShotGlass shotGlass = (ShotGlass) event.getLocalState();
+                    // TODO:
+
+                }
 
                 // Return true. DragEvent.getResult() returns true.
                 return true;
@@ -159,27 +163,41 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
     }
 
-    public void onCollided() {
-        Toast.makeText(getContext(), "onCollided()", Toast.LENGTH_SHORT).show();
+    public void onCollided(View collider) {
+        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
 
         setAlpha(0.5f);
-        numberOfShots++;
-        invalidate();
+
+        if (collider instanceof EspressoShot) {
+            Log.e(TAG, "collider instanceof EspressoShot");
+
+            EspressoShot espressoShot = (EspressoShot) collider;
+            // TODO:
+            type = espressoShot.getType();
+            numberOfShots++;
+            invalidate();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaintBrown);
+        textPaint.setColor(getResources().getColor(
+                EspressoShot.getColorIdBasedOnType(type)
+        ));
+        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
 
         String nameOfContent = (content == null) ? "null" : content;
-        canvas.drawText(nameOfContent, 5, 40, textPaintPurple);
-        canvas.drawText(Integer.toString(amount), 5, 60, textPaintPurple);
+        textPaint.setColor(getResources().getColor(R.color.purple_700));
+        canvas.drawText(nameOfContent, 5, 40, textPaint);
+        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
         if (steamed) {
-            canvas.drawText("steamed", 5, 80, textPaintRed);
+            textPaint.setColor(getResources().getColor(R.color.red));
+            canvas.drawText("steamed", 5, 80, textPaint);
         } else {
-            canvas.drawText("unsteamed", 5, 80, textPaintPurple);
+            textPaint.setColor(getResources().getColor(R.color.purple_700));
+            canvas.drawText("unsteamed", 5, 80, textPaint);
         }
     }
 

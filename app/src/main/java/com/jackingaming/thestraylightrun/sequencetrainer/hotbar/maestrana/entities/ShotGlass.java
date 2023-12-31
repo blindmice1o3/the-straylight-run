@@ -18,12 +18,16 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class ShotGlass extends AppCompatImageView {
+import java.util.HashMap;
+
+public class ShotGlass extends AppCompatImageView
+        implements LiquidContainable {
     public static final String TAG = ShotGlass.class.getSimpleName();
 
+    private EspressoShot.Type type;
     private int numberOfShots;
     private boolean colliding, cantCollide, justCollided;
-    
+
     private Paint textPaint;
 
     public ShotGlass(@NonNull Context context) {
@@ -37,6 +41,7 @@ public class ShotGlass extends AppCompatImageView {
     }
 
     private void init() {
+        type = EspressoShot.Type.SIGNATURE;
         numberOfShots = 0;
 
         textPaint = new Paint();
@@ -59,17 +64,29 @@ public class ShotGlass extends AppCompatImageView {
         }
     }
 
-    public void onCollided() {
-        Toast.makeText(getContext(), "onCollided()", Toast.LENGTH_SHORT).show();
+    public void onCollided(View collider) {
+        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
 
         setAlpha(0.5f);
-        numberOfShots++;
-        invalidate();
+
+        if (collider instanceof EspressoShot) {
+            Log.e(TAG, "collider instanceof EspressoShot");
+
+            EspressoShot espressoShot = (EspressoShot) collider;
+            // TODO:
+            type = espressoShot.getType();
+            numberOfShots++;
+            invalidate();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        textPaint.setColor(getResources().getColor(
+                EspressoShot.getColorIdBasedOnType(type)
+        ));
         canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
     }
 
@@ -102,5 +119,15 @@ public class ShotGlass extends AppCompatImageView {
 
     public boolean isJustCollided() {
         return justCollided;
+    }
+
+    @Override
+    public void transferIn(HashMap<String, String> content) {
+
+    }
+
+    @Override
+    public HashMap<String, String> transferOut() {
+        return null;
     }
 }

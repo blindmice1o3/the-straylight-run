@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
 
 public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String TAG = EspressoShotControlDialogFragment.class.getSimpleName();
@@ -20,12 +21,10 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String BUNDLE_KEY_TYPE = "type";
     public static final String BUNDLE_KEY_QUANTITY = "quantity";
 
-    public enum Type {BLONDE, SIGNATURE, DECAF;}
-
     private Button buttonBlonde, buttonSignature, buttonDecaf;
     private Button buttonSingle, buttonDouble, buttonTriple;
 
-    private Type typeSelected = Type.SIGNATURE;
+    private EspressoShot.Type typeSelected = EspressoShot.Type.SIGNATURE;
     private int quantitySelected = 0;
 
     @Nullable
@@ -52,21 +51,21 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "BLONDE");
-                typeSelected = Type.BLONDE;
+                typeSelected = EspressoShot.Type.BLONDE;
             }
         });
         buttonSignature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "SIGNATURE");
-                typeSelected = Type.SIGNATURE;
+                typeSelected = EspressoShot.Type.SIGNATURE;
             }
         });
         buttonDecaf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "DECAF");
-                typeSelected = Type.DECAF;
+                typeSelected = EspressoShot.Type.DECAF;
             }
         });
         buttonSingle.setOnClickListener(new View.OnClickListener() {
