@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entiti
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
@@ -112,7 +114,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 Log.d(TAG, "ACTION_DROP");
 
                 if (label.equals("SteamingPitcher")) {
-                    Log.d(TAG, "label.equals(\"SteamingPitcher\"");
+                    Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
                     SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
 
@@ -121,16 +123,44 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                             steamingPitcher.transferOut()
                     );
                 } else if (label.equals("ShotGlass")) {
-                    Log.d(TAG, "label.equals(\"ShotGlass\"");
+                    Log.d(TAG, "label.equals(\"ShotGlass\")");
 
                     ShotGlass shotGlass = (ShotGlass) event.getLocalState();
-                    // TODO:
 
+                    Toast.makeText(getContext(), "transferring content of shot glass", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            shotGlass.transferOut()
+                    );
+                }
+
+                if (isWinnerWinnerChickenDinner()) {
+                    // TODO:
+                    String title = "WINNER";
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                    alertDialogBuilder.setTitle(title);
+                    alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER!");
+                    alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // on success
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.create().show();
                 }
 
                 // Return true. DragEvent.getResult() returns true.
                 return true;
             case DragEvent.ACTION_DRAG_ENDED:
+                Log.d(TAG, "ACTION_DRAG_ENDED CupImageView");
+
                 // Reset value of alpha back to normal.
                 setAlpha(1.0f);
 
@@ -148,6 +178,42 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         return false;
+    }
+
+    private boolean isWinnerWinnerChickenDinner() {
+        boolean isWinner = false;
+
+        if (getTag().toString().equals("trenta")) {
+            Log.e(TAG, "isWinnerWinnerChickenDinner() trenta");
+
+            // blank.
+        } else if (getTag().toString().equals("venti")) {
+            Log.e(TAG, "isWinnerWinnerChickenDinner() venti");
+
+            if (numberOfShots == 2 && steamed && (amount >= (20 * 4))) {
+                isWinner = true;
+            }
+        } else if (getTag().toString().equals("grande")) {
+            Log.e(TAG, "isWinnerWinnerChickenDinner() grande");
+
+            if (numberOfShots == 2 && steamed && (amount >= (16 * 4))) {
+                isWinner = true;
+            }
+        } else if (getTag().toString().equals("tall")) {
+            Log.e(TAG, "isWinnerWinnerChickenDinner() tall");
+
+            if (numberOfShots == 1 && steamed && (amount >= (12 * 4))) {
+                isWinner = true;
+            }
+        } else if (getTag().toString().equals("short")) {
+            Log.e(TAG, "isWinnerWinnerChickenDinner() short");
+
+            if (numberOfShots == 1 && steamed && (amount >= (8 * 4))) {
+                isWinner = true;
+            }
+        }
+
+        return isWinner;
     }
 
     public void update(boolean colliding) {
@@ -258,6 +324,19 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     @Override
     public void transferIn(HashMap<String, String> content) {
+        if (content.containsKey("type")) {
+            for (EspressoShot.Type type : EspressoShot.Type.values()) {
+                if (content.get("type").equals(type.name())) {
+                    this.type = type;
+                }
+            }
+
+        }
+        if (content.containsKey("numberOfShots")) {
+            this.numberOfShots = Integer.parseInt(
+                    content.get("numberOfShots")
+            );
+        }
         if (content.containsKey("content")) {
             this.content = content.get("content");
         }
@@ -278,10 +357,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
+        content.put("type", this.type.name());
+        content.put("numberOfShots", Integer.toString(this.numberOfShots));
         content.put("content", this.content);
         content.put("amount", Integer.toString(this.amount));
         content.put("steamed", Boolean.toString(this.steamed));
 
+        this.type = EspressoShot.Type.SIGNATURE;
+        this.numberOfShots = 0;
         this.content = null;
         this.amount = 0;
         this.steamed = false;

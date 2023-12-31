@@ -123,11 +123,33 @@ public class ShotGlass extends AppCompatImageView
 
     @Override
     public void transferIn(HashMap<String, String> content) {
+        if (content.containsKey("type")) {
+            for (EspressoShot.Type type : EspressoShot.Type.values()) {
+                if (content.get("type").equals(type.name())) {
+                    this.type = type;
+                }
+            }
 
+        }
+        if (content.containsKey("numberOfShots")) {
+            this.numberOfShots = Integer.parseInt(
+                    content.get("numberOfShots")
+            );
+        }
+
+        invalidate();
     }
 
     @Override
     public HashMap<String, String> transferOut() {
-        return null;
+        HashMap<String, String> content = new HashMap<>();
+        content.put("type", this.type.name());
+        content.put("numberOfShots", Integer.toString(this.numberOfShots));
+
+        this.type = EspressoShot.Type.SIGNATURE;
+        this.numberOfShots = 0;
+        invalidate();
+
+        return content;
     }
 }

@@ -509,9 +509,8 @@ public class MaestranaFragment extends Fragment {
 
                             // Instantiate CupImageView.
                             ivToBeAdded = new CupImageView(getContext());
-                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                                    FrameLayout.LayoutParams.WRAP_CONTENT);
+                            FrameLayout.LayoutParams layoutParams =
+                                    new FrameLayout.LayoutParams(64, 64);
                             ivToBeAdded.setLayoutParams(layoutParams);
 
                             // Get the item containing the dragged data.
@@ -546,6 +545,9 @@ public class MaestranaFragment extends Fragment {
                             }
                             ivToBeAdded.setBackgroundResource(resId);
                             ivToBeAdded.setTag(tag);
+
+                            ivToBeAdded.setX(xTouch - (64 / 2));
+                            ivToBeAdded.setY(yTouch - (64 / 2));
                         } else if (label.equals("MaestranaToCaddy")) {
                             Log.d(TAG, "ACTION_DROP label.equals(\"MaestranaToCaddy\")");
                             Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
@@ -553,11 +555,13 @@ public class MaestranaFragment extends Fragment {
 
                             ViewGroup owner = (ViewGroup) ivToBeAdded.getParent();
                             owner.removeView(ivToBeAdded);
+
+                            ivToBeAdded.setX(xTouch - (ivToBeAdded.getWidth() / 2));
+                            ivToBeAdded.setY(yTouch - (ivToBeAdded.getHeight() / 2));
                         }
 
                         // Add ImageView to FrameLayout.
                         ((FrameLayout) view).addView(ivToBeAdded);
-                        ivToBeAdded.setVisibility(View.INVISIBLE);
                     } else if (label.equals("ShotGlass")) {
                         Log.d(TAG, "ACTION_DROP label.equals(\"ShotGlass\")");
                         Log.d(TAG, "ACTION_DROP Derive shotGlass from dragData");
@@ -566,15 +570,17 @@ public class MaestranaFragment extends Fragment {
                         ViewGroup owner = (ViewGroup) shotGlass.getParent();
                         owner.removeView(shotGlass);
 
+                        shotGlass.setX(xTouch - (shotGlass.getWidth() / 2));
+                        shotGlass.setY(yTouch - (shotGlass.getHeight() / 2));
+
                         // Add ImageView to FrameLayout.
                         ((FrameLayout) view).addView(shotGlass);
-                        shotGlass.setVisibility(View.INVISIBLE);
                     }
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG, "ACTION_DRAG_ENDED");
+                    Log.d(TAG, "ACTION_DRAG_ENDED MaestranaFragment");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -591,18 +597,6 @@ public class MaestranaFragment extends Fragment {
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
-
-                        if (label.equals("CaddyToMaestrana") || label.equals("MaestranaToCaddy")) {
-                            if (ivToBeAdded != null) {
-                                ivToBeAdded.setX(xTouch - (ivToBeAdded.getWidth() / 2));
-                                ivToBeAdded.setY(yTouch - (ivToBeAdded.getHeight() / 2));
-                            }
-                        } else if (label.equals("ShotGlass")) {
-                            if (shotGlass != null) {
-                                shotGlass.setX(xTouch - (shotGlass.getWidth() / 2));
-                                shotGlass.setY(yTouch - (shotGlass.getHeight() / 2));
-                            }
-                        }
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
