@@ -197,7 +197,14 @@ public class MaestranaFragment extends Fragment {
         steamingPitcher.setX(30);
         steamingPitcher.setY(50);
         steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
-        steamingPitcher.setOnDragListener(new ToSteamingPitcherDragListener());
+        steamingPitcher.setListener(new SteamingPitcher.SteamingPitcherListener() {
+            @Override
+            public void onDropAccepted(String contentToBeSteamed, int amount) {
+                FillSteamingPitcherDialogFragment dialogFragment =
+                        FillSteamingPitcherDialogFragment.newInstance(contentToBeSteamed, amount);
+                dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
+            }
+        });
         framelayoutRight.addView(steamingPitcher);
 
         // STEAMING WAND
@@ -206,7 +213,6 @@ public class MaestranaFragment extends Fragment {
         steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
         steamingWand.setX(800);
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
-        steamingWand.setOnDragListener(new SteamingWandDragListener());
         constraintLayoutMaestrana.addView(steamingWand);
 
         // TODO:
@@ -264,177 +270,6 @@ public class MaestranaFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(MaestranaViewModel.class);
         // TODO: Use the ViewModel
-    }
-
-    private class ToSteamingPitcherDragListener
-            implements View.OnDragListener {
-
-        @Override
-        public boolean onDrag(View view, DragEvent dragEvent) {
-            switch (dragEvent.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    // Determine whether this View can accept the dragged data.
-                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
-
-                        if (dragEvent.getClipDescription().getLabel().equals("Milk")) {
-                            Log.d(TAG, "label.equals(\"Milk\")");
-
-                            // Change value of alpha to indicate drop-target.
-                            view.setAlpha(0.8f);
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
-                        }
-                    } else {
-                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
-                    }
-
-                    // Return false to indicate that, during the current drag and drop
-                    // operation, this View doesn't receive events again until
-                    // ACTION_DRAG_ENDED is sent.
-                    return false;
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(TAG, "ACTION_DRAG_ENTERED");
-
-                    // Change value of alpha to indicate [ENTERED] state.
-                    view.setAlpha(0.5f);
-
-                    // Return true. The value is ignored.
-                    return true;
-                case DragEvent.ACTION_DRAG_LOCATION:
-                    // Ignore the event.
-                    return true;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(TAG, "ACTION_DRAG_EXITED");
-
-                    // Reset value of alpha back to normal.
-                    view.setAlpha(0.8f);
-
-                    // Return true. The value is ignored.
-                    return true;
-                case DragEvent.ACTION_DROP:
-                    Log.d(TAG, "ACTION_DROP");
-
-                    String contentToBeSteamed = dragEvent.getClipData().getItemAt(0).getText().toString();
-                    Log.e(TAG, contentToBeSteamed);
-
-                    FillSteamingPitcherDialogFragment dialogFragment =
-                            FillSteamingPitcherDialogFragment.newInstance(
-                                    contentToBeSteamed,
-                                    steamingPitcher.getAmount());
-                    dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
-
-                    // Return true. DragEvent.getResult() returns true.
-                    return true;
-                case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG, "ACTION_DRAG_ENDED");
-
-                    // Reset value of alpha back to normal.
-                    view.setAlpha(1.0f);
-
-                    // Do a getResult() and displays what happens.
-                    if (dragEvent.getResult()) {
-                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
-                    }
-
-                    // Return true. The value is ignored.
-                    return true;
-                default:
-                    Log.e(TAG, "Unknown action type received by MilkDragListener.");
-                    break;
-            }
-
-            return false;
-        }
-    }
-
-    private class SteamingWandDragListener
-            implements View.OnDragListener {
-
-        @Override
-        public boolean onDrag(View view, DragEvent dragEvent) {
-            switch (dragEvent.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED:
-                    // Determine whether this View can accept the dragged data.
-                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
-
-                        if (dragEvent.getClipDescription().getLabel().equals("SteamingPitcher")) {
-                            Log.d(TAG, "label.equals(\"SteamingPitcher\")");
-
-                            SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
-                            if (steamingPitcher.getContent() != null &&
-                                    steamingPitcher.getAmount() > 0) {
-                                // Change value of alpha to indicate drop-target.
-                                view.setAlpha(0.8f);
-
-                                // Return true to indicate that the View can accept the dragged
-                                // data.
-                                return true;
-                            } else {
-                                Log.d(TAG, "steamingPitcher's content is null or amount <= 0.");
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
-                    }
-
-                    // Return false to indicate that, during the current drag and drop
-                    // operation, this View doesn't receive events again until
-                    // ACTION_DRAG_ENDED is sent.
-                    return false;
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.d(TAG, "ACTION_DRAG_ENTERED");
-
-                    // Change value of alpha to indicate [ENTERED] state.
-                    view.setAlpha(0.5f);
-
-                    // Return true. The value is ignored.
-                    return true;
-                case DragEvent.ACTION_DRAG_LOCATION:
-                    // Ignore the event.
-                    return true;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    Log.d(TAG, "ACTION_DRAG_EXITED");
-
-                    // Reset value of alpha back to normal.
-                    view.setAlpha(0.8f);
-
-                    // Return true. The value is ignored.
-                    return true;
-                case DragEvent.ACTION_DROP:
-                    Log.d(TAG, "ACTION_DROP");
-
-                    SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
-                    steamingPitcher.steam();
-
-                    // Return true. DragEvent.getResult() returns true.
-                    return true;
-                case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG, "ACTION_DRAG_ENDED");
-
-                    // Reset value of alpha back to normal.
-                    view.setAlpha(1.0f);
-
-                    // Do a getResult() and displays what happens.
-                    if (dragEvent.getResult()) {
-                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
-                    }
-
-                    // Return true. The value is ignored.
-                    return true;
-                default:
-                    Log.e(TAG, "Unknown action type received by SteamingWandDragListener.");
-                    break;
-            }
-
-            return false;
-        }
     }
 
     private String label;

@@ -1,14 +1,17 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
 
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +24,12 @@ import java.util.HashMap;
 public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable {
     public static final String TAG = SteamingPitcher.class.getSimpleName();
+
+    public interface SteamingPitcherListener {
+        void onDropAccepted(String contentToBeSteamed, int amount);
+    }
+
+    private SteamingPitcherListener listener;
 
     private boolean steamed;
     private String content;
@@ -93,6 +102,88 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         return false;
     }
 
+    @Override
+    public boolean onDragEvent(DragEvent event) {
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                // Determine whether this View can accept the dragged data.
+                if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+
+                    if (event.getClipDescription().getLabel().equals("Milk")) {
+                        Log.d(TAG, "label.equals(\"Milk\")");
+
+                        // Change value of alpha to indicate drop-target.
+                        setAlpha(0.8f);
+                        // Return true to indicate that the View can accept the dragged
+                        // data.
+                        return true;
+                    }
+                } else {
+                    Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                }
+
+                // Return false to indicate that, during the current drag and drop
+                // operation, this View doesn't receive events again until
+                // ACTION_DRAG_ENDED is sent.
+                return false;
+            case DragEvent.ACTION_DRAG_ENTERED:
+                Log.d(TAG, "ACTION_DRAG_ENTERED");
+
+                // Change value of alpha to indicate [ENTERED] state.
+                setAlpha(0.5f);
+
+                // Return true. The value is ignored.
+                return true;
+            case DragEvent.ACTION_DRAG_LOCATION:
+                // Ignore the event.
+                return true;
+            case DragEvent.ACTION_DRAG_EXITED:
+                Log.d(TAG, "ACTION_DRAG_EXITED");
+
+                // Reset value of alpha back to normal.
+                setAlpha(0.8f);
+
+                // Return true. The value is ignored.
+                return true;
+            case DragEvent.ACTION_DROP:
+                Log.d(TAG, "ACTION_DROP");
+
+                String contentToBeSteamed = event.getClipData().getItemAt(0).getText().toString();
+                Log.e(TAG, contentToBeSteamed);
+
+                // TODO:
+                if (listener != null) {
+                    listener.onDropAccepted(contentToBeSteamed, amount);
+                } else {
+                    Log.e(TAG, "listener =~= null");
+                }
+
+                // Return true. DragEvent.getResult() returns true.
+                return true;
+            case DragEvent.ACTION_DRAG_ENDED:
+                Log.d(TAG, "ACTION_DRAG_ENDED");
+
+                // Reset value of alpha back to normal.
+                setAlpha(1.0f);
+
+                // Do a getResult() and displays what happens.
+                if (event.getResult()) {
+                    Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                }
+
+                // Return true. The value is ignored.
+                return true;
+            default:
+                Log.e(TAG, "Unknown action type received by MilkDragListener.");
+                break;
+        }
+
+        return false;
+    }
+
     public void steam() {
         Log.e(TAG, "steam()");
 
@@ -126,6 +217,14 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             setBackgroundColor(getResources().getColor(R.color.red));
         }
         invalidate();
+    }
+
+    public SteamingPitcherListener getListener() {
+        return listener;
+    }
+
+    public void setListener(SteamingPitcherListener listener) {
+        this.listener = listener;
     }
 
     public boolean isSteamed() {
