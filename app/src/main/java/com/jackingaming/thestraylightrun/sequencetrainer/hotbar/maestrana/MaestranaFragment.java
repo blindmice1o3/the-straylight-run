@@ -128,6 +128,7 @@ public class MaestranaFragment extends Fragment {
                                 Log.e(TAG, "onAnimationRepeat()");
 
                                 espressoShot.setCollided(false);
+                                espressoShot.setVisibility(View.VISIBLE);
                             }
 
                             @Override
@@ -158,6 +159,7 @@ public class MaestranaFragment extends Fragment {
 
                                             ivCup.onCollided(espressoShot);
                                             espressoShot.setCollided(true);
+                                            espressoShot.setVisibility(View.INVISIBLE);
                                         }
                                     } else if (framelayoutLeft.getChildAt(i) instanceof ShotGlass) {
                                         ShotGlass myShotGlass = (ShotGlass) framelayoutLeft.getChildAt(i);
@@ -170,6 +172,7 @@ public class MaestranaFragment extends Fragment {
 
                                             myShotGlass.onCollided(espressoShot);
                                             espressoShot.setCollided(true);
+                                            espressoShot.setVisibility(View.INVISIBLE);
                                         }
                                     } else {
                                         Log.e(TAG, "onAnimationUpdate() else-clause.");
