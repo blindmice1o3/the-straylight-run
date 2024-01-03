@@ -150,9 +150,18 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     label = event.getClipDescription().getLabel().toString();
-                    if (label.equals("SteamingPitcher") ||
-                            label.equals("ShotGlass")) {
-                        Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\")");
+                    if (label.equals("ShotGlass")) {
+                        Log.d(TAG, "label.equals(\"ShotGlass\")");
+
+                        // Change value of alpha to indicate drop-target.
+                        setAlpha(0.75f);
+
+                        // Return true to indicate that the View can accept the dragged
+                        // data.
+                        return true;
+                    } else if (label.equals("SteamingPitcher") &&
+                            ((SteamingPitcher) event.getLocalState()).getAmount() != 0) {
+                        Log.d(TAG, "label.equals(\"SteamingPitcher\") && ((SteamingPitcher) event.getLocalState()).getAmount() != 0");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -292,6 +301,22 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         return isWinner;
+    }
+
+    public EspressoShot.Type getType() {
+        return type;
+    }
+
+    public void setType(EspressoShot.Type type) {
+        this.type = type;
+    }
+
+    public int getNumberOfShots() {
+        return numberOfShots;
+    }
+
+    public void setNumberOfShots(int numberOfShots) {
+        this.numberOfShots = numberOfShots;
     }
 
     public boolean isJustCollided() {

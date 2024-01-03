@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 
 import java.util.HashMap;
 
@@ -26,7 +27,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public static final String TAG = SteamingPitcher.class.getSimpleName();
 
     public interface SteamingPitcherListener {
-        void onDropAccepted(String contentToBeSteamed, int amount);
+        void showDialogFillSteamingPitcher(String contentToBeSteamed, int amount);
     }
 
     private SteamingPitcherListener listener;
@@ -111,10 +112,20 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     if (event.getClipDescription().getLabel().equals("Milk")) {
-                        Log.d(TAG, "label.equals(\"Milk\")");
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Milk\")");
 
                         // Change value of alpha to indicate drop-target.
-                        setAlpha(0.8f);
+                        setAlpha(0.75f);
+                        // Return true to indicate that the View can accept the dragged
+                        // data.
+                        return true;
+                    } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy") &&
+                            ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 &&
+                            ((CupImageView) event.getLocalState()).getAmount() != 0) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+
+                        // Change value of alpha to indicate drop-target.
+                        setAlpha(0.75f);
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
@@ -142,21 +153,33 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                 Log.d(TAG, "ACTION_DRAG_EXITED");
 
                 // Reset value of alpha back to normal.
-                setAlpha(0.8f);
+                setAlpha(0.75f);
 
                 // Return true. The value is ignored.
                 return true;
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                String contentToBeSteamed = event.getClipData().getItemAt(0).getText().toString();
-                Log.e(TAG, contentToBeSteamed);
+                if (event.getClipDescription().getLabel().equals("Milk")) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"Milk\")");
 
-                // TODO:
-                if (listener != null) {
-                    listener.onDropAccepted(contentToBeSteamed, amount);
-                } else {
-                    Log.e(TAG, "listener == null");
+                    String contentToBeSteamed = event.getClipData().getItemAt(0).getText().toString();
+                    Log.e(TAG, "contentToBeSteamed: " + contentToBeSteamed);
+
+                    if (listener != null) {
+                        listener.showDialogFillSteamingPitcher(contentToBeSteamed, amount);
+                    } else {
+                        Log.e(TAG, "listener == null");
+                    }
+                } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
+
+                    CupImageView cupImageView = ((CupImageView) event.getLocalState());
+
+                    Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            cupImageView.transferOut()
+                    );
                 }
 
                 // Return true. DragEvent.getResult() returns true.
@@ -267,7 +290,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             );
         }
 
-        invalidate();
+        update(this.content, this.amount);
     }
 
     @Override
@@ -280,7 +303,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         this.content = null;
         this.amount = 0;
         this.steamed = false;
-        invalidate();
+        update(this.content, this.amount);
 
         return content;
     }

@@ -218,7 +218,7 @@ public class MaestranaFragment extends Fragment {
         steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
         steamingPitcher.setListener(new SteamingPitcher.SteamingPitcherListener() {
             @Override
-            public void onDropAccepted(String contentToBeSteamed, int amount) {
+            public void showDialogFillSteamingPitcher(String contentToBeSteamed, int amount) {
                 FillSteamingPitcherDialogFragment dialogFragment =
                         FillSteamingPitcherDialogFragment.newInstance(contentToBeSteamed, amount);
                 dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
