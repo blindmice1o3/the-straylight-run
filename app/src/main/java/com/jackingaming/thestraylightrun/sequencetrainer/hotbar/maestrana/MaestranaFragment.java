@@ -138,6 +138,8 @@ public class MaestranaFragment extends Fragment {
 
                                 espressoShot.setY(0);
                                 espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
+                                espressoShot.setCollided(false);
+                                espressoShot.setVisibility(View.VISIBLE);
                             }
                         });
                         animatorEspressoStream.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
