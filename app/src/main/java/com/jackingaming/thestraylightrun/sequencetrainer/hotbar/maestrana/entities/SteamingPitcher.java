@@ -156,7 +156,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                 if (listener != null) {
                     listener.onDropAccepted(contentToBeSteamed, amount);
                 } else {
-                    Log.e(TAG, "listener =~= null");
+                    Log.e(TAG, "listener == null");
                 }
 
                 // Return true. DragEvent.getResult() returns true.

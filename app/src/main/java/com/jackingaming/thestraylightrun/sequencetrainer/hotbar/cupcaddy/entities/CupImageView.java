@@ -61,6 +61,84 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         textPaint.setTextSize(18);
     }
 
+    public void update(boolean colliding) {
+        this.colliding = colliding;
+        if (cantCollide && !this.colliding) {
+            cantCollide = false;
+        } else if (justCollided) {
+            cantCollide = true;
+            justCollided = false;
+        }
+        if (!cantCollide && this.colliding) {
+            justCollided = true;
+        }
+    }
+
+    public void onCollided(View collider) {
+        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
+
+        setAlpha(0.5f);
+
+        if (collider instanceof EspressoShot) {
+            Log.e(TAG, "collider instanceof EspressoShot");
+
+            EspressoShot espressoShot = (EspressoShot) collider;
+            // TODO:
+            type = espressoShot.getType();
+            numberOfShots++;
+            invalidate();
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        textPaint.setColor(getResources().getColor(
+                EspressoShot.getColorIdBasedOnType(type)
+        ));
+        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
+
+        String nameOfContent = (content == null) ? "null" : content;
+        textPaint.setColor(getResources().getColor(R.color.purple_700));
+        canvas.drawText(nameOfContent, 5, 40, textPaint);
+        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
+        if (steamed) {
+            textPaint.setColor(getResources().getColor(R.color.red));
+            canvas.drawText("steamed", 5, 80, textPaint);
+        } else {
+            textPaint.setColor(getResources().getColor(R.color.purple_700));
+            canvas.drawText("unsteamed", 5, 80, textPaint);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            String label = "MaestranaToCaddy";
+
+            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+            // Start the drag.
+            startDragAndDrop(
+                    dragData,           // The data to be dragged.
+                    myShadow,           // The drag shadow builder.
+                    this,    // The CupImageView.
+                    0              // Flags. Not currently used, set to 0.
+            );
+            setVisibility(View.INVISIBLE);
+
+            Log.e(TAG, "label: " + label);
+
+            // Indicate that the on-touch event is handled.
+            return true;
+        }
+
+        return false;
+    }
+
     private String label;
 
     @Override
@@ -216,84 +294,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return isWinner;
     }
 
-    public void update(boolean colliding) {
-        this.colliding = colliding;
-        if (cantCollide && !this.colliding) {
-            cantCollide = false;
-        } else if (justCollided) {
-            cantCollide = true;
-            justCollided = false;
-        }
-        if (!cantCollide && this.colliding) {
-            justCollided = true;
-        }
-    }
-
-    public void onCollided(View collider) {
-        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
-
-        setAlpha(0.5f);
-
-        if (collider instanceof EspressoShot) {
-            Log.e(TAG, "collider instanceof EspressoShot");
-
-            EspressoShot espressoShot = (EspressoShot) collider;
-            // TODO:
-            type = espressoShot.getType();
-            numberOfShots++;
-            invalidate();
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        textPaint.setColor(getResources().getColor(
-                EspressoShot.getColorIdBasedOnType(type)
-        ));
-        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
-
-        String nameOfContent = (content == null) ? "null" : content;
-        textPaint.setColor(getResources().getColor(R.color.purple_700));
-        canvas.drawText(nameOfContent, 5, 40, textPaint);
-        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
-        if (steamed) {
-            textPaint.setColor(getResources().getColor(R.color.red));
-            canvas.drawText("steamed", 5, 80, textPaint);
-        } else {
-            textPaint.setColor(getResources().getColor(R.color.purple_700));
-            canvas.drawText("unsteamed", 5, 80, textPaint);
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "MaestranaToCaddy";
-
-            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The CupImageView.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
-    }
-
     public boolean isJustCollided() {
         return justCollided;
     }
@@ -333,7 +333,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         }
         if (content.containsKey("numberOfShots")) {
-            this.numberOfShots = Integer.parseInt(
+            // INCREMENT
+            this.numberOfShots += Integer.parseInt(
                     content.get("numberOfShots")
             );
         }
