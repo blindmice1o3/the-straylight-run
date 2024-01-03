@@ -15,6 +15,7 @@ public class EspressoShot extends AppCompatImageView {
     public enum Type {BLONDE, SIGNATURE, DECAF;}
 
     private Type type;
+    private boolean collided;
 
     public EspressoShot(@NonNull Context context) {
         super(context);
@@ -33,6 +34,14 @@ public class EspressoShot extends AppCompatImageView {
 
     public Type getType() {
         return type;
+    }
+
+    public boolean isCollided() {
+        return collided;
+    }
+
+    public void setCollided(boolean collided) {
+        this.collided = collided;
     }
 
     public static int getColorIdBasedOnType(Type type) {

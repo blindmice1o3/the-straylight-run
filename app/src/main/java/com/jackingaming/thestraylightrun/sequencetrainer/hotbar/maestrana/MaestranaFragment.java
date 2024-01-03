@@ -123,10 +123,18 @@ public class MaestranaFragment extends Fragment {
                         animatorEspressoStream.setInterpolator(new AccelerateDecelerateInterpolator());
                         animatorEspressoStream.addListener(new AnimatorListenerAdapter() {
                             @Override
+                            public void onAnimationRepeat(Animator animation) {
+                                super.onAnimationRepeat(animation);
+                                Log.e(TAG, "onAnimationRepeat()");
+
+                                espressoShot.setCollided(false);
+                            }
+
+                            @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 Log.e(TAG, "onAnimationEnd()");
-                                // TODO:
+
                                 espressoShot.setY(0);
                                 espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
                             }
@@ -135,6 +143,10 @@ public class MaestranaFragment extends Fragment {
                             @Override
                             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                                 for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
+                                    if (espressoShot.isCollided()) {
+                                        break;
+                                    }
+
                                     if (framelayoutLeft.getChildAt(i) instanceof CupImageView) {
                                         CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
 
@@ -145,6 +157,7 @@ public class MaestranaFragment extends Fragment {
                                             Log.e(TAG, "ivCup.isJustCollided()");
 
                                             ivCup.onCollided(espressoShot);
+                                            espressoShot.setCollided(true);
                                         }
                                     } else if (framelayoutLeft.getChildAt(i) instanceof ShotGlass) {
                                         ShotGlass myShotGlass = (ShotGlass) framelayoutLeft.getChildAt(i);
@@ -156,6 +169,7 @@ public class MaestranaFragment extends Fragment {
                                             Log.e(TAG, "myShotGlass.isJustCollided()");
 
                                             myShotGlass.onCollided(espressoShot);
+                                            espressoShot.setCollided(true);
                                         }
                                     } else {
                                         Log.e(TAG, "onAnimationUpdate() else-clause.");
