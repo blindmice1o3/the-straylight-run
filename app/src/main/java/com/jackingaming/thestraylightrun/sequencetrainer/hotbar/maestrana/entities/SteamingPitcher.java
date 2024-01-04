@@ -119,16 +119,21 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy") &&
-                            ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 &&
-                            ((CupImageView) event.getLocalState()).getAmount() != 0) {
+                    } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
                         Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
 
-                        // Change value of alpha to indicate drop-target.
-                        setAlpha(0.75f);
-                        // Return true to indicate that the View can accept the dragged
-                        // data.
-                        return true;
+                        if (((CupImageView) event.getLocalState()).getNumberOfShots() == 0 &&
+                                ((CupImageView) event.getLocalState()).getAmount() != 0) {
+                            Log.d(TAG, "((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+
+                            // Change value of alpha to indicate drop-target.
+                            setAlpha(0.75f);
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        } else {
+                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                        }
                     }
                 } else {
                     Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");

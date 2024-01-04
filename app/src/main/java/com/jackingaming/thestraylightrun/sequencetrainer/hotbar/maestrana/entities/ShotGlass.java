@@ -141,7 +141,7 @@ public class ShotGlass extends AppCompatImageView
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "((CupImageView) event.getLocalState()).getAmount() NOT == 0");
+                            Log.e(TAG, "((CupImageView) event.getLocalState()).getAmount() != 0");
                         }
                     }
                 } else {

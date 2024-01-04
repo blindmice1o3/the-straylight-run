@@ -159,16 +159,21 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (label.equals("SteamingPitcher") &&
-                            ((SteamingPitcher) event.getLocalState()).getAmount() != 0) {
-                        Log.d(TAG, "label.equals(\"SteamingPitcher\") && ((SteamingPitcher) event.getLocalState()).getAmount() != 0");
+                    } else if (label.equals("SteamingPitcher")) {
+                        Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
-                        // Change value of alpha to indicate drop-target.
-                        setAlpha(0.75f);
+                        if (((SteamingPitcher) event.getLocalState()).getAmount() != 0) {
+                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getAmount() != 0");
 
-                        // Return true to indicate that the View can accept the dragged
-                        // data.
-                        return true;
+                            // Change value of alpha to indicate drop-target.
+                            setAlpha(0.75f);
+
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        } else {
+                            Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getAmount() == 0");
+                        }
                     }
                 } else {
                     Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
