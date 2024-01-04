@@ -101,12 +101,19 @@ public class CupCaddyFragment extends Fragment {
                         if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
                             Log.d(TAG, "label.equals(\"MaestranaToCaddy\")");
 
-                            // Change background drawable to indicate drop-target.
-                            view.setBackgroundResource(resIdDropTarget);
+                            if (((CupImageView) dragEvent.getLocalState()).getAmount() == 0 &&
+                                    ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0) {
+                                Log.d(TAG, "((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0");
 
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
+                                // Change background drawable to indicate drop-target.
+                                view.setBackgroundResource(resIdDropTarget);
+
+                                // Return true to indicate that the View can accept the dragged
+                                // data.
+                                return true;
+                            } else {
+                                Log.e(TAG, "NOT ((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0");
+                            }
                         }
                     } else {
                         Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");

@@ -131,8 +131,9 @@ public class ShotGlass extends AppCompatImageView
                     if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
                         Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
 
-                        if (((CupImageView) event.getLocalState()).getAmount() == 0) {
-                            Log.d(TAG, "((CupImageView) event.getLocalState()).getAmount() == 0");
+                        if (((CupImageView) event.getLocalState()).getAmount() == 0 &&
+                                ((CupImageView) event.getLocalState()).getNumberOfShots() != 0) {
+                            Log.d(TAG, "((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getNumberOfShots() != 0");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
@@ -141,7 +142,7 @@ public class ShotGlass extends AppCompatImageView
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "((CupImageView) event.getLocalState()).getAmount() != 0");
+                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getNumberOfShots() != 0");
                         }
                     }
                 } else {
