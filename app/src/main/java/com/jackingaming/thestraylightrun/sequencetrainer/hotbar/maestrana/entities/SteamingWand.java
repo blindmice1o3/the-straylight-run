@@ -63,7 +63,7 @@ public class SteamingWand extends AppCompatImageView {
                 Log.d(TAG, "ACTION_DRAG_ENTERED");
 
                 steamingPitcherAnimator = ObjectAnimator.ofInt(steamingPitcher, "temperature", steamingPitcher.getTemperature(), 250);
-                steamingPitcherAnimator.setDuration(((250L - steamingPitcher.getTemperature()) * 1000L) / 10);
+                steamingPitcherAnimator.setDuration(((250L - steamingPitcher.getTemperature()) * 1000L) / 100);
                 steamingPitcherAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {

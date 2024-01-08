@@ -280,25 +280,25 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         } else if (getTag().toString().equals("venti")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() venti");
 
-            if (numberOfShots == 2 && temperature == 160 && (amount >= (20 * 4))) {
+            if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("grande")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() grande");
 
-            if (numberOfShots == 2 && temperature == 160 && (amount >= (16 * 4))) {
+            if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("tall")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() tall");
 
-            if (numberOfShots == 1 && temperature == 160 && (amount >= (12 * 4))) {
+            if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("short")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() short");
 
-            if (numberOfShots == 1 && temperature == 160 && (amount >= (8 * 4))) {
+            if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
                 isWinner = true;
             }
         }
