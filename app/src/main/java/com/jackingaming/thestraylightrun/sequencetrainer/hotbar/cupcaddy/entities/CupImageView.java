@@ -34,7 +34,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private int numberOfShots;
     private boolean colliding, cantCollide, justCollided;
 
-    private boolean steamed;
+    private int temperature;
     private String content;
     private int amount;
 
@@ -99,17 +99,15 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         ));
         canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
 
+        int idPaintColor = (temperature < 160) ? R.color.purple_700 : R.color.red;
+        textPaint.setColor(getResources().getColor(idPaintColor));
+        canvas.drawText(Integer.toString(temperature), 5, 40, textPaint);
+
         String nameOfContent = (content == null) ? "null" : content;
         textPaint.setColor(getResources().getColor(R.color.purple_700));
-        canvas.drawText(nameOfContent, 5, 40, textPaint);
-        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
-        if (steamed) {
-            textPaint.setColor(getResources().getColor(R.color.red));
-            canvas.drawText("steamed", 5, 80, textPaint);
-        } else {
-            textPaint.setColor(getResources().getColor(R.color.purple_700));
-            canvas.drawText("unsteamed", 5, 80, textPaint);
-        }
+        canvas.drawText(nameOfContent, 5, 60, textPaint);
+
+        canvas.drawText(Integer.toString(amount), 5, 80, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -282,25 +280,25 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         } else if (getTag().toString().equals("venti")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() venti");
 
-            if (numberOfShots == 2 && steamed && (amount >= (20 * 4))) {
+            if (numberOfShots == 2 && temperature == 160 && (amount >= (20 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("grande")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() grande");
 
-            if (numberOfShots == 2 && steamed && (amount >= (16 * 4))) {
+            if (numberOfShots == 2 && temperature == 160 && (amount >= (16 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("tall")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() tall");
 
-            if (numberOfShots == 1 && steamed && (amount >= (12 * 4))) {
+            if (numberOfShots == 1 && temperature == 160 && (amount >= (12 * 4))) {
                 isWinner = true;
             }
         } else if (getTag().toString().equals("short")) {
             Log.e(TAG, "isWinnerWinnerChickenDinner() short");
 
-            if (numberOfShots == 1 && steamed && (amount >= (8 * 4))) {
+            if (numberOfShots == 1 && temperature == 160 && (amount >= (8 * 4))) {
                 isWinner = true;
             }
         }
@@ -328,14 +326,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return justCollided;
     }
 
-    public boolean isSteamed() {
-        return steamed;
-    }
-
-    public void setSteamed(boolean steamed) {
-        this.steamed = steamed;
-    }
-
     public String getContent() {
         return content;
     }
@@ -360,12 +350,16 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     this.type = type;
                 }
             }
-
         }
         if (content.containsKey("numberOfShots")) {
             // INCREMENT
             this.numberOfShots += Integer.parseInt(
                     content.get("numberOfShots")
+            );
+        }
+        if (content.containsKey("temperature")) {
+            this.temperature = Integer.parseInt(
+                    content.get("temperature")
             );
         }
         if (content.containsKey("content")) {
@@ -374,11 +368,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (content.containsKey("amount")) {
             this.amount = Integer.parseInt(
                     content.get("amount")
-            );
-        }
-        if (content.containsKey("steamed")) {
-            this.steamed = Boolean.parseBoolean(
-                    content.get("steamed")
             );
         }
 
@@ -390,15 +379,15 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         HashMap<String, String> content = new HashMap<>();
         content.put("type", this.type.name());
         content.put("numberOfShots", Integer.toString(this.numberOfShots));
+        content.put("temperature", Integer.toString(this.temperature));
         content.put("content", this.content);
         content.put("amount", Integer.toString(this.amount));
-        content.put("steamed", Boolean.toString(this.steamed));
 
         this.type = EspressoShot.Type.SIGNATURE;
         this.numberOfShots = 0;
+        this.temperature = 0;
         this.content = null;
         this.amount = 0;
-        this.steamed = false;
         invalidate();
 
         return content;

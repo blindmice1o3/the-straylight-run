@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -13,6 +15,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class SteamingWand extends AppCompatImageView {
     public static final String TAG = SteamingWand.class.getSimpleName();
+
+    private SteamingPitcher steamingPitcher;
+    private ObjectAnimator steamingPitcherAnimator;
 
     public SteamingWand(@NonNull Context context) {
         super(context);
@@ -33,7 +38,7 @@ public class SteamingWand extends AppCompatImageView {
                     if (event.getClipDescription().getLabel().equals("SteamingPitcher")) {
                         Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
-                        SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
+                        steamingPitcher = (SteamingPitcher) event.getLocalState();
                         if (steamingPitcher.getContent() != null &&
                                 steamingPitcher.getAmount() > 0) {
                             // Change value of alpha to indicate drop-target.
@@ -57,6 +62,16 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_ENTERED:
                 Log.d(TAG, "ACTION_DRAG_ENTERED");
 
+                steamingPitcherAnimator = ObjectAnimator.ofInt(steamingPitcher, "temperature", steamingPitcher.getTemperature(), 250);
+                steamingPitcherAnimator.setDuration(((250L - steamingPitcher.getTemperature()) * 1000L) / 10);
+                steamingPitcherAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                        steamingPitcher.invalidate();
+                    }
+                });
+                steamingPitcherAnimator.start();
+
                 // Change value of alpha to indicate [ENTERED] state.
                 setAlpha(0.5f);
 
@@ -68,6 +83,8 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_EXITED:
                 Log.d(TAG, "ACTION_DRAG_EXITED");
 
+                steamingPitcherAnimator.cancel();
+
                 // Reset value of alpha back to normal.
                 setAlpha(0.8f);
 
@@ -75,9 +92,6 @@ public class SteamingWand extends AppCompatImageView {
                 return true;
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
-
-                SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
-                steamingPitcher.steam();
 
                 // Return true. DragEvent.getResult() returns true.
                 return true;
@@ -93,6 +107,9 @@ public class SteamingWand extends AppCompatImageView {
                 } else {
                     Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                 }
+
+                steamingPitcherAnimator.cancel();
+                steamingPitcher = null;
 
                 // Return true. The value is ignored.
                 return true;

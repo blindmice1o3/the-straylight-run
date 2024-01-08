@@ -32,7 +32,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     private SteamingPitcherListener listener;
 
-    private boolean steamed;
+    private int temperature;
     private String content;
     private int amount;
 
@@ -67,14 +67,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        Paint temperatureMessageColor = (temperature < 160) ? textPaintPurple : textPaintRed;
+        canvas.drawText(Integer.toString(temperature), 5, 20, temperatureMessageColor);
+
         String nameOfContent = (content == null) ? "null" : content;
-        canvas.drawText(nameOfContent, 5, 20, textPaintPurple);
-        canvas.drawText(Integer.toString(amount), 5, 40, textPaintPurple);
-        if (steamed) {
-            canvas.drawText("steamed", 5, 60, textPaintRed);
-        } else {
-            canvas.drawText("unsteamed", 5, 60, textPaintPurple);
-        }
+        canvas.drawText(nameOfContent, 5, 40, textPaintPurple);
+
+        canvas.drawText(Integer.toString(amount), 5, 60, textPaintPurple);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -212,16 +211,9 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         return false;
     }
 
-    public void steam() {
-        Log.e(TAG, "steam()");
-
-        steamed = true;
-        invalidate();
-    }
-
     public void empty() {
         Log.e(TAG, "empty()");
-        steamed = false;
+        temperature = 0;
         update(null, 0);
     }
 
@@ -255,12 +247,12 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         this.listener = listener;
     }
 
-    public boolean isSteamed() {
-        return steamed;
+    public int getTemperature() {
+        return temperature;
     }
 
-    public void setSteamed(boolean steamed) {
-        this.steamed = steamed;
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
     }
 
     public String getContent() {
@@ -281,17 +273,17 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     @Override
     public void transferIn(HashMap<String, String> content) {
+        if (content.containsKey("temperature")) {
+            this.temperature = Integer.parseInt(
+                    content.get("temperature")
+            );
+        }
         if (content.containsKey("content")) {
             this.content = content.get("content");
         }
         if (content.containsKey("amount")) {
             this.amount = Integer.parseInt(
                     content.get("amount")
-            );
-        }
-        if (content.containsKey("steamed")) {
-            this.steamed = Boolean.parseBoolean(
-                    content.get("steamed")
             );
         }
 
@@ -301,13 +293,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
+        content.put("temperature", Integer.toString(this.temperature));
         content.put("content", this.content);
         content.put("amount", Integer.toString(this.amount));
-        content.put("steamed", Boolean.toString(this.steamed));
 
+        this.temperature = 0;
         this.content = null;
         this.amount = 0;
-        this.steamed = false;
         update(this.content, this.amount);
 
         return content;
