@@ -83,10 +83,13 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             Log.e(TAG, "collider instanceof EspressoShot");
 
             EspressoShot espressoShot = (EspressoShot) collider;
-            // TODO:
             type = espressoShot.getType();
             numberOfShots++;
             invalidate();
+
+            if (isWinnerWinnerChickenDinner()) {
+                showDialogWinner();
+            }
         }
     }
 
@@ -224,26 +227,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 }
 
                 if (isWinnerWinnerChickenDinner()) {
-                    // TODO:
-                    String title = "WINNER";
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                    alertDialogBuilder.setTitle(title);
-                    alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER!");
-                    alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // on success
-                            dialog.dismiss();
-                        }
-                    });
-                    alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    alertDialogBuilder.setCancelable(false);
-                    alertDialogBuilder.create().show();
+                    showDialogWinner();
                 }
 
                 // Return true. DragEvent.getResult() returns true.
@@ -268,6 +252,28 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         return false;
+    }
+
+    private void showDialogWinner() {
+        String title = "WINNER";
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER!");
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // on success
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.create().show();
     }
 
     private boolean isWinnerWinnerChickenDinner() {
