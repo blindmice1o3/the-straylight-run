@@ -45,7 +45,7 @@ public class MaestranaFragment extends Fragment {
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
-    private FrameLayout framelayoutEspressoStreamAndSteamWand;
+    private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
@@ -200,7 +200,9 @@ public class MaestranaFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         constraintLayoutMaestrana = view.findViewById(R.id.constraintlayout_maestrana);
-        framelayoutEspressoStreamAndSteamWand = view.findViewById(R.id.framelayout_espresso_stream_and_steam_wand);
+        framelayoutEspressoStream = view.findViewById(R.id.framelayout_espresso_stream);
+        framelayoutSyrupCaddy = view.findViewById(R.id.framelayout_syrup_caddy);
+        framelayoutSteamingWand = view.findViewById(R.id.framelayout_steaming_wand);
         framelayoutLeft = view.findViewById(R.id.framelayout_left);
         framelayoutCenter = view.findViewById(R.id.framelayout_center);
         framelayoutRight = view.findViewById(R.id.framelayout_right);
@@ -234,12 +236,11 @@ public class MaestranaFragment extends Fragment {
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
         constraintLayoutMaestrana.addView(steamingWand);
 
-        // TODO:
         // ESPRESSO SHOT CONTROL
         ImageView espressoShotControl = new ImageView(getContext());
         espressoShotControl.setTag(TAG_ESPRESSO_SHOT_CONTROL);
         espressoShotControl.setLayoutParams(new FrameLayout.LayoutParams(128, 128));
-        espressoShotControl.setX(250 - (128 / 2));
+        espressoShotControl.setX(200 - (128 / 2));
         espressoShotControl.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShotControl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,7 +255,7 @@ public class MaestranaFragment extends Fragment {
         espressoShot = new EspressoShot(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-        espressoShot.setX(250 - (16 / 2));
+        espressoShot.setX(200 - (16 / 2));
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
         constraintLayoutMaestrana.addView(espressoShot);
 
@@ -262,7 +263,7 @@ public class MaestranaFragment extends Fragment {
         shotGlass = new ShotGlass(getContext());
         shotGlass.setTag(TAG_SHOT_GLASS);
         shotGlass.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
-        shotGlass.setX(250 - (64 / 2));
+        shotGlass.setX(200 - (64 / 2));
         shotGlass.setBackgroundColor(getResources().getColor(R.color.cream));
         framelayoutLeft.addView(shotGlass);
     }
