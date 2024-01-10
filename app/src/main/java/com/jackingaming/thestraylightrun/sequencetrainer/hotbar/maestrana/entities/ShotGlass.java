@@ -81,6 +81,7 @@ public class ShotGlass extends AppCompatImageView
             numberOfShots++;
             invalidate();
         }
+        // TODO: Syrup
     }
 
     @Override
@@ -88,7 +89,7 @@ public class ShotGlass extends AppCompatImageView
         super.onDraw(canvas);
 
         textPaint.setColor(getResources().getColor(
-                EspressoShot.getColorIdBasedOnType(type)
+                EspressoShot.lookupColorIdByType(type)
         ));
         canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
     }

@@ -91,6 +91,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 showDialogWinner();
             }
         }
+        // TODO: Syrup
     }
 
     @Override
@@ -98,7 +99,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         super.onDraw(canvas);
 
         textPaint.setColor(getResources().getColor(
-                EspressoShot.getColorIdBasedOnType(type)
+                EspressoShot.lookupColorIdByType(type)
         ));
         canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
 

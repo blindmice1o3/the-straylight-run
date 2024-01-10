@@ -26,9 +26,9 @@ public class EspressoShot extends AppCompatImageView {
     }
 
     public void updateType(Type typeSelected) {
-        this.type = typeSelected;
+        type = typeSelected;
 
-        int colorToUse = getColorIdBasedOnType(this.type);
+        int colorToUse = lookupColorIdByType(type);
         setBackgroundColor(getResources().getColor(colorToUse));
     }
 
@@ -44,7 +44,7 @@ public class EspressoShot extends AppCompatImageView {
         this.collided = collided;
     }
 
-    public static int getColorIdBasedOnType(Type type) {
+    public static int lookupColorIdByType(Type type) {
         switch (type) {
             case BLONDE:
                 return R.color.cream;
