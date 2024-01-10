@@ -8,13 +8,30 @@
     <color name="black">#FF000000</color>
     <color name="light_grey">#FFBBBBBB</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="cream">#FFFFFDD0</color>
-    <color name="brown">#FF964B00</color>
-    <color name="green">#FF00FF00</color>
-    <color name="red">#FFFF0000</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+
+    <color name="red">#F44336</color>
+    <color name="pink">#E91E63</color>
+    <color name="purple">#9C27B0</color>
+    <color name="deep_purple">#673AB7</color>
+    <color name="indigo">#3F51B5</color>
+    <color name="blue">#2196F3</color>
+    <color name="light_blue">#03A9F4</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="teal">#009688</color>
+    <color name="green">#4CAF50</color>
+    <color name="light_green">#8BC34A</color>
+    <color name="lime">#CDDC39</color>
+    <color name="cream">#FFFFFDD0</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="amber">#FFC107</color>
+    <color name="orange">#FF9800</color>
+    <color name="deep_orange">#FF5722</color>
+    <color name="brown">#795548</color>
+    <color name="grey">#9E9E9E</color>
+    <color name="blue_grey">#607D8B</color>
 </resources>

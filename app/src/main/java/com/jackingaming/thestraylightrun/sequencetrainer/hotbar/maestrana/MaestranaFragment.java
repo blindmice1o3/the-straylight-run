@@ -42,6 +42,7 @@ public class MaestranaFragment extends Fragment {
     public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
     public static final String TAG_SHOT_GLASS = "ShotGlass";
+    public static final String TAG_SYRUP_BOTTLE = "SyrupBottle";
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
@@ -51,6 +52,7 @@ public class MaestranaFragment extends Fragment {
     private SteamingWand steamingWand;
     private EspressoShot espressoShot;
     private ShotGlass shotGlass;
+    private ImageView syrupBottle;
     private ObjectAnimator animatorEspressoStream;
 
     private CupImageView ivToBeAdded;
@@ -232,9 +234,9 @@ public class MaestranaFragment extends Fragment {
         steamingWand = new SteamingWand(getContext());
         steamingWand.setTag(TAG_STEAMING_WAND);
         steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
-        steamingWand.setX(800);
+        steamingWand.setX(128);
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
-        constraintLayoutMaestrana.addView(steamingWand);
+        framelayoutSteamingWand.addView(steamingWand);
 
         // ESPRESSO SHOT CONTROL
         ImageView espressoShotControl = new ImageView(getContext());
@@ -249,7 +251,7 @@ public class MaestranaFragment extends Fragment {
                 dialogFragment.show(getChildFragmentManager(), EspressoShotControlDialogFragment.TAG);
             }
         });
-        constraintLayoutMaestrana.addView(espressoShotControl);
+        framelayoutEspressoStream.addView(espressoShotControl);
 
         // ESPRESSO SHOT
         espressoShot = new EspressoShot(getContext());
@@ -257,7 +259,7 @@ public class MaestranaFragment extends Fragment {
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setX(200 - (16 / 2));
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
-        constraintLayoutMaestrana.addView(espressoShot);
+        framelayoutEspressoStream.addView(espressoShot);
 
         // SHOT GLASS
         shotGlass = new ShotGlass(getContext());
@@ -266,6 +268,20 @@ public class MaestranaFragment extends Fragment {
         shotGlass.setX(200 - (64 / 2));
         shotGlass.setBackgroundColor(getResources().getColor(R.color.cream));
         framelayoutLeft.addView(shotGlass);
+
+        // SYRUP BOTTLE
+        syrupBottle = new ImageView(getContext());
+        syrupBottle.setTag(TAG_SYRUP_BOTTLE);
+        syrupBottle.setLayoutParams(new FrameLayout.LayoutParams(64, 128));
+        syrupBottle.setX(64 - (64 / 2));
+        syrupBottle.setBackgroundColor(getResources().getColor(R.color.yellow));
+        syrupBottle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Vanilla Syrup Bottle", Toast.LENGTH_SHORT).show();
+            }
+        });
+        framelayoutSyrupCaddy.addView(syrupBottle);
     }
 
     private boolean isViewOverlapping(View firstView, View secondView) {
