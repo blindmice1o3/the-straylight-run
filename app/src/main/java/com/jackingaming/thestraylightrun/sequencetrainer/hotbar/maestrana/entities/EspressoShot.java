@@ -36,6 +36,10 @@ public class EspressoShot extends AppCompatImageView {
         return type;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public boolean isCollided() {
         return collided;
     }

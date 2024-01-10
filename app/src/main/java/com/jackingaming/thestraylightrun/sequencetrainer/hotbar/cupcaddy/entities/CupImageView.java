@@ -23,8 +23,10 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entiti
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.Syrup;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable {
@@ -37,6 +39,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private int temperature;
     private String content;
     private int amount;
+
+    private Map<Syrup.Type, Integer> syrups;
 
     private Paint textPaint;
 
@@ -54,11 +58,17 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         type = EspressoShot.Type.SIGNATURE;
         numberOfShots = 0;
 
+        temperature = 0;
+        content = null;
+        amount = 0;
+
+        syrups = new HashMap<>();
+
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setColor(getResources().getColor(R.color.brown));
-        textPaint.setTextSize(18);
+        textPaint.setTextSize(14);
     }
 
     public void update(boolean colliding) {
@@ -90,8 +100,17 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             if (isWinnerWinnerChickenDinner()) {
                 showDialogWinner();
             }
+        } else if (collider instanceof Syrup) {
+            Log.e(TAG, "collider instanceof Syrup");
+
+            Syrup syrup = (Syrup) collider;
+            int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
+            int quantityNew = quantityPrevious + 1;
+            syrups.put(syrup.getType(), quantityNew);
+            invalidate();
+
+            // TODO:
         }
-        // TODO: Syrup
     }
 
     @Override
@@ -101,17 +120,21 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         textPaint.setColor(getResources().getColor(
                 EspressoShot.lookupColorIdByType(type)
         ));
-        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
+        canvas.drawText("shots: " + numberOfShots, 5, 15, textPaint);
 
         int idPaintColor = (temperature < 160) ? R.color.purple_700 : R.color.red;
         textPaint.setColor(getResources().getColor(idPaintColor));
-        canvas.drawText(Integer.toString(temperature), 5, 40, textPaint);
+        canvas.drawText(Integer.toString(temperature), 5, 30, textPaint);
 
         String nameOfContent = (content == null) ? "null" : content;
         textPaint.setColor(getResources().getColor(R.color.purple_700));
-        canvas.drawText(nameOfContent, 5, 60, textPaint);
+        canvas.drawText(nameOfContent, 5, 45, textPaint);
 
-        canvas.drawText(Integer.toString(amount), 5, 80, textPaint);
+        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
+
+        textPaint.setColor(getResources().getColor(R.color.yellow));
+        int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
+        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 8, 30, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

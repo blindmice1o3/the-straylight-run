@@ -334,19 +334,6 @@ public class MaestranaFragment extends Fragment {
                                     syrup.setCollided(true);
                                     syrup.setVisibility(View.INVISIBLE);
                                 }
-                            } else if (framelayoutCenter.getChildAt(i) instanceof ShotGlass) {
-                                ShotGlass myShotGlass = (ShotGlass) framelayoutCenter.getChildAt(i);
-
-                                boolean colliding = isViewOverlapping(syrup, myShotGlass);
-                                myShotGlass.update(colliding);
-
-                                if (myShotGlass.isJustCollided()) {
-                                    Log.e(TAG, "myShotGlass.isJustCollided()");
-
-                                    myShotGlass.onCollided(syrup);
-                                    syrup.setCollided(true);
-                                    syrup.setVisibility(View.INVISIBLE);
-                                }
                             } else {
                                 Log.e(TAG, "onAnimationUpdate() else-clause.");
                             }

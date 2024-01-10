@@ -54,13 +54,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         textPaintPurple.setAntiAlias(true);
         textPaintPurple.setStyle(Paint.Style.STROKE);
         textPaintPurple.setColor(getResources().getColor(R.color.purple_700));
-        textPaintPurple.setTextSize(18);
+        textPaintPurple.setTextSize(14);
 
         textPaintRed = new Paint();
         textPaintRed.setAntiAlias(true);
         textPaintRed.setStyle(Paint.Style.STROKE);
         textPaintRed.setColor(getResources().getColor(R.color.red));
-        textPaintRed.setTextSize(18);
+        textPaintRed.setTextSize(14);
     }
 
     @Override
@@ -68,12 +68,12 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         super.onDraw(canvas);
 
         Paint temperatureMessageColor = (temperature < 160) ? textPaintPurple : textPaintRed;
-        canvas.drawText(Integer.toString(temperature), 5, 20, temperatureMessageColor);
+        canvas.drawText(Integer.toString(temperature), 5, 15, temperatureMessageColor);
 
         String nameOfContent = (content == null) ? "null" : content;
-        canvas.drawText(nameOfContent, 5, 40, textPaintPurple);
+        canvas.drawText(nameOfContent, 5, 30, textPaintPurple);
 
-        canvas.drawText(Integer.toString(amount), 5, 60, textPaintPurple);
+        canvas.drawText(Integer.toString(amount), 5, 45, textPaintPurple);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

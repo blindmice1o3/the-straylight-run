@@ -51,7 +51,7 @@ public class ShotGlass extends AppCompatImageView
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setColor(getResources().getColor(R.color.brown));
-        textPaint.setTextSize(18);
+        textPaint.setTextSize(14);
     }
 
     public void update(boolean colliding) {
@@ -91,7 +91,7 @@ public class ShotGlass extends AppCompatImageView
         textPaint.setColor(getResources().getColor(
                 EspressoShot.lookupColorIdByType(type)
         ));
-        canvas.drawText("shots: " + numberOfShots, 5, 20, textPaint);
+        canvas.drawText("shots: " + numberOfShots, 5, 15, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
