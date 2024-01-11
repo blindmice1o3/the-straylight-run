@@ -42,6 +42,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     private Map<Syrup.Type, Integer> syrups;
 
+    private boolean shotOnTop;
+
     private Paint textPaint;
 
     public CupImageView(Context context) {
@@ -63,6 +65,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         amount = 0;
 
         syrups = new HashMap<>();
+
+        shotOnTop = false;
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
@@ -113,6 +117,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
     }
 
+    private int yLine1 = 15;
+    private int yLine2 = 30;
+    private int yLine3 = 45;
+    private int yLine4 = 60;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -120,21 +129,26 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         textPaint.setColor(getResources().getColor(
                 EspressoShot.lookupColorIdByType(type)
         ));
-        canvas.drawText("shots: " + numberOfShots, 5, 15, textPaint);
+        int yShot = (shotOnTop) ? yLine1 : yLine4;
+        canvas.drawText("shots: " + numberOfShots, 5, yShot, textPaint);
 
         int idPaintColor = (temperature < 160) ? R.color.purple_700 : R.color.red;
         textPaint.setColor(getResources().getColor(idPaintColor));
-        canvas.drawText(Integer.toString(temperature), 5, 30, textPaint);
+        int yTemperature = (shotOnTop) ? yLine2 : yLine1;
+        canvas.drawText(Integer.toString(temperature), 5, yTemperature, textPaint);
 
         String nameOfContent = (content == null) ? "null" : content;
         textPaint.setColor(getResources().getColor(R.color.purple_700));
-        canvas.drawText(nameOfContent, 5, 45, textPaint);
+        int yContentName = (shotOnTop) ? yLine3 : yLine2;
+        canvas.drawText(nameOfContent, 5, yContentName, textPaint);
 
-        canvas.drawText(Integer.toString(amount), 5, 60, textPaint);
+        int yContentAmount = (shotOnTop) ? yLine4 : yLine3;
+        canvas.drawText(Integer.toString(amount), 5, yContentAmount, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.yellow));
         int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
-        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 8, 30, textPaint);
+        int ySyrupVanilla = (shotOnTop) ? yLine2 : yLine1;
+        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 8, ySyrupVanilla, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -241,6 +255,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     );
                 } else if (label.equals("ShotGlass")) {
                     Log.d(TAG, "label.equals(\"ShotGlass\")");
+
+                    // TODO:
+                    if (content != null) {
+                        Log.d(TAG, "content != null... setting shotOnTop to true.");
+                        shotOnTop = true;
+                    }
 
                     ShotGlass shotGlass = (ShotGlass) event.getLocalState();
 
@@ -370,6 +390,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public boolean isShotOnTop() {
+        return shotOnTop;
+    }
+
+    public void setShotOnTop(boolean shotOnTop) {
+        this.shotOnTop = shotOnTop;
     }
 
     @Override
