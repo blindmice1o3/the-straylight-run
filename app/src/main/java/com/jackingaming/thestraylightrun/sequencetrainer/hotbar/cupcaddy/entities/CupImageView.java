@@ -43,6 +43,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private Map<Syrup.Type, Integer> syrups;
 
     private boolean shotOnTop;
+    private boolean drizzled;
 
     private Paint textPaint;
 
@@ -67,6 +68,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         syrups = new HashMap<>();
 
         shotOnTop = false;
+        drizzled = false;
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
@@ -191,8 +193,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     label = event.getClipDescription().getLabel().toString();
-                    if (label.equals("ShotGlass")) {
-                        Log.d(TAG, "label.equals(\"ShotGlass\")");
+                    if (label.equals("ShotGlass") || label.equals("CaramelDrizzleBottle")) {
+                        Log.d(TAG, "label.equals(\"ShotGlass\") || label.equals(\"CaramelDrizzleBottle\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -270,6 +272,13 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     transferIn(
                             shotGlass.transferOut()
                     );
+                } else if (label.equals("CaramelDrizzleBottle")) {
+                    Log.d(TAG, "label.equals(\"CaramelDrizzleBottle\")");
+
+                    if (content != null && numberOfShots > 0) {
+                        Log.d(TAG, "content != null && numberOfShots > 0... setting drizzled to true.");
+                        drizzled = true;
+                    }
                 }
 
                 if (isWinnerWinnerChickenDinner()) {
@@ -338,9 +347,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 if (syrups.containsKey(Syrup.Type.VANILLA)) {
                     int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                    if (quantitySyrupVanilla == 4 && shotOnTop) {
+                    if (quantitySyrupVanilla == 4 && shotOnTop && drizzled) {
                         isWinner = true;
-                        winningDrink = "Venti | Caramel Macchiato (without caramel drizzle)";
+                        winningDrink = "Venti | Caramel Macchiato";
                     } else if (quantitySyrupVanilla == 5) {
                         isWinner = true;
                         winningDrink = "Venti | Starbucks Vanilla Latte";
@@ -357,9 +366,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 if (syrups.containsKey(Syrup.Type.VANILLA)) {
                     int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                    if (quantitySyrupVanilla == 3 && shotOnTop) {
+                    if (quantitySyrupVanilla == 3 && shotOnTop && drizzled) {
                         isWinner = true;
-                        winningDrink = "Grande | Caramel Macchiato (without caramel drizzle)";
+                        winningDrink = "Grande | Caramel Macchiato";
                     } else if (quantitySyrupVanilla == 4) {
                         isWinner = true;
                         winningDrink = "Grande | Starbucks Vanilla Latte";
@@ -376,9 +385,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 if (syrups.containsKey(Syrup.Type.VANILLA)) {
                     int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                    if (quantitySyrupVanilla == 2 && shotOnTop) {
+                    if (quantitySyrupVanilla == 2 && shotOnTop && drizzled) {
                         isWinner = true;
-                        winningDrink = "Tall | Caramel Macchiato (without caramel drizzle)";
+                        winningDrink = "Tall | Caramel Macchiato";
                     } else if (quantitySyrupVanilla == 3) {
                         isWinner = true;
                         winningDrink = "Tall | Starbucks Vanilla Latte";
@@ -395,9 +404,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 if (syrups.containsKey(Syrup.Type.VANILLA)) {
                     int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                    if (quantitySyrupVanilla == 1 && shotOnTop) {
+                    if (quantitySyrupVanilla == 1 && shotOnTop && drizzled) {
                         isWinner = true;
-                        winningDrink = "Short | Caramel Macchiato (without caramel drizzle)";
+                        winningDrink = "Short | Caramel Macchiato";
                     } else if (quantitySyrupVanilla == 2) {
                         isWinner = true;
                         winningDrink = "Short | Starbucks Vanilla Latte";

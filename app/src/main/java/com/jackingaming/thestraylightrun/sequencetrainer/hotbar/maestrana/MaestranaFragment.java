@@ -29,6 +29,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
@@ -60,7 +61,7 @@ public class MaestranaFragment extends Fragment {
     private ImageView syrupBottleVanilla;
     private Syrup syrupVanilla;
     private ObjectAnimator animatorSyrupVanilla;
-    private ImageView caramelDrizzleBottle;
+    private CaramelDrizzleBottle caramelDrizzleBottle;
 
 
     private CupImageView ivToBeAdded;
@@ -363,18 +364,12 @@ public class MaestranaFragment extends Fragment {
         constraintLayoutMaestrana.addView(syrupVanilla);
 
         // CARAMEL DRIZZLE BOTTLE
-        caramelDrizzleBottle = new ImageView(getContext());
+        caramelDrizzleBottle = new CaramelDrizzleBottle(getContext());
         caramelDrizzleBottle.setTag(TAG_CARAMEL_DRIZZLE_BOTTLE);
         caramelDrizzleBottle.setLayoutParams(new FrameLayout.LayoutParams(48, 96));
         caramelDrizzleBottle.setX(384 - (48 + 16));
         caramelDrizzleBottle.setY(452 - (96 + 16));
         caramelDrizzleBottle.setBackgroundColor(getResources().getColor(R.color.yellow));
-        caramelDrizzleBottle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Caramel Drizzle Bottle", Toast.LENGTH_SHORT).show();
-            }
-        });
         framelayoutSyrupCaddy.addView(caramelDrizzleBottle);
     }
 
