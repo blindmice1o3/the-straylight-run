@@ -45,6 +45,7 @@ public class MaestranaFragment extends Fragment {
     public static final String TAG_SHOT_GLASS = "ShotGlass";
     public static final String TAG_SYRUP_BOTTLE_VANILLA = "SyrupBottleVanilla";
     public static final String TAG_SYRUP_VANILLA = "SyrupVanilla";
+    public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
@@ -59,6 +60,7 @@ public class MaestranaFragment extends Fragment {
     private ImageView syrupBottleVanilla;
     private Syrup syrupVanilla;
     private ObjectAnimator animatorSyrupVanilla;
+    private ImageView caramelDrizzleBottle;
 
 
     private CupImageView ivToBeAdded;
@@ -281,7 +283,7 @@ public class MaestranaFragment extends Fragment {
         syrupBottleVanilla.setTag(TAG_SYRUP_BOTTLE_VANILLA);
         syrupBottleVanilla.setLayoutParams(new FrameLayout.LayoutParams(64, 128));
         syrupBottleVanilla.setX(64 - (64 / 2));
-        syrupBottleVanilla.setBackgroundColor(getResources().getColor(R.color.yellow));
+        syrupBottleVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
         syrupBottleVanilla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -306,7 +308,7 @@ public class MaestranaFragment extends Fragment {
                         Log.e(TAG, "onAnimationEnd()");
 
                         syrupVanilla.setY(0);
-                        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.brown));
+                        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
                         syrupVanilla.setCollided(false);
                         syrupVanilla.setVisibility(View.VISIBLE);
 
@@ -351,7 +353,7 @@ public class MaestranaFragment extends Fragment {
         syrupVanilla.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
 //        syrup.setX(64 - (16 / 2));
         syrupVanilla.setX(344);
-        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.brown));
+        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
         syrupVanilla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -359,6 +361,21 @@ public class MaestranaFragment extends Fragment {
             }
         });
         constraintLayoutMaestrana.addView(syrupVanilla);
+
+        // CARAMEL DRIZZLE BOTTLE
+        caramelDrizzleBottle = new ImageView(getContext());
+        caramelDrizzleBottle.setTag(TAG_CARAMEL_DRIZZLE_BOTTLE);
+        caramelDrizzleBottle.setLayoutParams(new FrameLayout.LayoutParams(48, 96));
+        caramelDrizzleBottle.setX(384 - (48 + 16));
+        caramelDrizzleBottle.setY(452 - (96 + 16));
+        caramelDrizzleBottle.setBackgroundColor(getResources().getColor(R.color.yellow));
+        caramelDrizzleBottle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Caramel Drizzle Bottle", Toast.LENGTH_SHORT).show();
+            }
+        });
+        framelayoutSyrupCaddy.addView(caramelDrizzleBottle);
     }
 
     private boolean isViewOverlapping(View firstView, View secondView) {
