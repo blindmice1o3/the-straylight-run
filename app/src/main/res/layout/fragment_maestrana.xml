@@ -8,6 +8,17 @@
     tools:context=".sequencetrainer.hotbar.maestrana.MaestranaFragment">
 
     <FrameLayout
+        android:id="@+id/framelayout_label_staging_area"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/shape_maestrana"
+        app:layout_constraintBottom_toTopOf="@id/framelayout_espresso_stream"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <FrameLayout
         android:id="@+id/framelayout_espresso_stream"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -16,7 +27,7 @@
         app:layout_constraintEnd_toStartOf="@id/framelayout_syrup_caddy"
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/framelayout_label_staging_area"
         app:layout_constraintVertical_weight="1" />
 
     <FrameLayout
@@ -28,7 +39,7 @@
         app:layout_constraintEnd_toStartOf="@id/framelayout_steaming_wand"
         app:layout_constraintHorizontal_weight="4"
         app:layout_constraintStart_toEndOf="@id/framelayout_espresso_stream"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/framelayout_label_staging_area"
         app:layout_constraintVertical_weight="1" />
 
     <FrameLayout
@@ -40,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@id/framelayout_syrup_caddy"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/framelayout_label_staging_area"
         app:layout_constraintVertical_weight="1" />
 
     <FrameLayout
@@ -53,7 +64,7 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/framelayout_espresso_stream"
-        app:layout_constraintVertical_weight="2" />
+        app:layout_constraintVertical_weight="1" />
 
     <FrameLayout
         android:id="@+id/framelayout_center"
@@ -65,7 +76,7 @@
         app:layout_constraintHorizontal_weight="4"
         app:layout_constraintStart_toEndOf="@id/framelayout_left"
         app:layout_constraintTop_toBottomOf="@id/framelayout_syrup_caddy"
-        app:layout_constraintVertical_weight="2" />
+        app:layout_constraintVertical_weight="1" />
 
     <FrameLayout
         android:id="@+id/framelayout_right"
@@ -77,6 +88,6 @@
         app:layout_constraintHorizontal_weight="3"
         app:layout_constraintStart_toEndOf="@id/framelayout_center"
         app:layout_constraintTop_toBottomOf="@id/framelayout_steaming_wand"
-        app:layout_constraintVertical_weight="2" />
+        app:layout_constraintVertical_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

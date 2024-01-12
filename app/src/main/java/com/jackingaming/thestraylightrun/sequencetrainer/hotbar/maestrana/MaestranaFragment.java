@@ -12,7 +12,6 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -50,6 +49,7 @@ public class MaestranaFragment extends Fragment {
 
     private MaestranaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMaestrana;
+    private FrameLayout framelayoutLabelStagingArea;
     private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
@@ -125,13 +125,13 @@ public class MaestranaFragment extends Fragment {
                         animatorEspressoShot = ObjectAnimator.ofFloat(
                                 espressoShot,
                                 "y",
-                                0f,
-                                800f);
-                        animatorEspressoShot.setDuration(4000);
+                                458f,
+                                1200f);
+                        animatorEspressoShot.setDuration(2000);
                         animatorEspressoShot.setRepeatCount(repeatCountToUse);
 //        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
 //        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
-                        animatorEspressoShot.setInterpolator(new AccelerateDecelerateInterpolator());
+//                        animatorEspressoShot.setInterpolator(new AccelerateDecelerateInterpolator());
                         animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationRepeat(Animator animation) {
@@ -147,7 +147,7 @@ public class MaestranaFragment extends Fragment {
                                 super.onAnimationEnd(animation);
                                 Log.e(TAG, "onAnimationEnd()");
 
-                                espressoShot.setY(0);
+                                espressoShot.setY(458);
                                 espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
                                 espressoShot.setCollided(false);
                                 espressoShot.setVisibility(View.VISIBLE);
@@ -211,6 +211,7 @@ public class MaestranaFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         constraintLayoutMaestrana = view.findViewById(R.id.constraintlayout_maestrana);
+        framelayoutLabelStagingArea = view.findViewById(R.id.framelayout_label_staging_area);
         framelayoutEspressoStream = view.findViewById(R.id.framelayout_espresso_stream);
         framelayoutSyrupCaddy = view.findViewById(R.id.framelayout_syrup_caddy);
         framelayoutSteamingWand = view.findViewById(R.id.framelayout_steaming_wand);
@@ -268,6 +269,7 @@ public class MaestranaFragment extends Fragment {
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setX(200 - (16 / 2));
+        espressoShot.setY(458);
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
         constraintLayoutMaestrana.addView(espressoShot);
 
@@ -298,17 +300,17 @@ public class MaestranaFragment extends Fragment {
                 animatorSyrupVanilla = ObjectAnimator.ofFloat(
                         syrupVanilla,
                         "y",
-                        0f,
-                        800f);
-                animatorSyrupVanilla.setDuration(4000);
-                animatorSyrupVanilla.setInterpolator(new AccelerateDecelerateInterpolator());
+                        458f,
+                        1200f);
+                animatorSyrupVanilla.setDuration(2000);
+//                animatorSyrupVanilla.setInterpolator(new AccelerateDecelerateInterpolator());
                 animatorSyrupVanilla.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         Log.e(TAG, "onAnimationEnd()");
 
-                        syrupVanilla.setY(0);
+                        syrupVanilla.setY(458);
                         syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
                         syrupVanilla.setCollided(false);
                         syrupVanilla.setVisibility(View.VISIBLE);
@@ -354,6 +356,7 @@ public class MaestranaFragment extends Fragment {
         syrupVanilla.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
 //        syrup.setX(64 - (16 / 2));
         syrupVanilla.setX(344);
+        syrupVanilla.setY(458);
         syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
         syrupVanilla.setOnClickListener(new View.OnClickListener() {
             @Override
