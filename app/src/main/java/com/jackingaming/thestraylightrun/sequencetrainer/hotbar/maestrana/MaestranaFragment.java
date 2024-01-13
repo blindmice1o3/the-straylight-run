@@ -219,6 +219,8 @@ public class MaestranaFragment extends Fragment {
         framelayoutCenter = view.findViewById(R.id.framelayout_center);
         framelayoutRight = view.findViewById(R.id.framelayout_right);
 
+        framelayoutLabelStagingArea.setOnDragListener(new LabelPrinterDragListener());
+
         View.OnDragListener maestranaDragListener = new MaestranaDragListener();
         framelayoutLeft.setOnDragListener(maestranaDragListener);
         framelayoutCenter.setOnDragListener(maestranaDragListener);
@@ -398,6 +400,96 @@ public class MaestranaFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(MaestranaViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    private class LabelPrinterDragListener
+            implements View.OnDragListener {
+        int resIdNormal = R.drawable.shape_maestrana;
+        int resIdDropTarget = R.drawable.shape_droptarget;
+
+        private View viewFromDropData;
+
+        @Override
+        public boolean onDrag(View view, DragEvent dragEvent) {
+            switch (dragEvent.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    // Determine whether this View can accept the dragged data.
+                    if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                        Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
+
+                        if (dragEvent.getClipDescription().getLabel().equals("LabelPrinter")) {
+                            Log.d(TAG, "dragEvent.getClipDescription().getLabel().equals(\"LabelPrinter\")");
+
+                            viewFromDropData = (View) dragEvent.getLocalState();
+
+                            // Change background drawable to indicate drop-target.
+                            view.setBackgroundResource(resIdDropTarget);
+
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        }
+                    } else {
+                        Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
+                    }
+
+                    // Return false to indicate that, during the current drag and drop
+                    // operation, this View doesn't receive events again until
+                    // ACTION_DRAG_ENDED is sent.
+                    return false;
+                case DragEvent.ACTION_DRAG_ENTERED:
+                    Log.d(TAG, "ACTION_DRAG_ENTERED");
+
+                    // Change value of alpha to indicate [ENTERED] state.
+                    view.setAlpha(0.5f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DRAG_LOCATION:
+                    // Ignore the event.
+                    return true;
+                case DragEvent.ACTION_DRAG_EXITED:
+                    Log.d(TAG, "ACTION_DRAG_EXITED");
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
+
+                    // Return true. The value is ignored.
+                    return true;
+                case DragEvent.ACTION_DROP:
+                    Log.d(TAG, "ACTION_DROP !!! LABEL PRINTER !!!");
+
+                    // TODO:
+
+                    // Return true. DragEvent.getResult() returns true.
+                    return true;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    Log.d(TAG, "ACTION_DRAG_ENDED");
+
+                    viewFromDropData.setVisibility(View.VISIBLE);
+                    viewFromDropData = null;
+
+                    // Reset value of alpha back to normal.
+                    view.setAlpha(1.0f);
+                    // Reset the background drawable to normal.
+                    view.setBackgroundResource(resIdNormal);
+
+                    // Do a getResult() and displays what happens.
+                    if (dragEvent.getResult()) {
+                        Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Return true. The value is ignored.
+                    return true;
+                default:
+                    Log.e(TAG, "Unknown action type received by LabelPrinterDragListener.");
+                    break;
+            }
+
+            return false;
+        }
     }
 
     private String label;
