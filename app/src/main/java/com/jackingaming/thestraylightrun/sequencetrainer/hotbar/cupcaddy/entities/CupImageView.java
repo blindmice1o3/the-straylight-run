@@ -161,7 +161,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             String label = "MaestranaToCaddy";
 
-            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+            ClipData dragData = ClipData.newPlainText(label,
+                    (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
 
             // Start the drag.

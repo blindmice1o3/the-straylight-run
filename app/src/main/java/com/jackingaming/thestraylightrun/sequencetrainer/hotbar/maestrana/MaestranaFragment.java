@@ -29,7 +29,9 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.CaramelDrizzleBottle;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingWand;
@@ -459,6 +461,40 @@ public class MaestranaFragment extends Fragment {
                 case DragEvent.ACTION_DROP:
                     Log.d(TAG, "ACTION_DROP !!! LABEL PRINTER !!!");
 
+                    xTouch = dragEvent.getX();
+                    yTouch = dragEvent.getY();
+
+                    LabelPrinter labelPrinter = (LabelPrinter) dragEvent.getLocalState();
+
+                    // Instantiate DrinkLabel.
+                    DrinkLabel drinkLabel = new DrinkLabel(getContext());
+                    FrameLayout.LayoutParams layoutParams =
+                            new FrameLayout.LayoutParams(labelPrinter.getWidth(), labelPrinter.getHeight());
+                    drinkLabel.setLayoutParams(layoutParams);
+                    drinkLabel.setBackgroundColor(getResources().getColor(R.color.purple_200));
+
+                    // Get the item containing the dragged data.
+                    ClipData.Item item = dragEvent.getClipData().getItemAt(0);
+
+                    // Get the text data from the item.
+                    String dragData = item.getText().toString();
+
+                    // Display a message containing the dragged data.
+                    Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
+
+                    drinkLabel.setTag(dragData);
+                    drinkLabel.setText(dragData);
+
+                    drinkLabel.setX(xTouch - (labelPrinter.getWidth() / 2));
+                    drinkLabel.setY(yTouch - (labelPrinter.getHeight() / 2));
+
+                    // Add Textview to FrameLayout.
+                    ((FrameLayout) view).addView(drinkLabel);
+
+                    //////////////////////////////////////////////////////////////////////////
+
+                    labelPrinter.generateRandomDrinkRequest();
+                    labelPrinter.setVisibility(View.VISIBLE);
                     // TODO:
 
                     // Return true. DragEvent.getResult() returns true.

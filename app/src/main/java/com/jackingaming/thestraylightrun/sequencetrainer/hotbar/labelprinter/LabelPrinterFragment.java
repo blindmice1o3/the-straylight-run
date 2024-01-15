@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,13 +16,13 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter;
 
 public class LabelPrinterFragment extends Fragment {
     public static final String TAG = LabelPrinterFragment.class.getSimpleName();
 
     private FrameLayout frameLayoutLabelPrinter;
-    private TextView tvLabelPrinter;
+    private LabelPrinter labelPrinter;
 
     public LabelPrinterFragment() {
         // Required empty public constructor
@@ -49,25 +48,10 @@ public class LabelPrinterFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         frameLayoutLabelPrinter = view.findViewById(R.id.framelayout_label_printer);
-        // TODO: temporarily disable drag-and-drop.
-//        frameLayoutLabelPrinter.setOnTouchListener(new LabelPrinterTouchListener());
+        labelPrinter = view.findViewById(R.id.tv_label_printer);
 
-        tvLabelPrinter = view.findViewById(R.id.tv_label_printer);
-
-        Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
-        tvLabelPrinter.setText(
-                String.format("%s - %s", drinkRandom.getSize(), drinkRandom.getName())
-        );
-
-        tvLabelPrinter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
-                tvLabelPrinter.setText(
-                        String.format("%s - %s", drinkRandom.getSize(), drinkRandom.getName())
-                );
-            }
-        });
+        labelPrinter.setOnTouchListener(new LabelPrinterTouchListener());
+        labelPrinter.generateRandomDrinkRequest();
     }
 
     private class LabelPrinterTouchListener
@@ -79,7 +63,8 @@ public class LabelPrinterFragment extends Fragment {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 String label = "LabelPrinter";
 
-                ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+                ClipData dragData = ClipData.newPlainText(label,
+                        labelPrinter.getText());
                 View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
 
                 // Start the drag.
