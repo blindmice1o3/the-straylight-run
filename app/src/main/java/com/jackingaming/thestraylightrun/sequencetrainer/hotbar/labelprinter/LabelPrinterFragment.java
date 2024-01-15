@@ -1,18 +1,14 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
-import android.content.ClipData;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
@@ -50,39 +46,6 @@ public class LabelPrinterFragment extends Fragment {
         frameLayoutLabelPrinter = view.findViewById(R.id.framelayout_label_printer);
         labelPrinter = view.findViewById(R.id.tv_label_printer);
 
-        labelPrinter.setOnTouchListener(new LabelPrinterTouchListener());
         labelPrinter.generateRandomDrinkRequest();
-    }
-
-    private class LabelPrinterTouchListener
-            implements View.OnTouchListener {
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = "LabelPrinter";
-
-                ClipData dragData = ClipData.newPlainText(label,
-                        labelPrinter.getText());
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
-
-                // Start the drag.
-                view.startDragAndDrop(
-                        dragData,           // The data to be dragged.
-                        myShadow,           // The drag shadow builder.
-                        view,               // The LabelPrinter.
-                        0              // Flags. Not currently used, set to 0.
-                );
-                view.setVisibility(View.INVISIBLE);
-
-                Log.e(TAG, "label: " + label);
-
-                // Indicate that the on-touch event is handled.
-                return true;
-            }
-
-            return false;
-        }
     }
 }

@@ -221,7 +221,7 @@ public class MaestranaFragment extends Fragment {
         framelayoutCenter = view.findViewById(R.id.framelayout_center);
         framelayoutRight = view.findViewById(R.id.framelayout_right);
 
-        framelayoutLabelStagingArea.setOnDragListener(new LabelPrinterDragListener());
+        framelayoutLabelStagingArea.setOnDragListener(new LabelStagingAreaDragListener());
 
         View.OnDragListener maestranaDragListener = new MaestranaDragListener();
         framelayoutLeft.setOnDragListener(maestranaDragListener);
@@ -404,10 +404,14 @@ public class MaestranaFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    private class LabelPrinterDragListener
+    private class LabelStagingAreaDragListener
             implements View.OnDragListener {
         int resIdNormal = R.drawable.shape_maestrana;
         int resIdDropTarget = R.drawable.shape_droptarget;
+
+        private String label;
+        private LabelPrinter labelPrinter;
+        private DrinkLabel drinkLabel;
 
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
@@ -417,8 +421,17 @@ public class MaestranaFragment extends Fragment {
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                        if (dragEvent.getClipDescription().getLabel().equals("LabelPrinter")) {
-                            Log.d(TAG, "dragEvent.getClipDescription().getLabel().equals(\"LabelPrinter\")");
+                        label = dragEvent.getClipDescription().getLabel().toString();
+
+                        if (label.equals("LabelPrinter") ||
+                                label.equals("DrinkLabel")) {
+                            Log.d(TAG, "label.equals(\"LabelPrinter\") || label.equals(\"DrinkLabel\")");
+
+                            if (label.equals("LabelPrinter")) {
+                                labelPrinter = (LabelPrinter) dragEvent.getLocalState();
+                            } else if (label.equals("DrinkLabel")) {
+                                drinkLabel = (DrinkLabel) dragEvent.getLocalState();
+                            }
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -460,38 +473,45 @@ public class MaestranaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    LabelPrinter labelPrinter = (LabelPrinter) dragEvent.getLocalState();
+                    if (label.equals("LabelPrinter")) {
+                        // Instantiate DrinkLabel.
+                        DrinkLabel drinkLabelNew = new DrinkLabel(getContext());
+                        FrameLayout.LayoutParams layoutParams =
+                                new FrameLayout.LayoutParams(labelPrinter.getWidth(), labelPrinter.getHeight());
+                        drinkLabelNew.setLayoutParams(layoutParams);
+                        drinkLabelNew.setBackgroundColor(getResources().getColor(R.color.purple_200));
 
-                    // Instantiate DrinkLabel.
-                    DrinkLabel drinkLabel = new DrinkLabel(getContext());
-                    FrameLayout.LayoutParams layoutParams =
-                            new FrameLayout.LayoutParams(labelPrinter.getWidth(), labelPrinter.getHeight());
-                    drinkLabel.setLayoutParams(layoutParams);
-                    drinkLabel.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                        // Get the item containing the dragged data.
+                        ClipData.Item item = dragEvent.getClipData().getItemAt(0);
 
-                    // Get the item containing the dragged data.
-                    ClipData.Item item = dragEvent.getClipData().getItemAt(0);
+                        // Get the text data from the item.
+                        String dragData = item.getText().toString();
 
-                    // Get the text data from the item.
-                    String dragData = item.getText().toString();
+                        // Display a message containing the dragged data.
+                        Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
 
-                    // Display a message containing the dragged data.
-                    Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
+                        drinkLabelNew.setTag(dragData);
+                        drinkLabelNew.setText(dragData);
 
-                    drinkLabel.setTag(dragData);
-                    drinkLabel.setText(dragData);
+                        drinkLabelNew.setX(xTouch - (labelPrinter.getWidth() / 2));
+                        drinkLabelNew.setY(yTouch - (labelPrinter.getHeight() / 2));
 
-                    drinkLabel.setX(xTouch - (labelPrinter.getWidth() / 2));
-                    drinkLabel.setY(yTouch - (labelPrinter.getHeight() / 2));
+                        // Add Textview to FrameLayout.
+                        ((FrameLayout) view).addView(drinkLabelNew);
 
-                    // Add Textview to FrameLayout.
-                    ((FrameLayout) view).addView(drinkLabel);
+                        //////////////////////////////////////////////////////////////////////////
 
-                    //////////////////////////////////////////////////////////////////////////
+                        labelPrinter.generateRandomDrinkRequest();
 
-                    labelPrinter.generateRandomDrinkRequest();
-                    labelPrinter.setVisibility(View.VISIBLE);
-                    // TODO:
+                        labelPrinter.setVisibility(View.VISIBLE);
+                        labelPrinter = null;
+                    } else if (label.equals("DrinkLabel")) {
+                        drinkLabel.setX(xTouch - (drinkLabel.getWidth() / 2));
+                        drinkLabel.setY(yTouch - (drinkLabel.getHeight() / 2));
+
+                        drinkLabel.setVisibility(View.VISIBLE);
+                        drinkLabel = null;
+                    }
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;
@@ -508,7 +528,18 @@ public class MaestranaFragment extends Fragment {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+
+                        if (label.equals("LabelPrinter")) {
+                            labelPrinter.setVisibility(View.VISIBLE);
+                            labelPrinter = null;
+                        } else if (label.equals("DrinkLabel")) {
+                            drinkLabel.setVisibility(View.VISIBLE);
+                            drinkLabel = null;
+                        }
                     }
+
+                    // TODO: override CupImageView.onDrag() to handle drop from DrinkLabel,
+                    //  compare drink label and cup content, display winning dialog if same.
 
                     // Return true. The value is ignored.
                     return true;
