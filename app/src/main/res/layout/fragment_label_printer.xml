@@ -10,7 +10,7 @@
     <!-- TODO: Update blank fragment layout -->
     <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter
         android:id="@+id/tv_label_printer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hello, LabelPrinter" />
 

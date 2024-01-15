@@ -24,7 +24,7 @@ public class LabelPrinter extends AppCompatTextView {
     public void generateRandomDrinkRequest() {
         Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
         setText(
-                String.format("%s - %s", drinkRandom.getSize(), drinkRandom.getName())
+                String.format("%s\n%s", drinkRandom.getSize(), drinkRandom.getName())
         );
     }
 }

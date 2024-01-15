@@ -409,8 +409,6 @@ public class MaestranaFragment extends Fragment {
         int resIdNormal = R.drawable.shape_maestrana;
         int resIdDropTarget = R.drawable.shape_droptarget;
 
-        private View viewFromDropData;
-
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
             switch (dragEvent.getAction()) {
@@ -421,8 +419,6 @@ public class MaestranaFragment extends Fragment {
 
                         if (dragEvent.getClipDescription().getLabel().equals("LabelPrinter")) {
                             Log.d(TAG, "dragEvent.getClipDescription().getLabel().equals(\"LabelPrinter\")");
-
-                            viewFromDropData = (View) dragEvent.getLocalState();
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -501,9 +497,6 @@ public class MaestranaFragment extends Fragment {
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
                     Log.d(TAG, "ACTION_DRAG_ENDED");
-
-                    viewFromDropData.setVisibility(View.VISIBLE);
-                    viewFromDropData = null;
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
