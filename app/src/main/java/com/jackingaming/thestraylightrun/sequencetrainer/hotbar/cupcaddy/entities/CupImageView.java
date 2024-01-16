@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
@@ -102,10 +104,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             type = espressoShot.getType();
             numberOfShots++;
             invalidate();
-
-            if (isWinnerWinnerChickenDinner()) {
-                showDialogWinner();
-            }
         } else if (collider instanceof Syrup) {
             Log.e(TAG, "collider instanceof Syrup");
 
@@ -114,10 +112,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             int quantityNew = quantityPrevious + 1;
             syrups.put(syrup.getType(), quantityNew);
             invalidate();
-
-            if (isWinnerWinnerChickenDinner()) {
-                showDialogWinner();
-            }
         }
     }
 
@@ -194,8 +188,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     label = event.getClipDescription().getLabel().toString();
-                    if (label.equals("ShotGlass") || label.equals("CaramelDrizzleBottle")) {
-                        Log.d(TAG, "label.equals(\"ShotGlass\") || label.equals(\"CaramelDrizzleBottle\")");
+                    if (label.equals("ShotGlass") ||
+                            label.equals("CaramelDrizzleBottle") ||
+                            label.equals("DrinkLabel")) {
+                        Log.d(TAG, "label.equals(\"ShotGlass\") || label.equals(\"CaramelDrizzleBottle\") || label.equals(\"DrinkLabel\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -280,10 +276,18 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         Log.d(TAG, "content != null && numberOfShots > 0... setting drizzled to true.");
                         drizzled = true;
                     }
-                }
+                } else if (label.equals("DrinkLabel")) {
+                    DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
 
-                if (isWinnerWinnerChickenDinner()) {
-                    showDialogWinner();
+                    if (isWinnerWinnerChickenDinner(drinkLabel)) {
+                        showDialogWinner(drinkLabel);
+
+                        ((FrameLayout) drinkLabel.getParent()).removeView(drinkLabel);
+                        ((FrameLayout) getParent()).removeView(this);
+                    } else {
+                        Toast.makeText(getContext(), "NOT a winner", Toast.LENGTH_SHORT).show();
+                        drinkLabel.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 // Return true. DragEvent.getResult() returns true.
@@ -310,11 +314,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return false;
     }
 
-    private void showDialogWinner() {
-        String title = winningDrink;
+    private void showDialogWinner(DrinkLabel drinkLabel) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setTitle(title);
-        alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER (" + winningDrink + ")!");
+        alertDialogBuilder.setTitle(drinkLabel.getText());
+        alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER (" + drinkLabel.getText() + ")!");
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -332,89 +335,118 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         alertDialogBuilder.create().show();
     }
 
-    private String winningDrink;
+    private boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
+        String[] text = drinkLabel.getText().toString().split("\\s+");
+        String size = text[0].toLowerCase();
+        String name = text[1];
 
-    private boolean isWinnerWinnerChickenDinner() {
         boolean isWinner = false;
+        if (name.equals("CaramelMacchiato")) {
+            if (size.equals("trenta")) {
+                // blank.
+            } else if (size.equals("venti")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-        if (getTag().toString().equals("trenta")) {
-            Log.e(TAG, "isWinnerWinnerChickenDinner() trenta");
-
-            // blank.
-        } else if (getTag().toString().equals("venti")) {
-            Log.e(TAG, "isWinnerWinnerChickenDinner() venti");
-
-            if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
-                if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                    int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
-
-                    if (quantitySyrupVanilla == 4 && shotOnTop && drizzled) {
-                        isWinner = true;
-                        winningDrink = "Venti | Caramel Macchiato";
-                    } else if (quantitySyrupVanilla == 5) {
-                        isWinner = true;
-                        winningDrink = "Venti | Starbucks Vanilla Latte";
+                        if (quantitySyrupVanilla == 4 && shotOnTop && drizzled) {
+                            isWinner = true;
+                        }
                     }
-                } else {
-                    isWinner = true;
-                    winningDrink = "Venti | Caffe Latte";
+                }
+            } else if (size.equals("grande")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 3 && shotOnTop && drizzled) {
+                            isWinner = true;
+                        }
+                    }
+                }
+            } else if (size.equals("tall")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 2 && shotOnTop && drizzled) {
+                            isWinner = true;
+                        }
+                    }
+                }
+            } else if (size.equals("short")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 1 && shotOnTop && drizzled) {
+                            isWinner = true;
+                        }
+                    }
                 }
             }
-        } else if (getTag().toString().equals("grande")) {
-            Log.e(TAG, "isWinnerWinnerChickenDinner() grande");
+        } else if (name.equals("VanillaLatte")) {
+            if (size.equals("trenta")) {
+                // blank.
+            } else if (size.equals("venti")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-            if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
-                if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                    int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
-
-                    if (quantitySyrupVanilla == 3 && shotOnTop && drizzled) {
-                        isWinner = true;
-                        winningDrink = "Grande | Caramel Macchiato";
-                    } else if (quantitySyrupVanilla == 4) {
-                        isWinner = true;
-                        winningDrink = "Grande | Starbucks Vanilla Latte";
+                        if (quantitySyrupVanilla == 5) {
+                            isWinner = true;
+                        }
                     }
-                } else {
-                    isWinner = true;
-                    winningDrink = "Grande | Caffe Latte";
+                }
+            } else if (size.equals("grande")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 4) {
+                            isWinner = true;
+                        }
+                    }
+                }
+            } else if (size.equals("tall")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 3) {
+                            isWinner = true;
+                        }
+                    }
+                }
+            } else if (size.equals("short")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
+                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+
+                        if (quantitySyrupVanilla == 2) {
+                            isWinner = true;
+                        }
+                    }
                 }
             }
-        } else if (getTag().toString().equals("tall")) {
-            Log.e(TAG, "isWinnerWinnerChickenDinner() tall");
-
-            if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
-                if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                    int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
-
-                    if (quantitySyrupVanilla == 2 && shotOnTop && drizzled) {
-                        isWinner = true;
-                        winningDrink = "Tall | Caramel Macchiato";
-                    } else if (quantitySyrupVanilla == 3) {
-                        isWinner = true;
-                        winningDrink = "Tall | Starbucks Vanilla Latte";
-                    }
-                } else {
+        } else if (name.equals("CaffeLatte")) {
+            if (size.equals("trenta")) {
+                // blank.
+            } else if (size.equals("venti")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
                     isWinner = true;
-                    winningDrink = "Tall | Caffe Latte";
                 }
-            }
-        } else if (getTag().toString().equals("short")) {
-            Log.e(TAG, "isWinnerWinnerChickenDinner() short");
-
-            if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
-                if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                    int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
-
-                    if (quantitySyrupVanilla == 1 && shotOnTop && drizzled) {
-                        isWinner = true;
-                        winningDrink = "Short | Caramel Macchiato";
-                    } else if (quantitySyrupVanilla == 2) {
-                        isWinner = true;
-                        winningDrink = "Short | Starbucks Vanilla Latte";
-                    }
-                } else {
+            } else if (size.equals("grande")) {
+                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
                     isWinner = true;
-                    winningDrink = "Short | Caffe Latte";
+                }
+            } else if (size.equals("tall")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
+                    isWinner = true;
+                }
+            } else if (size.equals("short")) {
+                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
+                    isWinner = true;
                 }
             }
         }
