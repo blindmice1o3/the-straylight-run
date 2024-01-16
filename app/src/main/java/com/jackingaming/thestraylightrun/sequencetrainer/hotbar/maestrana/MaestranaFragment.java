@@ -61,10 +61,7 @@ public class MaestranaFragment extends Fragment {
     private ObjectAnimator animatorEspressoShot;
     private ShotGlass shotGlass;
     private ImageView syrupBottleVanilla;
-    private Syrup syrupVanilla;
-    private ObjectAnimator animatorSyrupVanilla;
     private CaramelDrizzleBottle caramelDrizzleBottle;
-
 
     private CupImageView ivToBeAdded;
     private float xTouch, yTouch;
@@ -294,42 +291,37 @@ public class MaestranaFragment extends Fragment {
         syrupBottleVanilla.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e(TAG, "Vanilla Syrup Bottle");
+                Log.e(TAG, "syrupBottleVanilla.onClick()");
 
-                if (animatorSyrupVanilla != null) {
-                    Toast.makeText(getContext(), "syrup animator already running", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                Syrup syrupVanilla = new Syrup(getContext());
+                syrupVanilla.setTag(TAG_SYRUP_VANILLA);
+                syrupVanilla.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
+                syrupVanilla.setX(344);
+                syrupVanilla.setY(458);
+                syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
+                constraintLayoutMaestrana.addView(syrupVanilla);
 
-                animatorSyrupVanilla = ObjectAnimator.ofFloat(
+                ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
                         syrupVanilla,
                         "y",
                         458f,
                         1200f);
-                animatorSyrupVanilla.setDuration(2000);
-//                animatorSyrupVanilla.setInterpolator(new AccelerateDecelerateInterpolator());
-                animatorSyrupVanilla.addListener(new AnimatorListenerAdapter() {
+                animatorSyrup.setDuration(2000);
+                animatorSyrup.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
                         Log.e(TAG, "onAnimationEnd()");
 
-                        syrupVanilla.setY(458);
-                        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
-                        syrupVanilla.setCollided(false);
-                        syrupVanilla.setVisibility(View.VISIBLE);
-
-                        animatorSyrupVanilla = null;
+                        if (syrupVanilla != null) {
+                            constraintLayoutMaestrana.removeView(syrupVanilla);
+                        }
                     }
                 });
-                animatorSyrupVanilla.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                animatorSyrup.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                         for (int i = 0; i < framelayoutCenter.getChildCount(); i++) {
-                            if (syrupVanilla.isCollided()) {
-                                break;
-                            }
-
                             if (framelayoutCenter.getChildAt(i) instanceof CupImageView) {
                                 CupImageView ivCup = (CupImageView) framelayoutCenter.getChildAt(i);
 
@@ -340,8 +332,8 @@ public class MaestranaFragment extends Fragment {
                                     Log.e(TAG, "ivCup.isJustCollided()");
 
                                     ivCup.onCollided(syrupVanilla);
-                                    syrupVanilla.setCollided(true);
-                                    syrupVanilla.setVisibility(View.INVISIBLE);
+                                    constraintLayoutMaestrana.removeView(syrupVanilla);
+                                    return;
                                 }
                             } else {
                                 Log.e(TAG, "onAnimationUpdate() else-clause.");
@@ -349,26 +341,10 @@ public class MaestranaFragment extends Fragment {
                         }
                     }
                 });
-                animatorSyrupVanilla.start();
+                animatorSyrup.start();
             }
         });
         framelayoutSyrupCaddy.addView(syrupBottleVanilla);
-
-        // SYRUP (vanilla)
-        syrupVanilla = new Syrup(getContext());
-        syrupVanilla.setTag(TAG_SYRUP_VANILLA);
-        syrupVanilla.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-//        syrup.setX(64 - (16 / 2));
-        syrupVanilla.setX(344);
-        syrupVanilla.setY(458);
-        syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
-        syrupVanilla.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Syrup (vanilla)", Toast.LENGTH_SHORT).show();
-            }
-        });
-        constraintLayoutMaestrana.addView(syrupVanilla);
 
         // CARAMEL DRIZZLE BOTTLE
         caramelDrizzleBottle = new CaramelDrizzleBottle(getContext());
