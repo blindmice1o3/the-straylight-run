@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
 
 /**
@@ -91,6 +93,8 @@ public class SinkFragment extends Fragment {
         int resIdNormal = R.drawable.shape_sink;
         int resIdDropTarget = R.drawable.shape_droptarget;
 
+        String label = null;
+
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
             switch (dragEvent.getAction()) {
@@ -99,8 +103,12 @@ public class SinkFragment extends Fragment {
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                        if (dragEvent.getClipDescription().getLabel().equals("SteamingPitcher")) {
-                            Log.d(TAG, "label.equals(\"SteamingPitcher\")");
+                        label = dragEvent.getClipDescription().getLabel().toString();
+
+                        if (label.equals("SteamingPitcher") ||
+                                label.equals("ShotGlass") ||
+                                label.equals("MaestranaToCaddy")) {
+                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MaestranaToCaddy\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -137,12 +145,29 @@ public class SinkFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DROP:
-                    Log.d(TAG, "ACTION_DROP Derive steamingPitcher from dragData");
+                    Log.d(TAG, "ACTION_DROP ");
 
-                    SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
+                    if (label.equals("SteamingPitcher")) {
+                        Log.d(TAG, "Derive steamingPitcher from dragData");
+                        SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
 
-                    Toast.makeText(getContext(), "emptying steaming pitcher", Toast.LENGTH_SHORT).show();
-                    steamingPitcher.empty();
+                        Toast.makeText(getContext(), "emptying steaming pitcher", Toast.LENGTH_SHORT).show();
+                        steamingPitcher.empty();
+                    } else if (label.equals("ShotGlass")) {
+                        Log.d(TAG, "Derive shotGlass from dragData");
+
+                        ShotGlass shotGlass = (ShotGlass) dragEvent.getLocalState();
+                        Toast.makeText(getContext(), "emptying shot glass", Toast.LENGTH_SHORT).show();
+                        shotGlass.empty();
+                    } else if (label.equals("MaestranaToCaddy")) {
+                        Log.d(TAG, "Derive CupImageView from dragData");
+
+                        CupImageView cupImageView = (CupImageView) dragEvent.getLocalState();
+                        Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
+                        cupImageView.empty();
+                    } else {
+                        Log.e(TAG, "unknown label.");
+                    }
 
                     // Return true. DragEvent.getResult() returns true.
                     return true;

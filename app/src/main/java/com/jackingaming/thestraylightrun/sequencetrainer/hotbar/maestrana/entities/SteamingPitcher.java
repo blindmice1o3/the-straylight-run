@@ -211,12 +211,6 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         return false;
     }
 
-    public void empty() {
-        Log.e(TAG, "empty()");
-        temperature = 0;
-        update(null, 0);
-    }
-
     public void update(String content, int amount) {
         this.content = content;
         this.amount = amount;
@@ -303,5 +297,12 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         update(this.content, this.amount);
 
         return content;
+    }
+
+    @Override
+    public void empty() {
+        Log.e(TAG, "empty()");
+        temperature = 0;
+        update(null, 0);
     }
 }

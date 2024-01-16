@@ -245,4 +245,12 @@ public class ShotGlass extends AppCompatImageView
 
         return content;
     }
+
+    @Override
+    public void empty() {
+        type = EspressoShot.Type.SIGNATURE;
+        numberOfShots = 0;
+
+        invalidate();
+    }
 }

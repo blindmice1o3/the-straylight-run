@@ -6,4 +6,6 @@ public interface LiquidContainable {
     void transferIn(HashMap<String, String> content);
 
     HashMap<String, String> transferOut();
+
+    void empty();
 }

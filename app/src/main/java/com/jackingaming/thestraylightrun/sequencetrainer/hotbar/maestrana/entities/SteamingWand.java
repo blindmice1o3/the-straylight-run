@@ -108,8 +108,10 @@ public class SteamingWand extends AppCompatImageView {
                     Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                 }
 
-                steamingPitcherAnimator.cancel();
-                steamingPitcher = null;
+                if (steamingPitcherAnimator != null) {
+                    steamingPitcherAnimator.cancel();
+                    steamingPitcher = null;
+                }
 
                 // Return true. The value is ignored.
                 return true;

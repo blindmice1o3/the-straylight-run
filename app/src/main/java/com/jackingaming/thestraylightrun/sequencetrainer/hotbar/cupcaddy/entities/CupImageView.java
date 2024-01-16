@@ -548,4 +548,18 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         return content;
     }
+
+    @Override
+    public void empty() {
+        type = EspressoShot.Type.SIGNATURE;
+        numberOfShots = 0;
+        temperature = 0;
+        content = null;
+        amount = 0;
+        syrups.clear();
+        shotOnTop = false;
+        drizzled = false;
+
+        invalidate();
+    }
 }
