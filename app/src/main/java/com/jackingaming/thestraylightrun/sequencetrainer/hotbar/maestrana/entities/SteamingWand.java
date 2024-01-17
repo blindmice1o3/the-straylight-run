@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,16 @@ public class SteamingWand extends AppCompatImageView {
 
     public SteamingWand(@NonNull Context context) {
         super(context);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (steamingPitcherAnimator != null) {
+                    steamingPitcherAnimator.cancel();
+                    steamingPitcherAnimator = null;
+                }
+            }
+        });
     }
 
     public SteamingWand(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -62,16 +73,6 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_ENTERED:
                 Log.d(TAG, "ACTION_DRAG_ENTERED");
 
-                steamingPitcherAnimator = ObjectAnimator.ofInt(steamingPitcher, "temperature", steamingPitcher.getTemperature(), 250);
-                steamingPitcherAnimator.setDuration(((250L - steamingPitcher.getTemperature()) * 1000L) / 100);
-                steamingPitcherAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                        steamingPitcher.invalidate();
-                    }
-                });
-                steamingPitcherAnimator.start();
-
                 // Change value of alpha to indicate [ENTERED] state.
                 setAlpha(0.5f);
 
@@ -83,8 +84,6 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_EXITED:
                 Log.d(TAG, "ACTION_DRAG_EXITED");
 
-                steamingPitcherAnimator.cancel();
-
                 // Reset value of alpha back to normal.
                 setAlpha(0.8f);
 
@@ -92,6 +91,16 @@ public class SteamingWand extends AppCompatImageView {
                 return true;
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
+
+                steamingPitcherAnimator = ObjectAnimator.ofInt(steamingPitcher, "temperature", steamingPitcher.getTemperature(), 160);
+                steamingPitcherAnimator.setDuration(((160L - steamingPitcher.getTemperature()) * 1000L) / 20);
+                steamingPitcherAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                        steamingPitcher.invalidate();
+                    }
+                });
+                steamingPitcherAnimator.start();
 
                 // Return true. DragEvent.getResult() returns true.
                 return true;
@@ -106,11 +115,6 @@ public class SteamingWand extends AppCompatImageView {
                     Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
-                }
-
-                if (steamingPitcherAnimator != null) {
-                    steamingPitcherAnimator.cancel();
-                    steamingPitcher = null;
                 }
 
                 // Return true. The value is ignored.

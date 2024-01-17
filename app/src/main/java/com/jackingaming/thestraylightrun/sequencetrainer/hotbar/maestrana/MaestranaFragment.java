@@ -85,7 +85,9 @@ public class MaestranaFragment extends Fragment {
 
                         String content = result.getString(FillSteamingPitcherDialogFragment.BUNDLE_KEY_CONTENT);
                         int amount = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY_AMOUNT);
+
                         Log.e(TAG, content + ": " + amount);
+                        steamingPitcher.setTemperature(37);
                         steamingPitcher.update(content, amount);
                     }
                 });
