@@ -152,6 +152,7 @@ public class SinkFragment extends Fragment {
                         SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
 
                         Toast.makeText(getContext(), "emptying steaming pitcher", Toast.LENGTH_SHORT).show();
+                        steamingPitcher.cancelTemperatureAnimator();
                         steamingPitcher.empty();
                     } else if (label.equals("ShotGlass")) {
                         Log.d(TAG, "Derive shotGlass from dragData");

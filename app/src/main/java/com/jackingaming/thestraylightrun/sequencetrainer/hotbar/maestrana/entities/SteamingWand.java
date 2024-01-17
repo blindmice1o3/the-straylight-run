@@ -1,7 +1,5 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -18,7 +16,6 @@ public class SteamingWand extends AppCompatImageView {
     public static final String TAG = SteamingWand.class.getSimpleName();
 
     private SteamingPitcher steamingPitcher;
-    private ObjectAnimator steamingPitcherAnimator;
 
     public SteamingWand(@NonNull Context context) {
         super(context);
@@ -26,9 +23,8 @@ public class SteamingWand extends AppCompatImageView {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (steamingPitcherAnimator != null) {
-                    steamingPitcherAnimator.cancel();
-                    steamingPitcherAnimator = null;
+                if (steamingPitcher != null) {
+                    steamingPitcher.cancelTemperatureAnimator();
                 }
             }
         });
@@ -92,15 +88,7 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                steamingPitcherAnimator = ObjectAnimator.ofInt(steamingPitcher, "temperature", steamingPitcher.getTemperature(), 160);
-                steamingPitcherAnimator.setDuration(((160L - steamingPitcher.getTemperature()) * 1000L) / 20);
-                steamingPitcherAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                        steamingPitcher.invalidate();
-                    }
-                });
-                steamingPitcherAnimator.start();
+                steamingPitcher.startTemperatureAnimator();
 
                 // Return true. DragEvent.getResult() returns true.
                 return true;

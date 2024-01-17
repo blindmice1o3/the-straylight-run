@@ -1,5 +1,9 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
@@ -39,6 +43,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     private Paint textPaintPurple;
     private Paint textPaintRed;
 
+    private ObjectAnimator temperatureAnimator;
+
     public SteamingPitcher(@NonNull Context context) {
         super(context);
         init();
@@ -61,6 +67,38 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         textPaintRed.setStyle(Paint.Style.STROKE);
         textPaintRed.setColor(getResources().getColor(R.color.red));
         textPaintRed.setTextSize(14);
+    }
+
+    public void startTemperatureAnimator() {
+        Log.e(TAG, "startTemperatureAnimator()");
+
+        temperatureAnimator = ObjectAnimator.ofInt(this, "temperature", temperature, 160);
+        temperatureAnimator.setDuration(((160L - temperature) * 1000L) / 20);
+        temperatureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                invalidate();
+            }
+        });
+        temperatureAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "onAnimationEnd()");
+
+                temperatureAnimator = null;
+            }
+        });
+        temperatureAnimator.start();
+    }
+
+    public void cancelTemperatureAnimator() {
+        Log.e(TAG, "cancelTemperatureAnimator()");
+
+        if (temperatureAnimator != null) {
+            temperatureAnimator.cancel();
+            temperatureAnimator = null;
+        }
     }
 
     @Override
