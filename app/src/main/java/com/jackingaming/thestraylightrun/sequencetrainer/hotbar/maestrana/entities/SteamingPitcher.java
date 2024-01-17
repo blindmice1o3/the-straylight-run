@@ -73,7 +73,10 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         Log.e(TAG, "startTemperatureAnimator()");
 
         temperatureAnimator = ObjectAnimator.ofInt(this, "temperature", temperature, 160);
-        temperatureAnimator.setDuration(((160L - temperature) * 1000L) / 20);
+        int coefficientAmount = 1 + (amount / 100);
+        temperatureAnimator.setDuration(
+                coefficientAmount * (((160L - temperature) * 1000L) / 20)
+        );
         temperatureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {

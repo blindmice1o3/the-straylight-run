@@ -102,6 +102,11 @@ public class MaestranaFragment extends Fragment {
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                         Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
 
+                        if (animatorEspressoShot != null && animatorEspressoShot.isRunning()) {
+                            Log.e(TAG, "animatorEspressoShot.isRunning() RETURN");
+                            return;
+                        }
+
                         EspressoShot.Type typeSelected = (EspressoShot.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
                         int quantitySelected = result.getInt(EspressoShotControlDialogFragment.BUNDLE_KEY_QUANTITY);
                         Log.e(TAG, "type: " + typeSelected.name() + ", quantity: " + quantitySelected);
@@ -113,6 +118,8 @@ public class MaestranaFragment extends Fragment {
 
                         espressoShot.updateType(typeSelected);
 
+                        long startDelay = 1500L * quantitySelected;
+                        long duration = 1500L;
                         int repeatCountToUse = -1;
                         if (quantitySelected == 1) {
                             repeatCountToUse = REPEAT_COUNT_SINGLE;
@@ -121,18 +128,17 @@ public class MaestranaFragment extends Fragment {
                         } else if (quantitySelected == 3) {
                             repeatCountToUse = REPEAT_COUNT_TRIPLE;
                         } else {
-                            Log.e(TAG, "repeatCountToUse != 1 or 2 or 3.");
+                            Log.e(TAG, "quantitySelected != 1 or 2 or 3.");
                         }
+
                         animatorEspressoShot = ObjectAnimator.ofFloat(
                                 espressoShot,
                                 "y",
                                 458f,
                                 1200f);
-                        animatorEspressoShot.setDuration(2000);
+                        animatorEspressoShot.setStartDelay(startDelay);
+                        animatorEspressoShot.setDuration(duration);
                         animatorEspressoShot.setRepeatCount(repeatCountToUse);
-//        animatorEspressoStream.setRepeatCount(ObjectAnimator.INFINITE);
-//        animatorEspressoStream.setRepeatMode(ObjectAnimator.REVERSE);
-//                        animatorEspressoShot.setInterpolator(new AccelerateDecelerateInterpolator());
                         animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationRepeat(Animator animation) {
@@ -194,6 +200,7 @@ public class MaestranaFragment extends Fragment {
                                 }
                             }
                         });
+
                         animatorEspressoShot.start();
                     }
                 });
