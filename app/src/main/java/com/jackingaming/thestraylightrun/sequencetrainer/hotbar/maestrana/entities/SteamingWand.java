@@ -69,6 +69,8 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_ENTERED:
                 Log.d(TAG, "ACTION_DRAG_ENTERED");
 
+                steamingPitcher.startTimeFrothedAnimator();
+
                 // Change value of alpha to indicate [ENTERED] state.
                 setAlpha(0.5f);
 
@@ -80,6 +82,8 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DRAG_EXITED:
                 Log.d(TAG, "ACTION_DRAG_EXITED");
 
+                steamingPitcher.cancelTimeFrothedAnimator();
+
                 // Reset value of alpha back to normal.
                 setAlpha(0.8f);
 
@@ -88,6 +92,7 @@ public class SteamingWand extends AppCompatImageView {
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
+                steamingPitcher.cancelTimeFrothedAnimator();
                 steamingPitcher.startTemperatureAnimator();
 
                 // Return true. DragEvent.getResult() returns true.

@@ -38,9 +38,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private int numberOfShots;
     private boolean colliding, cantCollide, justCollided;
 
-    private int temperature;
     private String content;
     private int amount;
+    private int temperature;
+    private int timeFrothed;
 
     private Map<Syrup.Type, Integer> syrups;
 
@@ -135,6 +136,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         int yTemperature = (shotOnTop) ? yLine2 : yLine1;
         canvas.drawText(Integer.toString(temperature), 5, yTemperature, textPaint);
 
+        textPaint.setColor(getResources().getColor(R.color.red));
+        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 8, yTemperature, textPaint);
+
         String nameOfContent = (content == null) ? "null" : content;
         textPaint.setColor(getResources().getColor(R.color.purple_700));
         int yContentName = (shotOnTop) ? yLine3 : yLine2;
@@ -143,9 +147,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         int yContentAmount = (shotOnTop) ? yLine4 : yLine3;
         canvas.drawText(Integer.toString(amount), 5, yContentAmount, textPaint);
 
-        textPaint.setColor(getResources().getColor(R.color.yellow));
+        textPaint.setColor(getResources().getColor(R.color.amber));
         int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
-        int ySyrupVanilla = (shotOnTop) ? yLine2 : yLine1;
+        int ySyrupVanilla = (shotOnTop) ? yLine3 : yLine2;
         canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 8, ySyrupVanilla, textPaint);
     }
 
@@ -513,17 +517,22 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     content.get("numberOfShots")
             );
         }
-        if (content.containsKey("temperature")) {
-            this.temperature = Integer.parseInt(
-                    content.get("temperature")
-            );
-        }
         if (content.containsKey("content")) {
             this.content = content.get("content");
         }
         if (content.containsKey("amount")) {
             this.amount = Integer.parseInt(
                     content.get("amount")
+            );
+        }
+        if (content.containsKey("temperature")) {
+            this.temperature = Integer.parseInt(
+                    content.get("temperature")
+            );
+        }
+        if (content.containsKey("timeFrothed")) {
+            this.timeFrothed = Integer.parseInt(
+                    content.get("timeFrothed")
             );
         }
 
@@ -535,15 +544,17 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         HashMap<String, String> content = new HashMap<>();
         content.put("type", this.type.name());
         content.put("numberOfShots", Integer.toString(this.numberOfShots));
-        content.put("temperature", Integer.toString(this.temperature));
         content.put("content", this.content);
         content.put("amount", Integer.toString(this.amount));
+        content.put("temperature", Integer.toString(this.temperature));
+        content.put("timeFrothed", Integer.toString(this.timeFrothed));
 
         this.type = EspressoShot.Type.SIGNATURE;
         this.numberOfShots = 0;
-        this.temperature = 0;
         this.content = null;
         this.amount = 0;
+        this.temperature = 0;
+        this.timeFrothed = 0;
         invalidate();
 
         return content;
@@ -553,9 +564,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public void empty() {
         type = EspressoShot.Type.SIGNATURE;
         numberOfShots = 0;
-        temperature = 0;
         content = null;
         amount = 0;
+        temperature = 0;
+        timeFrothed = 0;
         syrups.clear();
         shotOnTop = false;
         drizzled = false;

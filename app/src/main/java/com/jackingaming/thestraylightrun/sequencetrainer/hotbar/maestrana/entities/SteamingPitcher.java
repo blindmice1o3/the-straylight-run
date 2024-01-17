@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,14 +37,16 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     private SteamingPitcherListener listener;
 
-    private int temperature;
     private String content;
     private int amount;
 
     private Paint textPaintPurple;
     private Paint textPaintRed;
 
+    private int temperature;
     private ObjectAnimator temperatureAnimator;
+    private int timeFrothed;
+    private ObjectAnimator timeFrothedAnimator;
 
     public SteamingPitcher(@NonNull Context context) {
         super(context);
@@ -67,6 +70,39 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         textPaintRed.setStyle(Paint.Style.STROKE);
         textPaintRed.setColor(getResources().getColor(R.color.red));
         textPaintRed.setTextSize(14);
+    }
+
+    public void startTimeFrothedAnimator() {
+        Log.e(TAG, "startTimeFrothedAnimator()");
+
+        timeFrothedAnimator = ObjectAnimator.ofInt(this, "timeFrothed", timeFrothed, 60);
+        timeFrothedAnimator.setInterpolator(new LinearInterpolator());
+        timeFrothedAnimator.setDuration(60000L);
+        timeFrothedAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                invalidate();
+            }
+        });
+        timeFrothedAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "onAnimationEnd()");
+
+                timeFrothedAnimator = null;
+            }
+        });
+        timeFrothedAnimator.start();
+    }
+
+    public void cancelTimeFrothedAnimator() {
+        Log.e(TAG, "cancelTimeFrothedAnimator()");
+
+        if (timeFrothedAnimator != null) {
+            timeFrothedAnimator.cancel();
+            timeFrothedAnimator = null;
+        }
     }
 
     public void startTemperatureAnimator() {
@@ -111,6 +147,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         Paint temperatureMessageColor = (temperature < 160) ? textPaintPurple : textPaintRed;
         canvas.drawText(Integer.toString(temperature), 5, 15, temperatureMessageColor);
 
+        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 8, 15, textPaintRed);
+
         String nameOfContent = (content == null) ? "null" : content;
         canvas.drawText(nameOfContent, 5, 30, textPaintPurple);
 
@@ -120,6 +158,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (temperatureAnimator != null && temperatureAnimator.isRunning()) {
+            temperatureAnimator.cancel();
+        }
+        if (timeFrothedAnimator != null && timeFrothedAnimator.isRunning()) {
+            timeFrothedAnimator.cancel();
+        }
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             String label = "SteamingPitcher";
 
@@ -282,14 +327,6 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         this.listener = listener;
     }
 
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-    }
-
     public String getContent() {
         return content;
     }
@@ -306,19 +343,40 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         this.amount = amount;
     }
 
+    public int getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
+    }
+
+    public int getTimeFrothed() {
+        return timeFrothed;
+    }
+
+    public void setTimeFrothed(int timeFrothed) {
+        this.timeFrothed = timeFrothed;
+    }
+
     @Override
     public void transferIn(HashMap<String, String> content) {
-        if (content.containsKey("temperature")) {
-            this.temperature = Integer.parseInt(
-                    content.get("temperature")
-            );
-        }
         if (content.containsKey("content")) {
             this.content = content.get("content");
         }
         if (content.containsKey("amount")) {
             this.amount = Integer.parseInt(
                     content.get("amount")
+            );
+        }
+        if (content.containsKey("temperature")) {
+            this.temperature = Integer.parseInt(
+                    content.get("temperature")
+            );
+        }
+        if (content.containsKey("timeFrothed")) {
+            this.timeFrothed = Integer.parseInt(
+                    content.get("timeFrothed")
             );
         }
 
@@ -328,13 +386,15 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
-        content.put("temperature", Integer.toString(this.temperature));
         content.put("content", this.content);
         content.put("amount", Integer.toString(this.amount));
+        content.put("temperature", Integer.toString(this.temperature));
+        content.put("timeFrothed", Integer.toString(this.timeFrothed));
 
-        this.temperature = 0;
         this.content = null;
         this.amount = 0;
+        this.temperature = 0;
+        this.timeFrothed = 0;
         update(this.content, this.amount);
 
         return content;
@@ -344,6 +404,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public void empty() {
         Log.e(TAG, "empty()");
         temperature = 0;
+        timeFrothed = 0;
         update(null, 0);
     }
 }
