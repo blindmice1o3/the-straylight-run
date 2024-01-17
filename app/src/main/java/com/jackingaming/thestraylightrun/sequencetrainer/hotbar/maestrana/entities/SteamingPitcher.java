@@ -75,9 +75,9 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public void startTimeFrothedAnimator() {
         Log.e(TAG, "startTimeFrothedAnimator()");
 
-        timeFrothedAnimator = ObjectAnimator.ofInt(this, "timeFrothed", timeFrothed, 60);
+        timeFrothedAnimator = ObjectAnimator.ofInt(this, "timeFrothed", timeFrothed, 10);
         timeFrothedAnimator.setInterpolator(new LinearInterpolator());
-        timeFrothedAnimator.setDuration(60000L);
+        timeFrothedAnimator.setDuration(10000L);
         timeFrothedAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
@@ -147,7 +147,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         Paint temperatureMessageColor = (temperature < 160) ? textPaintPurple : textPaintRed;
         canvas.drawText(Integer.toString(temperature), 5, 15, temperatureMessageColor);
 
-        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 8, 15, textPaintRed);
+        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, 15, textPaintRed);
 
         String nameOfContent = (content == null) ? "null" : content;
         canvas.drawText(nameOfContent, 5, 30, textPaintPurple);

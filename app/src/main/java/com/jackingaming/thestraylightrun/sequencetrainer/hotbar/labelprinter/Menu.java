@@ -11,6 +11,7 @@ public class Menu {
     static {
         drinks = new ArrayList<>();
         drinks.add(new Drink("CaffeLatte"));
+        drinks.add(new Drink("Cappuccino"));
         drinks.add(new Drink("VanillaLatte"));
         drinks.add(new Drink("CaramelMacchiato"));
     }

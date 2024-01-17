@@ -137,7 +137,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         canvas.drawText(Integer.toString(temperature), 5, yTemperature, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.red));
-        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 8, yTemperature, textPaint);
+        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, yTemperature, textPaint);
 
         String nameOfContent = (content == null) ? "null" : content;
         textPaint.setColor(getResources().getColor(R.color.purple_700));
@@ -150,7 +150,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         textPaint.setColor(getResources().getColor(R.color.amber));
         int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
         int ySyrupVanilla = (shotOnTop) ? yLine3 : yLine2;
-        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 8, ySyrupVanilla, textPaint);
+        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -346,111 +346,143 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         boolean isWinner = false;
         if (name.equals("CaramelMacchiato")) {
-            if (size.equals("trenta")) {
-                // blank.
-            } else if (size.equals("venti")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+            if (temperature >= 160 &&
+                    (timeFrothed >= 3 && timeFrothed <= 5)) {
+                if (size.equals("trenta")) {
+                    // blank.
+                } else if (size.equals("venti")) {
+                    if (numberOfShots == 2 && (amount >= (20 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 4 && shotOnTop && drizzled) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 4 && shotOnTop && drizzled) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("grande")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("grande")) {
+                    if (numberOfShots == 2 && (amount >= (16 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 3 && shotOnTop && drizzled) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 3 && shotOnTop && drizzled) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("tall")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("tall")) {
+                    if (numberOfShots == 1 && (amount >= (12 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 2 && shotOnTop && drizzled) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 2 && shotOnTop && drizzled) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("short")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("short")) {
+                    if (numberOfShots == 1 && (amount >= (8 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 1 && shotOnTop && drizzled) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 1 && shotOnTop && drizzled) {
+                                isWinner = true;
+                            }
                         }
                     }
                 }
             }
         } else if (name.equals("VanillaLatte")) {
-            if (size.equals("trenta")) {
-                // blank.
-            } else if (size.equals("venti")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+            if (temperature >= 160 &&
+                    (timeFrothed >= 3 && timeFrothed <= 5)) {
+                if (size.equals("trenta")) {
+                    // blank.
+                } else if (size.equals("venti")) {
+                    if (numberOfShots == 2 && (amount >= (20 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 5) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 5) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("grande")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("grande")) {
+                    if (numberOfShots == 2 && (amount >= (16 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 4) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 4) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("tall")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("tall")) {
+                    if (numberOfShots == 1 && (amount >= (12 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 3) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 3) {
+                                isWinner = true;
+                            }
                         }
                     }
-                }
-            } else if (size.equals("short")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
-                    if (syrups.containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
+                } else if (size.equals("short")) {
+                    if (numberOfShots == 1 && (amount >= (8 * 4))) {
+                        if (syrups.containsKey(Syrup.Type.VANILLA)) {
+                            int quantitySyrupVanilla = syrups.get(Syrup.Type.VANILLA);
 
-                        if (quantitySyrupVanilla == 2) {
-                            isWinner = true;
+                            if (quantitySyrupVanilla == 2) {
+                                isWinner = true;
+                            }
                         }
                     }
                 }
             }
         } else if (name.equals("CaffeLatte")) {
-            if (size.equals("trenta")) {
-                // blank.
-            } else if (size.equals("venti")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (20 * 4))) {
-                    isWinner = true;
+            if (temperature >= 160 &&
+                    (timeFrothed >= 3 && timeFrothed <= 5)) {
+                if (size.equals("trenta")) {
+                    // blank.
+                } else if (size.equals("venti")) {
+                    if (numberOfShots == 2 && (amount >= (20 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("grande")) {
+                    if (numberOfShots == 2 && (amount >= (16 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("tall")) {
+                    if (numberOfShots == 1 && (amount >= (12 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("short")) {
+                    if (numberOfShots == 1 && (amount >= (8 * 4))) {
+                        isWinner = true;
+                    }
                 }
-            } else if (size.equals("grande")) {
-                if (numberOfShots == 2 && temperature >= 160 && (amount >= (16 * 4))) {
-                    isWinner = true;
-                }
-            } else if (size.equals("tall")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (12 * 4))) {
-                    isWinner = true;
-                }
-            } else if (size.equals("short")) {
-                if (numberOfShots == 1 && temperature >= 160 && (amount >= (8 * 4))) {
-                    isWinner = true;
+            }
+        } else if (name.equals("Cappuccino")) {
+            if (temperature >= 160 &&
+                    (timeFrothed >= 6 && timeFrothed <= 8)) {
+                if (size.equals("trenta")) {
+                    // blank.
+                } else if (size.equals("venti")) {
+                    if (numberOfShots == 2 && (amount >= (20 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("grande")) {
+                    if (numberOfShots == 2 && (amount >= (16 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("tall")) {
+                    if (numberOfShots == 1 && (amount >= (12 * 4))) {
+                        isWinner = true;
+                    }
+                } else if (size.equals("short")) {
+                    if (numberOfShots == 1 && (amount >= (8 * 4))) {
+                        isWinner = true;
+                    }
                 }
             }
         }
