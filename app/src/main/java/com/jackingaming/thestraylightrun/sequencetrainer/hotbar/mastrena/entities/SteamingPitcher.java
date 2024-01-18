@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -204,8 +204,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                    } else if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
 
                         if (((CupImageView) event.getLocalState()).getNumberOfShots() == 0 &&
                                 ((CupImageView) event.getLocalState()).getAmount() != 0) {
@@ -261,8 +261,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     } else {
                         Log.e(TAG, "listener == null");
                     }
-                } else if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
+                } else if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
 
                     CupImageView cupImageView = ((CupImageView) event.getLocalState());
 

@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
 
 import android.content.ClipDescription;
 import android.content.Context;

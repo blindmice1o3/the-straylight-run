@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.LabelPrinterFragment;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.MaestranaFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.MastrenaFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragment;
 
@@ -23,7 +23,7 @@ public class SequenceTrainerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sequence_trainer);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fcv_main, MaestranaFragment.newInstance());
+        ft.add(R.id.fcv_main, MastrenaFragment.newInstance());
         ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance());
         ft.add(R.id.fcv_right_middle, CupCaddyFragment.newInstance());
         ft.add(R.id.fcv_right_bottom, SinkFragment.newInstance("", ""));

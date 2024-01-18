@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments;
 
 import android.content.DialogInterface;
 import android.os.Build;

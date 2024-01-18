@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,8 +107,8 @@ public class SinkFragment extends Fragment {
 
                         if (label.equals("SteamingPitcher") ||
                                 label.equals("ShotGlass") ||
-                                label.equals("MaestranaToCaddy")) {
-                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MaestranaToCaddy\")");
+                                label.equals("MastrenaToCaddy")) {
+                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MastrenaToCaddy\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -160,7 +160,7 @@ public class SinkFragment extends Fragment {
                         ShotGlass shotGlass = (ShotGlass) dragEvent.getLocalState();
                         Toast.makeText(getContext(), "emptying shot glass", Toast.LENGTH_SHORT).show();
                         shotGlass.empty();
-                    } else if (label.equals("MaestranaToCaddy")) {
+                    } else if (label.equals("MastrenaToCaddy")) {
                         Log.d(TAG, "Derive CupImageView from dragData");
 
                         CupImageView cupImageView = (CupImageView) dragEvent.getLocalState();

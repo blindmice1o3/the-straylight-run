@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -129,8 +129,8 @@ public class ShotGlass extends AppCompatImageView
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MaestranaToCaddy\")");
+                    if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
 
                         if (((CupImageView) event.getLocalState()).getAmount() == 0 &&
                                 ((CupImageView) event.getLocalState()).getNumberOfShots() != 0) {
@@ -176,7 +176,7 @@ public class ShotGlass extends AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
+                if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
                     CupImageView cupImageView = ((CupImageView) event.getLocalState());
 
                     Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();

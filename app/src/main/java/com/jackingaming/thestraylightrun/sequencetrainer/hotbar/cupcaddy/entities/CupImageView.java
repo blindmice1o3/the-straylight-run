@@ -20,12 +20,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LiquidContainable;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -157,7 +157,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "MaestranaToCaddy";
+            String label = "MastrenaToCaddy";
 
             ClipData dragData = ClipData.newPlainText(label,
                     (CharSequence) getTag());

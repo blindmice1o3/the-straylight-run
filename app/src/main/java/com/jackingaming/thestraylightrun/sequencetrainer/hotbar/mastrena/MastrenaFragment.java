@@ -37,8 +37,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
-public class MaestranaFragment extends Fragment {
-    public static final String TAG = MaestranaFragment.class.getSimpleName();
+public class MastrenaFragment extends Fragment {
+    public static final String TAG = MastrenaFragment.class.getSimpleName();
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
@@ -49,8 +49,8 @@ public class MaestranaFragment extends Fragment {
     public static final String TAG_SYRUP_VANILLA = "SyrupVanilla";
     public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
 
-    private MaestranaViewModel mViewModel;
-    private ConstraintLayout constraintLayoutMaestrana;
+    private MastrenaViewModel mViewModel;
+    private ConstraintLayout constraintLayoutMastrena;
     private FrameLayout framelayoutLabelStagingArea;
     private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
@@ -66,9 +66,9 @@ public class MaestranaFragment extends Fragment {
     private CupImageView ivToBeAdded;
     private float xTouch, yTouch;
 
-    public static MaestranaFragment newInstance() {
+    public static MastrenaFragment newInstance() {
         Log.e(TAG, "newInstance()");
-        return new MaestranaFragment();
+        return new MastrenaFragment();
     }
 
     @Override
@@ -210,7 +210,7 @@ public class MaestranaFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView()");
-        return inflater.inflate(R.layout.fragment_maestrana, container, false);
+        return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
     @Override
@@ -218,7 +218,7 @@ public class MaestranaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        constraintLayoutMaestrana = view.findViewById(R.id.constraintlayout_maestrana);
+        constraintLayoutMastrena = view.findViewById(R.id.constraintlayout_mastrena);
         framelayoutLabelStagingArea = view.findViewById(R.id.framelayout_label_staging_area);
         framelayoutEspressoStream = view.findViewById(R.id.framelayout_espresso_stream);
         framelayoutSyrupCaddy = view.findViewById(R.id.framelayout_syrup_caddy);
@@ -229,10 +229,10 @@ public class MaestranaFragment extends Fragment {
 
         framelayoutLabelStagingArea.setOnDragListener(new LabelStagingAreaDragListener());
 
-        View.OnDragListener maestranaDragListener = new MaestranaDragListener();
-        framelayoutLeft.setOnDragListener(maestranaDragListener);
-        framelayoutCenter.setOnDragListener(maestranaDragListener);
-        framelayoutRight.setOnDragListener(maestranaDragListener);
+        View.OnDragListener mastrenaDragListener = new MastrenaDragListener();
+        framelayoutLeft.setOnDragListener(mastrenaDragListener);
+        framelayoutCenter.setOnDragListener(mastrenaDragListener);
+        framelayoutRight.setOnDragListener(mastrenaDragListener);
 
         // STEAMING PITCHER
         steamingPitcher = new SteamingPitcher(getContext());
@@ -281,7 +281,7 @@ public class MaestranaFragment extends Fragment {
         espressoShot.setX(200 - (16 / 2));
         espressoShot.setY(458);
         espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
-        constraintLayoutMaestrana.addView(espressoShot);
+        constraintLayoutMastrena.addView(espressoShot);
 
         // SHOT GLASS
         shotGlass = new ShotGlass(getContext());
@@ -308,7 +308,7 @@ public class MaestranaFragment extends Fragment {
                 syrupVanilla.setX(344);
                 syrupVanilla.setY(458);
                 syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
-                constraintLayoutMaestrana.addView(syrupVanilla);
+                constraintLayoutMastrena.addView(syrupVanilla);
 
                 ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
                         syrupVanilla,
@@ -323,7 +323,7 @@ public class MaestranaFragment extends Fragment {
                         Log.e(TAG, "onAnimationEnd()");
 
                         if (syrupVanilla != null) {
-                            constraintLayoutMaestrana.removeView(syrupVanilla);
+                            constraintLayoutMastrena.removeView(syrupVanilla);
                         }
                     }
                 });
@@ -341,7 +341,7 @@ public class MaestranaFragment extends Fragment {
                                     Log.e(TAG, "ivCup.isJustCollided()");
 
                                     ivCup.onCollided(syrupVanilla);
-                                    constraintLayoutMaestrana.removeView(syrupVanilla);
+                                    constraintLayoutMastrena.removeView(syrupVanilla);
                                     return;
                                 }
                             } else {
@@ -385,13 +385,13 @@ public class MaestranaFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated()");
 
-        mViewModel = new ViewModelProvider(this).get(MaestranaViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(MastrenaViewModel.class);
         // TODO: Use the ViewModel
     }
 
     private class LabelStagingAreaDragListener
             implements View.OnDragListener {
-        int resIdNormal = R.drawable.shape_maestrana;
+        int resIdNormal = R.drawable.shape_mastrena;
         int resIdDropTarget = R.drawable.shape_droptarget;
 
         private String label;
@@ -539,9 +539,9 @@ public class MaestranaFragment extends Fragment {
 
     private String label;
 
-    private class MaestranaDragListener
+    private class MastrenaDragListener
             implements View.OnDragListener {
-        int resIdNormal = R.drawable.shape_maestrana;
+        int resIdNormal = R.drawable.shape_mastrena;
         int resIdDropTarget = R.drawable.shape_droptarget;
 
         @Override
@@ -553,10 +553,10 @@ public class MaestranaFragment extends Fragment {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         label = dragEvent.getClipDescription().getLabel().toString();
-                        if (label.equals("CaddyToMaestrana") ||
-                                label.equals("MaestranaToCaddy") ||
+                        if (label.equals("CaddyToMastrena") ||
+                                label.equals("MastrenaToCaddy") ||
                                 label.equals("ShotGlass")) {
-                            Log.d(TAG, "label.equals(\"CaddyToMaestrana\") || label.equals(\"MaestranaToCaddy\") || label.equals(\"ShotGlass\")");
+                            Log.d(TAG, "label.equals(\"CaddyToMastrena\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"ShotGlass\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -579,7 +579,7 @@ public class MaestranaFragment extends Fragment {
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
 
-                    if (label.equals("MaestranaToCaddy")) {
+                    if (label.equals("MastrenaToCaddy")) {
                         ivToBeAdded = (CupImageView) dragEvent.getLocalState();
                     }
 
@@ -602,9 +602,9 @@ public class MaestranaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    if (label.equals("CaddyToMaestrana") || label.equals("MaestranaToCaddy")) {
-                        if (label.equals("CaddyToMaestrana")) {
-                            Log.d(TAG, "ACTION_DROP label.equals(\"CaddyToMaestrana\")");
+                    if (label.equals("CaddyToMastrena") || label.equals("MastrenaToCaddy")) {
+                        if (label.equals("CaddyToMastrena")) {
+                            Log.d(TAG, "ACTION_DROP label.equals(\"CaddyToMastrena\")");
                             Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
 
                             // Instantiate CupImageView.
@@ -648,8 +648,8 @@ public class MaestranaFragment extends Fragment {
 
                             ivToBeAdded.setX(xTouch - (64 / 2));
                             ivToBeAdded.setY(yTouch - (64 / 2));
-                        } else if (label.equals("MaestranaToCaddy")) {
-                            Log.d(TAG, "ACTION_DROP label.equals(\"MaestranaToCaddy\")");
+                        } else if (label.equals("MastrenaToCaddy")) {
+                            Log.d(TAG, "ACTION_DROP label.equals(\"MastrenaToCaddy\")");
                             Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
                             ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
@@ -680,7 +680,7 @@ public class MaestranaFragment extends Fragment {
                     // Return true. DragEvent.getResult() returns true.
                     return true;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    Log.d(TAG, "ACTION_DRAG_ENDED MaestranaFragment");
+                    Log.d(TAG, "ACTION_DRAG_ENDED MastrenaFragment");
 
                     // Reset value of alpha back to normal.
                     view.setAlpha(1.0f);
@@ -701,7 +701,7 @@ public class MaestranaFragment extends Fragment {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
 
-                    if (label.equals("CaddyToMaestrana") || label.equals("MaestranaToCaddy")) {
+                    if (label.equals("CaddyToMastrena") || label.equals("MastrenaToCaddy")) {
                         if (ivToBeAdded != null) {
                             ivToBeAdded.setVisibility(View.VISIBLE);
 
@@ -722,7 +722,7 @@ public class MaestranaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 default:
-                    Log.e(TAG, "Unknown action type received by MaestranaDragListener.");
+                    Log.e(TAG, "Unknown action type received by MastrenaDragListener.");
                     break;
             }
 

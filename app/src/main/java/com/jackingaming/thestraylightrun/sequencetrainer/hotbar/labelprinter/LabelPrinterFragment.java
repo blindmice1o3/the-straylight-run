@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 
 public class LabelPrinterFragment extends Fragment {
     public static final String TAG = LabelPrinterFragment.class.getSimpleName();

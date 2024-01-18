@@ -8,7 +8,7 @@
     tools:context=".sequencetrainer.hotbar.labelprinter.LabelPrinterFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter
+    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter
         android:id="@+id/tv_label_printer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

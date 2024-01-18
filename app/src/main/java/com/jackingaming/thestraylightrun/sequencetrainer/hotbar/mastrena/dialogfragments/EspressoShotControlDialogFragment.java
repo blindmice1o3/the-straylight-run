@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
 
 public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String TAG = EspressoShotControlDialogFragment.class.getSimpleName();

@@ -68,12 +68,12 @@ public class CupCaddyFragment extends Fragment {
         ivTall.setTag(TAG_TALL);
         ivShort.setTag(TAG_SHORT);
 
-        View.OnTouchListener caddyToMaestranaTouchListener = new CaddyToMaestranaTouchListener();
-        ivTrenta.setOnTouchListener(caddyToMaestranaTouchListener);
-        ivVenti.setOnTouchListener(caddyToMaestranaTouchListener);
-        ivGrande.setOnTouchListener(caddyToMaestranaTouchListener);
-        ivTall.setOnTouchListener(caddyToMaestranaTouchListener);
-        ivShort.setOnTouchListener(caddyToMaestranaTouchListener);
+        View.OnTouchListener caddyToMastrenaTouchListener = new CaddyToMastrenaTouchListener();
+        ivTrenta.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivVenti.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivGrande.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivTall.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivShort.setOnTouchListener(caddyToMastrenaTouchListener);
     }
 
     @Override
@@ -98,8 +98,8 @@ public class CupCaddyFragment extends Fragment {
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                        if (dragEvent.getClipDescription().getLabel().equals("MaestranaToCaddy")) {
-                            Log.d(TAG, "label.equals(\"MaestranaToCaddy\")");
+                        if (dragEvent.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
+                            Log.d(TAG, "label.equals(\"MastrenaToCaddy\")");
 
                             if (((CupImageView) dragEvent.getLocalState()).getAmount() == 0 &&
                                     ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0) {
@@ -174,7 +174,7 @@ public class CupCaddyFragment extends Fragment {
         }
     }
 
-    private class CaddyToMaestranaTouchListener
+    private class CaddyToMastrenaTouchListener
             implements View.OnTouchListener {
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -185,7 +185,7 @@ public class CupCaddyFragment extends Fragment {
                 // convenience method ClipData.newPlainText() can create a plain text
                 // ClipData in one step.
 
-                String label = "CaddyToMaestrana";
+                String label = "CaddyToMastrena";
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
                 // Create a new ClipData.Item from the ImageView object's tag.
                 ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());
