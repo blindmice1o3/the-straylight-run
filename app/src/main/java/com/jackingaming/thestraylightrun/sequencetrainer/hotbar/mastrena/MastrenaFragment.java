@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -26,16 +26,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.EspressoShotControlDialogFragment;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.dialogfragments.FillSteamingPitcherDialogFragment;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.CaramelDrizzleBottle;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.EspressoShot;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.LabelPrinter;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingPitcher;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.SteamingWand;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
 public class MaestranaFragment extends Fragment {
     public static final String TAG = MaestranaFragment.class.getSimpleName();

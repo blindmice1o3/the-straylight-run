@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.maestrana;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena;
 
 import androidx.lifecycle.ViewModel;
 
