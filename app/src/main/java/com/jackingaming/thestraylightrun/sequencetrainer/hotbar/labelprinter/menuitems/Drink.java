@@ -1,6 +1,8 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems;
 
-public class Drink extends MenuItem {
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+
+public abstract class Drink extends MenuItem {
     public enum Size {VENTI, GRANDE, TALL, SHORT;}
 
     private Size size;
@@ -8,6 +10,8 @@ public class Drink extends MenuItem {
     public Drink(String name) {
         super(name);
     }
+
+    abstract public boolean validate(String size, CupImageView cupImageView);
 
     public Size getSize() {
         return size;

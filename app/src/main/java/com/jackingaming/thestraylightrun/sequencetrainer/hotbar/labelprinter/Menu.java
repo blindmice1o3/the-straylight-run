@@ -1,6 +1,10 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.CaffeLatte;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Cappuccino;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.CaramelMacchiato;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.VanillaLatte;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +14,10 @@ public class Menu {
 
     static {
         drinks = new ArrayList<>();
-        drinks.add(new Drink("CaffeLatte"));
-        drinks.add(new Drink("Cappuccino"));
-        drinks.add(new Drink("VanillaLatte"));
-        drinks.add(new Drink("CaramelMacchiato"));
+        drinks.add(new CaffeLatte());
+        drinks.add(new Cappuccino());
+        drinks.add(new VanillaLatte());
+        drinks.add(new CaramelMacchiato());
     }
 
     public static int queryNumberOfDrinksOnMenu() {
@@ -22,5 +26,15 @@ public class Menu {
 
     public static Drink getDrinkByIndex(int index) {
         return drinks.get(index);
+    }
+
+    public static Drink getDrinkByName(String name) {
+        for (Drink drink : drinks) {
+            if (drink.getName().equals(name)) {
+                return drink;
+            }
+        }
+
+        return null;
     }
 }
