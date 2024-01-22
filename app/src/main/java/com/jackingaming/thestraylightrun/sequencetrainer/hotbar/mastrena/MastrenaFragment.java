@@ -6,14 +6,17 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +40,10 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class MastrenaFragment extends Fragment {
     public static final String TAG = MastrenaFragment.class.getSimpleName();
 
@@ -52,6 +59,7 @@ public class MastrenaFragment extends Fragment {
     private MastrenaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMastrena;
     private FrameLayout framelayoutLabelStagingArea;
+    private TextView tvClock;
     private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
     private SteamingPitcher steamingPitcher;
@@ -65,6 +73,8 @@ public class MastrenaFragment extends Fragment {
 
     private CupImageView ivToBeAdded;
     private float xTouch, yTouch;
+
+    private int time;
 
     public static MastrenaFragment newInstance() {
         Log.e(TAG, "newInstance()");
@@ -220,6 +230,7 @@ public class MastrenaFragment extends Fragment {
 
         constraintLayoutMastrena = view.findViewById(R.id.constraintlayout_mastrena);
         framelayoutLabelStagingArea = view.findViewById(R.id.framelayout_label_staging_area);
+        tvClock = view.findViewById(R.id.tv_clock);
         framelayoutEspressoStream = view.findViewById(R.id.framelayout_espresso_stream);
         framelayoutSyrupCaddy = view.findViewById(R.id.framelayout_syrup_caddy);
         framelayoutSteamingWand = view.findViewById(R.id.framelayout_steaming_wand);
@@ -228,6 +239,54 @@ public class MastrenaFragment extends Fragment {
         framelayoutRight = view.findViewById(R.id.framelayout_right);
 
         framelayoutLabelStagingArea.setOnDragListener(new LabelStagingAreaDragListener());
+        ObjectAnimator clockAnimator = ObjectAnimator.ofInt(this, "time", 60);
+        clockAnimator.setDuration(60000L);
+        clockAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        clockAnimator.setInterpolator(new LinearInterpolator());
+        clockAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                // update clock
+                LocalDateTime now = LocalDateTime.now();
+                DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("hh:mm:ss a");
+                String timeNow = now.format(formatterTime);
+
+                tvClock.setText(timeNow);
+
+                // update drink labels
+                for (int i = 0; i < framelayoutLabelStagingArea.getChildCount(); i++) {
+                    if (framelayoutLabelStagingArea.getChildAt(i) instanceof DrinkLabel) {
+                        DrinkLabel drinkLabel = (DrinkLabel) framelayoutLabelStagingArea.getChildAt(i);
+
+                        String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
+                        String date = drinkLabelSplitted[2];
+                        String time = drinkLabelSplitted[3];
+                        String amOrPm = drinkLabelSplitted[4];
+
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
+                        LocalDateTime localDateTimeDrinkLabel = LocalDateTime.parse(date + " " + time + " " + amOrPm, formatter);
+
+                        // TODO:
+                        int valueBracketYellow = 10;
+                        int valueBracketRed = 20;
+                        Duration actual = Duration.between(localDateTimeDrinkLabel, now);
+                        Duration bracketYellow = Duration.ofSeconds(valueBracketYellow);
+                        Duration bracketRed = Duration.ofSeconds(valueBracketRed);
+                        if (actual.compareTo(bracketRed) > 0) {
+                            Log.e(TAG, "red");
+                            drinkLabel.setBackgroundColor(getResources().getColor(R.color.red));
+                        } else if (actual.compareTo(bracketYellow) > 0) {
+                            Log.e(TAG, "yellow");
+                            drinkLabel.setBackgroundColor(getResources().getColor(R.color.yellow));
+                        } else {
+                            Log.e(TAG, "original");
+                        }
+                    }
+                }
+            }
+        });
+        clockAnimator.start();
 
         View.OnDragListener mastrenaDragListener = new MastrenaDragListener();
         framelayoutLeft.setOnDragListener(mastrenaDragListener);
@@ -398,6 +457,7 @@ public class MastrenaFragment extends Fragment {
         private LabelPrinter labelPrinter;
         private DrinkLabel drinkLabel;
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
             switch (dragEvent.getAction()) {
@@ -728,5 +788,13 @@ public class MastrenaFragment extends Fragment {
 
             return false;
         }
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

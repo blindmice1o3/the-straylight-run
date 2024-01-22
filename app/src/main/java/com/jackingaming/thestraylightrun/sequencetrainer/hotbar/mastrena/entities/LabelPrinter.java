@@ -16,6 +16,9 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class LabelPrinter extends AppCompatTextView {
     public static final String TAG = LabelPrinter.class.getSimpleName();
 
@@ -27,10 +30,19 @@ public class LabelPrinter extends AppCompatTextView {
         super(context, attrs);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void generateRandomDrinkRequest() {
         Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
+        String formatDateTime = now.format(formatter);
+
         setText(
-                String.format("%s\n%s", drinkRandom.getSize(), drinkRandom.getName())
+                String.format("%s\n%s\n%s",
+                        drinkRandom.getSize(),
+                        drinkRandom.getName(),
+                        formatDateTime)
         );
     }
 
