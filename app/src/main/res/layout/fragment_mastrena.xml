@@ -19,6 +19,15 @@
         app:layout_constraintVertical_weight="1">
 
         <TextView
+            android:id="@+id/tv_number_of_drinks_in_queue"
+            android:layout_width="130dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|top"
+            android:background="@color/purple"
+            android:gravity="center"
+            android:textColor="@color/green" />
+
+        <TextView
             android:id="@+id/tv_clock"
             android:layout_width="130dp"
             android:layout_height="30dp"

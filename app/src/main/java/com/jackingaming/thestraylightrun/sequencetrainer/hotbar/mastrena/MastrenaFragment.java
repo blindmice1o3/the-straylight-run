@@ -46,6 +46,9 @@ import java.time.format.DateTimeFormatter;
 
 public class MastrenaFragment extends Fragment {
     public static final String TAG = MastrenaFragment.class.getSimpleName();
+    private static final long DELAY_ADD_NEW_DRINK = 30000L;
+    private static final int VALUE_BRACKET_YELLOW = 10;
+    private static final int VALUE_BRACKET_RED = 20;
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
@@ -58,7 +61,9 @@ public class MastrenaFragment extends Fragment {
 
     private MastrenaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMastrena;
+    private LabelPrinter labelPrinter;
     private FrameLayout framelayoutLabelStagingArea;
+    private TextView tvNumberOfDrinksInQueue;
     private TextView tvClock;
     private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
@@ -230,6 +235,7 @@ public class MastrenaFragment extends Fragment {
 
         constraintLayoutMastrena = view.findViewById(R.id.constraintlayout_mastrena);
         framelayoutLabelStagingArea = view.findViewById(R.id.framelayout_label_staging_area);
+        tvNumberOfDrinksInQueue = view.findViewById(R.id.tv_number_of_drinks_in_queue);
         tvClock = view.findViewById(R.id.tv_clock);
         framelayoutEspressoStream = view.findViewById(R.id.framelayout_espresso_stream);
         framelayoutSyrupCaddy = view.findViewById(R.id.framelayout_syrup_caddy);
@@ -244,9 +250,30 @@ public class MastrenaFragment extends Fragment {
         clockAnimator.setRepeatCount(ValueAnimator.INFINITE);
         clockAnimator.setInterpolator(new LinearInterpolator());
         clockAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            private long previousTime = System.currentTimeMillis();
+
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                // add new drinks to LabelPrinter's queue.
+                long nowTime = System.currentTimeMillis();
+                long differenceTime = nowTime - previousTime;
+                if (differenceTime > DELAY_ADD_NEW_DRINK) {
+                    if (labelPrinter != null) {
+                        labelPrinter.generateRandomDrinkRequest();
+                        labelPrinter.updateDisplay();
+
+                        previousTime = nowTime;
+                    }
+                }
+
+                // update number of drinks currently in queue.
+                if (labelPrinter != null) {
+                    tvNumberOfDrinksInQueue.setText(
+                            Integer.toString(labelPrinter.numberOfDrinksInQueue())
+                    );
+                }
+
                 // update clock
                 LocalDateTime now = LocalDateTime.now();
                 DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("hh:mm:ss a");
@@ -254,7 +281,7 @@ public class MastrenaFragment extends Fragment {
 
                 tvClock.setText(timeNow);
 
-                // update drink labels
+                // update drink labels' color.
                 for (int i = 0; i < framelayoutLabelStagingArea.getChildCount(); i++) {
                     if (framelayoutLabelStagingArea.getChildAt(i) instanceof DrinkLabel) {
                         DrinkLabel drinkLabel = (DrinkLabel) framelayoutLabelStagingArea.getChildAt(i);
@@ -267,12 +294,9 @@ public class MastrenaFragment extends Fragment {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
                         LocalDateTime localDateTimeDrinkLabel = LocalDateTime.parse(date + " " + time + " " + amOrPm, formatter);
 
-                        // TODO:
-                        int valueBracketYellow = 10;
-                        int valueBracketRed = 20;
                         Duration actual = Duration.between(localDateTimeDrinkLabel, now);
-                        Duration bracketYellow = Duration.ofSeconds(valueBracketYellow);
-                        Duration bracketRed = Duration.ofSeconds(valueBracketRed);
+                        Duration bracketYellow = Duration.ofSeconds(VALUE_BRACKET_YELLOW);
+                        Duration bracketRed = Duration.ofSeconds(VALUE_BRACKET_RED);
                         if (actual.compareTo(bracketRed) > 0) {
                             Log.e(TAG, "red");
                             drinkLabel.setBackgroundColor(getResources().getColor(R.color.red));
@@ -454,7 +478,6 @@ public class MastrenaFragment extends Fragment {
         int resIdDropTarget = R.drawable.shape_droptarget;
 
         private String label;
-        private LabelPrinter labelPrinter;
         private DrinkLabel drinkLabel;
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -546,10 +569,10 @@ public class MastrenaFragment extends Fragment {
 
                         //////////////////////////////////////////////////////////////////////////
 
-                        labelPrinter.generateRandomDrinkRequest();
+                        labelPrinter.removeFromQueue(dragData);
+                        labelPrinter.updateDisplay();
 
                         labelPrinter.setVisibility(View.VISIBLE);
-                        labelPrinter = null;
                     } else if (label.equals("DrinkLabel")) {
                         drinkLabel.setX(xTouch - (drinkLabel.getWidth() / 2));
                         drinkLabel.setY(yTouch - (drinkLabel.getHeight() / 2));
@@ -576,7 +599,6 @@ public class MastrenaFragment extends Fragment {
 
                         if (label.equals("LabelPrinter")) {
                             labelPrinter.setVisibility(View.VISIBLE);
-                            labelPrinter = null;
                         } else if (label.equals("DrinkLabel")) {
                             drinkLabel.setVisibility(View.VISIBLE);
                             drinkLabel = null;
