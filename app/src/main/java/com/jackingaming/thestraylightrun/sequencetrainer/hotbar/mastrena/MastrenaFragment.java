@@ -319,9 +319,9 @@ public class MastrenaFragment extends Fragment {
                         DrinkLabel drinkLabel = (DrinkLabel) framelayoutLabelStagingArea.getChildAt(i);
 
                         String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
-                        String date = drinkLabelSplitted[2];
-                        String time = drinkLabelSplitted[3];
-                        String amOrPm = drinkLabelSplitted[4];
+                        String date = drinkLabelSplitted[0];
+                        String time = drinkLabelSplitted[1];
+                        String amOrPm = drinkLabelSplitted[2];
 
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
                         LocalDateTime localDateTimeDrinkLabel = LocalDateTime.parse(date + " " + time + " " + amOrPm, formatter);

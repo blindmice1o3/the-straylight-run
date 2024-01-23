@@ -43,16 +43,17 @@ public class LabelPrinter extends AppCompatTextView {
             return;
         }
 
-        Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
-
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
         String formatDateTime = now.format(formatter);
 
+        Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
+        // TODO: generate customizations for drinkRandom.
+
         String contentNewDrinkLabel = String.format("%s\n%s\n%s",
+                formatDateTime,
                 drinkRandom.getSize(),
-                drinkRandom.getName(),
-                formatDateTime);
+                drinkRandom.getName());
 
         queueDrinks.add(
                 contentNewDrinkLabel

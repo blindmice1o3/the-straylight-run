@@ -320,9 +320,16 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void showDialogWinner(DrinkLabel drinkLabel) {
+        String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
+        String date = drinkLabelSplitted[0];
+        String time = drinkLabelSplitted[1];
+        String amOrPm = drinkLabelSplitted[2];
+        String size = drinkLabelSplitted[3];
+        String name = drinkLabelSplitted[4];
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setTitle(drinkLabel.getText());
-        alertDialogBuilder.setMessage("WINNER WINNER CHICKEN DINNER (" + drinkLabel.getText() + ")!");
+        alertDialogBuilder.setTitle("WINNER WINNER CHICKEN DINNER");
+        alertDialogBuilder.setMessage(size + " " + name + " (" + time + " " + amOrPm + ")!");
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -342,8 +349,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     private boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
         String[] text = drinkLabel.getText().toString().split("\\s+");
-        String size = text[0].toLowerCase();
-        String name = text[1];
+        String size = text[3].toLowerCase();
+        String name = text[4];
 
         return Menu.getDrinkByName(name).validate(size, this);
     }
