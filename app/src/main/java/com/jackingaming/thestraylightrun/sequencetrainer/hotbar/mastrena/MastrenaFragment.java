@@ -46,9 +46,21 @@ import java.time.format.DateTimeFormatter;
 
 public class MastrenaFragment extends Fragment {
     public static final String TAG = MastrenaFragment.class.getSimpleName();
-    private static final long DELAY_ADD_NEW_DRINK = 30000L;
-    private static final int VALUE_BRACKET_YELLOW = 10;
-    private static final int VALUE_BRACKET_RED = 20;
+    private static final long DELAY_ADD_NEW_DRINK_EASY = 60000L;
+    private static final int VALUE_BRACKET_YELLOW_EASY = 20;
+    private static final int VALUE_BRACKET_RED_EASY = 40;
+
+    private static final long DELAY_ADD_NEW_DRINK_MEDIUM = 45000L;
+    private static final int VALUE_BRACKET_YELLOW_MEDIUM = 15;
+    private static final int VALUE_BRACKET_RED_MEDIUM = 30;
+
+    private static final long DELAY_ADD_NEW_DRINK_HARD = 30000L;
+    private static final int VALUE_BRACKET_YELLOW_HARD = 10;
+    private static final int VALUE_BRACKET_RED_HARD = 20;
+
+    private long delayAddNewDrink;
+    private int valueBracketYellow;
+    private int valueBracketRed;
 
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
@@ -84,6 +96,24 @@ public class MastrenaFragment extends Fragment {
     public static MastrenaFragment newInstance() {
         Log.e(TAG, "newInstance()");
         return new MastrenaFragment();
+    }
+
+    public void changeDifficultySetting(String difficultySetting) {
+        Log.e(TAG, "changeDifficultySetting(String) difficultySetting: " + difficultySetting);
+
+        if (difficultySetting.equals("easy")) {
+            delayAddNewDrink = DELAY_ADD_NEW_DRINK_EASY;
+            valueBracketYellow = VALUE_BRACKET_YELLOW_EASY;
+            valueBracketRed = VALUE_BRACKET_RED_EASY;
+        } else if (difficultySetting.equals("medium")) {
+            delayAddNewDrink = DELAY_ADD_NEW_DRINK_MEDIUM;
+            valueBracketYellow = VALUE_BRACKET_YELLOW_MEDIUM;
+            valueBracketRed = VALUE_BRACKET_RED_MEDIUM;
+        } else if (difficultySetting.equals("hard")) {
+            delayAddNewDrink = DELAY_ADD_NEW_DRINK_HARD;
+            valueBracketYellow = VALUE_BRACKET_YELLOW_HARD;
+            valueBracketRed = VALUE_BRACKET_RED_HARD;
+        }
     }
 
     @Override
@@ -233,6 +263,8 @@ public class MastrenaFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
+        changeDifficultySetting("hard");
+
         constraintLayoutMastrena = view.findViewById(R.id.constraintlayout_mastrena);
         framelayoutLabelStagingArea = view.findViewById(R.id.framelayout_label_staging_area);
         tvNumberOfDrinksInQueue = view.findViewById(R.id.tv_number_of_drinks_in_queue);
@@ -258,7 +290,7 @@ public class MastrenaFragment extends Fragment {
                 // add new drinks to LabelPrinter's queue.
                 long nowTime = System.currentTimeMillis();
                 long differenceTime = nowTime - previousTime;
-                if (differenceTime > DELAY_ADD_NEW_DRINK) {
+                if (differenceTime > delayAddNewDrink) {
                     if (labelPrinter != null) {
                         labelPrinter.generateRandomDrinkRequest();
                         labelPrinter.updateDisplay();
@@ -295,16 +327,14 @@ public class MastrenaFragment extends Fragment {
                         LocalDateTime localDateTimeDrinkLabel = LocalDateTime.parse(date + " " + time + " " + amOrPm, formatter);
 
                         Duration actual = Duration.between(localDateTimeDrinkLabel, now);
-                        Duration bracketYellow = Duration.ofSeconds(VALUE_BRACKET_YELLOW);
-                        Duration bracketRed = Duration.ofSeconds(VALUE_BRACKET_RED);
+                        Duration bracketYellow = Duration.ofSeconds(valueBracketYellow);
+                        Duration bracketRed = Duration.ofSeconds(valueBracketRed);
                         if (actual.compareTo(bracketRed) > 0) {
-                            Log.e(TAG, "red");
                             drinkLabel.setBackgroundColor(getResources().getColor(R.color.red));
                         } else if (actual.compareTo(bracketYellow) > 0) {
-                            Log.e(TAG, "yellow");
                             drinkLabel.setBackgroundColor(getResources().getColor(R.color.yellow));
                         } else {
-                            Log.e(TAG, "original");
+                            // keep original background color.
                         }
                     }
                 }
