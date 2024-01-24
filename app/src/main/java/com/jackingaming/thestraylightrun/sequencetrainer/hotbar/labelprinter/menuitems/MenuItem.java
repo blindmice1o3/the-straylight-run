@@ -1,6 +1,9 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem
+        implements Serializable {
     private String name;
 
     public MenuItem(String name) {

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LabelPrinter extends AppCompatTextView {
     public static final String TAG = LabelPrinter.class.getSimpleName();
@@ -36,6 +37,10 @@ public class LabelPrinter extends AppCompatTextView {
         super(context, attrs);
     }
 
+    private static final int STANDARD = 0;
+    private static final int CUSTOMIZED = 1;
+    private Random random = new Random();
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void generateRandomDrinkRequest() {
         if (counter >= MAX_NUMBER_OF_DRINKS) {
@@ -47,17 +52,36 @@ public class LabelPrinter extends AppCompatTextView {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
         String formatDateTime = now.format(formatter);
 
-        Drink drinkRandom = MenuItemRequestGenerator.requestRandomDrink();
-        // TODO: generate customizations for drinkRandom.
+        int standardOrCustomized = random.nextInt(2);
+        if (standardOrCustomized == STANDARD) {
+            Drink drinkRandomStandard = MenuItemRequestGenerator.requestRandomDrink();
+            String contentNewDrinkLabel = String.format("%s\n%s\n%s",
+                    formatDateTime,
+                    drinkRandomStandard.getSize(),
+                    drinkRandomStandard.getName());
 
-        String contentNewDrinkLabel = String.format("%s\n%s\n%s",
-                formatDateTime,
-                drinkRandom.getSize(),
-                drinkRandom.getName());
+            queueDrinks.add(
+                    contentNewDrinkLabel
+            );
+        } else if (standardOrCustomized == CUSTOMIZED) {
+            Drink drinkRandomCustomized = MenuItemRequestGenerator.requestRandomCustomizedDrink();
+            StringBuilder sb = new StringBuilder();
+            sb.append(formatDateTime + "\n")
+                    .append(drinkRandomCustomized.getSize() + "\n")
+                    .append(drinkRandomCustomized.getName() + "\n");
+            for (int i = 0; i < drinkRandomCustomized.queryNumberOfCustomizations(); i++) {
+                sb.append(drinkRandomCustomized.getCustomizationByIndex(i));
 
-        queueDrinks.add(
-                contentNewDrinkLabel
-        );
+                if (i != (drinkRandomCustomized.queryNumberOfCustomizations() - 1)) {
+                    sb.append("\n");
+                }
+            }
+
+            queueDrinks.add(
+                    sb.toString()
+            );
+        }
+
         counter++;
     }
 

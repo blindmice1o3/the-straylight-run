@@ -351,6 +351,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         String[] text = drinkLabel.getText().toString().split("\\s+");
         String size = text[3].toLowerCase();
         String name = text[4];
+        // TODO: differentiate between standard and customized drinks.
+        // TODO: implement checking customized drinks.
 
         return Menu.getDrinkByName(name).validate(size, this);
     }

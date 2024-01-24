@@ -6,6 +6,11 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.men
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.CaramelMacchiato;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.VanillaLatte;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +30,29 @@ public class Menu {
     }
 
     public static Drink getDrinkByIndex(int index) {
-        return drinks.get(index);
+        Drink drinkToCopy = drinks.get(index);
+        Drink copy = createCopyOfDrink(drinkToCopy);
+        return copy;
+    }
+
+    private static Drink createCopyOfDrink(Drink drink) {
+        Drink original = drink;
+        Drink copy = null;
+        try {
+            // Serialize the object
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(original);
+            oos.close();
+
+            // Deserialize the object
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bais);
+            copy = (Drink) ois.readObject();
+        } catch (IOException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+        }
+        return copy;
     }
 
     public static Drink getDrinkByName(String name) {
