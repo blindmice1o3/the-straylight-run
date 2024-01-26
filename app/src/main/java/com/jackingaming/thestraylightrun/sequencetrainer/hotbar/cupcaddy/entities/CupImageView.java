@@ -28,7 +28,9 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
@@ -349,12 +351,21 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     private boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
         String[] text = drinkLabel.getText().toString().split("\\s+");
+        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
         String size = text[3].toLowerCase();
         String name = text[4];
-        // TODO: differentiate between standard and customized drinks.
-        // TODO: implement checking customized drinks.
+        // (6+) customization(s).
+        int numberOfNonCustomizations = 5;
+        List<String> customizations = null;
+        if (text.length > numberOfNonCustomizations) {
+            customizations = new ArrayList<>();
+            for (int i = 0; i < (text.length - numberOfNonCustomizations); i++) {
+                int indexCustomization = numberOfNonCustomizations + i;
+                customizations.add(text[indexCustomization]);
+            }
+        }
 
-        return Menu.getDrinkByName(name).validate(size, this);
+        return Menu.getDrinkByName(name).validate(this, size, customizations);
     }
 
     public EspressoShot.Type getType() {

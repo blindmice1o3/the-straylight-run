@@ -27,7 +27,8 @@ public abstract class Drink extends MenuItem {
         return customizations.size();
     }
 
-    abstract public boolean validate(String size, CupImageView cupImageView);
+    abstract public boolean validate(CupImageView cupImageView,
+                                     String size, List<String> customizations);
 
     public Size getSize() {
         return size;
