@@ -22,7 +22,7 @@ public class DifficultySettingsDialogFragment extends DialogFragment {
     private static final String DIFFICULTY_SETTING_PASSED_IN = "difficultySettingPassedIn";
 
     private RadioGroup radioGroup;
-    private RadioButton radioButtonEasy, radioButtonMedium, radioButtonHard;
+    private RadioButton radioButtonStandard, radioButtonCustomized, radioButtonBoth;
     private String difficultySettingPassedIn;
 
     public static DifficultySettingsDialogFragment newInstance(String difficultySettingPassedIn) {
@@ -51,18 +51,18 @@ public class DifficultySettingsDialogFragment extends DialogFragment {
         Log.e(TAG, "onViewCreated()");
 
         radioGroup = view.findViewById(R.id.radiogroup_difficulty_settings);
-        radioButtonEasy = view.findViewById(R.id.radiobutton_easy);
-        radioButtonMedium = view.findViewById(R.id.radiobutton_medium);
-        radioButtonHard = view.findViewById(R.id.radiobutton_hard);
+        radioButtonStandard = view.findViewById(R.id.radiobutton_standard);
+        radioButtonCustomized = view.findViewById(R.id.radiobutton_customized);
+        radioButtonBoth = view.findViewById(R.id.radiobutton_both);
 
         difficultySettingPassedIn = getArguments().getString(DIFFICULTY_SETTING_PASSED_IN);
 
-        if (difficultySettingPassedIn.equals(radioButtonEasy.getText().toString())) {
-            radioButtonEasy.setChecked(true);
-        } else if (difficultySettingPassedIn.equals(radioButtonMedium.getText().toString())) {
-            radioButtonMedium.setChecked(true);
-        } else if (difficultySettingPassedIn.equals(radioButtonHard.getText().toString())) {
-            radioButtonHard.setChecked(true);
+        if (difficultySettingPassedIn.equals(radioButtonStandard.getText().toString())) {
+            radioButtonStandard.setChecked(true);
+        } else if (difficultySettingPassedIn.equals(radioButtonCustomized.getText().toString())) {
+            radioButtonCustomized.setChecked(true);
+        } else if (difficultySettingPassedIn.equals(radioButtonBoth.getText().toString())) {
+            radioButtonBoth.setChecked(true);
         }
     }
 

@@ -37,8 +37,10 @@ public class LabelPrinter extends AppCompatTextView {
         super(context, attrs);
     }
 
+    private int modeSelected = BOTH;
     private static final int STANDARD = 0;
     private static final int CUSTOMIZED = 1;
+    private static final int BOTH = 2;
     private Random random = new Random();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -52,7 +54,16 @@ public class LabelPrinter extends AppCompatTextView {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
         String formatDateTime = now.format(formatter);
 
-        int standardOrCustomized = random.nextInt(2);
+        int standardOrCustomized = -1;
+        if (modeSelected == STANDARD) {
+            standardOrCustomized = STANDARD;
+        } else if (modeSelected == CUSTOMIZED) {
+            standardOrCustomized = CUSTOMIZED;
+        } else {
+            // randomly select between standard or customized.
+            standardOrCustomized = random.nextInt(2);
+        }
+
         if (standardOrCustomized == STANDARD) {
             Drink drinkRandomStandard = MenuItemRequestGenerator.requestRandomDrink();
             String contentNewDrinkLabel = String.format("%s\n%s\n%s",
@@ -138,5 +149,17 @@ public class LabelPrinter extends AppCompatTextView {
         }
 
         return false;
+    }
+
+    public void selectModeStandard() {
+        modeSelected = STANDARD;
+    }
+
+    public void selectModeCustomized() {
+        modeSelected = CUSTOMIZED;
+    }
+
+    public void selectModeBoth() {
+        modeSelected = BOTH;
     }
 }

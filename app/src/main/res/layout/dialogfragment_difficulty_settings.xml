@@ -15,21 +15,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
-            android:id="@+id/radiobutton_easy"
+            android:id="@+id/radiobutton_standard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="easy" />
+            android:text="standard" />
 
         <RadioButton
-            android:id="@+id/radiobutton_medium"
+            android:id="@+id/radiobutton_customized"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="medium" />
+            android:text="customized" />
 
         <RadioButton
-            android:id="@+id/radiobutton_hard"
+            android:id="@+id/radiobutton_both"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="hard" />
+            android:text="both" />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>
