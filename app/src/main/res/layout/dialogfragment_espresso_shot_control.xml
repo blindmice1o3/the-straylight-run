@@ -36,6 +36,56 @@
         app:layout_constraintStart_toEndOf="@id/button_signature"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <RadioGroup
+        android:id="@+id/radiogroup_amount_of_water"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/radiogroup_amount_of_bean"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_single"
+        app:layout_constraintTop_toBottomOf="@id/button_decaf">
+
+        <RadioButton
+            android:id="@+id/radiobutton_ristretto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="R" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_long"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="L" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/radiogroup_amount_of_bean"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/button_single"
+        app:layout_constraintTop_toBottomOf="@id/radiogroup_amount_of_water">
+
+        <RadioButton
+            android:id="@+id/radiobutton_half_decaf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1/2" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_updosed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="U" />
+    </RadioGroup>
+
     <Button
         android:id="@+id/button_single"
         android:layout_width="wrap_content"

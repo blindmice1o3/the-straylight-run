@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,11 +23,22 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String BUNDLE_KEY_TYPE = "type";
     public static final String BUNDLE_KEY_QUANTITY = "quantity";
 
+    public enum AmountOfWater {RISTRETTO, LONG;}
+
+    public enum AmountOfBean {HALF_DECAF, UPDOSED;}
+
     private Button buttonBlonde, buttonSignature, buttonDecaf;
     private Button buttonSingle, buttonDouble, buttonTriple;
 
+    private RadioGroup radiogroupAmountOfWater, radiogroupAmountOfBean;
+    private RadioButton radiobuttonRistretto, radiobuttonLong;
+    private RadioButton radiobuttonHalfDecaf, radiobuttonUpdosed;
+
     private EspressoShot.Type typeSelected = EspressoShot.Type.SIGNATURE;
     private int quantitySelected = 0;
+
+    private AmountOfWater amountOfWaterSelected = null;
+    private AmountOfBean amountOfBeanSelected = null;
 
     @Nullable
     @Override
@@ -90,6 +103,62 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
                 Log.e(TAG, "TRIPLE");
                 quantitySelected = 3;
                 dismiss();
+            }
+        });
+
+        radiogroupAmountOfWater = view.findViewById(R.id.radiogroup_amount_of_water);
+        radiobuttonRistretto = view.findViewById(R.id.radiobutton_ristretto);
+        radiobuttonRistretto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "radioButtonRistretto.onClick(View)");
+                if (amountOfWaterSelected == AmountOfWater.RISTRETTO) {
+                    amountOfWaterSelected = null;
+                    radiogroupAmountOfWater.clearCheck();
+                } else {
+                    amountOfWaterSelected = AmountOfWater.RISTRETTO;
+                }
+            }
+        });
+        radiobuttonLong = view.findViewById(R.id.radiobutton_long);
+        radiobuttonLong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "radiobuttonLong.onClick(View)");
+                if (amountOfWaterSelected == AmountOfWater.LONG) {
+                    amountOfWaterSelected = null;
+                    radiogroupAmountOfWater.clearCheck();
+                } else {
+                    amountOfWaterSelected = AmountOfWater.LONG;
+                }
+            }
+        });
+
+        radiogroupAmountOfBean = view.findViewById(R.id.radiogroup_amount_of_bean);
+        radiobuttonHalfDecaf = view.findViewById(R.id.radiobutton_half_decaf);
+        radiobuttonHalfDecaf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "radiobuttonHalfDecaf.onClick(View)");
+                if (amountOfBeanSelected == AmountOfBean.HALF_DECAF) {
+                    amountOfBeanSelected = null;
+                    radiogroupAmountOfBean.clearCheck();
+                } else {
+                    amountOfBeanSelected = AmountOfBean.HALF_DECAF;
+                }
+            }
+        });
+        radiobuttonUpdosed = view.findViewById(R.id.radiobutton_updosed);
+        radiobuttonUpdosed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "radiobuttonUpdosed.onClick(View)");
+                if (amountOfBeanSelected == AmountOfBean.UPDOSED) {
+                    amountOfBeanSelected = null;
+                    radiogroupAmountOfBean.clearCheck();
+                } else {
+                    amountOfBeanSelected = AmountOfBean.UPDOSED;
+                }
             }
         });
     }
