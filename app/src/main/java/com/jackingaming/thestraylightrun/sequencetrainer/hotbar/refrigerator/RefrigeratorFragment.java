@@ -1,21 +1,18 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator;
 
-import android.content.ClipData;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk;
 
 public class RefrigeratorFragment extends Fragment {
     public static final String TAG = RefrigeratorFragment.class.getSimpleName();
@@ -25,7 +22,7 @@ public class RefrigeratorFragment extends Fragment {
     public static final String TAG_MILK_SOY = "soy";
 
     private ConstraintLayout clRefrigerator;
-    private View viewCoconutMilk, viewAlmondMilk, viewSoyMilk;
+    private Milk milkCoconut, milkAlmond, milkSoy;
 
     public static RefrigeratorFragment newInstance() {
         Log.e(TAG, "newInstance()");
@@ -46,48 +43,12 @@ public class RefrigeratorFragment extends Fragment {
 
         clRefrigerator = view.findViewById(R.id.constraintlayout_refrigerator);
 
-        viewCoconutMilk = view.findViewById(R.id.milk_coconut);
-        viewAlmondMilk = view.findViewById(R.id.milk_almond);
-        viewSoyMilk = view.findViewById(R.id.milk_soy);
+        milkCoconut = view.findViewById(R.id.milk_coconut);
+        milkAlmond = view.findViewById(R.id.milk_almond);
+        milkSoy = view.findViewById(R.id.milk_soy);
 
-        viewCoconutMilk.setTag(TAG_MILK_COCONUT);
-        viewAlmondMilk.setTag(TAG_MILK_ALMOND);
-        viewSoyMilk.setTag(TAG_MILK_SOY);
-
-        MilkTouchListener milkTouchListener = new MilkTouchListener();
-        viewCoconutMilk.setOnTouchListener(milkTouchListener);
-        viewAlmondMilk.setOnTouchListener(milkTouchListener);
-        viewSoyMilk.setOnTouchListener(milkTouchListener);
-    }
-
-    private class MilkTouchListener
-            implements View.OnTouchListener {
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = "Milk";
-
-                ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
-                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
-
-                // Start the drag.
-                view.startDragAndDrop(
-                        dragData,           // The data to be dragged.
-                        myShadow,           // The drag shadow builder.
-                        null,    // No need to use local data.
-                        0              // Flags. Not currently used, set to 0.
-                );
-
-                Log.e(TAG, "label: " + label);
-                Log.e(TAG, "view.getTag(): " + view.getTag());
-
-                // Indicate that the on-touch event is handled.
-                return true;
-            }
-
-            return false;
-        }
+        milkCoconut.setTag(TAG_MILK_COCONUT);
+        milkAlmond.setTag(TAG_MILK_ALMOND);
+        milkSoy.setTag(TAG_MILK_SOY);
     }
 }
