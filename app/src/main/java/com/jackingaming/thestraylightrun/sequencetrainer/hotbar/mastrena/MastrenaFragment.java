@@ -157,14 +157,17 @@ public class MastrenaFragment extends Fragment {
 
                         EspressoShot.Type typeSelected = (EspressoShot.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
                         int quantitySelected = result.getInt(EspressoShotControlDialogFragment.BUNDLE_KEY_QUANTITY);
+                        EspressoShot.AmountOfWater amountOfWaterSelected = (EspressoShot.AmountOfWater) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_AMOUNT_OF_WATER);
+                        EspressoShot.AmountOfBean amountOfBeanSelected = (EspressoShot.AmountOfBean) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_AMOUNT_OF_BEAN);
                         Log.e(TAG, "type: " + typeSelected.name() + ", quantity: " + quantitySelected);
+                        Log.e(TAG, "amountOfWaterSelected: " + amountOfWaterSelected.name() + ", amountOfBeanSelected: " + amountOfBeanSelected.name());
 
                         if (quantitySelected < 1) {
                             Log.e(TAG, "quantitySelected < 1 returning.");
                             return;
                         }
 
-                        espressoShot.updateType(typeSelected);
+                        espressoShot.updateShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
 
                         long startDelay = 1500L * quantitySelected;
                         long duration = 1500L;

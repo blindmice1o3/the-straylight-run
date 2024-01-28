@@ -22,10 +22,8 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String REQUEST_KEY = "espressoShotControl";
     public static final String BUNDLE_KEY_TYPE = "type";
     public static final String BUNDLE_KEY_QUANTITY = "quantity";
-
-    public enum AmountOfWater {RISTRETTO, LONG;}
-
-    public enum AmountOfBean {HALF_DECAF, UPDOSED;}
+    public static final String BUNDLE_KEY_AMOUNT_OF_WATER = "amountOfWater";
+    public static final String BUNDLE_KEY_AMOUNT_OF_BEAN = "amountOfBean";
 
     private Button buttonBlonde, buttonSignature, buttonDecaf;
     private Button buttonSingle, buttonDouble, buttonTriple;
@@ -37,8 +35,8 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     private EspressoShot.Type typeSelected = EspressoShot.Type.SIGNATURE;
     private int quantitySelected = 0;
 
-    private AmountOfWater amountOfWaterSelected = null;
-    private AmountOfBean amountOfBeanSelected = null;
+    private EspressoShot.AmountOfWater amountOfWaterSelected = EspressoShot.AmountOfWater.STANDARD;
+    private EspressoShot.AmountOfBean amountOfBeanSelected = EspressoShot.AmountOfBean.STANDARD;
 
     @Nullable
     @Override
@@ -112,11 +110,11 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "radioButtonRistretto.onClick(View)");
-                if (amountOfWaterSelected == AmountOfWater.RISTRETTO) {
-                    amountOfWaterSelected = null;
+                if (amountOfWaterSelected == EspressoShot.AmountOfWater.RISTRETTO) {
+                    amountOfWaterSelected = EspressoShot.AmountOfWater.STANDARD;
                     radiogroupAmountOfWater.clearCheck();
                 } else {
-                    amountOfWaterSelected = AmountOfWater.RISTRETTO;
+                    amountOfWaterSelected = EspressoShot.AmountOfWater.RISTRETTO;
                 }
             }
         });
@@ -125,11 +123,11 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "radiobuttonLong.onClick(View)");
-                if (amountOfWaterSelected == AmountOfWater.LONG) {
-                    amountOfWaterSelected = null;
+                if (amountOfWaterSelected == EspressoShot.AmountOfWater.LONG) {
+                    amountOfWaterSelected = EspressoShot.AmountOfWater.STANDARD;
                     radiogroupAmountOfWater.clearCheck();
                 } else {
-                    amountOfWaterSelected = AmountOfWater.LONG;
+                    amountOfWaterSelected = EspressoShot.AmountOfWater.LONG;
                 }
             }
         });
@@ -140,11 +138,11 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "radiobuttonHalfDecaf.onClick(View)");
-                if (amountOfBeanSelected == AmountOfBean.HALF_DECAF) {
-                    amountOfBeanSelected = null;
+                if (amountOfBeanSelected == EspressoShot.AmountOfBean.HALF_DECAF) {
+                    amountOfBeanSelected = EspressoShot.AmountOfBean.STANDARD;
                     radiogroupAmountOfBean.clearCheck();
                 } else {
-                    amountOfBeanSelected = AmountOfBean.HALF_DECAF;
+                    amountOfBeanSelected = EspressoShot.AmountOfBean.HALF_DECAF;
                 }
             }
         });
@@ -153,11 +151,11 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Log.e(TAG, "radiobuttonUpdosed.onClick(View)");
-                if (amountOfBeanSelected == AmountOfBean.UPDOSED) {
-                    amountOfBeanSelected = null;
+                if (amountOfBeanSelected == EspressoShot.AmountOfBean.UPDOSED) {
+                    amountOfBeanSelected = EspressoShot.AmountOfBean.STANDARD;
                     radiogroupAmountOfBean.clearCheck();
                 } else {
-                    amountOfBeanSelected = AmountOfBean.UPDOSED;
+                    amountOfBeanSelected = EspressoShot.AmountOfBean.UPDOSED;
                 }
             }
         });
@@ -183,6 +181,8 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
         Bundle result = new Bundle();
         result.putSerializable(BUNDLE_KEY_TYPE, typeSelected);
         result.putInt(BUNDLE_KEY_QUANTITY, quantitySelected);
+        result.putSerializable(BUNDLE_KEY_AMOUNT_OF_WATER, amountOfWaterSelected);
+        result.putSerializable(BUNDLE_KEY_AMOUNT_OF_BEAN, amountOfBeanSelected);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 }

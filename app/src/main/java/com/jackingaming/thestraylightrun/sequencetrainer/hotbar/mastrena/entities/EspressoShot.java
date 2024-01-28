@@ -14,7 +14,13 @@ public class EspressoShot extends AppCompatImageView {
 
     public enum Type {BLONDE, SIGNATURE, DECAF;}
 
+    public enum AmountOfWater {RISTRETTO, STANDARD, LONG;}
+
+    public enum AmountOfBean {HALF_DECAF, STANDARD, UPDOSED;}
+
     private Type type;
+    private AmountOfWater amountOfWater;
+    private AmountOfBean amountOfBean;
     private boolean collided;
 
     public EspressoShot(@NonNull Context context) {
@@ -25,11 +31,15 @@ public class EspressoShot extends AppCompatImageView {
         super(context, attrs);
     }
 
-    public void updateType(Type typeSelected) {
+    public void updateShot(Type typeSelected,
+                           AmountOfWater amountOfWaterSelected, AmountOfBean amountOfBeanSelected) {
         type = typeSelected;
 
         int colorToUse = lookupColorIdByType(type);
         setBackgroundColor(getResources().getColor(colorToUse));
+
+        amountOfWater = amountOfWaterSelected;
+        amountOfBean = amountOfBeanSelected;
     }
 
     public Type getType() {
@@ -38,6 +48,22 @@ public class EspressoShot extends AppCompatImageView {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public AmountOfWater getAmountOfWater() {
+        return amountOfWater;
+    }
+
+    public void setAmountOfWater(AmountOfWater amountOfWater) {
+        this.amountOfWater = amountOfWater;
+    }
+
+    public AmountOfBean getAmountOfBean() {
+        return amountOfBean;
+    }
+
+    public void setAmountOfBean(AmountOfBean amountOfBean) {
+        this.amountOfBean = amountOfBean;
     }
 
     public boolean isCollided() {
@@ -51,7 +77,7 @@ public class EspressoShot extends AppCompatImageView {
     public static int lookupColorIdByType(Type type) {
         switch (type) {
             case BLONDE:
-                return R.color.cream;
+                return R.color.green;
             case SIGNATURE:
                 return R.color.light_blue_900;
             case DECAF:
