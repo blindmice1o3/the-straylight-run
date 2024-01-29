@@ -37,7 +37,7 @@ public class LabelPrinter extends AppCompatTextView {
         super(context, attrs);
     }
 
-    private int modeSelected = BOTH;
+    private int modeSelected = STANDARD;
     private static final int STANDARD = 0;
     private static final int CUSTOMIZED = 1;
     private static final int BOTH = 2;

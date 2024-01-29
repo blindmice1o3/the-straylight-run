@@ -20,7 +20,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragmen
 public class SequenceTrainerActivity extends AppCompatActivity {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
 
-    private String settingSelected = "both";
+    private String settingSelected = "standard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
