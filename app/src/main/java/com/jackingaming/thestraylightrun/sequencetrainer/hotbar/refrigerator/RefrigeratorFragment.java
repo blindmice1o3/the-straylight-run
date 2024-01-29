@@ -17,11 +17,14 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.ent
 public class RefrigeratorFragment extends Fragment {
     public static final String TAG = RefrigeratorFragment.class.getSimpleName();
 
+    public static final String TAG_MILK_TWO_PERCENT = "twoPercent";
+    public static final String TAG_MILK_WHOLE = "whole";
     public static final String TAG_MILK_COCONUT = "coconut";
     public static final String TAG_MILK_ALMOND = "almond";
     public static final String TAG_MILK_SOY = "soy";
 
     private ConstraintLayout clRefrigerator;
+    private Milk milkTwoPercent, milkWhole;
     private Milk milkCoconut, milkAlmond, milkSoy;
 
     public static RefrigeratorFragment newInstance() {
@@ -43,10 +46,14 @@ public class RefrigeratorFragment extends Fragment {
 
         clRefrigerator = view.findViewById(R.id.constraintlayout_refrigerator);
 
+        milkTwoPercent = view.findViewById(R.id.milk_two_percent);
+        milkWhole = view.findViewById(R.id.milk_whole);
         milkCoconut = view.findViewById(R.id.milk_coconut);
         milkAlmond = view.findViewById(R.id.milk_almond);
         milkSoy = view.findViewById(R.id.milk_soy);
 
+        milkTwoPercent.setTag(TAG_MILK_TWO_PERCENT);
+        milkWhole.setTag(TAG_MILK_WHOLE);
         milkCoconut.setTag(TAG_MILK_COCONUT);
         milkAlmond.setTag(TAG_MILK_ALMOND);
         milkSoy.setTag(TAG_MILK_SOY);

@@ -389,6 +389,22 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.type = type;
     }
 
+    public EspressoShot.AmountOfWater getAmountOfWater() {
+        return amountOfWater;
+    }
+
+    public void setAmountOfWater(EspressoShot.AmountOfWater amountOfWater) {
+        this.amountOfWater = amountOfWater;
+    }
+
+    public EspressoShot.AmountOfBean getAmountOfBean() {
+        return amountOfBean;
+    }
+
+    public void setAmountOfBean(EspressoShot.AmountOfBean amountOfBean) {
+        this.amountOfBean = amountOfBean;
+    }
+
     public int getNumberOfShots() {
         return numberOfShots;
     }

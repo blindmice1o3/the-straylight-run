@@ -9,6 +9,23 @@
     tools:context=".sequencetrainer.hotbar.refrigerator.RefrigeratorFragment">
 
     <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+        android:id="@+id/milk_two_percent"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@color/teal_200"
+        app:layout_constraintBottom_toTopOf="@id/milk_whole"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+        android:id="@+id/milk_whole"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/milk_two_percent" />
+
+    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
         android:id="@+id/milk_coconut"
         android:layout_width="64dp"
         android:layout_height="128dp"
