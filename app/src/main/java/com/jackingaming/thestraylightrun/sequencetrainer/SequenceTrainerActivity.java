@@ -20,7 +20,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragmen
 public class SequenceTrainerActivity extends AppCompatActivity {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
 
-    private String settingSelected = "standard";
+    private String modeSelected = "standard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +37,16 @@ public class SequenceTrainerActivity extends AppCompatActivity {
         ft.commit();
 
         // Set the listener on the fragmentManager.
-        getSupportFragmentManager().setFragmentResultListener(DifficultySettingsDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
+        getSupportFragmentManager().setFragmentResultListener(LabelPrinterModeDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
 
-                settingSelected = result.getString(DifficultySettingsDialogFragment.BUNDLE_KEY_SETTING_SELECTED);
-                Log.e(TAG, "settingSelected: " + settingSelected);
+                modeSelected = result.getString(LabelPrinterModeDialogFragment.BUNDLE_KEY_MODE_SELECTED);
+                Log.e(TAG, "modeSelected: " + modeSelected);
 
                 MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
-                mastrenaFragment.changeDifficultySetting(settingSelected);
+                mastrenaFragment.changeLabelPrinterMode(modeSelected);
             }
         });
     }
@@ -60,9 +60,9 @@ public class SequenceTrainerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.options_item_difficulty_settings:
-                DifficultySettingsDialogFragment difficultySettingsDialogFragment = DifficultySettingsDialogFragment.newInstance(settingSelected);
-                difficultySettingsDialogFragment.show(getSupportFragmentManager(), DifficultySettingsDialogFragment.TAG);
+            case R.id.options_item_label_printer_mode:
+                LabelPrinterModeDialogFragment labelPrinterModeDialogFragment = LabelPrinterModeDialogFragment.newInstance(modeSelected);
+                labelPrinterModeDialogFragment.show(getSupportFragmentManager(), LabelPrinterModeDialogFragment.TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

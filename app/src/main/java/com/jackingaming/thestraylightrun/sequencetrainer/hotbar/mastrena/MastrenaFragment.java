@@ -98,20 +98,20 @@ public class MastrenaFragment extends Fragment {
         return new MastrenaFragment();
     }
 
-    public void changeDifficultySetting(String difficultySetting) {
-        Log.e(TAG, "changeDifficultySetting(String) difficultySetting: " + difficultySetting);
+    public void changeLabelPrinterMode(String modeSelected) {
+        Log.e(TAG, "changeLabelPrinterMode(String) modeSelected: " + modeSelected);
 
-        if (difficultySetting.equals("standard")) {
+        if (modeSelected.equals("standard")) {
             labelPrinter.selectModeStandard();
 //            delayAddNewDrink = DELAY_ADD_NEW_DRINK_EASY;
 //            valueBracketYellow = VALUE_BRACKET_YELLOW_EASY;
 //            valueBracketRed = VALUE_BRACKET_RED_EASY;
-        } else if (difficultySetting.equals("customized")) {
+        } else if (modeSelected.equals("customized")) {
             labelPrinter.selectModeCustomized();
 //            delayAddNewDrink = DELAY_ADD_NEW_DRINK_MEDIUM;
 //            valueBracketYellow = VALUE_BRACKET_YELLOW_MEDIUM;
 //            valueBracketRed = VALUE_BRACKET_RED_MEDIUM;
-        } else if (difficultySetting.equals("both")) {
+        } else if (modeSelected.equals("both")) {
             labelPrinter.selectModeBoth();
 //            delayAddNewDrink = DELAY_ADD_NEW_DRINK_HARD;
 //            valueBracketYellow = VALUE_BRACKET_YELLOW_HARD;

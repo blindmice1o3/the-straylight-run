@@ -15,23 +15,23 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class DifficultySettingsDialogFragment extends DialogFragment {
-    public static final String TAG = DifficultySettingsDialogFragment.class.getSimpleName();
-    public static final String REQUEST_KEY = "difficultySettings";
-    public static final String BUNDLE_KEY_SETTING_SELECTED = "settingSelected";
-    private static final String DIFFICULTY_SETTING_PASSED_IN = "difficultySettingPassedIn";
+public class LabelPrinterModeDialogFragment extends DialogFragment {
+    public static final String TAG = LabelPrinterModeDialogFragment.class.getSimpleName();
+    public static final String REQUEST_KEY = "labelPrinterMode";
+    public static final String BUNDLE_KEY_MODE_SELECTED = "modeSelected";
+    private static final String MODE_PASSED_IN = "modePassedIn";
 
     private RadioGroup radioGroup;
     private RadioButton radioButtonStandard, radioButtonCustomized, radioButtonBoth;
-    private String difficultySettingPassedIn;
+    private String modePassedIn;
 
-    public static DifficultySettingsDialogFragment newInstance(String difficultySettingPassedIn) {
+    public static LabelPrinterModeDialogFragment newInstance(String modePassedIn) {
         Log.e(TAG, "newInstance(String)");
 
-        DifficultySettingsDialogFragment fragment = new DifficultySettingsDialogFragment();
+        LabelPrinterModeDialogFragment fragment = new LabelPrinterModeDialogFragment();
 
         Bundle args = new Bundle();
-        args.putString(DIFFICULTY_SETTING_PASSED_IN, difficultySettingPassedIn);
+        args.putString(MODE_PASSED_IN, modePassedIn);
         fragment.setArguments(args);
 
         return fragment;
@@ -42,7 +42,7 @@ public class DifficultySettingsDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.e(TAG, "onCreateView()");
-        return inflater.inflate(R.layout.dialogfragment_difficulty_settings, container, false);
+        return inflater.inflate(R.layout.dialogfragment_label_printer_mode, container, false);
     }
 
     @Override
@@ -50,18 +50,18 @@ public class DifficultySettingsDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        radioGroup = view.findViewById(R.id.radiogroup_difficulty_settings);
+        radioGroup = view.findViewById(R.id.radiogroup_label_printer_mode);
         radioButtonStandard = view.findViewById(R.id.radiobutton_standard);
         radioButtonCustomized = view.findViewById(R.id.radiobutton_customized);
         radioButtonBoth = view.findViewById(R.id.radiobutton_both);
 
-        difficultySettingPassedIn = getArguments().getString(DIFFICULTY_SETTING_PASSED_IN);
+        modePassedIn = getArguments().getString(MODE_PASSED_IN);
 
-        if (difficultySettingPassedIn.equals(radioButtonStandard.getText().toString())) {
+        if (modePassedIn.equals(radioButtonStandard.getText().toString())) {
             radioButtonStandard.setChecked(true);
-        } else if (difficultySettingPassedIn.equals(radioButtonCustomized.getText().toString())) {
+        } else if (modePassedIn.equals(radioButtonCustomized.getText().toString())) {
             radioButtonCustomized.setChecked(true);
-        } else if (difficultySettingPassedIn.equals(radioButtonBoth.getText().toString())) {
+        } else if (modePassedIn.equals(radioButtonBoth.getText().toString())) {
             radioButtonBoth.setChecked(true);
         }
     }
@@ -84,10 +84,10 @@ public class DifficultySettingsDialogFragment extends DialogFragment {
         Log.e(TAG, "sendBackResult()");
 
         RadioButton radioButtonSelected = (RadioButton) getView().findViewById(radioGroup.getCheckedRadioButtonId());
-        String settingSelected = radioButtonSelected.getText().toString();
+        String modeSelected = radioButtonSelected.getText().toString();
 
         Bundle result = new Bundle();
-        result.putString(BUNDLE_KEY_SETTING_SELECTED, settingSelected);
+        result.putString(BUNDLE_KEY_MODE_SELECTED, modeSelected);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
     }
 }
