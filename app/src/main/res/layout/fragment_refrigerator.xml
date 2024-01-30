@@ -26,6 +26,15 @@
         app:layout_constraintTop_toBottomOf="@id/milk_two_percent" />
 
     <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+        android:id="@+id/milk_oat"
+        android:layout_width="64dp"
+        android:layout_height="96dp"
+        android:background="@color/blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/milk_coconut"
+        app:layout_constraintStart_toEndOf="@id/milk_whole" />
+
+    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
         android:id="@+id/milk_coconut"
         android:layout_width="64dp"
         android:layout_height="128dp"
