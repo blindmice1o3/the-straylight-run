@@ -58,4 +58,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <View
+        android:id="@+id/view_whipped_cream"
+        android:layout_width="48dp"
+        android:layout_height="88dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@id/milk_two_percent"
+        app:layout_constraintEnd_toEndOf="@id/milk_almond"
+        app:layout_constraintStart_toStartOf="@id/milk_almond" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

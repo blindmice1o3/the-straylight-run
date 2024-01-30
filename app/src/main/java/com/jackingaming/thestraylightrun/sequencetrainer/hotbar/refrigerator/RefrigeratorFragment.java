@@ -23,10 +23,12 @@ public class RefrigeratorFragment extends Fragment {
     public static final String TAG_MILK_COCONUT = "coconut";
     public static final String TAG_MILK_ALMOND = "almond";
     public static final String TAG_MILK_SOY = "soy";
+    public static final String TAG_VIEW_WHIPPED_CREAM = "viewWhippedCream";
 
     private ConstraintLayout clRefrigerator;
     private Milk milkTwoPercent, milkWhole;
     private Milk milkOat, milkCoconut, milkAlmond, milkSoy;
+    private View viewWhippedCream;
 
     public static RefrigeratorFragment newInstance() {
         Log.e(TAG, "newInstance()");
@@ -53,6 +55,7 @@ public class RefrigeratorFragment extends Fragment {
         milkCoconut = view.findViewById(R.id.milk_coconut);
         milkAlmond = view.findViewById(R.id.milk_almond);
         milkSoy = view.findViewById(R.id.milk_soy);
+        viewWhippedCream = view.findViewById(R.id.view_whipped_cream);
 
         milkTwoPercent.setTag(TAG_MILK_TWO_PERCENT);
         milkWhole.setTag(TAG_MILK_WHOLE);
@@ -60,5 +63,6 @@ public class RefrigeratorFragment extends Fragment {
         milkCoconut.setTag(TAG_MILK_COCONUT);
         milkAlmond.setTag(TAG_MILK_ALMOND);
         milkSoy.setTag(TAG_MILK_SOY);
+        viewWhippedCream.setTag(TAG_VIEW_WHIPPED_CREAM);
     }
 }
