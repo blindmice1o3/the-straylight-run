@@ -10,7 +10,7 @@
         android:id="@+id/fcv_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/fcv_bottom"
+        app:layout_constraintBottom_toTopOf="@id/fcv_bottom_left"
         app:layout_constraintEnd_toStartOf="@id/fcv_right_top"
         app:layout_constraintHorizontal_weight="4"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,12 +51,24 @@
         app:layout_constraintVertical_weight="1" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_bottom"
+        android:id="@+id/fcv_bottom_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/fcv_bottom_right"
+        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fcv_main"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_bottom_right"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/fcv_right_top"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/fcv_bottom_left"
         app:layout_constraintTop_toBottomOf="@id/fcv_main"
         app:layout_constraintVertical_weight="1" />
 

@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.LabelPrinterFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.MastrenaFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
@@ -33,7 +34,8 @@ public class SequenceTrainerActivity extends AppCompatActivity {
         ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance());
         ft.add(R.id.fcv_right_middle, CupCaddyFragment.newInstance());
         ft.add(R.id.fcv_right_bottom, SinkFragment.newInstance("", ""));
-        ft.add(R.id.fcv_bottom, RefrigeratorFragment.newInstance());
+        ft.add(R.id.fcv_bottom_left, RefrigeratorFragment.newInstance());
+        ft.add(R.id.fcv_bottom_right, IceBinFragment.newInstance("", ""));
         ft.commit();
 
         // Set the listener on the fragmentManager.

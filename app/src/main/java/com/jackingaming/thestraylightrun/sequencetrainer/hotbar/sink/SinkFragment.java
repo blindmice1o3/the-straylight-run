@@ -36,7 +36,7 @@ public class SinkFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private FrameLayout frameLayoutSink;
+    private FrameLayout framelayoutSink;
 
     public SinkFragment() {
         // Required empty public constructor
@@ -84,8 +84,8 @@ public class SinkFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        frameLayoutSink = view.findViewById(R.id.framelayout_sink);
-        frameLayoutSink.setOnDragListener(new SinkDragListener());
+        framelayoutSink = view.findViewById(R.id.framelayout_sink);
+        framelayoutSink.setOnDragListener(new SinkDragListener());
     }
 
     private class SinkDragListener
