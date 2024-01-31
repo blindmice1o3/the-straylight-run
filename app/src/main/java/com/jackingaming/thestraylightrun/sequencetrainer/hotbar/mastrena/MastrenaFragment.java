@@ -34,6 +34,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogf
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
@@ -62,6 +63,7 @@ public class MastrenaFragment extends Fragment {
     private int valueBracketYellow;
     private int valueBracketRed;
 
+    public static final String TAG_ICE_SHAKER = "IceShaker";
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
     public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
@@ -79,6 +81,7 @@ public class MastrenaFragment extends Fragment {
     private TextView tvClock;
     private FrameLayout framelayoutEspressoStream, framelayoutSyrupCaddy, framelayoutSteamingWand;
     private FrameLayout framelayoutLeft, framelayoutCenter, framelayoutRight;
+    private IceShaker iceShaker;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
     private ImageView espressoShotControl;
@@ -354,6 +357,15 @@ public class MastrenaFragment extends Fragment {
         framelayoutLeft.setOnDragListener(mastrenaDragListener);
         framelayoutCenter.setOnDragListener(mastrenaDragListener);
         framelayoutRight.setOnDragListener(mastrenaDragListener);
+
+        // ICE SHAKER
+        iceShaker = new IceShaker(getContext());
+        iceShaker.setTag(TAG_ICE_SHAKER);
+        iceShaker.setLayoutParams(new FrameLayout.LayoutParams(64, 128));
+        iceShaker.setX(288 - 64 - 30);
+        iceShaker.setY(458 - 96 - 50);
+        iceShaker.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        framelayoutRight.addView(iceShaker);
 
         // STEAMING PITCHER
         steamingPitcher = new SteamingPitcher(getContext());

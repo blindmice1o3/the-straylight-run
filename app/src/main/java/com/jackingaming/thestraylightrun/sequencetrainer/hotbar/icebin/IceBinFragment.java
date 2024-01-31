@@ -1,14 +1,18 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin;
 
+import android.content.ClipData;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
@@ -31,6 +35,7 @@ public class IceBinFragment extends Fragment {
     private String mParam2;
 
     private FrameLayout framelayoutIceBin;
+    private View viewDragShadow;
 
     public IceBinFragment() {
         // Required empty public constructor
@@ -79,5 +84,38 @@ public class IceBinFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         framelayoutIceBin = view.findViewById(R.id.framelayout_ice_bin);
+        framelayoutIceBin.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    String label = "Ice";
+
+                    ClipData dragData = ClipData.newPlainText(label, "ice");
+                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(viewDragShadow);
+
+                    // Start the drag.
+                    view.startDragAndDrop(
+                            dragData,           // The data to be dragged.
+                            myShadow,           // The drag shadow builder.
+                            null,    // No need to use local data.
+                            0              // Flags. Not currently used, set to 0.
+                    );
+
+                    Log.e(TAG, "label: " + label);
+
+                    // Indicate that the on-touch event is handled.
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        viewDragShadow = new View(getContext());
+        viewDragShadow.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
+        viewDragShadow.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        viewDragShadow.setVisibility(View.INVISIBLE);
+        framelayoutIceBin.addView(viewDragShadow);
     }
 }

@@ -40,8 +40,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     private String content;
     private int amount;
 
-    private Paint textPaintPurple;
-    private Paint textPaintRed;
+    private Paint textPaint;
+    private int idPurple, idRed;
 
     private int temperature;
     private ObjectAnimator temperatureAnimator;
@@ -59,17 +59,14 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     private void init() {
-        textPaintPurple = new Paint();
-        textPaintPurple.setAntiAlias(true);
-        textPaintPurple.setStyle(Paint.Style.STROKE);
-        textPaintPurple.setColor(getResources().getColor(R.color.purple_700));
-        textPaintPurple.setTextSize(14);
+        idPurple = getResources().getColor(R.color.purple_700);
+        idRed = getResources().getColor(R.color.red);
 
-        textPaintRed = new Paint();
-        textPaintRed.setAntiAlias(true);
-        textPaintRed.setStyle(Paint.Style.STROKE);
-        textPaintRed.setColor(getResources().getColor(R.color.red));
-        textPaintRed.setTextSize(14);
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+        textPaint.setStyle(Paint.Style.STROKE);
+        textPaint.setColor(idPurple);
+        textPaint.setTextSize(14);
     }
 
     public void startTimeFrothedAnimator() {
@@ -144,15 +141,18 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Paint temperatureMessageColor = (temperature < 160) ? textPaintPurple : textPaintRed;
-        canvas.drawText(Integer.toString(temperature), 5, 15, temperatureMessageColor);
+        int colorTemperature = (temperature < 160) ? idPurple : idRed;
+        textPaint.setColor(colorTemperature);
+        canvas.drawText(Integer.toString(temperature), 5, 15, textPaint);
 
-        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, 15, textPaintRed);
+        textPaint.setColor(idRed);
+        canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, 15, textPaint);
 
+        textPaint.setColor(idPurple);
         String nameOfContent = (content == null) ? "null" : content;
-        canvas.drawText(nameOfContent, 5, 30, textPaintPurple);
+        canvas.drawText(nameOfContent, 5, 30, textPaint);
 
-        canvas.drawText(Integer.toString(amount), 5, 45, textPaintPurple);
+        canvas.drawText(Integer.toString(amount), 5, 45, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
