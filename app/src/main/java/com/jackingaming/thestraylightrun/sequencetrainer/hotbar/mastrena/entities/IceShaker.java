@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entiti
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -73,6 +74,18 @@ public class IceShaker extends AppCompatImageView
         textPaint.setTextSize(14);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        String typeAbbreviated = type.name().substring(0, 1);
+        String amountOfWaterAbbreviated = amountOfWater.name().substring(0, 1);
+        String amountOfBeanAbbreviated = amountOfBean.name().substring(0, 1);
+        String textForShot = String.format("E: %d %s %s %s",
+                numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
+        canvas.drawText(textForShot, 5, 15, textPaint);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -108,8 +121,9 @@ public class IceShaker extends AppCompatImageView
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("Ice")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Ice\")");
+                    if (event.getClipDescription().getLabel().equals("Ice") ||
+                            event.getClipDescription().getLabel().equals("ShotGlass")) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -153,10 +167,19 @@ public class IceShaker extends AppCompatImageView
                     String contentToBeShaken = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeShaken: " + contentToBeShaken);
 
-                    // TODO:
                     iced = true;
                     setBackgroundColor(idBlue);
                     invalidate();
+                } else if (event.getClipDescription().getLabel().equals("ShotGlass")) {
+                    // TODO:
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"ShotGlass\")");
+
+                    ShotGlass shotGlass = (ShotGlass) event.getLocalState();
+
+                    Toast.makeText(getContext(), "transferring content of shot glass", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            shotGlass.transferOut()
+                    );
                 }
 
                 // Return true. DragEvent.getResult() returns true.
