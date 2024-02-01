@@ -498,7 +498,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
         if (content.containsKey("numberOfShots")) {
             // INCREMENT
-            this.numberOfShots += Integer.parseInt(
+            numberOfShots += Integer.parseInt(
                     content.get("numberOfShots")
             );
         }
@@ -506,28 +506,28 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             this.content = content.get("content");
         }
         if (content.containsKey("amount")) {
-            this.amount = Integer.parseInt(
+            amount = Integer.parseInt(
                     content.get("amount")
             );
         }
         if (content.containsKey("temperature")) {
-            this.temperature = Integer.parseInt(
+            temperature = Integer.parseInt(
                     content.get("temperature")
             );
         }
         if (content.containsKey("timeFrothed")) {
-            this.timeFrothed = Integer.parseInt(
+            timeFrothed = Integer.parseInt(
                     content.get("timeFrothed")
             );
         }
         // TODO: syrups
         if (content.containsKey("shotOnTop")) {
-            this.shotOnTop = Boolean.parseBoolean(
+            shotOnTop = Boolean.parseBoolean(
                     content.get("shotOnTop")
             );
         }
         if (content.containsKey("drizzled")) {
-            this.drizzled = Boolean.parseBoolean(
+            drizzled = Boolean.parseBoolean(
                     content.get("drizzled")
             );
         }
@@ -538,6 +538,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
+
         content.put("type", type.name());
         content.put("amountOfWater", amountOfWater.name());
         content.put("amountOfBean", amountOfBean.name());

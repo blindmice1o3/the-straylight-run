@@ -365,44 +365,40 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             this.content = content.get("content");
         }
         if (content.containsKey("amount")) {
-            this.amount = Integer.parseInt(
+            amount = Integer.parseInt(
                     content.get("amount")
             );
         }
         if (content.containsKey("temperature")) {
-            this.temperature = Integer.parseInt(
+            temperature = Integer.parseInt(
                     content.get("temperature")
             );
         }
         if (content.containsKey("timeFrothed")) {
-            this.timeFrothed = Integer.parseInt(
+            timeFrothed = Integer.parseInt(
                     content.get("timeFrothed")
             );
         }
 
-        update(this.content, this.amount);
+        update(this.content, amount);
     }
 
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
-        content.put("content", this.content);
-        content.put("amount", Integer.toString(this.amount));
-        content.put("temperature", Integer.toString(this.temperature));
-        content.put("timeFrothed", Integer.toString(this.timeFrothed));
 
-        this.content = null;
-        this.amount = 0;
-        this.temperature = 0;
-        this.timeFrothed = 0;
-        update(this.content, this.amount);
+        content.put("content", this.content);
+        content.put("amount", Integer.toString(amount));
+        content.put("temperature", Integer.toString(temperature));
+        content.put("timeFrothed", Integer.toString(timeFrothed));
+
+        empty();
 
         return content;
     }
 
     @Override
     public void empty() {
-        Log.e(TAG, "empty()");
         temperature = 0;
         timeFrothed = 0;
         update(null, 0);

@@ -248,7 +248,7 @@ public class ShotGlass extends AppCompatImageView
         }
         if (content.containsKey("numberOfShots")) {
             // INCREMENT
-            this.numberOfShots += Integer.parseInt(
+            numberOfShots += Integer.parseInt(
                     content.get("numberOfShots")
             );
         }
@@ -259,6 +259,7 @@ public class ShotGlass extends AppCompatImageView
     @Override
     public HashMap<String, String> transferOut() {
         HashMap<String, String> content = new HashMap<>();
+
         content.put("type", type.name());
         content.put("amountOfWater", amountOfWater.name());
         content.put("amountOfBean", amountOfBean.name());

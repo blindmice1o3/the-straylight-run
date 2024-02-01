@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 
@@ -107,8 +108,9 @@ public class SinkFragment extends Fragment {
 
                         if (label.equals("SteamingPitcher") ||
                                 label.equals("ShotGlass") ||
-                                label.equals("MastrenaToCaddy")) {
-                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MastrenaToCaddy\")");
+                                label.equals("MastrenaToCaddy") ||
+                                label.equals("IceShaker")) {
+                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"IceShaker\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -166,6 +168,12 @@ public class SinkFragment extends Fragment {
                         CupImageView cupImageView = (CupImageView) dragEvent.getLocalState();
                         Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
                         cupImageView.empty();
+                    } else if (label.equals("IceShaker")) {
+                        Log.d(TAG, "Derive IceShaker from dragData");
+
+                        IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
+                        Toast.makeText(getContext(), "emptying ice shaker", Toast.LENGTH_SHORT).show();
+                        iceShaker.empty();
                     } else {
                         Log.e(TAG, "unknown label.");
                     }

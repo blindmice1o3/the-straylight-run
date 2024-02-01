@@ -687,8 +687,9 @@ public class MastrenaFragment extends Fragment {
                         label = dragEvent.getClipDescription().getLabel().toString();
                         if (label.equals("CaddyToMastrena") ||
                                 label.equals("MastrenaToCaddy") ||
-                                label.equals("ShotGlass")) {
-                            Log.d(TAG, "label.equals(\"CaddyToMastrena\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"ShotGlass\")");
+                                label.equals("ShotGlass") ||
+                                label.equals("IceShaker")) {
+                            Log.d(TAG, "label.equals(\"CaddyToMastrena\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"ShotGlass\") || label.equals(\"IceShaker\")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -807,6 +808,19 @@ public class MastrenaFragment extends Fragment {
 
                         // Add ImageView to FrameLayout.
                         ((FrameLayout) view).addView(shotGlass);
+                    } else if (label.equals("IceShaker")) {
+                        Log.d(TAG, "ACTION_DROP label.equals(\"IceShaker\")");
+                        Log.d(TAG, "ACTION_DROP Derive IceShaker from dragData");
+                        iceShaker = (IceShaker) dragEvent.getLocalState();
+
+                        ViewGroup owner = (ViewGroup) iceShaker.getParent();
+                        owner.removeView(iceShaker);
+
+                        iceShaker.setX(xTouch - (iceShaker.getWidth() / 2));
+                        iceShaker.setY(yTouch - (iceShaker.getHeight() / 2));
+
+                        // Add ImageView to FrameLayout.
+                        ((FrameLayout) view).addView(iceShaker);
                     }
 
                     // Return true. DragEvent.getResult() returns true.
@@ -842,6 +856,10 @@ public class MastrenaFragment extends Fragment {
                     } else if (label.equals("ShotGlass")) {
                         if (shotGlass != null) {
                             shotGlass.setVisibility(View.VISIBLE);
+                        }
+                    } else if (label.equals("IceShaker")) {
+                        if (iceShaker != null) {
+                            iceShaker.setVisibility(View.VISIBLE);
                         }
                     }
 
