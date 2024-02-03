@@ -6,6 +6,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,7 +72,8 @@ public class MastrenaFragment extends Fragment {
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
     public static final String TAG_SHOT_GLASS = "ShotGlass";
     public static final String TAG_SYRUP_BOTTLE_VANILLA = "SyrupBottleVanilla";
-    public static final String TAG_SYRUP_VANILLA = "SyrupVanilla";
+    public static final String TAG_SYRUP_BOTTLE_BROWN_SUGAR = "SyrupBottleBrownSugar";
+    public static final String TAG_SYRUP = "Syrup";
     public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
 
     private MastrenaViewModel mViewModel;
@@ -88,7 +91,7 @@ public class MastrenaFragment extends Fragment {
     private EspressoShot espressoShot;
     private ObjectAnimator animatorEspressoShot;
     private ShotGlass shotGlass;
-    private ImageView syrupBottleVanilla;
+    private ImageView syrupBottleVanilla, syrupBottleBrownSugar;
     private CaramelDrizzleBottle caramelDrizzleBottle;
 
     private CupImageView ivToBeAdded;
@@ -267,6 +270,64 @@ public class MastrenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
+    private void performSyrupPump(Syrup.Type type) {
+        Syrup syrup = new Syrup(getContext());
+        syrup.setTag(TAG_SYRUP);
+        syrup.setLayoutParams(new FrameLayout.LayoutParams(16, 32));
+        syrup.setY(562);
+        syrup.setType(type);
+        if (type == Syrup.Type.VANILLA) {
+            syrup.setX(344);
+            syrup.setBackgroundColor(getResources().getColor(R.color.cream));
+        } else if (type == Syrup.Type.BROWN_SUGAR) {
+            syrup.setX(344 + 64);
+            syrup.setBackgroundColor(getResources().getColor(R.color.brown));
+        }
+        constraintLayoutMastrena.addView(syrup);
+
+        ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
+                syrup,
+                "y",
+                562f,
+                1200f);
+        animatorSyrup.setDuration(2000);
+        animatorSyrup.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "onAnimationEnd()");
+
+                if (syrup != null) {
+                    constraintLayoutMastrena.removeView(syrup);
+                }
+            }
+        });
+        animatorSyrup.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                for (int i = 0; i < framelayoutCenter.getChildCount(); i++) {
+                    if (framelayoutCenter.getChildAt(i) instanceof CupImageView) {
+                        CupImageView ivCup = (CupImageView) framelayoutCenter.getChildAt(i);
+
+                        boolean colliding = isViewOverlapping(syrup, ivCup);
+                        ivCup.update(colliding);
+
+                        if (ivCup.isJustCollided()) {
+                            Log.e(TAG, "ivCup.isJustCollided()");
+
+                            ivCup.onCollided(syrup);
+                            constraintLayoutMastrena.removeView(syrup);
+                            return;
+                        }
+                    } else {
+                        Log.e(TAG, "onAnimationUpdate() else-clause.");
+                    }
+                }
+            }
+        });
+        animatorSyrup.start();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -435,58 +496,43 @@ public class MastrenaFragment extends Fragment {
             public void onClick(View view) {
                 Log.e(TAG, "syrupBottleVanilla.onClick()");
 
-                Syrup syrupVanilla = new Syrup(getContext());
-                syrupVanilla.setTag(TAG_SYRUP_VANILLA);
-                syrupVanilla.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-                syrupVanilla.setX(344);
-                syrupVanilla.setY(458);
-                syrupVanilla.setBackgroundColor(getResources().getColor(R.color.cream));
-                constraintLayoutMastrena.addView(syrupVanilla);
-
-                ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
-                        syrupVanilla,
-                        "y",
-                        458f,
-                        1200f);
-                animatorSyrup.setDuration(2000);
-                animatorSyrup.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        Log.e(TAG, "onAnimationEnd()");
-
-                        if (syrupVanilla != null) {
-                            constraintLayoutMastrena.removeView(syrupVanilla);
-                        }
-                    }
-                });
-                animatorSyrup.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                        for (int i = 0; i < framelayoutCenter.getChildCount(); i++) {
-                            if (framelayoutCenter.getChildAt(i) instanceof CupImageView) {
-                                CupImageView ivCup = (CupImageView) framelayoutCenter.getChildAt(i);
-
-                                boolean colliding = isViewOverlapping(syrupVanilla, ivCup);
-                                ivCup.update(colliding);
-
-                                if (ivCup.isJustCollided()) {
-                                    Log.e(TAG, "ivCup.isJustCollided()");
-
-                                    ivCup.onCollided(syrupVanilla);
-                                    constraintLayoutMastrena.removeView(syrupVanilla);
-                                    return;
-                                }
-                            } else {
-                                Log.e(TAG, "onAnimationUpdate() else-clause.");
-                            }
-                        }
-                    }
-                });
-                animatorSyrup.start();
+                performSyrupPump(Syrup.Type.VANILLA);
             }
         });
         framelayoutSyrupCaddy.addView(syrupBottleVanilla);
+
+        // SYRUP BOTTLE (brown sugar)
+        syrupBottleBrownSugar = new androidx.appcompat.widget.AppCompatImageView(getContext()) {
+            private Paint paintGreen;
+            private int marginHorizontal = 8;
+            private int marginVertical = 24;
+
+            {
+                paintGreen = new Paint();
+                paintGreen.setAntiAlias(true);
+                paintGreen.setColor(getResources().getColor(R.color.green));
+            }
+
+            @Override
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+
+                canvas.drawRect(marginHorizontal, marginVertical, getWidth() - marginHorizontal, getHeight() - marginVertical, paintGreen);
+            }
+        };
+        syrupBottleBrownSugar.setTag(TAG_SYRUP_BOTTLE_BROWN_SUGAR);
+        syrupBottleBrownSugar.setLayoutParams(new FrameLayout.LayoutParams(64, 128));
+        syrupBottleBrownSugar.setX(64 + 64 - (64 / 2));
+        syrupBottleBrownSugar.setBackgroundColor(getResources().getColor(R.color.brown));
+        syrupBottleBrownSugar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "syrupBottleBrownSugar.onClick()");
+
+                performSyrupPump(Syrup.Type.BROWN_SUGAR);
+            }
+        });
+        framelayoutSyrupCaddy.addView(syrupBottleBrownSugar);
 
         // CARAMEL DRIZZLE BOTTLE
         caramelDrizzleBottle = new CaramelDrizzleBottle(getContext());

@@ -10,9 +10,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 public class Syrup extends AppCompatImageView {
     public static final String TAG = Syrup.class.getSimpleName();
 
-    public enum Type {VANILLA;}
+    public enum Type {VANILLA, BROWN_SUGAR;}
 
-    private Type type = Type.VANILLA;
+    private Type type;
     private boolean collided;
 
     public Syrup(@NonNull Context context) {

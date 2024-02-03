@@ -167,6 +167,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
         int ySyrupVanilla = (shotOnTop) ? yLine3 : yLine2;
         canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
+
+        textPaint.setColor(getResources().getColor(R.color.brown));
+        int quantityBrownSugar = (syrups.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrups.get(Syrup.Type.BROWN_SUGAR);
+        int ySyrupBrownSugar = (shotOnTop) ? yLine4 : yLine3;
+        canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
