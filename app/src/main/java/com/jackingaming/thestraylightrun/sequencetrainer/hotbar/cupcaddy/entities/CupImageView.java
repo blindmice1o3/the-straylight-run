@@ -27,6 +27,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,14 +36,15 @@ import java.util.List;
 import java.util.Map;
 
 public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
-        implements LiquidContainable {
+        implements LiquidContainable, Collideable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
     private EspressoShot.Type type;
     private EspressoShot.AmountOfWater amountOfWater;
     private EspressoShot.AmountOfBean amountOfBean;
     private int numberOfShots;
-    private boolean colliding, cantCollide, justCollided;
+
+    private Collider collider;
 
     private String content;
     private int amount;
@@ -71,9 +74,40 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         amountOfBean = EspressoShot.AmountOfBean.STANDARD;
         numberOfShots = 0;
 
-        temperature = 0;
+        collider = new Collider() {
+            @Override
+            public void onCollided(View collider) {
+                Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
+
+                setAlpha(0.5f);
+
+                if (collider instanceof EspressoShot) {
+                    Log.e(TAG, "collider instanceof EspressoShot");
+
+                    EspressoShot espressoShot = (EspressoShot) collider;
+                    type = espressoShot.getType();
+                    amountOfWater = espressoShot.getAmountOfWater();
+                    amountOfBean = espressoShot.getAmountOfBean();
+
+                    numberOfShots++;
+                    invalidate();
+                } else if (collider instanceof Syrup) {
+                    Log.e(TAG, "collider instanceof Syrup");
+
+                    Syrup syrup = (Syrup) collider;
+                    int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
+
+                    int quantityNew = quantityPrevious + 1;
+                    syrups.put(syrup.getType(), quantityNew);
+                    invalidate();
+                }
+            }
+        };
+
         content = null;
         amount = 0;
+        temperature = 0;
+        timeFrothed = 0;
 
         syrups = new HashMap<>();
 
@@ -85,46 +119,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setColor(getResources().getColor(R.color.brown));
         textPaint.setTextSize(14);
-    }
-
-    public void update(boolean colliding) {
-        this.colliding = colliding;
-        if (cantCollide && !this.colliding) {
-            cantCollide = false;
-        } else if (justCollided) {
-            cantCollide = true;
-            justCollided = false;
-        }
-        if (!cantCollide && this.colliding) {
-            justCollided = true;
-        }
-    }
-
-    public void onCollided(View collider) {
-        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
-
-        setAlpha(0.5f);
-
-        if (collider instanceof EspressoShot) {
-            Log.e(TAG, "collider instanceof EspressoShot");
-
-            EspressoShot espressoShot = (EspressoShot) collider;
-            type = espressoShot.getType();
-            amountOfWater = espressoShot.getAmountOfWater();
-            amountOfBean = espressoShot.getAmountOfBean();
-
-            numberOfShots++;
-            invalidate();
-        } else if (collider instanceof Syrup) {
-            Log.e(TAG, "collider instanceof Syrup");
-
-            Syrup syrup = (Syrup) collider;
-            int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
-
-            int quantityNew = quantityPrevious + 1;
-            syrups.put(syrup.getType(), quantityNew);
-            invalidate();
-        }
     }
 
     private int yLine1 = 15;
@@ -418,10 +412,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.numberOfShots = numberOfShots;
     }
 
-    public boolean isJustCollided() {
-        return justCollided;
-    }
-
     public String getContent() {
         return content;
     }
@@ -576,5 +566,20 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         drizzled = false;
 
         invalidate();
+    }
+
+    @Override
+    public void update(boolean colliding) {
+        collider.update(colliding);
+    }
+
+    @Override
+    public boolean isJustCollided() {
+        return collider.isJustCollided();
+    }
+
+    @Override
+    public void onCollided(View collider) {
+        this.collider.onCollided(collider);
     }
 }

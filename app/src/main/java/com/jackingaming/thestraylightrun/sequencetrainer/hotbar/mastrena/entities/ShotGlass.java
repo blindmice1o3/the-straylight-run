@@ -20,18 +20,21 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 
 import java.util.HashMap;
 
 public class ShotGlass extends AppCompatImageView
-        implements LiquidContainable {
+        implements LiquidContainable, Collideable {
     public static final String TAG = ShotGlass.class.getSimpleName();
 
     private EspressoShot.Type type;
     private EspressoShot.AmountOfWater amountOfWater;
     private EspressoShot.AmountOfBean amountOfBean;
     private int numberOfShots;
-    private boolean colliding, cantCollide, justCollided;
+
+    private Collider collider;
 
     private Paint textPaint;
 
@@ -51,42 +54,32 @@ public class ShotGlass extends AppCompatImageView
         amountOfBean = EspressoShot.AmountOfBean.STANDARD;
         numberOfShots = 0;
 
+        collider = new Collider() {
+            @Override
+            public void onCollided(View collider) {
+                Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
+
+                setAlpha(0.5f);
+
+                if (collider instanceof EspressoShot) {
+                    Log.e(TAG, "collider instanceof EspressoShot");
+
+                    EspressoShot espressoShot = (EspressoShot) collider;
+                    type = espressoShot.getType();
+                    amountOfWater = espressoShot.getAmountOfWater();
+                    amountOfBean = espressoShot.getAmountOfBean();
+
+                    numberOfShots++;
+                    invalidate();
+                }
+            }
+        };
+
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setColor(getResources().getColor(R.color.brown));
         textPaint.setTextSize(14);
-    }
-
-    public void update(boolean colliding) {
-        this.colliding = colliding;
-        if (cantCollide && !this.colliding) {
-            cantCollide = false;
-        } else if (justCollided) {
-            cantCollide = true;
-            justCollided = false;
-        }
-        if (!cantCollide && this.colliding) {
-            justCollided = true;
-        }
-    }
-
-    public void onCollided(View collider) {
-        Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
-
-        setAlpha(0.5f);
-
-        if (collider instanceof EspressoShot) {
-            Log.e(TAG, "collider instanceof EspressoShot");
-
-            EspressoShot espressoShot = (EspressoShot) collider;
-            type = espressoShot.getType();
-            amountOfWater = espressoShot.getAmountOfWater();
-            amountOfBean = espressoShot.getAmountOfBean();
-
-            numberOfShots++;
-            invalidate();
-        }
     }
 
     @Override
@@ -219,10 +212,6 @@ public class ShotGlass extends AppCompatImageView
         return false;
     }
 
-    public boolean isJustCollided() {
-        return justCollided;
-    }
-
     @Override
     public void transferIn(HashMap<String, String> content) {
         if (content.containsKey("type")) {
@@ -278,5 +267,20 @@ public class ShotGlass extends AppCompatImageView
         numberOfShots = 0;
 
         invalidate();
+    }
+
+    @Override
+    public void update(boolean colliding) {
+        collider.update(colliding);
+    }
+
+    @Override
+    public boolean isJustCollided() {
+        return collider.isJustCollided();
+    }
+
+    @Override
+    public void onCollided(View collider) {
+        this.collider.onCollided(collider);
     }
 }

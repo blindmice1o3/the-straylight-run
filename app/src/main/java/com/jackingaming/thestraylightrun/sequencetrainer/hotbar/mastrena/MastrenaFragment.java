@@ -42,6 +42,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -225,29 +226,17 @@ public class MastrenaFragment extends Fragment {
                                         break;
                                     }
 
-                                    if (framelayoutLeft.getChildAt(i) instanceof CupImageView) {
-                                        CupImageView ivCup = (CupImageView) framelayoutLeft.getChildAt(i);
+                                    View view = framelayoutLeft.getChildAt(i);
+                                    if (view instanceof Collideable) {
+                                        Collideable collideable = (Collideable) view;
 
-                                        boolean colliding = isViewOverlapping(espressoShot, ivCup);
-                                        ivCup.update(colliding);
+                                        boolean colliding = isViewOverlapping(espressoShot, view);
+                                        collideable.update(colliding);
 
-                                        if (ivCup.isJustCollided()) {
-                                            Log.e(TAG, "ivCup.isJustCollided()");
+                                        if (collideable.isJustCollided()) {
+                                            Log.e(TAG, "collideable.isJustCollided()");
 
-                                            ivCup.onCollided(espressoShot);
-                                            espressoShot.setCollided(true);
-                                            espressoShot.setVisibility(View.INVISIBLE);
-                                        }
-                                    } else if (framelayoutLeft.getChildAt(i) instanceof ShotGlass) {
-                                        ShotGlass myShotGlass = (ShotGlass) framelayoutLeft.getChildAt(i);
-
-                                        boolean colliding = isViewOverlapping(espressoShot, myShotGlass);
-                                        myShotGlass.update(colliding);
-
-                                        if (myShotGlass.isJustCollided()) {
-                                            Log.e(TAG, "myShotGlass.isJustCollided()");
-
-                                            myShotGlass.onCollided(espressoShot);
+                                            collideable.onCollided(espressoShot);
                                             espressoShot.setCollided(true);
                                             espressoShot.setVisibility(View.INVISIBLE);
                                         }
@@ -306,18 +295,24 @@ public class MastrenaFragment extends Fragment {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 for (int i = 0; i < framelayoutCenter.getChildCount(); i++) {
-                    if (framelayoutCenter.getChildAt(i) instanceof CupImageView) {
-                        CupImageView ivCup = (CupImageView) framelayoutCenter.getChildAt(i);
+                    if (syrup.isCollided()) {
+                        break;
+                    }
 
-                        boolean colliding = isViewOverlapping(syrup, ivCup);
-                        ivCup.update(colliding);
+                    View view = framelayoutCenter.getChildAt(i);
+                    if (view instanceof Collideable &&
+                            view instanceof CupImageView) {
+                        Collideable collideable = (Collideable) view;
 
-                        if (ivCup.isJustCollided()) {
-                            Log.e(TAG, "ivCup.isJustCollided()");
+                        boolean colliding = isViewOverlapping(syrup, view);
+                        collideable.update(colliding);
 
-                            ivCup.onCollided(syrup);
+                        if (collideable.isJustCollided()) {
+                            Log.e(TAG, "collideable.isJustCollided()");
+
+                            collideable.onCollided(syrup);
+                            syrup.setCollided(true);
                             constraintLayoutMastrena.removeView(syrup);
-                            return;
                         }
                     } else {
                         Log.e(TAG, "onAnimationUpdate() else-clause.");
