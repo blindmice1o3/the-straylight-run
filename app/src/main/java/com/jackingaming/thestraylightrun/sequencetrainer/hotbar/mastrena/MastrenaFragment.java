@@ -300,19 +300,21 @@ public class MastrenaFragment extends Fragment {
                     }
 
                     View view = framelayoutCenter.getChildAt(i);
-                    if (view instanceof Collideable &&
-                            view instanceof CupImageView) {
-                        Collideable collideable = (Collideable) view;
+                    if (view instanceof Collideable) {
+                        if (view instanceof CupImageView ||
+                                view instanceof IceShaker) {
+                            Collideable collideable = (Collideable) view;
 
-                        boolean colliding = isViewOverlapping(syrup, view);
-                        collideable.update(colliding);
+                            boolean colliding = isViewOverlapping(syrup, view);
+                            collideable.update(colliding);
 
-                        if (collideable.isJustCollided()) {
-                            Log.e(TAG, "collideable.isJustCollided()");
+                            if (collideable.isJustCollided()) {
+                                Log.e(TAG, "collideable.isJustCollided()");
 
-                            collideable.onCollided(syrup);
-                            syrup.setCollided(true);
-                            constraintLayoutMastrena.removeView(syrup);
+                                collideable.onCollided(syrup);
+                                syrup.setCollided(true);
+                                constraintLayoutMastrena.removeView(syrup);
+                            }
                         }
                     } else {
                         Log.e(TAG, "onAnimationUpdate() else-clause.");

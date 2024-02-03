@@ -44,8 +44,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private EspressoShot.AmountOfBean amountOfBean;
     private int numberOfShots;
 
-    private Collider collider;
-
     private String content;
     private int amount;
     private int temperature;
@@ -55,6 +53,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     private boolean shotOnTop;
     private boolean drizzled;
+
+    private Collider collider;
 
     private Paint textPaint;
 
@@ -73,6 +73,16 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         amountOfWater = EspressoShot.AmountOfWater.STANDARD;
         amountOfBean = EspressoShot.AmountOfBean.STANDARD;
         numberOfShots = 0;
+
+        content = null;
+        amount = 0;
+        temperature = 0;
+        timeFrothed = 0;
+
+        syrups = new HashMap<>();
+
+        shotOnTop = false;
+        drizzled = false;
 
         collider = new Collider() {
             @Override
@@ -103,16 +113,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 }
             }
         };
-
-        content = null;
-        amount = 0;
-        temperature = 0;
-        timeFrothed = 0;
-
-        syrups = new HashMap<>();
-
-        shotOnTop = false;
-        drizzled = false;
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);

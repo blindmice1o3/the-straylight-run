@@ -19,12 +19,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class IceShaker extends AppCompatImageView
-        implements LiquidContainable {
+        implements LiquidContainable, Collideable {
     public static final String TAG = IceShaker.class.getSimpleName();
 
     private boolean iced;
@@ -36,6 +38,8 @@ public class IceShaker extends AppCompatImageView
     private int numberOfShots;
 
     private Map<Syrup.Type, Integer> syrups;
+
+    private Collider collider;
 
     private Paint textPaint;
     private int idRed;
@@ -63,6 +67,26 @@ public class IceShaker extends AppCompatImageView
 
         syrups = new HashMap<>();
 
+        collider = new Collider() {
+            @Override
+            public void onCollided(View collider) {
+                Toast.makeText(getContext(), "onCollided(View)", Toast.LENGTH_SHORT).show();
+
+                setAlpha(0.5f);
+
+                if (collider instanceof Syrup) {
+                    Log.e(TAG, "collider instanceof Syrup");
+
+                    Syrup syrup = (Syrup) collider;
+                    int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
+
+                    int quantityNew = quantityPrevious + 1;
+                    syrups.put(syrup.getType(), quantityNew);
+                    invalidate();
+                }
+            }
+        };
+
         idRed = getResources().getColor(R.color.red);
         idLightBlueA200 = getResources().getColor(R.color.light_blue_A200);
         idBlue = getResources().getColor(R.color.blue);
@@ -74,6 +98,11 @@ public class IceShaker extends AppCompatImageView
         textPaint.setTextSize(14);
     }
 
+    private int yLine1 = 15;
+    private int yLine2 = 30;
+    private int yLine3 = 45;
+    private int yLine4 = 60;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -84,6 +113,16 @@ public class IceShaker extends AppCompatImageView
         String textForShot = String.format("E: %d %s %s %s",
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, 15, textPaint);
+
+        textPaint.setColor(getResources().getColor(R.color.amber));
+        int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
+        int ySyrupVanilla = yLine2;
+        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
+
+        textPaint.setColor(getResources().getColor(R.color.brown));
+        int quantityBrownSugar = (syrups.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrups.get(Syrup.Type.BROWN_SUGAR);
+        int ySyrupBrownSugar = yLine3;
+        canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -286,5 +325,20 @@ public class IceShaker extends AppCompatImageView
         syrups.clear();
 
         invalidate();
+    }
+
+    @Override
+    public void update(boolean colliding) {
+        collider.update(colliding);
+    }
+
+    @Override
+    public boolean isJustCollided() {
+        return collider.isJustCollided();
+    }
+
+    @Override
+    public void onCollided(View collider) {
+        this.collider.onCollided(collider);
     }
 }
