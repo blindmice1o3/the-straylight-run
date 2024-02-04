@@ -34,6 +34,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
@@ -76,6 +77,7 @@ public class MastrenaFragment extends Fragment {
     public static final String TAG_SYRUP_BOTTLE_BROWN_SUGAR = "SyrupBottleBrownSugar";
     public static final String TAG_SYRUP = "Syrup";
     public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
+    public static final String TAG_CINNAMON_DISPENSER = "CinnamonDispenser";
 
     private MastrenaViewModel mViewModel;
     private ConstraintLayout constraintLayoutMastrena;
@@ -94,6 +96,7 @@ public class MastrenaFragment extends Fragment {
     private ShotGlass shotGlass;
     private ImageView syrupBottleVanilla, syrupBottleBrownSugar;
     private CaramelDrizzleBottle caramelDrizzleBottle;
+    private CinnamonDispenser cinnamonDispenser;
 
     private CupImageView ivToBeAdded;
     private float xTouch, yTouch;
@@ -539,6 +542,15 @@ public class MastrenaFragment extends Fragment {
         caramelDrizzleBottle.setY(452 - (96 + 16));
         caramelDrizzleBottle.setBackgroundColor(getResources().getColor(R.color.yellow));
         framelayoutSyrupCaddy.addView(caramelDrizzleBottle);
+
+        // CINNAMON DISPENSER
+        cinnamonDispenser = new CinnamonDispenser(getContext());
+        cinnamonDispenser.setTag(TAG_CINNAMON_DISPENSER);
+        cinnamonDispenser.setLayoutParams(new FrameLayout.LayoutParams(48, 48));
+        cinnamonDispenser.setX(384 - (48 + 16));
+        cinnamonDispenser.setY(452 - (48 + 16 + 96 + 16));
+        cinnamonDispenser.setBackgroundColor(getResources().getColor(R.color.red));
+        framelayoutSyrupCaddy.addView(cinnamonDispenser);
     }
 
     private boolean isViewOverlapping(View firstView, View secondView) {

@@ -123,6 +123,11 @@ public class IceShaker extends AppCompatImageView
         int quantityBrownSugar = (syrups.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrups.get(Syrup.Type.BROWN_SUGAR);
         int ySyrupBrownSugar = yLine3;
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
+
+        String textForCinnamoned = (cinnamoned) ? "cinn" : "no-cinn";
+        int colorForCinnamoned = (cinnamoned) ? R.color.red : R.color.black;
+        textPaint.setColor(getResources().getColor(colorForCinnamoned));
+        canvas.drawText(textForCinnamoned, 5, ySyrupBrownSugar, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -161,8 +166,9 @@ public class IceShaker extends AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     if (event.getClipDescription().getLabel().equals("Ice") ||
-                            event.getClipDescription().getLabel().equals("ShotGlass")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\")");
+                            event.getClipDescription().getLabel().equals("ShotGlass") ||
+                            event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\") || event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -219,6 +225,11 @@ public class IceShaker extends AppCompatImageView
                     transferIn(
                             shotGlass.transferOut()
                     );
+                } else if (event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
+
+                    cinnamoned = true;
+                    invalidate();
                 }
 
                 // Return true. DragEvent.getResult() returns true.
