@@ -724,6 +724,11 @@ public class MastrenaFragment extends Fragment {
         }
     }
 
+    private static final int SHAKE_DETECTION_THRESHOLD = 3;
+    private float yTouchInit = 0;
+    private boolean shakeUpward = false;
+    private int shakeCounter = 0;
+
     private String label;
 
     private class MastrenaDragListener
@@ -745,6 +750,11 @@ public class MastrenaFragment extends Fragment {
                                 label.equals("ShotGlass") ||
                                 label.equals("IceShaker")) {
                             Log.d(TAG, "label.equals(\"CaddyToMastrena\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"ShotGlass\") || label.equals(\"IceShaker\")");
+
+                            if (label.equals("IceShaker")) {
+                                yTouchInit = dragEvent.getY();
+                                Log.e(TAG, "yTouchInit: " + yTouchInit);
+                            }
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -774,7 +784,25 @@ public class MastrenaFragment extends Fragment {
                     // Return true. The value is ignored.
                     return true;
                 case DragEvent.ACTION_DRAG_LOCATION:
-                    // Ignore the event.
+//                    Log.d(TAG, "ACTION_DRAG_LOCATION");
+
+                    if (label.equals("IceShaker")) {
+                        if (shakeUpward && yTouchInit - dragEvent.getY() > SHAKE_DETECTION_THRESHOLD) {
+                            shakeUpward = false;
+                        } else if (!shakeUpward && yTouchInit - dragEvent.getY() < -SHAKE_DETECTION_THRESHOLD) {
+                            shakeUpward = true;
+
+                            ///////////////
+                            shakeCounter++;
+                            ///////////////
+                        }
+                    }
+
+                    if (shakeCounter == 5) {
+                        Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
+                        iceShaker.setBackgroundColor(getResources().getColor(R.color.purple_700));
+                    }
+
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
                     Log.d(TAG, "ACTION_DRAG_EXITED");
@@ -913,6 +941,9 @@ public class MastrenaFragment extends Fragment {
                             shotGlass.setVisibility(View.VISIBLE);
                         }
                     } else if (label.equals("IceShaker")) {
+                        shakeUpward = false;
+                        shakeCounter = 0;
+
                         if (iceShaker != null) {
                             iceShaker.setVisibility(View.VISIBLE);
                         }

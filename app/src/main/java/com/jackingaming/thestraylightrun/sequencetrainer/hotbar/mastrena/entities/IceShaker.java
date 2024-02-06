@@ -17,10 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.view.GestureDetectorCompat;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +42,8 @@ public class IceShaker extends AppCompatImageView
     private Map<Syrup.Type, Integer> syrups;
 
     private Collider collider;
+
+    private GestureDetectorCompat gestureDetector;
 
     private Paint textPaint;
     private int idRed;
@@ -87,6 +91,15 @@ public class IceShaker extends AppCompatImageView
             }
         };
 
+        gestureDetector = new GestureDetectorCompat(getContext(), new OnSwipeListener() {
+            @Override
+            public boolean onSwipe(Direction direction) {
+                Log.e(TAG, "!!!!!!onSwipe direction: " + direction.toString());
+
+                return true;
+            }
+        });
+
         idRed = getResources().getColor(R.color.red);
         idLightBlueA200 = getResources().getColor(R.color.light_blue_A200);
         idBlue = getResources().getColor(R.color.blue);
@@ -129,6 +142,16 @@ public class IceShaker extends AppCompatImageView
         textPaint.setColor(getResources().getColor(colorForCinnamoned));
         canvas.drawText(textForCinnamoned, 5, ySyrupBrownSugar, textPaint);
     }
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        Log.e(TAG, "onTouchEvent()");
+//
+//        if (gestureDetector.onTouchEvent(event)) {
+//            return true;
+//        }
+//        return super.onTouchEvent(event);
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
