@@ -10,13 +10,13 @@ public abstract class OnSwipeListener extends GestureDetector.SimpleOnGestureLis
 
     @Override
     public boolean onDown(MotionEvent event) {
-        Log.e(TAG, "onDown(): " + event.toString());
+        Log.e(TAG, "onDown()");
         return true;
     }
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.e(TAG, "onFling(): " + e1.toString() + e2.toString());
+        Log.e(TAG, "onFling()");
 
         // Grab two events located on the plane at e1=(x1, y1) and e2=(x2, y2)
         // Let e1 be the initial event
@@ -129,42 +129,42 @@ public abstract class OnSwipeListener extends GestureDetector.SimpleOnGestureLis
 
     @Override
     public void onLongPress(MotionEvent event) {
-        Log.d(TAG, "onLongPress(): " + event.toString());
+        Log.e(TAG, "onLongPress()");
     }
 
     @Override
     public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX,
                             float distanceY) {
-        Log.d(TAG, "onScroll(): " + event1.toString() + event2.toString());
+        Log.e(TAG, "onScroll()");
         return true;
     }
 
     @Override
     public void onShowPress(MotionEvent event) {
-        Log.d(TAG, "onShowPress(): " + event.toString());
+        Log.e(TAG, "onShowPress()");
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent event) {
-        Log.d(TAG, "onSingleTapUp(): " + event.toString());
+        Log.e(TAG, "onSingleTapUp()");
         return true;
     }
 
     @Override
     public boolean onDoubleTap(MotionEvent event) {
-        Log.d(TAG, "onDoubleTap(): " + event.toString());
+        Log.e(TAG, "onDoubleTap()");
         return true;
     }
 
     @Override
     public boolean onDoubleTapEvent(MotionEvent event) {
-        Log.d(TAG, "onDoubleTapEvent(): " + event.toString());
+        Log.e(TAG, "onDoubleTapEvent()");
         return true;
     }
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
-        Log.d(TAG, "onSingleTapConfirmed(): " + event.toString());
+        Log.e(TAG, "onSingleTapConfirmed()");
         return true;
     }
 }

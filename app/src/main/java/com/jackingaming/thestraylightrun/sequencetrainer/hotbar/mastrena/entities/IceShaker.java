@@ -280,6 +280,13 @@ public class IceShaker extends AppCompatImageView
         return false;
     }
 
+    public void shake() {
+        // TODO:
+        if (!syrups.isEmpty() && (numberOfShots > 0) && cinnamoned && iced) {
+            setBackgroundColor(getResources().getColor(R.color.purple_700));
+        }
+    }
+
     @Override
     public void transferIn(HashMap<String, String> content) {
         if (content.containsKey("iced")) {

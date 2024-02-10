@@ -231,6 +231,10 @@ public class MastrenaFragment extends Fragment {
 
                                     View view = framelayoutLeft.getChildAt(i);
                                     if (view instanceof Collideable) {
+                                        if (view instanceof IceShaker) {
+                                            continue;
+                                        }
+
                                         Collideable collideable = (Collideable) view;
 
                                         boolean colliding = isViewOverlapping(espressoShot, view);
@@ -304,20 +308,22 @@ public class MastrenaFragment extends Fragment {
 
                     View view = framelayoutCenter.getChildAt(i);
                     if (view instanceof Collideable) {
-                        if (view instanceof CupImageView ||
-                                view instanceof IceShaker) {
-                            Collideable collideable = (Collideable) view;
+                        if (!(view instanceof CupImageView) &&
+                                !(view instanceof IceShaker)) {
+                            continue;
+                        }
 
-                            boolean colliding = isViewOverlapping(syrup, view);
-                            collideable.update(colliding);
+                        Collideable collideable = (Collideable) view;
 
-                            if (collideable.isJustCollided()) {
-                                Log.e(TAG, "collideable.isJustCollided()");
+                        boolean colliding = isViewOverlapping(syrup, view);
+                        collideable.update(colliding);
 
-                                collideable.onCollided(syrup);
-                                syrup.setCollided(true);
-                                constraintLayoutMastrena.removeView(syrup);
-                            }
+                        if (collideable.isJustCollided()) {
+                            Log.e(TAG, "collideable.isJustCollided()");
+
+                            collideable.onCollided(syrup);
+                            syrup.setCollided(true);
+                            constraintLayoutMastrena.removeView(syrup);
                         }
                     } else {
                         Log.e(TAG, "onAnimationUpdate() else-clause.");
@@ -800,7 +806,7 @@ public class MastrenaFragment extends Fragment {
 
                     if (shakeCounter == 5) {
                         Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
-                        iceShaker.setBackgroundColor(getResources().getColor(R.color.purple_700));
+                        iceShaker.shake();
                     }
 
                     return true;
