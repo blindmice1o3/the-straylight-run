@@ -151,10 +151,6 @@ public class MastrenaFragment extends Fragment {
                 });
         getChildFragmentManager()
                 .setFragmentResultListener(EspressoShotControlDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
-                    private static final int REPEAT_COUNT_SINGLE = 0;
-                    private static final int REPEAT_COUNT_DOUBLE = 1;
-                    private static final int REPEAT_COUNT_TRIPLE = 2;
-
                     @RequiresApi(api = 33)
                     @Override
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
@@ -177,84 +173,8 @@ public class MastrenaFragment extends Fragment {
                             return;
                         }
 
-                        espressoShot.updateShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
-
-                        long startDelay = 1500L * quantitySelected;
-                        long duration = 1500L;
-                        int repeatCountToUse = -1;
-                        if (quantitySelected == 1) {
-                            repeatCountToUse = REPEAT_COUNT_SINGLE;
-                        } else if (quantitySelected == 2) {
-                            repeatCountToUse = REPEAT_COUNT_DOUBLE;
-                        } else if (quantitySelected == 3) {
-                            repeatCountToUse = REPEAT_COUNT_TRIPLE;
-                        } else {
-                            Log.e(TAG, "quantitySelected != 1 or 2 or 3.");
-                        }
-
-                        animatorEspressoShot = ObjectAnimator.ofFloat(
-                                espressoShot,
-                                "y",
-                                458f,
-                                1200f);
-                        animatorEspressoShot.setStartDelay(startDelay);
-                        animatorEspressoShot.setDuration(duration);
-                        animatorEspressoShot.setRepeatCount(repeatCountToUse);
-                        animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-                                super.onAnimationRepeat(animation);
-                                Log.e(TAG, "onAnimationRepeat()");
-
-                                espressoShot.setCollided(false);
-                                espressoShot.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                Log.e(TAG, "onAnimationEnd()");
-
-                                espressoShot.setY(458);
-                                espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
-                                espressoShot.setCollided(false);
-                                espressoShot.setVisibility(View.VISIBLE);
-                            }
-                        });
-                        animatorEspressoShot.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                                for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
-                                    if (espressoShot.isCollided()) {
-                                        break;
-                                    }
-
-                                    View view = framelayoutLeft.getChildAt(i);
-                                    if (view instanceof Collideable) {
-                                        if (view instanceof IceShaker) {
-                                            continue;
-                                        }
-
-                                        Collideable collideable = (Collideable) view;
-
-                                        boolean colliding = isViewOverlapping(espressoShot, view);
-                                        collideable.update(colliding);
-
-                                        if (collideable.isJustCollided()) {
-                                            Log.e(TAG, "collideable.isJustCollided()");
-
-                                            collideable.onCollided(espressoShot);
-                                            espressoShot.setCollided(true);
-                                            espressoShot.setVisibility(View.INVISIBLE);
-                                        }
-                                    } else {
-                                        Log.e(TAG, "onAnimationUpdate() else-clause.");
-                                    }
-                                }
-                            }
-                        });
-
-                        animatorEspressoShot.start();
+                        pullEspressoShot(quantitySelected, typeSelected,
+                                amountOfWaterSelected, amountOfBeanSelected);
                     }
                 });
     }
@@ -266,7 +186,87 @@ public class MastrenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
-    private void performSyrupPump(Syrup.Type type) {
+    private void pullEspressoShot(int quantitySelected,
+                                  EspressoShot.Type typeSelected,
+                                  EspressoShot.AmountOfWater amountOfWaterSelected,
+                                  EspressoShot.AmountOfBean amountOfBeanSelected) {
+        espressoShot = new EspressoShot(getContext());
+        espressoShot.setTag(TAG_ESPRESSO_SHOT);
+        espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
+        espressoShot.setX(200 - (16 / 2));
+        espressoShot.setY(458);
+        espressoShot.updateShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
+        constraintLayoutMastrena.addView(espressoShot);
+
+        long startDelay = 1500L * quantitySelected;
+        long duration = 1500L;
+        int repeatCountToUse = quantitySelected - 1;
+
+        animatorEspressoShot = ObjectAnimator.ofFloat(
+                espressoShot,
+                "y",
+                458f,
+                1200f);
+        animatorEspressoShot.setStartDelay(startDelay);
+        animatorEspressoShot.setDuration(duration);
+        animatorEspressoShot.setRepeatCount(repeatCountToUse);
+        animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                super.onAnimationRepeat(animation);
+                Log.e(TAG, "onAnimationRepeat()");
+
+                espressoShot.setCollided(false);
+                espressoShot.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "onAnimationEnd()");
+
+                if (espressoShot != null) {
+                    constraintLayoutMastrena.removeView(espressoShot);
+                }
+            }
+        });
+        animatorEspressoShot.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
+                    if (espressoShot.isCollided()) {
+                        break;
+                    }
+
+                    View view = framelayoutLeft.getChildAt(i);
+                    if (view instanceof Collideable) {
+                        if (view instanceof IceShaker) {
+                            continue;
+                        }
+
+                        Collideable collideable = (Collideable) view;
+
+                        boolean colliding = isViewOverlapping(espressoShot, view);
+                        collideable.update(colliding);
+
+                        if (collideable.isJustCollided()) {
+                            Log.e(TAG, "collideable.isJustCollided()");
+
+                            collideable.onCollided(espressoShot);
+                            espressoShot.setCollided(true);
+                            espressoShot.setVisibility(View.INVISIBLE);
+                            // TODO: invisible
+                        }
+                    } else {
+                        Log.e(TAG, "onAnimationUpdate() else-clause.");
+                    }
+                }
+            }
+        });
+        animatorEspressoShot.start();
+    }
+
+    private void pumpSyrup(Syrup.Type type) {
         Syrup syrup = new Syrup(getContext());
         syrup.setTag(TAG_SYRUP);
         syrup.setLayoutParams(new FrameLayout.LayoutParams(16, 32));
@@ -474,15 +474,6 @@ public class MastrenaFragment extends Fragment {
         });
         framelayoutEspressoStream.addView(espressoShotControl);
 
-        // ESPRESSO SHOT
-        espressoShot = new EspressoShot(getContext());
-        espressoShot.setTag(TAG_ESPRESSO_SHOT);
-        espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-        espressoShot.setX(200 - (16 / 2));
-        espressoShot.setY(458);
-        espressoShot.setBackgroundColor(getResources().getColor(R.color.brown));
-        constraintLayoutMastrena.addView(espressoShot);
-
         // SHOT GLASS
         shotGlass = new ShotGlass(getContext());
         shotGlass.setTag(TAG_SHOT_GLASS);
@@ -502,7 +493,7 @@ public class MastrenaFragment extends Fragment {
             public void onClick(View view) {
                 Log.e(TAG, "syrupBottleVanilla.onClick()");
 
-                performSyrupPump(Syrup.Type.VANILLA);
+                pumpSyrup(Syrup.Type.VANILLA);
             }
         });
         framelayoutSyrupCaddy.addView(syrupBottleVanilla);
@@ -535,7 +526,7 @@ public class MastrenaFragment extends Fragment {
             public void onClick(View view) {
                 Log.e(TAG, "syrupBottleBrownSugar.onClick()");
 
-                performSyrupPump(Syrup.Type.BROWN_SUGAR);
+                pumpSyrup(Syrup.Type.BROWN_SUGAR);
             }
         });
         framelayoutSyrupCaddy.addView(syrupBottleBrownSugar);
