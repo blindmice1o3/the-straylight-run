@@ -21,7 +21,6 @@ public class EspressoShot extends AppCompatImageView {
     private Type type;
     private AmountOfWater amountOfWater;
     private AmountOfBean amountOfBean;
-    private boolean collided;
 
     public EspressoShot(@NonNull Context context) {
         super(context);
@@ -64,14 +63,6 @@ public class EspressoShot extends AppCompatImageView {
 
     public void setAmountOfBean(AmountOfBean amountOfBean) {
         this.amountOfBean = amountOfBean;
-    }
-
-    public boolean isCollided() {
-        return collided;
-    }
-
-    public void setCollided(boolean collided) {
-        this.collided = collided;
     }
 
     public static int lookupColorIdByType(Type type) {

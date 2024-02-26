@@ -91,7 +91,6 @@ public class MastrenaFragment extends Fragment {
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
     private ImageView espressoShotControl;
-    private EspressoShot espressoShot;
     private ObjectAnimator animatorEspressoShot;
     private ShotGlass shotGlass;
     private ImageView syrupBottleVanilla, syrupBottleBrownSugar;
@@ -186,11 +185,17 @@ public class MastrenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
+    private int counterEspressoShot;
+
     private void pullEspressoShot(int quantitySelected,
                                   EspressoShot.Type typeSelected,
                                   EspressoShot.AmountOfWater amountOfWaterSelected,
                                   EspressoShot.AmountOfBean amountOfBeanSelected) {
-        espressoShot = new EspressoShot(getContext());
+        // TODO:
+        //  (1) compose EspressoShot/Syrup with DrinkComponentInfo.
+        //  (2) store EspressoShot instances instead of using (int numberOfShots).
+        //  (3) store Syrup instances instead of using (int quantityNew).
+        EspressoShot espressoShot = new EspressoShot(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setX(200 - (16 / 2));
@@ -198,35 +203,33 @@ public class MastrenaFragment extends Fragment {
         espressoShot.updateShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         constraintLayoutMastrena.addView(espressoShot);
 
-        long startDelay = 1500L * quantitySelected;
-        long duration = 1500L;
-        int repeatCountToUse = quantitySelected - 1;
-
         animatorEspressoShot = ObjectAnimator.ofFloat(
                 espressoShot,
                 "y",
                 458f,
                 1200f);
+        long startDelay = (counterEspressoShot == 0) ? (1500L * quantitySelected) : (0);
         animatorEspressoShot.setStartDelay(startDelay);
-        animatorEspressoShot.setDuration(duration);
-        animatorEspressoShot.setRepeatCount(repeatCountToUse);
+        animatorEspressoShot.setDuration(2000L);
         animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-                super.onAnimationRepeat(animation);
-                Log.e(TAG, "onAnimationRepeat()");
-
-                espressoShot.setCollided(false);
-                espressoShot.setVisibility(View.VISIBLE);
-            }
-
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 Log.e(TAG, "onAnimationEnd()");
 
+                counterEspressoShot++;
+
                 if (espressoShot != null) {
                     constraintLayoutMastrena.removeView(espressoShot);
+                }
+
+                if (counterEspressoShot < quantitySelected) {
+                    pullEspressoShot(quantitySelected, typeSelected,
+                            amountOfWaterSelected, amountOfBeanSelected);
+                } else if (counterEspressoShot == quantitySelected) {
+                    counterEspressoShot = 0;
+                } else {
+                    Log.e(TAG, "counterEspressoShot > quantitySelected");
                 }
             }
         });
@@ -234,10 +237,6 @@ public class MastrenaFragment extends Fragment {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 for (int i = 0; i < framelayoutLeft.getChildCount(); i++) {
-                    if (espressoShot.isCollided()) {
-                        break;
-                    }
-
                     View view = framelayoutLeft.getChildAt(i);
                     if (view instanceof Collideable) {
                         if (view instanceof IceShaker) {
@@ -253,12 +252,10 @@ public class MastrenaFragment extends Fragment {
                             Log.e(TAG, "collideable.isJustCollided()");
 
                             collideable.onCollided(espressoShot);
-                            espressoShot.setCollided(true);
-                            espressoShot.setVisibility(View.INVISIBLE);
-                            // TODO: invisible
+                            constraintLayoutMastrena.removeView(espressoShot);
                         }
                     } else {
-                        Log.e(TAG, "onAnimationUpdate() else-clause.");
+                        Log.e(TAG, "onAnimationUpdate(): view NOT instanceof Collideable.");
                     }
                 }
             }
@@ -286,7 +283,7 @@ public class MastrenaFragment extends Fragment {
                 "y",
                 562f,
                 1200f);
-        animatorSyrup.setDuration(2000);
+        animatorSyrup.setDuration(2000L);
         animatorSyrup.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -302,10 +299,6 @@ public class MastrenaFragment extends Fragment {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 for (int i = 0; i < framelayoutCenter.getChildCount(); i++) {
-                    if (syrup.isCollided()) {
-                        break;
-                    }
-
                     View view = framelayoutCenter.getChildAt(i);
                     if (view instanceof Collideable) {
                         if (!(view instanceof CupImageView) &&
@@ -322,11 +315,10 @@ public class MastrenaFragment extends Fragment {
                             Log.e(TAG, "collideable.isJustCollided()");
 
                             collideable.onCollided(syrup);
-                            syrup.setCollided(true);
                             constraintLayoutMastrena.removeView(syrup);
                         }
                     } else {
-                        Log.e(TAG, "onAnimationUpdate() else-clause.");
+                        Log.e(TAG, "onAnimationUpdate(): view NOT instanceof Collideable.");
                     }
                 }
             }

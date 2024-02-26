@@ -13,7 +13,6 @@ public class Syrup extends AppCompatImageView {
     public enum Type {VANILLA, BROWN_SUGAR;}
 
     private Type type;
-    private boolean collided;
 
     public Syrup(@NonNull Context context) {
         super(context);
@@ -29,13 +28,5 @@ public class Syrup extends AppCompatImageView {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public boolean isCollided() {
-        return collided;
-    }
-
-    public void setCollided(boolean collided) {
-        this.collided = collided;
     }
 }
