@@ -207,9 +207,9 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     } else if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
                         Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
 
-                        if (((CupImageView) event.getLocalState()).getNumberOfShots() == 0 &&
+                        if (((CupImageView) event.getLocalState()).getShots().size() == 0 &&
                                 ((CupImageView) event.getLocalState()).getAmount() != 0) {
-                            Log.d(TAG, "((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                            Log.d(TAG, "((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
@@ -217,7 +217,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
                         }
                     }
                 } else {
@@ -360,23 +360,23 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     @Override
-    public void transferIn(HashMap<String, String> content) {
+    public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("content")) {
-            this.content = content.get("content");
+            this.content = (String) content.get("content");
         }
         if (content.containsKey("amount")) {
             amount = Integer.parseInt(
-                    content.get("amount")
+                    (String) content.get("amount")
             );
         }
         if (content.containsKey("temperature")) {
             temperature = Integer.parseInt(
-                    content.get("temperature")
+                    (String) content.get("temperature")
             );
         }
         if (content.containsKey("timeFrothed")) {
             timeFrothed = Integer.parseInt(
-                    content.get("timeFrothed")
+                    (String) content.get("timeFrothed")
             );
         }
 
@@ -384,8 +384,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     }
 
     @Override
-    public HashMap<String, String> transferOut() {
-        HashMap<String, String> content = new HashMap<>();
+    public HashMap<String, Object> transferOut() {
+        HashMap<String, Object> content = new HashMap<>();
 
         content.put("content", this.content);
         content.put("amount", Integer.toString(amount));

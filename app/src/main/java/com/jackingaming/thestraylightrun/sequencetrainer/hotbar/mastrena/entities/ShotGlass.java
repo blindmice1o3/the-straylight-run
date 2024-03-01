@@ -23,16 +23,15 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ShotGlass extends AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = ShotGlass.class.getSimpleName();
 
-    private EspressoShot.Type type;
-    private EspressoShot.AmountOfWater amountOfWater;
-    private EspressoShot.AmountOfBean amountOfBean;
-    private int numberOfShots;
+    private List<EspressoShot> shots;
 
     private Collider collider;
 
@@ -49,10 +48,7 @@ public class ShotGlass extends AppCompatImageView
     }
 
     private void init() {
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
+        shots = new ArrayList<>();
 
         collider = new Collider() {
             @Override
@@ -65,11 +61,8 @@ public class ShotGlass extends AppCompatImageView
                     Log.e(TAG, "collider instanceof EspressoShot");
 
                     EspressoShot espressoShot = (EspressoShot) collider;
-                    type = espressoShot.getType();
-                    amountOfWater = espressoShot.getAmountOfWater();
-                    amountOfBean = espressoShot.getAmountOfBean();
 
-                    numberOfShots++;
+                    shots.add(espressoShot);
                     invalidate();
                 }
             }
@@ -86,12 +79,25 @@ public class ShotGlass extends AppCompatImageView
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        EspressoShot.Type typeMostRecent = EspressoShot.Type.SIGNATURE;
+        String typeAbbreviated = typeMostRecent.name().substring(0, 1);
+        String amountOfWaterAbbreviated = EspressoShot.AmountOfWater.STANDARD.name().substring(0, 1);
+        String amountOfBeanAbbreviated = EspressoShot.AmountOfBean.STANDARD.name().substring(0, 1);
+        int numberOfShots = shots.size();
+        if (numberOfShots != 0) {
+            int indexOfLast = numberOfShots - 1;
+            EspressoShot shotMostRecent = shots.get(indexOfLast);
+
+            typeMostRecent = shotMostRecent.getType();
+            typeAbbreviated = typeMostRecent.name().substring(0, 1);
+            amountOfWaterAbbreviated = shotMostRecent.getAmountOfWater().name().substring(0, 1);
+            amountOfBeanAbbreviated = shotMostRecent.getAmountOfBean().name().substring(0, 1);
+        }
+
         textPaint.setColor(getResources().getColor(
-                EspressoShot.lookupColorIdByType(type)
+                EspressoShot.lookupColorIdByType(typeMostRecent)
         ));
-        String typeAbbreviated = type.name().substring(0, 1);
-        String amountOfWaterAbbreviated = amountOfWater.name().substring(0, 1);
-        String amountOfBeanAbbreviated = amountOfBean.name().substring(0, 1);
+
         String textForShot = String.format("E: %d %s %s %s",
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, 15, textPaint);
@@ -136,8 +142,8 @@ public class ShotGlass extends AppCompatImageView
                         Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
 
                         if (((CupImageView) event.getLocalState()).getAmount() == 0 &&
-                                ((CupImageView) event.getLocalState()).getNumberOfShots() != 0) {
-                            Log.d(TAG, "((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getNumberOfShots() != 0");
+                                ((CupImageView) event.getLocalState()).getShots().size() != 0) {
+                            Log.d(TAG, "((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getShots().size() != 0");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
@@ -146,7 +152,7 @@ public class ShotGlass extends AppCompatImageView
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getNumberOfShots() != 0");
+                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getAmount() == 0 && ((CupImageView) event.getLocalState()).getShots().size() != 0");
                         }
                     }
                 } else {
@@ -213,46 +219,21 @@ public class ShotGlass extends AppCompatImageView
     }
 
     @Override
-    public void transferIn(HashMap<String, String> content) {
-        if (content.containsKey("type")) {
-            for (EspressoShot.Type type : EspressoShot.Type.values()) {
-                if (content.get("type").equals(type.name())) {
-                    this.type = type;
-                }
-            }
-        }
-        if (content.containsKey("amountOfWater")) {
-            for (EspressoShot.AmountOfWater amountOfWater : EspressoShot.AmountOfWater.values()) {
-                if (content.get("amountOfWater").equals(amountOfWater.name())) {
-                    this.amountOfWater = amountOfWater;
-                }
-            }
-        }
-        if (content.containsKey("amountOfBean")) {
-            for (EspressoShot.AmountOfBean amountOfBean : EspressoShot.AmountOfBean.values()) {
-                if (content.get("amountOfBean").equals(amountOfBean.name())) {
-                    this.amountOfBean = amountOfBean;
-                }
-            }
-        }
-        if (content.containsKey("numberOfShots")) {
-            // INCREMENT
-            numberOfShots += Integer.parseInt(
-                    content.get("numberOfShots")
-            );
+    public void transferIn(HashMap<String, Object> content) {
+        if (content.containsKey("shots")) {
+            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
+            shots.addAll(shotsToTransferIn);
         }
 
         invalidate();
     }
 
     @Override
-    public HashMap<String, String> transferOut() {
-        HashMap<String, String> content = new HashMap<>();
+    public HashMap<String, Object> transferOut() {
+        HashMap<String, Object> content = new HashMap<>();
 
-        content.put("type", type.name());
-        content.put("amountOfWater", amountOfWater.name());
-        content.put("amountOfBean", amountOfBean.name());
-        content.put("numberOfShots", Integer.toString(numberOfShots));
+        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
+        content.put("shots", shotsCopy);
 
         empty();
 
@@ -261,11 +242,7 @@ public class ShotGlass extends AppCompatImageView
 
     @Override
     public void empty() {
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
-
+        shots.clear();
         invalidate();
     }
 

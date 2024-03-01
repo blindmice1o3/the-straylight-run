@@ -39,10 +39,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
-    private EspressoShot.Type type;
-    private EspressoShot.AmountOfWater amountOfWater;
-    private EspressoShot.AmountOfBean amountOfBean;
-    private int numberOfShots;
+    private List<EspressoShot> shots;
+//    private EspressoShot.Type type;
+//    private EspressoShot.AmountOfWater amountOfWater;
+//    private EspressoShot.AmountOfBean amountOfBean;
+//    private int numberOfShots;
 
     private String content;
     private int amount;
@@ -69,10 +70,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void init() {
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
+        shots = new ArrayList<>();
 
         content = null;
         amount = 0;
@@ -95,11 +93,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.e(TAG, "collider instanceof EspressoShot");
 
                     EspressoShot espressoShot = (EspressoShot) collider;
-                    type = espressoShot.getType();
-                    amountOfWater = espressoShot.getAmountOfWater();
-                    amountOfBean = espressoShot.getAmountOfBean();
 
-                    numberOfShots++;
+                    shots.add(espressoShot);
                     invalidate();
                 } else if (collider instanceof Syrup) {
                     Log.e(TAG, "collider instanceof Syrup");
@@ -130,13 +125,26 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        EspressoShot.Type typeMostRecent = EspressoShot.Type.SIGNATURE;
+        String typeAbbreviated = typeMostRecent.name().substring(0, 1);
+        String amountOfWaterAbbreviated = EspressoShot.AmountOfWater.STANDARD.name().substring(0, 1);
+        String amountOfBeanAbbreviated = EspressoShot.AmountOfBean.STANDARD.name().substring(0, 1);
+        int numberOfShots = shots.size();
+        if (numberOfShots != 0) {
+            int indexOfLast = numberOfShots - 1;
+            EspressoShot shotMostRecent = shots.get(indexOfLast);
+
+            typeMostRecent = shotMostRecent.getType();
+            typeAbbreviated = typeMostRecent.name().substring(0, 1);
+            amountOfWaterAbbreviated = shotMostRecent.getAmountOfWater().name().substring(0, 1);
+            amountOfBeanAbbreviated = shotMostRecent.getAmountOfBean().name().substring(0, 1);
+        }
+
         textPaint.setColor(getResources().getColor(
-                EspressoShot.lookupColorIdByType(type)
+                EspressoShot.lookupColorIdByType(typeMostRecent)
         ));
+
         int yShot = (shotOnTop) ? yLine1 : yLine4;
-        String typeAbbreviated = type.name().substring(0, 1);
-        String amountOfWaterAbbreviated = amountOfWater.name().substring(0, 1);
-        String amountOfBeanAbbreviated = amountOfBean.name().substring(0, 1);
         String textForShot = String.format("E: %d %s %s %s",
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, yShot, textPaint);
@@ -291,8 +299,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 } else if (label.equals("CaramelDrizzleBottle")) {
                     Log.d(TAG, "label.equals(\"CaramelDrizzleBottle\")");
 
-                    if (content != null && numberOfShots > 0) {
-                        Log.d(TAG, "content != null && numberOfShots > 0... setting drizzled to true.");
+                    if (content != null && shots.size() > 0) {
+                        Log.d(TAG, "content != null && shots.size() > 0... setting drizzled to true.");
                         drizzled = true;
                     }
                 } else if (label.equals("DrinkLabel")) {
@@ -380,36 +388,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return Menu.getDrinkByName(name).validate(this, size, customizations);
     }
 
-    public EspressoShot.Type getType() {
-        return type;
+    public List<EspressoShot> getShots() {
+        return shots;
     }
 
-    public void setType(EspressoShot.Type type) {
-        this.type = type;
-    }
-
-    public EspressoShot.AmountOfWater getAmountOfWater() {
-        return amountOfWater;
-    }
-
-    public void setAmountOfWater(EspressoShot.AmountOfWater amountOfWater) {
-        this.amountOfWater = amountOfWater;
-    }
-
-    public EspressoShot.AmountOfBean getAmountOfBean() {
-        return amountOfBean;
-    }
-
-    public void setAmountOfBean(EspressoShot.AmountOfBean amountOfBean) {
-        this.amountOfBean = amountOfBean;
-    }
-
-    public int getNumberOfShots() {
-        return numberOfShots;
-    }
-
-    public void setNumberOfShots(int numberOfShots) {
-        this.numberOfShots = numberOfShots;
+    public void setShots(List<EspressoShot> shots) {
+        this.shots = shots;
     }
 
     public String getContent() {
@@ -469,61 +453,39 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     @Override
-    public void transferIn(HashMap<String, String> content) {
-        if (content.containsKey("type")) {
-            for (EspressoShot.Type type : EspressoShot.Type.values()) {
-                if (content.get("type").equals(type.name())) {
-                    this.type = type;
-                }
-            }
+    public void transferIn(HashMap<String, Object> content) {
+        if (content.containsKey("shots")) {
+            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
+            shots.addAll(shotsToTransferIn);
         }
-        if (content.containsKey("amountOfWater")) {
-            for (EspressoShot.AmountOfWater amountOfWater : EspressoShot.AmountOfWater.values()) {
-                if (content.get("amountOfWater").equals(amountOfWater.name())) {
-                    this.amountOfWater = amountOfWater;
-                }
-            }
-        }
-        if (content.containsKey("amountOfBean")) {
-            for (EspressoShot.AmountOfBean amountOfBean : EspressoShot.AmountOfBean.values()) {
-                if (content.get("amountOfBean").equals(amountOfBean.name())) {
-                    this.amountOfBean = amountOfBean;
-                }
-            }
-        }
-        if (content.containsKey("numberOfShots")) {
-            // INCREMENT
-            numberOfShots += Integer.parseInt(
-                    content.get("numberOfShots")
-            );
-        }
+
         if (content.containsKey("content")) {
-            this.content = content.get("content");
+            this.content = (String) content.get("content");
         }
         if (content.containsKey("amount")) {
             amount = Integer.parseInt(
-                    content.get("amount")
+                    (String) content.get("amount")
             );
         }
         if (content.containsKey("temperature")) {
             temperature = Integer.parseInt(
-                    content.get("temperature")
+                    (String) content.get("temperature")
             );
         }
         if (content.containsKey("timeFrothed")) {
             timeFrothed = Integer.parseInt(
-                    content.get("timeFrothed")
+                    (String) content.get("timeFrothed")
             );
         }
         // TODO: syrups
         if (content.containsKey("shotOnTop")) {
             shotOnTop = Boolean.parseBoolean(
-                    content.get("shotOnTop")
+                    (String) content.get("shotOnTop")
             );
         }
         if (content.containsKey("drizzled")) {
             drizzled = Boolean.parseBoolean(
-                    content.get("drizzled")
+                    (String) content.get("drizzled")
             );
         }
 
@@ -531,13 +493,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     @Override
-    public HashMap<String, String> transferOut() {
-        HashMap<String, String> content = new HashMap<>();
+    public HashMap<String, Object> transferOut() {
+        HashMap<String, Object> content = new HashMap<>();
 
-        content.put("type", type.name());
-        content.put("amountOfWater", amountOfWater.name());
-        content.put("amountOfBean", amountOfBean.name());
-        content.put("numberOfShots", Integer.toString(numberOfShots));
+        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
+        content.put("shots", shotsCopy);
+
         content.put("content", this.content);
         content.put("amount", Integer.toString(amount));
         content.put("temperature", Integer.toString(temperature));
@@ -553,10 +514,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     @Override
     public void empty() {
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
+        shots.clear();
+
         content = null;
         amount = 0;
         temperature = 0;

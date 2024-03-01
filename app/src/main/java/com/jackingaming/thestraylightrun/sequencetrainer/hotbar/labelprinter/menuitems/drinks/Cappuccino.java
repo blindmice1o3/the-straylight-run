@@ -82,7 +82,7 @@ public class Cappuccino extends Drink {
 
         if (shotCustom == -1) {
             // standard shots
-            if (cupImageView.getNumberOfShots() == shotStandard) {
+            if (cupImageView.getShots().size() == shotStandard) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     return true;
@@ -101,7 +101,7 @@ public class Cappuccino extends Drink {
             }
         } else {
             // custom shots
-            if (cupImageView.getNumberOfShots() == shotCustom) {
+            if (cupImageView.getShots().size() == shotCustom) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     return true;

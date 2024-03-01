@@ -3,9 +3,9 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entiti
 import java.util.HashMap;
 
 public interface LiquidContainable {
-    void transferIn(HashMap<String, String> content);
+    void transferIn(HashMap<String, Object> content);
 
-    HashMap<String, String> transferOut();
+    HashMap<String, Object> transferOut();
 
     void empty();
 }

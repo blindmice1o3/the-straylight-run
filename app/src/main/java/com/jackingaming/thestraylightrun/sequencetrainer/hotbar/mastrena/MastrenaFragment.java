@@ -192,15 +192,15 @@ public class MastrenaFragment extends Fragment {
                                   EspressoShot.AmountOfWater amountOfWaterSelected,
                                   EspressoShot.AmountOfBean amountOfBeanSelected) {
         // TODO:
-        //  (1) compose EspressoShot/Syrup with DrinkComponentInfo.
-        //  (2) store EspressoShot instances instead of using (int numberOfShots).
+        //  (1) [CHECKED] store EspressoShot instances instead of using (int numberOfShots).
+        //  (2) compose EspressoShot/Syrup with DrinkComponentInfo.
         //  (3) store Syrup instances instead of using (int quantityNew).
         EspressoShot espressoShot = new EspressoShot(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setX(200 - (16 / 2));
         espressoShot.setY(458);
-        espressoShot.updateShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
+        espressoShot.configureShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         constraintLayoutMastrena.addView(espressoShot);
 
         animatorEspressoShot = ObjectAnimator.ofFloat(

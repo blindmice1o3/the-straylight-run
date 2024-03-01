@@ -90,7 +90,7 @@ public class CaramelMacchiato extends Drink {
 
         if (shotCustom == -1) {
             // standard shots
-            if (cupImageView.getNumberOfShots() == shotStandard) {
+            if (cupImageView.getShots().size() == shotStandard) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     if (cupImageView.getSyrups().containsKey(Syrup.Type.VANILLA)) {
@@ -115,7 +115,7 @@ public class CaramelMacchiato extends Drink {
             }
         } else {
             // custom shots
-            if (cupImageView.getNumberOfShots() == shotCustom) {
+            if (cupImageView.getShots().size() == shotCustom) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     if (cupImageView.getSyrups().containsKey(Syrup.Type.VANILLA)) {

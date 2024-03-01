@@ -55,8 +55,15 @@ public class FlatWhite extends Drink {
             syrupStandard = 2;
         }
 
-        if (cupImageView.getAmountOfWater() != EspressoShot.AmountOfWater.RISTRETTO) {
+        int numberOfShots = cupImageView.getShots().size();
+        if (numberOfShots == 0) {
             return false;
+        } else {
+            int indexOfLast = numberOfShots - 1;
+            EspressoShot shotMostRecent = cupImageView.getShots().get(indexOfLast);
+            if (shotMostRecent.getAmountOfWater() != EspressoShot.AmountOfWater.RISTRETTO) {
+                return false;
+            }
         }
 
         if (!cupImageView.getContent().equals("whole")) {
@@ -91,7 +98,7 @@ public class FlatWhite extends Drink {
 
         if (shotCustom == -1) {
             // standard shots
-            if (cupImageView.getNumberOfShots() == shotStandard) {
+            if (cupImageView.getShots().size() == shotStandard) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     return true;
@@ -110,7 +117,7 @@ public class FlatWhite extends Drink {
             }
         } else {
             // custom shots
-            if (cupImageView.getNumberOfShots() == shotCustom) {
+            if (cupImageView.getShots().size() == shotCustom) {
                 if (syrupCustom == -1) {
                     // standard syrups
                     return true;

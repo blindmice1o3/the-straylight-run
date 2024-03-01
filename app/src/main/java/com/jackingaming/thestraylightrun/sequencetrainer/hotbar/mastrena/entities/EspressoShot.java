@@ -18,9 +18,9 @@ public class EspressoShot extends AppCompatImageView {
 
     public enum AmountOfBean {HALF_DECAF, STANDARD, UPDOSED;}
 
-    private Type type;
-    private AmountOfWater amountOfWater;
-    private AmountOfBean amountOfBean;
+    private Type type = Type.SIGNATURE;
+    private AmountOfWater amountOfWater = AmountOfWater.STANDARD;
+    private AmountOfBean amountOfBean = AmountOfBean.STANDARD;
 
     public EspressoShot(@NonNull Context context) {
         super(context);
@@ -30,8 +30,8 @@ public class EspressoShot extends AppCompatImageView {
         super(context, attrs);
     }
 
-    public void updateShot(Type typeSelected,
-                           AmountOfWater amountOfWaterSelected, AmountOfBean amountOfBeanSelected) {
+    public void configureShot(Type typeSelected,
+                              AmountOfWater amountOfWaterSelected, AmountOfBean amountOfBeanSelected) {
         type = typeSelected;
 
         int colorToUse = lookupColorIdByType(type);

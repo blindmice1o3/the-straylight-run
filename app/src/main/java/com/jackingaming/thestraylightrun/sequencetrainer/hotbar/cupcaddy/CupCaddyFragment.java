@@ -102,8 +102,8 @@ public class CupCaddyFragment extends Fragment {
                             Log.d(TAG, "label.equals(\"MastrenaToCaddy\")");
 
                             if (((CupImageView) dragEvent.getLocalState()).getAmount() == 0 &&
-                                    ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0) {
-                                Log.d(TAG, "((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0");
+                                    ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0) {
+                                Log.d(TAG, "((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
 
                                 // Change background drawable to indicate drop-target.
                                 view.setBackgroundResource(resIdDropTarget);
@@ -112,7 +112,7 @@ public class CupCaddyFragment extends Fragment {
                                 // data.
                                 return true;
                             } else {
-                                Log.e(TAG, "NOT ((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getNumberOfShots() == 0");
+                                Log.e(TAG, "NOT ((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
                             }
                         }
                     } else {

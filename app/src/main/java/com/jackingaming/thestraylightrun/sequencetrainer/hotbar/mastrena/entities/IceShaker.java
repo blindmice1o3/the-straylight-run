@@ -24,7 +24,9 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class IceShaker extends AppCompatImageView
@@ -34,10 +36,11 @@ public class IceShaker extends AppCompatImageView
     private boolean iced;
     private boolean cinnamoned;
 
-    private EspressoShot.Type type;
-    private EspressoShot.AmountOfWater amountOfWater;
-    private EspressoShot.AmountOfBean amountOfBean;
-    private int numberOfShots;
+    private List<EspressoShot> shots;
+//    private EspressoShot.Type type;
+//    private EspressoShot.AmountOfWater amountOfWater;
+//    private EspressoShot.AmountOfBean amountOfBean;
+//    private int numberOfShots;
 
     private Map<Syrup.Type, Integer> syrups;
 
@@ -64,10 +67,7 @@ public class IceShaker extends AppCompatImageView
         iced = false;
         cinnamoned = false;
 
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
+        shots = new ArrayList<>();
 
         syrups = new HashMap<>();
 
@@ -120,9 +120,25 @@ public class IceShaker extends AppCompatImageView
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        String typeAbbreviated = type.name().substring(0, 1);
-        String amountOfWaterAbbreviated = amountOfWater.name().substring(0, 1);
-        String amountOfBeanAbbreviated = amountOfBean.name().substring(0, 1);
+        EspressoShot.Type typeMostRecent = EspressoShot.Type.SIGNATURE;
+        String typeAbbreviated = typeMostRecent.name().substring(0, 1);
+        String amountOfWaterAbbreviated = EspressoShot.AmountOfWater.STANDARD.name().substring(0, 1);
+        String amountOfBeanAbbreviated = EspressoShot.AmountOfBean.STANDARD.name().substring(0, 1);
+        int numberOfShots = shots.size();
+        if (numberOfShots != 0) {
+            int indexOfLast = numberOfShots - 1;
+            EspressoShot shotMostRecent = shots.get(indexOfLast);
+
+            typeMostRecent = shotMostRecent.getType();
+            typeAbbreviated = typeMostRecent.name().substring(0, 1);
+            amountOfWaterAbbreviated = shotMostRecent.getAmountOfWater().name().substring(0, 1);
+            amountOfBeanAbbreviated = shotMostRecent.getAmountOfBean().name().substring(0, 1);
+        }
+
+        textPaint.setColor(getResources().getColor(
+                EspressoShot.lookupColorIdByType(typeMostRecent)
+        ));
+
         String textForShot = String.format("E: %d %s %s %s",
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, 15, textPaint);
@@ -282,50 +298,27 @@ public class IceShaker extends AppCompatImageView
 
     public void shake() {
         // TODO:
-        if (!syrups.isEmpty() && (numberOfShots > 0) && cinnamoned && iced) {
+        if (!syrups.isEmpty() && (shots.size() > 0) && cinnamoned && iced) {
             setBackgroundColor(getResources().getColor(R.color.purple_700));
         }
     }
 
     @Override
-    public void transferIn(HashMap<String, String> content) {
+    public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("iced")) {
             iced = Boolean.parseBoolean(
-                    content.get("iced")
+                    (String) content.get("iced")
             );
         }
         if (content.containsKey("cinnamoned")) {
             cinnamoned = Boolean.parseBoolean(
-                    content.get("cinnamoned")
+                    (String) content.get("cinnamoned")
             );
         }
 
-        if (content.containsKey("type")) {
-            for (EspressoShot.Type type : EspressoShot.Type.values()) {
-                if (content.get("type").equals(type.name())) {
-                    this.type = type;
-                }
-            }
-        }
-        if (content.containsKey("amountOfWater")) {
-            for (EspressoShot.AmountOfWater amountOfWater : EspressoShot.AmountOfWater.values()) {
-                if (content.get("amountOfWater").equals(amountOfWater.name())) {
-                    this.amountOfWater = amountOfWater;
-                }
-            }
-        }
-        if (content.containsKey("amountOfBean")) {
-            for (EspressoShot.AmountOfBean amountOfBean : EspressoShot.AmountOfBean.values()) {
-                if (content.get("amountOfBean").equals(amountOfBean.name())) {
-                    this.amountOfBean = amountOfBean;
-                }
-            }
-        }
-        if (content.containsKey("numberOfShots")) {
-            // INCREMENT
-            numberOfShots += Integer.parseInt(
-                    content.get("numberOfShots")
-            );
+        if (content.containsKey("shots")) {
+            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
+            shots.addAll(shotsToTransferIn);
         }
 
         // TODO: syrups
@@ -334,16 +327,14 @@ public class IceShaker extends AppCompatImageView
     }
 
     @Override
-    public HashMap<String, String> transferOut() {
-        HashMap<String, String> content = new HashMap<>();
+    public HashMap<String, Object> transferOut() {
+        HashMap<String, Object> content = new HashMap<>();
 
         content.put("iced", Boolean.toString(iced));
         content.put("cinnamoned", Boolean.toString(cinnamoned));
 
-        content.put("type", type.name());
-        content.put("amountOfWater", amountOfWater.name());
-        content.put("amountOfBean", amountOfBean.name());
-        content.put("numberOfShots", Integer.toString(numberOfShots));
+        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
+        content.put("shots", shotsCopy);
 
         // TODO: syrups
 
@@ -358,10 +349,7 @@ public class IceShaker extends AppCompatImageView
         setBackgroundColor(idLightBlueA200);
         cinnamoned = false;
 
-        type = EspressoShot.Type.SIGNATURE;
-        amountOfWater = EspressoShot.AmountOfWater.STANDARD;
-        amountOfBean = EspressoShot.AmountOfBean.STANDARD;
-        numberOfShots = 0;
+        shots.clear();
 
         syrups.clear();
 
