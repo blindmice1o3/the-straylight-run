@@ -50,7 +50,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private int temperature;
     private int timeFrothed;
 
-    private Map<Syrup.Type, Integer> syrups;
+    private Map<Syrup.Type, List<Syrup>> syrupsMap;
 
     private boolean shotOnTop;
     private boolean drizzled;
@@ -77,7 +77,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         temperature = 0;
         timeFrothed = 0;
 
-        syrups = new HashMap<>();
+        syrupsMap = new HashMap<>();
 
         shotOnTop = false;
         drizzled = false;
@@ -100,10 +100,16 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.e(TAG, "collider instanceof Syrup");
 
                     Syrup syrup = (Syrup) collider;
-                    int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
+                    Syrup.Type type = syrup.getType();
 
-                    int quantityNew = quantityPrevious + 1;
-                    syrups.put(syrup.getType(), quantityNew);
+                    List<Syrup> syrups = null;
+                    if (syrupsMap.get(type) == null) {
+                        syrups = new ArrayList<>();
+                    } else {
+                        syrups = syrupsMap.get(type);
+                    }
+                    syrups.add(syrup);
+                    syrupsMap.put(type, syrups);
                     invalidate();
                 }
             }
@@ -166,12 +172,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         canvas.drawText(Integer.toString(amount), 5, yContentAmount, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.amber));
-        int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
+        int quantityVanilla = (syrupsMap.get(Syrup.Type.VANILLA) == null) ? 0 : syrupsMap.get(Syrup.Type.VANILLA).size();
         int ySyrupVanilla = (shotOnTop) ? yLine3 : yLine2;
         canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.brown));
-        int quantityBrownSugar = (syrups.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrups.get(Syrup.Type.BROWN_SUGAR);
+        int quantityBrownSugar = (syrupsMap.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrupsMap.get(Syrup.Type.BROWN_SUGAR).size();
         int ySyrupBrownSugar = (shotOnTop) ? yLine4 : yLine3;
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
     }
@@ -428,12 +434,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.timeFrothed = timeFrothed;
     }
 
-    public Map<Syrup.Type, Integer> getSyrups() {
-        return syrups;
+    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
+        return syrupsMap;
     }
 
-    public void setSyrups(Map<Syrup.Type, Integer> syrups) {
-        this.syrups = syrups;
+    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
+        this.syrupsMap = syrupsMap;
     }
 
     public boolean isDrizzled() {
@@ -520,7 +526,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         amount = 0;
         temperature = 0;
         timeFrothed = 0;
-        syrups.clear();
+        syrupsMap.clear();
         shotOnTop = false;
         drizzled = false;
 

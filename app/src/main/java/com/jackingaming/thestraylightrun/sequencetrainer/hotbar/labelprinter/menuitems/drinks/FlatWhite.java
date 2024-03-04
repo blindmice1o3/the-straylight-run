@@ -104,8 +104,8 @@ public class FlatWhite extends Drink {
                     return true;
                 } else {
                     // custom syrups
-                    if (cupImageView.getSyrups().containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = cupImageView.getSyrups().get(Syrup.Type.VANILLA);
+                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
 
                         if (quantitySyrupVanilla == syrupCustom) {
                             return true;
@@ -123,8 +123,8 @@ public class FlatWhite extends Drink {
                     return true;
                 } else {
                     // custom syrups
-                    if (cupImageView.getSyrups().containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = cupImageView.getSyrups().get(Syrup.Type.VANILLA);
+                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
 
                         if (quantitySyrupVanilla == syrupCustom) {
                             return true;

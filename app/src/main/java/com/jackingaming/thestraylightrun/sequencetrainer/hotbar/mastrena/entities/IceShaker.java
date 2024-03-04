@@ -42,7 +42,7 @@ public class IceShaker extends AppCompatImageView
 //    private EspressoShot.AmountOfBean amountOfBean;
 //    private int numberOfShots;
 
-    private Map<Syrup.Type, Integer> syrups;
+    private Map<Syrup.Type, List<Syrup>> syrupsMap;
 
     private Collider collider;
 
@@ -69,7 +69,7 @@ public class IceShaker extends AppCompatImageView
 
         shots = new ArrayList<>();
 
-        syrups = new HashMap<>();
+        syrupsMap = new HashMap<>();
 
         collider = new Collider() {
             @Override
@@ -82,10 +82,16 @@ public class IceShaker extends AppCompatImageView
                     Log.e(TAG, "collider instanceof Syrup");
 
                     Syrup syrup = (Syrup) collider;
-                    int quantityPrevious = (syrups.get(syrup.getType()) == null) ? 0 : syrups.get(syrup.getType());
+                    Syrup.Type type = syrup.getType();
 
-                    int quantityNew = quantityPrevious + 1;
-                    syrups.put(syrup.getType(), quantityNew);
+                    List<Syrup> syrups = null;
+                    if (syrupsMap.get(type) == null) {
+                        syrups = new ArrayList<>();
+                    } else {
+                        syrups = syrupsMap.get(type);
+                    }
+                    syrups.add(syrup);
+                    syrupsMap.put(type, syrups);
                     invalidate();
                 }
             }
@@ -144,12 +150,12 @@ public class IceShaker extends AppCompatImageView
         canvas.drawText(textForShot, 5, 15, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.amber));
-        int quantityVanilla = (syrups.get(Syrup.Type.VANILLA) == null) ? 0 : syrups.get(Syrup.Type.VANILLA);
+        int quantityVanilla = (syrupsMap.get(Syrup.Type.VANILLA) == null) ? 0 : syrupsMap.get(Syrup.Type.VANILLA).size();
         int ySyrupVanilla = yLine2;
         canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.brown));
-        int quantityBrownSugar = (syrups.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrups.get(Syrup.Type.BROWN_SUGAR);
+        int quantityBrownSugar = (syrupsMap.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrupsMap.get(Syrup.Type.BROWN_SUGAR).size();
         int ySyrupBrownSugar = yLine3;
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
 
@@ -298,7 +304,7 @@ public class IceShaker extends AppCompatImageView
 
     public void shake() {
         // TODO:
-        if (!syrups.isEmpty() && (shots.size() > 0) && cinnamoned && iced) {
+        if (!syrupsMap.isEmpty() && (shots.size() > 0) && cinnamoned && iced) {
             setBackgroundColor(getResources().getColor(R.color.purple_700));
         }
     }
@@ -351,7 +357,7 @@ public class IceShaker extends AppCompatImageView
 
         shots.clear();
 
-        syrups.clear();
+        syrupsMap.clear();
 
         invalidate();
     }

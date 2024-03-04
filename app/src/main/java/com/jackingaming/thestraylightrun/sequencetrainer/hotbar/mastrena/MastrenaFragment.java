@@ -193,8 +193,10 @@ public class MastrenaFragment extends Fragment {
                                   EspressoShot.AmountOfBean amountOfBeanSelected) {
         // TODO:
         //  (1) [CHECKED] store EspressoShot instances instead of using (int numberOfShots).
-        //  (2) compose EspressoShot/Syrup with DrinkComponentInfo.
-        //  (3) store Syrup instances instead of using (int quantityNew).
+        //  (2) [CHECKED] store Syrup instances instead of using (int quantityNew).
+        //  (3) store Milk instances instead of using (String content, int amount, int temperature, int timeFrothed).
+        //  (4) compose EspressoShot/Syrup/Milk with DrinkComponentInfo.
+
         EspressoShot espressoShot = new EspressoShot(getContext());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
