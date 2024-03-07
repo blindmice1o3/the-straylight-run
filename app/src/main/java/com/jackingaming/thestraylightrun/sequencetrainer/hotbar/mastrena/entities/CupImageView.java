@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -21,12 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 
@@ -45,10 +39,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 //    private EspressoShot.AmountOfBean amountOfBean;
 //    private int numberOfShots;
 
-    private String content;
-    private int amount;
-    private int temperature;
-    private int timeFrothed;
+    // TODO: replace with List<Milk> milks
+    private Milk milk;
+//    private String content;
+//    private int amount;
+//    private int temperature;
+//    private int timeFrothed;
 
     private Map<Syrup.Type, List<Syrup>> syrupsMap;
 
@@ -72,10 +68,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     private void init() {
         shots = new ArrayList<>();
 
-        content = null;
-        amount = 0;
-        temperature = 0;
-        timeFrothed = 0;
+        milk = null;
+//        content = null;
+//        amount = 0;
+//        temperature = 0;
+//        timeFrothed = 0;
 
         syrupsMap = new HashMap<>();
 
@@ -155,19 +152,22 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, yShot, textPaint);
 
+        int temperature = (milk == null) ? (0) : (milk.getTemperature());
         int idPaintColor = (temperature < 160) ? R.color.purple_700 : R.color.red;
         textPaint.setColor(getResources().getColor(idPaintColor));
         int yTemperature = (shotOnTop) ? yLine2 : yLine1;
         canvas.drawText(Integer.toString(temperature), 5, yTemperature, textPaint);
 
+        int timeFrothed = (milk == null) ? (0) : (milk.getTimeFrothed());
         textPaint.setColor(getResources().getColor(R.color.red));
         canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, yTemperature, textPaint);
 
-        String nameOfContent = (content == null) ? "null" : content;
+        String nameOfContent = (milk == null) ? ("null") : (milk.getType().name());
         textPaint.setColor(getResources().getColor(R.color.purple_700));
         int yContentName = (shotOnTop) ? yLine3 : yLine2;
         canvas.drawText(nameOfContent, 5, yContentName, textPaint);
 
+        int amount = (milk == null) ? (0) : (milk.getAmount());
         int yContentAmount = (shotOnTop) ? yLine4 : yLine3;
         canvas.drawText(Integer.toString(amount), 5, yContentAmount, textPaint);
 
@@ -235,8 +235,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     } else if (label.equals("SteamingPitcher")) {
                         Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
-                        if (((SteamingPitcher) event.getLocalState()).getAmount() != 0) {
-                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getAmount() != 0");
+                        if (((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0) {
+                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
@@ -245,7 +245,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getAmount() == 0");
+                            Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() == 0");
                         }
                     }
                 } else {
@@ -291,8 +291,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.d(TAG, "label.equals(\"ShotGlass\")");
 
                     // TODO:
-                    if (content != null) {
-                        Log.d(TAG, "content != null... setting shotOnTop to true.");
+                    if (milk != null) {
+                        Log.d(TAG, "milk != null... setting shotOnTop to true.");
                         shotOnTop = true;
                     }
 
@@ -305,8 +305,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                 } else if (label.equals("CaramelDrizzleBottle")) {
                     Log.d(TAG, "label.equals(\"CaramelDrizzleBottle\")");
 
-                    if (content != null && shots.size() > 0) {
-                        Log.d(TAG, "content != null && shots.size() > 0... setting drizzled to true.");
+                    if (milk != null && shots.size() > 0) {
+                        Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
                         drizzled = true;
                     }
                 } else if (label.equals("DrinkLabel")) {
@@ -402,36 +402,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.shots = shots;
     }
 
-    public String getContent() {
-        return content;
+    public Milk getMilk() {
+        return milk;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-    }
-
-    public int getTimeFrothed() {
-        return timeFrothed;
-    }
-
-    public void setTimeFrothed(int timeFrothed) {
-        this.timeFrothed = timeFrothed;
+    public void setMilk(Milk milk) {
+        this.milk = milk;
     }
 
     public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
@@ -465,25 +441,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             shots.addAll(shotsToTransferIn);
         }
 
-        if (content.containsKey("content")) {
-            this.content = (String) content.get("content");
+        if (content.containsKey("milk")) {
+            milk = (Milk) content.get("milk");
         }
-        if (content.containsKey("amount")) {
-            amount = Integer.parseInt(
-                    (String) content.get("amount")
-            );
-        }
-        if (content.containsKey("temperature")) {
-            temperature = Integer.parseInt(
-                    (String) content.get("temperature")
-            );
-        }
-        if (content.containsKey("timeFrothed")) {
-            timeFrothed = Integer.parseInt(
-                    (String) content.get("timeFrothed")
-            );
-        }
+
         // TODO: syrups
+
         if (content.containsKey("shotOnTop")) {
             shotOnTop = Boolean.parseBoolean(
                     (String) content.get("shotOnTop")
@@ -505,11 +468,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         List<EspressoShot> shotsCopy = new ArrayList<>(shots);
         content.put("shots", shotsCopy);
 
-        content.put("content", this.content);
-        content.put("amount", Integer.toString(amount));
-        content.put("temperature", Integer.toString(temperature));
-        content.put("timeFrothed", Integer.toString(timeFrothed));
+        content.put("milk", milk);
+
         // TODO: syrups
+
         content.put("shotOnTop", Boolean.toString(shotOnTop));
         content.put("drizzled", Boolean.toString(drizzled));
 
@@ -522,11 +484,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public void empty() {
         shots.clear();
 
-        content = null;
-        amount = 0;
-        temperature = 0;
-        timeFrothed = 0;
+        milk = null;
+
         syrupsMap.clear();
+
         shotOnTop = false;
         drizzled = false;
 

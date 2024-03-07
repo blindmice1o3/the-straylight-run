@@ -46,8 +46,8 @@ public class SteamingWand extends AppCompatImageView {
                         Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
                         steamingPitcher = (SteamingPitcher) event.getLocalState();
-                        if (steamingPitcher.getContent() != null &&
-                                steamingPitcher.getAmount() > 0) {
+                        if (steamingPitcher.getMilk() != null &&
+                                steamingPitcher.getMilk().getAmount() > 0) {
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.8f);
 
@@ -55,7 +55,7 @@ public class SteamingWand extends AppCompatImageView {
                             // data.
                             return true;
                         } else {
-                            Log.d(TAG, "steamingPitcher's content is null or amount <= 0.");
+                            Log.d(TAG, "steamingPitcher's milk is null or milk's amount <= 0.");
                         }
                     }
                 } else {

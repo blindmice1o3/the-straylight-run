@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 
 import java.util.HashMap;
 
@@ -32,20 +31,22 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public static final String TAG = SteamingPitcher.class.getSimpleName();
 
     public interface SteamingPitcherListener {
-        void showDialogFillSteamingPitcher(String contentToBeSteamed, int amount);
+        void showDialogFillSteamingPitcher(String contentToBeSteamed);
     }
 
     private SteamingPitcherListener listener;
 
-    private String content;
-    private int amount;
-
-    private Paint textPaint;
     private int idPurple, idRed;
+    private Paint textPaint;
 
-    private int temperature;
+    // TODO: replace with List<Milk> milks
+    private Milk milk;
+//    private String content;
+//    private int amount;
+//    private int temperature;
+//    private int timeFrothed;
+
     private ObjectAnimator temperatureAnimator;
-    private int timeFrothed;
     private ObjectAnimator timeFrothedAnimator;
 
     public SteamingPitcher(@NonNull Context context) {
@@ -72,7 +73,12 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public void startTimeFrothedAnimator() {
         Log.e(TAG, "startTimeFrothedAnimator()");
 
-        timeFrothedAnimator = ObjectAnimator.ofInt(this, "timeFrothed", timeFrothed, 10);
+        if (milk == null) {
+            Log.e(TAG, "milk == null... returning.");
+            return;
+        }
+
+        timeFrothedAnimator = ObjectAnimator.ofInt(milk, "timeFrothed", milk.getTimeFrothed(), 10);
         timeFrothedAnimator.setInterpolator(new LinearInterpolator());
         timeFrothedAnimator.setDuration(10000L);
         timeFrothedAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -105,10 +111,15 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public void startTemperatureAnimator() {
         Log.e(TAG, "startTemperatureAnimator()");
 
-        temperatureAnimator = ObjectAnimator.ofInt(this, "temperature", temperature, 160);
-        int coefficientAmount = 1 + (amount / 100);
+        if (milk == null) {
+            Log.e(TAG, "milk == null... returning.");
+            return;
+        }
+
+        temperatureAnimator = ObjectAnimator.ofInt(milk, "temperature", milk.getTemperature(), 160);
+        int coefficientAmount = 1 + (milk.getAmount() / 100);
         temperatureAnimator.setDuration(
-                coefficientAmount * (((160L - temperature) * 1000L) / 20)
+                coefficientAmount * (((160L - milk.getTemperature()) * 1000L) / 20)
         );
         temperatureAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -141,17 +152,20 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        int temperature = (milk == null) ? 0 : milk.getTemperature();
         int colorTemperature = (temperature < 160) ? idPurple : idRed;
         textPaint.setColor(colorTemperature);
         canvas.drawText(Integer.toString(temperature), 5, 15, textPaint);
 
         textPaint.setColor(idRed);
+        int timeFrothed = (milk == null) ? 0 : milk.getTimeFrothed();
         canvas.drawText(Integer.toString(timeFrothed), getWidth() - 16, 15, textPaint);
 
         textPaint.setColor(idPurple);
-        String nameOfContent = (content == null) ? "null" : content;
+        String nameOfContent = (milk == null) ? "null" : milk.getType().name();
         canvas.drawText(nameOfContent, 5, 30, textPaint);
 
+        int amount = (milk == null) ? 0 : milk.getAmount();
         canvas.drawText(Integer.toString(amount), 5, 45, textPaint);
     }
 
@@ -208,8 +222,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                         Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
 
                         if (((CupImageView) event.getLocalState()).getShots().size() == 0 &&
-                                ((CupImageView) event.getLocalState()).getAmount() != 0) {
-                            Log.d(TAG, "((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                                ((CupImageView) event.getLocalState()).getMilk() != null) {
+                            Log.d(TAG, "((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getMilk() != null");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
@@ -217,7 +231,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                             // data.
                             return true;
                         } else {
-                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                            Log.e(TAG, "NOT ((CupImageView) event.getLocalState()).getShots().size() == 0 && ((CupImageView) event.getLocalState()).getMilk() != null");
                         }
                     }
                 } else {
@@ -257,7 +271,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     Log.e(TAG, "contentToBeSteamed: " + contentToBeSteamed);
 
                     if (listener != null) {
-                        listener.showDialogFillSteamingPitcher(contentToBeSteamed, amount);
+                        listener.showDialogFillSteamingPitcher(contentToBeSteamed);
                     } else {
                         Log.e(TAG, "listener == null");
                     }
@@ -297,23 +311,24 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         return false;
     }
 
-    public void update(String content, int amount) {
-        this.content = content;
-        this.amount = amount;
+    public void updateMilk(Milk milk) {
+        this.milk = milk;
 
-        if (content == null) {
+        if (milk == null) {
             setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+            invalidate();
             return;
         }
 
-        if (content.equals("coconut")) {
+        String nameMilkType = milk.getType().name();
+        if (nameMilkType.equals(Milk.Type.COCONUT.name())) {
             setBackgroundColor(getResources().getColor(R.color.green));
-        } else if (content.equals("almond")) {
+        } else if (nameMilkType.equals(Milk.Type.ALMOND.name())) {
             setBackgroundColor(getResources().getColor(R.color.brown));
-        } else if (content.equals("soy")) {
+        } else if (nameMilkType.equals(Milk.Type.SOY.name())) {
             setBackgroundColor(getResources().getColor(R.color.cream));
         } else {
-            Log.e(TAG, "update() content unknown.");
+            Log.e(TAG, "updateMilk(Milk) nameMilkType unknown.");
             setBackgroundColor(getResources().getColor(R.color.red));
         }
         invalidate();
@@ -327,70 +342,28 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         this.listener = listener;
     }
 
-    public String getContent() {
-        return content;
+    public Milk getMilk() {
+        return milk;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
-    }
-
-    public int getTimeFrothed() {
-        return timeFrothed;
-    }
-
-    public void setTimeFrothed(int timeFrothed) {
-        this.timeFrothed = timeFrothed;
+    public void setMilk(Milk milk) {
+        this.milk = milk;
     }
 
     @Override
     public void transferIn(HashMap<String, Object> content) {
-        if (content.containsKey("content")) {
-            this.content = (String) content.get("content");
-        }
-        if (content.containsKey("amount")) {
-            amount = Integer.parseInt(
-                    (String) content.get("amount")
-            );
-        }
-        if (content.containsKey("temperature")) {
-            temperature = Integer.parseInt(
-                    (String) content.get("temperature")
-            );
-        }
-        if (content.containsKey("timeFrothed")) {
-            timeFrothed = Integer.parseInt(
-                    (String) content.get("timeFrothed")
-            );
+        if (content.containsKey("milk")) {
+            milk = (Milk) content.get("milk");
         }
 
-        update(this.content, amount);
+        updateMilk(milk);
     }
 
     @Override
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
 
-        content.put("content", this.content);
-        content.put("amount", Integer.toString(amount));
-        content.put("temperature", Integer.toString(temperature));
-        content.put("timeFrothed", Integer.toString(timeFrothed));
+        content.put("milk", milk);
 
         empty();
 
@@ -399,8 +372,6 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     @Override
     public void empty() {
-        temperature = 0;
-        timeFrothed = 0;
-        update(null, 0);
+        updateMilk(null);
     }
 }

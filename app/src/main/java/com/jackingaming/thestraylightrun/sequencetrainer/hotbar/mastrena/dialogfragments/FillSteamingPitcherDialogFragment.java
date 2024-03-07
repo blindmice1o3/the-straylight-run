@@ -25,7 +25,6 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
     public static final String BUNDLE_KEY_AMOUNT = "amount";
 
     private static final String CONTENT = "content";
-    private static final String AMOUNT = "amount";
     private static final int MIN = 0;
     private static final int MAX = 25 * 4;
     private static final int BRACKET1 = 8 * 4;
@@ -36,14 +35,13 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
     private String content;
     private int amount;
 
-    public static FillSteamingPitcherDialogFragment newInstance(String content, int amount) {
-        Log.e(TAG, "newInstance(String, int)");
+    public static FillSteamingPitcherDialogFragment newInstance(String content) {
+        Log.e(TAG, "newInstance(String)");
 
         FillSteamingPitcherDialogFragment fragment = new FillSteamingPitcherDialogFragment();
 
         Bundle args = new Bundle();
         args.putString(CONTENT, content);
-        args.putInt(AMOUNT, amount);
         fragment.setArguments(args);
 
         return fragment;
@@ -67,7 +65,6 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
         AppCompatSeekBar seekBar = view.findViewById(R.id.seekbar);
 
         content = getArguments().getString(CONTENT);
-        amount = getArguments().getInt(AMOUNT);
 
         tvDisplayer.setText(content + ": " + amount);
         refreshBackgroundResourceImage(ivSteamingCup);

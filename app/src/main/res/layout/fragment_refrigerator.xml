@@ -8,7 +8,7 @@
     android:background="@drawable/shape_refrigerator"
     tools:context=".sequencetrainer.hotbar.refrigerator.RefrigeratorFragment">
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_two_percent"
         android:layout_width="112dp"
         android:layout_height="112dp"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_whole"
         android:layout_width="112dp"
         android:layout_height="112dp"
@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_oat"
         android:layout_width="48dp"
         android:layout_height="88dp"
@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toStartOf="@id/milk_coconut"
         app:layout_constraintStart_toEndOf="@id/milk_whole" />
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_coconut"
         android:layout_width="56dp"
         android:layout_height="112dp"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/milk_almond" />
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_almond"
         android:layout_width="56dp"
         android:layout_height="112dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/milk_soy" />
 
-    <com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.entities.Milk
+    <ImageView
         android:id="@+id/milk_soy"
         android:layout_width="56dp"
         android:layout_height="112dp"
@@ -58,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <View
+    <ImageView
         android:id="@+id/view_whipped_cream"
         android:layout_width="48dp"
         android:layout_height="88dp"

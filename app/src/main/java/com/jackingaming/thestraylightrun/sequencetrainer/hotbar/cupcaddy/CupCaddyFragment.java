@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
 
 public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
@@ -101,9 +101,9 @@ public class CupCaddyFragment extends Fragment {
                         if (dragEvent.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
                             Log.d(TAG, "label.equals(\"MastrenaToCaddy\")");
 
-                            if (((CupImageView) dragEvent.getLocalState()).getAmount() == 0 &&
+                            if (((CupImageView) dragEvent.getLocalState()).getMilk() == null &&
                                     ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0) {
-                                Log.d(TAG, "((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
+                                Log.d(TAG, "((CupImageView) dragEvent.getLocalState()).getMilk() == null && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
 
                                 // Change background drawable to indicate drop-target.
                                 view.setBackgroundResource(resIdDropTarget);
@@ -112,7 +112,7 @@ public class CupCaddyFragment extends Fragment {
                                 // data.
                                 return true;
                             } else {
-                                Log.e(TAG, "NOT ((CupImageView) dragEvent.getLocalState()).getAmount() == 0 && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
+                                Log.e(TAG, "NOT ((CupImageView) dragEvent.getLocalState()).getMilk() == null && ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0");
                             }
                         }
                     } else {

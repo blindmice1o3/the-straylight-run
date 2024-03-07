@@ -30,15 +30,16 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
@@ -143,9 +144,17 @@ public class MastrenaFragment extends Fragment {
                         String content = result.getString(FillSteamingPitcherDialogFragment.BUNDLE_KEY_CONTENT);
                         int amount = result.getInt(FillSteamingPitcherDialogFragment.BUNDLE_KEY_AMOUNT);
 
-                        Log.e(TAG, content + ": " + amount);
-                        steamingPitcher.setTemperature(37);
-                        steamingPitcher.update(content, amount);
+                        // check if content is a type of Milk.
+                        for (Milk.Type type : Milk.Type.values()) {
+                            if (content.equals(type.name())) {
+                                Log.e(TAG, "Instantiate Milk and initialize it with temperature 37, timeFrothed 0, and type (" + content + ").");
+                                Milk milk = new Milk(getContext());
+                                milk.init(type, amount, 37, 0);
+
+                                steamingPitcher.updateMilk(milk);
+                            }
+                        }
+                        // TODO: check if content is Lemonade.
                     }
                 });
         getChildFragmentManager()
@@ -198,11 +207,11 @@ public class MastrenaFragment extends Fragment {
         //  (4) compose EspressoShot/Syrup/Milk with DrinkComponentInfo.
 
         EspressoShot espressoShot = new EspressoShot(getContext());
+        espressoShot.init(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         espressoShot.setX(200 - (16 / 2));
         espressoShot.setY(458);
-        espressoShot.configureShot(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         constraintLayoutMastrena.addView(espressoShot);
 
         animatorEspressoShot = ObjectAnimator.ofFloat(
@@ -437,9 +446,9 @@ public class MastrenaFragment extends Fragment {
         steamingPitcher.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
         steamingPitcher.setListener(new SteamingPitcher.SteamingPitcherListener() {
             @Override
-            public void showDialogFillSteamingPitcher(String contentToBeSteamed, int amount) {
+            public void showDialogFillSteamingPitcher(String contentToBeSteamed) {
                 FillSteamingPitcherDialogFragment dialogFragment =
-                        FillSteamingPitcherDialogFragment.newInstance(contentToBeSteamed, amount);
+                        FillSteamingPitcherDialogFragment.newInstance(contentToBeSteamed);
                 dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
             }
         });

@@ -30,15 +30,15 @@ public class EspressoShot extends AppCompatImageView {
         super(context, attrs);
     }
 
-    public void configureShot(Type typeSelected,
-                              AmountOfWater amountOfWaterSelected, AmountOfBean amountOfBeanSelected) {
-        type = typeSelected;
+    public void init(Type type,
+                     AmountOfWater amountOfWater, AmountOfBean amountOfBean) {
+        this.type = type;
 
         int colorToUse = lookupColorIdByType(type);
         setBackgroundColor(getResources().getColor(colorToUse));
 
-        amountOfWater = amountOfWaterSelected;
-        amountOfBean = amountOfBeanSelected;
+        this.amountOfWater = amountOfWater;
+        this.amountOfBean = amountOfBean;
     }
 
     public Type getType() {

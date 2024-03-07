@@ -1,8 +1,9 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks;
 
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
 
 import java.util.List;
@@ -66,32 +67,32 @@ public class FlatWhite extends Drink {
             }
         }
 
-        if (!cupImageView.getContent().equals("whole")) {
+        if (!cupImageView.getMilk().getType().equals(Milk.Type.WHOLE)) {
             return false;
         }
 
-        if (cupImageView.getTemperature() < 160) {
+        if (cupImageView.getMilk().getTemperature() < 160) {
             return false;
         }
 
-        if (cupImageView.getTimeFrothed() < 3 || cupImageView.getTimeFrothed() > 5) {
+        if (cupImageView.getMilk().getTimeFrothed() < 3 || cupImageView.getMilk().getTimeFrothed() > 5) {
             return false;
         }
 
         if (size.equals("venti")) {
-            if (cupImageView.getAmount() < (20 * 4)) {
+            if (cupImageView.getMilk().getAmount() < (20 * 4)) {
                 return false;
             }
         } else if (size.equals("grande")) {
-            if (cupImageView.getAmount() < (16 * 4)) {
+            if (cupImageView.getMilk().getAmount() < (16 * 4)) {
                 return false;
             }
         } else if (size.equals("tall")) {
-            if (cupImageView.getAmount() < (12 * 4)) {
+            if (cupImageView.getMilk().getAmount() < (12 * 4)) {
                 return false;
             }
         } else if (size.equals("short")) {
-            if (cupImageView.getAmount() < (8 * 4)) {
+            if (cupImageView.getMilk().getAmount() < (8 * 4)) {
                 return false;
             }
         }
