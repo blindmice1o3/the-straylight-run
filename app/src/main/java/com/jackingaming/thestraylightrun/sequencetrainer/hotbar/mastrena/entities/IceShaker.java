@@ -218,10 +218,11 @@ public class IceShaker extends AppCompatImageView
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("Ice") ||
+                    if (event.getClipDescription().getLabel().equals("MastrenaToCaddy") ||
+                            event.getClipDescription().getLabel().equals("Ice") ||
                             event.getClipDescription().getLabel().equals("ShotGlass") ||
                             event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\") || event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") || event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\") || event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -259,7 +260,17 @@ public class IceShaker extends AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals("Ice")) {
+                if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
+
+                    // TODO:
+                    CupImageView cupImageView = (CupImageView) event.getLocalState();
+
+                    Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            cupImageView.transferOut()
+                    );
+                } else if (event.getClipDescription().getLabel().equals("Ice")) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(\"Ice\")");
 
                     String contentToBeShaken = event.getClipData().getItemAt(0).getText().toString();
@@ -343,6 +354,38 @@ public class IceShaker extends AppCompatImageView
         setBackgroundColor(getResources().getColor(R.color.purple_700));
     }
 
+    public Ice getIce() {
+        return ice;
+    }
+
+    public void setIce(Ice ice) {
+        this.ice = ice;
+    }
+
+    public Cinnamon getCinnamon() {
+        return cinnamon;
+    }
+
+    public void setCinnamon(Cinnamon cinnamon) {
+        this.cinnamon = cinnamon;
+    }
+
+    public List<EspressoShot> getShots() {
+        return shots;
+    }
+
+    public void setShots(List<EspressoShot> shots) {
+        this.shots = shots;
+    }
+
+    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
+        return syrupsMap;
+    }
+
+    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
+        this.syrupsMap = syrupsMap;
+    }
+
     @Override
     public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("ice")) {
@@ -358,6 +401,18 @@ public class IceShaker extends AppCompatImageView
         }
 
         // TODO: syrups
+        if (content.containsKey("syrupsMap")) {
+            Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
+            for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {
+                List<Syrup> syrupsToTransferIn = syrupsMapToTransferIn.get(type);
+
+                if (syrupsMap.containsKey(type)) {
+                    syrupsMap.get(type).addAll(syrupsToTransferIn);
+                } else {
+                    syrupsMap.put(type, syrupsToTransferIn);
+                }
+            }
+        }
 
         invalidate();
     }
@@ -376,7 +431,8 @@ public class IceShaker extends AppCompatImageView
         List<EspressoShot> shotsCopy = new ArrayList<>(shots);
         content.put("shots", shotsCopy);
 
-        // TODO: syrups
+        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
+        content.put("syrupsMap", syrupsMapCopy);
 
         empty();
 

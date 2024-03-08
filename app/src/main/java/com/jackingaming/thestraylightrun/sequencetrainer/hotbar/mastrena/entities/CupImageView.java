@@ -250,6 +250,21 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         } else {
                             Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() == 0");
                         }
+                    } else if (label.equals("IceShaker")) {
+                        Log.d(TAG, "label.equals(\"IceShaker\")");
+
+                        IceShaker iceShaker = (IceShaker) event.getLocalState();
+                        if (iceShaker.getIce() != null || iceShaker.getCinnamon() != null ||
+                                !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()) {
+                            Log.d(TAG, "iceShaker.getIce() != null || iceShaker.getCinnamon() != null || !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()");
+
+                            // Change value of alpha to indicate drop-target.
+                            setAlpha(0.75f);
+
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        }
                     }
                 } else {
                     Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
@@ -281,7 +296,16 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (label.equals("SteamingPitcher")) {
+                if (label.equals("IceShaker")) {
+                    Log.d(TAG, "label.equals(\"IceShaker\")");
+
+                    IceShaker iceShaker = (IceShaker) event.getLocalState();
+
+                    Toast.makeText(getContext(), "transferring content of ice shaker", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            iceShaker.transferOut()
+                    );
+                } else if (label.equals("SteamingPitcher")) {
                     Log.d(TAG, "label.equals(\"SteamingPitcher\")");
 
                     SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
@@ -449,6 +473,18 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         // TODO: syrups
+        if (content.containsKey("syrupsMap")) {
+            Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
+            for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {
+                List<Syrup> syrupsToTransferIn = syrupsMapToTransferIn.get(type);
+
+                if (syrupsMap.containsKey(type)) {
+                    syrupsMap.get(type).addAll(syrupsToTransferIn);
+                } else {
+                    syrupsMap.put(type, syrupsToTransferIn);
+                }
+            }
+        }
 
         if (content.containsKey("shotOnTop")) {
             shotOnTop = Boolean.parseBoolean(
@@ -473,7 +509,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         content.put("milk", milk);
 
-        // TODO: syrups
+        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
+        content.put("syrupsMap", syrupsMapCopy);
 
         content.put("shotOnTop", Boolean.toString(shotOnTop));
         content.put("drizzled", Boolean.toString(drizzled));
