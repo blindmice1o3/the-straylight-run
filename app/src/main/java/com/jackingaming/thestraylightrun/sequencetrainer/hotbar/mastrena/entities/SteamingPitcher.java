@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 
 import java.util.HashMap;
 

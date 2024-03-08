@@ -1,13 +1,12 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 
-public class Milk extends AppCompatImageView {
+public class Milk extends DrinkComponent {
     public static final String TAG = Milk.class.getSimpleName();
 
     public enum Type {TWO_PERCENT, WHOLE, NON_FAT, HALF_AND_HALF, OAT, COCONUT, ALMOND, SOY;}

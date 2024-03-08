@@ -2,9 +2,9 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.me
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Milk;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.util.List;
 

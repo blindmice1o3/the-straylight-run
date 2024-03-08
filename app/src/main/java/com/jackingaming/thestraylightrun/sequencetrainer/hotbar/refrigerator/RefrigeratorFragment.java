@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Milk;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 
 public class RefrigeratorFragment extends Fragment {
     public static final String TAG = RefrigeratorFragment.class.getSimpleName();

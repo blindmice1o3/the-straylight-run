@@ -1,15 +1,14 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class EspressoShot extends AppCompatImageView {
+public class EspressoShot extends DrinkComponent {
     public static final String TAG = EspressoShot.class.getSimpleName();
 
     public enum Type {BLONDE, SIGNATURE, DECAF;}

@@ -2,7 +2,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.me
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.util.List;
 

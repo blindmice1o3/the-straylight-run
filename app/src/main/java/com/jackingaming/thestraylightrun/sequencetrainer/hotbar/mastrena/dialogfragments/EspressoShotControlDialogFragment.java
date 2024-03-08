@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 
 public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String TAG = EspressoShotControlDialogFragment.class.getSimpleName();

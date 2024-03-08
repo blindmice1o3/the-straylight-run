@@ -36,14 +36,14 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 
 import java.time.Duration;
@@ -203,8 +203,8 @@ public class MastrenaFragment extends Fragment {
         // TODO:
         //  (1) [CHECKED] store EspressoShot instances instead of using (int numberOfShots).
         //  (2) [CHECKED] store Syrup instances instead of using (int quantityNew).
-        //  (3) store Milk instances instead of using (String content, int amount, int temperature, int timeFrothed).
-        //  (4) compose EspressoShot/Syrup/Milk with DrinkComponentInfo.
+        //  (3) [CHECKED] store Milk instances instead of using (String content, int amount, int temperature, int timeFrothed).
+        //  (4) [CHECKED] have EspressoShot/Syrup/Milk/Ice/Cinnamon extend DrinkComponent.
 
         EspressoShot espressoShot = new EspressoShot(getContext());
         espressoShot.init(typeSelected, amountOfWaterSelected, amountOfBeanSelected);

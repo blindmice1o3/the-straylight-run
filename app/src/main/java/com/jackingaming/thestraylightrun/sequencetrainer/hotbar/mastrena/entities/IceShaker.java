@@ -20,6 +20,10 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.GestureDetectorCompat;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
@@ -33,8 +37,10 @@ public class IceShaker extends AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = IceShaker.class.getSimpleName();
 
-    private boolean iced;
-    private boolean cinnamoned;
+    private Ice ice;
+    private Cinnamon cinnamon;
+//    private boolean iced;
+//    private boolean cinnamoned;
 
     private List<EspressoShot> shots;
 //    private EspressoShot.Type type;
@@ -64,8 +70,10 @@ public class IceShaker extends AppCompatImageView
     }
 
     private void init() {
-        iced = false;
-        cinnamoned = false;
+        ice = null;
+        cinnamon = null;
+//        iced = false;
+//        cinnamoned = false;
 
         shots = new ArrayList<>();
 
@@ -159,8 +167,8 @@ public class IceShaker extends AppCompatImageView
         int ySyrupBrownSugar = yLine3;
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
 
-        String textForCinnamoned = (cinnamoned) ? "cinn" : "no-cinn";
-        int colorForCinnamoned = (cinnamoned) ? R.color.red : R.color.black;
+        String textForCinnamoned = (cinnamon != null) ? "cinn" : "no-cinn";
+        int colorForCinnamoned = (cinnamon != null) ? R.color.red : R.color.black;
         textPaint.setColor(getResources().getColor(colorForCinnamoned));
         canvas.drawText(textForCinnamoned, 5, ySyrupBrownSugar, textPaint);
     }
@@ -257,7 +265,7 @@ public class IceShaker extends AppCompatImageView
                     String contentToBeShaken = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeShaken: " + contentToBeShaken);
 
-                    iced = true;
+                    ice = new Ice(getContext());
                     setBackgroundColor(idBlue);
                     invalidate();
                 } else if (event.getClipDescription().getLabel().equals("ShotGlass")) {
@@ -273,7 +281,7 @@ public class IceShaker extends AppCompatImageView
                 } else if (event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
 
-                    cinnamoned = true;
+                    cinnamon = new Cinnamon(getContext());
                     invalidate();
                 }
 
@@ -303,23 +311,45 @@ public class IceShaker extends AppCompatImageView
     }
 
     public void shake() {
-        // TODO:
-        if (!syrupsMap.isEmpty() && (shots.size() > 0) && cinnamoned && iced) {
-            setBackgroundColor(getResources().getColor(R.color.purple_700));
+        Log.e(TAG, "shake()");
+
+        if (ice != null) {
+            Log.e(TAG, "ice");
+            ice.setShaken(true);
         }
+
+        if (cinnamon != null) {
+            Log.e(TAG, "cinnamon");
+            cinnamon.setShaken(true);
+        }
+
+        if (!shots.isEmpty()) {
+            for (EspressoShot shot : shots) {
+                Log.e(TAG, "shot");
+                shot.setShaken(true);
+            }
+        }
+
+        if (!syrupsMap.isEmpty()) {
+            for (Syrup.Type type : syrupsMap.keySet()) {
+                List<Syrup> syrups = syrupsMap.get(type);
+                for (Syrup syrup : syrups) {
+                    Log.e(TAG, "syrup");
+                    syrup.setShaken(true);
+                }
+            }
+        }
+
+        setBackgroundColor(getResources().getColor(R.color.purple_700));
     }
 
     @Override
     public void transferIn(HashMap<String, Object> content) {
-        if (content.containsKey("iced")) {
-            iced = Boolean.parseBoolean(
-                    (String) content.get("iced")
-            );
+        if (content.containsKey("ice")) {
+            ice = (Ice) content.get("ice");
         }
-        if (content.containsKey("cinnamoned")) {
-            cinnamoned = Boolean.parseBoolean(
-                    (String) content.get("cinnamoned")
-            );
+        if (content.containsKey("cinnamon")) {
+            cinnamon = (Cinnamon) content.get("cinnamon");
         }
 
         if (content.containsKey("shots")) {
@@ -336,8 +366,12 @@ public class IceShaker extends AppCompatImageView
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
 
-        content.put("iced", Boolean.toString(iced));
-        content.put("cinnamoned", Boolean.toString(cinnamoned));
+        if (ice != null) {
+            content.put("ice", ice);
+        }
+        if (cinnamon != null) {
+            content.put("cinnamon", cinnamon);
+        }
 
         List<EspressoShot> shotsCopy = new ArrayList<>(shots);
         content.put("shots", shotsCopy);
@@ -351,9 +385,9 @@ public class IceShaker extends AppCompatImageView
 
     @Override
     public void empty() {
-        iced = false;
+        ice = null;
         setBackgroundColor(idLightBlueA200);
-        cinnamoned = false;
+        cinnamon = null;
 
         shots.clear();
 
