@@ -321,17 +321,39 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             return;
         }
 
-        String nameMilkType = milk.getType().name();
-        if (nameMilkType.equals(Milk.Type.COCONUT.name())) {
-            setBackgroundColor(getResources().getColor(R.color.green));
-        } else if (nameMilkType.equals(Milk.Type.ALMOND.name())) {
-            setBackgroundColor(getResources().getColor(R.color.brown));
-        } else if (nameMilkType.equals(Milk.Type.SOY.name())) {
-            setBackgroundColor(getResources().getColor(R.color.cream));
-        } else {
-            Log.e(TAG, "updateMilk(Milk) nameMilkType unknown.");
-            setBackgroundColor(getResources().getColor(R.color.red));
+        int idColor = -1;
+        switch (milk.getType()) {
+            case TWO_PERCENT:
+                idColor = R.color.teal_200;
+                break;
+            case WHOLE:
+                idColor = R.color.red;
+                break;
+            case NON_FAT:
+                idColor = R.color.light_blue_A200;
+                break;
+            case HALF_AND_HALF:
+                idColor = R.color.purple;
+                break;
+            case OAT:
+                idColor = R.color.blue;
+                break;
+            case COCONUT:
+                idColor = R.color.green;
+                break;
+            case ALMOND:
+                idColor = R.color.brown;
+                break;
+            case SOY:
+                idColor = R.color.cream;
+                break;
+            default:
+                idColor = R.color.orange;
+                break;
         }
+        setBackgroundColor(
+                getResources().getColor(idColor)
+        );
         invalidate();
     }
 
