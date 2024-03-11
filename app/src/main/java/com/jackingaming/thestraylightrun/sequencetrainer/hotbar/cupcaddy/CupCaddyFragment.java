@@ -26,15 +26,15 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
 
-    public static final String TAG_TRENTA = "trenta";
-    public static final String TAG_VENTI = "venti";
-    public static final String TAG_GRANDE = "grande";
-    public static final String TAG_TALL = "tall";
-    public static final String TAG_SHORT = "short";
+    public static final String TAG_COLD_TRENTA = "coldTrenta";
+    public static final String TAG_HOT_VENTI = "hotVenti";
+    public static final String TAG_HOT_GRANDE = "hotGrande";
+    public static final String TAG_HOT_TALL = "hotTall";
+    public static final String TAG_HOT_SHORT = "hotShort";
 
     private CupCaddyViewModel mViewModel;
     private LinearLayout linearLayoutCupCaddy;
-    private ImageView ivTrenta, ivVenti, ivGrande, ivTall, ivShort;
+    private ImageView ivColdTrenta, ivHotVenti, ivHotGrande, ivHotTall, ivHotShort;
 
     public static CupCaddyFragment newInstance() {
         Log.e(TAG, "newInstance()");
@@ -56,24 +56,24 @@ public class CupCaddyFragment extends Fragment {
         linearLayoutCupCaddy = view.findViewById(R.id.linearlayout_cup_caddy);
         linearLayoutCupCaddy.setOnDragListener(new CupCaddyDragListener());
 
-        ivTrenta = view.findViewById(R.id.iv_trenta);
-        ivVenti = view.findViewById(R.id.iv_venti);
-        ivGrande = view.findViewById(R.id.iv_grande);
-        ivTall = view.findViewById(R.id.iv_tall);
-        ivShort = view.findViewById(R.id.iv_short);
+        ivColdTrenta = view.findViewById(R.id.iv_cold_trenta);
+        ivHotVenti = view.findViewById(R.id.iv_hot_venti);
+        ivHotGrande = view.findViewById(R.id.iv_hot_grande);
+        ivHotTall = view.findViewById(R.id.iv_hot_tall);
+        ivHotShort = view.findViewById(R.id.iv_hot_short);
 
-        ivTrenta.setTag(TAG_TRENTA);
-        ivVenti.setTag(TAG_VENTI);
-        ivGrande.setTag(TAG_GRANDE);
-        ivTall.setTag(TAG_TALL);
-        ivShort.setTag(TAG_SHORT);
+        ivColdTrenta.setTag(TAG_COLD_TRENTA);
+        ivHotVenti.setTag(TAG_HOT_VENTI);
+        ivHotGrande.setTag(TAG_HOT_GRANDE);
+        ivHotTall.setTag(TAG_HOT_TALL);
+        ivHotShort.setTag(TAG_HOT_SHORT);
 
         View.OnTouchListener caddyToMastrenaTouchListener = new CaddyToMastrenaTouchListener();
-        ivTrenta.setOnTouchListener(caddyToMastrenaTouchListener);
-        ivVenti.setOnTouchListener(caddyToMastrenaTouchListener);
-        ivGrande.setOnTouchListener(caddyToMastrenaTouchListener);
-        ivTall.setOnTouchListener(caddyToMastrenaTouchListener);
-        ivShort.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivColdTrenta.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivHotVenti.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivHotGrande.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivHotTall.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivHotShort.setOnTouchListener(caddyToMastrenaTouchListener);
     }
 
     @Override

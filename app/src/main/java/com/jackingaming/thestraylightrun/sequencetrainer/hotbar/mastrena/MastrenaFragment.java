@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
@@ -841,21 +842,21 @@ public class MastrenaFragment extends Fragment {
                             // Set ImageView's background and tag according to dragData.
                             int resId = -1;
                             String tag = null;
-                            if (dragData.equals("trenta")) {
-                                resId = R.drawable.drinksize_trenta;
-                                tag = "trenta";
-                            } else if (dragData.equals("venti")) {
-                                resId = R.drawable.drinksize_venti;
-                                tag = "venti";
-                            } else if (dragData.equals("grande")) {
-                                resId = R.drawable.drinksize_grande;
-                                tag = "grande";
-                            } else if (dragData.equals("tall")) {
-                                resId = R.drawable.drinksize_tall;
-                                tag = "tall";
-                            } else if (dragData.equals("short")) {
-                                resId = R.drawable.drinksize_short;
-                                tag = "short";
+                            if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
+                                resId = R.drawable.cold_drinksize_trenta;
+                                tag = CupCaddyFragment.TAG_COLD_TRENTA;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_HOT_VENTI)) {
+                                resId = R.drawable.hot_drinksize_venti;
+                                tag = CupCaddyFragment.TAG_HOT_VENTI;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_HOT_GRANDE)) {
+                                resId = R.drawable.hot_drinksize_grande;
+                                tag = CupCaddyFragment.TAG_HOT_GRANDE;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_HOT_TALL)) {
+                                resId = R.drawable.hot_drinksize_tall;
+                                tag = CupCaddyFragment.TAG_HOT_TALL;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
+                                resId = R.drawable.hot_drinksize_short;
+                                tag = CupCaddyFragment.TAG_HOT_SHORT;
                             } else {
                                 Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
                             }

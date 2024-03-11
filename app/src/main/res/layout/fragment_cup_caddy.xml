@@ -9,33 +9,33 @@
     tools:context=".sequencetrainer.hotbar.cupcaddy.CupCaddyFragment">
 
     <ImageView
-        android:id="@+id/iv_trenta"
+        android:id="@+id/iv_cold_trenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drinksize_trenta" />
+        android:src="@drawable/cold_drinksize_trenta" />
 
     <ImageView
-        android:id="@+id/iv_venti"
+        android:id="@+id/iv_hot_venti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drinksize_venti" />
+        android:src="@drawable/hot_drinksize_venti" />
 
     <ImageView
-        android:id="@+id/iv_grande"
+        android:id="@+id/iv_hot_grande"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drinksize_grande" />
+        android:src="@drawable/hot_drinksize_grande" />
 
     <ImageView
-        android:id="@+id/iv_tall"
+        android:id="@+id/iv_hot_tall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drinksize_tall" />
+        android:src="@drawable/hot_drinksize_tall" />
 
     <ImageView
-        android:id="@+id/iv_short"
+        android:id="@+id/iv_hot_short"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/drinksize_short" />
+        android:src="@drawable/hot_drinksize_short" />
 
 </LinearLayout>
