@@ -1,41 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearlayout_cup_caddy"
+    android:id="@+id/constraintlayout_cup_caddy"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_cup_caddy"
-    android:orientation="vertical"
     tools:context=".sequencetrainer.hotbar.cupcaddy.CupCaddyFragment">
+
+    <ImageView
+        android:id="@+id/iv_cold_tall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cold_drinksize_tall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_cold_grande"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cold_drinksize_grande"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_cold_tall" />
+
+    <ImageView
+        android:id="@+id/iv_cold_venti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cold_drinksize_venti"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_cold_grande" />
 
     <ImageView
         android:id="@+id/iv_cold_trenta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/cold_drinksize_trenta" />
+        android:src="@drawable/cold_drinksize_trenta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_cold_venti" />
 
     <ImageView
         android:id="@+id/iv_hot_venti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/hot_drinksize_venti" />
+        android:src="@drawable/hot_drinksize_venti"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_hot_grande"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/hot_drinksize_grande" />
+        android:src="@drawable/hot_drinksize_grande"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_hot_venti" />
 
     <ImageView
         android:id="@+id/iv_hot_tall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/hot_drinksize_tall" />
+        android:src="@drawable/hot_drinksize_tall"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_hot_grande" />
 
     <ImageView
         android:id="@+id/iv_hot_short"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/hot_drinksize_short" />
+        android:src="@drawable/hot_drinksize_short"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_hot_tall" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

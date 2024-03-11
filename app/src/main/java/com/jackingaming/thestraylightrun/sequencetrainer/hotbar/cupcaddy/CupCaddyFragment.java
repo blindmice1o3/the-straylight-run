@@ -11,21 +11,24 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
 
+    public static final String TAG_COLD_TALL = "coldTall";
+    public static final String TAG_COLD_GRANDE = "coldGrande";
+    public static final String TAG_COLD_VENTI = "coldVenti";
     public static final String TAG_COLD_TRENTA = "coldTrenta";
     public static final String TAG_HOT_VENTI = "hotVenti";
     public static final String TAG_HOT_GRANDE = "hotGrande";
@@ -33,8 +36,9 @@ public class CupCaddyFragment extends Fragment {
     public static final String TAG_HOT_SHORT = "hotShort";
 
     private CupCaddyViewModel mViewModel;
-    private LinearLayout linearLayoutCupCaddy;
-    private ImageView ivColdTrenta, ivHotVenti, ivHotGrande, ivHotTall, ivHotShort;
+    private ConstraintLayout constraintLayoutCupCaddy;
+    private ImageView ivColdTall, ivColdGrande, ivColdVenti, ivColdTrenta;
+    private ImageView ivHotVenti, ivHotGrande, ivHotTall, ivHotShort;
 
     public static CupCaddyFragment newInstance() {
         Log.e(TAG, "newInstance()");
@@ -53,15 +57,21 @@ public class CupCaddyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        linearLayoutCupCaddy = view.findViewById(R.id.linearlayout_cup_caddy);
-        linearLayoutCupCaddy.setOnDragListener(new CupCaddyDragListener());
+        constraintLayoutCupCaddy = view.findViewById(R.id.constraintlayout_cup_caddy);
+        constraintLayoutCupCaddy.setOnDragListener(new CupCaddyDragListener());
 
+        ivColdTall = view.findViewById(R.id.iv_cold_tall);
+        ivColdGrande = view.findViewById(R.id.iv_cold_grande);
+        ivColdVenti = view.findViewById(R.id.iv_cold_venti);
         ivColdTrenta = view.findViewById(R.id.iv_cold_trenta);
         ivHotVenti = view.findViewById(R.id.iv_hot_venti);
         ivHotGrande = view.findViewById(R.id.iv_hot_grande);
         ivHotTall = view.findViewById(R.id.iv_hot_tall);
         ivHotShort = view.findViewById(R.id.iv_hot_short);
 
+        ivColdTall.setTag(TAG_COLD_TALL);
+        ivColdGrande.setTag(TAG_COLD_GRANDE);
+        ivColdVenti.setTag(TAG_COLD_VENTI);
         ivColdTrenta.setTag(TAG_COLD_TRENTA);
         ivHotVenti.setTag(TAG_HOT_VENTI);
         ivHotGrande.setTag(TAG_HOT_GRANDE);
@@ -69,6 +79,9 @@ public class CupCaddyFragment extends Fragment {
         ivHotShort.setTag(TAG_HOT_SHORT);
 
         View.OnTouchListener caddyToMastrenaTouchListener = new CaddyToMastrenaTouchListener();
+        ivColdTall.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivColdGrande.setOnTouchListener(caddyToMastrenaTouchListener);
+        ivColdVenti.setOnTouchListener(caddyToMastrenaTouchListener);
         ivColdTrenta.setOnTouchListener(caddyToMastrenaTouchListener);
         ivHotVenti.setOnTouchListener(caddyToMastrenaTouchListener);
         ivHotGrande.setOnTouchListener(caddyToMastrenaTouchListener);

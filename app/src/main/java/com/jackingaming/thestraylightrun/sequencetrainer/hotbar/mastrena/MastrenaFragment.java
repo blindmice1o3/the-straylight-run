@@ -35,17 +35,17 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogf
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -841,27 +841,27 @@ public class MastrenaFragment extends Fragment {
 
                             // Set ImageView's background and tag according to dragData.
                             int resId = -1;
-                            String tag = null;
-                            if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
+                            if (dragData.equals(CupCaddyFragment.TAG_COLD_TALL)) {
+                                resId = R.drawable.cold_drinksize_tall;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_COLD_GRANDE)) {
+                                resId = R.drawable.cold_drinksize_grande;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_COLD_VENTI)) {
+                                resId = R.drawable.cold_drinksize_venti;
+                            } else if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
                                 resId = R.drawable.cold_drinksize_trenta;
-                                tag = CupCaddyFragment.TAG_COLD_TRENTA;
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_VENTI)) {
                                 resId = R.drawable.hot_drinksize_venti;
-                                tag = CupCaddyFragment.TAG_HOT_VENTI;
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_GRANDE)) {
                                 resId = R.drawable.hot_drinksize_grande;
-                                tag = CupCaddyFragment.TAG_HOT_GRANDE;
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_TALL)) {
                                 resId = R.drawable.hot_drinksize_tall;
-                                tag = CupCaddyFragment.TAG_HOT_TALL;
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
                                 resId = R.drawable.hot_drinksize_short;
-                                tag = CupCaddyFragment.TAG_HOT_SHORT;
                             } else {
                                 Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
                             }
                             ivToBeAdded.setBackgroundResource(resId);
-                            ivToBeAdded.setTag(tag);
+                            ivToBeAdded.setTag(dragData);
 
                             ivToBeAdded.setX(xTouch - (64 / 2));
                             ivToBeAdded.setY(yTouch - (64 / 2));

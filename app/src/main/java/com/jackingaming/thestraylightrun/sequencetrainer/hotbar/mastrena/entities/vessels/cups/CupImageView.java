@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -21,11 +21,16 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,17 +42,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public static final String TAG = CupImageView.class.getSimpleName();
 
     private List<EspressoShot> shots;
-//    private EspressoShot.Type type;
-//    private EspressoShot.AmountOfWater amountOfWater;
-//    private EspressoShot.AmountOfBean amountOfBean;
-//    private int numberOfShots;
 
-    // TODO: replace with List<Milk> milks
     private Milk milk;
-//    private String content;
-//    private int amount;
-//    private int temperature;
-//    private int timeFrothed;
 
     private Map<Syrup.Type, List<Syrup>> syrupsMap;
 
@@ -72,10 +68,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         shots = new ArrayList<>();
 
         milk = null;
-//        content = null;
-//        amount = 0;
-//        temperature = 0;
-//        timeFrothed = 0;
 
         syrupsMap = new HashMap<>();
 
@@ -185,6 +177,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
     }
 
+    // TODO: separate onTouchEvent() between CupHot and CupCold.
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -213,6 +206,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return false;
     }
 
+    // TODO: separate onDragEvent() between CupHot and CupCold.
     private String label;
 
     @Override
@@ -472,7 +466,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             milk = (Milk) content.get("milk");
         }
 
-        // TODO: syrups
         if (content.containsKey("syrupsMap")) {
             Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
             for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {
