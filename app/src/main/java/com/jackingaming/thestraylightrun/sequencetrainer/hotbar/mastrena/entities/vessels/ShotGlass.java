@@ -32,6 +32,7 @@ import java.util.List;
 public class ShotGlass extends AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = ShotGlass.class.getSimpleName();
+    public static final String DRAG_LABEL = ShotGlass.class.getSimpleName();
 
     private List<EspressoShot> shots;
 
@@ -109,7 +110,7 @@ public class ShotGlass extends AppCompatImageView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "ShotGlass";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);

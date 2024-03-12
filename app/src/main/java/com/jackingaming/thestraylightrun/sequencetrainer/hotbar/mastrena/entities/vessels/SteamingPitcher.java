@@ -26,12 +26,14 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import java.util.HashMap;
 
 public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable {
     public static final String TAG = SteamingPitcher.class.getSimpleName();
+    public static final String DRAG_LABEL = SteamingPitcher.class.getSimpleName();
 
     public interface SteamingPitcherListener {
         void showDialogFillSteamingPitcher(String contentToBeSteamed);
@@ -183,7 +185,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         }
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "SteamingPitcher";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
@@ -213,8 +215,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("Milk")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"Milk\")");
+                    if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL)) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL + ")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -267,8 +269,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals("Milk")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"Milk\")");
+                if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL + ")");
 
                     String contentToBeSteamed = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeSteamed: " + contentToBeSteamed);

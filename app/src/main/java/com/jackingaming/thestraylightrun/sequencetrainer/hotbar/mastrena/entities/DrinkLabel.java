@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 public class DrinkLabel extends AppCompatTextView {
     public static final String TAG = DrinkLabel.class.getSimpleName();
+    public static final String DRAG_LABEL = DrinkLabel.class.getSimpleName();
 
     public DrinkLabel(@NonNull Context context) {
         super(context);
@@ -28,7 +29,7 @@ public class DrinkLabel extends AppCompatTextView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "DrinkLabel";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label,
                     getText());

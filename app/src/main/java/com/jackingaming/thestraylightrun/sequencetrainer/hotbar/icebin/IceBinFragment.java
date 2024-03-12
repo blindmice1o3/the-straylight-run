@@ -24,6 +24,7 @@ import com.jackingaming.thestraylightrun.R;
  */
 public class IceBinFragment extends Fragment {
     public static final String TAG = IceBinFragment.class.getSimpleName();
+    public static final String DRAG_LABEL = "IceBin";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,7 +90,7 @@ public class IceBinFragment extends Fragment {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    String label = "Ice";
+                    String label = DRAG_LABEL;
 
                     ClipData dragData = ClipData.newPlainText(label, "ice");
                     View.DragShadowBuilder myShadow = new View.DragShadowBuilder(viewDragShadow);

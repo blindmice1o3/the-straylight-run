@@ -597,15 +597,17 @@ public class MastrenaFragment extends Fragment {
 
                         label = dragEvent.getClipDescription().getLabel().toString();
 
-                        if (label.equals("LabelPrinter") ||
-                                label.equals("DrinkLabel")) {
-                            Log.d(TAG, "label.equals(\"LabelPrinter\") || label.equals(\"DrinkLabel\")");
+                        if (label.equals(LabelPrinter.DRAG_LABEL)) {
+                            labelPrinter = (LabelPrinter) dragEvent.getLocalState();
 
-                            if (label.equals("LabelPrinter")) {
-                                labelPrinter = (LabelPrinter) dragEvent.getLocalState();
-                            } else if (label.equals("DrinkLabel")) {
-                                drinkLabel = (DrinkLabel) dragEvent.getLocalState();
-                            }
+                            // Change background drawable to indicate drop-target.
+                            view.setBackgroundResource(resIdDropTarget);
+
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
+                            drinkLabel = (DrinkLabel) dragEvent.getLocalState();
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -647,7 +649,7 @@ public class MastrenaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    if (label.equals("LabelPrinter")) {
+                    if (label.equals(LabelPrinter.DRAG_LABEL)) {
                         // Instantiate DrinkLabel.
                         DrinkLabel drinkLabelNew = new DrinkLabel(getContext());
                         FrameLayout.LayoutParams layoutParams =
@@ -679,7 +681,7 @@ public class MastrenaFragment extends Fragment {
                         labelPrinter.updateDisplay();
 
                         labelPrinter.setVisibility(View.VISIBLE);
-                    } else if (label.equals("DrinkLabel")) {
+                    } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                         drinkLabel.setX(xTouch - (drinkLabel.getWidth() / 2));
                         drinkLabel.setY(yTouch - (drinkLabel.getHeight() / 2));
 
@@ -703,16 +705,13 @@ public class MastrenaFragment extends Fragment {
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
 
-                        if (label.equals("LabelPrinter")) {
+                        if (label.equals(LabelPrinter.DRAG_LABEL)) {
                             labelPrinter.setVisibility(View.VISIBLE);
-                        } else if (label.equals("DrinkLabel")) {
+                        } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                             drinkLabel.setVisibility(View.VISIBLE);
                             drinkLabel = null;
                         }
                     }
-
-                    // TODO: override CupImageView.onDrag() to handle drop from DrinkLabel,
-                    //  compare drink label and cup content, display winning dialog if same.
 
                     // Return true. The value is ignored.
                     return true;
@@ -746,13 +745,13 @@ public class MastrenaFragment extends Fragment {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         label = dragEvent.getClipDescription().getLabel().toString();
-                        if (label.equals("CaddyToMastrena") ||
+                        if (label.equals(CupCaddyFragment.DRAG_LABEL) ||
                                 label.equals("MastrenaToCaddy") ||
-                                label.equals("ShotGlass") ||
-                                label.equals("IceShaker")) {
-                            Log.d(TAG, "label.equals(\"CaddyToMastrena\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"ShotGlass\") || label.equals(\"IceShaker\")");
+                                label.equals(ShotGlass.DRAG_LABEL) ||
+                                label.equals(IceShaker.DRAG_LABEL)) {
+                            Log.d(TAG, "label.equals(" + CupCaddyFragment.DRAG_LABEL + ") || label.equals(\"MastrenaToCaddy\") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(" + IceShaker.DRAG_LABEL + ")");
 
-                            if (label.equals("IceShaker")) {
+                            if (label.equals(IceShaker.DRAG_LABEL)) {
                                 yTouchInit = dragEvent.getY();
                                 Log.e(TAG, "yTouchInit: " + yTouchInit);
                             }
@@ -787,7 +786,7 @@ public class MastrenaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_LOCATION:
 //                    Log.d(TAG, "ACTION_DRAG_LOCATION");
 
-                    if (label.equals("IceShaker")) {
+                    if (label.equals(IceShaker.DRAG_LABEL)) {
                         if (shakeUpward && yTouchInit - dragEvent.getY() > SHAKE_DETECTION_THRESHOLD) {
                             shakeUpward = false;
                         } else if (!shakeUpward && yTouchInit - dragEvent.getY() < -SHAKE_DETECTION_THRESHOLD) {
@@ -819,12 +818,13 @@ public class MastrenaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    if (label.equals("CaddyToMastrena") || label.equals("MastrenaToCaddy")) {
-                        if (label.equals("CaddyToMastrena")) {
-                            Log.d(TAG, "ACTION_DROP label.equals(\"CaddyToMastrena\")");
+                    if (label.equals(CupCaddyFragment.DRAG_LABEL) || label.equals("MastrenaToCaddy")) {
+                        if (label.equals(CupCaddyFragment.DRAG_LABEL)) {
+                            Log.d(TAG, "ACTION_DROP label.equals(" + CupCaddyFragment.DRAG_LABEL + ")");
                             Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
 
                             // Instantiate CupImageView.
+                            // TODO: use dragData to determine instantiation of CupCold/CupHot.
                             ivToBeAdded = new CupImageView(getContext());
                             FrameLayout.LayoutParams layoutParams =
                                     new FrameLayout.LayoutParams(64, 64);
@@ -858,7 +858,7 @@ public class MastrenaFragment extends Fragment {
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
                                 resId = R.drawable.hot_drinksize_short;
                             } else {
-                                Log.e(TAG, "else-clause (generating ImageView to add to LinearLayout).");
+                                Log.e(TAG, "else-clause (selecting image resource for ivToBeAdded).");
                             }
                             ivToBeAdded.setBackgroundResource(resId);
                             ivToBeAdded.setTag(dragData);
@@ -879,8 +879,8 @@ public class MastrenaFragment extends Fragment {
 
                         // Add ImageView to FrameLayout.
                         ((FrameLayout) view).addView(ivToBeAdded);
-                    } else if (label.equals("ShotGlass")) {
-                        Log.d(TAG, "ACTION_DROP label.equals(\"ShotGlass\")");
+                    } else if (label.equals(ShotGlass.DRAG_LABEL)) {
+                        Log.d(TAG, "ACTION_DROP label.equals(" + ShotGlass.DRAG_LABEL + ")");
                         Log.d(TAG, "ACTION_DROP Derive shotGlass from dragData");
                         shotGlass = (ShotGlass) dragEvent.getLocalState();
 
@@ -892,8 +892,8 @@ public class MastrenaFragment extends Fragment {
 
                         // Add ImageView to FrameLayout.
                         ((FrameLayout) view).addView(shotGlass);
-                    } else if (label.equals("IceShaker")) {
-                        Log.d(TAG, "ACTION_DROP label.equals(\"IceShaker\")");
+                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
+                        Log.d(TAG, "ACTION_DROP label.equals(" + IceShaker.DRAG_LABEL + ")");
                         Log.d(TAG, "ACTION_DROP Derive IceShaker from dragData");
                         iceShaker = (IceShaker) dragEvent.getLocalState();
 
@@ -931,17 +931,17 @@ public class MastrenaFragment extends Fragment {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
 
-                    if (label.equals("CaddyToMastrena") || label.equals("MastrenaToCaddy")) {
+                    if (label.equals(CupCaddyFragment.DRAG_LABEL) || label.equals("MastrenaToCaddy")) {
                         if (ivToBeAdded != null) {
                             ivToBeAdded.setVisibility(View.VISIBLE);
 
                             ivToBeAdded = null;
                         }
-                    } else if (label.equals("ShotGlass")) {
+                    } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                         if (shotGlass != null) {
                             shotGlass.setVisibility(View.VISIBLE);
                         }
-                    } else if (label.equals("IceShaker")) {
+                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
                         shakeUpward = false;
                         shakeCounter = 0;
 

@@ -24,6 +24,7 @@ import java.util.Random;
 
 public class LabelPrinter extends AppCompatTextView {
     public static final String TAG = LabelPrinter.class.getSimpleName();
+    public static final String DRAG_LABEL = LabelPrinter.class.getSimpleName();
     private static final int MAX_NUMBER_OF_DRINKS = 10;
 
     private List<String> queueDrinks = new ArrayList<>();
@@ -127,7 +128,7 @@ public class LabelPrinter extends AppCompatTextView {
                 return false;
             }
 
-            String label = "LabelPrinter";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label,
                     getText());

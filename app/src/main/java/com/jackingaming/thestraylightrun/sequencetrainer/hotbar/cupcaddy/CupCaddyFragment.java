@@ -25,6 +25,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 
 public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
+    public static final String DRAG_LABEL = "CupCaddy";
 
     public static final String TAG_COLD_TALL = "coldTall";
     public static final String TAG_COLD_GRANDE = "coldGrande";
@@ -198,7 +199,7 @@ public class CupCaddyFragment extends Fragment {
                 // convenience method ClipData.newPlainText() can create a plain text
                 // ClipData in one step.
 
-                String label = "CaddyToMastrena";
+                String label = DRAG_LABEL;
                 String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
                 // Create a new ClipData.Item from the ImageView object's tag.
                 ClipData.Item item = new ClipData.Item((CharSequence) view.getTag());

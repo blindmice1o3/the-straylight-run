@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class CinnamonDispenser extends AppCompatImageView {
     public static final String TAG = CinnamonDispenser.class.getSimpleName();
+    public static final String DRAG_LABEL = CinnamonDispenser.class.getSimpleName();
 
     public CinnamonDispenser(@NonNull Context context) {
         super(context);
@@ -28,7 +29,7 @@ public class CinnamonDispenser extends AppCompatImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "CinnamonDispenser";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);

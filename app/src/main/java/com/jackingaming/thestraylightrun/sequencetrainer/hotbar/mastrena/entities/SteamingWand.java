@@ -44,8 +44,8 @@ public class SteamingWand extends AppCompatImageView {
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("SteamingPitcher")) {
-                        Log.d(TAG, "label.equals(\"SteamingPitcher\")");
+                    if (event.getClipDescription().getLabel().equals(SteamingPitcher.DRAG_LABEL)) {
+                        Log.d(TAG, "label.equals(" + SteamingPitcher.DRAG_LABEL + ")");
 
                         steamingPitcher = (SteamingPitcher) event.getLocalState();
                         if (steamingPitcher.getMilk() != null &&

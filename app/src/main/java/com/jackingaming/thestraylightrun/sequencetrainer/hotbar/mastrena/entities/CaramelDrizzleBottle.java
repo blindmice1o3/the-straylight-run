@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class CaramelDrizzleBottle extends AppCompatImageView {
     public static final String TAG = CaramelDrizzleBottle.class.getSimpleName();
+    public static final String DRAG_LABEL = CaramelDrizzleBottle.class.getSimpleName();
 
     public CaramelDrizzleBottle(@NonNull Context context) {
         super(context);
@@ -28,7 +29,7 @@ public class CaramelDrizzleBottle extends AppCompatImageView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "CaramelDrizzleBottle";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);

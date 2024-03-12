@@ -106,11 +106,11 @@ public class SinkFragment extends Fragment {
 
                         label = dragEvent.getClipDescription().getLabel().toString();
 
-                        if (label.equals("SteamingPitcher") ||
-                                label.equals("ShotGlass") ||
+                        if (label.equals(SteamingPitcher.DRAG_LABEL) ||
+                                label.equals(ShotGlass.DRAG_LABEL) ||
                                 label.equals("MastrenaToCaddy") ||
-                                label.equals("IceShaker")) {
-                            Log.d(TAG, "label.equals(\"SteamingPitcher\") || label.equals(\"ShotGlass\") || label.equals(\"MastrenaToCaddy\") || label.equals(\"IceShaker\")");
+                                label.equals(IceShaker.DRAG_LABEL)) {
+                            Log.d(TAG, "label.equals(" + SteamingPitcher.DRAG_LABEL + ") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(\"MastrenaToCaddy\") || label.equals(" + IceShaker.DRAG_LABEL + ")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -149,14 +149,14 @@ public class SinkFragment extends Fragment {
                 case DragEvent.ACTION_DROP:
                     Log.d(TAG, "ACTION_DROP ");
 
-                    if (label.equals("SteamingPitcher")) {
+                    if (label.equals(SteamingPitcher.DRAG_LABEL)) {
                         Log.d(TAG, "Derive steamingPitcher from dragData");
                         SteamingPitcher steamingPitcher = (SteamingPitcher) dragEvent.getLocalState();
 
                         Toast.makeText(getContext(), "emptying steaming pitcher", Toast.LENGTH_SHORT).show();
                         steamingPitcher.cancelTemperatureAnimator();
                         steamingPitcher.empty();
-                    } else if (label.equals("ShotGlass")) {
+                    } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                         Log.d(TAG, "Derive shotGlass from dragData");
 
                         ShotGlass shotGlass = (ShotGlass) dragEvent.getLocalState();
@@ -168,7 +168,7 @@ public class SinkFragment extends Fragment {
                         CupImageView cupImageView = (CupImageView) dragEvent.getLocalState();
                         Toast.makeText(getContext(), "emptying cup", Toast.LENGTH_SHORT).show();
                         cupImageView.empty();
-                    } else if (label.equals("IceShaker")) {
+                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
                         Log.d(TAG, "Derive IceShaker from dragData");
 
                         IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();

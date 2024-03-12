@@ -20,6 +20,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.GestureDetectorCompat;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
@@ -38,6 +40,7 @@ import java.util.Map;
 public class IceShaker extends AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = IceShaker.class.getSimpleName();
+    public static final String DRAG_LABEL = IceShaker.class.getSimpleName();
 
     private Ice ice;
     private Cinnamon cinnamon;
@@ -189,7 +192,7 @@ public class IceShaker extends AppCompatImageView
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "IceShaker";
+            String label = DRAG_LABEL;
 
             ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
             View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
@@ -221,10 +224,10 @@ public class IceShaker extends AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     if (event.getClipDescription().getLabel().equals("MastrenaToCaddy") ||
-                            event.getClipDescription().getLabel().equals("Ice") ||
-                            event.getClipDescription().getLabel().equals("ShotGlass") ||
-                            event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") || event.getClipDescription().getLabel().equals(\"Ice\") || event.getClipDescription().getLabel().equals(\"ShotGlass\") || event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
+                            event.getClipDescription().getLabel().equals(IceBinFragment.DRAG_LABEL) ||
+                            event.getClipDescription().getLabel().equals(ShotGlass.DRAG_LABEL) ||
+                            event.getClipDescription().getLabel().equals(CinnamonDispenser.DRAG_LABEL)) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") || event.getClipDescription().getLabel().equals(" + IceBinFragment.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + ShotGlass.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -272,8 +275,8 @@ public class IceShaker extends AppCompatImageView
                     transferIn(
                             cupImageView.transferOut()
                     );
-                } else if (event.getClipDescription().getLabel().equals("Ice")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"Ice\")");
+                } else if (event.getClipDescription().getLabel().equals(IceBinFragment.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + IceBinFragment.DRAG_LABEL + ")");
 
                     String contentToBeShaken = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeShaken: " + contentToBeShaken);
@@ -281,9 +284,8 @@ public class IceShaker extends AppCompatImageView
                     ice = new Ice(getContext());
                     setBackgroundColor(idBlue);
                     invalidate();
-                } else if (event.getClipDescription().getLabel().equals("ShotGlass")) {
-                    // TODO:
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"ShotGlass\")");
+                } else if (event.getClipDescription().getLabel().equals(ShotGlass.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + ShotGlass.DRAG_LABEL + ")");
 
                     ShotGlass shotGlass = (ShotGlass) event.getLocalState();
 
@@ -291,8 +293,8 @@ public class IceShaker extends AppCompatImageView
                     transferIn(
                             shotGlass.transferOut()
                     );
-                } else if (event.getClipDescription().getLabel().equals("CinnamonDispenser")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"CinnamonDispenser\")");
+                } else if (event.getClipDescription().getLabel().equals(CinnamonDispenser.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
 
                     cinnamon = new Cinnamon(getContext());
                     invalidate();
@@ -402,7 +404,6 @@ public class IceShaker extends AppCompatImageView
             shots.addAll(shotsToTransferIn);
         }
 
-        // TODO: syrups
         if (content.containsKey("syrupsMap")) {
             Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
             for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {

@@ -21,6 +21,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 
 public class RefrigeratorFragment extends Fragment {
     public static final String TAG = RefrigeratorFragment.class.getSimpleName();
+    public static final String DRAG_LABEL = RefrigeratorFragment.class.getSimpleName();
 
     public static final String TAG_WHIPPED_CREAM = "whippedCream";
 
@@ -81,7 +82,7 @@ public class RefrigeratorFragment extends Fragment {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = "Milk";
+                String label = DRAG_LABEL;
 
                 ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
                 View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
