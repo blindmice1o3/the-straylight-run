@@ -30,6 +30,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.ArrayList;
@@ -223,11 +225,12 @@ public class IceShaker extends AppCompatImageView
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals("MastrenaToCaddy") ||
+                    if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
+                            event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL) ||
                             event.getClipDescription().getLabel().equals(IceBinFragment.DRAG_LABEL) ||
                             event.getClipDescription().getLabel().equals(ShotGlass.DRAG_LABEL) ||
                             event.getClipDescription().getLabel().equals(CinnamonDispenser.DRAG_LABEL)) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") || event.getClipDescription().getLabel().equals(" + IceBinFragment.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + ShotGlass.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL) || event.getClipDescription().getLabel().equals(" + IceBinFragment.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + ShotGlass.DRAG_LABEL + ") || event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -265,8 +268,8 @@ public class IceShaker extends AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
+                if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
 
                     // TODO:
                     CupImageView cupImageView = (CupImageView) event.getLocalState();

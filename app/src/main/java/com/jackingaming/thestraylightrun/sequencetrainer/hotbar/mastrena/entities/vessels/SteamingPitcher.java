@@ -25,6 +25,8 @@ import androidx.annotation.RequiresApi;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
@@ -223,8 +225,9 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\") && ((CupImageView) event.getLocalState()).getNumberOfShots() == 0 && ((CupImageView) event.getLocalState()).getAmount() != 0");
+                    } else if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
+                            event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
 
                         if (((CupImageView) event.getLocalState()).getShots().size() == 0 &&
                                 ((CupImageView) event.getLocalState()).getMilk() != null) {
@@ -280,8 +283,9 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     } else {
                         Log.e(TAG, "listener == null");
                     }
-                } else if (event.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(\"MastrenaToCaddy\")");
+                } else if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
+                        event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
 
                     CupImageView cupImageView = ((CupImageView) event.getLocalState());
 

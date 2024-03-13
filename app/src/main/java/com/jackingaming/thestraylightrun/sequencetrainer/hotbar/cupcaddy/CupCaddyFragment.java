@@ -21,11 +21,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
-    public static final String DRAG_LABEL = "CupCaddy";
+    public static final String DRAG_LABEL = CupCaddyFragment.class.getSimpleName();
 
     public static final String TAG_COLD_TALL = "coldTall";
     public static final String TAG_COLD_GRANDE = "coldGrande";
@@ -112,8 +114,9 @@ public class CupCaddyFragment extends Fragment {
                     if (dragEvent.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                        if (dragEvent.getClipDescription().getLabel().equals("MastrenaToCaddy")) {
-                            Log.d(TAG, "label.equals(\"MastrenaToCaddy\")");
+                        if (dragEvent.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
+                                dragEvent.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                            Log.d(TAG, "label.equals(CupHot.DRAG_LABEL) || label.equals(CupCold.DRAG_LABEL)");
 
                             if (((CupImageView) dragEvent.getLocalState()).getMilk() == null &&
                                     ((CupImageView) dragEvent.getLocalState()).getShots().size() == 0) {

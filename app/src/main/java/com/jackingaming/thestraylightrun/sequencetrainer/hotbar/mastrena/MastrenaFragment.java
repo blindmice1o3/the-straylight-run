@@ -45,6 +45,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.time.Duration;
@@ -746,10 +748,11 @@ public class MastrenaFragment extends Fragment {
 
                         label = dragEvent.getClipDescription().getLabel().toString();
                         if (label.equals(CupCaddyFragment.DRAG_LABEL) ||
-                                label.equals("MastrenaToCaddy") ||
+                                label.equals(CupHot.DRAG_LABEL) ||
+                                label.equals(CupCold.DRAG_LABEL) ||
                                 label.equals(ShotGlass.DRAG_LABEL) ||
                                 label.equals(IceShaker.DRAG_LABEL)) {
-                            Log.d(TAG, "label.equals(" + CupCaddyFragment.DRAG_LABEL + ") || label.equals(\"MastrenaToCaddy\") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(" + IceShaker.DRAG_LABEL + ")");
+                            Log.d(TAG, "label.equals(" + CupCaddyFragment.DRAG_LABEL + ") || label.equals(" + CupHot.DRAG_LABEL + ") || label.equals(" + CupCold.DRAG_LABEL + ") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(" + IceShaker.DRAG_LABEL + ")");
 
                             if (label.equals(IceShaker.DRAG_LABEL)) {
                                 yTouchInit = dragEvent.getY();
@@ -777,7 +780,8 @@ public class MastrenaFragment extends Fragment {
                     // Change value of alpha to indicate [ENTERED] state.
                     view.setAlpha(0.5f);
 
-                    if (label.equals("MastrenaToCaddy")) {
+                    if (label.equals(CupHot.DRAG_LABEL) ||
+                            label.equals(CupCold.DRAG_LABEL)) {
                         ivToBeAdded = (CupImageView) dragEvent.getLocalState();
                     }
 
@@ -818,17 +822,12 @@ public class MastrenaFragment extends Fragment {
                     xTouch = dragEvent.getX();
                     yTouch = dragEvent.getY();
 
-                    if (label.equals(CupCaddyFragment.DRAG_LABEL) || label.equals("MastrenaToCaddy")) {
+                    if (label.equals(CupCaddyFragment.DRAG_LABEL) ||
+                            label.equals(CupHot.DRAG_LABEL) ||
+                            label.equals(CupCold.DRAG_LABEL)) {
                         if (label.equals(CupCaddyFragment.DRAG_LABEL)) {
                             Log.d(TAG, "ACTION_DROP label.equals(" + CupCaddyFragment.DRAG_LABEL + ")");
                             Log.d(TAG, "ACTION_DROP Instantiate ImageView for ivToBeAdded");
-
-                            // Instantiate CupImageView.
-                            // TODO: use dragData to determine instantiation of CupCold/CupHot.
-                            ivToBeAdded = new CupImageView(getContext());
-                            FrameLayout.LayoutParams layoutParams =
-                                    new FrameLayout.LayoutParams(64, 64);
-                            ivToBeAdded.setLayoutParams(layoutParams);
 
                             // Get the item containing the dragged data.
                             ClipData.Item item = dragEvent.getClipData().getItemAt(0);
@@ -839,34 +838,47 @@ public class MastrenaFragment extends Fragment {
                             // Display a message containing the dragged data.
                             Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
 
+                            // TODO: use dragData to determine instantiation of CupCold/CupHot.
                             // Set ImageView's background and tag according to dragData.
                             int resId = -1;
                             if (dragData.equals(CupCaddyFragment.TAG_COLD_TALL)) {
                                 resId = R.drawable.cold_drinksize_tall;
+                                ivToBeAdded = new CupCold(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_GRANDE)) {
                                 resId = R.drawable.cold_drinksize_grande;
+                                ivToBeAdded = new CupCold(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_VENTI)) {
                                 resId = R.drawable.cold_drinksize_venti;
+                                ivToBeAdded = new CupCold(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
                                 resId = R.drawable.cold_drinksize_trenta;
+                                ivToBeAdded = new CupCold(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_VENTI)) {
                                 resId = R.drawable.hot_drinksize_venti;
+                                ivToBeAdded = new CupHot(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_GRANDE)) {
                                 resId = R.drawable.hot_drinksize_grande;
+                                ivToBeAdded = new CupHot(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_TALL)) {
                                 resId = R.drawable.hot_drinksize_tall;
+                                ivToBeAdded = new CupHot(getContext());
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
                                 resId = R.drawable.hot_drinksize_short;
+                                ivToBeAdded = new CupHot(getContext());
                             } else {
                                 Log.e(TAG, "else-clause (selecting image resource for ivToBeAdded).");
                             }
+                            FrameLayout.LayoutParams layoutParams =
+                                    new FrameLayout.LayoutParams(64, 64);
+                            ivToBeAdded.setLayoutParams(layoutParams);
                             ivToBeAdded.setBackgroundResource(resId);
                             ivToBeAdded.setTag(dragData);
 
                             ivToBeAdded.setX(xTouch - (64 / 2));
                             ivToBeAdded.setY(yTouch - (64 / 2));
-                        } else if (label.equals("MastrenaToCaddy")) {
-                            Log.d(TAG, "ACTION_DROP label.equals(\"MastrenaToCaddy\")");
+                        } else if (label.equals(CupHot.DRAG_LABEL) ||
+                                label.equals(CupCold.DRAG_LABEL)) {
+                            Log.d(TAG, "ACTION_DROP label.equals(CupHot.DRAG_LABEL) || label.equals(CupCold.DRAG_LABEL)");
                             Log.d(TAG, "ACTION_DROP Derive ivToBeAdded from dragData");
                             ivToBeAdded = (CupImageView) dragEvent.getLocalState();
 
@@ -931,7 +943,9 @@ public class MastrenaFragment extends Fragment {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                     }
 
-                    if (label.equals(CupCaddyFragment.DRAG_LABEL) || label.equals("MastrenaToCaddy")) {
+                    if (label.equals(CupCaddyFragment.DRAG_LABEL) ||
+                            label.equals(CupHot.DRAG_LABEL) ||
+                            label.equals(CupCold.DRAG_LABEL)) {
                         if (ivToBeAdded != null) {
                             ivToBeAdded.setVisibility(View.VISIBLE);
 

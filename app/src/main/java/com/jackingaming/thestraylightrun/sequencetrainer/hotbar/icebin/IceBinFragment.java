@@ -24,7 +24,7 @@ import com.jackingaming.thestraylightrun.R;
  */
 public class IceBinFragment extends Fragment {
     public static final String TAG = IceBinFragment.class.getSimpleName();
-    public static final String DRAG_LABEL = "IceBin";
+    public static final String DRAG_LABEL = IceBinFragment.class.getSimpleName();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

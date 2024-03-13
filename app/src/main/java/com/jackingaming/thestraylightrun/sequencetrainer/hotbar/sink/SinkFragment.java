@@ -15,10 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,9 +110,10 @@ public class SinkFragment extends Fragment {
 
                         if (label.equals(SteamingPitcher.DRAG_LABEL) ||
                                 label.equals(ShotGlass.DRAG_LABEL) ||
-                                label.equals("MastrenaToCaddy") ||
+                                label.equals(CupHot.DRAG_LABEL) ||
+                                label.equals(CupCold.DRAG_LABEL) ||
                                 label.equals(IceShaker.DRAG_LABEL)) {
-                            Log.d(TAG, "label.equals(" + SteamingPitcher.DRAG_LABEL + ") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(\"MastrenaToCaddy\") || label.equals(" + IceShaker.DRAG_LABEL + ")");
+                            Log.d(TAG, "label.equals(" + SteamingPitcher.DRAG_LABEL + ") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(" + CupHot.DRAG_LABEL + ") || label.equals(" + CupCold.DRAG_LABEL + ") || label.equals(" + IceShaker.DRAG_LABEL + ")");
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -162,7 +165,8 @@ public class SinkFragment extends Fragment {
                         ShotGlass shotGlass = (ShotGlass) dragEvent.getLocalState();
                         Toast.makeText(getContext(), "emptying shot glass", Toast.LENGTH_SHORT).show();
                         shotGlass.empty();
-                    } else if (label.equals("MastrenaToCaddy")) {
+                    } else if (label.equals(CupHot.DRAG_LABEL) ||
+                            label.equals(CupCold.DRAG_LABEL)) {
                         Log.d(TAG, "Derive CupImageView from dragData");
 
                         CupImageView cupImageView = (CupImageView) dragEvent.getLocalState();

@@ -1,26 +1,23 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups;
 
-import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
@@ -88,6 +85,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
                     shots.add(espressoShot);
                     invalidate();
+
+                    // TODO: shotOnTop
+                    if (milk != null) {
+                        Log.d(TAG, "milk != null... setting shotOnTop to true.");
+                        shotOnTop = true;
+                    }
                 } else if (collider instanceof Syrup) {
                     Log.e(TAG, "collider instanceof Syrup");
 
@@ -178,33 +181,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     // TODO: separate onTouchEvent() between CupHot and CupCold.
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = "MastrenaToCaddy";
-
-            ClipData dragData = ClipData.newPlainText(label,
-                    (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The CupImageView.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
-    }
 
     // TODO: separate onDragEvent() between CupHot and CupCold.
     private String label;
@@ -218,10 +194,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     label = event.getClipDescription().getLabel().toString();
-                    if (label.equals("ShotGlass") ||
-                            label.equals("CaramelDrizzleBottle") ||
-                            label.equals("DrinkLabel")) {
-                        Log.d(TAG, "label.equals(\"ShotGlass\") || label.equals(\"CaramelDrizzleBottle\") || label.equals(\"DrinkLabel\")");
+                    if (label.equals(ShotGlass.DRAG_LABEL) ||
+                            label.equals(CaramelDrizzleBottle.DRAG_LABEL) ||
+                            label.equals(DrinkLabel.DRAG_LABEL)) {
+                        Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -229,8 +205,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (label.equals("SteamingPitcher")) {
-                        Log.d(TAG, "label.equals(\"SteamingPitcher\")");
+                    } else if (label.equals(SteamingPitcher.DRAG_LABEL)) {
+                        Log.d(TAG, "label.equals(SteamingPitcher.DRAG_LABEL)");
 
                         if (((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0) {
                             Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0");
@@ -244,8 +220,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         } else {
                             Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() == 0");
                         }
-                    } else if (label.equals("IceShaker")) {
-                        Log.d(TAG, "label.equals(\"IceShaker\")");
+                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
+                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
 
                         IceShaker iceShaker = (IceShaker) event.getLocalState();
                         if (iceShaker.getIce() != null || iceShaker.getCinnamon() != null ||
@@ -290,8 +266,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (label.equals("IceShaker")) {
-                    Log.d(TAG, "label.equals(\"IceShaker\")");
+                if (label.equals(IceShaker.DRAG_LABEL)) {
+                    Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
 
                     IceShaker iceShaker = (IceShaker) event.getLocalState();
 
@@ -299,8 +275,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     transferIn(
                             iceShaker.transferOut()
                     );
-                } else if (label.equals("SteamingPitcher")) {
-                    Log.d(TAG, "label.equals(\"SteamingPitcher\")");
+                } else if (label.equals(SteamingPitcher.DRAG_LABEL)) {
+                    Log.d(TAG, "label.equals(SteamingPitcher.DRAG_LABEL)");
 
                     SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
 
@@ -308,10 +284,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     transferIn(
                             steamingPitcher.transferOut()
                     );
-                } else if (label.equals("ShotGlass")) {
-                    Log.d(TAG, "label.equals(\"ShotGlass\")");
+                } else if (label.equals(ShotGlass.DRAG_LABEL)) {
+                    Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL)");
 
-                    // TODO:
+                    // TODO: shotOnTop
                     if (milk != null) {
                         Log.d(TAG, "milk != null... setting shotOnTop to true.");
                         shotOnTop = true;
@@ -323,14 +299,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     transferIn(
                             shotGlass.transferOut()
                     );
-                } else if (label.equals("CaramelDrizzleBottle")) {
-                    Log.d(TAG, "label.equals(\"CaramelDrizzleBottle\")");
+                } else if (label.equals(CaramelDrizzleBottle.DRAG_LABEL)) {
+                    Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
 
                     if (milk != null && shots.size() > 0) {
                         Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
                         drizzled = true;
                     }
-                } else if (label.equals("DrinkLabel")) {
+                } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                     DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
 
                     if (isWinnerWinnerChickenDinner(drinkLabel)) {
