@@ -25,6 +25,8 @@ public class RefrigeratorFragment extends Fragment {
 
     public static final String TAG_WHIPPED_CREAM = "whippedCream";
 
+    public static final int TEMPERATURE = 37;
+
     private ConstraintLayout clRefrigerator;
     private ImageView ivMilkTwoPercent, ivMilkWhole;
     private ImageView ivMilkOat, ivMilkCoconut, ivMilkAlmond, ivMilkSoy;

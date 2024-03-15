@@ -1,15 +1,12 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups;
 
-import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -17,17 +14,14 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.LiquidContainable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,18 +32,19 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
-    private List<EspressoShot> shots;
+    protected Map<Syrup.Type, List<Syrup>> syrupsMap;
 
-    private Milk milk;
+    protected List<EspressoShot> shots;
 
-    private Map<Syrup.Type, List<Syrup>> syrupsMap;
+    protected Milk milk;
 
-    private boolean shotOnTop;
-    private boolean drizzled;
+    protected boolean shotOnTop;
+    protected boolean drizzled;
+    protected Cinnamon cinnamon;
 
-    private Collider collider;
+    protected Collider collider;
 
-    private Paint textPaint;
+    protected Paint textPaint;
 
     public CupImageView(Context context) {
         super(context);
@@ -62,11 +57,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void init() {
+        syrupsMap = new HashMap<>();
+
         shots = new ArrayList<>();
 
         milk = null;
-
-        syrupsMap = new HashMap<>();
 
         shotOnTop = false;
         drizzled = false;
@@ -180,171 +175,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
     }
 
-    // TODO: separate onTouchEvent() between CupHot and CupCold.
-
-    // TODO: separate onDragEvent() between CupHot and CupCold.
-    private String label;
-
-    @Override
-    public boolean onDragEvent(DragEvent event) {
-        switch (event.getAction()) {
-            case DragEvent.ACTION_DRAG_STARTED:
-                // Determine whether this View can accept the dragged data.
-                if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                    Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
-
-                    label = event.getClipDescription().getLabel().toString();
-                    if (label.equals(ShotGlass.DRAG_LABEL) ||
-                            label.equals(CaramelDrizzleBottle.DRAG_LABEL) ||
-                            label.equals(DrinkLabel.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
-
-                        // Change value of alpha to indicate drop-target.
-                        setAlpha(0.75f);
-
-                        // Return true to indicate that the View can accept the dragged
-                        // data.
-                        return true;
-                    } else if (label.equals(SteamingPitcher.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(SteamingPitcher.DRAG_LABEL)");
-
-                        if (((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0) {
-                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0");
-
-                            // Change value of alpha to indicate drop-target.
-                            setAlpha(0.75f);
-
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
-                        } else {
-                            Log.e(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() == 0");
-                        }
-                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
-
-                        IceShaker iceShaker = (IceShaker) event.getLocalState();
-                        if (iceShaker.getIce() != null || iceShaker.getCinnamon() != null ||
-                                !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()) {
-                            Log.d(TAG, "iceShaker.getIce() != null || iceShaker.getCinnamon() != null || !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()");
-
-                            // Change value of alpha to indicate drop-target.
-                            setAlpha(0.75f);
-
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
-                        }
-                    }
-                } else {
-                    Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
-                }
-
-                // Return false to indicate that, during the current drag and drop
-                // operation, this View doesn't receive events again until
-                // ACTION_DRAG_ENDED is sent.
-                return false;
-            case DragEvent.ACTION_DRAG_ENTERED:
-                Log.d(TAG, "ACTION_DRAG_ENTERED");
-
-                // Change value of alpha to indicate [ENTERED] state.
-                setAlpha(0.5f);
-
-                // Return true. The value is ignored.
-                return true;
-            case DragEvent.ACTION_DRAG_LOCATION:
-                // Ignore the event.
-                return true;
-            case DragEvent.ACTION_DRAG_EXITED:
-                Log.d(TAG, "ACTION_DRAG_EXITED");
-
-                // Reset value of alpha back to normal.
-                setAlpha(0.75f);
-
-                // Return true. The value is ignored.
-                return true;
-            case DragEvent.ACTION_DROP:
-                Log.d(TAG, "ACTION_DROP");
-
-                if (label.equals(IceShaker.DRAG_LABEL)) {
-                    Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
-
-                    IceShaker iceShaker = (IceShaker) event.getLocalState();
-
-                    Toast.makeText(getContext(), "transferring content of ice shaker", Toast.LENGTH_SHORT).show();
-                    transferIn(
-                            iceShaker.transferOut()
-                    );
-                } else if (label.equals(SteamingPitcher.DRAG_LABEL)) {
-                    Log.d(TAG, "label.equals(SteamingPitcher.DRAG_LABEL)");
-
-                    SteamingPitcher steamingPitcher = (SteamingPitcher) event.getLocalState();
-
-                    Toast.makeText(getContext(), "transferring content of steaming pitcher", Toast.LENGTH_SHORT).show();
-                    transferIn(
-                            steamingPitcher.transferOut()
-                    );
-                } else if (label.equals(ShotGlass.DRAG_LABEL)) {
-                    Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL)");
-
-                    // TODO: shotOnTop
-                    if (milk != null) {
-                        Log.d(TAG, "milk != null... setting shotOnTop to true.");
-                        shotOnTop = true;
-                    }
-
-                    ShotGlass shotGlass = (ShotGlass) event.getLocalState();
-
-                    Toast.makeText(getContext(), "transferring content of shot glass", Toast.LENGTH_SHORT).show();
-                    transferIn(
-                            shotGlass.transferOut()
-                    );
-                } else if (label.equals(CaramelDrizzleBottle.DRAG_LABEL)) {
-                    Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
-
-                    if (milk != null && shots.size() > 0) {
-                        Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
-                        drizzled = true;
-                    }
-                } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
-                    DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
-
-                    if (isWinnerWinnerChickenDinner(drinkLabel)) {
-                        showDialogWinner(drinkLabel);
-
-                        ((FrameLayout) drinkLabel.getParent()).removeView(drinkLabel);
-                        ((FrameLayout) getParent()).removeView(this);
-                    } else {
-                        Toast.makeText(getContext(), "NOT a winner", Toast.LENGTH_SHORT).show();
-                        drinkLabel.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                // Return true. DragEvent.getResult() returns true.
-                return true;
-            case DragEvent.ACTION_DRAG_ENDED:
-                Log.d(TAG, "ACTION_DRAG_ENDED CupImageView");
-
-                // Reset value of alpha back to normal.
-                setAlpha(1.0f);
-
-                // Do a getResult() and displays what happens.
-                if (event.getResult()) {
-                    Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
-                }
-                // Return true. The value is ignored.
-                return true;
-            default:
-                Log.e(TAG, "Unknown action type received by onDragEvent(DragEvent).");
-                break;
-        }
-
-        return false;
-    }
-
-    private void showDialogWinner(DrinkLabel drinkLabel) {
+    protected void showDialogWinner(DrinkLabel drinkLabel) {
         String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
         String date = drinkLabelSplitted[0];
         String time = drinkLabelSplitted[1];
@@ -372,7 +203,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         alertDialogBuilder.create().show();
     }
 
-    private boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
+    protected boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
         String[] text = drinkLabel.getText().toString().split("\\s+");
         // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
         String size = text[3].toLowerCase();
@@ -391,6 +222,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return Menu.getDrinkByName(name).validate(this, size, customizations);
     }
 
+    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
+        return syrupsMap;
+    }
+
+    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
+        this.syrupsMap = syrupsMap;
+    }
+
     public List<EspressoShot> getShots() {
         return shots;
     }
@@ -407,12 +246,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.milk = milk;
     }
 
-    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
-        return syrupsMap;
+    public boolean isShotOnTop() {
+        return shotOnTop;
     }
 
-    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
-        this.syrupsMap = syrupsMap;
+    public void setShotOnTop(boolean shotOnTop) {
+        this.shotOnTop = shotOnTop;
     }
 
     public boolean isDrizzled() {
@@ -423,25 +262,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.drizzled = drizzled;
     }
 
-    public boolean isShotOnTop() {
-        return shotOnTop;
-    }
-
-    public void setShotOnTop(boolean shotOnTop) {
-        this.shotOnTop = shotOnTop;
-    }
-
     @Override
     public void transferIn(HashMap<String, Object> content) {
-        if (content.containsKey("shots")) {
-            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
-            shots.addAll(shotsToTransferIn);
-        }
-
-        if (content.containsKey("milk")) {
-            milk = (Milk) content.get("milk");
-        }
-
         if (content.containsKey("syrupsMap")) {
             Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
             for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {
@@ -455,6 +277,15 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
+        if (content.containsKey("shots")) {
+            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
+            shots.addAll(shotsToTransferIn);
+        }
+
+        if (content.containsKey("milk")) {
+            milk = (Milk) content.get("milk");
+        }
+
         if (content.containsKey("shotOnTop")) {
             shotOnTop = Boolean.parseBoolean(
                     (String) content.get("shotOnTop")
@@ -465,6 +296,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     (String) content.get("drizzled")
             );
         }
+        if (content.containsKey("cinnamon")) {
+            cinnamon = (Cinnamon) content.get("cinnamon");
+        }
 
         invalidate();
     }
@@ -473,16 +307,19 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
 
+        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
+        content.put("syrupsMap", syrupsMapCopy);
+
         List<EspressoShot> shotsCopy = new ArrayList<>(shots);
         content.put("shots", shotsCopy);
 
         content.put("milk", milk);
 
-        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
-        content.put("syrupsMap", syrupsMapCopy);
-
         content.put("shotOnTop", Boolean.toString(shotOnTop));
         content.put("drizzled", Boolean.toString(drizzled));
+        if (cinnamon != null) {
+            content.put("cinnamon", cinnamon);
+        }
 
         empty();
 
@@ -491,14 +328,15 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     @Override
     public void empty() {
+        syrupsMap.clear();
+
         shots.clear();
 
         milk = null;
 
-        syrupsMap.clear();
-
         shotOnTop = false;
         drizzled = false;
+        cinnamon = null;
 
         invalidate();
     }

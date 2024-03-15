@@ -48,6 +48,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -152,7 +153,7 @@ public class MastrenaFragment extends Fragment {
                             if (content.equals(type.name())) {
                                 Log.e(TAG, "Instantiate Milk and initialize it with temperature 37, timeFrothed 0, and type (" + content + ").");
                                 Milk milk = new Milk(getContext());
-                                milk.init(type, amount, 37, 0);
+                                milk.init(type, amount, RefrigeratorFragment.TEMPERATURE, 0);
 
                                 steamingPitcher.updateMilk(milk);
                             }
@@ -203,12 +204,6 @@ public class MastrenaFragment extends Fragment {
                                   EspressoShot.Type typeSelected,
                                   EspressoShot.AmountOfWater amountOfWaterSelected,
                                   EspressoShot.AmountOfBean amountOfBeanSelected) {
-        // TODO:
-        //  (1) [CHECKED] store EspressoShot instances instead of using (int numberOfShots).
-        //  (2) [CHECKED] store Syrup instances instead of using (int quantityNew).
-        //  (3) [CHECKED] store Milk instances instead of using (String content, int amount, int temperature, int timeFrothed).
-        //  (4) [CHECKED] have EspressoShot/Syrup/Milk/Ice/Cinnamon extend DrinkComponent.
-
         EspressoShot espressoShot = new EspressoShot(getContext());
         espressoShot.init(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         espressoShot.setTag(TAG_ESPRESSO_SHOT);

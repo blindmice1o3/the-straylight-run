@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
@@ -43,18 +42,13 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
     private SteamingPitcherListener listener;
 
-    private int idPurple, idRed;
-    private Paint textPaint;
-
-    // TODO: replace with List<Milk> milks
     private Milk milk;
-//    private String content;
-//    private int amount;
-//    private int temperature;
-//    private int timeFrothed;
 
     private ObjectAnimator temperatureAnimator;
     private ObjectAnimator timeFrothedAnimator;
+
+    private int idPurple, idRed;
+    private Paint textPaint;
 
     public SteamingPitcher(@NonNull Context context) {
         super(context);

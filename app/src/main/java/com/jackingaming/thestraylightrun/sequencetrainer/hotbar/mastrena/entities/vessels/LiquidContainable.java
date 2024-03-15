@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels;
 
 import java.util.HashMap;
 

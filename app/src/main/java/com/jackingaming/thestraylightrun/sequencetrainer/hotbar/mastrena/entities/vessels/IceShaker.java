@@ -22,7 +22,6 @@ import androidx.core.view.GestureDetectorCompat;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LiquidContainable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
@@ -44,18 +43,12 @@ public class IceShaker extends AppCompatImageView
     public static final String TAG = IceShaker.class.getSimpleName();
     public static final String DRAG_LABEL = IceShaker.class.getSimpleName();
 
-    private Ice ice;
-    private Cinnamon cinnamon;
-//    private boolean iced;
-//    private boolean cinnamoned;
+    private Map<Syrup.Type, List<Syrup>> syrupsMap;
 
     private List<EspressoShot> shots;
-//    private EspressoShot.Type type;
-//    private EspressoShot.AmountOfWater amountOfWater;
-//    private EspressoShot.AmountOfBean amountOfBean;
-//    private int numberOfShots;
 
-    private Map<Syrup.Type, List<Syrup>> syrupsMap;
+    private Ice ice;
+    private Cinnamon cinnamon;
 
     private Collider collider;
 
@@ -77,14 +70,12 @@ public class IceShaker extends AppCompatImageView
     }
 
     private void init() {
-        ice = null;
-        cinnamon = null;
-//        iced = false;
-//        cinnamoned = false;
+        syrupsMap = new HashMap<>();
 
         shots = new ArrayList<>();
 
-        syrupsMap = new HashMap<>();
+        ice = null;
+        cinnamon = null;
 
         collider = new Collider() {
             @Override
@@ -268,7 +259,8 @@ public class IceShaker extends AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
+                        event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
 
                     // TODO:
@@ -331,23 +323,6 @@ public class IceShaker extends AppCompatImageView
     public void shake() {
         Log.e(TAG, "shake()");
 
-        if (ice != null) {
-            Log.e(TAG, "ice");
-            ice.setShaken(true);
-        }
-
-        if (cinnamon != null) {
-            Log.e(TAG, "cinnamon");
-            cinnamon.setShaken(true);
-        }
-
-        if (!shots.isEmpty()) {
-            for (EspressoShot shot : shots) {
-                Log.e(TAG, "shot");
-                shot.setShaken(true);
-            }
-        }
-
         if (!syrupsMap.isEmpty()) {
             for (Syrup.Type type : syrupsMap.keySet()) {
                 List<Syrup> syrups = syrupsMap.get(type);
@@ -358,7 +333,40 @@ public class IceShaker extends AppCompatImageView
             }
         }
 
+        if (!shots.isEmpty()) {
+            for (EspressoShot shot : shots) {
+                Log.e(TAG, "shot");
+                shot.setShaken(true);
+            }
+        }
+
+        if (ice != null) {
+            Log.e(TAG, "ice");
+            ice.setShaken(true);
+        }
+
+        if (cinnamon != null) {
+            Log.e(TAG, "cinnamon");
+            cinnamon.setShaken(true);
+        }
+
         setBackgroundColor(getResources().getColor(R.color.purple_700));
+    }
+
+    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
+        return syrupsMap;
+    }
+
+    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
+        this.syrupsMap = syrupsMap;
+    }
+
+    public List<EspressoShot> getShots() {
+        return shots;
+    }
+
+    public void setShots(List<EspressoShot> shots) {
+        this.shots = shots;
     }
 
     public Ice getIce() {
@@ -377,36 +385,8 @@ public class IceShaker extends AppCompatImageView
         this.cinnamon = cinnamon;
     }
 
-    public List<EspressoShot> getShots() {
-        return shots;
-    }
-
-    public void setShots(List<EspressoShot> shots) {
-        this.shots = shots;
-    }
-
-    public Map<Syrup.Type, List<Syrup>> getSyrupsMap() {
-        return syrupsMap;
-    }
-
-    public void setSyrupsMap(Map<Syrup.Type, List<Syrup>> syrupsMap) {
-        this.syrupsMap = syrupsMap;
-    }
-
     @Override
     public void transferIn(HashMap<String, Object> content) {
-        if (content.containsKey("ice")) {
-            ice = (Ice) content.get("ice");
-        }
-        if (content.containsKey("cinnamon")) {
-            cinnamon = (Cinnamon) content.get("cinnamon");
-        }
-
-        if (content.containsKey("shots")) {
-            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
-            shots.addAll(shotsToTransferIn);
-        }
-
         if (content.containsKey("syrupsMap")) {
             Map<Syrup.Type, List<Syrup>> syrupsMapToTransferIn = (Map<Syrup.Type, List<Syrup>>) content.get("syrupsMap");
             for (Syrup.Type type : syrupsMapToTransferIn.keySet()) {
@@ -420,12 +400,30 @@ public class IceShaker extends AppCompatImageView
             }
         }
 
+        if (content.containsKey("shots")) {
+            List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
+            shots.addAll(shotsToTransferIn);
+        }
+
+        if (content.containsKey("ice")) {
+            ice = (Ice) content.get("ice");
+        }
+        if (content.containsKey("cinnamon")) {
+            cinnamon = (Cinnamon) content.get("cinnamon");
+        }
+
         invalidate();
     }
 
     @Override
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
+
+        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
+        content.put("syrupsMap", syrupsMapCopy);
+
+        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
+        content.put("shots", shotsCopy);
 
         if (ice != null) {
             content.put("ice", ice);
@@ -434,12 +432,6 @@ public class IceShaker extends AppCompatImageView
             content.put("cinnamon", cinnamon);
         }
 
-        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
-        content.put("shots", shotsCopy);
-
-        Map<Syrup.Type, List<Syrup>> syrupsMapCopy = new HashMap<>(syrupsMap);
-        content.put("syrupsMap", syrupsMapCopy);
-
         empty();
 
         return content;
@@ -447,13 +439,13 @@ public class IceShaker extends AppCompatImageView
 
     @Override
     public void empty() {
-        ice = null;
-        setBackgroundColor(idLightBlueA200);
-        cinnamon = null;
+        syrupsMap.clear();
 
         shots.clear();
 
-        syrupsMap.clear();
+        ice = null;
+        setBackgroundColor(idLightBlueA200);
+        cinnamon = null;
 
         invalidate();
     }
