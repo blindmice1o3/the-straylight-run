@@ -23,13 +23,14 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.LiquidContainable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
-        implements LiquidContainable, Collideable {
+        implements LiquidContainable, Collideable, Serializable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
     protected Map<Syrup.Type, List<Syrup>> syrupsMap;
