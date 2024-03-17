@@ -197,6 +197,7 @@ public class ShotGlass extends AppCompatImageView
                     transferIn(
                             cupImageView.transferOut()
                     );
+                    cupImageView.empty();
                 }
 
                 // Return true. DragEvent.getResult() returns true.
@@ -239,8 +240,6 @@ public class ShotGlass extends AppCompatImageView
 
         List<EspressoShot> shotsCopy = new ArrayList<>(shots);
         content.put("shots", shotsCopy);
-
-        empty();
 
         return content;
     }

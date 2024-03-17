@@ -138,6 +138,7 @@ public class CupHot extends CupImageView {
                     transferIn(
                             steamingPitcher.transferOut()
                     );
+                    steamingPitcher.empty();
                 } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL)");
 
@@ -153,6 +154,7 @@ public class CupHot extends CupImageView {
                     transferIn(
                             shotGlass.transferOut()
                     );
+                    shotGlass.empty();
                 } else if (label.equals(CaramelDrizzleBottle.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
 

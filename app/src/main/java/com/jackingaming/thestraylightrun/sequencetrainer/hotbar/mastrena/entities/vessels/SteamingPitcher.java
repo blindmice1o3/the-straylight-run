@@ -287,6 +287,7 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                     transferIn(
                             cupImageView.transferOut()
                     );
+                    cupImageView.empty();
                 }
 
                 // Return true. DragEvent.getResult() returns true.
@@ -389,8 +390,6 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
         HashMap<String, Object> content = new HashMap<>();
 
         content.put("milk", milk);
-
-        empty();
 
         return content;
     }

@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entiti
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
@@ -42,6 +45,15 @@ public class CupCold extends CupImageView {
 
     public CupCold(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        String textIce = (ice != null) ? "iced" : "empty";
+        textPaint.setColor(getResources().getColor(R.color.blue));
+        canvas.drawText(textIce, 16, 15, textPaint);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -83,11 +95,13 @@ public class CupCold extends CupImageView {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                     label = event.getClipDescription().getLabel().toString();
-                    if (label.equals(RefrigeratorFragment.DRAG_LABEL) ||
+                    if (label.equals(IceShaker.DRAG_LABEL) ||
+                            label.equals(IceBinFragment.DRAG_LABEL) ||
+                            label.equals(RefrigeratorFragment.DRAG_LABEL) ||
                             label.equals(ShotGlass.DRAG_LABEL) ||
                             label.equals(CaramelDrizzleBottle.DRAG_LABEL) ||
                             label.equals(DrinkLabel.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL) || label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
+                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL) || label.equals(RefrigeratorFragment.DRAG_LABEL) || label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -95,21 +109,6 @@ public class CupCold extends CupImageView {
                         // Return true to indicate that the View can accept the dragged
                         // data.
                         return true;
-                    } else if (label.equals(IceShaker.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
-
-                        IceShaker iceShaker = (IceShaker) event.getLocalState();
-                        if (iceShaker.getIce() != null || iceShaker.getCinnamon() != null ||
-                                !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()) {
-                            Log.d(TAG, "iceShaker.getIce() != null || iceShaker.getCinnamon() != null || !iceShaker.getShots().isEmpty() || !iceShaker.getSyrupsMap().isEmpty()");
-
-                            // Change value of alpha to indicate drop-target.
-                            setAlpha(0.75f);
-
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
-                        }
                     }
                 } else {
                     Log.e(TAG, "ACTION_DRAG_STARTED clip description NOT ClipDescription.MIMETYPE_TEXT_PLAIN");
@@ -141,7 +140,15 @@ public class CupCold extends CupImageView {
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (label.equals(RefrigeratorFragment.DRAG_LABEL)) {
+                if (label.equals(IceBinFragment.DRAG_LABEL)) {
+                    Log.e(TAG, "label.equals(IceBinFragment.DRAG_LABEL)");
+
+                    String hardCodedWord = event.getClipData().getItemAt(0).getText().toString();
+                    Log.e(TAG, "hardCodedWord: " + hardCodedWord);
+
+                    ice = new Ice(getContext());
+                    invalidate();
+                } else if (label.equals(RefrigeratorFragment.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL)");
 
                     String contentToBePoured = event.getClipData().getItemAt(0).getText().toString();
@@ -162,6 +169,7 @@ public class CupCold extends CupImageView {
                     transferIn(
                             iceShaker.transferOut()
                     );
+                    iceShaker.empty();
                 } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL)");
 
@@ -177,6 +185,7 @@ public class CupCold extends CupImageView {
                     transferIn(
                             shotGlass.transferOut()
                     );
+                    shotGlass.empty();
                 } else if (label.equals(CaramelDrizzleBottle.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
 
@@ -245,8 +254,6 @@ public class CupCold extends CupImageView {
         if (content.containsKey("ice")) {
             ice = (Ice) content.get("ice");
         }
-
-        invalidate();
     }
 
     @Override
@@ -256,8 +263,6 @@ public class CupCold extends CupImageView {
         if (ice != null) {
             content.put("ice", ice);
         }
-
-        empty();
 
         return content;
     }

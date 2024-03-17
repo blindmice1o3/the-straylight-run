@@ -142,18 +142,37 @@ public class FillCupColdDialogFragment extends DialogFragment {
     }
 
     private void refreshBackgroundResourceImage(ImageView imageView) {
-        if (amount == 0) {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_0);
-        } else if (amount > 0 && amount <= BRACKET1) {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_1);
-        } else if (amount > BRACKET1 && amount <= BRACKET2) {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_2);
-        } else if (amount > BRACKET2 && amount <= BRACKET3) {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_3);
-        } else if (amount > BRACKET3 && amount <= BRACKET4) {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_4);
-        } else {
-            imageView.setBackgroundResource(R.drawable.cup_cold_iced_5);
+        // cup has ice inside.
+        if (cupCold.getIce() != null) {
+            if (amount == 0) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_0);
+            } else if (amount > 0 && amount <= BRACKET1) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_1);
+            } else if (amount > BRACKET1 && amount <= BRACKET2) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_2);
+            } else if (amount > BRACKET2 && amount <= BRACKET3) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_3);
+            } else if (amount > BRACKET3 && amount <= BRACKET4) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_4);
+            } else {
+                imageView.setBackgroundResource(R.drawable.cup_cold_iced_5);
+            }
+        }
+        // cup does NOT have ice inside.
+        else {
+            if (amount == 0) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_0);
+            } else if (amount > 0 && amount <= BRACKET1) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_1);
+            } else if (amount > BRACKET1 && amount <= BRACKET2) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_2);
+            } else if (amount > BRACKET2 && amount <= BRACKET3) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_3);
+            } else if (amount > BRACKET3 && amount <= BRACKET4) {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_4);
+            } else {
+                imageView.setBackgroundResource(R.drawable.cup_cold_empty_5);
+            }
         }
     }
 }

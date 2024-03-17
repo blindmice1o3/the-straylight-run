@@ -31,7 +31,6 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -259,17 +258,28 @@ public class IceShaker extends AppCompatImageView
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) ||
-                        event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL) || event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
+                if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL)");
 
                     // TODO:
-                    CupImageView cupImageView = (CupImageView) event.getLocalState();
+                    CupHot cupHot = (CupHot) event.getLocalState();
 
                     Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();
                     transferIn(
-                            cupImageView.transferOut()
+                            cupHot.transferOut()
                     );
+                    cupHot.empty();
+                } else if (event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
+
+                    // TODO:
+                    CupCold cupCold = (CupCold) event.getLocalState();
+
+                    Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();
+                    transferIn(
+                            cupCold.transferOut()
+                    );
+                    cupCold.empty();
                 } else if (event.getClipDescription().getLabel().equals(IceBinFragment.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(" + IceBinFragment.DRAG_LABEL + ")");
 
@@ -288,6 +298,7 @@ public class IceShaker extends AppCompatImageView
                     transferIn(
                             shotGlass.transferOut()
                     );
+                    shotGlass.empty();
                 } else if (event.getClipDescription().getLabel().equals(CinnamonDispenser.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
 
@@ -407,6 +418,7 @@ public class IceShaker extends AppCompatImageView
 
         if (content.containsKey("ice")) {
             ice = (Ice) content.get("ice");
+            setBackgroundColor(idBlue);
         }
         if (content.containsKey("cinnamon")) {
             cinnamon = (Cinnamon) content.get("cinnamon");
@@ -431,8 +443,6 @@ public class IceShaker extends AppCompatImageView
         if (cinnamon != null) {
             content.put("cinnamon", cinnamon);
         }
-
-        empty();
 
         return content;
     }

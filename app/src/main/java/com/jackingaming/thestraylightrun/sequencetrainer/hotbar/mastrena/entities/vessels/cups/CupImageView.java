@@ -322,8 +322,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             content.put("cinnamon", cinnamon);
         }
 
-        empty();
-
         return content;
     }
 
