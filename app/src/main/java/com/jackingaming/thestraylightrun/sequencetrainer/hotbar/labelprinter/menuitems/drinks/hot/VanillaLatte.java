@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
@@ -6,9 +6,9 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 
 import java.util.List;
 
-public class CaramelMacchiato extends Drink {
-    public CaramelMacchiato() {
-        super(CaramelMacchiato.class.getSimpleName());
+public class VanillaLatte extends Drink {
+    public VanillaLatte() {
+        super(VanillaLatte.class.getSimpleName());
     }
 
     @Override
@@ -42,16 +42,16 @@ public class CaramelMacchiato extends Drink {
         int syrupStandard = -1;
         if (size.equals("venti")) {
             shotStandard = 2;
-            syrupStandard = 4;
+            syrupStandard = 5;
         } else if (size.equals("grande")) {
             shotStandard = 2;
-            syrupStandard = 3;
+            syrupStandard = 4;
         } else if (size.equals("tall")) {
             shotStandard = 1;
-            syrupStandard = 2;
+            syrupStandard = 3;
         } else if (size.equals("short")) {
             shotStandard = 1;
-            syrupStandard = 1;
+            syrupStandard = 2;
         }
 
         if (cupImageView.getMilk().getTemperature() < 160) {
@@ -78,14 +78,6 @@ public class CaramelMacchiato extends Drink {
             if (cupImageView.getMilk().getAmount() < (8 * 4)) {
                 return false;
             }
-        }
-
-        if (!cupImageView.isShotOnTop()) {
-            return false;
-        }
-
-        if (!cupImageView.isDrizzled()) {
-            return false;
         }
 
         if (shotCustom == -1) {

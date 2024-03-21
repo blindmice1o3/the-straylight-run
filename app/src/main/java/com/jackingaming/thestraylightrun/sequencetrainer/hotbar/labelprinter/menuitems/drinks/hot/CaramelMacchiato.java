@@ -1,14 +1,14 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot;
 
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.util.List;
 
-public class Cappuccino extends Drink {
-    public Cappuccino() {
-        super(Cappuccino.class.getSimpleName());
+public class CaramelMacchiato extends Drink {
+    public CaramelMacchiato() {
+        super(CaramelMacchiato.class.getSimpleName());
     }
 
     @Override
@@ -42,23 +42,23 @@ public class Cappuccino extends Drink {
         int syrupStandard = -1;
         if (size.equals("venti")) {
             shotStandard = 2;
-            syrupStandard = 5;
+            syrupStandard = 4;
         } else if (size.equals("grande")) {
             shotStandard = 2;
-            syrupStandard = 4;
+            syrupStandard = 3;
         } else if (size.equals("tall")) {
             shotStandard = 1;
-            syrupStandard = 3;
+            syrupStandard = 2;
         } else if (size.equals("short")) {
             shotStandard = 1;
-            syrupStandard = 2;
+            syrupStandard = 1;
         }
 
         if (cupImageView.getMilk().getTemperature() < 160) {
             return false;
         }
 
-        if (cupImageView.getMilk().getTimeFrothed() < 6 || cupImageView.getMilk().getTimeFrothed() > 8) {
+        if (cupImageView.getMilk().getTimeFrothed() < 3 || cupImageView.getMilk().getTimeFrothed() > 5) {
             return false;
         }
 
@@ -80,12 +80,26 @@ public class Cappuccino extends Drink {
             }
         }
 
+        if (!cupImageView.isShotOnTop()) {
+            return false;
+        }
+
+        if (!cupImageView.isDrizzled()) {
+            return false;
+        }
+
         if (shotCustom == -1) {
             // standard shots
             if (cupImageView.getShots().size() == shotStandard) {
                 if (syrupCustom == -1) {
                     // standard syrups
-                    return true;
+                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
+
+                        if (quantitySyrupVanilla == syrupStandard) {
+                            return true;
+                        }
+                    }
                 } else {
                     // custom syrups
                     if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
@@ -104,7 +118,13 @@ public class Cappuccino extends Drink {
             if (cupImageView.getShots().size() == shotCustom) {
                 if (syrupCustom == -1) {
                     // standard syrups
-                    return true;
+                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
+                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
+
+                        if (quantitySyrupVanilla == syrupStandard) {
+                            return true;
+                        }
+                    }
                 } else {
                     // custom syrups
                     if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {

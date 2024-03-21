@@ -263,6 +263,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.drizzled = drizzled;
     }
 
+    public Cinnamon getCinnamon() {
+        return cinnamon;
+    }
+
+    public void setCinnamon(Cinnamon cinnamon) {
+        this.cinnamon = cinnamon;
+    }
+
     @Override
     public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("syrupsMap")) {
@@ -281,6 +289,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (content.containsKey("shots")) {
             List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
             shots.addAll(shotsToTransferIn);
+
+            // TODO: shotOnTop
+            if (milk != null) {
+                Log.d(TAG, "milk != null... setting shotOnTop to true.");
+                shotOnTop = true;
+            }
         }
 
         if (content.containsKey("milk")) {

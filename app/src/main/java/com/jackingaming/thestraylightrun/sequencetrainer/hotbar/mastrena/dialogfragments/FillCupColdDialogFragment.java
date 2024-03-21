@@ -29,9 +29,14 @@ public class FillCupColdDialogFragment extends DialogFragment {
     private static final int MIN = 0;
     private static final int MAX = 25 * 4;
     private static final int BRACKET1 = 8 * 4;
-    private static final int BRACKET2 = 12 * 4;
-    private static final int BRACKET3 = 16 * 4;
-    private static final int BRACKET4 = 20 * 4;
+    private static final int AMOUNT_OF_MILK_TALL = (12 * 4) - 12;
+    private static final int AMOUNT_OF_MILK_GRANDE = (16 * 4) - 16;
+    private static final int AMOUNT_OF_MILK_VENTI = (24 * 4) - 24;
+
+//    private static final int BRACKET1 = 8 * 4;
+//    private static final int BRACKET2 = 12 * 4;
+//    private static final int BRACKET3 = 16 * 4;
+//    private static final int BRACKET4 = 20 * 4;
 
     private CupCold cupCold;
     private String content;
@@ -69,6 +74,10 @@ public class FillCupColdDialogFragment extends DialogFragment {
 
         cupCold = (CupCold) getArguments().getSerializable(CUP_COLD);
         content = getArguments().getString(CONTENT);
+
+        // TODO: find out cup size (via tag)... calculate seekBar's MIN using cup size...
+        Log.e(TAG, "!!!!! cupCold.getTag() (should be cup size): " + cupCold.getTag());
+
         Milk.Type type = null;
         for (Milk.Type typeMilk : Milk.Type.values()) {
             if (content.equals(typeMilk.name())) {
@@ -148,11 +157,11 @@ public class FillCupColdDialogFragment extends DialogFragment {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_0);
             } else if (amount > 0 && amount <= BRACKET1) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_1);
-            } else if (amount > BRACKET1 && amount <= BRACKET2) {
+            } else if (amount > BRACKET1 && amount <= AMOUNT_OF_MILK_TALL) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_2);
-            } else if (amount > BRACKET2 && amount <= BRACKET3) {
+            } else if (amount > AMOUNT_OF_MILK_TALL && amount <= AMOUNT_OF_MILK_GRANDE) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_3);
-            } else if (amount > BRACKET3 && amount <= BRACKET4) {
+            } else if (amount > AMOUNT_OF_MILK_GRANDE && amount <= AMOUNT_OF_MILK_VENTI) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_4);
             } else {
                 imageView.setBackgroundResource(R.drawable.cup_cold_iced_5);
@@ -164,11 +173,11 @@ public class FillCupColdDialogFragment extends DialogFragment {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_0);
             } else if (amount > 0 && amount <= BRACKET1) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_1);
-            } else if (amount > BRACKET1 && amount <= BRACKET2) {
+            } else if (amount > BRACKET1 && amount <= AMOUNT_OF_MILK_TALL) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_2);
-            } else if (amount > BRACKET2 && amount <= BRACKET3) {
+            } else if (amount > AMOUNT_OF_MILK_TALL && amount <= AMOUNT_OF_MILK_GRANDE) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_3);
-            } else if (amount > BRACKET3 && amount <= BRACKET4) {
+            } else if (amount > AMOUNT_OF_MILK_GRANDE && amount <= AMOUNT_OF_MILK_VENTI) {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_4);
             } else {
                 imageView.setBackgroundResource(R.drawable.cup_cold_empty_5);

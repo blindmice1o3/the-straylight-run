@@ -1,14 +1,14 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot;
 
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.util.List;
 
-public class VanillaLatte extends Drink {
-    public VanillaLatte() {
-        super(VanillaLatte.class.getSimpleName());
+public class Cappuccino extends Drink {
+    public Cappuccino() {
+        super(Cappuccino.class.getSimpleName());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class VanillaLatte extends Drink {
             return false;
         }
 
-        if (cupImageView.getMilk().getTimeFrothed() < 3 || cupImageView.getMilk().getTimeFrothed() > 5) {
+        if (cupImageView.getMilk().getTimeFrothed() < 6 || cupImageView.getMilk().getTimeFrothed() > 8) {
             return false;
         }
 
@@ -85,13 +85,7 @@ public class VanillaLatte extends Drink {
             if (cupImageView.getShots().size() == shotStandard) {
                 if (syrupCustom == -1) {
                     // standard syrups
-                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
-
-                        if (quantitySyrupVanilla == syrupStandard) {
-                            return true;
-                        }
-                    }
+                    return true;
                 } else {
                     // custom syrups
                     if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
@@ -110,13 +104,7 @@ public class VanillaLatte extends Drink {
             if (cupImageView.getShots().size() == shotCustom) {
                 if (syrupCustom == -1) {
                     // standard syrups
-                    if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
-                        int quantitySyrupVanilla = cupImageView.getSyrupsMap().get(Syrup.Type.VANILLA).size();
-
-                        if (quantitySyrupVanilla == syrupStandard) {
-                            return true;
-                        }
-                    }
+                    return true;
                 } else {
                     // custom syrups
                     if (cupImageView.getSyrupsMap().containsKey(Syrup.Type.VANILLA)) {
