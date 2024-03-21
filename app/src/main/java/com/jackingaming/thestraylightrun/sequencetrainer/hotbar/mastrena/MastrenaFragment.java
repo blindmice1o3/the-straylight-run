@@ -116,6 +116,11 @@ public class MastrenaFragment extends Fragment {
     public void changeLabelPrinterMode(String modeSelected) {
         Log.e(TAG, "changeLabelPrinterMode(String) modeSelected: " + modeSelected);
 
+        if (labelPrinter == null) {
+            Toast.makeText(getContext(), "labelPrinter is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (modeSelected.equals("standard")) {
             labelPrinter.selectModeStandard();
 //            delayAddNewDrink = DELAY_ADD_NEW_DRINK_EASY;
