@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
@@ -214,7 +216,9 @@ public class MastrenaFragment extends Fragment {
         espressoShot.init(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
-        espressoShot.setX(200 - (16 / 2));
+        float xCenterOfEspressoShotControl = espressoShotControl.getX() + (espressoShotControl.getWidth() / 2) - (16 / 2);
+        espressoShot.setX(xCenterOfEspressoShotControl);
+//        espressoShot.setX(200 - (16 / 2));
         espressoShot.setY(458);
         constraintLayoutMastrena.addView(espressoShot);
 
@@ -466,11 +470,18 @@ public class MastrenaFragment extends Fragment {
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
         framelayoutSteamingWand.addView(steamingWand);
 
+        // ESPRESSO SHOT QUEUE VIEWER
+        RecyclerView recyclerView = new RecyclerView(getContext());
+        recyclerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 64, Gravity.CENTER_HORIZONTAL));
+        recyclerView.setBackgroundColor(getResources().getColor(R.color.light_green));
+        framelayoutEspressoStream.addView(recyclerView);
+
         // ESPRESSO SHOT CONTROL
         espressoShotControl = new ImageView(getContext());
         espressoShotControl.setTag(TAG_ESPRESSO_SHOT_CONTROL);
-        espressoShotControl.setLayoutParams(new FrameLayout.LayoutParams(128, 128));
-        espressoShotControl.setX(200 - (128 / 2));
+        espressoShotControl.setLayoutParams(new FrameLayout.LayoutParams(128, 128, Gravity.CENTER_HORIZONTAL));
+//        espressoShotControl.setX(200 - (128 / 2));
+        espressoShotControl.setY(64);
         espressoShotControl.setBackgroundColor(getResources().getColor(R.color.brown));
         espressoShotControl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -484,8 +495,8 @@ public class MastrenaFragment extends Fragment {
         // SHOT GLASS
         shotGlass = new ShotGlass(getContext());
         shotGlass.setTag(TAG_SHOT_GLASS);
-        shotGlass.setLayoutParams(new FrameLayout.LayoutParams(64, 64));
-        shotGlass.setX(200 - (64 / 2));
+        shotGlass.setLayoutParams(new FrameLayout.LayoutParams(64, 64, Gravity.CENTER_HORIZONTAL));
+//        shotGlass.setX(200 - (64 / 2));
         shotGlass.setBackgroundColor(getResources().getColor(R.color.cream));
         framelayoutLeft.addView(shotGlass);
 
