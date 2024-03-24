@@ -29,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
@@ -41,6 +42,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequestAdapter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -56,6 +59,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.Ref
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MastrenaFragment extends Fragment {
     public static final String TAG = MastrenaFragment.class.getSimpleName();
@@ -98,8 +103,12 @@ public class MastrenaFragment extends Fragment {
     private IceShaker iceShaker;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
+
     private ImageView espressoShotControl;
+    private List<EspressoShotRequest> espressoShotRequests;
+    private RecyclerView rvEspressoShotRequests;
     private ObjectAnimator animatorEspressoShot;
+
     private ShotGlass shotGlass;
     private ImageView syrupBottleVanilla, syrupBottleBrownSugar;
     private CaramelDrizzleBottle caramelDrizzleBottle;
@@ -146,6 +155,8 @@ public class MastrenaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
 
+        espressoShotRequests = new ArrayList<>();
+
         // Set the listener on the child fragmentManager.
         getChildFragmentManager()
                 .setFragmentResultListener(FillSteamingPitcherDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
@@ -176,16 +187,11 @@ public class MastrenaFragment extends Fragment {
                     public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                         Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
 
-                        if (animatorEspressoShot != null && animatorEspressoShot.isRunning()) {
-                            Log.e(TAG, "animatorEspressoShot.isRunning() RETURN");
-                            return;
-                        }
-
-                        EspressoShot.Type typeSelected = (EspressoShot.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
                         int quantitySelected = result.getInt(EspressoShotControlDialogFragment.BUNDLE_KEY_QUANTITY);
+                        EspressoShot.Type typeSelected = (EspressoShot.Type) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_TYPE);
                         EspressoShot.AmountOfWater amountOfWaterSelected = (EspressoShot.AmountOfWater) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_AMOUNT_OF_WATER);
                         EspressoShot.AmountOfBean amountOfBeanSelected = (EspressoShot.AmountOfBean) result.getSerializable(EspressoShotControlDialogFragment.BUNDLE_KEY_AMOUNT_OF_BEAN);
-                        Log.e(TAG, "type: " + typeSelected.name() + ", quantity: " + quantitySelected);
+                        Log.e(TAG, "quantity: " + quantitySelected + ", type: " + typeSelected.name());
                         Log.e(TAG, "amountOfWaterSelected: " + amountOfWaterSelected.name() + ", amountOfBeanSelected: " + amountOfBeanSelected.name());
 
                         if (quantitySelected < 1) {
@@ -193,8 +199,20 @@ public class MastrenaFragment extends Fragment {
                             return;
                         }
 
-                        pullEspressoShot(quantitySelected, typeSelected,
-                                amountOfWaterSelected, amountOfBeanSelected);
+                        EspressoShotRequest espressoShotRequest = new EspressoShotRequest(quantitySelected, typeSelected, amountOfWaterSelected, amountOfBeanSelected);
+
+                        Log.e(TAG, "ADDING ESPRESSO SHOT REQUEST TO QUEUE.");
+                        int index = espressoShotRequests.size();
+                        espressoShotRequests.add(index, espressoShotRequest);
+                        rvEspressoShotRequests.getAdapter().notifyItemInserted(index);
+
+                        if (animatorEspressoShot == null) {
+                            Log.e(TAG, "animatorEspressoShot == null... PULL ESPRESSO SHOT.");
+
+                            pullEspressoShot(espressoShotRequest);
+                        } else {
+                            Log.e(TAG, "animatorEspressoShot != null... DO NOTHING.");
+                        }
                     }
                 });
     }
@@ -206,28 +224,27 @@ public class MastrenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
-    private int counterEspressoShot;
+    private int quantityCurrentEspressoShot;
 
-    private void pullEspressoShot(int quantitySelected,
-                                  EspressoShot.Type typeSelected,
-                                  EspressoShot.AmountOfWater amountOfWaterSelected,
-                                  EspressoShot.AmountOfBean amountOfBeanSelected) {
+    private void pullEspressoShot(EspressoShotRequest espressoShotRequest) {
+        int quantitySelected = espressoShotRequest.getQuantity();
+
         EspressoShot espressoShot = new EspressoShot(getContext());
-        espressoShot.init(typeSelected, amountOfWaterSelected, amountOfBeanSelected);
+        espressoShot.init(espressoShotRequest.getType(), espressoShotRequest.getAmountOfWater(), espressoShotRequest.getAmountOfBean());
         espressoShot.setTag(TAG_ESPRESSO_SHOT);
         espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         float xCenterOfEspressoShotControl = espressoShotControl.getX() + (espressoShotControl.getWidth() / 2) - (16 / 2);
         espressoShot.setX(xCenterOfEspressoShotControl);
 //        espressoShot.setX(200 - (16 / 2));
-        espressoShot.setY(458);
+        espressoShot.setY(458 + 64); // 64 is for espresso shot queue viewer's height.
         constraintLayoutMastrena.addView(espressoShot);
 
         animatorEspressoShot = ObjectAnimator.ofFloat(
                 espressoShot,
                 "y",
-                458f,
+                458 + 64f,
                 1200f);
-        long startDelay = (counterEspressoShot == 0) ? (1500L * quantitySelected) : (0);
+        long startDelay = (quantityCurrentEspressoShot == 0) ? (1500L * quantitySelected) : (0);
         animatorEspressoShot.setStartDelay(startDelay);
         animatorEspressoShot.setDuration(2000L);
         animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
@@ -236,19 +253,35 @@ public class MastrenaFragment extends Fragment {
                 super.onAnimationEnd(animation);
                 Log.e(TAG, "onAnimationEnd()");
 
-                counterEspressoShot++;
+                quantityCurrentEspressoShot++;
 
                 if (espressoShot != null) {
                     constraintLayoutMastrena.removeView(espressoShot);
                 }
 
-                if (counterEspressoShot < quantitySelected) {
-                    pullEspressoShot(quantitySelected, typeSelected,
-                            amountOfWaterSelected, amountOfBeanSelected);
-                } else if (counterEspressoShot == quantitySelected) {
-                    counterEspressoShot = 0;
+                if (quantityCurrentEspressoShot < quantitySelected) {
+                    // current request, more than one shot needed.
+                    pullEspressoShot(espressoShotRequest);
+                } else if (quantityCurrentEspressoShot == quantitySelected) {
+                    // number of shots reached, request completed.
+                    quantityCurrentEspressoShot = 0;
+
+                    // remove request from queue.
+                    Log.e(TAG, "REMOVING ESPRESSO SHOT REQUEST FROM QUEUE.");
+                    espressoShotRequests.remove(0);
+                    rvEspressoShotRequests.getAdapter().notifyItemRemoved(0);
+
+                    // check queue.
+                    if (!espressoShotRequests.isEmpty()) {
+                        pullEspressoShot(
+                                espressoShotRequests.get(0)
+                        );
+                    } else {
+                        Log.e(TAG, "END OF QUEUE REACHED.");
+                        animatorEspressoShot = null;
+                    }
                 } else {
-                    Log.e(TAG, "counterEspressoShot > quantitySelected");
+                    Log.e(TAG, "quantityCurrentEspressoShot > quantitySelected");
                 }
             }
         });
@@ -471,10 +504,15 @@ public class MastrenaFragment extends Fragment {
         framelayoutSteamingWand.addView(steamingWand);
 
         // ESPRESSO SHOT QUEUE VIEWER
-        RecyclerView recyclerView = new RecyclerView(getContext());
-        recyclerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 64, Gravity.CENTER_HORIZONTAL));
-        recyclerView.setBackgroundColor(getResources().getColor(R.color.light_green));
-        framelayoutEspressoStream.addView(recyclerView);
+        rvEspressoShotRequests = new RecyclerView(getContext());
+        rvEspressoShotRequests.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 64, Gravity.CENTER_HORIZONTAL));
+        rvEspressoShotRequests.setBackgroundColor(getResources().getColor(R.color.light_green));
+        EspressoShotRequestAdapter adapter = new EspressoShotRequestAdapter(espressoShotRequests);
+        rvEspressoShotRequests.setAdapter(adapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvEspressoShotRequests.setLayoutManager(linearLayoutManager);
+        framelayoutEspressoStream.addView(rvEspressoShotRequests);
 
         // ESPRESSO SHOT CONTROL
         espressoShotControl = new ImageView(getContext());

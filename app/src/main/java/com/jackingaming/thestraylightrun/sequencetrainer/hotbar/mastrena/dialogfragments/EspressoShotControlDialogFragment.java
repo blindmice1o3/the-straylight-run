@@ -20,8 +20,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 public class EspressoShotControlDialogFragment extends DialogFragment {
     public static final String TAG = EspressoShotControlDialogFragment.class.getSimpleName();
     public static final String REQUEST_KEY = "espressoShotControl";
-    public static final String BUNDLE_KEY_TYPE = "type";
     public static final String BUNDLE_KEY_QUANTITY = "quantity";
+    public static final String BUNDLE_KEY_TYPE = "type";
     public static final String BUNDLE_KEY_AMOUNT_OF_WATER = "amountOfWater";
     public static final String BUNDLE_KEY_AMOUNT_OF_BEAN = "amountOfBean";
 
@@ -32,9 +32,8 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
     private RadioButton radiobuttonRistretto, radiobuttonLong;
     private RadioButton radiobuttonHalfDecaf, radiobuttonUpdosed;
 
-    private EspressoShot.Type typeSelected = EspressoShot.Type.SIGNATURE;
     private int quantitySelected = 0;
-
+    private EspressoShot.Type typeSelected = EspressoShot.Type.SIGNATURE;
     private EspressoShot.AmountOfWater amountOfWaterSelected = EspressoShot.AmountOfWater.STANDARD;
     private EspressoShot.AmountOfBean amountOfBeanSelected = EspressoShot.AmountOfBean.STANDARD;
 
@@ -179,8 +178,8 @@ public class EspressoShotControlDialogFragment extends DialogFragment {
         Log.e(TAG, "sendBackResult()");
 
         Bundle result = new Bundle();
-        result.putSerializable(BUNDLE_KEY_TYPE, typeSelected);
         result.putInt(BUNDLE_KEY_QUANTITY, quantitySelected);
+        result.putSerializable(BUNDLE_KEY_TYPE, typeSelected);
         result.putSerializable(BUNDLE_KEY_AMOUNT_OF_WATER, amountOfWaterSelected);
         result.putSerializable(BUNDLE_KEY_AMOUNT_OF_BEAN, amountOfBeanSelected);
         getParentFragmentManager().setFragmentResult(REQUEST_KEY, result);
