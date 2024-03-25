@@ -17,7 +17,8 @@ public class IcedBrownSugarOatmilkShakenEspresso extends Drink {
     }
 
     @Override
-    public boolean validate(CupImageView cupImageView, String size, List<String> customizations) {
+    public boolean validate(CupImageView cupImageView,
+                            String size, List<String> customizations) {
         int shotCustom = -1;
         int syrupCustom = -1;
         if (customizations != null) {

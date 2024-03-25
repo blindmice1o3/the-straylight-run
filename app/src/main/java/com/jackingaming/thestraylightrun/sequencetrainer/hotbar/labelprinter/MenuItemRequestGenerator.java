@@ -15,9 +15,10 @@ public class MenuItemRequestGenerator {
         int indexRandomSize = random.nextInt(Drink.Size.values().length);
 
         // iced drinks shouldn't have SHORT for size, replace with GRANDE.
-        if (indexRandomDrink == 5 &&
-                Drink.Size.values()[indexRandomSize] == Drink.Size.SHORT) {
-            indexRandomSize = Drink.Size.GRANDE.ordinal();
+        if (indexRandomDrink == 5 || indexRandomDrink == 6) {
+            if (Drink.Size.values()[indexRandomSize] == Drink.Size.SHORT) {
+                indexRandomSize = Drink.Size.GRANDE.ordinal();
+            }
         }
 
         // set size on menu item

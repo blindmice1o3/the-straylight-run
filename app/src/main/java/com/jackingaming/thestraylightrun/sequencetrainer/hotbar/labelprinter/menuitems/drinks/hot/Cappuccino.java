@@ -54,6 +54,10 @@ public class Cappuccino extends Drink {
             syrupStandard = 2;
         }
 
+        if (cupImageView.getMilk() == null) {
+            return false;
+        }
+
         if (cupImageView.getMilk().getTemperature() < 160) {
             return false;
         }

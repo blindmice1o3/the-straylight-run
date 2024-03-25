@@ -67,6 +67,10 @@ public class FlatWhite extends Drink {
             }
         }
 
+        if (cupImageView.getMilk() == null) {
+            return false;
+        }
+
         if (!cupImageView.getMilk().getType().equals(Milk.Type.WHOLE)) {
             return false;
         }

@@ -1,8 +1,8 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.List;
 
@@ -52,6 +52,10 @@ public class VanillaLatte extends Drink {
         } else if (size.equals("short")) {
             shotStandard = 1;
             syrupStandard = 2;
+        }
+
+        if (cupImageView.getMilk() == null) {
+            return false;
         }
 
         if (cupImageView.getMilk().getTemperature() < 160) {

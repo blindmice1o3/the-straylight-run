@@ -54,6 +54,10 @@ public class CaramelMacchiato extends Drink {
             syrupStandard = 1;
         }
 
+        if (cupImageView.getMilk() == null) {
+            return false;
+        }
+
         if (cupImageView.getMilk().getTemperature() < 160) {
             return false;
         }
