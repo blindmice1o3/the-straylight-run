@@ -17,9 +17,9 @@ import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 public class CupHot extends CupImageView {
     public static final String TAG = CupHot.class.getSimpleName();
@@ -74,8 +74,9 @@ public class CupHot extends CupImageView {
                     label = event.getClipDescription().getLabel().toString();
                     if (label.equals(ShotGlass.DRAG_LABEL) ||
                             label.equals(CaramelDrizzleBottle.DRAG_LABEL) ||
+                            label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM) ||
                             label.equals(DrinkLabel.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
+                        Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM) || label.equals(DrinkLabel.DRAG_LABEL)");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -162,6 +163,13 @@ public class CupHot extends CupImageView {
                         Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
                         drizzled = true;
                     }
+                } else if (label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)) {
+                    Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)");
+
+                    String tagWhippedCream = event.getClipData().getItemAt(0).getText().toString();
+                    Log.d(TAG, "tagWhippedCream: " + tagWhippedCream);
+
+                    whippedCream = true;
                 } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                     DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
 

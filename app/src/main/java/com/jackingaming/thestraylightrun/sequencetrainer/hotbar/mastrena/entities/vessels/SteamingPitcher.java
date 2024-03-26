@@ -211,8 +211,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
                 if (event.getClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
-                    if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL)) {
-                        Log.d(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL + ")");
+                    if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL_MILK)) {
+                        Log.d(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL_MILK + ")");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -266,8 +266,8 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             case DragEvent.ACTION_DROP:
                 Log.d(TAG, "ACTION_DROP");
 
-                if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL)) {
-                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL + ")");
+                if (event.getClipDescription().getLabel().equals(RefrigeratorFragment.DRAG_LABEL_MILK)) {
+                    Log.e(TAG, "event.getClipDescription().getLabel().equals(" + RefrigeratorFragment.DRAG_LABEL_MILK + ")");
 
                     String contentToBeSteamed = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeSteamed: " + contentToBeSteamed);

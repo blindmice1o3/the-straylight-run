@@ -42,6 +42,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     protected boolean shotOnTop;
     protected boolean drizzled;
     protected Cinnamon cinnamon;
+    protected boolean whippedCream;
 
     protected Collider collider;
 
@@ -273,6 +274,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.cinnamon = cinnamon;
     }
 
+    public boolean isWhippedCream() {
+        return whippedCream;
+    }
+
+    public void setWhippedCream(boolean whippedCream) {
+        this.whippedCream = whippedCream;
+    }
+
     @Override
     public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("syrupsMap")) {
@@ -316,6 +325,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (content.containsKey("cinnamon")) {
             cinnamon = (Cinnamon) content.get("cinnamon");
         }
+        if (content.containsKey("whippedCream")) {
+            whippedCream = (Boolean) content.get("whippedCream");
+        }
 
         invalidate();
     }
@@ -337,6 +349,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (cinnamon != null) {
             content.put("cinnamon", cinnamon);
         }
+        content.put("whippedCream", whippedCream);
 
         return content;
     }
@@ -352,6 +365,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         shotOnTop = false;
         drizzled = false;
         cinnamon = null;
+        whippedCream = false;
 
         invalidate();
     }

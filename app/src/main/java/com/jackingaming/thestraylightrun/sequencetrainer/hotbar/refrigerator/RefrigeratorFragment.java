@@ -21,7 +21,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 
 public class RefrigeratorFragment extends Fragment {
     public static final String TAG = RefrigeratorFragment.class.getSimpleName();
-    public static final String DRAG_LABEL = RefrigeratorFragment.class.getSimpleName();
+    public static final String DRAG_LABEL_MILK = "Milk";
+    public static final String DRAG_LABEL_WHIPPED_CREAM = "WhippedCream";
 
     public static final String TAG_WHIPPED_CREAM = "whippedCream";
 
@@ -65,7 +66,6 @@ public class RefrigeratorFragment extends Fragment {
         ivMilkCoconut.setTag(Milk.Type.COCONUT.name());
         ivMilkAlmond.setTag(Milk.Type.ALMOND.name());
         ivMilkSoy.setTag(Milk.Type.SOY.name());
-
         ivWhippedCream.setTag(TAG_WHIPPED_CREAM);
 
         View.OnTouchListener milkTouchListener = new MilkTouchListener();
@@ -75,6 +75,8 @@ public class RefrigeratorFragment extends Fragment {
         ivMilkCoconut.setOnTouchListener(milkTouchListener);
         ivMilkAlmond.setOnTouchListener(milkTouchListener);
         ivMilkSoy.setOnTouchListener(milkTouchListener);
+        View.OnTouchListener whippedCreamTouchListener = new WhippedCreamTouchListener();
+        ivWhippedCream.setOnTouchListener(whippedCreamTouchListener);
     }
 
     private class MilkTouchListener
@@ -84,7 +86,38 @@ public class RefrigeratorFragment extends Fragment {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                String label = DRAG_LABEL;
+                String label = DRAG_LABEL_MILK;
+
+                ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
+                View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);
+
+                // Start the drag.
+                view.startDragAndDrop(
+                        dragData,           // The data to be dragged.
+                        myShadow,           // The drag shadow builder.
+                        null,    // No need to use local data.
+                        0              // Flags. Not currently used, set to 0.
+                );
+
+                Log.e(TAG, "label: " + label);
+                Log.e(TAG, "getTag(): " + getTag());
+
+                // Indicate that the on-touch event is handled.
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private class WhippedCreamTouchListener
+            implements View.OnTouchListener {
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                String label = DRAG_LABEL_WHIPPED_CREAM;
 
                 ClipData dragData = ClipData.newPlainText(label, (CharSequence) view.getTag());
                 View.DragShadowBuilder myShadow = new View.DragShadowBuilder(view);

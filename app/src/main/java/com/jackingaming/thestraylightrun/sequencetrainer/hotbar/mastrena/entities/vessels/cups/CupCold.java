@@ -97,11 +97,12 @@ public class CupCold extends CupImageView {
                     label = event.getClipDescription().getLabel().toString();
                     if (label.equals(IceShaker.DRAG_LABEL) ||
                             label.equals(IceBinFragment.DRAG_LABEL) ||
-                            label.equals(RefrigeratorFragment.DRAG_LABEL) ||
+                            label.equals(RefrigeratorFragment.DRAG_LABEL_MILK) ||
+                            label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM) ||
                             label.equals(ShotGlass.DRAG_LABEL) ||
                             label.equals(CaramelDrizzleBottle.DRAG_LABEL) ||
                             label.equals(DrinkLabel.DRAG_LABEL)) {
-                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL) || label.equals(RefrigeratorFragment.DRAG_LABEL) || label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
+                        Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL) || label.equals(RefrigeratorFragment.DRAG_LABEL_MILK) || label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM) || label.equals(ShotGlass.DRAG_LABEL) || label.equals(CaramelDrizzleBottle.DRAG_LABEL) || label.equals(DrinkLabel.DRAG_LABEL)");
 
                         // Change value of alpha to indicate drop-target.
                         setAlpha(0.75f);
@@ -148,8 +149,8 @@ public class CupCold extends CupImageView {
 
                     ice = new Ice(getContext());
                     invalidate();
-                } else if (label.equals(RefrigeratorFragment.DRAG_LABEL)) {
-                    Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL)");
+                } else if (label.equals(RefrigeratorFragment.DRAG_LABEL_MILK)) {
+                    Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL_MILK)");
 
                     String contentToBePoured = event.getClipData().getItemAt(0).getText().toString();
                     Log.d(TAG, "contentToBePoured: " + contentToBePoured);
@@ -160,6 +161,13 @@ public class CupCold extends CupImageView {
                     } else {
                         Log.e(TAG, "listener == null");
                     }
+                } else if (label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)) {
+                    Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)");
+
+                    String tagWhippedCream = event.getClipData().getItemAt(0).getText().toString();
+                    Log.d(TAG, "tagWhippedCream: " + tagWhippedCream);
+
+                    whippedCream = true;
                 } else if (label.equals(IceShaker.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
 
