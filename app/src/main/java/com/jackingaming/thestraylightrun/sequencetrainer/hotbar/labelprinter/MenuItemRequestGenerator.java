@@ -18,7 +18,8 @@ public class MenuItemRequestGenerator {
         if (indexRandomDrink == 5 ||
                 indexRandomDrink == 6 ||
                 indexRandomDrink == 7 ||
-                indexRandomDrink == 8) {
+                indexRandomDrink == 8 ||
+                indexRandomDrink == 9) {
             if (Drink.Size.values()[indexRandomSize] == Drink.Size.SHORT) {
                 indexRandomSize = Drink.Size.GRANDE.ordinal();
             }
