@@ -88,6 +88,7 @@ public class MastrenaFragment extends Fragment {
     public static final String TAG_SHOT_GLASS = "ShotGlass";
     public static final String TAG_SYRUP_BOTTLE_VANILLA = "SyrupBottleVanilla";
     public static final String TAG_SYRUP_BOTTLE_BROWN_SUGAR = "SyrupBottleBrownSugar";
+    public static final String TAG_SYRUP_BOTTLE_MOCHA = "SyrupBottleMocha";
     public static final String TAG_SYRUP = "Syrup";
     public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
     public static final String TAG_CINNAMON_DISPENSER = "CinnamonDispenser";
@@ -110,7 +111,7 @@ public class MastrenaFragment extends Fragment {
     private ObjectAnimator animatorEspressoShot;
 
     private ShotGlass shotGlass;
-    private ImageView syrupBottleVanilla, syrupBottleBrownSugar;
+    private ImageView syrupBottleVanilla, syrupBottleBrownSugar, syrupBottleMocha;
     private CaramelDrizzleBottle caramelDrizzleBottle;
     private CinnamonDispenser cinnamonDispenser;
 
@@ -327,6 +328,9 @@ public class MastrenaFragment extends Fragment {
         } else if (type == Syrup.Type.BROWN_SUGAR) {
             syrup.setX(344 + 64);
             syrup.setBackgroundColor(getResources().getColor(R.color.brown));
+        } else if (type == Syrup.Type.MOCHA) {
+            syrup.setX(344 + 64 + 64);
+            syrup.setBackgroundColor(getResources().getColor(R.color.dark_brown));
         }
         constraintLayoutMastrena.addView(syrup);
 
@@ -586,6 +590,22 @@ public class MastrenaFragment extends Fragment {
             }
         });
         framelayoutSyrupCaddy.addView(syrupBottleBrownSugar);
+
+        // SYRUP BOTTLE (mocha)
+        syrupBottleMocha = new ImageView(getContext());
+        syrupBottleMocha.setTag(TAG_SYRUP_BOTTLE_MOCHA);
+        syrupBottleMocha.setLayoutParams(new FrameLayout.LayoutParams(64, 128));
+        syrupBottleMocha.setX(64 + 64 + 64 - (64 / 2));
+        syrupBottleMocha.setBackgroundColor(getResources().getColor(R.color.dark_brown));
+        syrupBottleMocha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "syrupBottleMocha.onClick()");
+
+                pumpSyrup(Syrup.Type.MOCHA);
+            }
+        });
+        framelayoutSyrupCaddy.addView(syrupBottleMocha);
 
         // CARAMEL DRIZZLE BOTTLE
         caramelDrizzleBottle = new CaramelDrizzleBottle(getContext());

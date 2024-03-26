@@ -167,13 +167,15 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         textPaint.setColor(getResources().getColor(R.color.amber));
         int quantityVanilla = (syrupsMap.get(Syrup.Type.VANILLA) == null) ? 0 : syrupsMap.get(Syrup.Type.VANILLA).size();
-        int ySyrupVanilla = (shotOnTop) ? yLine3 : yLine2;
-        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16, ySyrupVanilla, textPaint);
+        canvas.drawText(Integer.toString(quantityVanilla), getWidth() - 16 - 16 - 16, yLine3, textPaint);
 
         textPaint.setColor(getResources().getColor(R.color.brown));
         int quantityBrownSugar = (syrupsMap.get(Syrup.Type.BROWN_SUGAR) == null) ? 0 : syrupsMap.get(Syrup.Type.BROWN_SUGAR).size();
-        int ySyrupBrownSugar = (shotOnTop) ? yLine4 : yLine3;
-        canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16, ySyrupBrownSugar, textPaint);
+        canvas.drawText(Integer.toString(quantityBrownSugar), getWidth() - 16 - 16, yLine3, textPaint);
+
+        textPaint.setColor(getResources().getColor(R.color.dark_brown));
+        int quantityMocha = (syrupsMap.get(Syrup.Type.MOCHA) == null) ? 0 : syrupsMap.get(Syrup.Type.MOCHA).size();
+        canvas.drawText(Integer.toString(quantityMocha), getWidth() - 16, yLine3, textPaint);
     }
 
     protected void showDialogWinner(DrinkLabel drinkLabel) {

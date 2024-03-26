@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class Syrup extends DrinkComponent {
     public static final String TAG = Syrup.class.getSimpleName();
 
-    public enum Type {VANILLA, BROWN_SUGAR;}
+    public enum Type {VANILLA, BROWN_SUGAR, MOCHA;}
 
     private Type type;
 
