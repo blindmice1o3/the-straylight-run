@@ -174,12 +174,15 @@ public class CupHot extends CupImageView {
                     DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
 
                     if (isWinnerWinnerChickenDinner(drinkLabel)) {
+                        Toast.makeText(getContext(), "WINNER", Toast.LENGTH_SHORT).show();
                         showDialogWinner(drinkLabel);
 
                         ((FrameLayout) drinkLabel.getParent()).removeView(drinkLabel);
                         ((FrameLayout) getParent()).removeView(this);
                     } else {
                         Toast.makeText(getContext(), "NOT a winner", Toast.LENGTH_SHORT).show();
+                        showDialogExpectedVsActual(drinkLabel);
+
                         drinkLabel.setVisibility(View.VISIBLE);
                     }
                 }

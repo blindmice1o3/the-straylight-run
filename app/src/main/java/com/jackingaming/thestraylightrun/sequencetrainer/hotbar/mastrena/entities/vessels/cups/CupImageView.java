@@ -179,7 +179,61 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         canvas.drawText(Integer.toString(quantityMocha), getWidth() - 16, yLine3, textPaint);
     }
 
+    protected void showDialogExpectedVsActual(DrinkLabel drinkLabel) {
+        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
+        String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
+//        String date = drinkLabelSplitted[0];
+//        String time = drinkLabelSplitted[1];
+//        String amOrPm = drinkLabelSplitted[2];
+        String size = drinkLabelSplitted[3];
+        String name = drinkLabelSplitted[4];
+        // (6+) customization(s).
+        int numberOfNonCustomizations = 5;
+        List<String> customizations = new ArrayList<>();
+        if (drinkLabelSplitted.length > numberOfNonCustomizations) {
+            for (int i = 0; i < (drinkLabelSplitted.length - numberOfNonCustomizations); i++) {
+                int indexCustomization = numberOfNonCustomizations + i;
+                customizations.add(drinkLabelSplitted[indexCustomization]);
+            }
+        }
+
+        StringBuilder sbExpected = new StringBuilder();
+//        Drink drink = Menu.getDrinkByName(name).;
+        sbExpected.append("TODO: getRequiredDrinkComponents()");
+        for (String customization : customizations) {
+            sbExpected.append("\n");
+            sbExpected.append(customization);
+        }
+
+        String title = (customizations.isEmpty()) ?
+                size + " | " + name + " (standard)" :
+                size + " | " + name + " (customized)";
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setMessage(
+                String.format("EXPECTED: \n%s\n\n\nACTUAL: \n%s",
+                        sbExpected.toString(),
+                        "TODO: check CupCold/CupHot's content")
+        );
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // on success
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.create().show();
+    }
+
     protected void showDialogWinner(DrinkLabel drinkLabel) {
+        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
         String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
         String date = drinkLabelSplitted[0];
         String time = drinkLabelSplitted[1];
