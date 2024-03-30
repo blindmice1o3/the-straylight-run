@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
@@ -82,7 +83,7 @@ public class MastrenaFragment extends Fragment {
 
     public static final String TAG_ICE_SHAKER = "IceShaker";
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
-    public static final String TAG_STEAMING_WAND = "SteamingWand";
+    public static final String TAG_IV_STEAMING_WAND = "ivSteamingWand";
     public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
     public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
     public static final String TAG_SHOT_GLASS = "ShotGlass";
@@ -104,6 +105,7 @@ public class MastrenaFragment extends Fragment {
     private IceShaker iceShaker;
     private SteamingPitcher steamingPitcher;
     private SteamingWand steamingWand;
+    private ImageView ivSteamingWand;
 
     private ImageView espressoShotControl;
     private List<EspressoShotRequest> espressoShotRequests;
@@ -500,12 +502,25 @@ public class MastrenaFragment extends Fragment {
         framelayoutRight.addView(steamingPitcher);
 
         // STEAMING WAND
-        steamingWand = new SteamingWand(getContext());
-        steamingWand.setTag(TAG_STEAMING_WAND);
-        steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
-        steamingWand.setX(128);
-        steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
-        framelayoutSteamingWand.addView(steamingWand);
+        steamingWand = new SteamingWand();
+        // IV_STEAMING_WAND
+        ivSteamingWand = new AppCompatImageView(getContext()) {
+            @Override
+            public boolean onDragEvent(DragEvent event) {
+                return steamingWand.onDragEvent(event, this);
+            }
+        };
+        ivSteamingWand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                steamingWand.onClick(view);
+            }
+        });
+        ivSteamingWand.setTag(TAG_IV_STEAMING_WAND);
+        ivSteamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
+        ivSteamingWand.setX(128);
+        ivSteamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
+        framelayoutSteamingWand.addView(ivSteamingWand);
 
         // ESPRESSO SHOT QUEUE VIEWER
         rvEspressoShotRequests = new RecyclerView(getContext());

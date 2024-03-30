@@ -20,7 +20,7 @@ public abstract class DrinkComponent extends AppCompatImageView {
     public DrinkComponent(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
-    
+
     public boolean isShaken() {
         return shaken;
     }

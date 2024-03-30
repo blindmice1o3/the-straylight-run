@@ -16,6 +16,8 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkOptions;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -32,6 +34,8 @@ import java.util.Map;
 public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable, Collideable, Serializable {
     public static final String TAG = CupImageView.class.getSimpleName();
+
+    protected Map<DrinkOptions, List<DrinkComponent>> content = new HashMap<>();
 
     protected Map<Syrup.Type, List<Syrup>> syrupsMap;
 
