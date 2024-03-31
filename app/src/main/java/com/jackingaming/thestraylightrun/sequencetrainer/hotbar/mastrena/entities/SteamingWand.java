@@ -1,21 +1,43 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities;
 
 import android.content.ClipDescription;
+import android.content.Context;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
 
-public class SteamingWand
-        implements View.OnClickListener {
+public class SteamingWand extends AppCompatImageView {
     public static final String TAG = SteamingWand.class.getSimpleName();
 
     private SteamingPitcher steamingPitcher;
 
-    public boolean onDragEvent(DragEvent event, ImageView imageView) {
+    public SteamingWand(@NonNull Context context) {
+        super(context);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (steamingPitcher != null) {
+                    steamingPitcher.cancelTemperatureAnimator();
+                }
+            }
+        });
+    }
+
+    public SteamingWand(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    @Override
+    public boolean onDragEvent(DragEvent event) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 // Determine whether this View can accept the dragged data.
@@ -29,7 +51,7 @@ public class SteamingWand
                         if (steamingPitcher.getMilk() != null &&
                                 steamingPitcher.getMilk().getAmount() > 0) {
                             // Change value of alpha to indicate drop-target.
-                            imageView.setAlpha(0.8f);
+                            setAlpha(0.8f);
 
                             // Return true to indicate that the View can accept the dragged
                             // data.
@@ -52,7 +74,7 @@ public class SteamingWand
                 steamingPitcher.startTimeFrothedAnimator();
 
                 // Change value of alpha to indicate [ENTERED] state.
-                imageView.setAlpha(0.5f);
+                setAlpha(0.5f);
 
                 // Return true. The value is ignored.
                 return true;
@@ -65,7 +87,7 @@ public class SteamingWand
                 steamingPitcher.cancelTimeFrothedAnimator();
 
                 // Reset value of alpha back to normal.
-                imageView.setAlpha(0.8f);
+                setAlpha(0.8f);
 
                 // Return true. The value is ignored.
                 return true;
@@ -81,13 +103,13 @@ public class SteamingWand
                 Log.d(TAG, "ACTION_DRAG_ENDED");
 
                 // Reset value of alpha back to normal.
-                imageView.setAlpha(1.0f);
+                setAlpha(1.0f);
 
                 // Do a getResult() and displays what happens.
                 if (event.getResult()) {
-                    Toast.makeText(imageView.getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(imageView.getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
                 }
 
                 // Return true. The value is ignored.
@@ -98,12 +120,5 @@ public class SteamingWand
         }
 
         return false;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (steamingPitcher != null) {
-            steamingPitcher.cancelTemperatureAnimator();
-        }
     }
 }
