@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.CaffeLatte;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
@@ -206,12 +208,48 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
+        /////////////////////////////////////////////////////////////////////////////////
+
+        // TODO: convert String size into enum Drink.Size
+        Drink.Size sizeFromLabel = null;
+        for (Drink.Size sizeCurrent : Drink.Size.values()) {
+            if (size.equals(sizeCurrent.name())) {
+                sizeFromLabel = sizeCurrent;
+                break;
+            }
+        }
+
+        Drink drink = Menu.getDrinkByName(name);
+        List<DrinkComponent> drinkComponentsExpected =
+                ((CaffeLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
+
         StringBuilder sbExpected = new StringBuilder();
-//        Drink drink = Menu.getDrinkByName(name).;
-        sbExpected.append("TODO: getRequiredDrinkComponents()");
-        for (String customization : customizations) {
+        for (DrinkComponent drinkComponent : drinkComponentsExpected) {
             sbExpected.append("\n");
-            sbExpected.append(customization);
+            sbExpected.append(drinkComponent.toString());
+        }
+
+        StringBuilder sbActual = new StringBuilder();
+        for (EspressoShot shot : shots) {
+            sbActual.append("\n");
+            sbActual.append(shot.toString());
+        }
+        if (milk != null) {
+            sbActual.append("\n");
+            sbActual.append(milk.toString());
+        }
+        for (Syrup.Type type : Syrup.Type.values()) {
+            if (syrupsMap.containsKey(type)) {
+                List<Syrup> syrups = syrupsMap.get(type);
+                for (Syrup syrup : syrups) {
+                    sbActual.append("\n");
+                    sbActual.append(syrup.toString());
+                }
+            }
+        }
+        if (cinnamon != null) {
+            sbActual.append("\n");
+            sbActual.append(cinnamon.toString());
         }
 
         String title = (customizations.isEmpty()) ?
@@ -222,7 +260,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         alertDialogBuilder.setMessage(
                 String.format("EXPECTED: \n%s\n\n\nACTUAL: \n%s",
                         sbExpected.toString(),
-                        "TODO: check CupCold/CupHot's content")
+                        sbActual.toString())
         );
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override

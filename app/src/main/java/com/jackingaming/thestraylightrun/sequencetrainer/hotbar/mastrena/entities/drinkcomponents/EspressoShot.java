@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
+import androidx.annotation.NonNull;
+
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 
 public class EspressoShot extends DrinkComponent {
@@ -17,6 +19,14 @@ public class EspressoShot extends DrinkComponent {
 
     public EspressoShot() {
         super();
+    }
+
+    public EspressoShot(Type type, AmountOfWater amountOfWater, AmountOfBean amountOfBean) {
+        super();
+
+        this.type = type;
+        this.amountOfWater = amountOfWater;
+        this.amountOfBean = amountOfBean;
     }
 
     public EspressoShot(EspressoShotRequest espressoShotRequest) {
@@ -49,5 +59,22 @@ public class EspressoShot extends DrinkComponent {
 
     public void setAmountOfBean(AmountOfBean amountOfBean) {
         this.amountOfBean = amountOfBean;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String abbreviationOfPropeties = type.name().charAt(0) + " " +
+                amountOfWater.name().charAt(0) + " " +
+                amountOfBean.name().charAt(0);
+
+        if (shaken) {
+            abbreviationOfPropeties += " shaken";
+        }
+        if (blended) {
+            abbreviationOfPropeties += " blended";
+        }
+
+        return abbreviationOfPropeties;
     }
 }

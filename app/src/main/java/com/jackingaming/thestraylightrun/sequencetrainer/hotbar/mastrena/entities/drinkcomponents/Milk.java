@@ -1,10 +1,6 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
-import android.content.Context;
-import android.util.AttributeSet;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public class Milk extends DrinkComponent {
     public static final String TAG = Milk.class.getSimpleName();
@@ -18,6 +14,13 @@ public class Milk extends DrinkComponent {
 
     public Milk() {
         super();
+    }
+
+    public Milk(Type type, int amount, int temperature, int timeFrothed) {
+        this.type = type;
+        this.amount = amount;
+        this.temperature = temperature;
+        this.timeFrothed = timeFrothed;
     }
 
     public void init(Type type, int amount, int temperature, int timeFrothed) {
@@ -57,5 +60,23 @@ public class Milk extends DrinkComponent {
 
     public void setTimeFrothed(int timeFrothed) {
         this.timeFrothed = timeFrothed;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String abbreviationOfPropeties = type.name().charAt(0) + " " +
+                Integer.toString(amount) + " " +
+                Integer.toString(temperature) + " " +
+                Integer.toString(timeFrothed);
+
+        if (shaken) {
+            abbreviationOfPropeties += " shaken";
+        }
+        if (blended) {
+            abbreviationOfPropeties += " blended";
+        }
+
+        return abbreviationOfPropeties;
     }
 }

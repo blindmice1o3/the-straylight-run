@@ -31,12 +31,12 @@ public class Menu {
         drinks.add(new VanillaLatte());
         drinks.add(new CaramelMacchiato());
         drinks.add(new FlatWhite());
+        drinks.add(new MochaLatte());
         drinks.add(new IcedBrownSugarOatmilkShakenEspresso());
         drinks.add(new IcedCaffeLatte());
         drinks.add(new IcedVanillaLatte());
         drinks.add(new IcedCaramelMacchiato());
         drinks.add(new IcedFlatWhite());
-        drinks.add(new MochaLatte());
     }
 
     public static int queryNumberOfDrinksOnMenu() {

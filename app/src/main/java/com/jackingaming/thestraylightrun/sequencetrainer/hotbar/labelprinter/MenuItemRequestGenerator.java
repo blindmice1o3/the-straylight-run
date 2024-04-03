@@ -9,19 +9,36 @@ public class MenuItemRequestGenerator {
 
     public static Drink requestRandomDrink() {
         // randomly select drink
-        int indexRandomDrink = random.nextInt(Menu.queryNumberOfDrinksOnMenu());
+        int indexRandomDrink = 0;
+//        int indexRandomDrink = random.nextInt(Menu.queryNumberOfDrinksOnMenu());
 
         // randomly select size
         int indexRandomSize = random.nextInt(Drink.Size.values().length);
 
-        // iced drinks shouldn't have SHORT for size, replace with GRANDE.
-        if (indexRandomDrink == 5 ||
-                indexRandomDrink == 6 ||
+        // iced drinks
+        if (indexRandomDrink == 6 ||
                 indexRandomDrink == 7 ||
                 indexRandomDrink == 8 ||
-                indexRandomDrink == 9) {
+                indexRandomDrink == 9 ||
+                indexRandomDrink == 10) {
+            // ICED: shouldn't have SHORT for size, replace with GRANDE.
             if (Drink.Size.values()[indexRandomSize] == Drink.Size.SHORT) {
                 indexRandomSize = Drink.Size.GRANDE.ordinal();
+            }
+            // ICED: shouldn't have VENTI_HOT for size, replace with VENTI_COLD.
+            else if (Drink.Size.values()[indexRandomSize] == Drink.Size.VENTI_HOT) {
+                indexRandomSize = Drink.Size.VENTI_COLD.ordinal();
+            }
+        }
+        // hot drinks
+        else {
+            // HOT: shouldn't have TRENTA for size, replace with GRANDE.
+            if (Drink.Size.values()[indexRandomSize] == Drink.Size.TRENTA) {
+                indexRandomSize = Drink.Size.GRANDE.ordinal();
+            }
+            // HOT: shouldn't have VENTI_COLD for size, replace with VENTI_HOT.
+            else if (Drink.Size.values()[indexRandomSize] == Drink.Size.VENTI_COLD) {
+                indexRandomSize = Drink.Size.VENTI_HOT.ordinal();
             }
         }
 

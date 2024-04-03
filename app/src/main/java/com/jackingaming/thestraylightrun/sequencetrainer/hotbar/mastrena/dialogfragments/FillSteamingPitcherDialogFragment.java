@@ -27,10 +27,10 @@ public class FillSteamingPitcherDialogFragment extends DialogFragment {
     private static final String CONTENT = "content";
     private static final int MIN = 0;
     private static final int MAX = 25 * 4;
-    private static final int BRACKET1 = 8 * 4;
-    private static final int BRACKET2 = 12 * 4;
-    private static final int BRACKET3 = 16 * 4;
-    private static final int BRACKET4 = 20 * 4;
+    public static final int BRACKET1 = 8 * 4;
+    public static final int BRACKET2 = 12 * 4;
+    public static final int BRACKET3 = 16 * 4;
+    public static final int BRACKET4 = 20 * 4;
 
     private String content;
     private int amount;
