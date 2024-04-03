@@ -22,6 +22,8 @@ import androidx.core.view.GestureDetectorCompat;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
@@ -83,11 +85,11 @@ public class IceShaker extends AppCompatImageView
 
                 setAlpha(0.5f);
 
-                if (collider instanceof Syrup) {
+                if (collider instanceof SpriteSyrup) {
                     Log.e(TAG, "collider instanceof Syrup");
 
-                    Syrup syrup = (Syrup) collider;
-                    Syrup.Type type = syrup.getType();
+                    SpriteSyrup spriteSyrup = (SpriteSyrup) collider;
+                    Syrup.Type type = spriteSyrup.getType();
 
                     List<Syrup> syrups = null;
                     if (syrupsMap.get(type) == null) {
@@ -95,7 +97,9 @@ public class IceShaker extends AppCompatImageView
                     } else {
                         syrups = syrupsMap.get(type);
                     }
-                    syrups.add(syrup);
+                    syrups.add(
+                            spriteSyrup.instantiateSyrup()
+                    );
                     syrupsMap.put(type, syrups);
                     invalidate();
                 }
@@ -147,7 +151,7 @@ public class IceShaker extends AppCompatImageView
         }
 
         textPaint.setColor(getResources().getColor(
-                EspressoShot.lookupColorIdByType(typeMostRecent)
+                SpriteEspressoShot.lookupColorIdByType(typeMostRecent)
         ));
 
         String textForShot = String.format("E: %d %s %s %s",
@@ -288,7 +292,7 @@ public class IceShaker extends AppCompatImageView
                     String contentToBeShaken = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "contentToBeShaken: " + contentToBeShaken);
 
-                    ice = new Ice(getContext());
+                    ice = new Ice();
                     setBackgroundColor(idBlue);
                     invalidate();
                 } else if (event.getClipDescription().getLabel().equals(ShotGlass.DRAG_LABEL)) {
@@ -304,7 +308,7 @@ public class IceShaker extends AppCompatImageView
                 } else if (event.getClipDescription().getLabel().equals(CinnamonDispenser.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(" + CinnamonDispenser.DRAG_LABEL + ")");
 
-                    cinnamon = new Cinnamon(getContext());
+                    cinnamon = new Cinnamon();
                     invalidate();
                 }
 

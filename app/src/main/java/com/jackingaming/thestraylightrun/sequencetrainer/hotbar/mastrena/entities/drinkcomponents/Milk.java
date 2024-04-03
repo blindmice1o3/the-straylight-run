@@ -16,12 +16,8 @@ public class Milk extends DrinkComponent {
     private int temperature;
     private int timeFrothed;
 
-    public Milk(@NonNull Context context) {
-        super(context);
-    }
-
-    public Milk(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+    public Milk() {
+        super();
     }
 
     public void init(Type type, int amount, int temperature, int timeFrothed) {

@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
@@ -61,12 +62,13 @@ public class ShotGlass extends AppCompatImageView
 
                 setAlpha(0.5f);
 
-                if (collider instanceof EspressoShot) {
-                    Log.e(TAG, "collider instanceof EspressoShot");
+                if (collider instanceof SpriteEspressoShot) {
+                    Log.e(TAG, "collider instanceof SpriteEspressoShot");
 
-                    EspressoShot espressoShot = (EspressoShot) collider;
-
-                    shots.add(espressoShot);
+                    SpriteEspressoShot spriteEspressoShot = (SpriteEspressoShot) collider;
+                    shots.add(
+                            spriteEspressoShot.instantiateEspressoShot()
+                    );
                     invalidate();
                 }
             }
@@ -99,7 +101,7 @@ public class ShotGlass extends AppCompatImageView
         }
 
         textPaint.setColor(getResources().getColor(
-                EspressoShot.lookupColorIdByType(typeMostRecent)
+                SpriteEspressoShot.lookupColorIdByType(typeMostRecent)
         ));
 
         String textForShot = String.format("E: %d %s %s %s",

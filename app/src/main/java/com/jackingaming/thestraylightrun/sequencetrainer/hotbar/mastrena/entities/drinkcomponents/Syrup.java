@@ -1,11 +1,5 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
-import android.content.Context;
-import android.util.AttributeSet;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 public class Syrup extends DrinkComponent {
     public static final String TAG = Syrup.class.getSimpleName();
 
@@ -13,12 +7,14 @@ public class Syrup extends DrinkComponent {
 
     private Type type;
 
-    public Syrup(@NonNull Context context) {
-        super(context);
+    public Syrup() {
+        super();
     }
 
-    public Syrup(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+    public Syrup(Type type) {
+        super();
+
+        this.type = type;
     }
 
     public Type getType() {

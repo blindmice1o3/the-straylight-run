@@ -1,12 +1,6 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
-import android.content.Context;
-import android.util.AttributeSet;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 
 public class EspressoShot extends DrinkComponent {
     public static final String TAG = EspressoShot.class.getSimpleName();
@@ -21,23 +15,16 @@ public class EspressoShot extends DrinkComponent {
     private AmountOfWater amountOfWater = AmountOfWater.STANDARD;
     private AmountOfBean amountOfBean = AmountOfBean.STANDARD;
 
-    public EspressoShot(@NonNull Context context) {
-        super(context);
+    public EspressoShot() {
+        super();
     }
 
-    public EspressoShot(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
+    public EspressoShot(EspressoShotRequest espressoShotRequest) {
+        super();
 
-    public void init(Type type,
-                     AmountOfWater amountOfWater, AmountOfBean amountOfBean) {
-        this.type = type;
-
-        int colorToUse = lookupColorIdByType(type);
-        setBackgroundColor(getResources().getColor(colorToUse));
-
-        this.amountOfWater = amountOfWater;
-        this.amountOfBean = amountOfBean;
+        this.type = espressoShotRequest.getType();
+        this.amountOfWater = espressoShotRequest.getAmountOfWater();
+        this.amountOfBean = espressoShotRequest.getAmountOfBean();
     }
 
     public Type getType() {
@@ -62,18 +49,5 @@ public class EspressoShot extends DrinkComponent {
 
     public void setAmountOfBean(AmountOfBean amountOfBean) {
         this.amountOfBean = amountOfBean;
-    }
-
-    public static int lookupColorIdByType(Type type) {
-        switch (type) {
-            case BLONDE:
-                return R.color.green;
-            case SIGNATURE:
-                return R.color.light_blue_900;
-            case DECAF:
-                return R.color.teal_200;
-            default:
-                return R.color.red;
-        }
     }
 }

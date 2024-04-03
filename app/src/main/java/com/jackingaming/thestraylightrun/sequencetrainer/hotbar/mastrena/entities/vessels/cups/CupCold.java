@@ -147,7 +147,7 @@ public class CupCold extends CupImageView {
                     String hardCodedWord = event.getClipData().getItemAt(0).getText().toString();
                     Log.e(TAG, "hardCodedWord: " + hardCodedWord);
 
-                    ice = new Ice(getContext());
+                    ice = new Ice();
                     invalidate();
                 } else if (label.equals(RefrigeratorFragment.DRAG_LABEL_MILK)) {
                     Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL_MILK)");

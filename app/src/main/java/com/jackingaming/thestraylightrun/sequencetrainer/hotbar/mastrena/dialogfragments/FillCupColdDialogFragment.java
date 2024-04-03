@@ -96,7 +96,7 @@ public class FillCupColdDialogFragment extends DialogFragment {
         } else {
             amount = 0;
 
-            Milk milkToBeAdded = new Milk(getContext());
+            Milk milkToBeAdded = new Milk();
             milkToBeAdded.init(type, amount, RefrigeratorFragment.TEMPERATURE, 0);
             cupCold.setMilk(milkToBeAdded);
             cupCold.invalidate();

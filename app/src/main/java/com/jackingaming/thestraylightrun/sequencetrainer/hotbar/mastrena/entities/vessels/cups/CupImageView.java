@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkOptions;
@@ -79,12 +81,13 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
                 setAlpha(0.5f);
 
-                if (collider instanceof EspressoShot) {
-                    Log.e(TAG, "collider instanceof EspressoShot");
+                if (collider instanceof SpriteEspressoShot) {
+                    Log.e(TAG, "collider instanceof SpriteEspressoShot");
 
-                    EspressoShot espressoShot = (EspressoShot) collider;
-
-                    shots.add(espressoShot);
+                    SpriteEspressoShot spriteEspressoShot = (SpriteEspressoShot) collider;
+                    shots.add(
+                            spriteEspressoShot.instantiateEspressoShot()
+                    );
                     invalidate();
 
                     // TODO: shotOnTop
@@ -92,11 +95,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                         Log.d(TAG, "milk != null... setting shotOnTop to true.");
                         shotOnTop = true;
                     }
-                } else if (collider instanceof Syrup) {
+                } else if (collider instanceof SpriteSyrup) {
                     Log.e(TAG, "collider instanceof Syrup");
 
-                    Syrup syrup = (Syrup) collider;
-                    Syrup.Type type = syrup.getType();
+                    SpriteSyrup spriteSyrup = (SpriteSyrup) collider;
+                    Syrup.Type type = spriteSyrup.getType();
 
                     List<Syrup> syrups = null;
                     if (syrupsMap.get(type) == null) {
@@ -104,7 +107,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     } else {
                         syrups = syrupsMap.get(type);
                     }
-                    syrups.add(syrup);
+                    syrups.add(
+                            spriteSyrup.instantiateSyrup()
+                    );
                     syrupsMap.put(type, syrups);
                     invalidate();
                 }
@@ -143,7 +148,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         textPaint.setColor(getResources().getColor(
-                EspressoShot.lookupColorIdByType(typeMostRecent)
+                SpriteEspressoShot.lookupColorIdByType(typeMostRecent)
         ));
 
         int yShot = (shotOnTop) ? yLine1 : yLine4;

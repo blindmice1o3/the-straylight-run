@@ -41,6 +41,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequestAdapter;
@@ -84,12 +86,12 @@ public class MastrenaFragment extends Fragment {
     public static final String TAG_STEAMING_PITCHER = "SteamingPitcher";
     public static final String TAG_STEAMING_WAND = "SteamingWand";
     public static final String TAG_ESPRESSO_SHOT_CONTROL = "EspressoShotControl";
-    public static final String TAG_ESPRESSO_SHOT = "EspressoShot";
+    public static final String TAG_SPRITE_ESPRESSO_SHOT = "EspressoShot";
     public static final String TAG_SHOT_GLASS = "ShotGlass";
     public static final String TAG_SYRUP_BOTTLE_VANILLA = "SyrupBottleVanilla";
     public static final String TAG_SYRUP_BOTTLE_BROWN_SUGAR = "SyrupBottleBrownSugar";
     public static final String TAG_SYRUP_BOTTLE_MOCHA = "SyrupBottleMocha";
-    public static final String TAG_SYRUP = "Syrup";
+    public static final String TAG_SPRITE_SYRUP = "Syrup";
     public static final String TAG_CARAMEL_DRIZZLE_BOTTLE = "CaramelDrizzleBottle";
     public static final String TAG_CINNAMON_DISPENSER = "CinnamonDispenser";
 
@@ -172,7 +174,7 @@ public class MastrenaFragment extends Fragment {
                         for (Milk.Type type : Milk.Type.values()) {
                             if (content.equals(type.name())) {
                                 Log.e(TAG, "Instantiate Milk and initialize it with temperature 37, timeFrothed 0, and type (" + content + ").");
-                                Milk milk = new Milk(getContext());
+                                Milk milk = new Milk();
                                 milk.init(type, amount, RefrigeratorFragment.TEMPERATURE, 0);
 
                                 steamingPitcher.updateMilk(milk);
@@ -225,27 +227,27 @@ public class MastrenaFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_mastrena, container, false);
     }
 
-    private int quantityCurrentEspressoShot;
+    private int quantityEspressoShotCurrent;
 
     private void pullEspressoShot(EspressoShotRequest espressoShotRequest) {
-        int quantitySelected = espressoShotRequest.getQuantity();
+        int quantityEspressoShotSelected = espressoShotRequest.getQuantity();
 
-        EspressoShot espressoShot = new EspressoShot(getContext());
-        espressoShot.init(espressoShotRequest.getType(), espressoShotRequest.getAmountOfWater(), espressoShotRequest.getAmountOfBean());
-        espressoShot.setTag(TAG_ESPRESSO_SHOT);
-        espressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
+        SpriteEspressoShot spriteEspressoShot = new SpriteEspressoShot(getContext());
+        spriteEspressoShot.init(espressoShotRequest);
+        spriteEspressoShot.setTag(TAG_SPRITE_ESPRESSO_SHOT);
+        spriteEspressoShot.setLayoutParams(new FrameLayout.LayoutParams(16, 64));
         float xCenterOfEspressoShotControl = espressoShotControl.getX() + (espressoShotControl.getWidth() / 2) - (16 / 2);
-        espressoShot.setX(xCenterOfEspressoShotControl);
+        spriteEspressoShot.setX(xCenterOfEspressoShotControl);
 //        espressoShot.setX(200 - (16 / 2));
-        espressoShot.setY(458 + 64); // 64 is for espresso shot queue viewer's height.
-        constraintLayoutMastrena.addView(espressoShot);
+        spriteEspressoShot.setY(458 + 64); // 64 is for espresso shot queue viewer's height.
+        constraintLayoutMastrena.addView(spriteEspressoShot);
 
         animatorEspressoShot = ObjectAnimator.ofFloat(
-                espressoShot,
+                spriteEspressoShot,
                 "y",
                 458 + 64f,
                 1200f);
-        long startDelay = (quantityCurrentEspressoShot == 0) ? (1500L * quantitySelected) : (0);
+        long startDelay = (quantityEspressoShotCurrent == 0) ? (1500L * quantityEspressoShotSelected) : (0);
         animatorEspressoShot.setStartDelay(startDelay);
         animatorEspressoShot.setDuration(2000L);
         animatorEspressoShot.addListener(new AnimatorListenerAdapter() {
@@ -254,18 +256,18 @@ public class MastrenaFragment extends Fragment {
                 super.onAnimationEnd(animation);
                 Log.e(TAG, "onAnimationEnd()");
 
-                quantityCurrentEspressoShot++;
+                quantityEspressoShotCurrent++;
 
-                if (espressoShot != null) {
-                    constraintLayoutMastrena.removeView(espressoShot);
+                if (spriteEspressoShot != null) {
+                    constraintLayoutMastrena.removeView(spriteEspressoShot);
                 }
 
-                if (quantityCurrentEspressoShot < quantitySelected) {
+                if (quantityEspressoShotCurrent < quantityEspressoShotSelected) {
                     // current request, more than one shot needed.
                     pullEspressoShot(espressoShotRequest);
-                } else if (quantityCurrentEspressoShot == quantitySelected) {
+                } else if (quantityEspressoShotCurrent == quantityEspressoShotSelected) {
                     // number of shots reached, request completed.
-                    quantityCurrentEspressoShot = 0;
+                    quantityEspressoShotCurrent = 0;
 
                     // remove request from queue.
                     Log.e(TAG, "REMOVING ESPRESSO SHOT REQUEST FROM QUEUE.");
@@ -298,14 +300,14 @@ public class MastrenaFragment extends Fragment {
 
                         Collideable collideable = (Collideable) view;
 
-                        boolean colliding = isViewOverlapping(espressoShot, view);
+                        boolean colliding = isViewOverlapping(spriteEspressoShot, view);
                         collideable.update(colliding);
 
                         if (collideable.isJustCollided()) {
                             Log.e(TAG, "collideable.isJustCollided()");
 
-                            collideable.onCollided(espressoShot);
-                            constraintLayoutMastrena.removeView(espressoShot);
+                            collideable.onCollided(spriteEspressoShot);
+                            constraintLayoutMastrena.removeView(spriteEspressoShot);
                         }
                     } else {
                         Log.e(TAG, "onAnimationUpdate(): view NOT instanceof Collideable.");
@@ -317,25 +319,22 @@ public class MastrenaFragment extends Fragment {
     }
 
     private void pumpSyrup(Syrup.Type type) {
-        Syrup syrup = new Syrup(getContext());
-        syrup.setTag(TAG_SYRUP);
-        syrup.setLayoutParams(new FrameLayout.LayoutParams(16, 32));
-        syrup.setY(562);
-        syrup.setType(type);
+        SpriteSyrup spriteSyrup = new SpriteSyrup(getContext());
+        spriteSyrup.init(type);
+        spriteSyrup.setTag(TAG_SPRITE_SYRUP);
+        spriteSyrup.setLayoutParams(new FrameLayout.LayoutParams(16, 32));
         if (type == Syrup.Type.VANILLA) {
-            syrup.setX(344);
-            syrup.setBackgroundColor(getResources().getColor(R.color.cream));
+            spriteSyrup.setX(344);
         } else if (type == Syrup.Type.BROWN_SUGAR) {
-            syrup.setX(344 + 64);
-            syrup.setBackgroundColor(getResources().getColor(R.color.brown));
+            spriteSyrup.setX(344 + 64);
         } else if (type == Syrup.Type.MOCHA) {
-            syrup.setX(344 + 64 + 64);
-            syrup.setBackgroundColor(getResources().getColor(R.color.dark_brown));
+            spriteSyrup.setX(344 + 64 + 64);
         }
-        constraintLayoutMastrena.addView(syrup);
+        spriteSyrup.setY(562);
+        constraintLayoutMastrena.addView(spriteSyrup);
 
         ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
-                syrup,
+                spriteSyrup,
                 "y",
                 562f,
                 1200f);
@@ -346,8 +345,8 @@ public class MastrenaFragment extends Fragment {
                 super.onAnimationEnd(animation);
                 Log.e(TAG, "onAnimationEnd()");
 
-                if (syrup != null) {
-                    constraintLayoutMastrena.removeView(syrup);
+                if (spriteSyrup != null) {
+                    constraintLayoutMastrena.removeView(spriteSyrup);
                 }
             }
         });
@@ -364,14 +363,14 @@ public class MastrenaFragment extends Fragment {
 
                         Collideable collideable = (Collideable) view;
 
-                        boolean colliding = isViewOverlapping(syrup, view);
+                        boolean colliding = isViewOverlapping(spriteSyrup, view);
                         collideable.update(colliding);
 
                         if (collideable.isJustCollided()) {
                             Log.e(TAG, "collideable.isJustCollided()");
 
-                            collideable.onCollided(syrup);
-                            constraintLayoutMastrena.removeView(syrup);
+                            collideable.onCollided(spriteSyrup);
+                            constraintLayoutMastrena.removeView(spriteSyrup);
                         }
                     } else {
                         Log.e(TAG, "onAnimationUpdate(): view NOT instanceof Collideable.");
