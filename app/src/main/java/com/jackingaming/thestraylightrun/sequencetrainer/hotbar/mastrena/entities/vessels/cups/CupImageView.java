@@ -219,6 +219,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
+        // EXPECTED
         Drink drink = Menu.getDrinkByName(name);
         List<DrinkComponent> drinkComponentsExpected =
                 ((CaffeLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
@@ -229,6 +230,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             sbExpected.append(drinkComponent.toString());
         }
 
+        // ACTUAL
         StringBuilder sbActual = new StringBuilder();
         for (EspressoShot shot : shots) {
             sbActual.append("\n");

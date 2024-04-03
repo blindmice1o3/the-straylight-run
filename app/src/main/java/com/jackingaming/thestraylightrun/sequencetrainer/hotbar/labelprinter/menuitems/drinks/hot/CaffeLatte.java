@@ -16,6 +16,8 @@ public class CaffeLatte extends Drink {
     }
 
     public List<DrinkComponent> getDrinkComponentsBySize(Size size) {
+        drinkComponents.clear();
+
         int numberOfShots = -1;
         int amountOfMilk = -1;
         int temperatureMilk = 160;
