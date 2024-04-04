@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.VanillaLatte;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.Cappuccino;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
@@ -222,7 +222,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         // EXPECTED
         Drink drink = Menu.getDrinkByName(name);
         List<DrinkComponent> drinkComponentsExpected =
-                ((VanillaLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
+                ((Cappuccino) drink).getDrinkComponentsBySize(sizeFromLabel);
 
         StringBuilder sbExpected = new StringBuilder();
         for (DrinkComponent drinkComponent : drinkComponentsExpected) {

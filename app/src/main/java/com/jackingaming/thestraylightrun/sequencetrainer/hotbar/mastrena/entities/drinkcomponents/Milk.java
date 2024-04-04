@@ -87,7 +87,12 @@ public class Milk extends DrinkComponent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Milk milk = (Milk) o;
-        return amount == milk.amount && temperature == milk.temperature && timeFrothed == milk.timeFrothed && type == milk.type;
+        // TODO: (to be changed to a +/- range)... currently, if cup has amount
+        //  greater-than (OR equal-to) required, it'll count as equal.
+        return amount <= milk.amount &&
+                temperature == milk.temperature &&
+                (timeFrothed <= milk.timeFrothed && (timeFrothed + 2) >= milk.timeFrothed) &&
+                type == milk.type;
     }
 
     @Override
