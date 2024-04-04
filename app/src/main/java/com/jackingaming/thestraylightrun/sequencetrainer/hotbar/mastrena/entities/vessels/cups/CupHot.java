@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Drizzle;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.WhippedCream;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
@@ -170,7 +171,7 @@ public class CupHot extends CupImageView {
                     String tagWhippedCream = event.getClipData().getItemAt(0).getText().toString();
                     Log.d(TAG, "tagWhippedCream: " + tagWhippedCream);
 
-                    whippedCream = true;
+                    whippedCream = new WhippedCream();
                 } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                     DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();
 

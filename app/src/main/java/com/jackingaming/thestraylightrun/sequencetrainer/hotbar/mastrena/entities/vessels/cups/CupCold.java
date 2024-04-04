@@ -22,6 +22,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Drizzle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.WhippedCream;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
@@ -168,7 +169,7 @@ public class CupCold extends CupImageView {
                     String tagWhippedCream = event.getClipData().getItemAt(0).getText().toString();
                     Log.d(TAG, "tagWhippedCream: " + tagWhippedCream);
 
-                    whippedCream = true;
+                    whippedCream = new WhippedCream();
                 } else if (label.equals(IceShaker.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(IceShaker.DRAG_LABEL)");
 

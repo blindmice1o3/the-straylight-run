@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.FlatWhite;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.MochaLatte;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
@@ -26,6 +26,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.WhippedCream;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.LiquidContainable;
@@ -42,6 +43,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     protected Map<DrinkOptions, List<DrinkComponent>> content = new HashMap<>();
 
+    protected WhippedCream whippedCream;
     protected Drizzle drizzle;
 
     protected Map<Syrup.Type, List<Syrup>> syrupsMap;
@@ -52,7 +54,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
     protected boolean shotOnTop;
     protected Cinnamon cinnamon;
-    protected boolean whippedCream;
 
     protected Collider collider;
 
@@ -69,6 +70,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     }
 
     private void init() {
+        whippedCream = null;
         drizzle = null;
 
         syrupsMap = new HashMap<>();
@@ -225,7 +227,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         Drink drink = Menu.getDrinkByName(name);
         // EXPECTED
         List<DrinkComponent> drinkComponentsExpected =
-                ((FlatWhite) drink).getDrinkComponentsBySize(sizeFromLabel);
+                ((MochaLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
         StringBuilder sbExpected = new StringBuilder();
         sbExpected.append("--- DRINK COMPONENTS ---");
         for (DrinkComponent drinkComponent : drinkComponentsExpected) {
@@ -289,6 +291,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public List<DrinkComponent> getDrinkComponentsAsList() {
         List<DrinkComponent> drinkComponentsInsideCup = new ArrayList<>();
 
+        if (whippedCream != null) {
+            drinkComponentsInsideCup.add(whippedCream);
+        }
         if (drizzle != null) {
             drinkComponentsInsideCup.add(drizzle);
         }
@@ -361,6 +366,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         return Menu.getDrinkByName(name).validate(this, size, customizations);
     }
 
+    public WhippedCream getWhippedCream() {
+        return whippedCream;
+    }
+
+    public void setWhippedCream(WhippedCream whippedCream) {
+        this.whippedCream = whippedCream;
+    }
+
     public Drizzle getDrizzle() {
         return drizzle;
     }
@@ -409,16 +422,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         this.cinnamon = cinnamon;
     }
 
-    public boolean isWhippedCream() {
-        return whippedCream;
-    }
-
-    public void setWhippedCream(boolean whippedCream) {
-        this.whippedCream = whippedCream;
-    }
-
     @Override
     public void transferIn(HashMap<String, Object> content) {
+        if (content.containsKey("whippedCream")) {
+            whippedCream = (WhippedCream) content.get("whippedCream");
+        }
+
         if (content.containsKey("drizzle")) {
             drizzle = (Drizzle) content.get("drizzle");
         }
@@ -459,9 +468,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (content.containsKey("cinnamon")) {
             cinnamon = (Cinnamon) content.get("cinnamon");
         }
-        if (content.containsKey("whippedCream")) {
-            whippedCream = (Boolean) content.get("whippedCream");
-        }
 
         invalidate();
     }
@@ -469,6 +475,10 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     @Override
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
+
+        if (whippedCream != null) {
+            content.put("whippedCream", whippedCream);
+        }
 
         if (drizzle != null) {
             content.put("drizzle", drizzle);
@@ -488,13 +498,13 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         if (cinnamon != null) {
             content.put("cinnamon", cinnamon);
         }
-        content.put("whippedCream", whippedCream);
 
         return content;
     }
 
     @Override
     public void empty() {
+        whippedCream = null;
         drizzle = null;
 
         syrupsMap.clear();
@@ -505,7 +515,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         shotOnTop = false;
         cinnamon = null;
-        whippedCream = false;
 
         invalidate();
     }
