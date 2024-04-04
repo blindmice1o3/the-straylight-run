@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.CaffeLatte;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.VanillaLatte;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
@@ -222,7 +222,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         // EXPECTED
         Drink drink = Menu.getDrinkByName(name);
         List<DrinkComponent> drinkComponentsExpected =
-                ((CaffeLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
+                ((VanillaLatte) drink).getDrinkComponentsBySize(sizeFromLabel);
 
         StringBuilder sbExpected = new StringBuilder();
         for (DrinkComponent drinkComponent : drinkComponentsExpected) {
@@ -268,12 +268,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public List<DrinkComponent> getDrinkComponentsAsList() {
         List<DrinkComponent> drinkComponentsInsideCup = new ArrayList<>();
 
-        for (EspressoShot shot : shots) {
-            drinkComponentsInsideCup.add(shot);
-        }
-        if (milk != null) {
-            drinkComponentsInsideCup.add(milk);
-        }
         for (Syrup.Type type : Syrup.Type.values()) {
             if (syrupsMap.containsKey(type)) {
                 List<Syrup> syrups = syrupsMap.get(type);
@@ -281,6 +275,12 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
                     drinkComponentsInsideCup.add(syrup);
                 }
             }
+        }
+        for (EspressoShot shot : shots) {
+            drinkComponentsInsideCup.add(shot);
+        }
+        if (milk != null) {
+            drinkComponentsInsideCup.add(milk);
         }
         if (cinnamon != null) {
             drinkComponentsInsideCup.add(cinnamon);

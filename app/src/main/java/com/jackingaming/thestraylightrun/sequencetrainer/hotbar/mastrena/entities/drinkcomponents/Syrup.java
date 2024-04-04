@@ -2,6 +2,8 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entiti
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Syrup extends DrinkComponent {
     public static final String TAG = Syrup.class.getSimpleName();
 
@@ -40,5 +42,19 @@ public class Syrup extends DrinkComponent {
         }
 
         return abbreviationOfPropeties;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Syrup)) return false;
+        if (!super.equals(o)) return false;
+        Syrup syrup = (Syrup) o;
+        return type == syrup.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), type);
     }
 }

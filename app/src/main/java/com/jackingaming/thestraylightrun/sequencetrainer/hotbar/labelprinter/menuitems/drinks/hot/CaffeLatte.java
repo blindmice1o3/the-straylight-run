@@ -53,11 +53,11 @@ public class CaffeLatte extends Drink {
                 break;
         }
 
-        // TODO: shots
+        // ESPRESSO SHOTS
         for (int i = 0; i < numberOfShots; i++) {
             drinkComponents.add(new EspressoShot(EspressoShot.Type.SIGNATURE, EspressoShot.AmountOfWater.STANDARD, EspressoShot.AmountOfBean.STANDARD));
         }
-        // TODO: milk
+        // MILK
         drinkComponents.add(new Milk(Milk.Type.TWO_PERCENT, amountOfMilk, temperatureMilk, timeFrothedMilk));
 
         return drinkComponents;
