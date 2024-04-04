@@ -2,7 +2,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entiti
 
 import androidx.annotation.NonNull;
 
-public class WhippedCream extends DrinkComponent{
+public class WhippedCream extends DrinkComponent {
     public static final String TAG = WhippedCream.class.getSimpleName();
 
     public WhippedCream() {

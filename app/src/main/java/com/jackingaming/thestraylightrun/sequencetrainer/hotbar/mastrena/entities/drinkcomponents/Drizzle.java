@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public class Drizzle extends DrinkComponent{
+public class Drizzle extends DrinkComponent {
     public static final String TAG = Drizzle.class.getSimpleName();
 
     public enum Type {CARAMEL, MOCHA;}

@@ -20,6 +20,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Drizzle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.WhippedCream;
@@ -28,6 +29,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class CupCold extends CupImageView {
     public static final String TAG = CupCold.class.getSimpleName();
@@ -56,6 +58,17 @@ public class CupCold extends CupImageView {
         String textIce = (ice != null) ? "iced" : "empty";
         textPaint.setColor(getResources().getColor(R.color.blue));
         canvas.drawText(textIce, 16, 15, textPaint);
+    }
+
+    @Override
+    public List<DrinkComponent> getDrinkComponentsAsList() {
+        List<DrinkComponent> drinkComponentsInsideCup = super.getDrinkComponentsAsList();
+
+        if (ice != null) {
+            drinkComponentsInsideCup.add(0, ice);
+        }
+
+        return drinkComponentsInsideCup;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
