@@ -83,13 +83,14 @@ public class EspressoShot extends DrinkComponent {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof EspressoShot)) return false;
+        if (!super.equals(o)) return false;
         EspressoShot that = (EspressoShot) o;
         return type == that.type && amountOfWater == that.amountOfWater && amountOfBean == that.amountOfBean;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, amountOfWater, amountOfBean);
+        return Objects.hash(super.hashCode(), type, amountOfWater, amountOfBean);
     }
 }
