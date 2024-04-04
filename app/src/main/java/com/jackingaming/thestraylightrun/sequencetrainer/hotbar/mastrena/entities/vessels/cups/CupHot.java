@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Drizzle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
@@ -160,8 +161,8 @@ public class CupHot extends CupImageView {
                     Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
 
                     if (milk != null && shots.size() > 0) {
-                        Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
-                        drizzled = true;
+                        Log.d(TAG, "milk != null && shots.size() > 0... instantiating Drizzle with Type.CARAMEL.");
+                        drizzle = new Drizzle(Drizzle.Type.CARAMEL);
                     }
                 } else if (label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)) {
                     Log.d(TAG, "label.equals(RefrigeratorFragment.DRAG_LABEL_WHIPPED_CREAM)");

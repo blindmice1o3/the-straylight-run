@@ -20,6 +20,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Drizzle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.IceShaker;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.ShotGlass;
@@ -198,8 +199,8 @@ public class CupCold extends CupImageView {
                     Log.d(TAG, "label.equals(CaramelDrizzleBottle.DRAG_LABEL)");
 
                     if (milk != null && shots.size() > 0) {
-                        Log.d(TAG, "milk != null && shots.size() > 0... setting drizzled to true.");
-                        drizzled = true;
+                        Log.d(TAG, "milk != null && shots.size() > 0... instantiating Drizzle with Type.CARAMEL.");
+                        drizzle = new Drizzle(Drizzle.Type.CARAMEL);
                     }
                 } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
                     DrinkLabel drinkLabel = (DrinkLabel) event.getLocalState();

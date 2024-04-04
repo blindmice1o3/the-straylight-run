@@ -3,7 +3,6 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.me
 import android.widget.Toast;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
@@ -102,7 +101,7 @@ public class IcedCaramelMacchiato extends Drink {
             return false;
         }
 
-        if (!cupImageView.isDrizzled()) {
+        if (cupImageView.getDrizzle() == null) {
             return false;
         }
 

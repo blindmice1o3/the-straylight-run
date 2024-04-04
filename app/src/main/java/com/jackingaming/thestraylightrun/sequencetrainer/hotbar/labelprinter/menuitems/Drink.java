@@ -44,4 +44,20 @@ public abstract class Drink extends MenuItem {
     public void setSize(Size size) {
         this.size = size;
     }
+
+    public List<DrinkComponent> getDrinkComponents() {
+        return drinkComponents;
+    }
+
+    public void setDrinkComponents(List<DrinkComponent> drinkComponents) {
+        this.drinkComponents = drinkComponents;
+    }
+
+    public List<Property> getDrinkProperties() {
+        return drinkProperties;
+    }
+
+    public void setDrinkProperties(List<Property> drinkProperties) {
+        this.drinkProperties = drinkProperties;
+    }
 }
