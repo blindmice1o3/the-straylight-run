@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 
+import java.util.Objects;
+
 public class EspressoShot extends DrinkComponent {
     public static final String TAG = EspressoShot.class.getSimpleName();
 
@@ -76,5 +78,18 @@ public class EspressoShot extends DrinkComponent {
         }
 
         return abbreviationOfPropeties;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EspressoShot that = (EspressoShot) o;
+        return type == that.type && amountOfWater == that.amountOfWater && amountOfBean == that.amountOfBean;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, amountOfWater, amountOfBean);
     }
 }

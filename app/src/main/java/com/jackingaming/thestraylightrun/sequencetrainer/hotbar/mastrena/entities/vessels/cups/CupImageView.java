@@ -210,7 +210,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         /////////////////////////////////////////////////////////////////////////////////
 
-        // TODO: convert String size into enum Drink.Size
+        // Convert String size into enum Drink.Size.
         Drink.Size sizeFromLabel = null;
         for (Drink.Size sizeCurrent : Drink.Size.values()) {
             if (size.equals(sizeCurrent.name())) {
@@ -231,27 +231,11 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         // ACTUAL
+        List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
         StringBuilder sbActual = new StringBuilder();
-        for (EspressoShot shot : shots) {
+        for (DrinkComponent drinkComponent : drinkComponentsActual) {
             sbActual.append("\n");
-            sbActual.append(shot.toString());
-        }
-        if (milk != null) {
-            sbActual.append("\n");
-            sbActual.append(milk.toString());
-        }
-        for (Syrup.Type type : Syrup.Type.values()) {
-            if (syrupsMap.containsKey(type)) {
-                List<Syrup> syrups = syrupsMap.get(type);
-                for (Syrup syrup : syrups) {
-                    sbActual.append("\n");
-                    sbActual.append(syrup.toString());
-                }
-            }
-        }
-        if (cinnamon != null) {
-            sbActual.append("\n");
-            sbActual.append(cinnamon.toString());
+            sbActual.append(drinkComponent.toString());
         }
 
         String title = (customizations.isEmpty()) ?
@@ -279,6 +263,30 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         });
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.create().show();
+    }
+
+    public List<DrinkComponent> getDrinkComponentsAsList() {
+        List<DrinkComponent> drinkComponentsInsideCup = new ArrayList<>();
+
+        for (EspressoShot shot : shots) {
+            drinkComponentsInsideCup.add(shot);
+        }
+        if (milk != null) {
+            drinkComponentsInsideCup.add(milk);
+        }
+        for (Syrup.Type type : Syrup.Type.values()) {
+            if (syrupsMap.containsKey(type)) {
+                List<Syrup> syrups = syrupsMap.get(type);
+                for (Syrup syrup : syrups) {
+                    drinkComponentsInsideCup.add(syrup);
+                }
+            }
+        }
+        if (cinnamon != null) {
+            drinkComponentsInsideCup.add(cinnamon);
+        }
+
+        return drinkComponentsInsideCup;
     }
 
     protected void showDialogWinner(DrinkLabel drinkLabel) {
@@ -313,7 +321,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     protected boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
         String[] text = drinkLabel.getText().toString().split("\\s+");
         // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
-        String size = text[3].toLowerCase();
+        String size = text[3];
         String name = text[4];
         // (6+) customization(s).
         int numberOfNonCustomizations = 5;
