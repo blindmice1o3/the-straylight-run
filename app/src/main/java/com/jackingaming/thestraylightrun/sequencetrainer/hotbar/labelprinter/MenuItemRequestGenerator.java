@@ -29,6 +29,10 @@ public class MenuItemRequestGenerator {
             else if (Drink.Size.values()[indexRandomSize] == Drink.Size.VENTI_HOT) {
                 indexRandomSize = Drink.Size.VENTI_COLD.ordinal();
             }
+            // ICED (espresso-based): shouldn't have TRENTA for size, replace with GRANDE.
+            else if (Drink.Size.values()[indexRandomSize] == Drink.Size.TRENTA) {
+                indexRandomSize = Drink.Size.GRANDE.ordinal();
+            }
         }
         // hot drinks
         else {
