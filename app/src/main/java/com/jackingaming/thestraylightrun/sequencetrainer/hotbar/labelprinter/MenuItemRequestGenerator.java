@@ -9,7 +9,7 @@ public class MenuItemRequestGenerator {
 
     public static Drink requestRandomDrink() {
         // randomly select drink
-        int indexRandomDrink = 7;
+        int indexRandomDrink = 8;
 //        int indexRandomDrink = random.nextInt(Menu.queryNumberOfDrinksOnMenu());
 
         // randomly select size
