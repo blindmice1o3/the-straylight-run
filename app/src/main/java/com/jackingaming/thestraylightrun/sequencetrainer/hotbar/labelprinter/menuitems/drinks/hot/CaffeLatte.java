@@ -5,7 +5,6 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogf
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.List;
 
@@ -14,10 +13,12 @@ public class CaffeLatte extends Drink {
         super(CaffeLatte.class.getSimpleName());
     }
 
-    private void initDrinkProperties() {
+    @Override
+    protected void initDrinkProperties() {
         // TODO: (not needed for CaffeLatte)
     }
 
+    @Override
     public List<DrinkComponent> getDrinkComponentsBySize(Size size) {
         drinkComponents.clear();
 
@@ -61,23 +62,5 @@ public class CaffeLatte extends Drink {
         drinkComponents.add(new Milk(Milk.Type.TWO_PERCENT, amountOfMilk, temperatureMilk, timeFrothedMilk));
 
         return drinkComponents;
-    }
-
-    @Override
-    public boolean validate(CupImageView cupImageView,
-                            String size, List<String> customizations) {
-        // Convert String size into enum Drink.Size.
-        Drink.Size sizeFromLabel = null;
-        for (Drink.Size sizeCurrent : Drink.Size.values()) {
-            if (size.equals(sizeCurrent.name())) {
-                sizeFromLabel = sizeCurrent;
-                break;
-            }
-        }
-
-        List<DrinkComponent> drinkComponentsExpected = getDrinkComponentsBySize(sizeFromLabel);
-        List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
-
-        return drinkComponentsExpected.equals(drinkComponentsActual);
     }
 }

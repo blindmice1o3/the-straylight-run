@@ -20,6 +20,7 @@ public abstract class Drink extends MenuItem {
 
     public Drink(String name) {
         super(name);
+        initDrinkProperties();
     }
 
     public void addCustomization(String customization) {
@@ -34,8 +35,39 @@ public abstract class Drink extends MenuItem {
         return customizations.size();
     }
 
-    abstract public boolean validate(CupImageView cupImageView,
-                                     String size, List<String> customizations);
+    abstract protected void initDrinkProperties();
+
+    abstract public List<DrinkComponent> getDrinkComponentsBySize(Size size);
+
+    public boolean validate(CupImageView cupImageView, String size, List<String> customizations) {
+        // Convert String size into enum Drink.Size.
+        Drink.Size sizeFromLabel = null;
+        for (Drink.Size sizeCurrent : Drink.Size.values()) {
+            if (size.equals(sizeCurrent.name())) {
+                sizeFromLabel = sizeCurrent;
+                break;
+            }
+        }
+
+        List<DrinkComponent> drinkComponentsExpected = getDrinkComponentsBySize(sizeFromLabel);
+        List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
+
+        boolean isSameDrinkComponents = drinkComponentsExpected.equals(drinkComponentsActual);
+        boolean isSameDrinkProperties = true;
+        if (!drinkProperties.isEmpty()) {
+            for (Drink.Property property : drinkProperties) {
+                switch (property) {
+                    case SHOT_ON_TOP:
+                        if (!cupImageView.isShotOnTop()) {
+                            isSameDrinkProperties = false;
+                        }
+                        break;
+                }
+            }
+        }
+
+        return isSameDrinkComponents && isSameDrinkProperties;
+    }
 
     public Size getSize() {
         return size;
