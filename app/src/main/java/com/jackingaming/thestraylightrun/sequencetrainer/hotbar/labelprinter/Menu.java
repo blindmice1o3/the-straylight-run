@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.ColdMilk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.IcedBrownSugarOatmilkShakenEspresso;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.IcedCaffeLatte;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.IcedCaramelMacchiato;
@@ -41,6 +42,7 @@ public class Menu {
         drinks.add(new IcedCaramelMacchiato());
         drinks.add(new IcedFlatWhite());
         drinks.add(new IcedMochaLatte());
+        drinks.add(new ColdMilk());
     }
 
     public static int queryNumberOfDrinksOnMenu() {
