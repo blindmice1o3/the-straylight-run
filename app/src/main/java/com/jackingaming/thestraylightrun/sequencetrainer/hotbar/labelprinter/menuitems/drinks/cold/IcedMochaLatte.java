@@ -6,25 +6,26 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.WhippedCream;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import java.util.List;
 
-public class IcedVanillaLatte extends Drink {
-    public IcedVanillaLatte() {
-        super(IcedVanillaLatte.class.getSimpleName());
+public class IcedMochaLatte extends Drink {
+    public IcedMochaLatte() {
+        super(IcedMochaLatte.class.getSimpleName());
     }
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for IcedVanillaLatte)
+        // TODO: (not needed for IcedMochaLatte)
     }
 
     @Override
     public List<DrinkComponent> getDrinkComponentsBySize(Size size) {
         drinkComponents.clear();
 
-        int numberOfSyrupVanilla = -1;
+        int numberOfSyrupMocha = -1;
         int numberOfShots = -1;
         int amountOfMilk = -1;
         int temperatureMilk = RefrigeratorFragment.TEMPERATURE;
@@ -32,32 +33,32 @@ public class IcedVanillaLatte extends Drink {
 
         switch (size) {
             case TRENTA:
-                numberOfSyrupVanilla = -1;
+                numberOfSyrupMocha = -1;
                 numberOfShots = -1;
                 amountOfMilk = -1;
                 break;
             case VENTI_COLD:
-                numberOfSyrupVanilla = 6;
+                numberOfSyrupMocha = 6;
                 numberOfShots = 3;
                 amountOfMilk = 100;
                 break;
             case VENTI_HOT:
-                numberOfSyrupVanilla = -1;
+                numberOfSyrupMocha = -1;
                 numberOfShots = -1;
                 amountOfMilk = -1;
                 break;
             case GRANDE:
-                numberOfSyrupVanilla = 4;
+                numberOfSyrupMocha = 4;
                 numberOfShots = 2;
                 amountOfMilk = 100;
                 break;
             case TALL:
-                numberOfSyrupVanilla = 3;
+                numberOfSyrupMocha = 3;
                 numberOfShots = 1;
                 amountOfMilk = 100;
                 break;
             case SHORT:
-                numberOfSyrupVanilla = -1;
+                numberOfSyrupMocha = -1;
                 numberOfShots = -1;
                 amountOfMilk = -1;
                 break;
@@ -65,9 +66,11 @@ public class IcedVanillaLatte extends Drink {
 
         // ICE
         drinkComponents.add(new Ice());
+        // WHIPPED CREAM
+        drinkComponents.add(new WhippedCream());
         // SYRUPS
-        for (int i = 0; i < numberOfSyrupVanilla; i++) {
-            drinkComponents.add(new Syrup(Syrup.Type.VANILLA));
+        for (int i = 0; i < numberOfSyrupMocha; i++) {
+            drinkComponents.add(new Syrup(Syrup.Type.MOCHA));
         }
         // ESPRESSO SHOTS
         for (int i = 0; i < numberOfShots; i++) {
