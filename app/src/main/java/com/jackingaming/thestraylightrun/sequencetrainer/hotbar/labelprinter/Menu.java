@@ -11,6 +11,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.men
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.Cappuccino;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.CaramelMacchiato;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.FlatWhite;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.HotChocolate;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.MochaLatte;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.hot.VanillaLatte;
 
@@ -33,6 +34,7 @@ public class Menu {
         drinks.add(new CaramelMacchiato());
         drinks.add(new FlatWhite());
         drinks.add(new MochaLatte());
+        drinks.add(new HotChocolate());
         drinks.add(new IcedBrownSugarOatmilkShakenEspresso());
         drinks.add(new IcedCaffeLatte());
         drinks.add(new IcedVanillaLatte());

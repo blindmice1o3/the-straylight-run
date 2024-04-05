@@ -9,18 +9,19 @@ public class MenuItemRequestGenerator {
 
     public static Drink requestRandomDrink() {
         // randomly select drink
-        int indexRandomDrink = 11;
+        int indexRandomDrink = 6;
 //        int indexRandomDrink = random.nextInt(Menu.queryNumberOfDrinksOnMenu());
 
         // randomly select size
         int indexRandomSize = random.nextInt(Drink.Size.values().length);
 
         // iced drinks
-        if (indexRandomDrink == 6 ||
-                indexRandomDrink == 7 ||
+        if (indexRandomDrink == 7 ||
                 indexRandomDrink == 8 ||
                 indexRandomDrink == 9 ||
-                indexRandomDrink == 10) {
+                indexRandomDrink == 10 ||
+                indexRandomDrink == 11 ||
+                indexRandomDrink == 12) {
             // ICED: shouldn't have SHORT for size, replace with GRANDE.
             if (Drink.Size.values()[indexRandomSize] == Drink.Size.SHORT) {
                 indexRandomSize = Drink.Size.GRANDE.ordinal();
