@@ -13,8 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +30,8 @@ public class LabelPrinter extends AppCompatTextView {
     public static final String DRAG_LABEL = LabelPrinter.class.getSimpleName();
     private static final int MAX_NUMBER_OF_DRINKS = 10;
 
-    private List<String> queueDrinks = new ArrayList<>();
+    private List<Drink> queueDrinks = new ArrayList<>();
+    //    private List<String> queueDrinks = new ArrayList<>();
     private int counter = 0;
 
     public LabelPrinter(@NonNull Context context) {
@@ -67,30 +71,96 @@ public class LabelPrinter extends AppCompatTextView {
 
         if (standardOrCustomized == STANDARD) {
             Drink drinkRandomStandard = MenuItemRequestGenerator.requestRandomDrink();
+
             String contentNewDrinkLabel = String.format("%s\n%s\n%s",
                     formatDateTime,
                     drinkRandomStandard.getSize(),
                     drinkRandomStandard.getName());
 
-            queueDrinks.add(
+            drinkRandomStandard.setTextForDrinkLabel(
                     contentNewDrinkLabel
             );
+
+            queueDrinks.add(
+                    drinkRandomStandard
+            );
         } else if (standardOrCustomized == CUSTOMIZED) {
+            Log.e(TAG, "MAKING CUSTOMIZED DRINK!!!");
+
             Drink drinkRandomCustomized = MenuItemRequestGenerator.requestRandomCustomizedDrink();
             StringBuilder sb = new StringBuilder();
             sb.append(formatDateTime + "\n")
                     .append(drinkRandomCustomized.getSize() + "\n")
                     .append(drinkRandomCustomized.getName() + "\n");
-            for (int i = 0; i < drinkRandomCustomized.queryNumberOfCustomizations(); i++) {
-                sb.append(drinkRandomCustomized.getCustomizationByIndex(i));
 
-                if (i != (drinkRandomCustomized.queryNumberOfCustomizations() - 1)) {
-                    sb.append("\n");
+            // TODO: append what's different between customized and standard.
+            List<DrinkComponent> drinkComponentsCustomized = new ArrayList<>(
+                    drinkRandomCustomized.getDrinkComponents()
+            );
+            List<DrinkComponent> drinkComponentsStandard = new ArrayList<>(
+                    Menu.getDrinkByName(drinkRandomCustomized.getName())
+                            .getDrinkComponentsBySize(drinkRandomCustomized.getSize())
+            );
+
+            if (drinkComponentsCustomized.size() > drinkComponentsStandard.size()) {
+                for (DrinkComponent drinkComponentStandard : drinkComponentsStandard) {
+                    drinkComponentsCustomized.remove(drinkComponentStandard);
                 }
+
+                int counterSyrupStandard = 0;
+                for (DrinkComponent drinkComponent : drinkComponentsStandard) {
+                    if (drinkComponent instanceof Syrup) {
+                        counterSyrupStandard++;
+                    }
+                }
+                int counterSyrupCustomized = 0;
+                for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
+                    if (drinkComponent instanceof Syrup) {
+                        counterSyrupCustomized++;
+                    }
+                }
+
+                sb.append(
+                        (counterSyrupCustomized + counterSyrupStandard) + " " +
+                                drinkComponentsCustomized.get(0).toString() + "\n"
+                );
+            } else if (drinkComponentsCustomized.size() < drinkComponentsStandard.size()) {
+                for (DrinkComponent drinkComponentCustomized : drinkComponentsCustomized) {
+                    drinkComponentsStandard.remove(drinkComponentCustomized);
+                }
+
+                int counterSyrupStandard = 0;
+                for (DrinkComponent drinkComponent : drinkComponentsStandard) {
+                    if (drinkComponent instanceof Syrup) {
+                        counterSyrupStandard++;
+                    }
+                }
+                int counterSyrupCustomized = 0;
+                for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
+                    if (drinkComponent instanceof Syrup) {
+                        counterSyrupCustomized++;
+                    }
+                }
+
+                sb.append(
+                        (counterSyrupCustomized) + " " +
+                                drinkComponentsStandard.get(0).toString() + "\n"
+                );
+            } else {
+                // TODO: same number of components... could be a remove syrup and add whip...
+                //  which would result in no changes to the size.
+                Log.e(TAG, "SAME NUMBER OF DRINK COMPONENTS IN customized AND standard.");
+                sb.append(
+                        "same # drink components in customized and standard"
+                );
             }
 
-            queueDrinks.add(
+            drinkRandomCustomized.setTextForDrinkLabel(
                     sb.toString()
+            );
+
+            queueDrinks.add(
+                    drinkRandomCustomized
             );
         }
 
@@ -103,16 +173,17 @@ public class LabelPrinter extends AppCompatTextView {
 
     public void updateDisplay() {
         if (queueDrinks.size() > 0) {
-            setText(
-                    queueDrinks.get(0)
-            );
+            Drink drinkFirst = queueDrinks.get(0);
+            String textOnLabel = drinkFirst.getTextForDrinkLabel();
+
+            setText(textOnLabel);
         } else {
             setText("queue is empty");
         }
     }
 
-    public boolean removeFromQueue(String contentDrinkLabel) {
-        boolean isSuccessRemoval = queueDrinks.remove(contentDrinkLabel);
+    public boolean removeFromQueue(Drink drinkToRemove) {
+        boolean isSuccessRemoval = queueDrinks.remove(drinkToRemove);
         if (isSuccessRemoval) {
             Log.e(TAG, "SUCCESSFULLY removed!");
         }
@@ -125,10 +196,12 @@ public class LabelPrinter extends AppCompatTextView {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
             if (queueDrinks.size() <= 0) {
-                return false;
+                // intentionally blank.
+                return true;
             }
 
             String label = DRAG_LABEL;
+            Drink drinkFirst = queueDrinks.get(0);
 
             ClipData dragData = ClipData.newPlainText(label,
                     getText());
@@ -138,7 +211,7 @@ public class LabelPrinter extends AppCompatTextView {
             startDragAndDrop(
                     dragData,           // The data to be dragged.
                     myShadow,           // The drag shadow builder.
-                    this,               // The LabelPrinter.
+                    drinkFirst,               // The first Drink from queueDrinks.
                     0              // Flags. Not currently used, set to 0.
             );
             setVisibility(View.INVISIBLE);

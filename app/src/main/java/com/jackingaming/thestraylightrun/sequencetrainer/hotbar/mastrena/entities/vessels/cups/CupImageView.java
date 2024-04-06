@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
@@ -223,9 +222,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
-        Drink drink = Menu.getDrinkByName(name);
+        Drink drink = drinkLabel.getDrink();
         // EXPECTED
-        List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponentsBySize(sizeFromLabel);
+        List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
         StringBuilder sbExpected = new StringBuilder();
         sbExpected.append("--- DRINK COMPONENTS ---");
         for (DrinkComponent drinkComponent : drinkComponentsExpected) {
@@ -350,6 +349,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
         String size = text[3];
         String name = text[4];
+        // TODO: remove string customizations.
         // (6+) customization(s).
         int numberOfNonCustomizations = 5;
         List<String> customizations = null;
@@ -361,7 +361,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
-        return Menu.getDrinkByName(name).validate(this, size, customizations);
+        Drink drink = drinkLabel.getDrink();
+        return drink.validate(this, size, customizations);
     }
 
     public WhippedCream getWhippedCream() {

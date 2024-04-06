@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillCupColdDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
@@ -125,32 +126,6 @@ public class MastrenaFragment extends Fragment {
     public static MastrenaFragment newInstance() {
         Log.e(TAG, "newInstance()");
         return new MastrenaFragment();
-    }
-
-    public void changeLabelPrinterMode(String modeSelected) {
-        Log.e(TAG, "changeLabelPrinterMode(String) modeSelected: " + modeSelected);
-
-        if (labelPrinter == null) {
-            Toast.makeText(getContext(), "labelPrinter is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (modeSelected.equals("standard")) {
-            labelPrinter.selectModeStandard();
-//            delayAddNewDrink = DELAY_ADD_NEW_DRINK_EASY;
-//            valueBracketYellow = VALUE_BRACKET_YELLOW_EASY;
-//            valueBracketRed = VALUE_BRACKET_RED_EASY;
-        } else if (modeSelected.equals("customized")) {
-            labelPrinter.selectModeCustomized();
-//            delayAddNewDrink = DELAY_ADD_NEW_DRINK_MEDIUM;
-//            valueBracketYellow = VALUE_BRACKET_YELLOW_MEDIUM;
-//            valueBracketRed = VALUE_BRACKET_RED_MEDIUM;
-        } else if (modeSelected.equals("both")) {
-            labelPrinter.selectModeBoth();
-//            delayAddNewDrink = DELAY_ADD_NEW_DRINK_HARD;
-//            valueBracketYellow = VALUE_BRACKET_YELLOW_HARD;
-//            valueBracketRed = VALUE_BRACKET_RED_HARD;
-        }
     }
 
     @Override
@@ -442,8 +417,7 @@ public class MastrenaFragment extends Fragment {
                 for (int i = 0; i < framelayoutLabelStagingArea.getChildCount(); i++) {
                     if (framelayoutLabelStagingArea.getChildAt(i) instanceof DrinkLabel) {
                         DrinkLabel drinkLabel = (DrinkLabel) framelayoutLabelStagingArea.getChildAt(i);
-
-                        String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
+                        String[] drinkLabelSplitted = drinkLabel.getDrink().getTextForDrinkLabel().split("\\s+");
                         String date = drinkLabelSplitted[0];
                         String time = drinkLabelSplitted[1];
                         String amOrPm = drinkLabelSplitted[2];
@@ -668,18 +642,8 @@ public class MastrenaFragment extends Fragment {
 
                         label = dragEvent.getClipDescription().getLabel().toString();
 
-                        if (label.equals(LabelPrinter.DRAG_LABEL)) {
-                            labelPrinter = (LabelPrinter) dragEvent.getLocalState();
-
-                            // Change background drawable to indicate drop-target.
-                            view.setBackgroundResource(resIdDropTarget);
-
-                            // Return true to indicate that the View can accept the dragged
-                            // data.
-                            return true;
-                        } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
-                            drinkLabel = (DrinkLabel) dragEvent.getLocalState();
-
+                        if (label.equals(LabelPrinter.DRAG_LABEL) ||
+                                label.equals(DrinkLabel.DRAG_LABEL)) {
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
 
@@ -721,8 +685,11 @@ public class MastrenaFragment extends Fragment {
                     yTouch = dragEvent.getY();
 
                     if (label.equals(LabelPrinter.DRAG_LABEL)) {
+                        Drink drinkFirst = (Drink) dragEvent.getLocalState();
+
                         // Instantiate DrinkLabel.
                         DrinkLabel drinkLabelNew = new DrinkLabel(getContext());
+                        drinkLabelNew.setDrink(drinkFirst);
                         FrameLayout.LayoutParams layoutParams =
                                 new FrameLayout.LayoutParams(labelPrinter.getWidth(), labelPrinter.getHeight());
                         drinkLabelNew.setLayoutParams(layoutParams);
@@ -748,11 +715,13 @@ public class MastrenaFragment extends Fragment {
 
                         //////////////////////////////////////////////////////////////////////////
 
-                        labelPrinter.removeFromQueue(dragData);
+                        labelPrinter.removeFromQueue(drinkFirst);
                         labelPrinter.updateDisplay();
 
                         labelPrinter.setVisibility(View.VISIBLE);
                     } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
+                        drinkLabel = (DrinkLabel) dragEvent.getLocalState();
+
                         drinkLabel.setX(xTouch - (drinkLabel.getWidth() / 2));
                         drinkLabel.setY(yTouch - (drinkLabel.getHeight() / 2));
 
@@ -1068,5 +1037,13 @@ public class MastrenaFragment extends Fragment {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public LabelPrinter getLabelPrinter() {
+        return labelPrinter;
+    }
+
+    public void setLabelPrinter(LabelPrinter labelPrinter) {
+        this.labelPrinter = labelPrinter;
     }
 }

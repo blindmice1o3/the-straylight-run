@@ -47,10 +47,21 @@ public class SequenceTrainerActivity extends AppCompatActivity {
                 modeSelected = result.getString(LabelPrinterModeDialogFragment.BUNDLE_KEY_MODE_SELECTED);
                 Log.e(TAG, "modeSelected: " + modeSelected);
 
-                MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
-                mastrenaFragment.changeLabelPrinterMode(modeSelected);
+                LabelPrinterFragment labelPrinterFragment = (LabelPrinterFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_right_top);
+                labelPrinterFragment.changeLabelPrinterMode(modeSelected);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        LabelPrinterFragment labelPrinterFragment = (LabelPrinterFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_right_top);
+        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
+        mastrenaFragment.setLabelPrinter(
+                labelPrinterFragment.getLabelPrinter()
+        );
     }
 
     @Override

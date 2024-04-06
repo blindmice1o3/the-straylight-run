@@ -13,9 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+
 public class DrinkLabel extends AppCompatTextView {
     public static final String TAG = DrinkLabel.class.getSimpleName();
     public static final String DRAG_LABEL = DrinkLabel.class.getSimpleName();
+
+    private Drink drink;
 
     public DrinkLabel(@NonNull Context context) {
         super(context);
@@ -51,5 +55,13 @@ public class DrinkLabel extends AppCompatTextView {
         }
 
         return false;
+    }
+
+    public Drink getDrink() {
+        return drink;
+    }
+
+    public void setDrink(Drink drink) {
+        this.drink = drink;
     }
 }

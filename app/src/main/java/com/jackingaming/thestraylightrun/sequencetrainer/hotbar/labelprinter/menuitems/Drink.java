@@ -10,6 +10,7 @@ public abstract class Drink extends MenuItem {
     public enum Size {TRENTA, VENTI_COLD, VENTI_HOT, GRANDE, TALL, SHORT;}
 
     protected Size size = Size.GRANDE;
+    private String textForDrinkLabel = null;
     private List<String> customizations = new ArrayList<>();
 
     ////////////////////////////////////////////////////////
@@ -49,7 +50,8 @@ public abstract class Drink extends MenuItem {
             }
         }
 
-        List<DrinkComponent> drinkComponentsExpected = getDrinkComponentsBySize(sizeFromLabel);
+        List<DrinkComponent> drinkComponentsExpected = drinkComponents;
+//        List<DrinkComponent> drinkComponentsExpected = getDrinkComponentsBySize(sizeFromLabel);
         List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
 
         boolean isSameDrinkComponents = drinkComponentsExpected.equals(drinkComponentsActual);
@@ -75,6 +77,14 @@ public abstract class Drink extends MenuItem {
 
     public void setSize(Size size) {
         this.size = size;
+    }
+
+    public String getTextForDrinkLabel() {
+        return textForDrinkLabel;
+    }
+
+    public void setTextForDrinkLabel(String textForDrinkLabel) {
+        this.textForDrinkLabel = textForDrinkLabel;
     }
 
     public List<DrinkComponent> getDrinkComponents() {
