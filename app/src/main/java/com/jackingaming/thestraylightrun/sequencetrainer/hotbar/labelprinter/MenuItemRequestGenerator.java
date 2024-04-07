@@ -99,7 +99,7 @@ public class MenuItemRequestGenerator {
 //        drink.addCustomization("vanilla: " + syrupVanilla);
 
         // if drink has syrup in standard recipe... find out what type of syrup.
-        List<DrinkComponent> drinkComponents = drink.getDrinkComponentsBySize(drink.getSize());
+        List<DrinkComponent> drinkComponents = drink.getDrinkComponents();
         int counterSyrup = 0;
         Syrup.Type type = null;
         boolean shaken = false;
