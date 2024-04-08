@@ -224,12 +224,46 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         Drink drink = drinkLabel.getDrink();
         // EXPECTED
-        List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
         StringBuilder sbExpected = new StringBuilder();
         sbExpected.append("--- DRINK COMPONENTS ---");
-        for (DrinkComponent drinkComponent : drinkComponentsExpected) {
-            sbExpected.append("\n");
-            sbExpected.append(drinkComponent.toString());
+
+        List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
+
+        // SYRUP
+        Map<Syrup.Type, Integer> syrupsMapExpected = new HashMap<>();
+        for (DrinkComponent drinkComponentExpected : drinkComponentsExpected) {
+            if (drinkComponentExpected instanceof Syrup) {
+                Syrup.Type type = ((Syrup) drinkComponentExpected).getType();
+                if (syrupsMapExpected.containsKey(type)) {
+                    Integer counter = syrupsMapExpected.get(type);
+                    counter++;
+                    syrupsMapExpected.put(type, counter);
+                } else {
+                    syrupsMapExpected.put(type, 1);
+                }
+            }
+        }
+
+        Map<Syrup.Type, Boolean> isFirstTimeExpected = new HashMap<>();
+        for (DrinkComponent drinkComponentExpectedFirstTime : drinkComponentsExpected) {
+            if (drinkComponentExpectedFirstTime instanceof Syrup) {
+                Syrup.Type type = ((Syrup) drinkComponentExpectedFirstTime).getType();
+
+                // first occurrence of this Syrup.Type
+                if (!isFirstTimeExpected.containsKey(type)) {
+                    isFirstTimeExpected.put(type, false);
+
+                    sbExpected.append("\n");
+                    sbExpected.append(
+                            syrupsMapExpected.get(type) + " " + type.name()
+                    );
+                } else {
+                    continue;
+                }
+            } else {
+                sbExpected.append("\n");
+                sbExpected.append(drinkComponentExpectedFirstTime.toString());
+            }
         }
         sbExpected.append("\n");
         sbExpected.append("\n");
@@ -245,12 +279,46 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             sbExpected.append("none");
         }
         // ACTUAL
-        List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
         StringBuilder sbActual = new StringBuilder();
         sbActual.append("--- DRINK COMPONENTS ---");
-        for (DrinkComponent drinkComponent : drinkComponentsActual) {
-            sbActual.append("\n");
-            sbActual.append(drinkComponent.toString());
+
+        List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
+
+        // SYRUP
+        Map<Syrup.Type, Integer> syrupsMapActual = new HashMap<>();
+        for (DrinkComponent drinkComponentActual : drinkComponentsActual) {
+            if (drinkComponentActual instanceof Syrup) {
+                Syrup.Type type = ((Syrup) drinkComponentActual).getType();
+                if (syrupsMapActual.containsKey(type)) {
+                    Integer counter = syrupsMapActual.get(type);
+                    counter++;
+                    syrupsMapActual.put(type, counter);
+                } else {
+                    syrupsMapActual.put(type, 1);
+                }
+            }
+        }
+
+        Map<Syrup.Type, Boolean> isFirstTimeActual = new HashMap<>();
+        for (DrinkComponent drinkComponentActualFirstTime : drinkComponentsActual) {
+            if (drinkComponentActualFirstTime instanceof Syrup) {
+                Syrup.Type type = ((Syrup) drinkComponentActualFirstTime).getType();
+
+                // first occurrence of this Syrup.Type
+                if (!isFirstTimeActual.containsKey(type)) {
+                    isFirstTimeActual.put(type, false);
+
+                    sbActual.append("\n");
+                    sbActual.append(
+                            syrupsMapActual.get(type) + " " + type.name()
+                    );
+                } else {
+                    continue;
+                }
+            } else {
+                sbActual.append("\n");
+                sbActual.append(drinkComponentActualFirstTime.toString());
+            }
         }
         sbActual.append("\n");
         sbActual.append("\n");

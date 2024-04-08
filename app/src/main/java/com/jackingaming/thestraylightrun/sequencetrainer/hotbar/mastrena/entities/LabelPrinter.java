@@ -95,8 +95,10 @@ public class LabelPrinter extends AppCompatTextView {
                     .append(drinkRandomCustomized.getSize() + "\n")
                     .append(drinkRandomCustomized.getName() + "\n");
 
-            // TODO: append what's different between customized and standard to sb.
+            // Append differences between customized and standard to sb.
 
+            // ***CUSTOMIZED***
+            // SYRUP
             Map<Syrup.Type, Integer> syrupsMapCustomized = new HashMap<>();
             List<DrinkComponent> drinkComponentsCustomized = new ArrayList<>(
                     drinkRandomCustomized.getDrinkComponents()
@@ -114,6 +116,8 @@ public class LabelPrinter extends AppCompatTextView {
                 }
             }
 
+            // ***STANDARD***
+            // SYRUP
             Map<Syrup.Type, Integer> syrupsMapStandard = new HashMap<>();
             List<DrinkComponent> drinkComponentsStandard = new ArrayList<>(
                     Menu.getDrinkByName(drinkRandomCustomized.getName())
@@ -132,6 +136,8 @@ public class LabelPrinter extends AppCompatTextView {
                 }
             }
 
+            // ***APPEND***
+            // SYRUP
             for (Syrup.Type type : syrupsMapCustomized.keySet()) {
                 int counterCustomized = syrupsMapCustomized.get(type);
                 if (syrupsMapStandard.containsKey(type)) {
@@ -146,149 +152,6 @@ public class LabelPrinter extends AppCompatTextView {
                     sb.append(counterCustomized + " " + type);
                 }
             }
-
-            ///////////////////////////////////////////////////////////////////////////////
-
-//            List<DrinkComponent> drinkComponentsCustomized = new ArrayList<>(
-//                    drinkRandomCustomized.getDrinkComponents()
-//            );
-//            List<DrinkComponent> drinkComponentsCustomizedCopy = new ArrayList<>(
-//                    drinkRandomCustomized.getDrinkComponents()
-//            );
-//            List<DrinkComponent> drinkComponentsStandard = new ArrayList<>(
-//                    Menu.getDrinkByName(drinkRandomCustomized.getName())
-//                            .getDrinkComponentsBySize(drinkRandomCustomized.getSize())
-//            );
-//            Map<Syrup.Type, Integer> syrupsMapStandard = new HashMap<>();
-//            for (DrinkComponent drinkComponent : drinkComponentsStandard) {
-//                if (drinkComponent instanceof Syrup) {
-//                    Syrup.Type type = ((Syrup) drinkComponent).getType();
-//                    if (syrupsMapStandard.containsKey(type)) {
-//                        Integer counter = syrupsMapStandard.get(type);
-//                        counter++;
-//                        syrupsMapStandard.put(type, counter);
-//                    } else {
-//                        syrupsMapStandard.put(type, 1);
-//                    }
-//                }
-//            }
-//
-//            // TODO: append what's different between customized and standard to sb.
-//            for (DrinkComponent drinkComponentStandard : drinkComponentsStandard) {
-//                drinkComponentsCustomized.remove(drinkComponentStandard);
-//            }
-//            for (DrinkComponent drinkComponentCustomizedCopy : drinkComponentsCustomizedCopy) {
-//                drinkComponentsStandard.remove(drinkComponentCustomizedCopy);
-//            }
-//            // leftovers in customized are new drink components ADDED
-//            // leftovers in standard are drink components REMOVED
-//            Map<Syrup.Type, Integer> syrupMapsToAddToStandard = new HashMap<>();
-//            for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
-//                if (drinkComponent instanceof Syrup) {
-//                    Syrup.Type type = ((Syrup) drinkComponent).getType();
-//                    if (syrupMapsToAddToStandard.containsKey(type)) {
-//                        Integer counter = syrupMapsToAddToStandard.get(type);
-//                        counter++;
-//                        syrupMapsToAddToStandard.put(type, counter);
-//                    } else {
-//                        syrupMapsToAddToStandard.put(type, 1);
-//                    }
-//                }
-//            }
-//            Map<Syrup.Type, Integer> syrupMapsToRemoveFromStandard = new HashMap<>();
-//            for (DrinkComponent drinkComponent : drinkComponentsStandard) {
-//                if (drinkComponent instanceof Syrup) {
-//                    Syrup.Type type = ((Syrup) drinkComponent).getType();
-//                    if (syrupMapsToRemoveFromStandard.containsKey(type)) {
-//                        Integer counter = syrupMapsToRemoveFromStandard.get(type);
-//                        counter++;
-//                        syrupMapsToRemoveFromStandard.put(type, counter);
-//                    } else {
-//                        syrupMapsToRemoveFromStandard.put(type, 1);
-//                    }
-//                }
-//            }
-//
-//            for (Syrup.Type typeToAdd : syrupMapsToAddToStandard.keySet()) {
-//                if (syrupsMapStandard.containsKey(typeToAdd)) {
-//                    Integer counter = syrupsMapStandard.get(typeToAdd);
-//                    counter += syrupMapsToAddToStandard.get(typeToAdd);
-//                    syrupsMapStandard.put(typeToAdd, counter);
-//                } else {
-//                    syrupsMapStandard.put(typeToAdd, 1);
-//                }
-//            }
-//            for (Syrup.Type typeToRemove : syrupMapsToRemoveFromStandard.keySet()) {
-//                if (syrupsMapStandard.containsKey(typeToRemove)) {
-//                    Integer counter = syrupsMapStandard.get(typeToRemove);
-//                    counter -= syrupMapsToRemoveFromStandard.get(typeToRemove);
-//                    syrupsMapStandard.put(typeToRemove, counter);
-//                } else {
-//                    // Should not be possible.
-//                    Log.e(TAG, "attempting to remove syrup.type from standard recipe that doesn't exist in the standard recipe. The Syrup.Type is: " + typeToRemove.name());
-//                }
-//            }
-//
-//            for (Syrup.Type type : syrupsMapStandard.keySet()) {
-//                sb.append(
-//                        syrupsMapStandard.get(type) + " " + type.name()
-//                );
-//            }
-
-            ///////////////////////////////////////////////////////////////////////////////
-
-//            if (drinkComponentsCustomized.size() > drinkComponentsStandard.size()) {
-//                for (DrinkComponent drinkComponentStandard : drinkComponentsStandard) {
-//                    drinkComponentsCustomized.remove(drinkComponentStandard);
-//                }
-//
-//                int counterSyrupStandard = 0;
-//                for (DrinkComponent drinkComponent : drinkComponentsStandard) {
-//                    if (drinkComponent instanceof Syrup) {
-//                        counterSyrupStandard++;
-//                    }
-//                }
-//                int counterSyrupCustomized = 0;
-//                for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
-//                    if (drinkComponent instanceof Syrup) {
-//                        counterSyrupCustomized++;
-//                    }
-//                }
-//
-//                sb.append(
-//                        (counterSyrupCustomized + counterSyrupStandard) + " " +
-//                                drinkComponentsCustomized.get(0).toString() + "\n"
-//                );
-//            } else if (drinkComponentsCustomized.size() < drinkComponentsStandard.size()) {
-//                for (DrinkComponent drinkComponentCustomized : drinkComponentsCustomized) {
-//                    drinkComponentsStandard.remove(drinkComponentCustomized);
-//                }
-//
-//                int counterSyrupStandard = 0;
-//                for (DrinkComponent drinkComponent : drinkComponentsStandard) {
-//                    if (drinkComponent instanceof Syrup) {
-//                        counterSyrupStandard++;
-//                    }
-//                }
-//                int counterSyrupCustomized = 0;
-//                for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
-//                    if (drinkComponent instanceof Syrup) {
-//                        counterSyrupCustomized++;
-//                    }
-//                }
-//
-//                sb.append(
-//                        (counterSyrupCustomized) + " " +
-//                                drinkComponentsStandard.get(0).toString() + "\n"
-//                );
-//            } else {
-//                // TODO: same number of components... could be a remove syrup and add whip...
-//                //  which would result in no changes to the size.
-//                Log.e(TAG, "SAME NUMBER OF DRINK COMPONENTS IN customized AND standard.");
-//                sb.append(
-//                        "same # drink components in customized and standard"
-//                );
-//            }
 
             drinkRandomCustomized.setTextForDrinkLabel(
                     sb.toString()
