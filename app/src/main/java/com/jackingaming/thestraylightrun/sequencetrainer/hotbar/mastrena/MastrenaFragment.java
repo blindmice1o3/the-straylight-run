@@ -748,8 +748,10 @@ public class MastrenaFragment extends Fragment {
                         if (label.equals(LabelPrinter.DRAG_LABEL)) {
                             labelPrinter.setVisibility(View.VISIBLE);
                         } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
-                            drinkLabel.setVisibility(View.VISIBLE);
-                            drinkLabel = null;
+                            if (drinkLabel != null) {
+                                drinkLabel.setVisibility(View.VISIBLE);
+                                drinkLabel = null;
+                            }
                         }
                     }
 
