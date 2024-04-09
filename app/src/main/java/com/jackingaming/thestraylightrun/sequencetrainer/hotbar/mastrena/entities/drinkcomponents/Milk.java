@@ -7,7 +7,8 @@ import java.util.Objects;
 public class Milk extends DrinkComponent {
     public static final String TAG = Milk.class.getSimpleName();
 
-    public enum Type {TWO_PERCENT, WHOLE, NON_FAT, HALF_AND_HALF, OAT, COCONUT, ALMOND, SOY;}
+    public enum Type {TWO_PERCENT, WHOLE, OAT, COCONUT, ALMOND, SOY;}
+    // NON_FAT, HALF_AND_HALF
 
     private Type type;
     private int amount;

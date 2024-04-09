@@ -75,20 +75,19 @@ public class MenuItemRequestGenerator {
     }
 
     private static final int CUSTOMIZE_SYRUP = 0;
-    private static final int CUSTOMIZE_SHOT = 1;
+    private static final int CUSTOMIZE_MILK = 1;
     private static final int CUSTOMIZE_BOTH = 2;
 
     private static void generateCustomizationsForDrink(Drink drink) {
-        int randomCustomization = CUSTOMIZE_SYRUP;
-//        int randomCustomization = random.nextInt(3);
+        int randomCustomization = random.nextInt(3);
 
         if (randomCustomization == CUSTOMIZE_SYRUP) {
             generateRandomNumberOfSyrupForDrink(drink);
-        } else if (randomCustomization == CUSTOMIZE_SHOT) {
-            generateRandomNumberOfShotForDrink(drink);
+        } else if (randomCustomization == CUSTOMIZE_MILK) {
+            generateRandomTypeOfMilkForDrink(drink);
         } else if (randomCustomization == CUSTOMIZE_BOTH) {
             generateRandomNumberOfSyrupForDrink(drink);
-            generateRandomNumberOfShotForDrink(drink);
+            generateRandomTypeOfMilkForDrink(drink);
         }
     }
 
@@ -198,10 +197,37 @@ public class MenuItemRequestGenerator {
         }
     }
 
-    private static void generateRandomNumberOfShotForDrink(Drink drink) {
-        int maxNumberOfShotPlusOne = (4 + 1); // get random number of espresso shots [0-4].
-        int shot = random.nextInt(maxNumberOfShotPlusOne);
+    private static void generateRandomTypeOfMilkForDrink(Drink drink) {
+//        int maxNumberOfShotPlusOne = (4 + 1); // get random number of espresso shots [0-4].
+//        int shot = random.nextInt(maxNumberOfShotPlusOne);
+//
+//        drink.addCustomization("shot: " + shot);
 
-        drink.addCustomization("shot: " + shot);
+        List<DrinkComponent> drinkComponents = drink.getDrinkComponents();
+        // determine Milk.Type in standard recipe.
+        Milk.Type typeStandard = null;
+        int indexMilk = -1;
+        for (int i = 0; i < drinkComponents.size(); i++) {
+            DrinkComponent drinkComponent = drinkComponents.get(i);
+            if (drinkComponent instanceof Milk) {
+                typeStandard = ((Milk) drinkComponent).getType();
+                indexMilk = i;
+            }
+        }
+        // select new random Milk.Type.
+        int indexRandomMilkType = random.nextInt(Milk.Type.values().length);
+        Milk.Type typeRandom = Milk.Type.values()[indexRandomMilkType];
+
+        if (typeRandom == typeStandard) {
+            typeRandom = (typeStandard != Milk.Type.OAT) ?
+                    Milk.Type.OAT : Milk.Type.SOY;
+
+        }
+
+        if (indexMilk != -1) {
+            ((Milk) drinkComponents.get(indexMilk)).setType(typeRandom);
+        } else {
+            Log.e(TAG, "indexMilk == -1... meaning did not find milk in standard recipe.");
+        }
     }
 }

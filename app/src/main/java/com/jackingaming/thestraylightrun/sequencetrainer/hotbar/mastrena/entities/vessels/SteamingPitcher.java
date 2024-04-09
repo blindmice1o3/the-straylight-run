@@ -332,12 +332,12 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
             case WHOLE:
                 idColor = R.color.red;
                 break;
-            case NON_FAT:
-                idColor = R.color.light_blue_A200;
-                break;
-            case HALF_AND_HALF:
-                idColor = R.color.purple;
-                break;
+//            case NON_FAT:
+//                idColor = R.color.light_blue_A200;
+//                break;
+//            case HALF_AND_HALF:
+//                idColor = R.color.purple;
+//                break;
             case OAT:
                 idColor = R.color.blue;
                 break;

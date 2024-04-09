@@ -17,6 +17,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Men
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import java.time.LocalDateTime;
@@ -100,6 +101,8 @@ public class LabelPrinter extends AppCompatTextView {
             // ***CUSTOMIZED***
             // SYRUP
             Map<Syrup.Type, Integer> syrupsMapCustomized = new HashMap<>();
+            // MILK
+            Milk.Type typeMilkCustomized = null;
             List<DrinkComponent> drinkComponentsCustomized = new ArrayList<>(
                     drinkRandomCustomized.getDrinkComponents()
             );
@@ -113,12 +116,16 @@ public class LabelPrinter extends AppCompatTextView {
                     } else {
                         syrupsMapCustomized.put(type, 1);
                     }
+                } else if (drinkComponent instanceof Milk) {
+                    typeMilkCustomized = ((Milk) drinkComponent).getType();
                 }
             }
 
             // ***STANDARD***
             // SYRUP
             Map<Syrup.Type, Integer> syrupsMapStandard = new HashMap<>();
+            // MILK
+            Milk.Type typeMilkStandard = null;
             List<DrinkComponent> drinkComponentsStandard = new ArrayList<>(
                     Menu.getDrinkByName(drinkRandomCustomized.getName())
                             .getDrinkComponentsBySize(drinkRandomCustomized.getSize())
@@ -133,6 +140,8 @@ public class LabelPrinter extends AppCompatTextView {
                     } else {
                         syrupsMapStandard.put(type, 1);
                     }
+                } else if (drinkComponent instanceof Milk) {
+                    typeMilkStandard = ((Milk) drinkComponent).getType();
                 }
             }
 
@@ -146,11 +155,15 @@ public class LabelPrinter extends AppCompatTextView {
                     if (counterCustomized == counterStandard) {
                         continue;
                     } else {
-                        sb.append(counterCustomized + " " + type);
+                        sb.append(counterCustomized + " " + type + "\n");
                     }
                 } else {
-                    sb.append(counterCustomized + " " + type);
+                    sb.append(counterCustomized + " " + type + "\n");
                 }
+            }
+            // MILK
+            if (typeMilkCustomized != typeMilkStandard) {
+                sb.append(typeMilkCustomized + "\n");
             }
 
             drinkRandomCustomized.setTextForDrinkLabel(

@@ -211,8 +211,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
-        // TODO: "Pretty-print" number of EspressoShot.
-
         /////////////////////////////////////////////////////////////////////////////////
 
         // Convert String size into enum Drink.Size.
@@ -287,7 +285,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
                     sbExpected.append("\n");
                     sbExpected.append(
-                            espressoShotsMapExpected.get(espressoShot) + " " + espressoShot.getType().name() + " (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
+                            espressoShotsMapExpected.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
                     );
                 }
             } else {
@@ -366,7 +364,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
                     sbActual.append("\n");
                     sbActual.append(
-                            espressoShotsMapActual.get(espressoShot) + " " + espressoShot.getType().name() + " (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
+                            espressoShotsMapActual.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
                     );
                 } else {
                     continue;
