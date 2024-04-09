@@ -358,7 +358,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             } else if (drinkComponentActualFirstTime instanceof EspressoShot) {
                 EspressoShot espressoShot = (EspressoShot) drinkComponentActualFirstTime;
 
-                //first occurrence of this EspressoShot
+                // first occurrence of this EspressoShot
                 if (!isFirstTimeEspressoShotActual.containsKey(espressoShot)) {
                     isFirstTimeEspressoShotActual.put(espressoShot, false);
 
@@ -471,20 +471,9 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
         String size = text[3];
         String name = text[4];
-        // TODO: remove string customizations.
-        // (6+) customization(s).
-        int numberOfNonCustomizations = 5;
-        List<String> customizations = null;
-        if (text.length > numberOfNonCustomizations) {
-            customizations = new ArrayList<>();
-            for (int i = 0; i < (text.length - numberOfNonCustomizations); i++) {
-                int indexCustomization = numberOfNonCustomizations + i;
-                customizations.add(text[indexCustomization]);
-            }
-        }
 
         Drink drink = drinkLabel.getDrink();
-        return drink.validate(this, size, customizations);
+        return drink.validate(this, size);
     }
 
     public WhippedCream getWhippedCream() {

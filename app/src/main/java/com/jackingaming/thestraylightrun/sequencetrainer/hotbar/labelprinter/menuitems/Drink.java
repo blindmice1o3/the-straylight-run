@@ -11,7 +11,6 @@ public abstract class Drink extends MenuItem {
 
     protected Size size = Size.GRANDE;
     private String textForDrinkLabel = null;
-    private List<String> customizations = new ArrayList<>();
 
     ////////////////////////////////////////////////////////
     public enum Property {SHOT_ON_TOP;}
@@ -24,23 +23,11 @@ public abstract class Drink extends MenuItem {
         initDrinkProperties();
     }
 
-    public void addCustomization(String customization) {
-        customizations.add(customization);
-    }
-
-    public String getCustomizationByIndex(int index) {
-        return customizations.get(index);
-    }
-
-    public int queryNumberOfCustomizations() {
-        return customizations.size();
-    }
-
     abstract protected void initDrinkProperties();
 
     abstract public List<DrinkComponent> getDrinkComponentsBySize(Size size);
 
-    public boolean validate(CupImageView cupImageView, String size, List<String> customizations) {
+    public boolean validate(CupImageView cupImageView, String size) {
         // Convert String size into enum Drink.Size.
         Drink.Size sizeFromLabel = null;
         for (Drink.Size sizeCurrent : Drink.Size.values()) {
@@ -51,7 +38,6 @@ public abstract class Drink extends MenuItem {
         }
 
         List<DrinkComponent> drinkComponentsExpected = drinkComponents;
-//        List<DrinkComponent> drinkComponentsExpected = getDrinkComponentsBySize(sizeFromLabel);
         List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
 
         boolean isSameDrinkComponents = drinkComponentsExpected.equals(drinkComponentsActual);

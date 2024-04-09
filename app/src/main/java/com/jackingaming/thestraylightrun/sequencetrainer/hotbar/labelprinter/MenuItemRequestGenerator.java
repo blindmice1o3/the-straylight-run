@@ -92,11 +92,6 @@ public class MenuItemRequestGenerator {
     }
 
     private static void generateRandomNumberOfSyrupForDrink(Drink drink) {
-//        int maxNumberOfPumpsPlusOne = (6 + 1); // get random number of syrup pumps [0-6].
-//        int syrupVanilla = random.nextInt(maxNumberOfPumpsPlusOne);
-//
-//        drink.addCustomization("vanilla: " + syrupVanilla);
-
         // if drink has syrup in standard recipe... find out what type of syrup.
         List<DrinkComponent> drinkComponents = drink.getDrinkComponents();
         int counterSyrup = 0;
@@ -198,11 +193,6 @@ public class MenuItemRequestGenerator {
     }
 
     private static void generateRandomTypeOfMilkForDrink(Drink drink) {
-//        int maxNumberOfShotPlusOne = (4 + 1); // get random number of espresso shots [0-4].
-//        int shot = random.nextInt(maxNumberOfShotPlusOne);
-//
-//        drink.addCustomization("shot: " + shot);
-
         List<DrinkComponent> drinkComponents = drink.getDrinkComponents();
         // determine Milk.Type in standard recipe.
         Milk.Type typeStandard = null;
