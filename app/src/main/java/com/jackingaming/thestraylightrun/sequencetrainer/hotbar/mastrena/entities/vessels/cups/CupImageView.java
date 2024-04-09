@@ -211,6 +211,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
             }
         }
 
+        // TODO: "Pretty-print" number of EspressoShot.
+
         /////////////////////////////////////////////////////////////////////////////////
 
         // Convert String size into enum Drink.Size.
@@ -230,35 +232,63 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
 
         // SYRUP
-        Map<Syrup.Type, Integer> syrupsMapExpected = new HashMap<>();
+        Map<Syrup, Integer> syrupsMapExpected = new HashMap<>();
+        // ESPRESSO SHOT
+        Map<EspressoShot, Integer> espressoShotsMapExpected = new HashMap<>();
         for (DrinkComponent drinkComponentExpected : drinkComponentsExpected) {
             if (drinkComponentExpected instanceof Syrup) {
-                Syrup.Type type = ((Syrup) drinkComponentExpected).getType();
-                if (syrupsMapExpected.containsKey(type)) {
-                    Integer counter = syrupsMapExpected.get(type);
-                    counter++;
-                    syrupsMapExpected.put(type, counter);
+                Syrup syrup = (Syrup) drinkComponentExpected;
+                if (syrupsMapExpected.containsKey(syrup)) {
+                    Log.e(TAG, "INCREMENT SYRUP EXPECTED");
+                    Integer counterSyrup = syrupsMapExpected.get(syrup);
+                    counterSyrup++;
+                    syrupsMapExpected.put(syrup, counterSyrup);
                 } else {
-                    syrupsMapExpected.put(type, 1);
+                    Log.e(TAG, "START SYRUP EXPECTED AT 1");
+                    syrupsMapExpected.put(syrup, 1);
+                }
+            } else if (drinkComponentExpected instanceof EspressoShot) {
+                EspressoShot espressoShot = (EspressoShot) drinkComponentExpected;
+                if (espressoShotsMapExpected.containsKey(espressoShot)) {
+                    Log.e(TAG, "INCREMENT ESPRESSO SHOT EXPECTED");
+                    Integer counterEspressoShot = espressoShotsMapExpected.get(espressoShot);
+                    counterEspressoShot++;
+                    espressoShotsMapExpected.put(espressoShot, counterEspressoShot);
+                } else {
+                    Log.e(TAG, "START ESPRESSO SHOT EXPECTED AT 1");
+                    espressoShotsMapExpected.put(espressoShot, 1);
                 }
             }
         }
 
-        Map<Syrup.Type, Boolean> isFirstTimeExpected = new HashMap<>();
+        Map<Syrup, Boolean> isFirstTimeSyrupExpected = new HashMap<>();
+        Map<EspressoShot, Boolean> isFirstTimeEspressoShotExpected = new HashMap<>();
         for (DrinkComponent drinkComponentExpectedFirstTime : drinkComponentsExpected) {
             if (drinkComponentExpectedFirstTime instanceof Syrup) {
-                Syrup.Type type = ((Syrup) drinkComponentExpectedFirstTime).getType();
+                Syrup syrup = (Syrup) drinkComponentExpectedFirstTime;
 
-                // first occurrence of this Syrup.Type
-                if (!isFirstTimeExpected.containsKey(type)) {
-                    isFirstTimeExpected.put(type, false);
+                // first occurrence of this Syrup
+                if (!isFirstTimeSyrupExpected.containsKey(syrup)) {
+                    isFirstTimeSyrupExpected.put(syrup, false);
 
                     sbExpected.append("\n");
                     sbExpected.append(
-                            syrupsMapExpected.get(type) + " " + type.name()
+                            syrupsMapExpected.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
                     );
                 } else {
                     continue;
+                }
+            } else if (drinkComponentExpectedFirstTime instanceof EspressoShot) {
+                EspressoShot espressoShot = (EspressoShot) drinkComponentExpectedFirstTime;
+
+                // first occurrence of this EspressoShot
+                if (!isFirstTimeEspressoShotExpected.containsKey(espressoShot)) {
+                    isFirstTimeEspressoShotExpected.put(espressoShot, false);
+
+                    sbExpected.append("\n");
+                    sbExpected.append(
+                            espressoShotsMapExpected.get(espressoShot) + " " + espressoShot.getType().name() + " (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
+                    );
                 }
             } else {
                 sbExpected.append("\n");
@@ -285,32 +315,58 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
 
         // SYRUP
-        Map<Syrup.Type, Integer> syrupsMapActual = new HashMap<>();
+        Map<Syrup, Integer> syrupsMapActual = new HashMap<>();
+        // ESPRESSO SHOT
+        Map<EspressoShot, Integer> espressoShotsMapActual = new HashMap<>();
         for (DrinkComponent drinkComponentActual : drinkComponentsActual) {
             if (drinkComponentActual instanceof Syrup) {
-                Syrup.Type type = ((Syrup) drinkComponentActual).getType();
-                if (syrupsMapActual.containsKey(type)) {
-                    Integer counter = syrupsMapActual.get(type);
-                    counter++;
-                    syrupsMapActual.put(type, counter);
+                Syrup syrup = (Syrup) drinkComponentActual;
+                if (syrupsMapActual.containsKey(syrup)) {
+                    Integer counterSyrup = syrupsMapActual.get(syrup);
+                    counterSyrup++;
+                    syrupsMapActual.put(syrup, counterSyrup);
                 } else {
-                    syrupsMapActual.put(type, 1);
+                    syrupsMapActual.put(syrup, 1);
+                }
+            } else if (drinkComponentActual instanceof EspressoShot) {
+                EspressoShot espressoShot = (EspressoShot) drinkComponentActual;
+                if (espressoShotsMapActual.containsKey(espressoShot)) {
+                    Integer counterEspressoShot = espressoShotsMapActual.get(espressoShot);
+                    counterEspressoShot++;
+                    espressoShotsMapActual.put(espressoShot, counterEspressoShot);
+                } else {
+                    espressoShotsMapActual.put(espressoShot, 1);
                 }
             }
         }
 
-        Map<Syrup.Type, Boolean> isFirstTimeActual = new HashMap<>();
+        Map<Syrup, Boolean> isFirstTimeSyrupActual = new HashMap<>();
+        Map<EspressoShot, Boolean> isFirstTimeEspressoShotActual = new HashMap<>();
         for (DrinkComponent drinkComponentActualFirstTime : drinkComponentsActual) {
             if (drinkComponentActualFirstTime instanceof Syrup) {
-                Syrup.Type type = ((Syrup) drinkComponentActualFirstTime).getType();
+                Syrup syrup = (Syrup) drinkComponentActualFirstTime;
 
-                // first occurrence of this Syrup.Type
-                if (!isFirstTimeActual.containsKey(type)) {
-                    isFirstTimeActual.put(type, false);
+                // first occurrence of this Syrup
+                if (!isFirstTimeSyrupActual.containsKey(syrup)) {
+                    isFirstTimeSyrupActual.put(syrup, false);
 
                     sbActual.append("\n");
                     sbActual.append(
-                            syrupsMapActual.get(type) + " " + type.name()
+                            syrupsMapActual.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
+                    );
+                } else {
+                    continue;
+                }
+            } else if (drinkComponentActualFirstTime instanceof EspressoShot) {
+                EspressoShot espressoShot = (EspressoShot) drinkComponentActualFirstTime;
+
+                //first occurrence of this EspressoShot
+                if (!isFirstTimeEspressoShotActual.containsKey(espressoShot)) {
+                    isFirstTimeEspressoShotActual.put(espressoShot, false);
+
+                    sbActual.append("\n");
+                    sbActual.append(
+                            espressoShotsMapActual.get(espressoShot) + " " + espressoShot.getType().name() + " (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
                     );
                 } else {
                     continue;
