@@ -89,8 +89,9 @@ public class CupHot extends CupImageView {
                     } else if (label.equals(SteamingPitcher.DRAG_LABEL)) {
                         Log.d(TAG, "label.equals(SteamingPitcher.DRAG_LABEL)");
 
-                        if (((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0) {
-                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0");
+                        if (((SteamingPitcher) event.getLocalState()).getMilk() != null &&
+                                ((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0) {
+                            Log.d(TAG, "((SteamingPitcher) event.getLocalState()).getMilk() != null && ((SteamingPitcher) event.getLocalState()).getMilk().getAmount() != 0");
 
                             // Change value of alpha to indicate drop-target.
                             setAlpha(0.75f);
