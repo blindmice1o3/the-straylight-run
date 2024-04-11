@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,12 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 public class LabelPrinterFragment extends Fragment {
     public static final String TAG = LabelPrinterFragment.class.getSimpleName();
 
+    public interface Listener {
+        void onInitializationCompleted(LabelPrinter labelPrinter);
+    }
+
+    private Listener listener;
+
     private FrameLayout frameLayoutLabelPrinter;
     private LabelPrinter labelPrinter;
 
@@ -30,6 +37,18 @@ public class LabelPrinterFragment extends Fragment {
         Log.e(TAG, "newInstance()");
         LabelPrinterFragment fragment = new LabelPrinterFragment();
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (Listener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement InitializationListener");
+        }
     }
 
     @Override
@@ -51,6 +70,8 @@ public class LabelPrinterFragment extends Fragment {
 
         labelPrinter.generateRandomDrinkRequest();
         labelPrinter.updateDisplay();
+
+        listener.onInitializationCompleted(labelPrinter);
     }
 
     public void changeLabelPrinterMode(String modeSelected) {

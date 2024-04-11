@@ -15,10 +15,12 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCadd
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.LabelPrinterFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.MastrenaFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragment;
 
-public class SequenceTrainerActivity extends AppCompatActivity {
+public class SequenceTrainerActivity extends AppCompatActivity
+        implements LabelPrinterFragment.Listener {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
 
     private String modeSelected = "standard";
@@ -54,17 +56,6 @@ public class SequenceTrainerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        LabelPrinterFragment labelPrinterFragment = (LabelPrinterFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_right_top);
-        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
-        mastrenaFragment.setLabelPrinter(
-                labelPrinterFragment.getLabelPrinter()
-        );
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_activity_sequence_trainer, menu);
         return true;
@@ -80,5 +71,11 @@ public class SequenceTrainerActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onInitializationCompleted(LabelPrinter labelPrinter) {
+        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
+        mastrenaFragment.setLabelPrinter(labelPrinter);
     }
 }
