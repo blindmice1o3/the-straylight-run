@@ -27,16 +27,7 @@ public abstract class Drink extends MenuItem {
 
     abstract public List<DrinkComponent> getDrinkComponentsBySize(Size size);
 
-    public boolean validate(CupImageView cupImageView, String size) {
-        // Convert String size into enum Drink.Size.
-        Drink.Size sizeFromLabel = null;
-        for (Drink.Size sizeCurrent : Drink.Size.values()) {
-            if (size.equals(sizeCurrent.name())) {
-                sizeFromLabel = sizeCurrent;
-                break;
-            }
-        }
-
+    public boolean validate(CupImageView cupImageView) {
         List<DrinkComponent> drinkComponentsExpected = drinkComponents;
         List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
 

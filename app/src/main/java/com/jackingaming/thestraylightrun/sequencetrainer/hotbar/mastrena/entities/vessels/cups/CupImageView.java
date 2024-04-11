@@ -473,7 +473,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         String name = text[4];
 
         Drink drink = drinkLabel.getDrink();
-        return drink.validate(this, size);
+        return drink.validate(this);
     }
 
     public WhippedCream getWhippedCream() {
