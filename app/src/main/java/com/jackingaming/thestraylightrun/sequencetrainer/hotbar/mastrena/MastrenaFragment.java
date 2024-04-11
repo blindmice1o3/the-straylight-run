@@ -641,9 +641,16 @@ public class MastrenaFragment extends Fragment {
                         Log.d(TAG, "ACTION_DRAG_STARTED ClipDescription.MIMETYPE_TEXT_PLAIN");
 
                         label = dragEvent.getClipDescription().getLabel().toString();
+                        if (label.equals(LabelPrinter.DRAG_LABEL)) {
+                            // Change background drawable to indicate drop-target.
+                            view.setBackgroundResource(resIdDropTarget);
 
-                        if (label.equals(LabelPrinter.DRAG_LABEL) ||
-                                label.equals(DrinkLabel.DRAG_LABEL)) {
+                            // Return true to indicate that the View can accept the dragged
+                            // data.
+                            return true;
+                        } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
+                            drinkLabel = (DrinkLabel) dragEvent.getLocalState();
+
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
 
@@ -717,16 +724,9 @@ public class MastrenaFragment extends Fragment {
 
                         labelPrinter.removeFromQueue(drinkFirst);
                         labelPrinter.updateDisplay();
-
-                        labelPrinter.setVisibility(View.VISIBLE);
                     } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
-                        drinkLabel = (DrinkLabel) dragEvent.getLocalState();
-
                         drinkLabel.setX(xTouch - (drinkLabel.getWidth() / 2));
                         drinkLabel.setY(yTouch - (drinkLabel.getHeight() / 2));
-
-                        drinkLabel.setVisibility(View.VISIBLE);
-                        drinkLabel = null;
                     }
 
                     // Return true. DragEvent.getResult() returns true.
@@ -739,20 +739,18 @@ public class MastrenaFragment extends Fragment {
                     // Reset the background drawable to normal.
                     view.setBackgroundResource(resIdNormal);
 
+                    if (label.equals(LabelPrinter.DRAG_LABEL)) {
+                        labelPrinter.setVisibility(View.VISIBLE);
+                    } else if (label.equals(DrinkLabel.DRAG_LABEL) && drinkLabel != null) {
+                        drinkLabel.setVisibility(View.VISIBLE);
+                        drinkLabel = null;
+                    }
+
                     // Do a getResult() and displays what happens.
                     if (dragEvent.getResult()) {
                         Toast.makeText(getContext(), "The drop was handled.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "The drop didn't work.", Toast.LENGTH_SHORT).show();
-
-                        if (label.equals(LabelPrinter.DRAG_LABEL)) {
-                            labelPrinter.setVisibility(View.VISIBLE);
-                        } else if (label.equals(DrinkLabel.DRAG_LABEL)) {
-                            if (drinkLabel != null) {
-                                drinkLabel.setVisibility(View.VISIBLE);
-                                drinkLabel = null;
-                            }
-                        }
                     }
 
                     // Return true. The value is ignored.
