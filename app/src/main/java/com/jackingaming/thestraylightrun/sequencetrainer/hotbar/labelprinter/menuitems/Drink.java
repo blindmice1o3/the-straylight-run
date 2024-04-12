@@ -1,10 +1,14 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems;
 
+import android.util.Log;
+
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Drink extends MenuItem {
     public enum Size {TRENTA, VENTI_COLD, VENTI_HOT, GRANDE, TALL, SHORT;}
@@ -13,10 +17,10 @@ public abstract class Drink extends MenuItem {
     private String textForDrinkLabel = null;
 
     ////////////////////////////////////////////////////////
-    public enum Property {SHOT_ON_TOP;}
+    public enum Property {SHOT_ON_TOP, CUP_SIZE_SPECIFIED;}
 
     protected List<DrinkComponent> drinkComponents = new ArrayList<>();
-    protected List<Property> drinkProperties = new ArrayList<>();
+    protected Map<Property, Object> drinkProperties = new HashMap<>();
 
     public Drink(String name) {
         super(name);
@@ -31,13 +35,22 @@ public abstract class Drink extends MenuItem {
         List<DrinkComponent> drinkComponentsExpected = drinkComponents;
         List<DrinkComponent> drinkComponentsActual = cupImageView.getDrinkComponentsAsList();
 
+        Log.e("Drink", "cupImageView's tag: " + cupImageView.getTag());
+
         boolean isSameDrinkComponents = drinkComponentsExpected.equals(drinkComponentsActual);
         boolean isSameDrinkProperties = true;
         if (!drinkProperties.isEmpty()) {
-            for (Drink.Property property : drinkProperties) {
+            for (Drink.Property property : drinkProperties.keySet()) {
                 switch (property) {
                     case SHOT_ON_TOP:
-                        if (!cupImageView.isShotOnTop()) {
+                        if ((Boolean) drinkProperties.get(property) !=
+                                cupImageView.isShotOnTop()) {
+                            isSameDrinkProperties = false;
+                        }
+                        break;
+                    case CUP_SIZE_SPECIFIED:
+                        String cupSizeExpected = (String) drinkProperties.get(property);
+                        if (!cupSizeExpected.equals(cupImageView.getTag())) {
                             isSameDrinkProperties = false;
                         }
                         break;
@@ -72,11 +85,11 @@ public abstract class Drink extends MenuItem {
         this.drinkComponents = drinkComponents;
     }
 
-    public List<Property> getDrinkProperties() {
+    public Map<Property, Object> getDrinkProperties() {
         return drinkProperties;
     }
 
-    public void setDrinkProperties(List<Property> drinkProperties) {
+    public void setDrinkProperties(Map<Property, Object> drinkProperties) {
         this.drinkProperties = drinkProperties;
     }
 }

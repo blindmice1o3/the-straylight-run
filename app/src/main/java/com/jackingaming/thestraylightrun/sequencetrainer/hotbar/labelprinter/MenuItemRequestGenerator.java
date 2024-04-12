@@ -2,9 +2,11 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
@@ -88,6 +90,86 @@ public class MenuItemRequestGenerator {
         } else if (randomCustomization == CUSTOMIZE_BOTH) {
             generateRandomNumberOfSyrupForDrink(drink);
             generateRandomTypeOfMilkForDrink(drink);
+        }
+
+        // 25% chance to specify cup size.
+        int customizeCupSize = random.nextInt(4);
+        if (customizeCupSize == 0) {
+            generateRandomCupSize(drink);
+        }
+    }
+
+    private static void generateRandomCupSize(Drink drink) {
+        Log.e(TAG, "drink size: " + drink.getSize().name());
+        int indexRandom = -1;
+        String cupSizeSpecified = null;
+        switch (drink.getSize()) {
+            case TRENTA:
+                // Intentionally blank.
+                break;
+            case VENTI_COLD:
+                cupSizeSpecified = CupCaddyFragment.TAG_COLD_TRENTA;
+                break;
+            case VENTI_HOT:
+                // Intentionally blank.
+                break;
+            case GRANDE:
+                boolean isIcedDrink = false;
+                for (DrinkComponent drinkComponent : drink.getDrinkComponents()) {
+                    if (drinkComponent instanceof Ice) {
+                        isIcedDrink = true;
+                    }
+                }
+                if (isIcedDrink) {
+                    indexRandom = random.nextInt(2);
+                    if (indexRandom == 0) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_COLD_VENTI;
+                    } else if (indexRandom == 1) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_COLD_TRENTA;
+                    }
+                } else {
+                    cupSizeSpecified = CupCaddyFragment.TAG_HOT_VENTI;
+                }
+                break;
+            case TALL:
+                isIcedDrink = false;
+                for (DrinkComponent drinkComponent : drink.getDrinkComponents()) {
+                    if (drinkComponent instanceof Ice) {
+                        isIcedDrink = true;
+                    }
+                }
+                if (isIcedDrink) {
+                    indexRandom = random.nextInt(2);
+                    if (indexRandom == 0) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_COLD_GRANDE;
+                    } else if (indexRandom == 1) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_COLD_VENTI;
+                    } else if (indexRandom == 2) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_COLD_TRENTA;
+                    }
+                } else {
+                    indexRandom = random.nextInt(1);
+                    if (indexRandom == 0) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_HOT_GRANDE;
+                    } else if (indexRandom == 1) {
+                        cupSizeSpecified = CupCaddyFragment.TAG_HOT_VENTI;
+                    }
+                }
+                break;
+            case SHORT:
+                indexRandom = random.nextInt(3);
+                if (indexRandom == 0) {
+                    cupSizeSpecified = CupCaddyFragment.TAG_HOT_TALL;
+                } else if (indexRandom == 1) {
+                    cupSizeSpecified = CupCaddyFragment.TAG_HOT_GRANDE;
+                } else if (indexRandom == 2) {
+                    cupSizeSpecified = CupCaddyFragment.TAG_HOT_VENTI;
+                }
+                break;
+        }
+
+        if (cupSizeSpecified != null) {
+            drink.getDrinkProperties().put(Drink.Property.CUP_SIZE_SPECIFIED, cupSizeSpecified);
         }
     }
 

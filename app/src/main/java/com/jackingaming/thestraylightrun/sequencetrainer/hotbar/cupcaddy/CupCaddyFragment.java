@@ -29,14 +29,14 @@ public class CupCaddyFragment extends Fragment {
     public static final String TAG = CupCaddyFragment.class.getSimpleName();
     public static final String DRAG_LABEL = CupCaddyFragment.class.getSimpleName();
 
-    public static final String TAG_COLD_TALL = "coldTall";
-    public static final String TAG_COLD_GRANDE = "coldGrande";
-    public static final String TAG_COLD_VENTI = "coldVenti";
-    public static final String TAG_COLD_TRENTA = "coldTrenta";
-    public static final String TAG_HOT_VENTI = "hotVenti";
-    public static final String TAG_HOT_GRANDE = "hotGrande";
-    public static final String TAG_HOT_TALL = "hotTall";
-    public static final String TAG_HOT_SHORT = "hotShort";
+    public static final String TAG_COLD_TALL = "TALL_COLD";
+    public static final String TAG_COLD_GRANDE = "GRANDE_COLD";
+    public static final String TAG_COLD_VENTI = "VENTI_COLD";
+    public static final String TAG_COLD_TRENTA = "TRENTA_COLD";
+    public static final String TAG_HOT_VENTI = "VENTI_HOT";
+    public static final String TAG_HOT_GRANDE = "GRANDE_HOT";
+    public static final String TAG_HOT_TALL = "TALL_HOT";
+    public static final String TAG_HOT_SHORT = "SHORT_HOT";
 
     private CupCaddyViewModel mViewModel;
     private ConstraintLayout constraintLayoutCupCaddy;

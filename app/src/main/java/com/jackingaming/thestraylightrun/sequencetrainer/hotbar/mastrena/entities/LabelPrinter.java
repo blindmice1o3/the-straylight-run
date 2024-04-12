@@ -94,7 +94,7 @@ public class LabelPrinter extends AppCompatTextView {
             StringBuilder sb = new StringBuilder();
             sb.append(formatDateTime + "\n")
                     .append(drinkRandomCustomized.getSize() + "\n")
-                    .append(drinkRandomCustomized.getName() + "\n");
+                    .append(drinkRandomCustomized.getName());
 
             // Append differences between customized and standard to sb.
 
@@ -155,15 +155,22 @@ public class LabelPrinter extends AppCompatTextView {
                     if (counterCustomized == counterStandard) {
                         continue;
                     } else {
-                        sb.append(counterCustomized + " " + type + "\n");
+                        sb.append("\n" + counterCustomized + " " + type);
                     }
                 } else {
-                    sb.append(counterCustomized + " " + type + "\n");
+                    sb.append("\n" + counterCustomized + " " + type);
                 }
             }
             // MILK
             if (typeMilkCustomized != typeMilkStandard) {
-                sb.append(typeMilkCustomized + "\n");
+                sb.append("\n" + typeMilkCustomized);
+            }
+            // Drink.Property.CUP_SIZE_SPECIFIED
+            if (!drinkRandomCustomized.getDrinkProperties().isEmpty()) {
+                if (drinkRandomCustomized.getDrinkProperties().containsKey(Drink.Property.CUP_SIZE_SPECIFIED)) {
+                    String cupStringSpecified = (String) drinkRandomCustomized.getDrinkProperties().get(Drink.Property.CUP_SIZE_SPECIFIED);
+                    sb.append("\n" + "cup: " + cupStringSpecified);
+                }
             }
 
             drinkRandomCustomized.setTextForDrinkLabel(

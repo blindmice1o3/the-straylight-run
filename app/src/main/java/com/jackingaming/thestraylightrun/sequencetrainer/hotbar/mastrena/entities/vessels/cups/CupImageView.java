@@ -297,10 +297,20 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         sbExpected.append("\n");
         sbExpected.append("|| DRINK PROPERTIES ||");
         if (!drink.getDrinkProperties().isEmpty()) {
-            List<Drink.Property> drinkPropertiesExpected = drink.getDrinkProperties();
-            for (Drink.Property drinkProperty : drinkPropertiesExpected) {
-                sbExpected.append("\n");
-                sbExpected.append(drinkProperty.name());
+            Map<Drink.Property, Object> drinkPropertiesExpected = drink.getDrinkProperties();
+            for (Drink.Property drinkProperty : drinkPropertiesExpected.keySet()) {
+                switch (drinkProperty) {
+                    case SHOT_ON_TOP:
+                        sbExpected.append("\n");
+                        sbExpected.append(drinkProperty.name() + ": " + ((Boolean) drinkPropertiesExpected.get(drinkProperty)));
+                        break;
+                    case CUP_SIZE_SPECIFIED:
+                        sbExpected.append("\n");
+                        sbExpected.append(
+                                drinkProperty.name() + ": " + ((String) drinkPropertiesExpected.get(drinkProperty))
+                        );
+                        break;
+                }
             }
         } else {
             sbExpected.append("\n");
@@ -378,6 +388,8 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         sbActual.append("\n");
         sbActual.append("|| DRINK PROPERTIES ||");
         sbActual.append("\n");
+        sbActual.append("cup size: " + getTag());
+        sbActual.append("\n");
         sbActual.append("shotOnTop: " + shotOnTop);
 
         String title = (customizations.isEmpty()) ?
@@ -446,6 +458,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         String size = drinkLabelSplitted[3];
         String name = drinkLabelSplitted[4];
 
+        // TODO: make into its own class with its own specialized layout (RVs).
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setTitle("WINNER WINNER CHICKEN DINNER");
         alertDialogBuilder.setMessage(size + " " + name + " (" + time + " " + amOrPm + ")!");

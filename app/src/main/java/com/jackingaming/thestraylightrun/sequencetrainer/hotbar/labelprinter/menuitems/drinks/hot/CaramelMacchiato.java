@@ -17,7 +17,7 @@ public class CaramelMacchiato extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        drinkProperties.add(Property.SHOT_ON_TOP);
+        drinkProperties.put(Property.SHOT_ON_TOP, true);
     }
 
     @Override
