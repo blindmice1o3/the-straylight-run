@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_label_expected"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@color/deep_purple"
+        android:text="EXPECTED"
+        app:layout_constraintBottom_toTopOf="@id/rv_expected"
+        app:layout_constraintEnd_toStartOf="@id/tv_label_actual"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_label_actual"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:text="ACTUAL"
+        app:layout_constraintBottom_toTopOf="@id/rv_actual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/tv_label_expected"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_expected"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:background="@color/purple_200"
+        app:layout_constraintEnd_toStartOf="@id/rv_actual"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_label_expected"
+        app:layout_constraintVertical_weight="3" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_actual"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:background="@color/lime"
+        app:layout_constraintBottom_toBottomOf="@id/rv_expected"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@id/rv_expected"
+        app:layout_constraintTop_toTopOf="@id/rv_expected"
+        app:layout_constraintVertical_weight="3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

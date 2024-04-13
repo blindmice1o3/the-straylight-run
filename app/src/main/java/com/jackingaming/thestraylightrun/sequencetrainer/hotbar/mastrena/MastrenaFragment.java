@@ -36,6 +36,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.ExpectedVsActualDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillCupColdDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
@@ -47,6 +48,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequestAdapter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -879,7 +881,7 @@ public class MastrenaFragment extends Fragment {
                             // TODO: use dragData to determine instantiation of CupCold/CupHot.
                             // Set ImageView's background and tag according to dragData.
                             int resId = -1;
-                            CupCold.CupColdListener listener = new CupCold.CupColdListener() {
+                            CupCold.CupColdListener cupColdListener = new CupCold.CupColdListener() {
                                 @Override
                                 public void showDialogFillCupCold(CupCold cupCold, String contentToBePoured) {
                                     FillCupColdDialogFragment dialogFragment =
@@ -887,34 +889,52 @@ public class MastrenaFragment extends Fragment {
                                     dialogFragment.show(getChildFragmentManager(), FillCupColdDialogFragment.TAG);
                                 }
                             };
+                            CupImageView.CupImageViewListener cupImageViewListener = new CupImageView.CupImageViewListener() {
+                                @Override
+                                public void showExpectedVsActualDialogFragment(List<DrinkComponent> drinkComponentsExpected, List<DrinkComponent> drinkComponentsActual) {
+                                    ExpectedVsActualDialogFragment dialogFragment =
+                                            ExpectedVsActualDialogFragment.newInstance(
+                                                    drinkComponentsExpected,
+                                                    drinkComponentsActual);
+                                    dialogFragment.show(getChildFragmentManager(), ExpectedVsActualDialogFragment.TAG);
+                                }
+                            };
                             if (dragData.equals(CupCaddyFragment.TAG_COLD_TALL)) {
                                 resId = R.drawable.cold_drinksize_tall;
                                 ivToBeAdded = new CupCold(getContext());
-                                ((CupCold) ivToBeAdded).setListener(listener);
+                                ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
+                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_GRANDE)) {
                                 resId = R.drawable.cold_drinksize_grande;
                                 ivToBeAdded = new CupCold(getContext());
-                                ((CupCold) ivToBeAdded).setListener(listener);
+                                ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
+                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_VENTI)) {
                                 resId = R.drawable.cold_drinksize_venti;
                                 ivToBeAdded = new CupCold(getContext());
-                                ((CupCold) ivToBeAdded).setListener(listener);
+                                ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
+                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
                                 resId = R.drawable.cold_drinksize_trenta;
                                 ivToBeAdded = new CupCold(getContext());
-                                ((CupCold) ivToBeAdded).setListener(listener);
+                                ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
+                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_VENTI)) {
                                 resId = R.drawable.hot_drinksize_venti;
                                 ivToBeAdded = new CupHot(getContext());
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_GRANDE)) {
                                 resId = R.drawable.hot_drinksize_grande;
                                 ivToBeAdded = new CupHot(getContext());
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_TALL)) {
                                 resId = R.drawable.hot_drinksize_tall;
                                 ivToBeAdded = new CupHot(getContext());
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
                                 resId = R.drawable.hot_drinksize_short;
                                 ivToBeAdded = new CupHot(getContext());
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
                             } else {
                                 Log.e(TAG, "else-clause (selecting image resource for ivToBeAdded).");
                             }

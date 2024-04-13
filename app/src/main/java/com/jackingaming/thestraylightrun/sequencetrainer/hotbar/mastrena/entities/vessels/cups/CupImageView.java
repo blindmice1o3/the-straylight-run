@@ -39,6 +39,13 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         implements LiquidContainable, Collideable, Serializable {
     public static final String TAG = CupImageView.class.getSimpleName();
 
+    public interface CupImageViewListener {
+        void showExpectedVsActualDialogFragment(List<DrinkComponent> drinkComponentsExpected,
+                                                List<DrinkComponent> drinkComponentsActual);
+    }
+
+    private CupImageViewListener listener;
+
     protected Map<DrinkOptions, List<DrinkComponent>> content = new HashMap<>();
 
     protected WhippedCream whippedCream;
@@ -223,200 +230,202 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         }
 
         Drink drink = drinkLabel.getDrink();
-        // EXPECTED
-        StringBuilder sbExpected = new StringBuilder();
-        sbExpected.append("--- DRINK COMPONENTS ---");
-
+//        // EXPECTED
+//        StringBuilder sbExpected = new StringBuilder();
+//        sbExpected.append("--- DRINK COMPONENTS ---");
+//
         List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
-
-        // SYRUP
-        Map<Syrup, Integer> syrupsMapExpected = new HashMap<>();
-        // ESPRESSO SHOT
-        Map<EspressoShot, Integer> espressoShotsMapExpected = new HashMap<>();
-        for (DrinkComponent drinkComponentExpected : drinkComponentsExpected) {
-            if (drinkComponentExpected instanceof Syrup) {
-                Syrup syrup = (Syrup) drinkComponentExpected;
-                if (syrupsMapExpected.containsKey(syrup)) {
-                    Log.e(TAG, "INCREMENT SYRUP EXPECTED");
-                    Integer counterSyrup = syrupsMapExpected.get(syrup);
-                    counterSyrup++;
-                    syrupsMapExpected.put(syrup, counterSyrup);
-                } else {
-                    Log.e(TAG, "START SYRUP EXPECTED AT 1");
-                    syrupsMapExpected.put(syrup, 1);
-                }
-            } else if (drinkComponentExpected instanceof EspressoShot) {
-                EspressoShot espressoShot = (EspressoShot) drinkComponentExpected;
-                if (espressoShotsMapExpected.containsKey(espressoShot)) {
-                    Log.e(TAG, "INCREMENT ESPRESSO SHOT EXPECTED");
-                    Integer counterEspressoShot = espressoShotsMapExpected.get(espressoShot);
-                    counterEspressoShot++;
-                    espressoShotsMapExpected.put(espressoShot, counterEspressoShot);
-                } else {
-                    Log.e(TAG, "START ESPRESSO SHOT EXPECTED AT 1");
-                    espressoShotsMapExpected.put(espressoShot, 1);
-                }
-            }
-        }
-
-        Map<Syrup, Boolean> isFirstTimeSyrupExpected = new HashMap<>();
-        Map<EspressoShot, Boolean> isFirstTimeEspressoShotExpected = new HashMap<>();
-        for (DrinkComponent drinkComponentExpectedFirstTime : drinkComponentsExpected) {
-            if (drinkComponentExpectedFirstTime instanceof Syrup) {
-                Syrup syrup = (Syrup) drinkComponentExpectedFirstTime;
-
-                // first occurrence of this Syrup
-                if (!isFirstTimeSyrupExpected.containsKey(syrup)) {
-                    isFirstTimeSyrupExpected.put(syrup, false);
-
-                    sbExpected.append("\n");
-                    sbExpected.append(
-                            syrupsMapExpected.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
-                    );
-                } else {
-                    continue;
-                }
-            } else if (drinkComponentExpectedFirstTime instanceof EspressoShot) {
-                EspressoShot espressoShot = (EspressoShot) drinkComponentExpectedFirstTime;
-
-                // first occurrence of this EspressoShot
-                if (!isFirstTimeEspressoShotExpected.containsKey(espressoShot)) {
-                    isFirstTimeEspressoShotExpected.put(espressoShot, false);
-
-                    sbExpected.append("\n");
-                    sbExpected.append(
-                            espressoShotsMapExpected.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
-                    );
-                }
-            } else {
-                sbExpected.append("\n");
-                sbExpected.append(drinkComponentExpectedFirstTime.toString());
-            }
-        }
-        sbExpected.append("\n");
-        sbExpected.append("\n");
-        sbExpected.append("|| DRINK PROPERTIES ||");
-        if (!drink.getDrinkProperties().isEmpty()) {
-            Map<Drink.Property, Object> drinkPropertiesExpected = drink.getDrinkProperties();
-            for (Drink.Property drinkProperty : drinkPropertiesExpected.keySet()) {
-                switch (drinkProperty) {
-                    case SHOT_ON_TOP:
-                        sbExpected.append("\n");
-                        sbExpected.append(drinkProperty.name() + ": " + ((Boolean) drinkPropertiesExpected.get(drinkProperty)));
-                        break;
-                    case CUP_SIZE_SPECIFIED:
-                        sbExpected.append("\n");
-                        sbExpected.append(
-                                drinkProperty.name() + ": " + ((String) drinkPropertiesExpected.get(drinkProperty))
-                        );
-                        break;
-                }
-            }
-        } else {
-            sbExpected.append("\n");
-            sbExpected.append("none");
-        }
-        // ACTUAL
-        StringBuilder sbActual = new StringBuilder();
-        sbActual.append("--- DRINK COMPONENTS ---");
-
+//
+//        // SYRUP
+//        Map<Syrup, Integer> syrupsMapExpected = new HashMap<>();
+//        // ESPRESSO SHOT
+//        Map<EspressoShot, Integer> espressoShotsMapExpected = new HashMap<>();
+//        for (DrinkComponent drinkComponentExpected : drinkComponentsExpected) {
+//            if (drinkComponentExpected instanceof Syrup) {
+//                Syrup syrup = (Syrup) drinkComponentExpected;
+//                if (syrupsMapExpected.containsKey(syrup)) {
+//                    Log.e(TAG, "INCREMENT SYRUP EXPECTED");
+//                    Integer counterSyrup = syrupsMapExpected.get(syrup);
+//                    counterSyrup++;
+//                    syrupsMapExpected.put(syrup, counterSyrup);
+//                } else {
+//                    Log.e(TAG, "START SYRUP EXPECTED AT 1");
+//                    syrupsMapExpected.put(syrup, 1);
+//                }
+//            } else if (drinkComponentExpected instanceof EspressoShot) {
+//                EspressoShot espressoShot = (EspressoShot) drinkComponentExpected;
+//                if (espressoShotsMapExpected.containsKey(espressoShot)) {
+//                    Log.e(TAG, "INCREMENT ESPRESSO SHOT EXPECTED");
+//                    Integer counterEspressoShot = espressoShotsMapExpected.get(espressoShot);
+//                    counterEspressoShot++;
+//                    espressoShotsMapExpected.put(espressoShot, counterEspressoShot);
+//                } else {
+//                    Log.e(TAG, "START ESPRESSO SHOT EXPECTED AT 1");
+//                    espressoShotsMapExpected.put(espressoShot, 1);
+//                }
+//            }
+//        }
+//
+//        Map<Syrup, Boolean> isFirstTimeSyrupExpected = new HashMap<>();
+//        Map<EspressoShot, Boolean> isFirstTimeEspressoShotExpected = new HashMap<>();
+//        for (DrinkComponent drinkComponentExpectedFirstTime : drinkComponentsExpected) {
+//            if (drinkComponentExpectedFirstTime instanceof Syrup) {
+//                Syrup syrup = (Syrup) drinkComponentExpectedFirstTime;
+//
+//                // first occurrence of this Syrup
+//                if (!isFirstTimeSyrupExpected.containsKey(syrup)) {
+//                    isFirstTimeSyrupExpected.put(syrup, false);
+//
+//                    sbExpected.append("\n");
+//                    sbExpected.append(
+//                            syrupsMapExpected.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
+//                    );
+//                } else {
+//                    continue;
+//                }
+//            } else if (drinkComponentExpectedFirstTime instanceof EspressoShot) {
+//                EspressoShot espressoShot = (EspressoShot) drinkComponentExpectedFirstTime;
+//
+//                // first occurrence of this EspressoShot
+//                if (!isFirstTimeEspressoShotExpected.containsKey(espressoShot)) {
+//                    isFirstTimeEspressoShotExpected.put(espressoShot, false);
+//
+//                    sbExpected.append("\n");
+//                    sbExpected.append(
+//                            espressoShotsMapExpected.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
+//                    );
+//                }
+//            } else {
+//                sbExpected.append("\n");
+//                sbExpected.append(drinkComponentExpectedFirstTime.toString());
+//            }
+//        }
+//        sbExpected.append("\n");
+//        sbExpected.append("\n");
+//        sbExpected.append("|| DRINK PROPERTIES ||");
+//        if (!drink.getDrinkProperties().isEmpty()) {
+//            Map<Drink.Property, Object> drinkPropertiesExpected = drink.getDrinkProperties();
+//            for (Drink.Property drinkProperty : drinkPropertiesExpected.keySet()) {
+//                switch (drinkProperty) {
+//                    case SHOT_ON_TOP:
+//                        sbExpected.append("\n");
+//                        sbExpected.append(drinkProperty.name() + ": " + ((Boolean) drinkPropertiesExpected.get(drinkProperty)));
+//                        break;
+//                    case CUP_SIZE_SPECIFIED:
+//                        sbExpected.append("\n");
+//                        sbExpected.append(
+//                                drinkProperty.name() + ": " + ((String) drinkPropertiesExpected.get(drinkProperty))
+//                        );
+//                        break;
+//                }
+//            }
+//        } else {
+//            sbExpected.append("\n");
+//            sbExpected.append("none");
+//        }
+//        // ACTUAL
+//        StringBuilder sbActual = new StringBuilder();
+//        sbActual.append("--- DRINK COMPONENTS ---");
+//
         List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
+//
+//        // SYRUP
+//        Map<Syrup, Integer> syrupsMapActual = new HashMap<>();
+//        // ESPRESSO SHOT
+//        Map<EspressoShot, Integer> espressoShotsMapActual = new HashMap<>();
+//        for (DrinkComponent drinkComponentActual : drinkComponentsActual) {
+//            if (drinkComponentActual instanceof Syrup) {
+//                Syrup syrup = (Syrup) drinkComponentActual;
+//                if (syrupsMapActual.containsKey(syrup)) {
+//                    Integer counterSyrup = syrupsMapActual.get(syrup);
+//                    counterSyrup++;
+//                    syrupsMapActual.put(syrup, counterSyrup);
+//                } else {
+//                    syrupsMapActual.put(syrup, 1);
+//                }
+//            } else if (drinkComponentActual instanceof EspressoShot) {
+//                EspressoShot espressoShot = (EspressoShot) drinkComponentActual;
+//                if (espressoShotsMapActual.containsKey(espressoShot)) {
+//                    Integer counterEspressoShot = espressoShotsMapActual.get(espressoShot);
+//                    counterEspressoShot++;
+//                    espressoShotsMapActual.put(espressoShot, counterEspressoShot);
+//                } else {
+//                    espressoShotsMapActual.put(espressoShot, 1);
+//                }
+//            }
+//        }
+//
+//        Map<Syrup, Boolean> isFirstTimeSyrupActual = new HashMap<>();
+//        Map<EspressoShot, Boolean> isFirstTimeEspressoShotActual = new HashMap<>();
+//        for (DrinkComponent drinkComponentActualFirstTime : drinkComponentsActual) {
+//            if (drinkComponentActualFirstTime instanceof Syrup) {
+//                Syrup syrup = (Syrup) drinkComponentActualFirstTime;
+//
+//                // first occurrence of this Syrup
+//                if (!isFirstTimeSyrupActual.containsKey(syrup)) {
+//                    isFirstTimeSyrupActual.put(syrup, false);
+//
+//                    sbActual.append("\n");
+//                    sbActual.append(
+//                            syrupsMapActual.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
+//                    );
+//                } else {
+//                    continue;
+//                }
+//            } else if (drinkComponentActualFirstTime instanceof EspressoShot) {
+//                EspressoShot espressoShot = (EspressoShot) drinkComponentActualFirstTime;
+//
+//                // first occurrence of this EspressoShot
+//                if (!isFirstTimeEspressoShotActual.containsKey(espressoShot)) {
+//                    isFirstTimeEspressoShotActual.put(espressoShot, false);
+//
+//                    sbActual.append("\n");
+//                    sbActual.append(
+//                            espressoShotsMapActual.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
+//                    );
+//                } else {
+//                    continue;
+//                }
+//            } else {
+//                sbActual.append("\n");
+//                sbActual.append(drinkComponentActualFirstTime.toString());
+//            }
+//        }
+//        sbActual.append("\n");
+//        sbActual.append("\n");
+//        sbActual.append("|| DRINK PROPERTIES ||");
+//        sbActual.append("\n");
+//        sbActual.append("cup size: " + getTag());
+//        sbActual.append("\n");
+//        sbActual.append("shotOnTop: " + shotOnTop);
+//
+//        String title = (customizations.isEmpty()) ?
+//                size + " | " + name + " (standard)" :
+//                size + " | " + name + " (customized)";
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+//        alertDialogBuilder.setTitle(title);
+//        alertDialogBuilder.setMessage(
+//                String.format("@@@ EXPECTED @@@ \n%s\n\n\n@@@ ACTUAL @@@ \n%s",
+//                        sbExpected.toString(),
+//                        sbActual.toString())
+//        );
+//        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // on success
+//                dialog.dismiss();
+//            }
+//        });
+//        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        alertDialogBuilder.setCancelable(false);
+//        alertDialogBuilder.create().show();
 
-        // SYRUP
-        Map<Syrup, Integer> syrupsMapActual = new HashMap<>();
-        // ESPRESSO SHOT
-        Map<EspressoShot, Integer> espressoShotsMapActual = new HashMap<>();
-        for (DrinkComponent drinkComponentActual : drinkComponentsActual) {
-            if (drinkComponentActual instanceof Syrup) {
-                Syrup syrup = (Syrup) drinkComponentActual;
-                if (syrupsMapActual.containsKey(syrup)) {
-                    Integer counterSyrup = syrupsMapActual.get(syrup);
-                    counterSyrup++;
-                    syrupsMapActual.put(syrup, counterSyrup);
-                } else {
-                    syrupsMapActual.put(syrup, 1);
-                }
-            } else if (drinkComponentActual instanceof EspressoShot) {
-                EspressoShot espressoShot = (EspressoShot) drinkComponentActual;
-                if (espressoShotsMapActual.containsKey(espressoShot)) {
-                    Integer counterEspressoShot = espressoShotsMapActual.get(espressoShot);
-                    counterEspressoShot++;
-                    espressoShotsMapActual.put(espressoShot, counterEspressoShot);
-                } else {
-                    espressoShotsMapActual.put(espressoShot, 1);
-                }
-            }
-        }
-
-        Map<Syrup, Boolean> isFirstTimeSyrupActual = new HashMap<>();
-        Map<EspressoShot, Boolean> isFirstTimeEspressoShotActual = new HashMap<>();
-        for (DrinkComponent drinkComponentActualFirstTime : drinkComponentsActual) {
-            if (drinkComponentActualFirstTime instanceof Syrup) {
-                Syrup syrup = (Syrup) drinkComponentActualFirstTime;
-
-                // first occurrence of this Syrup
-                if (!isFirstTimeSyrupActual.containsKey(syrup)) {
-                    isFirstTimeSyrupActual.put(syrup, false);
-
-                    sbActual.append("\n");
-                    sbActual.append(
-                            syrupsMapActual.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
-                    );
-                } else {
-                    continue;
-                }
-            } else if (drinkComponentActualFirstTime instanceof EspressoShot) {
-                EspressoShot espressoShot = (EspressoShot) drinkComponentActualFirstTime;
-
-                // first occurrence of this EspressoShot
-                if (!isFirstTimeEspressoShotActual.containsKey(espressoShot)) {
-                    isFirstTimeEspressoShotActual.put(espressoShot, false);
-
-                    sbActual.append("\n");
-                    sbActual.append(
-                            espressoShotsMapActual.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
-                    );
-                } else {
-                    continue;
-                }
-            } else {
-                sbActual.append("\n");
-                sbActual.append(drinkComponentActualFirstTime.toString());
-            }
-        }
-        sbActual.append("\n");
-        sbActual.append("\n");
-        sbActual.append("|| DRINK PROPERTIES ||");
-        sbActual.append("\n");
-        sbActual.append("cup size: " + getTag());
-        sbActual.append("\n");
-        sbActual.append("shotOnTop: " + shotOnTop);
-
-        String title = (customizations.isEmpty()) ?
-                size + " | " + name + " (standard)" :
-                size + " | " + name + " (customized)";
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setTitle(title);
-        alertDialogBuilder.setMessage(
-                String.format("@@@ EXPECTED @@@ \n%s\n\n\n@@@ ACTUAL @@@ \n%s",
-                        sbExpected.toString(),
-                        sbActual.toString())
-        );
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // on success
-                dialog.dismiss();
-            }
-        });
-        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialogBuilder.setCancelable(false);
-        alertDialogBuilder.create().show();
+        listener.showExpectedVsActualDialogFragment(drinkComponentsExpected, drinkComponentsActual);
     }
 
     public List<DrinkComponent> getDrinkComponentsAsList() {
@@ -487,6 +496,14 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
 
         Drink drink = drinkLabel.getDrink();
         return drink.validate(this);
+    }
+
+    public CupImageViewListener getCupImageViewListener() {
+        return listener;
+    }
+
+    public void setCupImageViewListener(CupImageViewListener listener) {
+        this.listener = listener;
     }
 
     public WhippedCream getWhippedCream() {

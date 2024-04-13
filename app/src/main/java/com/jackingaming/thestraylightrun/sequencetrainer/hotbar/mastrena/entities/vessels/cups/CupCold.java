@@ -257,11 +257,11 @@ public class CupCold extends CupImageView {
         return false;
     }
 
-    public CupColdListener getListener() {
+    public CupColdListener getCupColdListener() {
         return listener;
     }
 
-    public void setListener(CupColdListener listener) {
+    public void setCupColdListener(CupColdListener listener) {
         this.listener = listener;
     }
 
