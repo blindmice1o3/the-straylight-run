@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/tv_label_expected"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:background="@color/deep_purple"
         android:text="EXPECTED"
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/tv_label_actual"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:background="@color/green"
         android:text="ACTUAL"
@@ -32,7 +32,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_expected"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="0dp"
         android:background="@color/purple_200"
         app:layout_constraintEnd_toStartOf="@id/rv_actual"
@@ -43,7 +43,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_actual"
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="0dp"
         android:background="@color/lime"
         app:layout_constraintBottom_toBottomOf="@id/rv_expected"

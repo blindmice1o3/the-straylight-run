@@ -79,16 +79,88 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
         Map<Syrup, Boolean> isFirstTimeSyrup = new HashMap<>();
         Map<EspressoShot, Boolean> isFirstTimeEspressoShot = new HashMap<>();
         for (DrinkComponent drinkComponentFirstTime : drinkComponents) {
-            if (drinkComponentFirstTime instanceof Syrup) {
+            if (drinkComponentFirstTime instanceof Ice) {
+                Ice ice = (Ice) drinkComponentFirstTime;
+
+                boolean isShaken = ice.isShaken();
+                boolean isBlended = ice.isBlended();
+                String icePrettyPrint = "ice \n(shaken:" + isShaken + ") " +
+                        "(blended:" + isBlended + ")";
+
+                drinkComponentsPrettyPrint.add(icePrettyPrint);
+            } else if (drinkComponentFirstTime instanceof Cinnamon) {
+                Cinnamon cinnamon = (Cinnamon) drinkComponentFirstTime;
+
+                boolean isShaken = cinnamon.isShaken();
+                boolean isBlended = cinnamon.isBlended();
+                String cinnamonPrettyPrint = "cinnamon \n(shaken:" + isShaken + ") " +
+                        "(blended:" + isBlended + ")";
+
+                drinkComponentsPrettyPrint.add(cinnamonPrettyPrint);
+            } else if (drinkComponentFirstTime instanceof Milk) {
+                Milk milk = (Milk) drinkComponentFirstTime;
+
+                Milk.Type type = milk.getType();
+                int amount = milk.getAmount();
+                int temperature = milk.getTemperature();
+                int froth = milk.getTimeFrothed();
+
+                String textType = null;
+                switch (type) {
+                    case TWO_PERCENT:
+                        textType = "2%";
+                        break;
+                    case WHOLE:
+                        textType = "WHOLE";
+                        break;
+                    case OAT:
+                        textType = "OAT";
+                        break;
+                    case COCONUT:
+                        textType = "COCONUT";
+                        break;
+                    case ALMOND:
+                        textType = "ALMOND";
+                        break;
+                    case SOY:
+                        textType = "SOY";
+                        break;
+                }
+                String textClass = "milk";
+                String textAmount = Integer.toString(amount);
+                String textTemperature = Integer.toString(temperature);
+                String textFroth = Integer.toString(froth);
+
+                String milkPrettyPrint = textType + " " +
+                        textClass + " (amount:" +
+                        textAmount + ") \n(temperature:" +
+                        textTemperature + ") (froth:" +
+                        textFroth + ")";
+
+                drinkComponentsPrettyPrint.add(milkPrettyPrint);
+            } else if (drinkComponentFirstTime instanceof Syrup) {
                 Syrup syrup = (Syrup) drinkComponentFirstTime;
 
                 // first occurrence of this Syrup
                 if (!isFirstTimeSyrup.containsKey(syrup)) {
                     isFirstTimeSyrup.put(syrup, false);
 
-                    drinkComponentsPrettyPrint.add(
-                            syrupsMap.get(syrup) + " " + syrup.getType().name() + " (shaken:" + syrup.isShaken() + ") (blended:" + syrup.isBlended() + ")"
-                    );
+                    int numberOfPumps = syrupsMap.get(syrup);
+                    Syrup.Type type = syrup.getType();
+                    boolean isShaken = syrup.isShaken();
+                    boolean isBlended = syrup.isBlended();
+
+                    String textNumberOfPumps = Integer.toString(numberOfPumps);
+                    String textClass = (numberOfPumps == 1) ? "pump" : "pumps";
+                    String textType = type.name();
+
+                    String espressoShotPrettyPrint = textNumberOfPumps + " " +
+                            textClass + " " +
+                            textType + " " +
+                            "\n(shaken:" + isShaken + ") " +
+                            "(blended:" + isBlended + ")";
+
+                    drinkComponentsPrettyPrint.add(espressoShotPrettyPrint);
                 } else {
                     continue;
                 }
@@ -99,9 +171,60 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
                 if (!isFirstTimeEspressoShot.containsKey(espressoShot)) {
                     isFirstTimeEspressoShot.put(espressoShot, false);
 
-                    drinkComponentsPrettyPrint.add(
-                            espressoShotsMap.get(espressoShot) + " " + espressoShot.getType().name() + "(amountOfWater:" + espressoShot.getAmountOfWater().name() + ") (amountOfBean:" + espressoShot.getAmountOfBean().name() + ") (shaken:" + espressoShot.isShaken() + ") (blended:" + espressoShot.isBlended() + ")"
-                    );
+                    int numberOfShots = espressoShotsMap.get(espressoShot);
+                    EspressoShot.Type type = espressoShot.getType();
+                    EspressoShot.AmountOfWater amountOfWater = espressoShot.getAmountOfWater();
+                    EspressoShot.AmountOfBean amountOfBean = espressoShot.getAmountOfBean();
+                    boolean isShaken = espressoShot.isShaken();
+                    boolean isBlended = espressoShot.isBlended();
+
+                    String textNumberOfShots = Integer.toString(numberOfShots);
+                    String textClass = (numberOfShots == 1) ? "shot" : "shots";
+                    String textType = null;
+                    switch (type) {
+                        case BLONDE:
+                            textType = "BLONDE";
+                            break;
+                        case SIGNATURE:
+                            textType = "      ";
+                            break;
+                        case DECAF:
+                            textType = "DECAF";
+                            break;
+                    }
+                    String textAmountOfWater = null;
+                    switch (amountOfWater) {
+                        case RISTRETTO:
+                            textAmountOfWater = "RIST";
+                            break;
+                        case STANDARD:
+                            textAmountOfWater = "    ";
+                            break;
+                        case LONG:
+                            textAmountOfWater = "LONG";
+                            break;
+                    }
+                    String textAmountOfBean = null;
+                    switch (amountOfBean) {
+                        case HALF_DECAF:
+                            textAmountOfBean = "1/2 DECAF";
+                            break;
+                        case STANDARD:
+                            textAmountOfBean = "    ";
+                            break;
+                        case UPDOSED:
+                            textAmountOfBean = "UPDOSED";
+                            break;
+                    }
+                    String espressoShotPrettyPrint = textNumberOfShots + " " +
+                            textClass + " " +
+                            textType + " " +
+                            textAmountOfWater + " " +
+                            textAmountOfBean + " " +
+                            "\n(shaken:" + isShaken + ") " +
+                            "(blended:" + isBlended + ")";
+
+                    drinkComponentsPrettyPrint.add(espressoShotPrettyPrint);
                 }
             } else {
                 drinkComponentsPrettyPrint.add(
