@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Drink extends MenuItem {
+    public static final String TAG = Drink.class.getSimpleName();
+
     public enum Size {TRENTA, VENTI_COLD, VENTI_HOT, GRANDE, TALL, SHORT;}
 
     protected Size size = Size.GRANDE;
@@ -53,6 +55,9 @@ public abstract class Drink extends MenuItem {
                         if (!cupSizeExpected.equals(cupImageView.getTag())) {
                             isSameDrinkProperties = false;
                         }
+                        break;
+                    default:
+                        Log.e(TAG, "Drink.validate(), switch(Drink.Property) default.");
                         break;
                 }
             }

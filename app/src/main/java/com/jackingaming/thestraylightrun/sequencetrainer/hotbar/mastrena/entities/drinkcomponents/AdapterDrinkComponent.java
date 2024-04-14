@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +21,22 @@ import java.util.Map;
 public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComponent.ViewHolderDrinkComponent> {
     public static final String TAG = AdapterDrinkComponent.class.getSimpleName();
 
+    private Drink drink;
+    private CupImageView cupImageView;
+
     private List<DrinkComponent> drinkComponents;
     private List<String> drinkComponentsPrettyPrint;
 
-    public AdapterDrinkComponent(List<DrinkComponent> drinkComponents) {
-        this.drinkComponents = drinkComponents;
+    public AdapterDrinkComponent(Drink drink, CupImageView cupImageView) {
+        this.drink = drink;
+        this.cupImageView = cupImageView;
+
+        if (drink != null) {
+            this.drinkComponents = drink.getDrinkComponents();
+        } else if (cupImageView != null) {
+            this.drinkComponents = cupImageView.getDrinkComponentsAsList();
+        }
+
         this.drinkComponentsPrettyPrint = convertToPrettyPrint(drinkComponents);
     }
 
@@ -51,6 +65,8 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
 
     private List<String> convertToPrettyPrint(List<DrinkComponent> drinkComponents) {
         List<String> drinkComponentsPrettyPrint = new ArrayList<>();
+        // DRINK COMPONENTS
+        drinkComponentsPrettyPrint.add("----- DRINK COMPONENTS -----");
 
         Map<Syrup, Integer> syrupsMap = new HashMap<>();
         Map<EspressoShot, Integer> espressoShotsMap = new HashMap<>();
@@ -123,6 +139,40 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
                         drinkComponentFirstTime.toString()
                 );
             }
+        }
+
+        // DRINK PROPERTIES
+        drinkComponentsPrettyPrint.add("@@ DRINK PROPERTIES @@");
+        if (drink != null) {
+            Map<Drink.Property, Object> drinkProperties = drink.getDrinkProperties();
+            if (!drinkProperties.isEmpty()) {
+                for (Drink.Property key : drinkProperties.keySet()) {
+                    Object object = drinkProperties.get(key);
+                    switch (key) {
+                        case SHOT_ON_TOP:
+                            Boolean shotOnTop = (Boolean) object;
+                            String textShotOnTop = "(shotOnTop:" + shotOnTop + ")";
+                            drinkComponentsPrettyPrint.add(textShotOnTop);
+                            break;
+                        case CUP_SIZE_SPECIFIED:
+                            String cupSizeSpecified = (String) object;
+                            String textCupSizeSpecified = "(cupSizeSpecified:" + cupSizeSpecified + ")";
+                            drinkComponentsPrettyPrint.add(textCupSizeSpecified);
+                            break;
+                        default:
+                            Log.e(TAG, "AdapterDrinkComponent.convertToPrettyPrint(), switch(Drink.Property) default.");
+                            break;
+                    }
+                }
+            }
+        } else if (cupImageView != null) {
+            boolean shotOnTop = cupImageView.isShotOnTop();
+            String textShotOnTop = "(shotOnTop:" + shotOnTop + ")";
+            drinkComponentsPrettyPrint.add(textShotOnTop);
+
+            String cupSize = (String) cupImageView.getTag();
+            String textCupSize = "(cupSize:" + cupSize + ")";
+            drinkComponentsPrettyPrint.add(textCupSize);
         }
 
         return drinkComponentsPrettyPrint;

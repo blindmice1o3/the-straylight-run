@@ -48,7 +48,6 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SteamingWand;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequest;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.beans.EspressoShotRequestAdapter;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -891,11 +890,9 @@ public class MastrenaFragment extends Fragment {
                             };
                             CupImageView.CupImageViewListener cupImageViewListener = new CupImageView.CupImageViewListener() {
                                 @Override
-                                public void showExpectedVsActualDialogFragment(List<DrinkComponent> drinkComponentsExpected, List<DrinkComponent> drinkComponentsActual) {
+                                public void showExpectedVsActualDialogFragment(Drink drink, CupImageView cupImageView) {
                                     ExpectedVsActualDialogFragment dialogFragment =
-                                            ExpectedVsActualDialogFragment.newInstance(
-                                                    drinkComponentsExpected,
-                                                    drinkComponentsActual);
+                                            ExpectedVsActualDialogFragment.newInstance(drink, cupImageView);
                                     dialogFragment.show(getChildFragmentManager(), ExpectedVsActualDialogFragment.TAG);
                                 }
                             };

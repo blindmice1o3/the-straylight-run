@@ -40,8 +40,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
     public static final String TAG = CupImageView.class.getSimpleName();
 
     public interface CupImageViewListener {
-        void showExpectedVsActualDialogFragment(List<DrinkComponent> drinkComponentsExpected,
-                                                List<DrinkComponent> drinkComponentsActual);
+        void showExpectedVsActualDialogFragment(Drink drink, CupImageView cupImageView);
     }
 
     private CupImageViewListener listener;
@@ -214,10 +213,7 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         /////////////////////////////////////////////////////////////////////////////////
 
         Drink drink = drinkLabel.getDrink();
-        List<DrinkComponent> drinkComponentsExpected = drink.getDrinkComponents();
-        List<DrinkComponent> drinkComponentsActual = getDrinkComponentsAsList();
-
-        listener.showExpectedVsActualDialogFragment(drinkComponentsExpected, drinkComponentsActual);
+        listener.showExpectedVsActualDialogFragment(drink, this);
     }
 
     public List<DrinkComponent> getDrinkComponentsAsList() {

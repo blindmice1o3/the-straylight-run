@@ -15,29 +15,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.AdapterDrinkComponent;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponentListHolder;
-
-import java.util.List;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 public class ExpectedVsActualDialogFragment extends DialogFragment {
     public static final String TAG = ExpectedVsActualDialogFragment.class.getSimpleName();
-    public static final String ARG_EXPECTED = "expected";
-    public static final String ARG_ACTUAL = "actual";
+    public static final String ARG_DRINK = "drink";
+    public static final String ARG_CUP_IMAGE_VIEW = "cupImageView";
 
     private RecyclerView rvExpected, rvActual;
     private AdapterDrinkComponent adapterExpected, adapterActual;
 
-    public static ExpectedVsActualDialogFragment newInstance(List<DrinkComponent> drinkComponentsExpected, List<DrinkComponent> drinkComponentsActual) {
+    public static ExpectedVsActualDialogFragment newInstance(Drink drink, CupImageView cupImageView) {
         ExpectedVsActualDialogFragment fragment = new ExpectedVsActualDialogFragment();
 
-        DrinkComponentListHolder listHolderExpected = new DrinkComponentListHolder(drinkComponentsExpected);
-        DrinkComponentListHolder listHolderActual = new DrinkComponentListHolder(drinkComponentsActual);
-
         Bundle args = new Bundle();
-        args.putSerializable(ARG_EXPECTED, listHolderExpected);
-        args.putSerializable(ARG_ACTUAL, listHolderActual);
+        args.putSerializable(ARG_DRINK, drink);
+        args.putSerializable(ARG_CUP_IMAGE_VIEW, cupImageView);
         fragment.setArguments(args);
 
         return fragment;
@@ -47,14 +42,14 @@ public class ExpectedVsActualDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DrinkComponentListHolder listHolderExpected = (DrinkComponentListHolder) getArguments().getSerializable(ARG_EXPECTED);
-        DrinkComponentListHolder listHolderActual = (DrinkComponentListHolder) getArguments().getSerializable(ARG_ACTUAL);
+        Drink drink = (Drink) getArguments().getSerializable(ARG_DRINK);
+        CupImageView cupImageView = (CupImageView) getArguments().getSerializable(ARG_CUP_IMAGE_VIEW);
 
         adapterExpected = new AdapterDrinkComponent(
-                listHolderExpected.getDrinkComponents()
+                drink, null
         );
         adapterActual = new AdapterDrinkComponent(
-                listHolderActual.getDrinkComponents()
+                null, cupImageView
         );
     }
 
