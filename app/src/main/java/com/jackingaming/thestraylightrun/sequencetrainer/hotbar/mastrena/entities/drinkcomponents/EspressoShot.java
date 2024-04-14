@@ -92,9 +92,16 @@ public class EspressoShot extends DrinkComponent {
                 break;
         }
 
-        String espressoShotPrettyPrint = textType + "\n" +
-                "(amountOfWater:" + textAmountOfWater + ") (amountOfBean:" + textAmountOfBean + ")\n" +
-                "(shaken:" + shaken + ") (blended:" + blended + ")";
+        String espressoShotPrettyPrint = textType;
+        if (amountOfWater != AmountOfWater.STANDARD &&
+                amountOfBean != AmountOfBean.STANDARD) {
+            espressoShotPrettyPrint += "\n(amountOfWater:" + textAmountOfWater + ") (amountOfBean:" + textAmountOfBean + ")";
+        } else if (amountOfWater != AmountOfWater.STANDARD) {
+            espressoShotPrettyPrint += "\n(amountOfWater:" + textAmountOfWater + ")";
+        } else if (amountOfBean != AmountOfBean.STANDARD) {
+            espressoShotPrettyPrint += "\n(amountOfBean:" + textAmountOfBean + ")";
+        }
+        espressoShotPrettyPrint += "\n(shaken:" + shaken + ") (blended:" + blended + ")";
 
         return espressoShotPrettyPrint;
     }
