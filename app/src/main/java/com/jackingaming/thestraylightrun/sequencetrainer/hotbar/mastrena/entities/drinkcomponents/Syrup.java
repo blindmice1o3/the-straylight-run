@@ -32,16 +32,9 @@ public class Syrup extends DrinkComponent {
     @NonNull
     @Override
     public String toString() {
-        String abbreviationOfPropeties = Character.toString(type.name().charAt(0)) + " syrup";
-
-        if (shaken) {
-            abbreviationOfPropeties += " shaken";
-        }
-        if (blended) {
-            abbreviationOfPropeties += " blended";
-        }
-
-        return abbreviationOfPropeties;
+        String syrupPrettyPrint = type.name() + " syrup\n" +
+                "(shaken:" + shaken + ") (blended:" + blended + ")";
+        return syrupPrettyPrint;
     }
 
     @Override

@@ -12,15 +12,8 @@ public class Ice extends DrinkComponent {
     @NonNull
     @Override
     public String toString() {
-        String abbreviationOfPropeties = "ice";
-
-        if (shaken) {
-            abbreviationOfPropeties += " shaken";
-        }
-        if (blended) {
-            abbreviationOfPropeties += " blended";
-        }
-
-        return abbreviationOfPropeties;
+        String icePrettyPrint = "ice\n" +
+                "(shaken:" + shaken + ") (blended:" + blended + ")";
+        return icePrettyPrint;
     }
 }

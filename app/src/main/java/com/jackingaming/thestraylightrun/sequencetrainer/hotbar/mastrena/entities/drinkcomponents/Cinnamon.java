@@ -12,15 +12,8 @@ public class Cinnamon extends DrinkComponent {
     @NonNull
     @Override
     public String toString() {
-        String abbreviationOfPropeties = "cinnamon";
-
-        if (shaken) {
-            abbreviationOfPropeties += " shaken";
-        }
-        if (blended) {
-            abbreviationOfPropeties += " blended";
-        }
-
-        return abbreviationOfPropeties;
+        String cinnamonPrettyPrint = "cinnamon\n" +
+                "(shaken:" + shaken + ") (blended:" + blended + ")";
+        return cinnamonPrettyPrint;
     }
 }

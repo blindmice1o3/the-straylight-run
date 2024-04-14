@@ -68,19 +68,15 @@ public class Milk extends DrinkComponent {
     @NonNull
     @Override
     public String toString() {
-        String abbreviationOfPropeties = type.name().charAt(0) + " milk " +
-                Integer.toString(amount) + " " +
-                Integer.toString(temperature) + " " +
-                Integer.toString(timeFrothed);
+        String textType = (type != Type.TWO_PERCENT) ? type.name() : "2%";
+        String textAmount = Integer.toString(amount);
+        String textTemperature = Integer.toString(temperature);
+        String textFroth = Integer.toString(timeFrothed);
 
-        if (shaken) {
-            abbreviationOfPropeties += " shaken";
-        }
-        if (blended) {
-            abbreviationOfPropeties += " blended";
-        }
+        String milkPrettyPrint = textType + " milk (amount:" + textAmount + ")\n" +
+                "(temperature:" + textTemperature + ") (froth:" + textFroth + ")";
 
-        return abbreviationOfPropeties;
+        return milkPrettyPrint;
     }
 
     @Override

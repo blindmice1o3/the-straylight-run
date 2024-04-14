@@ -66,18 +66,37 @@ public class EspressoShot extends DrinkComponent {
     @NonNull
     @Override
     public String toString() {
-        String abbreviationOfPropeties = type.name().charAt(0) + " " +
-                amountOfWater.name().charAt(0) + " " +
-                amountOfBean.name().charAt(0);
-
-        if (shaken) {
-            abbreviationOfPropeties += " shaken";
+        String textType = (type != Type.SIGNATURE) ? type.name() : "      ";
+        String textAmountOfWater = null;
+        switch (amountOfWater) {
+            case RISTRETTO:
+                textAmountOfWater = "RIST";
+                break;
+            case STANDARD:
+                textAmountOfWater = "    ";
+                break;
+            case LONG:
+                textAmountOfWater = "LONG";
+                break;
         }
-        if (blended) {
-            abbreviationOfPropeties += " blended";
+        String textAmountOfBean = null;
+        switch (amountOfBean) {
+            case HALF_DECAF:
+                textAmountOfBean = "1/2 DECAF";
+                break;
+            case STANDARD:
+                textAmountOfBean = "    ";
+                break;
+            case UPDOSED:
+                textAmountOfBean = "UPDOSED";
+                break;
         }
 
-        return abbreviationOfPropeties;
+        String espressoShotPrettyPrint = textType + "\n" +
+                "(amountOfWater:" + textAmountOfWater + ") (amountOfBean:" + textAmountOfBean + ")\n" +
+                "(shaken:" + shaken + ") (blended:" + blended + ")";
+
+        return espressoShotPrettyPrint;
     }
 
     @Override
