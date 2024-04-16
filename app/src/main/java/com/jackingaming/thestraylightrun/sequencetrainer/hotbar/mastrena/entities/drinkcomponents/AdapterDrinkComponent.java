@@ -165,6 +165,13 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
                     }
                 }
             }
+
+            // Unspecified cup size
+            if (drinkProperties.get(Drink.Property.CUP_SIZE_SPECIFIED) == null) {
+                String drinkSize = drink.getSize().name();
+                String textdrinkSize = "(drinkSize:" + drinkSize + ")";
+                drinkComponentsPrettyPrint.add(textdrinkSize);
+            }
         } else if (cupImageView != null) {
             boolean shotOnTop = cupImageView.isShotOnTop();
             String textShotOnTop = "(shotOnTop:" + shotOnTop + ")";

@@ -63,7 +63,14 @@ public abstract class Drink extends MenuItem {
             }
         }
 
-        return isSameDrinkComponents && isSameDrinkProperties;
+        // Unspecified cup size
+        if (drinkProperties.get(Property.CUP_SIZE_SPECIFIED) == null) {
+            boolean isCupSizeAcceptable = size.name().equals(cupImageView.getTag());
+            return isSameDrinkComponents && isSameDrinkProperties && isCupSizeAcceptable;
+        } else {
+            // Specified cup size (already checked in isSameDrinkProperties)
+            return isSameDrinkComponents && isSameDrinkProperties;
+        }
     }
 
     public Size getSize() {
