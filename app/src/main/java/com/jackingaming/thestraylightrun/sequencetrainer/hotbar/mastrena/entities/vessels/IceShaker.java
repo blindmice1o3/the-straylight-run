@@ -267,7 +267,6 @@ public class IceShaker extends AppCompatImageView
                 if (event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(CupHot.DRAG_LABEL)");
 
-                    // TODO:
                     CupHot cupHot = (CupHot) event.getLocalState();
 
                     Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();
@@ -278,7 +277,6 @@ public class IceShaker extends AppCompatImageView
                 } else if (event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)) {
                     Log.e(TAG, "event.getClipDescription().getLabel().equals(CupCold.DRAG_LABEL)");
 
-                    // TODO:
                     CupCold cupCold = (CupCold) event.getLocalState();
 
                     Toast.makeText(getContext(), "transferring content of cup", Toast.LENGTH_SHORT).show();

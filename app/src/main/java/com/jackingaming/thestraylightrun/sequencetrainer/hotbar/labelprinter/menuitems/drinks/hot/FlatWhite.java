@@ -16,7 +16,7 @@ public class FlatWhite extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for FlatWhite)
+        // not needed for FlatWhite.
     }
 
     @Override

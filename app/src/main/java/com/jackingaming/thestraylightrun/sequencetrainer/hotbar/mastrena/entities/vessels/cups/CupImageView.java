@@ -255,7 +255,6 @@ public class CupImageView extends androidx.appcompat.widget.AppCompatImageView
         String size = drinkLabelSplitted[3];
         String name = drinkLabelSplitted[4];
 
-        // TODO: make into its own class with its own specialized layout (RVs).
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setTitle("WINNER WINNER CHICKEN DINNER");
         alertDialogBuilder.setMessage(size + " " + name + " (" + time + " " + amOrPm + ")!");

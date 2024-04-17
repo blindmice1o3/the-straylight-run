@@ -16,7 +16,7 @@ public class Cappuccino extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for Cappuccino)
+        // not needed for Cappuccino.
     }
 
     @Override

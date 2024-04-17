@@ -18,7 +18,7 @@ public class IcedBrownSugarOatmilkShakenEspresso extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for IcedBrownSugarOatmilkShakenEspresso)
+        // not needed for IcedBrownSugarOatmilkShakenEspresso.
     }
 
     @Override

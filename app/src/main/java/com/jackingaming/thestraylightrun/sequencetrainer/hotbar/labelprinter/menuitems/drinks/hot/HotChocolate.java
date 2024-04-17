@@ -16,7 +16,7 @@ public class HotChocolate extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for HotChocolate)
+        // not needed for HotChocolate.
     }
 
     @Override

@@ -829,6 +829,7 @@ public class MastrenaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_LOCATION:
 //                    Log.d(TAG, "ACTION_DRAG_LOCATION");
 
+                    // TODO: re-work IceShaker's shaking logic.
                     if (label.equals(IceShaker.DRAG_LABEL)) {
                         if (shakeUpward && yTouchInit - dragEvent.getY() > SHAKE_DETECTION_THRESHOLD) {
                             shakeUpward = false;

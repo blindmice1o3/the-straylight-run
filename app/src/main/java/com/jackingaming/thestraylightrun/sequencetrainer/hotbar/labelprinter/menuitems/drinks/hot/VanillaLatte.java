@@ -6,7 +6,6 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class VanillaLatte extends Drink {
 
     @Override
     protected void initDrinkProperties() {
-        // TODO: (not needed for VanillaLatte)
+        // not needed for VanillaLatte.
     }
 
     @Override

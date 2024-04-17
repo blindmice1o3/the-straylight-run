@@ -68,7 +68,7 @@ public class ExpectedVsActualDialogFragment extends DialogFragment {
 
         rvExpected = view.findViewById(R.id.rv_expected);
         rvActual = view.findViewById(R.id.rv_actual);
-        // TODO:
+
         rvExpected.setAdapter(adapterExpected);
         rvActual.setAdapter(adapterActual);
 

@@ -170,7 +170,6 @@ public class CupCold extends CupImageView {
                     String contentToBePoured = event.getClipData().getItemAt(0).getText().toString();
                     Log.d(TAG, "contentToBePoured: " + contentToBePoured);
 
-                    // TODO:
                     if (listener != null) {
                         listener.showDialogFillCupCold(this, contentToBePoured);
                     } else {
