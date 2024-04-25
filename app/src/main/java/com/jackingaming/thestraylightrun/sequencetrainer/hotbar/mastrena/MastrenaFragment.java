@@ -765,9 +765,9 @@ public class MastrenaFragment extends Fragment {
         }
     }
 
-    private static final int SHAKE_DETECTION_THRESHOLD = 3;
-    private float yTouchInit = 0;
-    private boolean shakeUpward = false;
+    private static final int SHAKE_DETECTION_THRESHOLD = 50;
+    private float yPrevious, yPeak, yTrough = -1f;
+    private boolean shakeUpward, metThreshold = false;
     private int shakeCounter = 0;
 
     private String label;
@@ -792,11 +792,6 @@ public class MastrenaFragment extends Fragment {
                                 label.equals(ShotGlass.DRAG_LABEL) ||
                                 label.equals(IceShaker.DRAG_LABEL)) {
                             Log.d(TAG, "label.equals(" + CupCaddyFragment.DRAG_LABEL + ") || label.equals(" + CupHot.DRAG_LABEL + ") || label.equals(" + CupCold.DRAG_LABEL + ") || label.equals(" + ShotGlass.DRAG_LABEL + ") || label.equals(" + IceShaker.DRAG_LABEL + ")");
-
-                            if (label.equals(IceShaker.DRAG_LABEL)) {
-                                yTouchInit = dragEvent.getY();
-                                Log.e(TAG, "yTouchInit: " + yTouchInit);
-                            }
 
                             // Change background drawable to indicate drop-target.
                             view.setBackgroundResource(resIdDropTarget);
@@ -831,20 +826,73 @@ public class MastrenaFragment extends Fragment {
 
                     // TODO: re-work IceShaker's shaking logic.
                     if (label.equals(IceShaker.DRAG_LABEL)) {
-                        if (shakeUpward && yTouchInit - dragEvent.getY() > SHAKE_DETECTION_THRESHOLD) {
-                            shakeUpward = false;
-                        } else if (!shakeUpward && yTouchInit - dragEvent.getY() < -SHAKE_DETECTION_THRESHOLD) {
-                            shakeUpward = true;
-
-                            ///////////////
-                            shakeCounter++;
-                            ///////////////
+                        float yNow = dragEvent.getY();
+                        // starting condition
+                        if (yPeak == -1 && yTrough == -1) {
+                            yPrevious = yNow;
+                            yPeak = yNow;
+                            yTrough = yNow;
+                            Log.e(TAG, "yPrevious: " + yPrevious);
                         }
-                    }
+                        // non-starting condition
+                        else {
+                            // was moving upward
+                            if (shakeUpward) {
+                                // still moving upward
+                                if (yPrevious - yNow >= 0) {
+                                    // pass up-threshold
+                                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
+                                        // TODO:
+                                        Log.e(TAG, "up-threshold met");
+                                        metThreshold = true;
+                                        yPeak = yPrevious;
+                                    }
+                                    // not pass threshold
+                                    else {
+                                        // INTENTIONALLY BLANK.
+                                    }
+                                }
+                                // change-to moving downward
+                                else {
+                                    shakeUpward = false;
+                                    yPeak = yPrevious;
+                                }
 
-                    if (shakeCounter == 5) {
-                        Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
-                        iceShaker.shake();
+                                yPrevious = yNow;
+                            }
+                            // was moving downward
+                            else {
+                                // still moving downward
+                                if (yPrevious - yNow < 0) {
+                                    // pass up-AND-down-thresholds
+                                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
+                                            metThreshold) {
+                                        Log.e(TAG, "down-threshold met");
+                                        ///////////////
+                                        shakeCounter++;
+                                        metThreshold = false;
+                                        yTrough = yPrevious;
+                                        ///////////////
+                                    }
+                                    // not pass threshold
+                                    else {
+                                        // INTENTIONALLY BLANK.
+                                    }
+                                }
+                                // change-to moving upward
+                                else {
+                                    shakeUpward = true;
+                                    yTrough = yPrevious;
+                                }
+
+                                yPrevious = yNow;
+                            }
+                        }
+
+                        if (shakeCounter == 5) {
+                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
+                            iceShaker.shake();
+                        }
                     }
 
                     return true;
@@ -1025,7 +1073,10 @@ public class MastrenaFragment extends Fragment {
                         }
                     } else if (label.equals(IceShaker.DRAG_LABEL)) {
                         shakeUpward = false;
+                        metThreshold = false;
                         shakeCounter = 0;
+                        yPeak = -1;
+                        yTrough = -1;
 
                         if (iceShaker != null) {
                             iceShaker.setVisibility(View.VISIBLE);
@@ -1047,6 +1098,7 @@ public class MastrenaFragment extends Fragment {
 
             return false;
         }
+
     }
 
     public int getTime() {
