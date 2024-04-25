@@ -765,10 +765,10 @@ public class MastrenaFragment extends Fragment {
         }
     }
 
-    private static final int SHAKE_DETECTION_THRESHOLD = 50;
-    private float yPrevious, yPeak, yTrough = -1f;
-    private boolean shakeUpward, metThreshold = false;
-    private int shakeCounter = 0;
+//    private static final int SHAKE_DETECTION_THRESHOLD = 50;
+//    private float yPrevious, yPeak, yTrough = -1f;
+//    private boolean shakeUpward, metThreshold = false;
+//    private int shakeCounter = 0;
 
     private String label;
 
@@ -824,76 +824,76 @@ public class MastrenaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_LOCATION:
 //                    Log.d(TAG, "ACTION_DRAG_LOCATION");
 
-                    // TODO: re-work IceShaker's shaking logic.
-                    if (label.equals(IceShaker.DRAG_LABEL)) {
-                        float yNow = dragEvent.getY();
-                        // starting condition
-                        if (yPeak == -1 && yTrough == -1) {
-                            yPrevious = yNow;
-                            yPeak = yNow;
-                            yTrough = yNow;
-                            Log.e(TAG, "yPrevious: " + yPrevious);
-                        }
-                        // non-starting condition
-                        else {
-                            // was moving upward
-                            if (shakeUpward) {
-                                // still moving upward
-                                if (yPrevious - yNow >= 0) {
-                                    // pass up-threshold
-                                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
-                                        // TODO:
-                                        Log.e(TAG, "up-threshold met");
-                                        metThreshold = true;
-                                        yPeak = yPrevious;
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving downward
-                                else {
-                                    shakeUpward = false;
-                                    yPeak = yPrevious;
-                                }
-
-                                yPrevious = yNow;
-                            }
-                            // was moving downward
-                            else {
-                                // still moving downward
-                                if (yPrevious - yNow < 0) {
-                                    // pass up-AND-down-thresholds
-                                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
-                                            metThreshold) {
-                                        Log.e(TAG, "down-threshold met");
-                                        ///////////////
-                                        shakeCounter++;
-                                        metThreshold = false;
-                                        yTrough = yPrevious;
-                                        ///////////////
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving upward
-                                else {
-                                    shakeUpward = true;
-                                    yTrough = yPrevious;
-                                }
-
-                                yPrevious = yNow;
-                            }
-                        }
-
-                        if (shakeCounter == 5) {
-                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
-                            iceShaker.shake();
-                        }
-                    }
+//                    // TODO: re-work IceShaker's shaking logic.
+//                    if (label.equals(IceShaker.DRAG_LABEL)) {
+//                        float yNow = dragEvent.getY();
+//                        // starting condition
+//                        if (yPeak == -1 && yTrough == -1) {
+//                            yPrevious = yNow;
+//                            yPeak = yNow;
+//                            yTrough = yNow;
+//                            Log.e(TAG, "yPrevious: " + yPrevious);
+//                        }
+//                        // non-starting condition
+//                        else {
+//                            // was moving upward
+//                            if (shakeUpward) {
+//                                // still moving upward
+//                                if (yPrevious - yNow >= 0) {
+//                                    // pass up-threshold
+//                                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
+//                                        // TODO:
+//                                        Log.e(TAG, "up-threshold met");
+//                                        metThreshold = true;
+//                                        yPeak = yPrevious;
+//                                    }
+//                                    // not pass threshold
+//                                    else {
+//                                        // INTENTIONALLY BLANK.
+//                                    }
+//                                }
+//                                // change-to moving downward
+//                                else {
+//                                    shakeUpward = false;
+//                                    yPeak = yPrevious;
+//                                }
+//
+//                                yPrevious = yNow;
+//                            }
+//                            // was moving downward
+//                            else {
+//                                // still moving downward
+//                                if (yPrevious - yNow < 0) {
+//                                    // pass up-AND-down-thresholds
+//                                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
+//                                            metThreshold) {
+//                                        Log.e(TAG, "down-threshold met");
+//                                        ///////////////
+//                                        shakeCounter++;
+//                                        metThreshold = false;
+//                                        yTrough = yPrevious;
+//                                        ///////////////
+//                                    }
+//                                    // not pass threshold
+//                                    else {
+//                                        // INTENTIONALLY BLANK.
+//                                    }
+//                                }
+//                                // change-to moving upward
+//                                else {
+//                                    shakeUpward = true;
+//                                    yTrough = yPrevious;
+//                                }
+//
+//                                yPrevious = yNow;
+//                            }
+//                        }
+//
+//                        if (shakeCounter == 5) {
+//                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
+//                            iceShaker.shake();
+//                        }
+//                    }
 
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
@@ -1072,11 +1072,11 @@ public class MastrenaFragment extends Fragment {
                             shotGlass.setVisibility(View.VISIBLE);
                         }
                     } else if (label.equals(IceShaker.DRAG_LABEL)) {
-                        shakeUpward = false;
-                        metThreshold = false;
-                        shakeCounter = 0;
-                        yPeak = -1;
-                        yTrough = -1;
+//                        shakeUpward = false;
+//                        metThreshold = false;
+//                        shakeCounter = 0;
+//                        yPeak = -1;
+//                        yTrough = -1;
 
                         if (iceShaker != null) {
                             iceShaker.setVisibility(View.VISIBLE);
@@ -1098,7 +1098,6 @@ public class MastrenaFragment extends Fragment {
 
             return false;
         }
-
     }
 
     public int getTime() {

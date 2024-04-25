@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.me
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
 
 import java.util.ArrayList;
@@ -65,12 +66,41 @@ public abstract class Drink extends MenuItem {
 
         // Unspecified cup size
         if (drinkProperties.get(Property.CUP_SIZE_SPECIFIED) == null) {
-            boolean isCupSizeAcceptable = size.name().equals(cupImageView.getTag());
+            String sizeCup = (String) cupImageView.getTag();
+            Log.e(TAG, "sizeCup: " + sizeCup);
+            String sizeDrink = size.name();
+            Log.e(TAG, "sizeDrink: " + sizeDrink);
+            if (sizeDrink.equals(Size.TRENTA.name())) {
+                sizeDrink += "_COLD";
+            } else if (sizeDrink.equals(Size.SHORT.name())) {
+                sizeDrink += "_HOT";
+            } else if (sizeDrink.equals(Size.TALL.name()) ||
+                    sizeDrink.equals(Size.GRANDE.name())) {
+                if (isIcedDrink()) {
+                    sizeDrink += "_COLD";
+                } else {
+                    sizeDrink += "_HOT";
+                }
+            }
+            Log.e(TAG, "sizeDrink: " + sizeDrink);
+
+            boolean isCupSizeAcceptable = sizeDrink.equals(sizeCup);
             return isSameDrinkComponents && isSameDrinkProperties && isCupSizeAcceptable;
         } else {
             // Specified cup size (already checked in isSameDrinkProperties)
             return isSameDrinkComponents && isSameDrinkProperties;
         }
+    }
+
+    private boolean isIcedDrink() {
+        boolean isIced = false;
+        for (DrinkComponent drinkComponent : drinkComponents) {
+            if (drinkComponent instanceof Ice) {
+                isIced = true;
+                break;
+            }
+        }
+        return isIced;
     }
 
     public Size getSize() {
