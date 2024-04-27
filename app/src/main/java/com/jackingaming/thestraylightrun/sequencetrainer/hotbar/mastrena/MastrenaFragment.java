@@ -1078,15 +1078,13 @@ public class MastrenaFragment extends Fragment {
                             shotGlass.setVisibility(View.VISIBLE);
                         }
                     } else if (label.equals(IceShaker.DRAG_LABEL)) {
-//                        shakeUpward = false;
-//                        metThreshold = false;
-//                        shakeCounter = 0;
-//                        yPeak = -1;
-//                        yTrough = -1;
+                        SequenceTrainerActivity.shakeUpward = false;
+                        SequenceTrainerActivity.metThreshold = false;
+                        SequenceTrainerActivity.shakeCounter = 0;
+                        SequenceTrainerActivity.yPeak = -1;
+                        SequenceTrainerActivity.yTrough = -1;
 
-                        if (iceShaker != null) {
-                            iceShaker.setVisibility(View.VISIBLE);
-                        }
+                        iceShaker.setVisibility(View.VISIBLE);
                     }
 
                     xTouch = -1f;
