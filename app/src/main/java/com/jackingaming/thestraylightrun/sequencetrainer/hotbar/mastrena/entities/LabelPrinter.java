@@ -15,7 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -32,6 +32,14 @@ public class LabelPrinter extends AppCompatTextView {
     public static final String TAG = LabelPrinter.class.getSimpleName();
     public static final String DRAG_LABEL = LabelPrinter.class.getSimpleName();
     private static final int MAX_NUMBER_OF_DRINKS = 10;
+
+    public interface LabelPrinterListener {
+        void onDrinkAdded(int indexToAdd);
+
+        void onDrinkRemoved(int indexToRemove);
+    }
+
+    private LabelPrinterListener listener;
 
     private List<Drink> queueDrinks = new ArrayList<>();
     //    private List<String> queueDrinks = new ArrayList<>();
@@ -84,9 +92,11 @@ public class LabelPrinter extends AppCompatTextView {
                     contentNewDrinkLabel
             );
 
+            int indexToAdd = queueDrinks.size();
             queueDrinks.add(
                     drinkRandomStandard
             );
+            listener.onDrinkAdded(indexToAdd);
         } else if (standardOrCustomized == CUSTOMIZED) {
             Log.e(TAG, "MAKING CUSTOMIZED DRINK!!!");
 
@@ -177,9 +187,11 @@ public class LabelPrinter extends AppCompatTextView {
                     sb.toString()
             );
 
+            int indexToAdd = queueDrinks.size();
             queueDrinks.add(
                     drinkRandomCustomized
             );
+            listener.onDrinkAdded(indexToAdd);
         }
 
         counter++;
@@ -201,8 +213,10 @@ public class LabelPrinter extends AppCompatTextView {
     }
 
     public boolean removeFromQueue(Drink drinkToRemove) {
+        int indexToRemove = queueDrinks.indexOf(drinkToRemove);
         boolean isSuccessRemoval = queueDrinks.remove(drinkToRemove);
         if (isSuccessRemoval) {
+            listener.onDrinkRemoved(indexToRemove);
             Log.e(TAG, "SUCCESSFULLY removed!");
         }
         return isSuccessRemoval;
@@ -253,5 +267,21 @@ public class LabelPrinter extends AppCompatTextView {
 
     public void selectModeBoth() {
         modeSelected = BOTH;
+    }
+
+    public LabelPrinterListener getListener() {
+        return listener;
+    }
+
+    public void setListener(LabelPrinterListener listener) {
+        this.listener = listener;
+    }
+
+    public List<Drink> getQueueDrinks() {
+        return queueDrinks;
+    }
+
+    public void setQueueDrinks(List<Drink> queueDrinks) {
+        this.queueDrinks = queueDrinks;
     }
 }

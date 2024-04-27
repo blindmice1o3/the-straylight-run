@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.ExpectedVsActualDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillCupColdDialogFragment;

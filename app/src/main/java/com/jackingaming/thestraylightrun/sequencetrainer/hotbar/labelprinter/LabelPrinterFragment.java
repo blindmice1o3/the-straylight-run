@@ -7,15 +7,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.AdapterDrink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
+
+import java.util.List;
 
 public class LabelPrinterFragment extends Fragment {
     public static final String TAG = LabelPrinterFragment.class.getSimpleName();
@@ -26,8 +33,9 @@ public class LabelPrinterFragment extends Fragment {
 
     private Listener listener;
 
-    private FrameLayout frameLayoutLabelPrinter;
+    private ConstraintLayout constraintLayoutLabelPrinter;
     private LabelPrinter labelPrinter;
+    private RecyclerView recyclerViewQueueDrinks;
 
     public LabelPrinterFragment() {
         // Required empty public constructor
@@ -65,8 +73,29 @@ public class LabelPrinterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        frameLayoutLabelPrinter = view.findViewById(R.id.framelayout_label_printer);
+        constraintLayoutLabelPrinter = view.findViewById(R.id.constraintlayout_label_printer);
         labelPrinter = view.findViewById(R.id.tv_label_printer);
+        recyclerViewQueueDrinks = view.findViewById(R.id.rv_queue_drinks);
+
+        List<Drink> queueDrinks = labelPrinter.getQueueDrinks();
+        AdapterDrink adapter = new AdapterDrink(queueDrinks);
+        recyclerViewQueueDrinks.setAdapter(adapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerViewQueueDrinks.setLayoutManager(linearLayoutManager);
+        recyclerViewQueueDrinks.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        labelPrinter.setListener(new LabelPrinter.LabelPrinterListener() {
+            @Override
+            public void onDrinkAdded(int indexToAdd) {
+                adapter.notifyItemInserted(indexToAdd);
+            }
+
+            @Override
+            public void onDrinkRemoved(int indexToRemove) {
+                adapter.notifyItemRemoved(indexToRemove);
+            }
+        });
 
         labelPrinter.generateRandomDrinkRequest();
         labelPrinter.updateDisplay();

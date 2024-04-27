@@ -1,7 +1,8 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems;
+package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.MenuItem;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupImageView;
