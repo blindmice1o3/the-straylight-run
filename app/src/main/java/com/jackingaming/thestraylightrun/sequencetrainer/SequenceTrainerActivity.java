@@ -29,16 +29,16 @@ public class SequenceTrainerActivity extends AppCompatActivity
         implements LabelPrinterFragment.Listener {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
 
+    public static final int SHAKE_DETECTION_THRESHOLD = 50;
+    public static float yPrevious, yPeak, yTrough = -1f;
+    public static boolean shakeUpward, metThreshold = false;
+    public static int shakeCounter = 0;
+
     private ConstraintLayout constraintLayout;
     private String modeSelected = "standard";
 
     private class IceShakerDragListener
             implements View.OnDragListener {
-
-        private static final int SHAKE_DETECTION_THRESHOLD = 50;
-        private float yPrevious, yPeak, yTrough = -1f;
-        private boolean shakeUpward, metThreshold = false;
-        private int shakeCounter = 0;
 
         private String label;
 
@@ -84,7 +84,11 @@ public class SequenceTrainerActivity extends AppCompatActivity
 
                     // TODO: re-work IceShaker's shaking logic.
                     if (label.equals(IceShaker.DRAG_LABEL)) {
-                        float yNow = dragEvent.getY();
+                        int[] location = new int[2];
+                        view.getLocationInWindow(location);
+                        int yNow = (int) (location[1] + dragEvent.getY());
+                        Log.e(TAG, "yNow:" + yNow);
+
                         // starting condition
                         if (yPeak == -1 && yTrough == -1) {
                             yPrevious = yNow;

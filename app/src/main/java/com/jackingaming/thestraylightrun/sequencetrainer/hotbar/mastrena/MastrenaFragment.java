@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
@@ -777,6 +778,7 @@ public class MastrenaFragment extends Fragment {
         int resIdNormal = R.drawable.shape_mastrena;
         int resIdDropTarget = R.drawable.shape_droptarget;
 
+        @RequiresApi(api = Build.VERSION_CODES.Q)
         @Override
         public boolean onDrag(View view, DragEvent dragEvent) {
             switch (dragEvent.getAction()) {
@@ -824,76 +826,80 @@ public class MastrenaFragment extends Fragment {
                 case DragEvent.ACTION_DRAG_LOCATION:
 //                    Log.d(TAG, "ACTION_DRAG_LOCATION");
 
-//                    // TODO: re-work IceShaker's shaking logic.
-//                    if (label.equals(IceShaker.DRAG_LABEL)) {
-//                        float yNow = dragEvent.getY();
-//                        // starting condition
-//                        if (yPeak == -1 && yTrough == -1) {
-//                            yPrevious = yNow;
-//                            yPeak = yNow;
-//                            yTrough = yNow;
-//                            Log.e(TAG, "yPrevious: " + yPrevious);
-//                        }
-//                        // non-starting condition
-//                        else {
-//                            // was moving upward
-//                            if (shakeUpward) {
-//                                // still moving upward
-//                                if (yPrevious - yNow >= 0) {
-//                                    // pass up-threshold
-//                                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
-//                                        // TODO:
-//                                        Log.e(TAG, "up-threshold met");
-//                                        metThreshold = true;
-//                                        yPeak = yPrevious;
-//                                    }
-//                                    // not pass threshold
-//                                    else {
-//                                        // INTENTIONALLY BLANK.
-//                                    }
-//                                }
-//                                // change-to moving downward
-//                                else {
-//                                    shakeUpward = false;
-//                                    yPeak = yPrevious;
-//                                }
-//
-//                                yPrevious = yNow;
-//                            }
-//                            // was moving downward
-//                            else {
-//                                // still moving downward
-//                                if (yPrevious - yNow < 0) {
-//                                    // pass up-AND-down-thresholds
-//                                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
-//                                            metThreshold) {
-//                                        Log.e(TAG, "down-threshold met");
-//                                        ///////////////
-//                                        shakeCounter++;
-//                                        metThreshold = false;
-//                                        yTrough = yPrevious;
-//                                        ///////////////
-//                                    }
-//                                    // not pass threshold
-//                                    else {
-//                                        // INTENTIONALLY BLANK.
-//                                    }
-//                                }
-//                                // change-to moving upward
-//                                else {
-//                                    shakeUpward = true;
-//                                    yTrough = yPrevious;
-//                                }
-//
-//                                yPrevious = yNow;
-//                            }
-//                        }
-//
-//                        if (shakeCounter == 5) {
-//                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
-//                            iceShaker.shake();
-//                        }
-//                    }
+                    if (label.equals(IceShaker.DRAG_LABEL)) {
+                        int[] location = new int[2];
+                        view.getLocationInWindow(location);
+                        int yNow = (int) (location[1] + dragEvent.getY());
+                        Log.e(TAG, "yNow:" + yNow);
+
+                        // starting condition
+                        if (SequenceTrainerActivity.yPeak == -1 && SequenceTrainerActivity.yTrough == -1) {
+                            SequenceTrainerActivity.yPrevious = yNow;
+                            SequenceTrainerActivity.yPeak = yNow;
+                            SequenceTrainerActivity.yTrough = yNow;
+                            Log.e(TAG, "SequenceTrainerActivity.yPrevious: " + SequenceTrainerActivity.yPrevious);
+                        }
+                        // non-starting condition
+                        else {
+                            // was moving upward
+                            if (SequenceTrainerActivity.shakeUpward) {
+                                // still moving upward
+                                if (SequenceTrainerActivity.yPrevious - yNow >= 0) {
+                                    // pass up-threshold
+                                    if (SequenceTrainerActivity.yTrough - yNow > SequenceTrainerActivity.SHAKE_DETECTION_THRESHOLD) {
+                                        // TODO:
+                                        Log.e(TAG, "up-threshold met");
+                                        SequenceTrainerActivity.metThreshold = true;
+                                        SequenceTrainerActivity.yPeak = SequenceTrainerActivity.yPrevious;
+                                    }
+                                    // not pass threshold
+                                    else {
+                                        // INTENTIONALLY BLANK.
+                                    }
+                                }
+                                // change-to moving downward
+                                else {
+                                    SequenceTrainerActivity.shakeUpward = false;
+                                    SequenceTrainerActivity.yPeak = SequenceTrainerActivity.yPrevious;
+                                }
+
+                                SequenceTrainerActivity.yPrevious = yNow;
+                            }
+                            // was moving downward
+                            else {
+                                // still moving downward
+                                if (SequenceTrainerActivity.yPrevious - yNow < 0) {
+                                    // pass up-AND-down-thresholds
+                                    if (SequenceTrainerActivity.yPeak - yNow < -SequenceTrainerActivity.SHAKE_DETECTION_THRESHOLD &&
+                                            SequenceTrainerActivity.metThreshold) {
+                                        Log.e(TAG, "down-threshold met");
+                                        ///////////////
+                                        SequenceTrainerActivity.shakeCounter++;
+                                        SequenceTrainerActivity.metThreshold = false;
+                                        SequenceTrainerActivity.yTrough = SequenceTrainerActivity.yPrevious;
+                                        ///////////////
+                                    }
+                                    // not pass threshold
+                                    else {
+                                        // INTENTIONALLY BLANK.
+                                    }
+                                }
+                                // change-to moving upward
+                                else {
+                                    SequenceTrainerActivity.shakeUpward = true;
+                                    SequenceTrainerActivity.yTrough = SequenceTrainerActivity.yPrevious;
+                                }
+
+                                SequenceTrainerActivity.yPrevious = yNow;
+                            }
+                        }
+
+                        if (SequenceTrainerActivity.shakeCounter == 5) {
+                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
+                            IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
+                            iceShaker.shake();
+                        }
+                    }
 
                     return true;
                 case DragEvent.ACTION_DRAG_EXITED:
