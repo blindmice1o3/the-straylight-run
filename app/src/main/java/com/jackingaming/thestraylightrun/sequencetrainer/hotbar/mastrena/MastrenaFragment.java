@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.EspressoShotControlDialogFragment;
@@ -80,6 +79,14 @@ public class MastrenaFragment extends Fragment {
     private static final long DELAY_ADD_NEW_DRINK_HARD = 30000L;
     private static final int VALUE_BRACKET_YELLOW_HARD = 10;
     private static final int VALUE_BRACKET_RED_HARD = 20;
+
+    public interface IceShakerListener {
+        void handleShake(float yNow, IceShaker iceShaker);
+
+        void handleShakeTearDown(IceShaker iceShaker);
+    }
+
+    private IceShakerListener iceShakerListener;
 
     private long delayAddNewDrink;
     private int valueBracketYellow;
@@ -829,76 +836,10 @@ public class MastrenaFragment extends Fragment {
                     if (label.equals(IceShaker.DRAG_LABEL)) {
                         int[] location = new int[2];
                         view.getLocationInWindow(location);
-                        int yNow = (int) (location[1] + dragEvent.getY());
+                        float yNow = ((float) (location[1])) + dragEvent.getY();
                         Log.e(TAG, "yNow:" + yNow);
 
-                        // starting condition
-                        if (SequenceTrainerActivity.yPeak == -1 && SequenceTrainerActivity.yTrough == -1) {
-                            SequenceTrainerActivity.yPrevious = yNow;
-                            SequenceTrainerActivity.yPeak = yNow;
-                            SequenceTrainerActivity.yTrough = yNow;
-                            Log.e(TAG, "SequenceTrainerActivity.yPrevious: " + SequenceTrainerActivity.yPrevious);
-                        }
-                        // non-starting condition
-                        else {
-                            // was moving upward
-                            if (SequenceTrainerActivity.shakeUpward) {
-                                // still moving upward
-                                if (SequenceTrainerActivity.yPrevious - yNow >= 0) {
-                                    // pass up-threshold
-                                    if (SequenceTrainerActivity.yTrough - yNow > SequenceTrainerActivity.SHAKE_DETECTION_THRESHOLD) {
-                                        // TODO:
-                                        Log.e(TAG, "up-threshold met");
-                                        SequenceTrainerActivity.metThreshold = true;
-                                        SequenceTrainerActivity.yPeak = SequenceTrainerActivity.yPrevious;
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving downward
-                                else {
-                                    SequenceTrainerActivity.shakeUpward = false;
-                                    SequenceTrainerActivity.yPeak = SequenceTrainerActivity.yPrevious;
-                                }
-
-                                SequenceTrainerActivity.yPrevious = yNow;
-                            }
-                            // was moving downward
-                            else {
-                                // still moving downward
-                                if (SequenceTrainerActivity.yPrevious - yNow < 0) {
-                                    // pass up-AND-down-thresholds
-                                    if (SequenceTrainerActivity.yPeak - yNow < -SequenceTrainerActivity.SHAKE_DETECTION_THRESHOLD &&
-                                            SequenceTrainerActivity.metThreshold) {
-                                        Log.e(TAG, "down-threshold met");
-                                        ///////////////
-                                        SequenceTrainerActivity.shakeCounter++;
-                                        SequenceTrainerActivity.metThreshold = false;
-                                        SequenceTrainerActivity.yTrough = SequenceTrainerActivity.yPrevious;
-                                        ///////////////
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving upward
-                                else {
-                                    SequenceTrainerActivity.shakeUpward = true;
-                                    SequenceTrainerActivity.yTrough = SequenceTrainerActivity.yPrevious;
-                                }
-
-                                SequenceTrainerActivity.yPrevious = yNow;
-                            }
-                        }
-
-                        if (SequenceTrainerActivity.shakeCounter == 5) {
-                            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
-                            IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
-                            iceShaker.shake();
-                        }
+                        iceShakerListener.handleShake(yNow, iceShaker);
                     }
 
                     return true;
@@ -1078,13 +1019,7 @@ public class MastrenaFragment extends Fragment {
                             shotGlass.setVisibility(View.VISIBLE);
                         }
                     } else if (label.equals(IceShaker.DRAG_LABEL)) {
-                        SequenceTrainerActivity.shakeUpward = false;
-                        SequenceTrainerActivity.metThreshold = false;
-                        SequenceTrainerActivity.shakeCounter = 0;
-                        SequenceTrainerActivity.yPeak = -1;
-                        SequenceTrainerActivity.yTrough = -1;
-
-                        iceShaker.setVisibility(View.VISIBLE);
+                        iceShakerListener.handleShakeTearDown(iceShaker);
                     }
 
                     xTouch = -1f;
@@ -1118,5 +1053,13 @@ public class MastrenaFragment extends Fragment {
 
     public void setLabelPrinter(LabelPrinter labelPrinter) {
         this.labelPrinter = labelPrinter;
+    }
+
+    public IceShakerListener getIceShakerListener() {
+        return iceShakerListener;
+    }
+
+    public void setIceShakerListener(IceShakerListener iceShakerListener) {
+        this.iceShakerListener = iceShakerListener;
     }
 }

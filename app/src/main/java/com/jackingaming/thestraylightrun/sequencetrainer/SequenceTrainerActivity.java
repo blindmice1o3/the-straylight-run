@@ -26,16 +26,17 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.Ref
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragment;
 
 public class SequenceTrainerActivity extends AppCompatActivity
-        implements LabelPrinterFragment.Listener {
+        implements LabelPrinterFragment.Listener,
+        MastrenaFragment.IceShakerListener {
     public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
-
-    public static final int SHAKE_DETECTION_THRESHOLD = 50;
-    public static float yPrevious, yPeak, yTrough = -1f;
-    public static boolean shakeUpward, metThreshold = false;
-    public static int shakeCounter = 0;
 
     private ConstraintLayout constraintLayout;
     private String modeSelected = "standard";
+
+    private static final int SHAKE_DETECTION_THRESHOLD = 50;
+    private float yPrevious, yPeak, yTrough = -1f;
+    private boolean shakeUpward, metThreshold = false;
+    private int shakeCounter = 0;
 
     private class IceShakerDragListener
             implements View.OnDragListener {
@@ -82,80 +83,14 @@ public class SequenceTrainerActivity extends AppCompatActivity
                 case DragEvent.ACTION_DRAG_LOCATION:
 //                    Log.d(TAG, "ACTION_DRAG_LOCATION");
 
-                    // TODO: re-work IceShaker's shaking logic.
                     if (label.equals(IceShaker.DRAG_LABEL)) {
                         int[] location = new int[2];
                         view.getLocationInWindow(location);
-                        int yNow = (int) (location[1] + dragEvent.getY());
+                        float yNow = ((float) (location[1])) + dragEvent.getY();
                         Log.e(TAG, "yNow:" + yNow);
+                        IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
 
-                        // starting condition
-                        if (yPeak == -1 && yTrough == -1) {
-                            yPrevious = yNow;
-                            yPeak = yNow;
-                            yTrough = yNow;
-                            Log.e(TAG, "yPrevious: " + yPrevious);
-                        }
-                        // non-starting condition
-                        else {
-                            // was moving upward
-                            if (shakeUpward) {
-                                // still moving upward
-                                if (yPrevious - yNow >= 0) {
-                                    // pass up-threshold
-                                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
-                                        // TODO:
-                                        Log.e(TAG, "up-threshold met");
-                                        metThreshold = true;
-                                        yPeak = yPrevious;
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving downward
-                                else {
-                                    shakeUpward = false;
-                                    yPeak = yPrevious;
-                                }
-
-                                yPrevious = yNow;
-                            }
-                            // was moving downward
-                            else {
-                                // still moving downward
-                                if (yPrevious - yNow < 0) {
-                                    // pass up-AND-down-thresholds
-                                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
-                                            metThreshold) {
-                                        Log.e(TAG, "down-threshold met");
-                                        ///////////////
-                                        shakeCounter++;
-                                        metThreshold = false;
-                                        yTrough = yPrevious;
-                                        ///////////////
-                                    }
-                                    // not pass threshold
-                                    else {
-                                        // INTENTIONALLY BLANK.
-                                    }
-                                }
-                                // change-to moving upward
-                                else {
-                                    shakeUpward = true;
-                                    yTrough = yPrevious;
-                                }
-
-                                yPrevious = yNow;
-                            }
-                        }
-
-                        if (shakeCounter == 5) {
-                            Toast.makeText(SequenceTrainerActivity.this, "SHAKEN", Toast.LENGTH_SHORT).show();
-                            IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
-                            iceShaker.shake();
-                        }
+                        handleShake(yNow, iceShaker);
                     }
 
                     return true;
@@ -184,14 +119,9 @@ public class SequenceTrainerActivity extends AppCompatActivity
                     // NOT NEEDED.
 
                     if (label.equals(IceShaker.DRAG_LABEL)) {
-                        shakeUpward = false;
-                        metThreshold = false;
-                        shakeCounter = 0;
-                        yPeak = -1;
-                        yTrough = -1;
-
                         IceShaker iceShaker = (IceShaker) dragEvent.getLocalState();
-                        iceShaker.setVisibility(View.VISIBLE);
+
+                        handleShakeTearDown(iceShaker);
 
                         Log.e(TAG, "setting label to null.");
                         label = null;
@@ -206,6 +136,86 @@ public class SequenceTrainerActivity extends AppCompatActivity
 
             return false;
         }
+    }
+
+    @Override
+    public void handleShake(float yNow, IceShaker iceShaker) {
+        // starting condition
+        if (yPeak == -1 && yTrough == -1) {
+            yPrevious = yNow;
+            yPeak = yNow;
+            yTrough = yNow;
+        }
+        // non-starting condition
+        else {
+            // was moving upward
+            if (shakeUpward) {
+                // still moving upward
+                if (yPrevious - yNow >= 0) {
+                    // pass up-threshold
+                    if (yTrough - yNow > SHAKE_DETECTION_THRESHOLD) {
+                        // TODO:
+                        Log.e(TAG, "up-threshold met");
+                        metThreshold = true;
+                        yPeak = yPrevious;
+                    }
+                    // not pass threshold
+                    else {
+                        // INTENTIONALLY BLANK.
+                    }
+                }
+                // change-to moving downward
+                else {
+                    shakeUpward = false;
+                    yPeak = yPrevious;
+                }
+
+                yPrevious = yNow;
+            }
+            // was moving downward
+            else {
+                // still moving downward
+                if (yPrevious - yNow < 0) {
+                    // pass up-AND-down-thresholds
+                    if (yPeak - yNow < -SHAKE_DETECTION_THRESHOLD &&
+                            metThreshold) {
+                        Log.e(TAG, "down-threshold met");
+                        ///////////////
+                        shakeCounter++;
+                        metThreshold = false;
+                        yTrough = yPrevious;
+                        ///////////////
+                    }
+                    // not pass threshold
+                    else {
+                        // INTENTIONALLY BLANK.
+                    }
+                }
+                // change-to moving upward
+                else {
+                    shakeUpward = true;
+                    yTrough = yPrevious;
+                }
+
+                yPrevious = yNow;
+            }
+        }
+
+        if (shakeCounter == 5) {
+            Toast.makeText(SequenceTrainerActivity.this, "SHAKEN", Toast.LENGTH_SHORT).show();
+            iceShaker.shake();
+        }
+    }
+
+    @Override
+    public void handleShakeTearDown(IceShaker iceShaker) {
+        shakeUpward = false;
+        metThreshold = false;
+        shakeCounter = 0;
+        yPeak = -1;
+        yTrough = -1;
+
+        iceShaker.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -225,6 +235,9 @@ public class SequenceTrainerActivity extends AppCompatActivity
         ft.add(R.id.fcv_bottom_left, RefrigeratorFragment.newInstance());
         ft.add(R.id.fcv_bottom_right, IceBinFragment.newInstance("", ""));
         ft.commit();
+
+        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
+        mastrenaFragment.setIceShakerListener(this);
 
         // Set the listener on the fragmentManager.
         getSupportFragmentManager().setFragmentResultListener(LabelPrinterModeDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
