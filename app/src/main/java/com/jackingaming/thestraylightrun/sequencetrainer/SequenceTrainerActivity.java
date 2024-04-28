@@ -227,17 +227,17 @@ public class SequenceTrainerActivity extends AppCompatActivity
         constraintLayout = findViewById(R.id.constraintlayout_sequence_trainer);
         constraintLayout.setOnDragListener(new IceShakerDragListener());
 
+        MastrenaFragment mastrenaFragment = MastrenaFragment.newInstance();
+        mastrenaFragment.setIceShakerListener(this);
+        
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fcv_main, MastrenaFragment.newInstance());
+        ft.add(R.id.fcv_main, mastrenaFragment);
         ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance());
         ft.add(R.id.fcv_right_middle, CupCaddyFragment.newInstance());
         ft.add(R.id.fcv_right_bottom, SinkFragment.newInstance("", ""));
         ft.add(R.id.fcv_bottom_left, RefrigeratorFragment.newInstance());
         ft.add(R.id.fcv_bottom_right, IceBinFragment.newInstance("", ""));
         ft.commit();
-
-        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
-        mastrenaFragment.setIceShakerListener(this);
 
         // Set the listener on the fragmentManager.
         getSupportFragmentManager().setFragmentResultListener(LabelPrinterModeDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
