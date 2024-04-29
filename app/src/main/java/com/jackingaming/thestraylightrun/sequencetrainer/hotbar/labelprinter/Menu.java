@@ -55,6 +55,18 @@ public class Menu {
         return copy;
     }
 
+    public static Drink getDrinkByName(String name) {
+        Drink drinkToCopy = null;
+        for (Drink drink : drinks) {
+            if (drink.getName().equals(name)) {
+                drinkToCopy = drink;
+                break;
+            }
+        }
+        Drink copy = createCopyOfDrink(drinkToCopy);
+        return copy;
+    }
+
     private static Drink createCopyOfDrink(Drink drink) {
         Drink original = drink;
         Drink copy = null;
@@ -73,15 +85,5 @@ public class Menu {
             exception.printStackTrace();
         }
         return copy;
-    }
-
-    public static Drink getDrinkByName(String name) {
-        for (Drink drink : drinks) {
-            if (drink.getName().equals(name)) {
-                return drink;
-            }
-        }
-
-        return null;
     }
 }
