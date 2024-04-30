@@ -33,6 +33,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.net
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.MenuItemInfo;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.Order;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -285,8 +287,41 @@ public class LabelPrinterFragment extends Fragment {
                                     }
                                     drinkToAdd.setSize(sizeToAdd);
 
-                                    // initialize drinkComponents for drink
-                                    drinkToAdd.getDrinkComponentsBySize(sizeToAdd);
+                                    // TODO: handle customizations.
+                                    List<DrinkComponent> drinkComponentsStandard = drinkToAdd.getDrinkComponentsBySize(sizeToAdd);
+                                    int counter = 0;
+                                    String textCustomizationForLabel = "";
+                                    for (String customization : customizations) {
+                                        Log.e(TAG, counter + ": " + customization);
+                                        if (customization.substring(0, 5).equals("Syrup") ||
+                                                customization.substring(0, 5).equals("Sauce")) {
+                                            Log.e(TAG, "SYRUP || SAUCE");
+                                            String[] customizationSplitted = customization.split("\\s+");
+                                            int numberOfPumps = Integer.parseInt(customizationSplitted[2]);
+                                            if (customizationSplitted[1].equals("VANILLA_SYRUP,")) {
+                                                textCustomizationForLabel += "\n" + numberOfPumps + " VANILLA";
+                                                for (int i = 0; i < numberOfPumps; i++) {
+                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.VANILLA));
+                                                }
+                                            }
+                                            if (customizationSplitted[1].equals("MOCHA_SAUCE,")) {
+                                                textCustomizationForLabel += "\n" + numberOfPumps + " MOCHA";
+                                                for (int i = 0; i < numberOfPumps; i++) {
+                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.MOCHA));
+                                                }
+                                            }
+                                            if (customizationSplitted[1].equals("BROWN_SUGAR_SYRUP,")) {
+                                                textCustomizationForLabel += "\n" + numberOfPumps + " BROWN_SUGAR";
+                                                for (int i = 0; i < numberOfPumps; i++) {
+                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.BROWN_SUGAR));
+                                                }
+                                            }
+                                        } else {
+                                            Log.e(TAG, "NOT a syrup");
+                                        }
+
+                                        counter++;
+                                    }
 
                                     // initialize textForDrinkLabel for drink
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
@@ -295,6 +330,11 @@ public class LabelPrinterFragment extends Fragment {
                                             formatDateTime,
                                             drinkToAdd.getSize(),
                                             drinkToAdd.getName());
+
+                                    if (textCustomizationForLabel.length() > 0) {
+                                        contentNewDrinkLabel += textCustomizationForLabel;
+                                    }
+
                                     drinkToAdd.setTextForDrinkLabel(
                                             contentNewDrinkLabel
                                     );
