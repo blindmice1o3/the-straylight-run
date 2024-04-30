@@ -55,6 +55,7 @@ public class LabelPrinterFragment extends Fragment {
     private RequestQueue requestQueue;
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private ScheduledFuture requestRepeatingFetchNewerOrders;
+    private LocalDateTime timestampLastDrink;
 
     public interface Listener {
         void onInitializationCompleted(LabelPrinter labelPrinter);
@@ -97,7 +98,7 @@ public class LabelPrinterFragment extends Fragment {
         Log.e(TAG, "onCreate()");
 
         requestQueue = Volley.newRequestQueue(getContext());
-        timestampLastChecked = LocalDateTime.now();
+        timestampLastDrink = LocalDateTime.now();
     }
 
     @Override
@@ -136,6 +137,25 @@ public class LabelPrinterFragment extends Fragment {
             public void onDrinkRemoved(int indexToRemove) {
                 adapter.notifyItemRemoved(indexToRemove);
             }
+
+            @Override
+            public void onLastDrinkRemoved(Drink drink) {
+                String textForDrinkLabel = drink.getTextForDrinkLabel();
+                String[] textForDrinkLabelSplitted = textForDrinkLabel.split("\\s+");
+                String textDate = textForDrinkLabelSplitted[0];
+                String textTime = textForDrinkLabelSplitted[1];
+                String textAmOrPm = textForDrinkLabelSplitted[2];
+//                                String textSize = textForDrinkLabelSplitted[3];
+//                                String textDrink = textForDrinkLabelSplitted[4];
+
+                // convert String timestamp into LocalDateTime.
+                String dateTimeString = textDate + " " + textTime + " " + textAmOrPm;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
+
+                // store timestamp of last drink from queue (before the last label is pulled).
+                //   used to check db-service for drinks that are more recent.
+                timestampLastDrink = LocalDateTime.parse(dateTimeString, formatter);
+            }
         });
 
         labelPrinter.generateRandomDrinkRequest();
@@ -143,8 +163,6 @@ public class LabelPrinterFragment extends Fragment {
 
         listener.onInitializationCompleted(labelPrinter);
     }
-
-    private LocalDateTime timestampLastChecked;
 
     @Override
     public void onResume() {
@@ -161,6 +179,7 @@ public class LabelPrinterFragment extends Fragment {
                             LocalDateTime timestampNewest = LocalDateTime.of(1942, 4, 20, 16, 20, 0);
                             // queue NOT empty, use LAST drink's timestamp.
                             if (!queueDrinks.isEmpty()) {
+                                Log.e(TAG, "drink queue NOT empty");
                                 int indexEnd = queueDrinks.size() - 1;
                                 String textForDrinkLabel = queueDrinks.get(indexEnd).getTextForDrinkLabel();
                                 String[] textForDrinkLabelSplitted = textForDrinkLabel.split("\\s+");
@@ -175,12 +194,11 @@ public class LabelPrinterFragment extends Fragment {
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
                                 timestampNewest = LocalDateTime.parse(dateTimeString, formatter);
                                 Log.e(TAG, "timestampNewest: " + timestampNewest.toString());
-                                timestampLastChecked = timestampNewest;
                             }
-                            // queue IS empty, use timestampLastChecked.
+                            // queue IS empty, use timestampLastDrink.
                             else {
-                                // TODO: bug when queue is empty.
-                                timestampNewest = timestampLastChecked;
+                                Log.e(TAG, "drink queue empty");
+                                timestampNewest = timestampLastDrink;
                             }
 
                             requestFetchNewerOrders(

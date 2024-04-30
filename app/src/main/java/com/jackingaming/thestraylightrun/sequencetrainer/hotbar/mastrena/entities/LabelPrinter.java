@@ -37,6 +37,8 @@ public class LabelPrinter extends AppCompatTextView {
         void onDrinkAdded(int indexToAdd);
 
         void onDrinkRemoved(int indexToRemove);
+
+        void onLastDrinkRemoved(Drink drink);
     }
 
     private LabelPrinterListener listener;
@@ -218,6 +220,12 @@ public class LabelPrinter extends AppCompatTextView {
         if (isSuccessRemoval) {
             listener.onDrinkRemoved(indexToRemove);
             Log.e(TAG, "SUCCESSFULLY removed!");
+
+            // store timestamp of last drink from queue (before the last label is pulled).
+            //   used to check db-service for drinks that are more recent.
+            if (queueDrinks.isEmpty()) {
+                listener.onLastDrinkRemoved(drinkToRemove);
+            }
         }
         return isSuccessRemoval;
     }
