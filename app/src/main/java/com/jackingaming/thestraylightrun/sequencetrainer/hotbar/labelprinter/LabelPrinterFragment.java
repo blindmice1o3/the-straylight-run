@@ -34,7 +34,10 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.net
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.Order;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -273,6 +276,7 @@ public class LabelPrinterFragment extends Fragment {
 
                                     // set size for drink
                                     Drink drinkToAdd = Menu.getDrinkByName(id);
+                                    // TODO: drinkToAdd can potentially be null.
                                     Drink.Size sizeToAdd = null;
                                     if (size.equals("Short")) {
                                         sizeToAdd = Drink.Size.SHORT;
@@ -316,8 +320,85 @@ public class LabelPrinterFragment extends Fragment {
                                                     drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.BROWN_SUGAR));
                                                 }
                                             }
+                                        } else if (customization.substring(0, 8).equals("MilkBase")) {
+                                            Log.e(TAG, "MILK_BASE");
+                                            String[] customizationSplitted = customization.split("\\s+");
+
+                                            boolean isIced = false;
+                                            for (DrinkComponent drinkComponent : drinkToAdd.getDrinkComponents()) {
+                                                if (drinkComponent instanceof Ice) {
+                                                    isIced = true;
+                                                }
+                                            }
+                                            int amount = 100;
+                                            if (!isIced) {
+                                                switch (drinkToAdd.getSize()) {
+                                                    case TRENTA:
+                                                        // no TRENTA_HOT
+                                                        break;
+                                                    case VENTI_COLD:
+                                                        // no VENTI_COLD
+                                                        break;
+                                                    case VENTI_HOT:
+                                                        amount = 20 * 4;
+                                                        break;
+                                                    case GRANDE:
+                                                        amount = 16 * 4;
+                                                        break;
+                                                    case TALL:
+                                                        amount = 12 * 4;
+                                                        break;
+                                                    case SHORT:
+                                                        amount = 8 * 4;
+                                                        break;
+                                                }
+                                            }
+
+                                            if (customizationSplitted[1].equals("TWO_PERCENT,")) {
+                                                textCustomizationForLabel += "\nTWO_PERCENT";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.TWO_PERCENT, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.TWO_PERCENT, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            } else if (customizationSplitted[1].equals("WHOLE_MILK,")) {
+                                                textCustomizationForLabel += "\nWHOLE";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.WHOLE, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.WHOLE, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            } else if (customizationSplitted[1].equals("OATMILK,")) {
+                                                textCustomizationForLabel += "\nOAT";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.OAT, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.OAT, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            } else if (customizationSplitted[1].equals("COCONUT,")) {
+                                                textCustomizationForLabel += "\nCOCONUT";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.COCONUT, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.COCONUT, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            } else if (customizationSplitted[1].equals("ALMOND,")) {
+                                                textCustomizationForLabel += "\nALMOND";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.ALMOND, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.ALMOND, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            } else if (customizationSplitted[1].equals("SOY,")) {
+                                                textCustomizationForLabel += "\nSOY";
+                                                Milk milkToAdd = (isIced) ?
+                                                        new Milk(Milk.Type.SOY, amount, RefrigeratorFragment.TEMPERATURE, 0) :
+                                                        new Milk(Milk.Type.SOY, amount, 160, 3);
+
+                                                drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            }
                                         } else {
-                                            Log.e(TAG, "NOT a syrup");
+                                            Log.e(TAG, "NOT a syrup/sauce && NOT a milk");
                                         }
 
                                         counter++;
