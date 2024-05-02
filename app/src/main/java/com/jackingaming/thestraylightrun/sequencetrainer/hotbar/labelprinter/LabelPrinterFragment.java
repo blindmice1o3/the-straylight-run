@@ -38,6 +38,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -274,9 +275,9 @@ public class LabelPrinterFragment extends Fragment {
                                     String textCustomizations = (customizations.isEmpty()) ? "standard" : "customized";
                                     Log.e(TAG, id + " | " + size + " | " + textCustomizations);
 
-                                    // set size for drink
                                     Drink drinkToAdd = Menu.getDrinkByName(id);
-                                    // TODO: drinkToAdd can potentially be null.
+
+                                    // set size for drink
                                     Drink.Size sizeToAdd = null;
                                     if (size.equals("Short")) {
                                         sizeToAdd = Drink.Size.SHORT;
@@ -332,9 +333,12 @@ public class LabelPrinterFragment extends Fragment {
                                                     break;
                                                 }
                                             }
-                                            int amount = milkStandard.getAmount();
-                                            int temperature = milkStandard.getTemperature();
-                                            int timeFrothed = milkStandard.getTimeFrothed();
+                                            int amount = (milkStandard != null) ?
+                                                    milkStandard.getAmount() : 100;
+                                            int temperature = (milkStandard != null) ?
+                                                    milkStandard.getTemperature() : RefrigeratorFragment.TEMPERATURE;
+                                            int timeFrothed = (milkStandard != null) ?
+                                                    milkStandard.getTimeFrothed() : 0;
 
                                             Milk.Type type = null;
                                             String[] customizationSplitted = customization.split("\\s+");

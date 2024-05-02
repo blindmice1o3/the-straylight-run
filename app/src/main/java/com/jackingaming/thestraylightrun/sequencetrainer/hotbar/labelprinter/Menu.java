@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.UndefinedDrink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.ColdMilk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.IcedBrownSugarOatmilkShakenEspresso;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.cold.IcedCaffeLatte;
@@ -63,7 +64,10 @@ public class Menu {
                 break;
             }
         }
-        Drink copy = createCopyOfDrink(drinkToCopy);
+
+        Drink copy = (drinkToCopy != null) ?
+                createCopyOfDrink(drinkToCopy) : new UndefinedDrink();
+
         return copy;
     }
 
