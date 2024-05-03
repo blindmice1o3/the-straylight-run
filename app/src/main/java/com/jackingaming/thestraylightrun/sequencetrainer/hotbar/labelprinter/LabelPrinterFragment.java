@@ -35,10 +35,10 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.net
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.Order;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -292,8 +292,10 @@ public class LabelPrinterFragment extends Fragment {
                                     }
                                     drinkToAdd.setSize(sizeToAdd);
 
+                                    // initialize drinkComponents for drink
+                                    drinkToAdd.getDrinkComponentsBySize(sizeToAdd);
+
                                     // TODO: handle customizations.
-                                    List<DrinkComponent> drinkComponentsStandard = drinkToAdd.getDrinkComponentsBySize(sizeToAdd);
                                     int counter = 0;
                                     String textCustomizationForLabel = "";
                                     for (String customization : customizations) {
@@ -301,27 +303,23 @@ public class LabelPrinterFragment extends Fragment {
                                         if (customization.substring(0, 5).equals("Syrup") ||
                                                 customization.substring(0, 5).equals("Sauce")) {
                                             Log.e(TAG, "SYRUP || SAUCE");
-                                            // TODO: check if syrup/sauce already in standard recipe
-                                            //  (if so, how many pumps, and how many more/less needed).
+
                                             String[] customizationSplitted = customization.split("\\s+");
-                                            int numberOfPumps = Integer.parseInt(customizationSplitted[2]);
+                                            int numberOfPumpsCustomized = Integer.parseInt(customizationSplitted[2]);
                                             if (customizationSplitted[1].equals("VANILLA_SYRUP,")) {
-                                                textCustomizationForLabel += "\n" + numberOfPumps + " VANILLA";
-                                                for (int i = 0; i < numberOfPumps; i++) {
-                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.VANILLA));
-                                                }
+                                                textCustomizationForLabel += "\n" + numberOfPumpsCustomized + " VANILLA";
+                                                handleAddOrRemoveSyrup(numberOfPumpsCustomized,
+                                                        Syrup.Type.VANILLA, drinkToAdd.getDrinkComponents());
                                             }
                                             if (customizationSplitted[1].equals("MOCHA_SAUCE,")) {
-                                                textCustomizationForLabel += "\n" + numberOfPumps + " MOCHA";
-                                                for (int i = 0; i < numberOfPumps; i++) {
-                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.MOCHA));
-                                                }
+                                                textCustomizationForLabel += "\n" + numberOfPumpsCustomized + " MOCHA";
+                                                handleAddOrRemoveSyrup(numberOfPumpsCustomized,
+                                                        Syrup.Type.MOCHA, drinkToAdd.getDrinkComponents());
                                             }
                                             if (customizationSplitted[1].equals("BROWN_SUGAR_SYRUP,")) {
-                                                textCustomizationForLabel += "\n" + numberOfPumps + " BROWN_SUGAR";
-                                                for (int i = 0; i < numberOfPumps; i++) {
-                                                    drinkToAdd.getDrinkComponents().add(new Syrup(Syrup.Type.BROWN_SUGAR));
-                                                }
+                                                textCustomizationForLabel += "\n" + numberOfPumpsCustomized + " BROWN_SUGAR";
+                                                handleAddOrRemoveSyrup(numberOfPumpsCustomized,
+                                                        Syrup.Type.BROWN_SUGAR, drinkToAdd.getDrinkComponents());
                                             }
                                         } else if (customization.substring(0, 8).equals("MilkBase")) {
                                             Log.e(TAG, "MILK_BASE");
@@ -333,12 +331,6 @@ public class LabelPrinterFragment extends Fragment {
                                                     break;
                                                 }
                                             }
-                                            int amount = (milkStandard != null) ?
-                                                    milkStandard.getAmount() : 100;
-                                            int temperature = (milkStandard != null) ?
-                                                    milkStandard.getTemperature() : RefrigeratorFragment.TEMPERATURE;
-                                            int timeFrothed = (milkStandard != null) ?
-                                                    milkStandard.getTimeFrothed() : 0;
 
                                             Milk.Type type = null;
                                             String[] customizationSplitted = customization.split("\\s+");
@@ -362,10 +354,11 @@ public class LabelPrinterFragment extends Fragment {
                                                 type = Milk.Type.SOY;
                                             }
 
-                                            drinkToAdd.getDrinkComponents().remove(milkStandard);
-
-                                            Milk milkToAdd = new Milk(type, amount, temperature, timeFrothed);
-                                            drinkToAdd.getDrinkComponents().add(milkToAdd);
+                                            if (milkStandard != null) {
+                                                milkStandard.setType(type);
+                                            } else {
+                                                Log.e(TAG, "milkStandard == null... meaning did not find milk in standard recipe.");
+                                            }
                                         } else if (customization.substring(0, 7).equals("CupSize")) {
                                             Log.e(TAG, "CUP_SIZE");
 
@@ -449,6 +442,77 @@ public class LabelPrinterFragment extends Fragment {
         );
 
         requestQueue.add(fetchNewerOrderRequest);
+    }
+
+    private void handleAddOrRemoveSyrup(int numberOfPumpsTotal, Syrup.Type type, List<DrinkComponent> drinkComponents) {
+        // count how many pumps are in the standard recipe.
+        int counterSyrup = 0;
+        boolean shaken = false;
+        boolean blended = false;
+        for (DrinkComponent drinkComponent : drinkComponents) {
+            if (drinkComponent instanceof Syrup &&
+                    ((Syrup) drinkComponent).getType() == type) {
+                counterSyrup++;
+                shaken = drinkComponent.isShaken();
+                blended = drinkComponent.isBlended();
+            }
+        }
+
+        boolean isSyrupInStandardRecipe = counterSyrup > 0;
+
+        // add pump(s)
+        if (counterSyrup < numberOfPumpsTotal) {
+            int numberOfPumpsToAdd = numberOfPumpsTotal - counterSyrup;
+
+            int index = -1;
+            // find index of first syrup
+            if (isSyrupInStandardRecipe) {
+                for (int i = 0; i < drinkComponents.size(); i++) {
+                    if (drinkComponents.get(i) instanceof Syrup) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+            // not syrup in standard recipe (find espresso shot or milk)
+            else {
+                for (int i = 0; i < drinkComponents.size(); i++) {
+                    if (drinkComponents.get(i) instanceof EspressoShot) {
+                        index = i;
+                        break;
+                    } else if (drinkComponents.get(i) instanceof Milk) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < numberOfPumpsToAdd; i++) {
+                Syrup syrupToAdd = new Syrup(type);
+                syrupToAdd.setShaken(shaken);
+                syrupToAdd.setBlended(blended);
+                drinkComponents.add(index, syrupToAdd);
+            }
+        }
+        // remove pump(s)
+        else {
+            int numberOfPumpsToRemove = counterSyrup - numberOfPumpsTotal;
+
+            int index = -1;
+            // find index of first syrup
+            if (isSyrupInStandardRecipe) {
+                for (int i = 0; i < drinkComponents.size(); i++) {
+                    if (drinkComponents.get(i) instanceof Syrup) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i < numberOfPumpsToRemove; i++) {
+                drinkComponents.remove(index);
+            }
+        }
     }
 
     public void changeLabelPrinterMode(String modeSelected) {
