@@ -397,8 +397,43 @@ public class LabelPrinterFragment extends Fragment {
 
                                                 drinkToAdd.getDrinkProperties().put(Drink.Property.CUP_SIZE_SPECIFIED, cupSizeSpecified);
                                             }
+                                        } else if (customization.substring(0, 12).equals("RoastOptions")) {
+                                            Log.e(TAG, "ROAST_OPTIONS");
+
+                                            String[] customizationSplitted = customization.split("\\s+");
+                                            EspressoShot.Type type = null;
+                                            if (customizationSplitted[1].equals("BLONDE,")) {
+                                                Log.e(TAG, "BLONDE");
+                                                textCustomizationForLabel += "\n" + "blonde";
+                                                type = EspressoShot.Type.BLONDE;
+                                            } else if (customizationSplitted[1].equals("DECAF,")) {
+                                                Log.e(TAG, "DECAF");
+                                                textCustomizationForLabel += "\n" + "decaf";
+                                                type = EspressoShot.Type.DECAF;
+                                            }
+//                                            else if (customizationSplitted[1].equals("DECAF_ONE_THIRD")) {
+//                                                Log.e(TAG, "DECAF_ONE_THIRD");
+//                                            } else if (customizationSplitted[1].equals("DECAF_ONE_HALF")) {
+//                                                Log.e(TAG, "DECAF_ONE_HALF");
+//                                            } else if (customizationSplitted[1].equals("DECAF_TWO_THIRD")) {
+//                                                Log.e(TAG, "DECAF_TWO_THIRD");
+//                                            }
+
+                                            for (DrinkComponent drinkComponent : drinkToAdd.getDrinkComponents()) {
+                                                if (drinkComponent instanceof EspressoShot) {
+                                                    ((EspressoShot) drinkComponent).setType(type);
+                                                }
+                                            }
+                                        } else if (customization.substring(0, 5).equals("Shots")) {
+                                            Log.e(TAG, "SHOTS");
+
+                                            String[] customizationSplitted = customization.split("\\s+");
+                                            int numberOfShotsCustomized = Integer.parseInt(customizationSplitted[2]);
+                                            textCustomizationForLabel += "\n" + numberOfShotsCustomized + " shot";
+                                            handleAddOrRemoveShot(numberOfShotsCustomized,
+                                                    drinkToAdd.getDrinkComponents(), customizations);
                                         } else {
-                                            Log.e(TAG, "NOT a syrup/sauce && NOT a milk");
+                                            Log.e(TAG, "NOT syrup/sauce && NOT milk base && NOT cup size && NOT roast options && NOT shots");
                                         }
 
                                         counter++;
@@ -444,7 +479,112 @@ public class LabelPrinterFragment extends Fragment {
         requestQueue.add(fetchNewerOrderRequest);
     }
 
-    private void handleAddOrRemoveSyrup(int numberOfPumpsTotal, Syrup.Type type, List<DrinkComponent> drinkComponents) {
+    private void handleAddOrRemoveShot(int numberOfShotsTotal,
+                                       List<DrinkComponent> drinkComponents,
+                                       List<String> customizations) {
+        // count how many shots are in the standard recipe.
+        int counterShot = 0;
+        EspressoShot shot = null;
+        int indexFirstOccurrence = -1;
+        for (int i = 0; i < drinkComponents.size(); i++) {
+            DrinkComponent drinkComponent = drinkComponents.get(i);
+            if (drinkComponent instanceof EspressoShot) {
+                counterShot++;
+
+                if (indexFirstOccurrence < 0) {
+                    indexFirstOccurrence = 1;
+                }
+                shot = (EspressoShot) drinkComponent;
+            }
+        }
+
+        // add shot(s)
+        if (counterShot < numberOfShotsTotal) {
+            int numberOfShotsToAdd = numberOfShotsTotal - counterShot;
+
+            boolean isShotInStandardRecipe = (shot != null);
+            // shot in standard recipe
+            if (isShotInStandardRecipe) {
+                for (int i = 0; i < numberOfShotsToAdd; i++) {
+                    EspressoShot shotToAdd = new EspressoShot(shot.getType(),
+                            shot.getAmountOfWater(),
+                            shot.getAmountOfBean());
+                    shotToAdd.setShaken(shot.isShaken());
+                    shotToAdd.setBlended(shot.isBlended());
+                    drinkComponents.add(indexFirstOccurrence, shotToAdd);
+                }
+            }
+            // no shot in standard recipe (find milk)
+            else {
+                Milk milk = null;
+                int indexToAdd = -1;
+                for (int i = 0; i < drinkComponents.size(); i++) {
+                    if (drinkComponents.get(i) instanceof Milk) {
+                        milk = (Milk) drinkComponents.get(i);
+                        indexToAdd = i;
+                        break;
+                    }
+                }
+
+
+                EspressoShot.Type type = null;
+                EspressoShot.AmountOfWater amountOfWater = null;
+                for (String customization : customizations) {
+                    if (customization.substring(0, 20).equals("PullOptionsAllowable") ||
+                            customization.substring(0, 11).equals("PullOptions")) {
+                        Log.e(TAG, "PullOptionsAllowable || PullOptions");
+
+                        String[] customizationSplitted = customization.split("\\s+");
+                        if (customizationSplitted[1].equals("RISTRETTO,")) {
+                            amountOfWater = EspressoShot.AmountOfWater.RISTRETTO;
+                        } else if (customizationSplitted[1].equals("LONG,")) {
+                            amountOfWater = EspressoShot.AmountOfWater.LONG;
+                        }
+                    } else if (customization.substring(0, 21).equals("RoastOptionsAllowable") ||
+                            customization.substring(0, 12).equals("RoastOptions")) {
+                        Log.e(TAG, "RoastOptionsAllowable || RoastOptions");
+
+                        String[] customizationSplitted = customization.split("\\s+");
+                        if (customizationSplitted[1].equals("BLONDE,")) {
+                            Log.e(TAG, "BLONDE");
+                            type = EspressoShot.Type.BLONDE;
+                        } else if (customizationSplitted[1].equals("DECAF,")) {
+                            Log.e(TAG, "DECAF");
+                            type = EspressoShot.Type.DECAF;
+                        }
+                    }
+                }
+                if (type == null) {
+                    type = EspressoShot.Type.SIGNATURE;
+                }
+                if (amountOfWater == null) {
+                    amountOfWater = EspressoShot.AmountOfWater.STANDARD;
+                }
+
+
+                for (int i = 0; i < numberOfShotsToAdd; i++) {
+                    EspressoShot shotToAdd = new EspressoShot(type,
+                            amountOfWater,
+                            EspressoShot.AmountOfBean.STANDARD);
+                    shotToAdd.setShaken(milk.isShaken());
+                    shotToAdd.setBlended(milk.isBlended());
+                    drinkComponents.add(indexToAdd, shotToAdd);
+                }
+            }
+        }
+        // remove shot(s)
+        else {
+            int numberOfShotsToRemove = counterShot - numberOfShotsTotal;
+
+            for (int i = 0; i < numberOfShotsToRemove; i++) {
+                drinkComponents.remove(indexFirstOccurrence);
+            }
+        }
+    }
+
+    private void handleAddOrRemoveSyrup(int numberOfPumpsTotal,
+                                        Syrup.Type type,
+                                        List<DrinkComponent> drinkComponents) {
         // count how many pumps are in the standard recipe.
         int counterSyrup = 0;
         boolean shaken = false;
@@ -474,7 +614,7 @@ public class LabelPrinterFragment extends Fragment {
                     }
                 }
             }
-            // not syrup in standard recipe (find espresso shot or milk)
+            // no syrup in standard recipe (find espresso shot or milk)
             else {
                 for (int i = 0; i < drinkComponents.size(); i++) {
                     if (drinkComponents.get(i) instanceof EspressoShot) {
