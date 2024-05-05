@@ -17,6 +17,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Men
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 
@@ -111,6 +112,8 @@ public class LabelPrinter extends AppCompatTextView {
             // Append differences between customized and standard to sb.
 
             // ***CUSTOMIZED***
+            // ESPRESSO SHOT
+            Map<EspressoShot.Type, Integer> shotsMapCustomized = new HashMap<>();
             // SYRUP
             Map<Syrup.Type, Integer> syrupsMapCustomized = new HashMap<>();
             // MILK
@@ -119,12 +122,21 @@ public class LabelPrinter extends AppCompatTextView {
                     drinkRandomCustomized.getDrinkComponents()
             );
             for (DrinkComponent drinkComponent : drinkComponentsCustomized) {
-                if (drinkComponent instanceof Syrup) {
+                if (drinkComponent instanceof EspressoShot) {
+                    EspressoShot.Type type = ((EspressoShot) drinkComponent).getType();
+                    if (shotsMapCustomized.containsKey(type)) {
+                        Integer counterShot = shotsMapCustomized.get(type);
+                        counterShot++;
+                        shotsMapCustomized.put(type, counterShot);
+                    } else {
+                        shotsMapCustomized.put(type, 1);
+                    }
+                } else if (drinkComponent instanceof Syrup) {
                     Syrup.Type type = ((Syrup) drinkComponent).getType();
                     if (syrupsMapCustomized.containsKey(type)) {
-                        Integer counter = syrupsMapCustomized.get(type);
-                        counter++;
-                        syrupsMapCustomized.put(type, counter);
+                        Integer counterSyrup = syrupsMapCustomized.get(type);
+                        counterSyrup++;
+                        syrupsMapCustomized.put(type, counterSyrup);
                     } else {
                         syrupsMapCustomized.put(type, 1);
                     }
@@ -134,6 +146,8 @@ public class LabelPrinter extends AppCompatTextView {
             }
 
             // ***STANDARD***
+            // ESPRESSO SHOT
+            Map<EspressoShot.Type, Integer> shotsMapStandard = new HashMap<>();
             // SYRUP
             Map<Syrup.Type, Integer> syrupsMapStandard = new HashMap<>();
             // MILK
@@ -143,12 +157,21 @@ public class LabelPrinter extends AppCompatTextView {
                             .getDrinkComponentsBySize(drinkRandomCustomized.getSize())
             );
             for (DrinkComponent drinkComponent : drinkComponentsStandard) {
-                if (drinkComponent instanceof Syrup) {
+                if (drinkComponent instanceof EspressoShot) {
+                    EspressoShot.Type type = ((EspressoShot) drinkComponent).getType();
+                    if (shotsMapStandard.containsKey(type)) {
+                        Integer counterShot = shotsMapStandard.get(type);
+                        counterShot++;
+                        shotsMapStandard.put(type, counterShot);
+                    } else {
+                        shotsMapStandard.put(type, 1);
+                    }
+                } else if (drinkComponent instanceof Syrup) {
                     Syrup.Type type = ((Syrup) drinkComponent).getType();
                     if (syrupsMapStandard.containsKey(type)) {
-                        Integer counter = syrupsMapStandard.get(type);
-                        counter++;
-                        syrupsMapStandard.put(type, counter);
+                        Integer counterSyrup = syrupsMapStandard.get(type);
+                        counterSyrup++;
+                        syrupsMapStandard.put(type, counterSyrup);
                     } else {
                         syrupsMapStandard.put(type, 1);
                     }
@@ -158,6 +181,28 @@ public class LabelPrinter extends AppCompatTextView {
             }
 
             // ***APPEND***
+            // ESPRESSO SHOT
+            for (EspressoShot.Type type : shotsMapCustomized.keySet()) {
+                int counterCustomized = shotsMapCustomized.get(type);
+                if (shotsMapStandard.containsKey(type)) {
+                    int counterStandard = shotsMapStandard.get(type);
+
+                    if (counterCustomized == counterStandard) {
+                        continue;
+                    } else {
+                        sb.append("\n" + counterCustomized + " " + type);
+                    }
+                } else {
+                    sb.append("\n" + counterCustomized + " " + type);
+                }
+            }
+            // normally has shot... customization is 0-shot.
+            for (EspressoShot.Type type : shotsMapStandard.keySet()) {
+                int counterStandard = shotsMapStandard.get(type);
+                if (!shotsMapCustomized.containsKey(type)) {
+                    sb.append("\n" + 0 + " " + type);
+                }
+            }
             // SYRUP
             for (Syrup.Type type : syrupsMapCustomized.keySet()) {
                 int counterCustomized = syrupsMapCustomized.get(type);
@@ -171,6 +216,13 @@ public class LabelPrinter extends AppCompatTextView {
                     }
                 } else {
                     sb.append("\n" + counterCustomized + " " + type);
+                }
+            }
+            // normally has syrup... customization is 0-syrup.
+            for (Syrup.Type type : syrupsMapStandard.keySet()) {
+                int counterStandard = syrupsMapStandard.get(type);
+                if (!syrupsMapCustomized.containsKey(type)) {
+                    sb.append("\n" + 0 + " " + type);
                 }
             }
             // MILK

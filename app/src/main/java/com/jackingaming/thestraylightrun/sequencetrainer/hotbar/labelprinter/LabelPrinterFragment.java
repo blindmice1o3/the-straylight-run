@@ -404,11 +404,11 @@ public class LabelPrinterFragment extends Fragment {
                                             EspressoShot.Type type = null;
                                             if (customizationSplitted[1].equals("BLONDE,")) {
                                                 Log.e(TAG, "BLONDE");
-                                                textCustomizationForLabel += "\n" + "blonde";
+                                                textCustomizationForLabel += "\n" + "BLONDE";
                                                 type = EspressoShot.Type.BLONDE;
                                             } else if (customizationSplitted[1].equals("DECAF,")) {
                                                 Log.e(TAG, "DECAF");
-                                                textCustomizationForLabel += "\n" + "decaf";
+                                                textCustomizationForLabel += "\n" + "DECAF";
                                                 type = EspressoShot.Type.DECAF;
                                             }
 //                                            else if (customizationSplitted[1].equals("DECAF_ONE_THIRD")) {
@@ -492,7 +492,7 @@ public class LabelPrinterFragment extends Fragment {
                 counterShot++;
 
                 if (indexFirstOccurrence < 0) {
-                    indexFirstOccurrence = 1;
+                    indexFirstOccurrence = i;
                 }
                 shot = (EspressoShot) drinkComponent;
             }
@@ -525,7 +525,6 @@ public class LabelPrinterFragment extends Fragment {
                         break;
                     }
                 }
-
 
                 EspressoShot.Type type = null;
                 EspressoShot.AmountOfWater amountOfWater = null;
@@ -560,7 +559,6 @@ public class LabelPrinterFragment extends Fragment {
                 if (amountOfWater == null) {
                     amountOfWater = EspressoShot.AmountOfWater.STANDARD;
                 }
-
 
                 for (int i = 0; i < numberOfShotsToAdd; i++) {
                     EspressoShot shotToAdd = new EspressoShot(type,
