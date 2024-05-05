@@ -190,17 +190,22 @@ public class LabelPrinter extends AppCompatTextView {
                     if (counterCustomized == counterStandard) {
                         continue;
                     } else {
-                        sb.append("\n" + counterCustomized + " " + type);
+                        String textUnit = (counterCustomized > 1) ? "shots" : "shot";
+                        String textType = (type == EspressoShot.Type.SIGNATURE) ? "    " : type.name();
+                        sb.append("\n" + counterCustomized + " " + textUnit + " " + textType);
                     }
                 } else {
-                    sb.append("\n" + counterCustomized + " " + type);
+                    String textUnit = (counterCustomized > 1) ? "shots" : "shot";
+                    String textType = (type == EspressoShot.Type.SIGNATURE) ? "    " : type.name();
+                    sb.append("\n" + counterCustomized + " " + textUnit + " " + textType);
                 }
             }
             // normally has shot... customization is 0-shot.
             for (EspressoShot.Type type : shotsMapStandard.keySet()) {
                 int counterStandard = shotsMapStandard.get(type);
                 if (!shotsMapCustomized.containsKey(type)) {
-                    sb.append("\n" + 0 + " " + type);
+                    String textType = (type == EspressoShot.Type.SIGNATURE) ? "    " : type.name();
+                    sb.append("\n" + 0 + " " + "shot" + " " + textType);
                 }
             }
             // SYRUP

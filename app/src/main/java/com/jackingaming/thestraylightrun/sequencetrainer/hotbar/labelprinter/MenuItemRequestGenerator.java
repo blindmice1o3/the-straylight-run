@@ -76,29 +76,42 @@ public class MenuItemRequestGenerator {
         return drinkRandom;
     }
 
-    private static final int CUSTOMIZE_SYRUP = 0;
-    private static final int CUSTOMIZE_MILK = 1;
-    private static final int CUSTOMIZE_BOTH = 2;
+    private static final int CUSTOMIZE_MILK = 0;
+    private static final int CUSTOMIZE_SYRUP = 1;
+    private static final int CUSTOMIZE_SHOT = 2;
+    private static final int CUSTOMIZE_MULTIPLE_COMPONENTS = 3;
 
     private static void generateCustomizationsForDrink(Drink drink) {
-        int randomCustomization = random.nextInt(3);
+        int randomCustomization = random.nextInt(4);
 
-        if (randomCustomization == CUSTOMIZE_SYRUP) {
-            generateRandomNumberOfSyrupForDrink(drink);
-        } else if (randomCustomization == CUSTOMIZE_MILK) {
+        if (randomCustomization == CUSTOMIZE_MILK) {
             generateRandomTypeOfMilkForDrink(drink);
-        } else if (randomCustomization == CUSTOMIZE_BOTH) {
+        } else if (randomCustomization == CUSTOMIZE_SYRUP) {
             generateRandomNumberOfSyrupForDrink(drink);
-            generateRandomTypeOfMilkForDrink(drink);
-        }
-
-        int customizeShotOrCupSize = random.nextInt(4);
-        // 25% chance to specify espresso shot.
-        if (customizeShotOrCupSize == 0) {
+        } else if (randomCustomization == CUSTOMIZE_SHOT) {
             generateRandomNumberOfShotForDrink(drink);
+        } else if (randomCustomization == CUSTOMIZE_MULTIPLE_COMPONENTS) {
+            int randomCustomizationMultipleComponents = random.nextInt(4);
+
+            if (randomCustomizationMultipleComponents == 0) {
+                generateRandomTypeOfMilkForDrink(drink);
+                generateRandomNumberOfSyrupForDrink(drink);
+            } else if (randomCustomizationMultipleComponents == 1) {
+                generateRandomTypeOfMilkForDrink(drink);
+                generateRandomNumberOfShotForDrink(drink);
+            } else if (randomCustomizationMultipleComponents == 2) {
+                generateRandomNumberOfSyrupForDrink(drink);
+                generateRandomNumberOfShotForDrink(drink);
+            } else if (randomCustomizationMultipleComponents == 3) {
+                generateRandomTypeOfMilkForDrink(drink);
+                generateRandomNumberOfSyrupForDrink(drink);
+                generateRandomNumberOfShotForDrink(drink);
+            }
         }
+
+        int customizeCupSize = random.nextInt(4);
         // 25% chance to specify cup size.
-        else if (customizeShotOrCupSize == 1) {
+        if (customizeCupSize == 0) {
             generateRandomCupSize(drink);
         }
     }
