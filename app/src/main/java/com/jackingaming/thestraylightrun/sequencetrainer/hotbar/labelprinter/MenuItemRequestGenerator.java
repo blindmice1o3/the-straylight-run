@@ -92,9 +92,13 @@ public class MenuItemRequestGenerator {
             generateRandomTypeOfMilkForDrink(drink);
         }
 
+        int customizeShotOrCupSize = random.nextInt(4);
+        // 25% chance to specify espresso shot.
+        if (customizeShotOrCupSize == 0) {
+            generateRandomNumberOfShotForDrink(drink);
+        }
         // 25% chance to specify cup size.
-        int customizeCupSize = random.nextInt(4);
-        if (customizeCupSize == 0) {
+        else if (customizeShotOrCupSize == 1) {
             generateRandomCupSize(drink);
         }
     }
@@ -170,6 +174,80 @@ public class MenuItemRequestGenerator {
 
         if (cupSizeSpecified != null) {
             drink.getDrinkProperties().put(Drink.Property.CUP_SIZE_SPECIFIED, cupSizeSpecified);
+        }
+    }
+
+    private static void generateRandomNumberOfShotForDrink(Drink drink) {
+        int numberOfShotsTotal = random.nextInt(4) + 1; // [1-4]
+        Log.e(TAG, "numberOfShotsTotal:" + numberOfShotsTotal);
+
+        // count how many shots are in the standard recipe.
+        int counterShot = 0;
+        EspressoShot shot = null;
+        int indexFirstOccurrence = -1;
+        for (int i = 0; i < drink.getDrinkComponents().size(); i++) {
+            DrinkComponent drinkComponent = drink.getDrinkComponents().get(i);
+            if (drinkComponent instanceof EspressoShot) {
+                counterShot++;
+
+                if (indexFirstOccurrence < 0) {
+                    indexFirstOccurrence = i;
+                }
+                shot = (EspressoShot) drinkComponent;
+            }
+        }
+
+        if (counterShot == numberOfShotsTotal) {
+            numberOfShotsTotal++;
+        }
+
+        // add shot(s)
+        if (counterShot < numberOfShotsTotal) {
+            int numberOfShotsToAdd = numberOfShotsTotal - counterShot;
+
+            boolean isShotInStandardRecipe = (shot != null);
+            // shot in standard recipe
+            if (isShotInStandardRecipe) {
+                for (int i = 0; i < numberOfShotsToAdd; i++) {
+                    EspressoShot shotToAdd = new EspressoShot(shot.getType(),
+                            shot.getAmountOfWater(),
+                            shot.getAmountOfBean());
+                    shotToAdd.setShaken(shot.isShaken());
+                    shotToAdd.setBlended(shot.isBlended());
+                    drink.getDrinkComponents().add(indexFirstOccurrence, shotToAdd);
+                }
+            }
+            // no shot in standard recipe (find milk)
+            else {
+                Milk milk = null;
+                int indexToAdd = -1;
+                for (int i = 0; i < drink.getDrinkComponents().size(); i++) {
+                    if (drink.getDrinkComponents().get(i) instanceof Milk) {
+                        milk = (Milk) drink.getDrinkComponents().get(i);
+                        indexToAdd = i;
+                        break;
+                    }
+                }
+
+                int indexTypeRandom = random.nextInt(EspressoShot.Type.values().length);
+                EspressoShot.Type type = EspressoShot.Type.values()[indexTypeRandom];
+                for (int i = 0; i < numberOfShotsToAdd; i++) {
+                    EspressoShot shotToAdd = new EspressoShot(type,
+                            EspressoShot.AmountOfWater.STANDARD,
+                            EspressoShot.AmountOfBean.STANDARD);
+                    shotToAdd.setShaken(milk.isShaken());
+                    shotToAdd.setBlended(milk.isBlended());
+                    drink.getDrinkComponents().add(indexToAdd, shotToAdd);
+                }
+            }
+        }
+        // remove shot(s)
+        else {
+            int numberOfShotsToRemove = counterShot - numberOfShotsTotal;
+
+            for (int i = 0; i < numberOfShotsToRemove; i++) {
+                drink.getDrinkComponents().remove(indexFirstOccurrence);
+            }
         }
     }
 
