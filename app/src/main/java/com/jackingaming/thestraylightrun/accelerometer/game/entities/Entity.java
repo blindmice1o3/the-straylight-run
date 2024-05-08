@@ -6,10 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Entity {
+    public interface MovementListener {
+        boolean onMove(int[] futureCorner1, int[] futureCorner2);
+    }
+
     public interface CollisionListener {
         void onJustCollided(Entity collided);
     }
 
+    protected MovementListener movementListener;
     private CollisionListener collisionListener;
 
     public static final int DEFAULT_SPEED_MOVEMENT = 2;
@@ -30,9 +35,10 @@ public abstract class Entity {
     protected boolean justCollided;
     protected boolean cantCollide;
 
-    public Entity(Map<Direction, Animation> sprites, CollisionListener collisionListener) {
+    public Entity(Map<Direction, Animation> sprites, CollisionListener collisionListener, MovementListener movementListener) {
         this.sprites = sprites;
         this.collisionListener = collisionListener;
+        this.movementListener = movementListener;
     }
 
     public static void init(List<Entity> entities,

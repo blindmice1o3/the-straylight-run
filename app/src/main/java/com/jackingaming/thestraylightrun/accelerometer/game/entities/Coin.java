@@ -4,8 +4,9 @@ import java.util.Map;
 
 public class Coin extends Entity {
 
-    public Coin(Map<Direction, Animation> sprites, CollisionListener collisionListener) {
-        super(sprites, collisionListener);
+    public Coin(Map<Direction, Animation> sprites,
+                CollisionListener collisionListener, MovementListener movementListener) {
+        super(sprites, collisionListener, movementListener);
 
         xPos = 200f;
         yPos = 200f;

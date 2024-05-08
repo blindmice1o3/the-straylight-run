@@ -175,16 +175,40 @@ public class GameActivity extends AppCompatActivity
         spritesPlayer.put(LEFT, new Animation(leftPlayer));
         spritesPlayer.put(RIGHT, new Animation(rightPlayer));
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Player player = new Player(spritesPlayer, new Entity.CollisionListener() {
-            @Override
-            public void onJustCollided(Entity collided) {
-                if (collided instanceof Coin) {
-                    soundManager.sfxPlay(soundManager.sfxGetItem);
-                } else if (collided instanceof Rival) {
-                    soundManager.sfxPlay(soundManager.sfxHorn);
-                }
-            }
-        });
+        Player player = new Player(spritesPlayer,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        if (collided instanceof Coin) {
+                            soundManager.sfxPlay(soundManager.sfxGetItem);
+                        } else if (collided instanceof Rival) {
+                            soundManager.sfxPlay(soundManager.sfxHorn);
+                        }
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        // TODO:
+                        int xFutureCorner1 = futureCorner1[0];
+                        int yFutureCorner1 = futureCorner1[1];
+                        int xFutureCorner2 = futureCorner2[0];
+                        int yFutureCorner2 = futureCorner2[1];
+
+                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                        boolean isSolidCorner1 = tileCorner1.isSolid();
+                        boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                        return (!isSolidCorner1 && !isSolidCorner2);
+                    }
+                });
         controllable = (Controllable) player;
 
         Bitmap[] upRival = new Bitmap[3];
@@ -210,28 +234,60 @@ public class GameActivity extends AppCompatActivity
         spritesRival.put(DOWN, new Animation(downRival));
         spritesRival.put(LEFT, new Animation(leftRival));
         spritesRival.put(RIGHT, new Animation(rightRival));
-        Rival rival = new Rival(spritesRival, new Entity.CollisionListener() {
-            @Override
-            public void onJustCollided(Entity collided) {
-                if (collided instanceof Coin) {
-                    soundManager.sfxPlay(soundManager.sfxGetItem);
-                } else if (collided instanceof Player) {
-                    soundManager.sfxPlay(soundManager.sfxHorn);
-                }
-            }
-        });
+        Rival rival = new Rival(spritesRival,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        if (collided instanceof Coin) {
+                            soundManager.sfxPlay(soundManager.sfxGetItem);
+                        } else if (collided instanceof Player) {
+                            soundManager.sfxPlay(soundManager.sfxHorn);
+                        }
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        // TODO:
+                        int xFutureCorner1 = futureCorner1[0];
+                        int yFutureCorner1 = futureCorner1[1];
+                        int xFutureCorner2 = futureCorner2[0];
+                        int yFutureCorner2 = futureCorner2[1];
+
+                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                        boolean isSolidCorner1 = tileCorner1.isSolid();
+                        boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                        return (!isSolidCorner1 && !isSolidCorner2);
+                    }
+                });
 
         Map<Direction, Animation> spritesCoin = new HashMap<>();
         Bitmap[] downCoin = new Bitmap[2];
         downCoin[0] = spriteCoin;
         downCoin[1] = spriteCoin;
         spritesCoin.put(DOWN, new Animation(downCoin));
-        Coin coin = new Coin(spritesCoin, new Entity.CollisionListener() {
-            @Override
-            public void onJustCollided(Entity collided) {
-                // intentionally blank.
-            }
-        });
+        Coin coin = new Coin(spritesCoin,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        // intentionally blank.
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        // intentionally blank.
+                        return false;
+                    }
+                });
 
         ImageView ivPlayer = new ImageView(this);
         ImageView ivRival = new ImageView(this);
@@ -264,6 +320,9 @@ public class GameActivity extends AppCompatActivity
 
         ((World) frameLayout).init(this, R.raw.world01);
         gameCamera = new GameCamera(0f, 0f);
+
+        player.setxPos(150);
+        player.setyPos(300);
     }
 
     @Override
