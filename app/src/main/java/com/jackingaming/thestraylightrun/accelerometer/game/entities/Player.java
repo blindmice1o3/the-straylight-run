@@ -13,6 +13,9 @@ public class Player extends Entity
     private ObjectAnimator objectAnimatorLeft = ObjectAnimator.ofInt(sprites.get(Direction.LEFT), "index", 0, sprites.get(Direction.LEFT).getNumberOfFrames() - 1);
     private ObjectAnimator objectAnimatorRight = ObjectAnimator.ofInt(sprites.get(Direction.RIGHT), "index", 0, sprites.get(Direction.RIGHT).getNumberOfFrames() - 1);
 
+    private Direction directionHorizontal = Direction.RIGHT;
+    private Direction directionVertical = Direction.DOWN;
+
     public Player(Map<Direction, Animation> sprites,
                   CollisionListener collisionListener, MovementListener movementListener) {
         super(sprites, collisionListener, movementListener);
@@ -60,6 +63,8 @@ public class Player extends Entity
                 direction = Direction.RIGHT;
             }
         }
+        directionHorizontal = (xDelta < 0) ? Direction.LEFT : Direction.RIGHT;
+        directionVertical = (yDelta < 0) ? Direction.UP : Direction.DOWN;
 
         float xDeltaWithBonus = xDelta * speedBonus;
         float yDeltaWithBonus = yDelta * speedBonus;
@@ -73,59 +78,56 @@ public class Player extends Entity
         int[] bottomRight = new int[2];
         boolean isTileWalkableHorizontal = false;
         boolean isTileWalkableVertical = false;
-        switch (direction) {
-            case LEFT:
-                xTopLeft = (int) (xPos + xDeltaWithBonus);
-                yTopLeft = (int) (yPos + yDeltaWithBonus);
-                xBottomLeft = (int) (xPos + xDeltaWithBonus);
-                yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+        if (directionHorizontal == Direction.LEFT) {
+            xTopLeft = (int) (xPos + xDeltaWithBonus);
+            yTopLeft = (int) (yPos + yDeltaWithBonus);
+            xBottomLeft = (int) (xPos + xDeltaWithBonus);
+            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
-                topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft + 1;
-                bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft - 1;
+            topLeft[0] = xTopLeft;
+            topLeft[1] = yTopLeft + 1;
+            bottomLeft[0] = xBottomLeft;
+            bottomLeft[1] = yBottomLeft - 1;
 
-                isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
-                break;
-            case UP:
-                xTopLeft = (int) (xPos + xDeltaWithBonus);
-                yTopLeft = (int) (yPos + yDeltaWithBonus);
-                xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yTopRight = (int) (yPos + yDeltaWithBonus);
+            isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
+        } else {
+            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yTopRight = (int) (yPos + yDeltaWithBonus);
+            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
-                topLeft[0] = xTopLeft + 1;
-                topLeft[1] = yTopLeft;
-                topRight[0] = xTopRight - 1;
-                topRight[1] = yTopRight;
+            topRight[0] = xTopRight;
+            topRight[1] = yTopRight + 1;
+            bottomRight[0] = xBottomRight;
+            bottomRight[1] = yBottomRight - 1;
 
-                isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
-                break;
-            case RIGHT:
-                xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yTopRight = (int) (yPos + yDeltaWithBonus);
-                xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            isTileWalkableHorizontal = movementListener.onMove(topRight, bottomRight);
+        }
 
-                topRight[0] = xTopRight;
-                topRight[1] = yTopRight + 1;
-                bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight - 1;
+        if (directionVertical == Direction.UP) {
+            xTopLeft = (int) (xPos + xDeltaWithBonus);
+            yTopLeft = (int) (yPos + yDeltaWithBonus);
+            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yTopRight = (int) (yPos + yDeltaWithBonus);
 
-                isTileWalkableHorizontal = movementListener.onMove(topRight, bottomRight);
-                break;
-            case DOWN:
-                xBottomLeft = (int) (xPos + xDeltaWithBonus);
-                yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-                xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            topLeft[0] = xTopLeft + 1;
+            topLeft[1] = yTopLeft;
+            topRight[0] = xTopRight - 1;
+            topRight[1] = yTopRight;
 
-                bottomLeft[0] = xBottomLeft + 1;
-                bottomLeft[1] = yBottomLeft;
-                bottomRight[0] = xBottomRight - 1;
-                bottomRight[1] = yBottomRight;
+            isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
+        } else {
+            xBottomLeft = (int) (xPos + xDeltaWithBonus);
+            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
-                isTileWalkableVertical = movementListener.onMove(bottomLeft, bottomRight);
-                break;
+            bottomLeft[0] = xBottomLeft + 1;
+            bottomLeft[1] = yBottomLeft;
+            bottomRight[0] = xBottomRight - 1;
+            bottomRight[1] = yBottomRight;
+
+            isTileWalkableVertical = movementListener.onMove(bottomLeft, bottomRight);
         }
 
         // ENTITY-COLLISION
