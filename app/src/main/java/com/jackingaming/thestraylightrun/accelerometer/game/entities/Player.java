@@ -65,15 +65,14 @@ public class Player extends Entity
         float yDeltaWithBonus = yDelta * speedBonus;
 
         // TILE-COLLISION
-        // TODO: use [direction] to determine which two corner-coordinates (e.g. TopLeft,
-        //  TopRight, BottomLeft, BottomRight) to check.
         int xTopLeft, xBottomLeft, xTopRight, xBottomRight = -1;
         int yTopLeft, yBottomLeft, yTopRight, yBottomRight = -1;
         int[] topLeft = new int[2];
         int[] bottomLeft = new int[2];
         int[] topRight = new int[2];
         int[] bottomRight = new int[2];
-        boolean isTileWalkable = false;
+        boolean isTileWalkableHorizontal = false;
+        boolean isTileWalkableVertical = false;
         switch (direction) {
             case LEFT:
                 xTopLeft = (int) (xPos + xDeltaWithBonus);
@@ -82,11 +81,11 @@ public class Player extends Entity
                 yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
                 topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft;
+                topLeft[1] = yTopLeft + 1;
                 bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft;
+                bottomLeft[1] = yBottomLeft - 1;
 
-                isTileWalkable = movementListener.onMove(topLeft, bottomLeft);
+                isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
                 break;
             case UP:
                 xTopLeft = (int) (xPos + xDeltaWithBonus);
@@ -94,12 +93,12 @@ public class Player extends Entity
                 xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
                 yTopRight = (int) (yPos + yDeltaWithBonus);
 
-                topLeft[0] = xTopLeft;
+                topLeft[0] = xTopLeft + 1;
                 topLeft[1] = yTopLeft;
-                topRight[0] = xTopRight;
+                topRight[0] = xTopRight - 1;
                 topRight[1] = yTopRight;
 
-                isTileWalkable = movementListener.onMove(topLeft, topRight);
+                isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
                 break;
             case RIGHT:
                 xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
@@ -108,11 +107,11 @@ public class Player extends Entity
                 yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
                 topRight[0] = xTopRight;
-                topRight[1] = yTopRight;
+                topRight[1] = yTopRight + 1;
                 bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight;
+                bottomRight[1] = yBottomRight - 1;
 
-                isTileWalkable = movementListener.onMove(topRight, bottomRight);
+                isTileWalkableHorizontal = movementListener.onMove(topRight, bottomRight);
                 break;
             case DOWN:
                 xBottomLeft = (int) (xPos + xDeltaWithBonus);
@@ -120,16 +119,13 @@ public class Player extends Entity
                 xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
                 yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
-                bottomLeft[0] = xBottomLeft;
+                bottomLeft[0] = xBottomLeft + 1;
                 bottomLeft[1] = yBottomLeft;
-                bottomRight[0] = xBottomRight;
+                bottomRight[0] = xBottomRight - 1;
                 bottomRight[1] = yBottomRight;
 
-                isTileWalkable = movementListener.onMove(bottomLeft, bottomRight);
+                isTileWalkableVertical = movementListener.onMove(bottomLeft, bottomRight);
                 break;
-        }
-        if (!isTileWalkable) {
-            return;
         }
 
         // ENTITY-COLLISION
@@ -145,9 +141,15 @@ public class Player extends Entity
         }
 
         // POSITION
+        // @@@ ENTITY-COLLISION @@@
         if (!colliding) {
-            xPos += xDeltaWithBonus;
-            yPos += yDeltaWithBonus;
+            // @@@ TILE-COLLISION @@@
+            if (isTileWalkableHorizontal) {
+                xPos += xDeltaWithBonus;
+            }
+            if (isTileWalkableVertical) {
+                yPos += yDeltaWithBonus;
+            }
 
             // Validate
             if (xPos < xMin) {
