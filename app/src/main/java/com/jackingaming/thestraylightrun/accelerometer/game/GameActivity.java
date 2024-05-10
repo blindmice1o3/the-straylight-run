@@ -149,8 +149,6 @@ public class GameActivity extends AppCompatActivity
         int heightSpriteDst = widthSpriteDst;
         Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
 
-        gameCamera = new GameCamera(0f, 0f, xScreenSize, yScreenSize);
-
         initSprites(widthSpriteDst, heightSpriteDst);
 
         Bitmap[] upPlayer = new Bitmap[3];
@@ -314,6 +312,10 @@ public class GameActivity extends AppCompatActivity
         Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
 
         ((World) frameLayout).init(this, R.raw.world01);
+
+        gameCamera = new GameCamera(0f, 0f,
+                xScreenSize, yScreenSize,
+                ((World) frameLayout).getWorldWidthInPixels(), ((World) frameLayout).getWorldHeightInPixels());
 
         float xMax = (float) ((World) frameLayout).getWorldWidthInPixels();
         float yMax = (float) ((World) frameLayout).getWorldHeightInPixels();
