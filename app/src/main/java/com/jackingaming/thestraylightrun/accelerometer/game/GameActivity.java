@@ -148,6 +148,8 @@ public class GameActivity extends AppCompatActivity
         int heightSpriteDst = widthSpriteDst;
         Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
 
+        gameCamera = new GameCamera(0f, 0f, xScreenSize, yScreenSize);
+
         initSprites(widthSpriteDst, heightSpriteDst);
 
         Bitmap[] upPlayer = new Bitmap[3];
@@ -319,7 +321,6 @@ public class GameActivity extends AppCompatActivity
         Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
 
         ((World) frameLayout).init(this, R.raw.world01);
-        gameCamera = new GameCamera(0f, 0f);
 
         player.setxPos(150);
         player.setyPos(300);
@@ -376,6 +377,7 @@ public class GameActivity extends AppCompatActivity
 
             controllable.updateViaSensorEvent(xDelta, yDelta);
             updateGameEntities();
+            gameCamera.centerOnEntity((Player) controllable);
 //            gameCamera.move(1, 1);
             frameLayout.invalidate();
 
@@ -406,8 +408,8 @@ public class GameActivity extends AppCompatActivity
             ivEntity.setImageBitmap(e.getFrame());
 
             // POSITION
-            ivEntity.setX(e.getxPos());
-            ivEntity.setY(e.getyPos());
+            ivEntity.setX(e.getxPos() - gameCamera.getxOffset());
+            ivEntity.setY(e.getyPos() - gameCamera.getyOffset());
         }
     }
 
