@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 public class WalkableTile extends Tile {
 
-    public WalkableTile(Bitmap texture, int id) {
-        super(texture, id);
+    public WalkableTile(Bitmap texture) {
+        super(texture);
     }
 }

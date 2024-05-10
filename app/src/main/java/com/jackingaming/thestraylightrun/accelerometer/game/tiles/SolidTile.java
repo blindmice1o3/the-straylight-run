@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 
 public class SolidTile extends Tile {
 
-    public SolidTile(Bitmap texture, int id) {
-        super(texture, id);
+    public SolidTile(Bitmap texture) {
+        super(texture);
     }
 
     @Override
