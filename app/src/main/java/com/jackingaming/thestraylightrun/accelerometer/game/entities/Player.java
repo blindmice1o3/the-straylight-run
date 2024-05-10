@@ -80,9 +80,9 @@ public class Player extends Entity
         boolean isTileWalkableVertical = false;
         if (directionHorizontal == Direction.LEFT) {
             xTopLeft = (int) (xPos + xDeltaWithBonus);
-            yTopLeft = (int) (yPos + yDeltaWithBonus);
+            yTopLeft = (int) (yPos);
             xBottomLeft = (int) (xPos + xDeltaWithBonus);
-            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            yBottomLeft = (int) (yPos + Entity.getHeightSprite());
 
             topLeft[0] = xTopLeft;
             topLeft[1] = yTopLeft + 1;
@@ -92,9 +92,9 @@ public class Player extends Entity
             isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
         } else {
             xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-            yTopRight = (int) (yPos + yDeltaWithBonus);
+            yTopRight = (int) (yPos);
             xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            yBottomRight = (int) (yPos + Entity.getHeightSprite());
 
             topRight[0] = xTopRight;
             topRight[1] = yTopRight + 1;
@@ -105,9 +105,9 @@ public class Player extends Entity
         }
 
         if (directionVertical == Direction.UP) {
-            xTopLeft = (int) (xPos + xDeltaWithBonus);
+            xTopLeft = (int) (xPos);
             yTopLeft = (int) (yPos + yDeltaWithBonus);
-            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            xTopRight = (int) (xPos + Entity.getWidthSprite());
             yTopRight = (int) (yPos + yDeltaWithBonus);
 
             topLeft[0] = xTopLeft + 1;
@@ -117,9 +117,9 @@ public class Player extends Entity
 
             isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
         } else {
-            xBottomLeft = (int) (xPos + xDeltaWithBonus);
+            xBottomLeft = (int) (xPos);
             yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            xBottomRight = (int) (xPos + Entity.getWidthSprite());
             yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
 
             bottomLeft[0] = xBottomLeft + 1;
