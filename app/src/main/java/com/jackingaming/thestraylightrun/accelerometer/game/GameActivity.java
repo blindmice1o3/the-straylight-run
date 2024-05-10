@@ -309,7 +309,7 @@ public class GameActivity extends AppCompatActivity
         imageViewViaEntity.put(rival, ivRival);
         imageViewViaEntity.put(coin, ivCoin);
 
-        Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
+        Tile.init(widthSpriteDst, heightSpriteDst);
 
         ((World) frameLayout).init(this, R.raw.world01);
 
@@ -325,8 +325,12 @@ public class GameActivity extends AppCompatActivity
                 0, xMax, 0, yMax
         );
 
-        player.setxPos(150);
-        player.setyPos(300);
+        player.setxPos(200 * widthSpriteDst);
+        player.setyPos(30 * heightSpriteDst);
+        rival.setxPos(201 * widthSpriteDst);
+        rival.setyPos(35 * heightSpriteDst);
+        coin.setxPos(201 * widthSpriteDst);
+        coin.setyPos(23 * heightSpriteDst);
     }
 
     @Override

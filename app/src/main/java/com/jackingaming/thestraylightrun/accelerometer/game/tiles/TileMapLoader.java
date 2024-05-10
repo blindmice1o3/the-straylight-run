@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.tiles;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -69,7 +70,7 @@ public class TileMapLoader {
      * <p>
      * To split on any amount of white space, use "\\s+" as the argument to "split()".
      */
-    public static int[][] convertStringToTileIDs(String stringOfTiles) {
+    public static Tile[][] convertStringToTileIDs(String stringOfTiles, Bitmap fullWorldMap) {
         Log.d(TAG, "convertStringToTileIDs(String)");
 
         String[] tokens = stringOfTiles.split("\\s+");
@@ -80,7 +81,7 @@ public class TileMapLoader {
 
         // Now every single number after this is actual world-data. We have to read all
         // of this data into a Tile[][] and return it to the TileMap class.
-        int[][] tileIDs = new int[columns][rows];
+        Tile[][] tiles = new Tile[columns][rows];
 
         // Here's where it gets a bit tricky. The "tokens" array is 1-D while "tiles" is 2-D.
         //
@@ -91,23 +92,36 @@ public class TileMapLoader {
         //
         // BUT ALSO HAVE TO "+ 2" because we are setting the first 2 elements in the
         // "tiles_world_map.txt" file (array indexes [0] and [1]) as width and height values.
+        int xOffsetInit = 0;
+        int heightTile = 16;
+        int widthTile = 16;
+        int yOffset = 0;
+        int xOffset = xOffsetInit;
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                // WalkableTile
-                if (tokens[((y * columns) + x) + 2].equals("1")) {
-                    tileIDs[x][y] = 1;
-                }
+                // TODO: grab subimage
+                Bitmap spriteTile = Bitmap.createBitmap(fullWorldMap,
+                        xOffset, yOffset, widthTile, heightTile);
+
                 // SolidTile
-                else if (tokens[((y * columns) + x) + 2].equals("0")) {
-                    tileIDs[x][y] = 0;
+                if (tokens[((y * columns) + x) + 2].equals("1") ||
+                        tokens[((y * columns) + x) + 2].equals("9")) {
+                    tiles[x][y] = new SolidTile(spriteTile);
                 }
-                // BoulderTile
-                else if (tokens[((y * columns) + x) + 2].equals("2")) {
-                    tileIDs[x][y] = 2;
+                // WalkableTile
+                else if (tokens[((y * columns) + x) + 2].equals("0") ||
+                        tokens[((y * columns) + x) + 2].equals("2")) {
+                    tiles[x][y] = new WalkableTile(spriteTile);
                 }
+
+                // TODO: increment yOffset
+                xOffset += widthTile;
             }
+            // TODO: increment xOffset, reset yOffset
+            xOffset = xOffsetInit;
+            yOffset += heightTile;
         }
 
-        return tileIDs;
+        return tiles;
     }
 }

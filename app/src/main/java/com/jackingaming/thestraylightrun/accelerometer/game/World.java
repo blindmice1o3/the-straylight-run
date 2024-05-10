@@ -1,6 +1,8 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,7 +19,7 @@ public class World extends FrameLayout {
 
     private GameActivity game;
     private int width, height;
-    private int[][] tiles;
+    private Tile[][] tiles;
 
     public World(@NonNull Context context) {
         super(context);
@@ -29,26 +31,22 @@ public class World extends FrameLayout {
 
     public void init(GameActivity game, int resId) {
         this.game = game;
-        loadWorld(R.raw.world01);
+//        loadWorld(R.raw.world01);
+        loadWorld(R.raw.tiles_world_map);
     }
 
     public void loadWorld(int resId) {
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(game.getResources(), resId);
         Log.e("WORLD", stringOfTilesIDs);
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs);
+        Bitmap fullWorldMap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.pokemon_gsc_kanto);
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
         width = tiles.length;
         height = tiles[0].length;
     }
 
     public Tile getTile(int x, int y) {
-        int idTile = tiles[x][y];
-        Tile tile = Tile.tiles[idTile];
-
-        if (tile == null) {
-            return Tile.walkableTile;
-        }
-
-        return tile;
+        return tiles[x][y];
     }
 
     @Override

@@ -36,7 +36,7 @@ public class GameCamera {
         xOffset = e.getxPos() - (xScreenSize / 2) + (e.getWidthSprite() / 2);
         yOffset = e.getyPos() - (yScreenSize / 2) + (e.getHeightSprite() / 2);
 
-        checkBlankSpace();
+//        checkBlankSpace();
     }
 
     public void move(int xAmount, int yAmount) {
