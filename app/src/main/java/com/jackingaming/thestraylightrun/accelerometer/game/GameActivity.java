@@ -44,13 +44,14 @@ public class GameActivity extends AppCompatActivity
     public static final String TAG = GameActivity.class.getSimpleName();
 
     private SoundManager soundManager;
-
     private FrameLayout frameLayout;
+    private int xScreenSize, yScreenSize;
+    private GameCamera gameCamera;
     private Map<Entity, ImageView> imageViewViaEntity;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
     private Bitmap tileSolid, tileWalkable, tileBoulder;
-    private GameCamera gameCamera;
+
 
     private Controllable controllable;
     private SensorManager sensorManager;
@@ -141,8 +142,8 @@ public class GameActivity extends AppCompatActivity
         Point sizeDisplay = new Point();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(sizeDisplay);
-        int xScreenSize = sizeDisplay.x;
-        int yScreenSize = sizeDisplay.y;
+        xScreenSize = sizeDisplay.x;
+        yScreenSize = sizeDisplay.y;
         Log.e(TAG, "xScreenSize, yScreenSize: " + xScreenSize + ", " + yScreenSize);
         int widthSpriteDst = Math.min(xScreenSize, yScreenSize) / 12;
         int heightSpriteDst = widthSpriteDst;
@@ -411,6 +412,14 @@ public class GameActivity extends AppCompatActivity
             ivEntity.setX(e.getxPos() - gameCamera.getxOffset());
             ivEntity.setY(e.getyPos() - gameCamera.getyOffset());
         }
+    }
+
+    public int getxScreenSize() {
+        return xScreenSize;
+    }
+
+    public int getyScreenSize() {
+        return yScreenSize;
     }
 
     public GameCamera getGameCamera() {
