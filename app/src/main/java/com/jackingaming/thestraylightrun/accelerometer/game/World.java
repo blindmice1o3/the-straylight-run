@@ -73,4 +73,12 @@ public class World extends FrameLayout {
             }
         }
     }
+
+    public int getWorldWidthInPixels() {
+        return width * Tile.widthTile;
+    }
+
+    public int getWorldHeightInPixels() {
+        return height * Tile.heightTile;
+    }
 }

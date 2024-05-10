@@ -311,17 +311,17 @@ public class GameActivity extends AppCompatActivity
         imageViewViaEntity.put(rival, ivRival);
         imageViewViaEntity.put(coin, ivCoin);
 
-        float xMax = (float) xScreenSize - widthSpriteDst;
-        float yMax = (float) yScreenSize - heightSpriteDst;
+        Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
+
+        ((World) frameLayout).init(this, R.raw.world01);
+
+        float xMax = (float) ((World) frameLayout).getWorldWidthInPixels();
+        float yMax = (float) ((World) frameLayout).getWorldHeightInPixels();
         Entity.init(
                 new ArrayList<Entity>(imageViewViaEntity.keySet()),
                 widthSpriteDst, heightSpriteDst,
                 0, xMax, 0, yMax
         );
-
-        Tile.init(widthSpriteDst, heightSpriteDst, tileSolid, tileWalkable, tileBoulder);
-
-        ((World) frameLayout).init(this, R.raw.world01);
 
         player.setxPos(150);
         player.setyPos(300);
