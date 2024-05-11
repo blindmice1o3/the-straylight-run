@@ -131,7 +131,9 @@ public class Player extends Entity
         }
 
         // ENTITY-COLLISION
-        colliding = checkEntityCollision(xDeltaWithBonus, yDeltaWithBonus);
+        boolean collidingHorizontal = checkEntityCollision(xDeltaWithBonus, 0f);
+        boolean collidingVertical = checkEntityCollision(0f, yDeltaWithBonus);
+        colliding = (collidingHorizontal || collidingVertical);
         if (cantCollide && !colliding) {
             cantCollide = false;
         } else if (justCollided) {
@@ -143,29 +145,25 @@ public class Player extends Entity
         }
 
         // POSITION
-        // @@@ ENTITY-COLLISION @@@
-        if (!colliding) {
-            // @@@ TILE-COLLISION @@@
-            if (isTileWalkableHorizontal) {
-                xPos += xDeltaWithBonus;
-            }
-            if (isTileWalkableVertical) {
-                yPos += yDeltaWithBonus;
-            }
+        if (!collidingHorizontal && isTileWalkableHorizontal) {
+            xPos += xDeltaWithBonus;
+        }
+        if (!collidingVertical && isTileWalkableVertical) {
+            yPos += yDeltaWithBonus;
+        }
 
-            // Validate
-            if (xPos < xMin) {
-                xPos = xMin;
-            }
-            if (xPos > xMax) {
-                xPos = xMax;
-            }
-            if (yPos < yMin) {
-                yPos = yMin;
-            }
-            if (yPos > yMax) {
-                yPos = yMax;
-            }
+        // Validate
+        if (xPos < xMin) {
+            xPos = xMin;
+        }
+        if (xPos > xMax) {
+            xPos = xMax;
+        }
+        if (yPos < yMin) {
+            yPos = yMin;
+        }
+        if (yPos > yMax) {
+            yPos = yMax;
         }
     }
 }
