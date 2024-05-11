@@ -47,24 +47,30 @@ public class Rival extends Entity {
 
     }
 
+    private Direction directionHorizontal = Direction.RIGHT;
+    private Direction directionVertical = Direction.DOWN;
+
     @Override
     public void update() {
         // DIRECTION (changes 10% of the time)
         if (random.nextInt(10) < 1) {
             // determine direction
-            switch (random.nextInt(4)) {
-                case 0:
-                    direction = Direction.UP;
-                    break;
-                case 1:
-                    direction = Direction.DOWN;
-                    break;
-                case 2:
-                    direction = Direction.LEFT;
-                    break;
-                case 3:
-                    direction = Direction.RIGHT;
-                    break;
+            if (random.nextInt(2) == 0) {
+                directionHorizontal = Direction.LEFT;
+            } else {
+                directionHorizontal = Direction.RIGHT;
+            }
+            if (random.nextInt(2) == 0) {
+                directionVertical = Direction.UP;
+            } else {
+                directionVertical = Direction.DOWN;
+            }
+
+            boolean isMoreHorizontalThanVertical = (random.nextInt(2) == 0);
+            if (isMoreHorizontalThanVertical) {
+                direction = directionHorizontal;
+            } else {
+                direction = directionVertical;
             }
         }
         // don't change direction (90% of the time)
@@ -75,94 +81,85 @@ public class Rival extends Entity {
         // POSITION
         int xDelta = 0;
         int yDelta = 0;
-        switch (direction) {
-            case UP:
-                yDelta = -speedMovement;
-                break;
-            case DOWN:
-                yDelta = speedMovement;
-                break;
-            case LEFT:
-                xDelta = -speedMovement;
-                break;
-            case RIGHT:
-                xDelta = speedMovement;
-                break;
+        if (directionHorizontal == Direction.RIGHT) {
+            xDelta = speedMovement;
+        } else {
+            xDelta = -speedMovement;
+        }
+        if (directionVertical == Direction.UP) {
+            yDelta = -speedMovement;
+        } else {
+            yDelta = speedMovement;
         }
 
         float xDeltaWithBonus = (xDelta * speedBonus);
         float yDeltaWithBonus = (yDelta * speedBonus);
 
         // TILE-COLLISION
-        // TODO: use [direction] to determine which two corner-coordinates (e.g. TopLeft,
-        //  TopRight, BottomLeft, BottomRight) to check.
         int xTopLeft, xBottomLeft, xTopRight, xBottomRight = -1;
         int yTopLeft, yBottomLeft, yTopRight, yBottomRight = -1;
         int[] topLeft = new int[2];
         int[] bottomLeft = new int[2];
         int[] topRight = new int[2];
         int[] bottomRight = new int[2];
-        boolean isTileWalkable = false;
-        switch (direction) {
-            case LEFT:
-                xTopLeft = (int) (xPos + xDeltaWithBonus);
-                yTopLeft = (int) (yPos + yDeltaWithBonus);
-                xBottomLeft = (int) (xPos + xDeltaWithBonus);
-                yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+        boolean isTileWalkableHorizontal = false;
+        boolean isTileWalkableVertical = false;
+        if (directionHorizontal == Direction.LEFT) {
+            xTopLeft = (int) (xPos + xDeltaWithBonus);
+            yTopLeft = (int) (yPos);
+            xBottomLeft = (int) (xPos + xDeltaWithBonus);
+            yBottomLeft = (int) (yPos + Entity.getHeightSprite());
 
-                topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft;
-                bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft;
+            topLeft[0] = xTopLeft;
+            topLeft[1] = yTopLeft + 1;
+            bottomLeft[0] = xBottomLeft;
+            bottomLeft[1] = yBottomLeft - 1;
 
-                isTileWalkable = movementListener.onMove(topLeft, bottomLeft);
-                break;
-            case UP:
-                xTopLeft = (int) (xPos + xDeltaWithBonus);
-                yTopLeft = (int) (yPos + yDeltaWithBonus);
-                xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yTopRight = (int) (yPos + yDeltaWithBonus);
+            isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
+        } else {
+            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yTopRight = (int) (yPos);
+            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            yBottomRight = (int) (yPos + Entity.getHeightSprite());
 
-                topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft;
-                topRight[0] = xTopRight;
-                topRight[1] = yTopRight;
+            topRight[0] = xTopRight;
+            topRight[1] = yTopRight + 1;
+            bottomRight[0] = xBottomRight;
+            bottomRight[1] = yBottomRight - 1;
 
-                isTileWalkable = movementListener.onMove(topLeft, topRight);
-                break;
-            case RIGHT:
-                xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yTopRight = (int) (yPos + yDeltaWithBonus);
-                xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-
-                topRight[0] = xTopRight;
-                topRight[1] = yTopRight;
-                bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight;
-
-                isTileWalkable = movementListener.onMove(topRight, bottomRight);
-                break;
-            case DOWN:
-                xBottomLeft = (int) (xPos + xDeltaWithBonus);
-                yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-                xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-                yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-
-                bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft;
-                bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight;
-
-                isTileWalkable = movementListener.onMove(bottomLeft, bottomRight);
-                break;
+            isTileWalkableHorizontal = movementListener.onMove(topRight, bottomRight);
         }
-        if (!isTileWalkable) {
-            return;
+
+        if (directionVertical == Direction.UP) {
+            xTopLeft = (int) (xPos);
+            yTopLeft = (int) (yPos + yDeltaWithBonus);
+            xTopRight = (int) (xPos + Entity.getWidthSprite());
+            yTopRight = (int) (yPos + yDeltaWithBonus);
+
+            topLeft[0] = xTopLeft + 1;
+            topLeft[1] = yTopLeft;
+            topRight[0] = xTopRight - 1;
+            topRight[1] = yTopRight;
+
+            isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
+        } else {
+            xBottomLeft = (int) (xPos);
+            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            xBottomRight = (int) (xPos + Entity.getWidthSprite());
+            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+
+            bottomLeft[0] = xBottomLeft + 1;
+            bottomLeft[1] = yBottomLeft;
+            bottomRight[0] = xBottomRight - 1;
+            bottomRight[1] = yBottomRight;
+
+            isTileWalkableVertical = movementListener.onMove(bottomLeft, bottomRight);
         }
 
         // ENTITY-COLLISION
-        colliding = checkEntityCollision(xDeltaWithBonus, yDeltaWithBonus);
+        boolean collidingHorizontal = checkEntityCollision(xDeltaWithBonus, 0f);
+        boolean collidingVertical = checkEntityCollision(0f, yDeltaWithBonus);
+        colliding = (collidingHorizontal || collidingVertical);
         if (cantCollide && !colliding) {
             cantCollide = false;
         } else if (justCollided) {
@@ -174,23 +171,25 @@ public class Rival extends Entity {
         }
 
         // POSITION
-        if (!colliding) {
+        if (!collidingHorizontal && isTileWalkableHorizontal) {
             xPos += xDeltaWithBonus;
+        }
+        if (!collidingVertical && isTileWalkableVertical) {
             yPos += yDeltaWithBonus;
+        }
 
-            // Validate
-            if (xPos < xMin) {
-                xPos = xMin;
-            }
-            if (xPos > xMax) {
-                xPos = xMax;
-            }
-            if (yPos < yMin) {
-                yPos = yMin;
-            }
-            if (yPos > yMax) {
-                yPos = yMax;
-            }
+        // Validate
+        if (xPos < xMin) {
+            xPos = xMin;
+        }
+        if (xPos > xMax) {
+            xPos = xMax;
+        }
+        if (yPos < yMin) {
+            yPos = yMin;
+        }
+        if (yPos > yMax) {
+            yPos = yMax;
         }
     }
 
