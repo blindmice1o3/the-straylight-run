@@ -27,13 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Coin;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Controllable;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Rival;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.RivalLeader;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Controllable;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
 
@@ -182,31 +180,33 @@ public class GameActivity extends AppCompatActivity
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
-                        if (collided instanceof Coin) {
-                            soundManager.sfxPlay(soundManager.sfxGetItem);
-                        } else if (collided instanceof Rival) {
-                            soundManager.sfxPlay(soundManager.sfxHorn);
-                        } else if (collided instanceof RivalLeader) {
-                            TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
-                            if (typeWriterDialogFragment != null) {
-                                Log.e(TAG, "typeWriterDialogFragment != null");
+                        if (collided instanceof NonPlayableCharacter) {
+                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                                soundManager.sfxPlay(soundManager.sfxGetItem);
+                            } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
+//                                soundManager.sfxPlay(soundManager.sfxHorn);
+                            } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
+                                TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                if (typeWriterDialogFragment != null) {
+                                    Log.e(TAG, "typeWriterDialogFragment != null");
 
-                                if (!typeWriterDialogFragment.isVisible()) {
-                                    Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
-                                    typeWriterDialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    if (!typeWriterDialogFragment.isVisible()) {
+                                        Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
+                                        typeWriterDialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    } else {
+                                        Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
+                                    }
                                 } else {
-                                    Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
-                                }
-                            } else {
-                                Log.e(TAG, "typeWriterDialogFragment == null");
-                                Log.e(TAG, "First time instantiating TypeWriterDialogFragment... show TypeWriterDialogFragment.");
+                                    Log.e(TAG, "typeWriterDialogFragment == null");
+                                    Log.e(TAG, "First time instantiating TypeWriterDialogFragment... show TypeWriterDialogFragment.");
 
 //                                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-                                String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                                    String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
-                                TypeWriterDialogFragment dialogFragment =
-                                        TypeWriterDialogFragment.newInstance(50L, message);
-                                dialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    TypeWriterDialogFragment dialogFragment =
+                                            TypeWriterDialogFragment.newInstance(50L, message);
+                                    dialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                }
                             }
                         }
                     }
@@ -259,12 +259,15 @@ public class GameActivity extends AppCompatActivity
         spritesRival.put(DOWN, new Animation(downRival));
         spritesRival.put(LEFT, new Animation(leftRival));
         spritesRival.put(RIGHT, new Animation(rightRival));
-        Rival rival = new Rival(spritesRival,
+        NonPlayableCharacter rival = new NonPlayableCharacter("rival",
+                spritesRival,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
-                        if (collided instanceof Coin) {
-                            soundManager.sfxPlay(soundManager.sfxGetItem);
+                        if (collided instanceof NonPlayableCharacter) {
+                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                                soundManager.sfxPlay(soundManager.sfxGetItem);
+                            }
                         } else if (collided instanceof Player) {
                             soundManager.sfxPlay(soundManager.sfxHorn);
                         }
@@ -317,12 +320,15 @@ public class GameActivity extends AppCompatActivity
         spritesRivalLeader.put(DOWN, new Animation(downRivalLeader));
         spritesRivalLeader.put(LEFT, new Animation(leftRivalLeader));
         spritesRivalLeader.put(RIGHT, new Animation(rightRivalLeader));
-        RivalLeader rivalLeader = new RivalLeader(spritesRivalLeader,
+        NonPlayableCharacter rivalLeader = new NonPlayableCharacter("rival leader",
+                spritesRivalLeader,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
-                        if (collided instanceof Coin) {
-                            soundManager.sfxPlay(soundManager.sfxGetItem);
+                        if (collided instanceof NonPlayableCharacter) {
+                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                                soundManager.sfxPlay(soundManager.sfxGetItem);
+                            }
                         } else if (collided instanceof Player) {
                             soundManager.sfxPlay(soundManager.sfxHorn);
                         }
@@ -352,23 +358,60 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
 
-        Map<Direction, Animation> spritesCoin = new HashMap<>();
-        Bitmap[] downCoin = new Bitmap[2];
+        Bitmap[] upCoin = new Bitmap[3];
+        upCoin[0] = spriteCoin;
+        upCoin[1] = spriteCoin;
+        upCoin[2] = spriteCoin;
+
+        Bitmap[] downCoin = new Bitmap[3];
         downCoin[0] = spriteCoin;
         downCoin[1] = spriteCoin;
+        downCoin[2] = spriteCoin;
+
+        Bitmap[] leftCoin = new Bitmap[2];
+        leftCoin[0] = spriteCoin;
+        leftCoin[1] = spriteCoin;
+
+        Bitmap[] rightCoin = new Bitmap[2];
+        rightCoin[0] = spriteCoin;
+        rightCoin[1] = spriteCoin;
+
+        Map<Direction, Animation> spritesCoin = new HashMap<>();
+        spritesCoin.put(UP, new Animation(upCoin));
         spritesCoin.put(DOWN, new Animation(downCoin));
-        Coin coin = new Coin(spritesCoin,
+        spritesCoin.put(LEFT, new Animation(leftCoin));
+        spritesCoin.put(RIGHT, new Animation(rightCoin));
+        NonPlayableCharacter coin = new NonPlayableCharacter("coin",
+                spritesCoin,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
-                        // intentionally blank.
+                        if (collided instanceof Player) {
+                            soundManager.sfxPlay(soundManager.sfxHorn);
+                        }
                     }
                 },
                 new Entity.MovementListener() {
                     @Override
                     public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // intentionally blank.
-                        return false;
+                        // TODO:
+                        int xFutureCorner1 = futureCorner1[0];
+                        int yFutureCorner1 = futureCorner1[1];
+                        int xFutureCorner2 = futureCorner2[0];
+                        int yFutureCorner2 = futureCorner2[1];
+
+                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                        boolean isSolidCorner1 = tileCorner1.isSolid();
+                        boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                        return (!isSolidCorner1 && !isSolidCorner2);
                     }
                 });
 
@@ -419,6 +462,28 @@ public class GameActivity extends AppCompatActivity
         rivalLeader.setyPos(23 * heightSpriteDst);
         coin.setxPos(201 * widthSpriteDst);
         coin.setyPos(22 * heightSpriteDst);
+
+        rivalLeader.turnStationaryOn();
+        coin.turnStationaryOn();
+
+        ivRival.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rival.toggleStationary();
+            }
+        });
+        ivRivalLeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rivalLeader.toggleStationary();
+            }
+        });
+        ivCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coin.toggleStationary();
+            }
+        });
     }
 
     @Override
@@ -458,7 +523,7 @@ public class GameActivity extends AppCompatActivity
             float xAccel = -sensorEvent.values[0];
             float yAccel = sensorEvent.values[1];
 
-            Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
+//            Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
 
             float xAccelDelta = xAccel - xAccelPrevious;
             float yAccelDelta = yAccel - yAccelPrevious;
@@ -467,13 +532,13 @@ public class GameActivity extends AppCompatActivity
             xVel += (xAccelDelta * frameTime);
             yVel += (yAccelDelta * frameTime);
 
-            Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", xVel, yVel));
-            Log.e(TAG, String.format("((xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
+//            Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", xVel, yVel));
+//            Log.e(TAG, String.format("((xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
 
             float xDelta = (xVel / 2) * frameTime;
             float yDelta = (yVel / 2) * frameTime;
 
-            Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
+//            Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
 
             controllable.updateViaSensorEvent(xDelta, yDelta);
             updateGameEntities();

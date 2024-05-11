@@ -52,7 +52,6 @@ public class World extends FrameLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.e("WORLD", "onDraw()");
 
         canvas.drawColor(
                 getResources().getColor(R.color.purple_700)

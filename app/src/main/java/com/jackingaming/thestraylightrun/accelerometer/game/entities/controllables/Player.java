@@ -1,7 +1,11 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.entities;
+package com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
+import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 
 import java.util.Map;
 
