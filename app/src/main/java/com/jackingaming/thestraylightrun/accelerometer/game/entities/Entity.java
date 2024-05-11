@@ -67,10 +67,10 @@ public abstract class Entity {
                 continue;
             }
 
-            if (xPos + xDelta < e.getxPos() + Entity.getWidthSprite() &&
-                    xPos + xDelta + Entity.getWidthSprite() > e.getxPos() &&
-                    yPos + yDelta < e.getyPos() + Entity.getHeightSprite() &&
-                    yPos + yDelta + Entity.getHeightSprite() > e.getyPos()) {
+            if (xPos + xDelta + 1 < e.getxPos() + Entity.getWidthSprite() &&
+                    xPos + xDelta + Entity.getWidthSprite() - 1 > e.getxPos() &&
+                    yPos + yDelta < e.getyPos() + 1 + Entity.getHeightSprite() &&
+                    yPos + yDelta + Entity.getHeightSprite() - 1 > e.getyPos()) {
 
                 /////////////////////////////////////////////////
                 e.collided(this);
