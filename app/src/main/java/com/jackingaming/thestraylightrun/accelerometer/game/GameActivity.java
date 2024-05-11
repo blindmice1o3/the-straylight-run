@@ -270,6 +270,64 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
 
+        Bitmap[] upRivalLeader = new Bitmap[3];
+        upRivalLeader[0] = sprites[3][28];
+        upRivalLeader[1] = sprites[4][28];
+        upRivalLeader[2] = sprites[5][28];
+
+        Bitmap[] downRivalLeader = new Bitmap[3];
+        downRivalLeader[0] = sprites[0][28];
+        downRivalLeader[1] = sprites[1][28];
+        downRivalLeader[2] = sprites[2][28];
+
+        Bitmap[] leftRivalLeader = new Bitmap[2];
+        leftRivalLeader[0] = sprites[6][28];
+        leftRivalLeader[1] = sprites[7][28];
+
+        Bitmap[] rightRivalLeader = new Bitmap[2];
+        rightRivalLeader[0] = sprites[8][28];
+        rightRivalLeader[1] = sprites[9][28];
+
+        Map<Direction, Animation> spritesRivalLeader = new HashMap<>();
+        spritesRivalLeader.put(UP, new Animation(upRivalLeader));
+        spritesRivalLeader.put(DOWN, new Animation(downRivalLeader));
+        spritesRivalLeader.put(LEFT, new Animation(leftRivalLeader));
+        spritesRivalLeader.put(RIGHT, new Animation(rightRivalLeader));
+        Rival rivalLeader = new Rival(spritesRivalLeader,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        if (collided instanceof Coin) {
+                            soundManager.sfxPlay(soundManager.sfxGetItem);
+                        } else if (collided instanceof Player) {
+                            soundManager.sfxPlay(soundManager.sfxHorn);
+                        }
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        // TODO:
+                        int xFutureCorner1 = futureCorner1[0];
+                        int yFutureCorner1 = futureCorner1[1];
+                        int xFutureCorner2 = futureCorner2[0];
+                        int yFutureCorner2 = futureCorner2[1];
+
+                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                        boolean isSolidCorner1 = tileCorner1.isSolid();
+                        boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                        return (!isSolidCorner1 && !isSolidCorner2);
+                    }
+                });
+
         Map<Direction, Animation> spritesCoin = new HashMap<>();
         Bitmap[] downCoin = new Bitmap[2];
         downCoin[0] = spriteCoin;
@@ -292,9 +350,11 @@ public class GameActivity extends AppCompatActivity
 
         ImageView ivPlayer = new ImageView(this);
         ImageView ivRival = new ImageView(this);
+        ImageView ivRivalLeader = new ImageView(this);
         ImageView ivCoin = new ImageView(this);
         ivPlayer.setImageBitmap(player.getFrame());
         ivRival.setImageBitmap(rival.getFrame());
+        ivRivalLeader.setImageBitmap(rivalLeader.getFrame());
         ivCoin.setImageBitmap(coin.getFrame());
         ivCoin.setX(coin.getxPos());
         ivCoin.setY(coin.getyPos());
@@ -302,11 +362,13 @@ public class GameActivity extends AppCompatActivity
                 new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst);
         frameLayout.addView(ivPlayer, layoutParams);
         frameLayout.addView(ivRival, layoutParams);
+        frameLayout.addView(ivRivalLeader, layoutParams);
         frameLayout.addView(ivCoin, layoutParams);
 
         imageViewViaEntity = new HashMap<>();
         imageViewViaEntity.put(player, ivPlayer);
         imageViewViaEntity.put(rival, ivRival);
+        imageViewViaEntity.put(rivalLeader, ivRivalLeader);
         imageViewViaEntity.put(coin, ivCoin);
 
         Tile.init(widthSpriteDst, heightSpriteDst);
@@ -329,8 +391,10 @@ public class GameActivity extends AppCompatActivity
         player.setyPos(30 * heightSpriteDst);
         rival.setxPos(201 * widthSpriteDst);
         rival.setyPos(35 * heightSpriteDst);
+        rivalLeader.setxPos(201 * widthSpriteDst);
+        rivalLeader.setyPos(23 * heightSpriteDst);
         coin.setxPos(201 * widthSpriteDst);
-        coin.setyPos(23 * heightSpriteDst);
+        coin.setyPos(22 * heightSpriteDst);
     }
 
     @Override
