@@ -449,6 +449,11 @@ public class GameActivity extends AppCompatActivity
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+        if (typeWriterDialogFragment != null && typeWriterDialogFragment.isVisible()) {
+            return;
+        }
+
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float xAccel = -sensorEvent.values[0];
             float yAccel = sensorEvent.values[1];
