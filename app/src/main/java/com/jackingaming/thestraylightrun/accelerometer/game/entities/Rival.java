@@ -9,14 +9,18 @@ import java.util.Random;
 public class Rival extends Entity {
     private Random random = new Random();
 
+    private String id;
+
     private ObjectAnimator objectAnimatorUp = ObjectAnimator.ofInt(sprites.get(Direction.UP), "index", 0, sprites.get(Direction.UP).getNumberOfFrames() - 1);
     private ObjectAnimator objectAnimatorDown = ObjectAnimator.ofInt(sprites.get(Direction.DOWN), "index", 0, sprites.get(Direction.DOWN).getNumberOfFrames() - 1);
     private ObjectAnimator objectAnimatorLeft = ObjectAnimator.ofInt(sprites.get(Direction.LEFT), "index", 0, sprites.get(Direction.LEFT).getNumberOfFrames() - 1);
     private ObjectAnimator objectAnimatorRight = ObjectAnimator.ofInt(sprites.get(Direction.RIGHT), "index", 0, sprites.get(Direction.RIGHT).getNumberOfFrames() - 1);
 
-    public Rival(Map<Direction, Animation> sprites,
+    public Rival(String id, Map<Direction, Animation> sprites,
                  CollisionListener collisionListener, MovementListener movementListener) {
         super(sprites, collisionListener, movementListener);
+
+        this.id = id;
 
         objectAnimatorUp.setDuration(500);
         objectAnimatorUp.setRepeatCount(ValueAnimator.INFINITE);
@@ -188,5 +192,9 @@ public class Rival extends Entity {
                 yPos = yMax;
             }
         }
+    }
+
+    public String getId() {
+        return id;
     }
 }

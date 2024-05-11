@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Coin;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Controllable;
@@ -184,6 +185,31 @@ public class GameActivity extends AppCompatActivity
                             soundManager.sfxPlay(soundManager.sfxGetItem);
                         } else if (collided instanceof Rival) {
                             soundManager.sfxPlay(soundManager.sfxHorn);
+
+                            if (((Rival) collided).getId().equals("RivalLeader")) {
+                                TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                if (typeWriterDialogFragment != null) {
+                                    Log.e(TAG, "typeWriterDialogFragment != null");
+
+                                    if (!typeWriterDialogFragment.isVisible()) {
+                                        Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
+                                        typeWriterDialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    } else {
+                                        Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
+                                    }
+                                } else {
+                                    Log.e(TAG, "typeWriterDialogFragment == null");
+                                    Log.e(TAG, "First time instantiating TypeWriterDialogFragment... show TypeWriterDialogFragment.");
+
+//                                    String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+                                    String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+
+                                    TypeWriterDialogFragment dialogFragment =
+                                            TypeWriterDialogFragment.newInstance(50L, message);
+                                    dialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                }
+
+                            }
                         }
                     }
                 },
@@ -235,7 +261,7 @@ public class GameActivity extends AppCompatActivity
         spritesRival.put(DOWN, new Animation(downRival));
         spritesRival.put(LEFT, new Animation(leftRival));
         spritesRival.put(RIGHT, new Animation(rightRival));
-        Rival rival = new Rival(spritesRival,
+        Rival rival = new Rival("Rival", spritesRival,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
@@ -293,7 +319,7 @@ public class GameActivity extends AppCompatActivity
         spritesRivalLeader.put(DOWN, new Animation(downRivalLeader));
         spritesRivalLeader.put(LEFT, new Animation(leftRivalLeader));
         spritesRivalLeader.put(RIGHT, new Animation(rightRivalLeader));
-        Rival rivalLeader = new Rival(spritesRivalLeader,
+        Rival rivalLeader = new Rival("RivalLeader", spritesRivalLeader,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
