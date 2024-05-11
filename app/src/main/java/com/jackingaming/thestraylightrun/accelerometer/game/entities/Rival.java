@@ -81,15 +81,37 @@ public class Rival extends Entity {
         // POSITION
         int xDelta = 0;
         int yDelta = 0;
-        if (directionHorizontal == Direction.RIGHT) {
-            xDelta = speedMovement;
+        boolean isDiagonal = (random.nextInt(2) == 0);
+        if (isDiagonal) {
+            if (directionHorizontal == Direction.RIGHT) {
+                xDelta = speedMovement;
+            } else {
+                xDelta = -speedMovement;
+            }
+            if (directionVertical == Direction.UP) {
+                yDelta = -speedMovement;
+            } else {
+                yDelta = speedMovement;
+            }
         } else {
-            xDelta = -speedMovement;
-        }
-        if (directionVertical == Direction.UP) {
-            yDelta = -speedMovement;
-        } else {
-            yDelta = speedMovement;
+            switch (direction) {
+                case LEFT:
+                    xDelta = -speedMovement;
+                    yDelta = 0;
+                    break;
+                case UP:
+                    xDelta = 0;
+                    yDelta = -speedMovement;
+                    break;
+                case RIGHT:
+                    xDelta = speedMovement;
+                    yDelta = 0;
+                    break;
+                case DOWN:
+                    xDelta = 0;
+                    yDelta = speedMovement;
+                    break;
+            }
         }
 
         float xDeltaWithBonus = (xDelta * speedBonus);
