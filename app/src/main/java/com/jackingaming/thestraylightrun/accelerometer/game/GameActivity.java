@@ -111,7 +111,7 @@ public class GameActivity extends AppCompatActivity
                 (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
     }
 
-    private void initPlayer() {
+    private void initPlayer(int xIndexSpawn, int yIndexSpawn) {
         Bitmap[] upPlayer = new Bitmap[3];
         upPlayer[0] = sprites[3][1];
         upPlayer[1] = sprites[4][1];
@@ -173,7 +173,6 @@ public class GameActivity extends AppCompatActivity
                 new Entity.MovementListener() {
                     @Override
                     public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // TODO:
                         int xFutureCorner1 = futureCorner1[0];
                         int yFutureCorner1 = futureCorner1[1];
                         int xFutureCorner2 = futureCorner2[0];
@@ -200,315 +199,71 @@ public class GameActivity extends AppCompatActivity
         frameLayout.addView(ivPlayer, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         imageViewViaEntity.put(player, ivPlayer);
 
-        player.setxPos(200 * widthSpriteDst);
-        player.setyPos(30 * heightSpriteDst);
+        player.setxPos(xIndexSpawn * widthSpriteDst);
+        player.setyPos(yIndexSpawn * heightSpriteDst);
     }
 
-    private void initRival() {
-        Bitmap[] upRival = new Bitmap[3];
-        upRival[0] = sprites[3][3];
-        upRival[1] = sprites[4][3];
-        upRival[2] = sprites[5][3];
+    private void initNonPlayableCharacter(String id, int yIndexForSprites,
+                                          int xIndexSpawn, int yIndexSpawn,
+                                          boolean isStationary,
+                                          Entity.CollisionListener entityCollisionListener,
+                                          Entity.MovementListener entityMovementListener,
+                                          View.OnClickListener viewOnClickListener) {
+        Bitmap[] upSprites = new Bitmap[3];
+        Bitmap[] downSprites = new Bitmap[3];
+        Bitmap[] leftSprites = new Bitmap[2];
+        Bitmap[] rightSprites = new Bitmap[2];
+        if (yIndexForSprites >= 0) {
+            upSprites[0] = sprites[3][yIndexForSprites];
+            upSprites[1] = sprites[4][yIndexForSprites];
+            upSprites[2] = sprites[5][yIndexForSprites];
 
-        Bitmap[] downRival = new Bitmap[3];
-        downRival[0] = sprites[0][3];
-        downRival[1] = sprites[1][3];
-        downRival[2] = sprites[2][3];
+            downSprites[0] = sprites[0][yIndexForSprites];
+            downSprites[1] = sprites[1][yIndexForSprites];
+            downSprites[2] = sprites[2][yIndexForSprites];
 
-        Bitmap[] leftRival = new Bitmap[2];
-        leftRival[0] = sprites[6][3];
-        leftRival[1] = sprites[7][3];
+            leftSprites[0] = sprites[6][yIndexForSprites];
+            leftSprites[1] = sprites[7][yIndexForSprites];
 
-        Bitmap[] rightRival = new Bitmap[2];
-        rightRival[0] = sprites[8][3];
-        rightRival[1] = sprites[9][3];
+            rightSprites[0] = sprites[8][yIndexForSprites];
+            rightSprites[1] = sprites[9][yIndexForSprites];
+        } else {
+            upSprites[0] = spriteCoin;
+            upSprites[1] = spriteCoin;
+            upSprites[2] = spriteCoin;
 
-        Map<Direction, Animation> spritesRival = new HashMap<>();
-        spritesRival.put(UP, new Animation(upRival));
-        spritesRival.put(DOWN, new Animation(downRival));
-        spritesRival.put(LEFT, new Animation(leftRival));
-        spritesRival.put(RIGHT, new Animation(rightRival));
-        NonPlayableCharacter rival = new NonPlayableCharacter("rival",
-                spritesRival,
-                new Entity.CollisionListener() {
-                    @Override
-                    public void onJustCollided(Entity collided) {
-                        if (collided instanceof NonPlayableCharacter) {
-                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
-                                soundManager.sfxPlay(soundManager.sfxGetItem);
-                            }
-                        } else if (collided instanceof Player) {
-                            soundManager.sfxPlay(soundManager.sfxHorn);
-                        }
-                    }
-                },
-                new Entity.MovementListener() {
-                    @Override
-                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // TODO:
-                        int xFutureCorner1 = futureCorner1[0];
-                        int yFutureCorner1 = futureCorner1[1];
-                        int xFutureCorner2 = futureCorner2[0];
-                        int yFutureCorner2 = futureCorner2[1];
+            downSprites[0] = spriteCoin;
+            downSprites[1] = spriteCoin;
+            downSprites[2] = spriteCoin;
 
-                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
-                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
-                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
-                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+            leftSprites[0] = spriteCoin;
+            leftSprites[1] = spriteCoin;
 
-                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
-                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+            rightSprites[0] = spriteCoin;
+            rightSprites[1] = spriteCoin;
+        }
 
-                        boolean isSolidCorner1 = tileCorner1.isSolid();
-                        boolean isSolidCorner2 = tileCorner2.isSolid();
+        Map<Direction, Animation> animationMap = new HashMap<>();
+        animationMap.put(UP, new Animation(upSprites));
+        animationMap.put(DOWN, new Animation(downSprites));
+        animationMap.put(LEFT, new Animation(leftSprites));
+        animationMap.put(RIGHT, new Animation(rightSprites));
+        NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
+                animationMap,
+                entityCollisionListener,
+                entityMovementListener);
 
-                        return (!isSolidCorner1 && !isSolidCorner2);
-                    }
-                });
+        ImageView imageView = new ImageView(this);
+        imageView.setImageBitmap(nonPlayableCharacter.getFrame());
+        frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(nonPlayableCharacter, imageView);
 
-        ImageView ivRival = new ImageView(this);
-        ivRival.setImageBitmap(rival.getFrame());
-        frameLayout.addView(ivRival, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
-        imageViewViaEntity.put(rival, ivRival);
-
-        rival.setxPos(201 * widthSpriteDst);
-        rival.setyPos(35 * heightSpriteDst);
-        ivRival.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rival.toggleStationary();
-            }
-        });
-    }
-
-    private void initRivalLeader() {
-        Bitmap[] upRivalLeader = new Bitmap[3];
-        upRivalLeader[0] = sprites[3][28];
-        upRivalLeader[1] = sprites[4][28];
-        upRivalLeader[2] = sprites[5][28];
-
-        Bitmap[] downRivalLeader = new Bitmap[3];
-        downRivalLeader[0] = sprites[0][28];
-        downRivalLeader[1] = sprites[1][28];
-        downRivalLeader[2] = sprites[2][28];
-
-        Bitmap[] leftRivalLeader = new Bitmap[2];
-        leftRivalLeader[0] = sprites[6][28];
-        leftRivalLeader[1] = sprites[7][28];
-
-        Bitmap[] rightRivalLeader = new Bitmap[2];
-        rightRivalLeader[0] = sprites[8][28];
-        rightRivalLeader[1] = sprites[9][28];
-
-        Map<Direction, Animation> spritesRivalLeader = new HashMap<>();
-        spritesRivalLeader.put(UP, new Animation(upRivalLeader));
-        spritesRivalLeader.put(DOWN, new Animation(downRivalLeader));
-        spritesRivalLeader.put(LEFT, new Animation(leftRivalLeader));
-        spritesRivalLeader.put(RIGHT, new Animation(rightRivalLeader));
-        NonPlayableCharacter rivalLeader = new NonPlayableCharacter("rival leader",
-                spritesRivalLeader,
-                new Entity.CollisionListener() {
-                    @Override
-                    public void onJustCollided(Entity collided) {
-                        if (collided instanceof NonPlayableCharacter) {
-                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
-                                soundManager.sfxPlay(soundManager.sfxGetItem);
-                            }
-                        } else if (collided instanceof Player) {
-                            soundManager.sfxPlay(soundManager.sfxHorn);
-                        }
-                    }
-                },
-                new Entity.MovementListener() {
-                    @Override
-                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // TODO:
-                        int xFutureCorner1 = futureCorner1[0];
-                        int yFutureCorner1 = futureCorner1[1];
-                        int xFutureCorner2 = futureCorner2[0];
-                        int yFutureCorner2 = futureCorner2[1];
-
-                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
-                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
-                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
-                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
-
-                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
-                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
-
-                        boolean isSolidCorner1 = tileCorner1.isSolid();
-                        boolean isSolidCorner2 = tileCorner2.isSolid();
-
-                        return (!isSolidCorner1 && !isSolidCorner2);
-                    }
-                });
-
-        ImageView ivRivalLeader = new ImageView(this);
-        ivRivalLeader.setImageBitmap(rivalLeader.getFrame());
-        frameLayout.addView(ivRivalLeader, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
-        imageViewViaEntity.put(rivalLeader, ivRivalLeader);
-
-        rivalLeader.setxPos(201 * widthSpriteDst);
-        rivalLeader.setyPos(23 * heightSpriteDst);
-        rivalLeader.turnStationaryOn();
-        ivRivalLeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rivalLeader.toggleStationary();
-            }
-        });
-    }
-
-    private void initBugCatcher() {
-        Bitmap[] upBugCatcher = new Bitmap[3];
-        upBugCatcher[0] = sprites[3][10];
-        upBugCatcher[1] = sprites[4][10];
-        upBugCatcher[2] = sprites[5][10];
-
-        Bitmap[] downBugCatcher = new Bitmap[3];
-        downBugCatcher[0] = sprites[0][10];
-        downBugCatcher[1] = sprites[1][10];
-        downBugCatcher[2] = sprites[2][10];
-
-        Bitmap[] leftBugCatcher = new Bitmap[2];
-        leftBugCatcher[0] = sprites[6][10];
-        leftBugCatcher[1] = sprites[7][10];
-
-        Bitmap[] rightBugCatcher = new Bitmap[2];
-        rightBugCatcher[0] = sprites[8][10];
-        rightBugCatcher[1] = sprites[9][10];
-
-        Map<Direction, Animation> spritesBugCatcher = new HashMap<>();
-        spritesBugCatcher.put(UP, new Animation(upBugCatcher));
-        spritesBugCatcher.put(DOWN, new Animation(downBugCatcher));
-        spritesBugCatcher.put(LEFT, new Animation(leftBugCatcher));
-        spritesBugCatcher.put(RIGHT, new Animation(rightBugCatcher));
-        NonPlayableCharacter bugCatcher = new NonPlayableCharacter("bug catcher",
-                spritesBugCatcher,
-                new Entity.CollisionListener() {
-                    @Override
-                    public void onJustCollided(Entity collided) {
-                        if (collided instanceof NonPlayableCharacter) {
-                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
-                                soundManager.sfxPlay(soundManager.sfxGetItem);
-                            }
-                        } else if (collided instanceof Player) {
-                            soundManager.sfxPlay(soundManager.sfxHorn);
-                        }
-                    }
-                },
-                new Entity.MovementListener() {
-                    @Override
-                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // TODO:
-                        int xFutureCorner1 = futureCorner1[0];
-                        int yFutureCorner1 = futureCorner1[1];
-                        int xFutureCorner2 = futureCorner2[0];
-                        int yFutureCorner2 = futureCorner2[1];
-
-                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
-                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
-                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
-                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
-
-                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
-                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
-
-                        boolean isSolidCorner1 = tileCorner1.isSolid();
-                        boolean isSolidCorner2 = tileCorner2.isSolid();
-
-                        return (!isSolidCorner1 && !isSolidCorner2);
-                    }
-                });
-
-        ImageView ivBugCatcher = new ImageView(this);
-        ivBugCatcher.setImageBitmap(bugCatcher.getFrame());
-        frameLayout.addView(ivBugCatcher, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
-        imageViewViaEntity.put(bugCatcher, ivBugCatcher);
-
-        bugCatcher.setxPos(201 * widthSpriteDst);
-        bugCatcher.setyPos(24 * heightSpriteDst);
-        bugCatcher.turnStationaryOn();
-        ivBugCatcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bugCatcher.toggleStationary();
-            }
-        });
-    }
-
-    private void initCoin() {
-        Bitmap[] upCoin = new Bitmap[3];
-        upCoin[0] = spriteCoin;
-        upCoin[1] = spriteCoin;
-        upCoin[2] = spriteCoin;
-
-        Bitmap[] downCoin = new Bitmap[3];
-        downCoin[0] = spriteCoin;
-        downCoin[1] = spriteCoin;
-        downCoin[2] = spriteCoin;
-
-        Bitmap[] leftCoin = new Bitmap[2];
-        leftCoin[0] = spriteCoin;
-        leftCoin[1] = spriteCoin;
-
-        Bitmap[] rightCoin = new Bitmap[2];
-        rightCoin[0] = spriteCoin;
-        rightCoin[1] = spriteCoin;
-
-        Map<Direction, Animation> spritesCoin = new HashMap<>();
-        spritesCoin.put(UP, new Animation(upCoin));
-        spritesCoin.put(DOWN, new Animation(downCoin));
-        spritesCoin.put(LEFT, new Animation(leftCoin));
-        spritesCoin.put(RIGHT, new Animation(rightCoin));
-        NonPlayableCharacter coin = new NonPlayableCharacter("coin",
-                spritesCoin,
-                new Entity.CollisionListener() {
-                    @Override
-                    public void onJustCollided(Entity collided) {
-                        if (collided instanceof Player) {
-                            soundManager.sfxPlay(soundManager.sfxHorn);
-                        }
-                    }
-                },
-                new Entity.MovementListener() {
-                    @Override
-                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        // TODO:
-                        int xFutureCorner1 = futureCorner1[0];
-                        int yFutureCorner1 = futureCorner1[1];
-                        int xFutureCorner2 = futureCorner2[0];
-                        int yFutureCorner2 = futureCorner2[1];
-
-                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
-                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
-                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
-                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
-
-                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
-                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
-
-                        boolean isSolidCorner1 = tileCorner1.isSolid();
-                        boolean isSolidCorner2 = tileCorner2.isSolid();
-
-                        return (!isSolidCorner1 && !isSolidCorner2);
-                    }
-                });
-
-        ImageView ivCoin = new ImageView(this);
-        ivCoin.setImageBitmap(coin.getFrame());
-        frameLayout.addView(ivCoin, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
-        imageViewViaEntity.put(coin, ivCoin);
-
-        coin.setxPos(201 * widthSpriteDst);
-        coin.setyPos(22 * heightSpriteDst);
-        coin.turnStationaryOn();
-        ivCoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                coin.toggleStationary();
-            }
-        });
+        nonPlayableCharacter.setxPos(xIndexSpawn * widthSpriteDst);
+        nonPlayableCharacter.setyPos(yIndexSpawn * heightSpriteDst);
+        if (isStationary) {
+            nonPlayableCharacter.turnStationaryOn();
+        }
+        imageView.setOnClickListener(viewOnClickListener);
     }
 
     @Override
@@ -555,13 +310,102 @@ public class GameActivity extends AppCompatActivity
 
         initSprites(widthSpriteDst, heightSpriteDst);
 
-        ///////////////////
-        initPlayer();
-        initCoin();
-        initRivalLeader();
-        initBugCatcher();
-        initRival();
-        ///////////////////
+        Entity.CollisionListener collisionListener = new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                if (collided instanceof NonPlayableCharacter) {
+                    if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                        soundManager.sfxPlay(soundManager.sfxGetItem);
+                    }
+                } else if (collided instanceof Player) {
+                    soundManager.sfxPlay(soundManager.sfxHorn);
+                }
+            }
+        };
+        Entity.CollisionListener collisionListenerCoin = new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                if (collided instanceof Player) {
+                    soundManager.sfxPlay(soundManager.sfxHorn);
+                }
+            }
+        };
+        Entity.MovementListener movementListener = new Entity.MovementListener() {
+            @Override
+            public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                int xFutureCorner1 = futureCorner1[0];
+                int yFutureCorner1 = futureCorner1[1];
+                int xFutureCorner2 = futureCorner2[0];
+                int yFutureCorner2 = futureCorner2[1];
+
+                int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                boolean isSolidCorner1 = tileCorner1.isSolid();
+                boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                return (!isSolidCorner1 && !isSolidCorner2);
+            }
+        };
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (Entity e : imageViewViaEntity.keySet()) {
+                    if (imageViewViaEntity.get(e) == view) {
+                        ((NonPlayableCharacter) e).toggleStationary();
+                    }
+                }
+            }
+        };
+
+        ////////////////////////////////////////////////////////////
+        initNonPlayableCharacter("rival", 3,
+                200, 12, false,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("coin", -1,
+                201, 14, true,
+                collisionListenerCoin,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("rival leader", 28,
+                201, 15, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("jr trainer", 11,
+                201, 19, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("lass02", 17,
+                200, 22, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("youngster", 10,
+                201, 25, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("lass02", 17,
+                200, 28, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initNonPlayableCharacter("bug catcher", 10,
+                201, 31, true,
+                collisionListener,
+                movementListener,
+                onClickListener);
+        initPlayer(200, 34);
+        ////////////////////////////////////////////////////////////
 
         Tile.init(widthSpriteDst, heightSpriteDst);
 
