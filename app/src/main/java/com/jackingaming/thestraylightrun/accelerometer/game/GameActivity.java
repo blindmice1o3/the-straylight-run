@@ -57,6 +57,7 @@ public class GameActivity extends AppCompatActivity
     private SensorManager sensorManager;
     private float xAccelPrevious, yAccelPrevious = 0f;
     private float xVel, yVel = 0.0f;
+    private int widthSpriteDst, heightSpriteDst;
 
     private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
     private static final int HEIGHT_SPRITE_SHEET_ACTUAL = 1188;
@@ -110,47 +111,7 @@ public class GameActivity extends AppCompatActivity
                 (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        soundManager = new SoundManager(this);
-
-        ///////////////////////////////////////////////////////////////////////////////
-        setContentView(R.layout.activity_game);
-
-        frameLayout = findViewById(R.id.frameLayout);
-
-        frameLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundManager.sfxIterateAndPlay();
-            }
-        });
-
-        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                soundManager.backgroundMusicTogglePause();
-                return true;
-            }
-        });
-
-        Point sizeDisplay = new Point();
-        Display display = getWindowManager().getDefaultDisplay();
-        display.getSize(sizeDisplay);
-        xScreenSize = sizeDisplay.x;
-        yScreenSize = sizeDisplay.y;
-        Log.e(TAG, "xScreenSize, yScreenSize: " + xScreenSize + ", " + yScreenSize);
-        int widthSpriteDst = Math.min(xScreenSize, yScreenSize) / 12;
-        int heightSpriteDst = widthSpriteDst;
-        Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
-
-        initSprites(widthSpriteDst, heightSpriteDst);
-
+    private void initPlayer() {
         Bitmap[] upPlayer = new Bitmap[3];
         upPlayer[0] = sprites[3][1];
         upPlayer[1] = sprites[4][1];
@@ -169,13 +130,11 @@ public class GameActivity extends AppCompatActivity
         rightPlayer[0] = sprites[8][1];
         rightPlayer[1] = sprites[9][1];
 
-
         Map<Direction, Animation> spritesPlayer = new HashMap<>();
         spritesPlayer.put(UP, new Animation(upPlayer));
         spritesPlayer.put(DOWN, new Animation(downPlayer));
         spritesPlayer.put(LEFT, new Animation(leftPlayer));
         spritesPlayer.put(RIGHT, new Animation(rightPlayer));
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Player player = new Player(spritesPlayer,
                 new Entity.CollisionListener() {
                     @Override
@@ -236,6 +195,16 @@ public class GameActivity extends AppCompatActivity
                 });
         controllable = (Controllable) player;
 
+        ImageView ivPlayer = new ImageView(this);
+        ivPlayer.setImageBitmap(player.getFrame());
+        frameLayout.addView(ivPlayer, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(player, ivPlayer);
+
+        player.setxPos(200 * widthSpriteDst);
+        player.setyPos(30 * heightSpriteDst);
+    }
+
+    private void initRival() {
         Bitmap[] upRival = new Bitmap[3];
         upRival[0] = sprites[3][3];
         upRival[1] = sprites[4][3];
@@ -297,6 +266,22 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
 
+        ImageView ivRival = new ImageView(this);
+        ivRival.setImageBitmap(rival.getFrame());
+        frameLayout.addView(ivRival, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(rival, ivRival);
+
+        rival.setxPos(201 * widthSpriteDst);
+        rival.setyPos(35 * heightSpriteDst);
+        ivRival.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rival.toggleStationary();
+            }
+        });
+    }
+
+    private void initRivalLeader() {
         Bitmap[] upRivalLeader = new Bitmap[3];
         upRivalLeader[0] = sprites[3][28];
         upRivalLeader[1] = sprites[4][28];
@@ -358,6 +343,101 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
 
+        ImageView ivRivalLeader = new ImageView(this);
+        ivRivalLeader.setImageBitmap(rivalLeader.getFrame());
+        frameLayout.addView(ivRivalLeader, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(rivalLeader, ivRivalLeader);
+
+        rivalLeader.setxPos(201 * widthSpriteDst);
+        rivalLeader.setyPos(23 * heightSpriteDst);
+        rivalLeader.turnStationaryOn();
+        ivRivalLeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rivalLeader.toggleStationary();
+            }
+        });
+    }
+
+    private void initBugCatcher() {
+        Bitmap[] upBugCatcher = new Bitmap[3];
+        upBugCatcher[0] = sprites[3][10];
+        upBugCatcher[1] = sprites[4][10];
+        upBugCatcher[2] = sprites[5][10];
+
+        Bitmap[] downBugCatcher = new Bitmap[3];
+        downBugCatcher[0] = sprites[0][10];
+        downBugCatcher[1] = sprites[1][10];
+        downBugCatcher[2] = sprites[2][10];
+
+        Bitmap[] leftBugCatcher = new Bitmap[2];
+        leftBugCatcher[0] = sprites[6][10];
+        leftBugCatcher[1] = sprites[7][10];
+
+        Bitmap[] rightBugCatcher = new Bitmap[2];
+        rightBugCatcher[0] = sprites[8][10];
+        rightBugCatcher[1] = sprites[9][10];
+
+        Map<Direction, Animation> spritesBugCatcher = new HashMap<>();
+        spritesBugCatcher.put(UP, new Animation(upBugCatcher));
+        spritesBugCatcher.put(DOWN, new Animation(downBugCatcher));
+        spritesBugCatcher.put(LEFT, new Animation(leftBugCatcher));
+        spritesBugCatcher.put(RIGHT, new Animation(rightBugCatcher));
+        NonPlayableCharacter bugCatcher = new NonPlayableCharacter("bug catcher",
+                spritesBugCatcher,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        if (collided instanceof NonPlayableCharacter) {
+                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                                soundManager.sfxPlay(soundManager.sfxGetItem);
+                            }
+                        } else if (collided instanceof Player) {
+                            soundManager.sfxPlay(soundManager.sfxHorn);
+                        }
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        // TODO:
+                        int xFutureCorner1 = futureCorner1[0];
+                        int yFutureCorner1 = futureCorner1[1];
+                        int xFutureCorner2 = futureCorner2[0];
+                        int yFutureCorner2 = futureCorner2[1];
+
+                        int xIndex1 = xFutureCorner1 / Tile.widthTile;
+                        int yIndex1 = yFutureCorner1 / Tile.heightTile;
+                        int xIndex2 = xFutureCorner2 / Tile.widthTile;
+                        int yIndex2 = yFutureCorner2 / Tile.heightTile;
+
+                        Tile tileCorner1 = ((World) frameLayout).getTile(xIndex1, yIndex1);
+                        Tile tileCorner2 = ((World) frameLayout).getTile(xIndex2, yIndex2);
+
+                        boolean isSolidCorner1 = tileCorner1.isSolid();
+                        boolean isSolidCorner2 = tileCorner2.isSolid();
+
+                        return (!isSolidCorner1 && !isSolidCorner2);
+                    }
+                });
+
+        ImageView ivBugCatcher = new ImageView(this);
+        ivBugCatcher.setImageBitmap(bugCatcher.getFrame());
+        frameLayout.addView(ivBugCatcher, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(bugCatcher, ivBugCatcher);
+
+        bugCatcher.setxPos(201 * widthSpriteDst);
+        bugCatcher.setyPos(24 * heightSpriteDst);
+        bugCatcher.turnStationaryOn();
+        ivBugCatcher.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bugCatcher.toggleStationary();
+            }
+        });
+    }
+
+    private void initCoin() {
         Bitmap[] upCoin = new Bitmap[3];
         upCoin[0] = spriteCoin;
         upCoin[1] = spriteCoin;
@@ -415,28 +495,73 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
 
-        ImageView ivPlayer = new ImageView(this);
-        ImageView ivRival = new ImageView(this);
-        ImageView ivRivalLeader = new ImageView(this);
         ImageView ivCoin = new ImageView(this);
-        ivPlayer.setImageBitmap(player.getFrame());
-        ivRival.setImageBitmap(rival.getFrame());
-        ivRivalLeader.setImageBitmap(rivalLeader.getFrame());
         ivCoin.setImageBitmap(coin.getFrame());
-        ivCoin.setX(coin.getxPos());
-        ivCoin.setY(coin.getyPos());
-        FrameLayout.LayoutParams layoutParams =
-                new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst);
-        frameLayout.addView(ivPlayer, layoutParams);
-        frameLayout.addView(ivRival, layoutParams);
-        frameLayout.addView(ivRivalLeader, layoutParams);
-        frameLayout.addView(ivCoin, layoutParams);
+        frameLayout.addView(ivCoin, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        imageViewViaEntity.put(coin, ivCoin);
+
+        coin.setxPos(201 * widthSpriteDst);
+        coin.setyPos(22 * heightSpriteDst);
+        coin.turnStationaryOn();
+        ivCoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                coin.toggleStationary();
+            }
+        });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        soundManager = new SoundManager(this);
+
+        ///////////////////////////////////////////////////////////////////////////////
+        setContentView(R.layout.activity_game);
+
+        frameLayout = findViewById(R.id.frameLayout);
+
+        frameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                soundManager.sfxIterateAndPlay();
+            }
+        });
+
+        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                soundManager.backgroundMusicTogglePause();
+                return true;
+            }
+        });
 
         imageViewViaEntity = new HashMap<>();
-        imageViewViaEntity.put(player, ivPlayer);
-        imageViewViaEntity.put(rival, ivRival);
-        imageViewViaEntity.put(rivalLeader, ivRivalLeader);
-        imageViewViaEntity.put(coin, ivCoin);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        Point sizeDisplay = new Point();
+        Display display = getWindowManager().getDefaultDisplay();
+        display.getSize(sizeDisplay);
+        xScreenSize = sizeDisplay.x;
+        yScreenSize = sizeDisplay.y;
+        Log.e(TAG, "xScreenSize, yScreenSize: " + xScreenSize + ", " + yScreenSize);
+        widthSpriteDst = Math.min(xScreenSize, yScreenSize) / 12;
+        heightSpriteDst = widthSpriteDst;
+        Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
+
+        initSprites(widthSpriteDst, heightSpriteDst);
+
+        ///////////////////
+        initPlayer();
+        initCoin();
+        initRivalLeader();
+        initBugCatcher();
+        initRival();
+        ///////////////////
 
         Tile.init(widthSpriteDst, heightSpriteDst);
 
@@ -453,37 +578,6 @@ public class GameActivity extends AppCompatActivity
                 widthSpriteDst, heightSpriteDst,
                 0, xMax, 0, yMax
         );
-
-        player.setxPos(200 * widthSpriteDst);
-        player.setyPos(30 * heightSpriteDst);
-        rival.setxPos(201 * widthSpriteDst);
-        rival.setyPos(35 * heightSpriteDst);
-        rivalLeader.setxPos(201 * widthSpriteDst);
-        rivalLeader.setyPos(23 * heightSpriteDst);
-        coin.setxPos(201 * widthSpriteDst);
-        coin.setyPos(22 * heightSpriteDst);
-
-        rivalLeader.turnStationaryOn();
-        coin.turnStationaryOn();
-
-        ivRival.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rival.toggleStationary();
-            }
-        });
-        ivRivalLeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rivalLeader.toggleStationary();
-            }
-        });
-        ivCoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                coin.toggleStationary();
-            }
-        });
     }
 
     @Override
