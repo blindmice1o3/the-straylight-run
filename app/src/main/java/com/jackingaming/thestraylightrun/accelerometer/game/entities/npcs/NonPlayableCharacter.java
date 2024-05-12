@@ -20,14 +20,15 @@ public class NonPlayableCharacter extends Entity {
     private ObjectAnimator objectAnimatorUp, objectAnimatorDown, objectAnimatorLeft, objectAnimatorRight;
     private boolean stationary = false;
 
-    public NonPlayableCharacter(String id, Map<Direction, Animation> sprites,
+    public NonPlayableCharacter(String id, Map<Direction, Animation> sprites, Direction directionFacing,
                                 CollisionListener collisionListener, MovementListener movementListener) {
         super(sprites, collisionListener, movementListener);
 
         this.id = id;
+        this.direction = directionFacing;
 
         initAnimations();
-        startAnimations();
+//        startAnimations();
     }
 
     private void initAnimations() {
@@ -116,23 +117,23 @@ public class NonPlayableCharacter extends Entity {
     public void update() {
         if (stationary) {
             // DIRECTION (changes 10% of the time)
-            if (random.nextInt(10) < 1) {
-                // determine direction
-                switch (random.nextInt(4)) {
-                    case 0:
-                        direction = Direction.UP;
-                        break;
-                    case 1:
-                        direction = Direction.DOWN;
-                        break;
-                    case 2:
-                        direction = Direction.LEFT;
-                        break;
-                    case 3:
-                        direction = Direction.RIGHT;
-                        break;
-                }
-            }
+//            if (random.nextInt(10) < 1) {
+//                // determine direction
+//                switch (random.nextInt(4)) {
+//                    case 0:
+//                        direction = Direction.UP;
+//                        break;
+//                    case 1:
+//                        direction = Direction.DOWN;
+//                        break;
+//                    case 2:
+//                        direction = Direction.LEFT;
+//                        break;
+//                    case 3:
+//                        direction = Direction.RIGHT;
+//                        break;
+//                }
+//            }
         } else {
             // DIRECTION (changes 10% of the time)
             if (random.nextInt(10) < 1) {

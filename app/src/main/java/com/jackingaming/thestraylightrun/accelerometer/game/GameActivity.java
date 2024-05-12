@@ -205,7 +205,7 @@ public class GameActivity extends AppCompatActivity
 
     private void initNonPlayableCharacter(String id, int yIndexForSprites,
                                           int xIndexSpawn, int yIndexSpawn,
-                                          boolean isStationary,
+                                          boolean isStationary, Direction directionFacing,
                                           Entity.CollisionListener entityCollisionListener,
                                           Entity.MovementListener entityMovementListener,
                                           View.OnClickListener viewOnClickListener) {
@@ -250,6 +250,7 @@ public class GameActivity extends AppCompatActivity
         animationMap.put(RIGHT, new Animation(rightSprites));
         NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
                 animationMap,
+                directionFacing,
                 entityCollisionListener,
                 entityMovementListener);
 
@@ -365,42 +366,50 @@ public class GameActivity extends AppCompatActivity
 
         ////////////////////////////////////////////////////////////
         initNonPlayableCharacter("rival", 3,
-                200, 12, false,
+                200, 12,
+                false, DOWN,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("coin", -1,
-                201, 14, true,
+                201, 14,
+                true, DOWN,
                 collisionListenerCoin,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("rival leader", 28,
-                201, 15, true,
+                201, 15,
+                true, LEFT,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("jr trainer", 11,
-                201, 19, true,
+                201, 19,
+                true, LEFT,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("lass02", 17,
-                200, 22, true,
+                200, 22,
+                true, RIGHT,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("youngster", 10,
-                201, 25, true,
+                201, 25,
+                true, LEFT,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("lass02", 17,
-                200, 28, true,
+                200, 28,
+                true, RIGHT,
                 collisionListener,
                 movementListener,
                 onClickListener);
         initNonPlayableCharacter("bug catcher", 10,
-                201, 31, true,
+                201, 31,
+                true, LEFT,
                 collisionListener,
                 movementListener,
                 onClickListener);
