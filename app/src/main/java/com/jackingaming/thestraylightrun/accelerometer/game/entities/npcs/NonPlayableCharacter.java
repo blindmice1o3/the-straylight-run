@@ -74,6 +74,13 @@ public class NonPlayableCharacter extends Entity {
                 objectAnimatorRight.isPaused();
     }
 
+    private boolean areAnimationsStarted() {
+        return objectAnimatorUp.isStarted() &&
+                objectAnimatorDown.isStarted() &&
+                objectAnimatorLeft.isStarted() &&
+                objectAnimatorRight.isStarted();
+    }
+
     private void updateAnimationsBasedOnStationary() {
         if (stationary) {
             pauseAnimations();
@@ -83,7 +90,7 @@ public class NonPlayableCharacter extends Entity {
             sprites.get(Direction.LEFT).setIndex(0);
             sprites.get(Direction.RIGHT).setIndex(0);
         } else {
-            if (areAnimationsPaused()) {
+            if (areAnimationsPaused() || !areAnimationsStarted()) {
                 startAnimations();
             }
         }
