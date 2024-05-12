@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
@@ -43,6 +44,9 @@ public class GameActivity extends AppCompatActivity
         implements SensorEventListener {
     public static final String TAG = GameActivity.class.getSimpleName();
 
+    private TypeWriterTextView drawerStart;
+    private TypeWriterTextView drawerEnd;
+
     private SoundManager soundManager;
     private FrameLayout frameLayout;
     private int xScreenSize, yScreenSize;
@@ -51,7 +55,6 @@ public class GameActivity extends AppCompatActivity
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
     private Bitmap tileSolid, tileWalkable, tileBoulder;
-
 
     private Controllable controllable;
     private SensorManager sensorManager;
@@ -159,7 +162,6 @@ public class GameActivity extends AppCompatActivity
                                     Log.e(TAG, "typeWriterDialogFragment == null");
                                     Log.e(TAG, "First time instantiating TypeWriterDialogFragment... show TypeWriterDialogFragment.");
 
-//                                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
                                     String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
                                     TypeWriterDialogFragment dialogFragment =
@@ -280,6 +282,8 @@ public class GameActivity extends AppCompatActivity
         setContentView(R.layout.activity_game);
 
         frameLayout = findViewById(R.id.frameLayout);
+        drawerStart = findViewById(R.id.drawer_start);
+        drawerEnd = findViewById(R.id.drawer_end);
 
         frameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,12 +291,25 @@ public class GameActivity extends AppCompatActivity
                 soundManager.sfxIterateAndPlay();
             }
         });
-
         frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 soundManager.backgroundMusicTogglePause();
                 return true;
+            }
+        });
+        drawerStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+                drawerStart.displayTextWithAnimation(message);
+            }
+        });
+        drawerEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+                drawerEnd.displayTextWithAnimation(message);
             }
         });
 
