@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".accelerometer.game.drawers.DrawerEndFragment">
+    tools:context=".accelerometer.game.drawers.DrawerTopFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView
-        android:id="@+id/type_writer_tv_in_drawer_end"
+        android:id="@+id/type_writer_tv_in_drawer_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello, TypeWriterTextViewEnd" />
+        android:text="Hello, TypeWriterTextViewTop" />
 
 </FrameLayout>

@@ -1,34 +1,29 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments;
+package com.jackingaming.thestraylightrun.accelerometer.game.drawers;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
 
-public class TypeWriterDialogFragment extends DialogFragment {
-    public static final String TAG = TypeWriterDialogFragment.class.getSimpleName();
-    public static final String ARG_DELAY = "delay";
+public class BottomDrawerDialogFragment extends BottomSheetDialogFragment {
+    public static final String TAG = BottomDrawerDialogFragment.class.getSimpleName();
     public static final String ARG_TEXT = "text";
 
-    private TypeWriterTextView tvTypeWriter;
-    private long delay;
     private String text;
 
-    public static TypeWriterDialogFragment newInstance(long delay, String text) {
-        TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
+    public static BottomDrawerDialogFragment newInstance(String text) {
+        BottomDrawerDialogFragment fragment = new BottomDrawerDialogFragment();
 
         Bundle args = new Bundle();
-        args.putLong(ARG_DELAY, delay);
         args.putString(ARG_TEXT, text);
         fragment.setArguments(args);
 
@@ -38,8 +33,6 @@ public class TypeWriterDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        delay = getArguments().getLong(ARG_DELAY);
         text = getArguments().getString(ARG_TEXT);
     }
 
@@ -48,10 +41,7 @@ public class TypeWriterDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.e(TAG, "onCreateView()");
-
-        getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
-
-        return inflater.inflate(R.layout.dialogfragment_type_writer, container, false);
+        return inflater.inflate(R.layout.dialogfragment_bottom_drawer, container, false);
     }
 
     @Override
@@ -59,9 +49,7 @@ public class TypeWriterDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        tvTypeWriter = view.findViewById(R.id.tv_type_writer);
-        tvTypeWriter.setCharacterDelay(delay);
-        tvTypeWriter.displayTextWithAnimation(text);
+        ((TextView) view.findViewById(R.id.tv_bottom_drawer)).setText(text);
     }
 
     @Override

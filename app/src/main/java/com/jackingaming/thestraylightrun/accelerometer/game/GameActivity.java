@@ -27,11 +27,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.BottomDrawer;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
@@ -49,11 +50,13 @@ import java.util.Map;
 public class GameActivity extends AppCompatActivity
         implements SensorEventListener,
         DrawerStartFragment.DrawerStartListener,
-        DrawerEndFragment.DrawerEndListener {
+        DrawerEndFragment.DrawerEndListener,
+        DrawerTopFragment.DrawerTopListener {
     public static final String TAG = GameActivity.class.getSimpleName();
 
     private DrawerStartFragment drawerStartFragment;
     private DrawerEndFragment drawerEndFragment;
+    private DrawerTopFragment drawerTopFragment;
 
     private SoundManager soundManager;
     private AppBarLayout appBarLayout;
@@ -297,6 +300,7 @@ public class GameActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);
             drawerEndFragment = DrawerEndFragment.newInstance(null, null);
+            drawerTopFragment = DrawerTopFragment.newInstance(null, null);
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fcv_drawer_start,
@@ -305,10 +309,14 @@ public class GameActivity extends AppCompatActivity
                     .add(R.id.fcv_drawer_end,
                             drawerEndFragment,
                             DrawerEndFragment.TAG)
+                    .add(R.id.fcv_drawer_top,
+                            drawerTopFragment,
+                            DrawerTopFragment.TAG)
                     .commit();
         } else {
             drawerStartFragment = (DrawerStartFragment) getSupportFragmentManager().findFragmentByTag(DrawerStartFragment.TAG);
             drawerEndFragment = (DrawerEndFragment) getSupportFragmentManager().findFragmentByTag(DrawerEndFragment.TAG);
+            drawerTopFragment = (DrawerTopFragment) getSupportFragmentManager().findFragmentByTag(DrawerTopFragment.TAG);
         }
 
         imageViewViaEntity = new HashMap<>();
@@ -454,8 +462,8 @@ public class GameActivity extends AppCompatActivity
                 if (direction == OnSwipeListener.Direction.up &&
                         yInit > (yScreenSize - 100)) {
                     String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                    BottomDrawer.newInstance(message)
-                            .show(getSupportFragmentManager(), BottomDrawer.TAG);
+                    BottomDrawerDialogFragment.newInstance(message)
+                            .show(getSupportFragmentManager(), BottomDrawerDialogFragment.TAG);
                     return true;
                 }
                 return false;
@@ -586,6 +594,9 @@ public class GameActivity extends AppCompatActivity
             ((TypeWriterTextView) view).displayTextWithAnimation(message);
         } else if (tag.equals(DrawerEndFragment.TAG)) {
             String message = "DrawerEndFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            ((TypeWriterTextView) view).displayTextWithAnimation(message);
+        } else if (tag.equals(DrawerTopFragment.TAG)) {
+            String message = "DrawerTopFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
             ((TypeWriterTextView) view).displayTextWithAnimation(message);
         }
     }
