@@ -17,6 +17,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.BottomDrawer;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
@@ -36,6 +38,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllabl
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -289,21 +292,19 @@ public class GameActivity extends AppCompatActivity
         drawerStart = findViewById(R.id.drawer_start);
         drawerEnd = findViewById(R.id.drawer_end);
 
-        frameLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                soundManager.sfxIterateAndPlay();
-
-                appBarLayout.setExpanded(false);
-            }
-        });
-        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                soundManager.backgroundMusicTogglePause();
-                return true;
-            }
-        });
+//        frameLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+//        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//
+//                return true;
+//            }
+//        });
         drawerStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -441,7 +442,34 @@ public class GameActivity extends AppCompatActivity
 
         Tile.init(widthSpriteDst, heightSpriteDst);
 
-        ((World) frameLayout).init(this, R.raw.world01);
+        ((World) frameLayout).init(this, R.raw.world01, new OnSwipeListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent event) {
+                soundManager.sfxIterateAndPlay();
+
+                appBarLayout.setExpanded(false);
+
+                return super.onSingleTapUp(event);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent event) {
+                super.onLongPress(event);
+                soundManager.backgroundMusicTogglePause();
+            }
+
+            @Override
+            public boolean onSwipe(Direction direction, int yInit) {
+                if (direction == OnSwipeListener.Direction.up &&
+                        yInit > (yScreenSize - 100)) {
+                    String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                    BottomDrawer.newInstance(message)
+                            .show(getSupportFragmentManager(), BottomDrawer.TAG);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         gameCamera = new GameCamera(0f, 0f,
                 xScreenSize, yScreenSize,

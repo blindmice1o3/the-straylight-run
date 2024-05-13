@@ -44,13 +44,13 @@ public abstract class OnSwipeListener extends GestureDetector.SimpleOnGestureLis
         float y2 = e2.getY();
 
         Direction direction = getDirection(x1, y1, x2, y2);
-        return onSwipe(direction);
+        return onSwipe(direction, (int) e1.getY());
     }
 
     /**
      * Override this method. The Direction enum will tell you how the user swiped.
      */
-    abstract public boolean onSwipe(Direction direction);
+    abstract public boolean onSwipe(Direction direction, int yInit);
 
     /**
      * Given two points in the plane p1=(x1, x2) and p2=(y1, y1), this method

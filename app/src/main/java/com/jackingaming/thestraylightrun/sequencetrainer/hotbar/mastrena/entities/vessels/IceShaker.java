@@ -108,7 +108,7 @@ public class IceShaker extends AppCompatImageView
 
         gestureDetector = new GestureDetectorCompat(getContext(), new OnSwipeListener() {
             @Override
-            public boolean onSwipe(Direction direction) {
+            public boolean onSwipe(Direction direction, int yInit) {
                 Log.e(TAG, "!!!!!!onSwipe direction: " + direction.toString());
 
                 return true;

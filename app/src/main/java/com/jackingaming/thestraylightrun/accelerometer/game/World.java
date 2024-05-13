@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -14,12 +16,14 @@ import androidx.annotation.Nullable;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.TileMapLoader;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
 public class World extends FrameLayout {
 
     private GameActivity game;
     private int width, height;
     private Tile[][] tiles;
+    private GestureDetector gestureDetector;
 
     public World(@NonNull Context context) {
         super(context);
@@ -29,10 +33,20 @@ public class World extends FrameLayout {
         super(context, attrs);
     }
 
-    public void init(GameActivity game, int resId) {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (gestureDetector != null) {
+            return gestureDetector.onTouchEvent(event);
+        } else {
+            return super.onTouchEvent(event);
+        }
+    }
+
+    public void init(GameActivity game, int resId, OnSwipeListener bottomDrawerSwipeListener) {
         this.game = game;
 //        loadWorld(R.raw.world01);
         loadWorld(R.raw.tiles_world_map);
+        gestureDetector = new GestureDetector(getContext(), bottomDrawerSwipeListener);
     }
 
     public void loadWorld(int resId) {
