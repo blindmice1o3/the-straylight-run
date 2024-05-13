@@ -24,6 +24,7 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
@@ -48,6 +49,8 @@ public class GameActivity extends AppCompatActivity
     private TypeWriterTextView drawerEnd;
 
     private SoundManager soundManager;
+    private AppBarLayout appBarLayout;
+    // TODO: change FrameLayout to World
     private FrameLayout frameLayout;
     private int xScreenSize, yScreenSize;
     private GameCamera gameCamera;
@@ -281,6 +284,7 @@ public class GameActivity extends AppCompatActivity
         ///////////////////////////////////////////////////////////////////////////////
         setContentView(R.layout.activity_game);
 
+        appBarLayout = findViewById(R.id.app_bar_layout);
         frameLayout = findViewById(R.id.frameLayout);
         drawerStart = findViewById(R.id.drawer_start);
         drawerEnd = findViewById(R.id.drawer_end);
@@ -289,6 +293,8 @@ public class GameActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 soundManager.sfxIterateAndPlay();
+
+                appBarLayout.setExpanded(false);
             }
         });
         frameLayout.setOnLongClickListener(new View.OnLongClickListener() {

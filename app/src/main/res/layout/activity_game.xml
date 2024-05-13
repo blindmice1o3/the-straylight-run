@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.World
-        android:id="@+id/frameLayout"
+    <include
+        layout="@layout/app_bar_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/red" />
+        android:layout_height="match_parent" />
 
     <com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView
         android:id="@+id/drawer_start"
