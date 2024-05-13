@@ -9,20 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView
-        android:id="@+id/drawer_start"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_drawer_start"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/purple_200"
-        android:text="Hello, TypeWriterTextView1" />
+        android:background="@color/purple_200" />
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView
-        android:id="@+id/drawer_end"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_drawer_end"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/green"
-        android:text="Hello, TypeWriterTextView2" />
+        android:background="@color/green" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

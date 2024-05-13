@@ -30,6 +30,8 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.BottomDrawer;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogfragments.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
@@ -45,11 +47,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameActivity extends AppCompatActivity
-        implements SensorEventListener {
+        implements SensorEventListener,
+        DrawerStartFragment.DrawerStartListener,
+        DrawerEndFragment.DrawerEndListener {
     public static final String TAG = GameActivity.class.getSimpleName();
 
-    private TypeWriterTextView drawerStart;
-    private TypeWriterTextView drawerEnd;
+    private DrawerStartFragment drawerStartFragment;
+    private DrawerEndFragment drawerEndFragment;
 
     private SoundManager soundManager;
     private AppBarLayout appBarLayout;
@@ -289,36 +293,23 @@ public class GameActivity extends AppCompatActivity
 
         appBarLayout = findViewById(R.id.app_bar_layout);
         frameLayout = findViewById(R.id.frameLayout);
-        drawerStart = findViewById(R.id.drawer_start);
-        drawerEnd = findViewById(R.id.drawer_end);
 
-//        frameLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//        frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                return true;
-//            }
-//        });
-        drawerStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-                drawerStart.displayTextWithAnimation(message);
-            }
-        });
-        drawerEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-                drawerEnd.displayTextWithAnimation(message);
-            }
-        });
+        if (savedInstanceState == null) {
+            drawerStartFragment = DrawerStartFragment.newInstance(null, null);
+            drawerEndFragment = DrawerEndFragment.newInstance(null, null);
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fcv_drawer_start,
+                            drawerStartFragment,
+                            DrawerStartFragment.TAG)
+                    .add(R.id.fcv_drawer_end,
+                            drawerEndFragment,
+                            DrawerEndFragment.TAG)
+                    .commit();
+        } else {
+            drawerStartFragment = (DrawerStartFragment) getSupportFragmentManager().findFragmentByTag(DrawerStartFragment.TAG);
+            drawerEndFragment = (DrawerEndFragment) getSupportFragmentManager().findFragmentByTag(DrawerEndFragment.TAG);
+        }
 
         imageViewViaEntity = new HashMap<>();
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -586,5 +577,16 @@ public class GameActivity extends AppCompatActivity
 
     public GameCamera getGameCamera() {
         return gameCamera;
+    }
+
+    @Override
+    public void onClickTypeWriterTextView(View view, String tag) {
+        if (tag.equals(DrawerStartFragment.TAG)) {
+            String message = "DrawerStartFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            ((TypeWriterTextView) view).displayTextWithAnimation(message);
+        } else if (tag.equals(DrawerEndFragment.TAG)) {
+            String message = "DrawerEndFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            ((TypeWriterTextView) view).displayTextWithAnimation(message);
+        }
     }
 }
