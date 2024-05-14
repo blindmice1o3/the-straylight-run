@@ -71,32 +71,59 @@ public class CupCold extends CupImageView {
         return drinkComponentsInsideCup;
     }
 
+    private float mDownX;
+    private float mDownY;
+    private final float SCROLL_THRESHOLD = 10;
+    private boolean isOnClick;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
+        Log.e(TAG, "onTouchEvent()");
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                Log.e(TAG, "ACTION_DOWN");
+                mDownX = event.getX();
+                mDownY = event.getY();
+                isOnClick = true;
+                return true;
+            case MotionEvent.ACTION_CANCEL:
+                Log.e(TAG, "ACTION_CANCEL");
+            case MotionEvent.ACTION_UP:
+                Log.e(TAG, "ACTION_UP");
+                if (isOnClick) {
+                    Log.e(TAG, "onClick ");
+                    //TODO onClick code
+                    // TODO: open dialog listing content of cup.
+                }
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                Log.e(TAG, "ACTION_MOVE");
+                if (isOnClick && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD)) {
+                    Log.e(TAG, "movement detected");
+                    isOnClick = false;
 
-            ClipData dragData = ClipData.newPlainText(label,
-                    (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+                    String label = DRAG_LABEL;
 
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The CupCold.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
+                    ClipData dragData = ClipData.newPlainText(label,
+                            (CharSequence) getTag());
+                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
 
-            Log.e(TAG, "label: " + label);
+                    // Start the drag.
+                    startDragAndDrop(
+                            dragData,           // The data to be dragged.
+                            myShadow,           // The drag shadow builder.
+                            this,    // The CupCold.
+                            0              // Flags. Not currently used, set to 0.
+                    );
+                    setVisibility(View.INVISIBLE);
 
-            // Indicate that the on-touch event is handled.
-            return true;
+                    Log.e(TAG, "label: " + label);
+                }
+                return true;
+            default:
+                return super.onTouchEvent(event);
         }
-
-        return false;
     }
 
     private String label;

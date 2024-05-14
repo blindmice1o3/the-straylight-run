@@ -185,7 +185,7 @@ public class LabelPrinterFragment extends Fragment {
                             LocalDateTime timestampNewest = LocalDateTime.of(1942, 4, 20, 16, 20, 0);
                             // queue NOT empty, use LAST drink's timestamp.
                             if (!queueDrinks.isEmpty()) {
-                                Log.e(TAG, "drink queue NOT empty");
+//                                Log.e(TAG, "drink queue NOT empty");
                                 int indexEnd = queueDrinks.size() - 1;
                                 String textForDrinkLabel = queueDrinks.get(indexEnd).getTextForDrinkLabel();
                                 String[] textForDrinkLabelSplitted = textForDrinkLabel.split("\\s+");
@@ -199,11 +199,11 @@ public class LabelPrinterFragment extends Fragment {
                                 String dateTimeString = textDate + " " + textTime + " " + textAmOrPm;
                                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
                                 timestampNewest = LocalDateTime.parse(dateTimeString, formatter);
-                                Log.e(TAG, "timestampNewest: " + timestampNewest.toString());
+//                                Log.e(TAG, "timestampNewest: " + timestampNewest.toString());
                             }
                             // queue IS empty, use timestampLastDrink.
                             else {
-                                Log.e(TAG, "drink queue empty");
+//                                Log.e(TAG, "drink queue empty");
                                 timestampNewest = timestampLastDrink;
                             }
 
@@ -236,11 +236,11 @@ public class LabelPrinterFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void requestFetchNewerOrders(LocalDateTime localDateTime) throws JSONException {
-        Log.i(TAG, "requestFetchNewerOrders(LocalDateTime)");
+//        Log.i(TAG, "requestFetchNewerOrders(LocalDateTime)");
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         String timestampAsString = localDateTime.format(formatter);
-        Log.e(TAG, "timestampAsString: " + timestampAsString);
+//        Log.e(TAG, "timestampAsString: " + timestampAsString);
 
         String templateWithRequestParam = URL_ORDERS + "?timestamp=%s";
         String urlFetchNewerOrders = String.format(templateWithRequestParam, timestampAsString);
@@ -251,7 +251,7 @@ public class LabelPrinterFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, "JsonObjectRequest onResponse(JSONObject)");
+//                        Log.i(TAG, "JsonObjectRequest onResponse(JSONObject)");
 
                         Gson gson = new GsonBuilder()
                                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -261,7 +261,7 @@ public class LabelPrinterFragment extends Fragment {
                         List<Order> ordersFromServer = orderDTO.getOrders();
 
                         if (!ordersFromServer.isEmpty()) {
-                            Log.e(TAG, "NOT ordersFromServer.isEmpty()... addAll()");
+//                            Log.e(TAG, "NOT ordersFromServer.isEmpty()... addAll()");
 
                             List<Drink> drinksConvertedFromOrder = new ArrayList<>();
                             for (Order order : ordersFromServer) {
@@ -471,7 +471,7 @@ public class LabelPrinterFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Log.e(TAG, "onErrorResponse(VolleyError)" + error);
+//                        Log.e(TAG, "onErrorResponse(VolleyError)" + error);
                     }
                 }
         );
