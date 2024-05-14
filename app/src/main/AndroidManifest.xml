@@ -26,7 +26,7 @@
         <activity
             android:name=".accelerometer.game.GameActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.TheStraylightRun.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

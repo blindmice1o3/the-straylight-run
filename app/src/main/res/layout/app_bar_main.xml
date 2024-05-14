@@ -8,6 +8,7 @@
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="350dp"
+        android:background="@android:color/transparent"
         app:expanded="false">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -21,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="bottom"
-                android:background="@color/yellow" />
+                android:background="@drawable/background_drawer_top" />
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"

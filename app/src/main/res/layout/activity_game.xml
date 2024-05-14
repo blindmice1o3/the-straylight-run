@@ -14,13 +14,13 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/purple_200" />
+        android:background="@drawable/background_drawer_start" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fcv_drawer_end"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/green" />
+        android:background="@drawable/background_drawer_end" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
