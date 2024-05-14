@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.view.GestureDetectorCompat;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
@@ -30,7 +29,6 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collider;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
 
@@ -52,8 +50,6 @@ public class IceShaker extends AppCompatImageView
     private Cinnamon cinnamon;
 
     private Collider collider;
-
-    private GestureDetectorCompat gestureDetector;
 
     private Paint textPaint;
     private int idRed;
@@ -105,15 +101,6 @@ public class IceShaker extends AppCompatImageView
                 }
             }
         };
-
-        gestureDetector = new GestureDetectorCompat(getContext(), new OnSwipeListener() {
-            @Override
-            public boolean onSwipe(Direction direction, int yInit) {
-                Log.e(TAG, "!!!!!!onSwipe direction: " + direction.toString());
-
-                return true;
-            }
-        });
 
         idRed = getResources().getColor(R.color.red);
         idLightBlueA200 = getResources().getColor(R.color.light_blue_A200);
@@ -175,16 +162,6 @@ public class IceShaker extends AppCompatImageView
         int quantityMocha = (syrupsMap.get(Syrup.Type.MOCHA) == null) ? 0 : syrupsMap.get(Syrup.Type.MOCHA).size();
         canvas.drawText(Integer.toString(quantityMocha), getWidth() - 16, yLine3, textPaint);
     }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        Log.e(TAG, "onTouchEvent()");
-//
-//        if (gestureDetector.onTouchEvent(event)) {
-//            return true;
-//        }
-//        return super.onTouchEvent(event);
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override

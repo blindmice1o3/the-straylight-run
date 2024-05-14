@@ -41,7 +41,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllabl
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;

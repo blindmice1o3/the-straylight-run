@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.TileMapLoader;
-import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.OnSwipeListener;
 
 public class World extends FrameLayout {
 

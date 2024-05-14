@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts;
+package com.jackingaming.thestraylightrun.accelerometer.game;
 
 import android.util.Log;
 import android.view.GestureDetector;
