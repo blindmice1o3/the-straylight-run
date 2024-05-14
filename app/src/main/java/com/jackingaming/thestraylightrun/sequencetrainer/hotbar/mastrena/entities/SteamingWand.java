@@ -5,16 +5,16 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.SteamingPitcher;
 
-public class SteamingWand extends AppCompatImageView {
+public class SteamingWand extends ClickableAndDraggableImageView {
     public static final String TAG = SteamingWand.class.getSimpleName();
 
     private SteamingPitcher steamingPitcher;
@@ -34,6 +34,16 @@ public class SteamingWand extends AppCompatImageView {
 
     public SteamingWand(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing details of steaming wand.
+    }
+
+    @Override
+    protected void doMove(MotionEvent event) {
+        // intentionally blank.
     }
 
     @Override

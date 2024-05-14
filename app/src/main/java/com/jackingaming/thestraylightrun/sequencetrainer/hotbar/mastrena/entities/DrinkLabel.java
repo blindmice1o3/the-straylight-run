@@ -11,11 +11,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
 
-public class DrinkLabel extends AppCompatTextView {
+public class DrinkLabel extends ClickableAndDraggableTextView {
     public static final String TAG = DrinkLabel.class.getSimpleName();
     public static final String DRAG_LABEL = DrinkLabel.class.getSimpleName();
 
@@ -29,32 +28,30 @@ public class DrinkLabel extends AppCompatTextView {
         super(context, attrs);
     }
 
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing details of drink label.
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
+    protected void doMove(MotionEvent event) {
+        String label = DRAG_LABEL;
 
-            ClipData dragData = ClipData.newPlainText(label,
-                    getText());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+        ClipData dragData = ClipData.newPlainText(label,
+                getText());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
 
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The DrinkLabel.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,    // The DrinkLabel.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
 
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
+        Log.e(TAG, "label: " + label);
     }
 
     public Drink getDrink() {

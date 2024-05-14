@@ -16,11 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.icebin.IceBinFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IceShaker extends AppCompatImageView
+public class IceShaker extends ClickableAndDraggableImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = IceShaker.class.getSimpleName();
     public static final String DRAG_LABEL = IceShaker.class.getSimpleName();
@@ -64,6 +64,31 @@ public class IceShaker extends AppCompatImageView
     public IceShaker(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing content of ice shaker.
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void doMove(MotionEvent event) {
+        String label = DRAG_LABEL;
+
+        ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,    // The IceShaker.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
+
+        Log.e(TAG, "label: " + label);
     }
 
     private void init() {
@@ -161,33 +186,6 @@ public class IceShaker extends AppCompatImageView
         textPaint.setColor(getResources().getColor(R.color.dark_brown));
         int quantityMocha = (syrupsMap.get(Syrup.Type.MOCHA) == null) ? 0 : syrupsMap.get(Syrup.Type.MOCHA).size();
         canvas.drawText(Integer.toString(quantityMocha), getWidth() - 16, yLine3, textPaint);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
-
-            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The IceShaker.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
     }
 
     @Override

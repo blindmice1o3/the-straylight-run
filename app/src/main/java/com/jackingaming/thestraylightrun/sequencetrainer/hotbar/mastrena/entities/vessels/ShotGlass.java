@@ -16,9 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.parts.Collideable;
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShotGlass extends AppCompatImageView
+public class ShotGlass extends ClickableAndDraggableImageView
         implements LiquidContainable, Collideable {
     public static final String TAG = ShotGlass.class.getSimpleName();
     public static final String DRAG_LABEL = ShotGlass.class.getSimpleName();
@@ -50,6 +50,31 @@ public class ShotGlass extends AppCompatImageView
     public ShotGlass(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing content of shot glass.
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void doMove(MotionEvent event) {
+        String label = DRAG_LABEL;
+
+        ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,    // The ShotGlass.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
+
+        Log.e(TAG, "label: " + label);
     }
 
     private void init() {
@@ -107,33 +132,6 @@ public class ShotGlass extends AppCompatImageView
         String textForShot = String.format("E: %d %s %s %s",
                 numberOfShots, typeAbbreviated, amountOfWaterAbbreviated, amountOfBeanAbbreviated);
         canvas.drawText(textForShot, 5, 15, textPaint);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
-
-            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The ShotGlass.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
     }
 
     @Override

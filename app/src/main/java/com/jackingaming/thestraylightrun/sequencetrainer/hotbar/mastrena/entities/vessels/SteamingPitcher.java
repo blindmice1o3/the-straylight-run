@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableImageView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Milk;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupCold;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.vessels.cups.CupHot;
@@ -31,7 +32,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.Ref
 
 import java.util.HashMap;
 
-public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageView
+public class SteamingPitcher extends ClickableAndDraggableImageView
         implements LiquidContainable {
     public static final String TAG = SteamingPitcher.class.getSimpleName();
     public static final String DRAG_LABEL = SteamingPitcher.class.getSimpleName();
@@ -58,6 +59,37 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
     public SteamingPitcher(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing content of steaming pitcher.
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void doMove(MotionEvent event) {
+        if (temperatureAnimator != null && temperatureAnimator.isRunning()) {
+            temperatureAnimator.cancel();
+        }
+        if (timeFrothedAnimator != null && timeFrothedAnimator.isRunning()) {
+            timeFrothedAnimator.cancel();
+        }
+
+        String label = DRAG_LABEL;
+
+        ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,               // The SteamingPitcher.
+                0              // Flags. Not currently used, set to 0.
+        );
+
+        Log.e(TAG, "label: " + label);
     }
 
     private void init() {
@@ -168,39 +200,6 @@ public class SteamingPitcher extends androidx.appcompat.widget.AppCompatImageVie
 
         int amount = (milk == null) ? 0 : milk.getAmount();
         canvas.drawText(Integer.toString(amount), 5, 45, textPaint);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (temperatureAnimator != null && temperatureAnimator.isRunning()) {
-            temperatureAnimator.cancel();
-        }
-        if (timeFrothedAnimator != null && timeFrothedAnimator.isRunning()) {
-            timeFrothedAnimator.cancel();
-        }
-
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
-
-            ClipData dragData = ClipData.newPlainText(label, (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,               // The SteamingPitcher.
-                    0              // Flags. Not currently used, set to 0.
-            );
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
     }
 
     @Override

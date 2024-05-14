@@ -11,7 +11,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.Menu;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.MenuItemRequestGenerator;
@@ -29,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class LabelPrinter extends AppCompatTextView {
+public class LabelPrinter extends ClickableAndDraggableTextView {
     public static final String TAG = LabelPrinter.class.getSimpleName();
     public static final String DRAG_LABEL = LabelPrinter.class.getSimpleName();
     private static final int MAX_NUMBER_OF_DRINKS = 10;
@@ -54,6 +53,38 @@ public class LabelPrinter extends AppCompatTextView {
 
     public LabelPrinter(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing details of label printer.
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void doMove(MotionEvent event) {
+        if (queueDrinks.size() <= 0) {
+            // intentionally blank.
+            return;
+        }
+
+        String label = DRAG_LABEL;
+        Drink drinkFirst = queueDrinks.get(0);
+
+        ClipData dragData = ClipData.newPlainText(label,
+                getText());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                drinkFirst,               // The first Drink from queueDrinks.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
+
+        Log.e(TAG, "label: " + label);
     }
 
     private int modeSelected = STANDARD;
@@ -285,41 +316,6 @@ public class LabelPrinter extends AppCompatTextView {
             }
         }
         return isSuccessRemoval;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
-            if (queueDrinks.size() <= 0) {
-                // intentionally blank.
-                return true;
-            }
-
-            String label = DRAG_LABEL;
-            Drink drinkFirst = queueDrinks.get(0);
-
-            ClipData dragData = ClipData.newPlainText(label,
-                    getText());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    drinkFirst,               // The first Drink from queueDrinks.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
-
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
     }
 
     public void selectModeStandard() {
