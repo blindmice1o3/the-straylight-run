@@ -52,6 +52,32 @@ public class CupCold extends CupImageView {
     }
 
     @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing content of cup.
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    protected void doMove(MotionEvent event) {
+        String label = DRAG_LABEL;
+
+        ClipData dragData = ClipData.newPlainText(label,
+                (CharSequence) getTag());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,    // The CupCold.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
+
+        Log.e(TAG, "label: " + label);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -69,61 +95,6 @@ public class CupCold extends CupImageView {
         }
 
         return drinkComponentsInsideCup;
-    }
-
-    private float mDownX;
-    private float mDownY;
-    private final float SCROLL_THRESHOLD = 10;
-    private boolean isOnClick;
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.e(TAG, "onTouchEvent()");
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                Log.e(TAG, "ACTION_DOWN");
-                mDownX = event.getX();
-                mDownY = event.getY();
-                isOnClick = true;
-                return true;
-            case MotionEvent.ACTION_CANCEL:
-                Log.e(TAG, "ACTION_CANCEL");
-            case MotionEvent.ACTION_UP:
-                Log.e(TAG, "ACTION_UP");
-                if (isOnClick) {
-                    Log.e(TAG, "onClick ");
-                    //TODO onClick code
-                    // TODO: open dialog listing content of cup.
-                }
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                Log.e(TAG, "ACTION_MOVE");
-                if (isOnClick && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD)) {
-                    Log.e(TAG, "movement detected");
-                    isOnClick = false;
-
-                    String label = DRAG_LABEL;
-
-                    ClipData dragData = ClipData.newPlainText(label,
-                            (CharSequence) getTag());
-                    View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
-
-                    // Start the drag.
-                    startDragAndDrop(
-                            dragData,           // The data to be dragged.
-                            myShadow,           // The drag shadow builder.
-                            this,    // The CupCold.
-                            0              // Flags. Not currently used, set to 0.
-                    );
-                    setVisibility(View.INVISIBLE);
-
-                    Log.e(TAG, "label: " + label);
-                }
-                return true;
-            default:
-                return super.onTouchEvent(event);
-        }
     }
 
     private String label;

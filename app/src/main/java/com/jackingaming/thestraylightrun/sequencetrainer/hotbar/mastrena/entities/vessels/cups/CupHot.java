@@ -35,32 +35,30 @@ public class CupHot extends CupImageView {
         super(context, attrs);
     }
 
+    @Override
+    protected void doClick(MotionEvent event) {
+        // TODO: open dialog listing content of cup.
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            String label = DRAG_LABEL;
+    protected void doMove(MotionEvent event) {
+        String label = DRAG_LABEL;
 
-            ClipData dragData = ClipData.newPlainText(label,
-                    (CharSequence) getTag());
-            View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
+        ClipData dragData = ClipData.newPlainText(label,
+                (CharSequence) getTag());
+        View.DragShadowBuilder myShadow = new View.DragShadowBuilder(this);
 
-            // Start the drag.
-            startDragAndDrop(
-                    dragData,           // The data to be dragged.
-                    myShadow,           // The drag shadow builder.
-                    this,    // The CupHot.
-                    0              // Flags. Not currently used, set to 0.
-            );
-            setVisibility(View.INVISIBLE);
+        // Start the drag.
+        startDragAndDrop(
+                dragData,           // The data to be dragged.
+                myShadow,           // The drag shadow builder.
+                this,    // The CupHot.
+                0              // Flags. Not currently used, set to 0.
+        );
+        setVisibility(View.INVISIBLE);
 
-            Log.e(TAG, "label: " + label);
-
-            // Indicate that the on-touch event is handled.
-            return true;
-        }
-
-        return false;
+        Log.e(TAG, "label: " + label);
     }
 
     private String label;

@@ -1010,10 +1010,14 @@ public class MastrenaFragment extends Fragment {
                             label.equals(CupHot.DRAG_LABEL) ||
                             label.equals(CupCold.DRAG_LABEL)) {
                         if (ivToBeAdded != null) {
-                            ivToBeAdded.setVisibility(View.VISIBLE);
-
                             ivToBeAdded = null;
                         }
+
+                        //////////////////////////////////////////////
+                        if (dragEvent.getLocalState() != null) {
+                            ((CupImageView) dragEvent.getLocalState()).setVisibility(View.VISIBLE);
+                        }
+                        //////////////////////////////////////////////
                     } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                         if (shotGlass != null) {
                             shotGlass.setVisibility(View.VISIBLE);
