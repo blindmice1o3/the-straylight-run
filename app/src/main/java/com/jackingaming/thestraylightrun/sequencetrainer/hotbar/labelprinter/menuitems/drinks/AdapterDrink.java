@@ -10,15 +10,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 
+import java.util.Collections;
 import java.util.List;
 
-public class AdapterDrink extends RecyclerView.Adapter<AdapterDrink.ViewHolderDrink> {
+public class AdapterDrink extends RecyclerView.Adapter<AdapterDrink.ViewHolderDrink>
+        implements ItemTouchHelperAdapter {
     public static final String TAG = AdapterDrink.class.getSimpleName();
+
+    public interface UpdateListener {
+        void updateDisplay();
+    }
+
+    private UpdateListener listener;
 
     private List<Drink> drinks;
 
-    public AdapterDrink(List<Drink> drinks) {
+    public AdapterDrink(List<Drink> drinks, UpdateListener listener) {
         this.drinks = drinks;
+        this.listener = listener;
     }
 
     @NonNull
@@ -50,6 +59,28 @@ public class AdapterDrink extends RecyclerView.Adapter<AdapterDrink.ViewHolderDr
     @Override
     public int getItemCount() {
         return drinks.size();
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(drinks, i, i + 1);
+            }
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(drinks, i, i - 1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        listener.updateDisplay();
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        drinks.remove(position);
+        notifyItemRemoved(position);
+        listener.updateDisplay();
     }
 
 

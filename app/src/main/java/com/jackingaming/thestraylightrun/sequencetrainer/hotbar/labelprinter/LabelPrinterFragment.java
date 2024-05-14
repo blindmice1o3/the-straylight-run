@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.cupcaddy.CupCaddyFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.AdapterDrink;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.Drink;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.menuitems.drinks.SimpleItemTouchHelperCallback;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.adapters.LocalDateTimeTypeAdapter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.dtos.OrderDTO;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.MenuItemInfo;
@@ -126,12 +128,21 @@ public class LabelPrinterFragment extends Fragment {
         queueDrinks = labelPrinter.getQueueDrinks();
         recyclerViewQueueDrinks = view.findViewById(R.id.rv_queue_drinks);
 
-        adapter = new AdapterDrink(queueDrinks);
+        adapter = new AdapterDrink(queueDrinks, new AdapterDrink.UpdateListener() {
+            @Override
+            public void updateDisplay() {
+                labelPrinter.updateDisplay();
+            }
+        });
         recyclerViewQueueDrinks.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerViewQueueDrinks.setLayoutManager(linearLayoutManager);
         recyclerViewQueueDrinks.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerViewQueueDrinks);
 
         labelPrinter.setListener(new LabelPrinter.LabelPrinterListener() {
             @Override
