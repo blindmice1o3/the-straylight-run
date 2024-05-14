@@ -117,8 +117,10 @@ public class LabelPrinter extends ClickableAndDraggableTextView {
         if (standardOrCustomized == STANDARD) {
             Drink drinkRandomStandard = MenuItemRequestGenerator.requestRandomDrink();
 
-            String contentNewDrinkLabel = String.format("%s\n%s\n%s",
+            // initialize textForDrinkLabel for drink
+            String contentNewDrinkLabel = String.format("%s\n%s\n%s\n%s",
                     formatDateTime,
+                    "cafe",
                     drinkRandomStandard.getSize(),
                     drinkRandomStandard.getName());
 
@@ -135,8 +137,11 @@ public class LabelPrinter extends ClickableAndDraggableTextView {
             Log.e(TAG, "MAKING CUSTOMIZED DRINK!!!");
 
             Drink drinkRandomCustomized = MenuItemRequestGenerator.requestRandomCustomizedDrink();
+
+            // initialize textForDrinkLabel for drink
             StringBuilder sb = new StringBuilder();
             sb.append(formatDateTime + "\n")
+                    .append("cafe" + "\n")
                     .append(drinkRandomCustomized.getSize() + "\n")
                     .append(drinkRandomCustomized.getName());
 

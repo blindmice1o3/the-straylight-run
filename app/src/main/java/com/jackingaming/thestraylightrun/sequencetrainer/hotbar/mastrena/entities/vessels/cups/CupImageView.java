@@ -201,15 +201,15 @@ public abstract class CupImageView extends ClickableAndDraggableImageView
     }
 
     protected void showDialogExpectedVsActual(DrinkLabel drinkLabel) {
-        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
+        // (0) date, (1) time, (2) amOrPm, (3) mobile/cafe (4) size, (5) name.
         String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
 //        String date = drinkLabelSplitted[0];
 //        String time = drinkLabelSplitted[1];
 //        String amOrPm = drinkLabelSplitted[2];
-        String size = drinkLabelSplitted[3];
-        String name = drinkLabelSplitted[4];
+        String mobileOrCafe = drinkLabelSplitted[3];
+        String size = drinkLabelSplitted[4];
+        String name = drinkLabelSplitted[5];
         // (6+) customization(s).
-        int numberOfNonCustomizations = 5;
 
         /////////////////////////////////////////////////////////////////////////////////
 
@@ -248,13 +248,15 @@ public abstract class CupImageView extends ClickableAndDraggableImageView
     }
 
     protected void showDialogWinner(DrinkLabel drinkLabel) {
-        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
+        // (0) date, (1) time, (2) amOrPm, (3) mobile/cafe (4) size, (5) name.
         String[] drinkLabelSplitted = drinkLabel.getText().toString().split("\\s+");
         String date = drinkLabelSplitted[0];
         String time = drinkLabelSplitted[1];
         String amOrPm = drinkLabelSplitted[2];
-        String size = drinkLabelSplitted[3];
-        String name = drinkLabelSplitted[4];
+        String mobileOrCafe = drinkLabelSplitted[3];
+        String size = drinkLabelSplitted[4];
+        String name = drinkLabelSplitted[5];
+        // (6+) customization(s).
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setTitle("WINNER WINNER CHICKEN DINNER");
@@ -278,9 +280,10 @@ public abstract class CupImageView extends ClickableAndDraggableImageView
 
     protected boolean isWinnerWinnerChickenDinner(DrinkLabel drinkLabel) {
         String[] text = drinkLabel.getText().toString().split("\\s+");
-        // (1) date, (2) time, (3) amOrPm, (4) size, (5) name.
-        String size = text[3];
-        String name = text[4];
+        // (0) date, (1) time, (2) amOrPm, (3) mobile/cafe (4) size, (5) name.
+        String size = text[4];
+        String name = text[5];
+        // (6+) customization(s).
 
         Drink drink = drinkLabel.getDrink();
         return drink.validate(this);

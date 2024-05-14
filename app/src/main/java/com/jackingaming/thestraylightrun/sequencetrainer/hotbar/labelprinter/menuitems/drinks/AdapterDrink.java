@@ -40,7 +40,7 @@ public class AdapterDrink extends RecyclerView.Adapter<AdapterDrink.ViewHolderDr
         );
 
         String[] textDrinkLabel = drink.getTextForDrinkLabel().split("\\s+");
-        boolean isStandardRecipe = textDrinkLabel.length == 5;
+        boolean isStandardRecipe = textDrinkLabel.length == 6;
         String textStandardRecipe = (isStandardRecipe) ? "standard" : "customized";
         holder.tvStandardRecipe.setText(
                 textStandardRecipe

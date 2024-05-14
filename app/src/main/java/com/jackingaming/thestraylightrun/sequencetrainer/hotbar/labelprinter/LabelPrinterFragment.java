@@ -442,8 +442,9 @@ public class LabelPrinterFragment extends Fragment {
                                     // initialize textForDrinkLabel for drink
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a");
                                     String formatDateTime = createdOn.format(formatter);
-                                    String contentNewDrinkLabel = String.format("%s\n%s\n%s",
+                                    String contentNewDrinkLabel = String.format("%s\n%s\n%s\n%s",
                                             formatDateTime,
+                                            "mobile",
                                             drinkToAdd.getSize(),
                                             drinkToAdd.getName());
 
