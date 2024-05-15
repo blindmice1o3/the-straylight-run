@@ -39,10 +39,6 @@ public class TypeWriterDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    public void showChoiceYesOrNot() {
-        Log.e(TAG, "showChoiceYesOrNot(): YES or NO");
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

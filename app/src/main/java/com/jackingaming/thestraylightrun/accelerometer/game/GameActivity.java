@@ -6,6 +6,7 @@ import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Dire
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.UP;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.choiceboxes.ChoiceDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawerDialogFragment;
@@ -41,6 +43,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllabl
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
+import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,7 +180,7 @@ public class GameActivity extends AppCompatActivity
 
                                     String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
-                                    TypeWriterDialogFragment dialogFragment =
+                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader =
                                             TypeWriterDialogFragment.newInstance(50L, message,
                                                     new TypeWriterTextView.TextCompletionListener() {
                                                         @Override
@@ -185,9 +188,36 @@ public class GameActivity extends AppCompatActivity
                                                             Log.e(TAG, "onAnimationFinish()");
 
                                                             // TODO:
+                                                            ChoiceDialogFragment choiceDialogFragmentYesOrNo =
+                                                                    ChoiceDialogFragment.newInstance(
+                                                                            new ChoiceDialogFragment.ChoiceListener() {
+                                                                                @Override
+                                                                                public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                                                    Log.e(TAG, "YES selected");
+
+                                                                                    soundManager.sfxPlay(soundManager.sfxGetItem);
+
+                                                                                    choiceDialogFragment.dismiss();
+                                                                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
+                                                                                            (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                                                                    typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
+
+                                                                                    startActivity(
+                                                                                            new Intent(GameActivity.this, SequenceTrainerActivity.class)
+                                                                                    );
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                                                    Log.e(TAG, "NO selected");
+
+                                                                                    soundManager.sfxPlay(soundManager.sfxCollision);
+                                                                                }
+                                                                            });
+                                                            choiceDialogFragmentYesOrNo.show(getSupportFragmentManager(), ChoiceDialogFragment.TAG);
                                                         }
                                                     });
-                                    dialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    typeWriterDialogFragmentRivalLeader.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
                                 }
                             }
                         }
