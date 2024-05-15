@@ -6,25 +6,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
+
+import java.io.Serializable;
 
 public class BottomDrawerDialogFragment extends BottomSheetDialogFragment {
     public static final String TAG = BottomDrawerDialogFragment.class.getSimpleName();
-    public static final String ARG_TEXT = "text";
+    public static final String ARG_DRAWER_BOTTOM_LISTENER = "drawerBottomListener";
 
-    private String text;
+    public interface DrawerBottomListener extends Serializable {
+        void onClickTypeWriterTextView(View view, String tag);
+    }
 
-    public static BottomDrawerDialogFragment newInstance(String text) {
+    private DrawerBottomListener listener;
+
+    private TypeWriterTextView typeWriterTextView;
+
+    public static BottomDrawerDialogFragment newInstance(DrawerBottomListener listener) {
         BottomDrawerDialogFragment fragment = new BottomDrawerDialogFragment();
 
         Bundle args = new Bundle();
-        args.putString(ARG_TEXT, text);
+        args.putSerializable(ARG_DRAWER_BOTTOM_LISTENER, listener);
         fragment.setArguments(args);
 
         return fragment;
@@ -33,7 +41,7 @@ public class BottomDrawerDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        text = getArguments().getString(ARG_TEXT);
+        listener = (DrawerBottomListener) getArguments().getSerializable(ARG_DRAWER_BOTTOM_LISTENER);
     }
 
     @Nullable
@@ -49,7 +57,22 @@ public class BottomDrawerDialogFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        ((TextView) view.findViewById(R.id.tv_bottom_drawer)).setText(text);
+        typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_bottom);
+
+        typeWriterTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onClickTypeWriterTextView(view, BottomDrawerDialogFragment.TAG);
+            }
+        });
+        typeWriterTextView.setTextCompletionListener(new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onAnimationFinish()");
+
+                // TODO:
+            }
+        });
     }
 
     @Override

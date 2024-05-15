@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +32,8 @@ public class DrawerStartFragment extends Fragment {
     }
 
     private DrawerStartListener listener;
+
+    private TypeWriterTextView typeWriterTextView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -103,10 +106,20 @@ public class DrawerStartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        view.findViewById(R.id.type_writer_tv_in_drawer_start).setOnClickListener(new View.OnClickListener() {
+        typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_start);
+
+        typeWriterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onClickTypeWriterTextView(view, DrawerStartFragment.TAG);
+            }
+        });
+        typeWriterTextView.setTextCompletionListener(new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onAnimationFinish()");
+
+                // TODO:
             }
         });
     }

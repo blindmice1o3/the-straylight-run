@@ -50,7 +50,8 @@ public class GameActivity extends AppCompatActivity
         implements SensorEventListener,
         DrawerStartFragment.DrawerStartListener,
         DrawerEndFragment.DrawerEndListener,
-        DrawerTopFragment.DrawerTopListener {
+        DrawerTopFragment.DrawerTopListener,
+        BottomDrawerDialogFragment.DrawerBottomListener {
     public static final String TAG = GameActivity.class.getSimpleName();
 
     private DrawerStartFragment drawerStartFragment;
@@ -177,7 +178,15 @@ public class GameActivity extends AppCompatActivity
                                     String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
                                     TypeWriterDialogFragment dialogFragment =
-                                            TypeWriterDialogFragment.newInstance(50L, message);
+                                            TypeWriterDialogFragment.newInstance(50L, message,
+                                                    new TypeWriterTextView.TextCompletionListener() {
+                                                        @Override
+                                                        public void onAnimationFinish() {
+                                                            Log.e(TAG, "onAnimationFinish()");
+
+                                                            // TODO:
+                                                        }
+                                                    });
                                     dialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
                                 }
                             }
@@ -460,8 +469,7 @@ public class GameActivity extends AppCompatActivity
             public boolean onSwipe(Direction direction, int yInit) {
                 if (direction == OnSwipeListener.Direction.up &&
                         yInit > (yScreenSize - 100)) {
-                    String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                    BottomDrawerDialogFragment.newInstance(message)
+                    BottomDrawerDialogFragment.newInstance(GameActivity.this)
                             .show(getSupportFragmentManager(), BottomDrawerDialogFragment.TAG);
                     return true;
                 }
@@ -589,13 +597,16 @@ public class GameActivity extends AppCompatActivity
     @Override
     public void onClickTypeWriterTextView(View view, String tag) {
         if (tag.equals(DrawerStartFragment.TAG)) {
-            String message = "DrawerStartFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            String message = "DrawerStartFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
             ((TypeWriterTextView) view).displayTextWithAnimation(message);
         } else if (tag.equals(DrawerEndFragment.TAG)) {
-            String message = "DrawerEndFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            String message = "DrawerEndFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
             ((TypeWriterTextView) view).displayTextWithAnimation(message);
         } else if (tag.equals(DrawerTopFragment.TAG)) {
-            String message = "DrawerTopFragment: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+            ((TypeWriterTextView) view).displayTextWithAnimation(message);
+        } else if (tag.equals(BottomDrawerDialogFragment.TAG)) {
+            String message = "BottomDrawerDialogFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
             ((TypeWriterTextView) view).displayTextWithAnimation(message);
         }
     }

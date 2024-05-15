@@ -6,7 +6,15 @@ import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
+import java.io.Serializable;
+
 public class TypeWriterTextView extends AppCompatTextView {
+    public interface TextCompletionListener extends Serializable {
+        void onAnimationFinish();
+    }
+
+    private TextCompletionListener textCompletionListener;
+
     private CharSequence sequence;
     private int mIndex;
     private long delay = 150; //default is 150 milliseconds
@@ -27,6 +35,10 @@ public class TypeWriterTextView extends AppCompatTextView {
             setText(sequence.subSequence(0, mIndex++));
             if (mIndex <= sequence.length()) {
                 handler.postDelayed(runnable, delay);
+            } else {
+                if (textCompletionListener != null) {
+                    textCompletionListener.onAnimationFinish();
+                }
             }
         }
     };
@@ -52,5 +64,9 @@ public class TypeWriterTextView extends AppCompatTextView {
      */
     public void setCharacterDelay(long m) {
         delay = m;
+    }
+
+    public void setTextCompletionListener(TextCompletionListener textCompletionListener) {
+        this.textCompletionListener = textCompletionListener;
     }
 }

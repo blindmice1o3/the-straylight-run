@@ -19,20 +19,28 @@ public class TypeWriterDialogFragment extends DialogFragment {
     public static final String TAG = TypeWriterDialogFragment.class.getSimpleName();
     public static final String ARG_DELAY = "delay";
     public static final String ARG_TEXT = "text";
+    public static final String ARG_TEXT_COMPLETION_LISTENER = "textCompletionListener";
 
     private TypeWriterTextView tvTypeWriter;
     private long delay;
     private String text;
+    private TypeWriterTextView.TextCompletionListener textCompletionListener;
 
-    public static TypeWriterDialogFragment newInstance(long delay, String text) {
+    public static TypeWriterDialogFragment newInstance(long delay, String text,
+                                                       TypeWriterTextView.TextCompletionListener textCompletionListener) {
         TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
 
         Bundle args = new Bundle();
         args.putLong(ARG_DELAY, delay);
         args.putString(ARG_TEXT, text);
+        args.putSerializable(ARG_TEXT_COMPLETION_LISTENER, textCompletionListener);
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    public void showChoiceYesOrNot() {
+        Log.e(TAG, "showChoiceYesOrNot(): YES or NO");
     }
 
     @Override
@@ -41,6 +49,7 @@ public class TypeWriterDialogFragment extends DialogFragment {
 
         delay = getArguments().getLong(ARG_DELAY);
         text = getArguments().getString(ARG_TEXT);
+        textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
     }
 
     @Nullable
@@ -62,6 +71,7 @@ public class TypeWriterDialogFragment extends DialogFragment {
         tvTypeWriter = view.findViewById(R.id.tv_type_writer);
         tvTypeWriter.setCharacterDelay(delay);
         tvTypeWriter.displayTextWithAnimation(text);
+        tvTypeWriter.setTextCompletionListener(textCompletionListener);
     }
 
     @Override
