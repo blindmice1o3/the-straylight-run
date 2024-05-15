@@ -2,11 +2,15 @@ package com.jackingaming.thestraylightrun.sequencetrainer;
 
 import android.content.ClipDescription;
 import android.os.Bundle;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -222,6 +226,15 @@ public class SequenceTrainerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
+        // Inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//        getWindow().setAllowEnterTransitionOverlap(true);
+        // Set an exit transition
+        getWindow().setExitTransition(new Slide(Gravity.TOP));
+        // Set an enter transition
+        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+
+
         setContentView(R.layout.activity_sequence_trainer);
 
         constraintLayout = findViewById(R.id.constraintlayout_sequence_trainer);
@@ -229,7 +242,7 @@ public class SequenceTrainerActivity extends AppCompatActivity
 
         MastrenaFragment mastrenaFragment = MastrenaFragment.newInstance();
         mastrenaFragment.setIceShakerListener(this);
-        
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fcv_main, mastrenaFragment);
         ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance());

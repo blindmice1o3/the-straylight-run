@@ -5,6 +5,7 @@ import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Dire
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.RIGHT;
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.UP;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,11 +16,17 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -202,9 +209,18 @@ public class GameActivity extends AppCompatActivity
                                                                                             (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
                                                                                     typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
 
-                                                                                    startActivity(
-                                                                                            new Intent(GameActivity.this, SequenceTrainerActivity.class)
-                                                                                    );
+                                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                                                        // Apply activity trainsition
+                                                                                        startActivity(
+                                                                                                new Intent(GameActivity.this, SequenceTrainerActivity.class),
+                                                                                                ActivityOptions.makeSceneTransitionAnimation(GameActivity.this).toBundle()
+                                                                                        );
+                                                                                    } else {
+                                                                                        // Swap without transition
+                                                                                        startActivity(
+                                                                                                new Intent(GameActivity.this, SequenceTrainerActivity.class)
+                                                                                        );
+                                                                                    }
                                                                                 }
 
                                                                                 @Override
@@ -326,6 +342,14 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        // Inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//        getWindow().setAllowEnterTransitionOverlap(true);
+        // Set an exit transition
+        getWindow().setExitTransition(new Slide(Gravity.TOP));
+        // Set an enter transition
+        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
 
         soundManager = new SoundManager(this);
 

@@ -1,9 +1,14 @@
 package com.jackingaming.thestraylightrun;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +25,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//        getWindow().setAllowEnterTransitionOverlap(true);
+        // Set an exit transition
+        getWindow().setExitTransition(new Slide(Gravity.TOP));
+        // Set an enter transition
+        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
@@ -46,14 +59,28 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragmentInContainer(NextWeekTonightFragment.newInstance(null, null));
                 return true;
             case R.id.options_item_game_controller:
-                startActivity(
-                        new Intent(this, GameActivity.class)
-                );
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(
+                            new Intent(this, GameActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+                    );
+                } else {
+                    startActivity(
+                            new Intent(this, GameActivity.class)
+                    );
+                }
                 return true;
             case R.id.options_item_hot_bar:
-                startActivity(
-                        new Intent(this, SequenceTrainerActivity.class)
-                );
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(
+                            new Intent(this, SequenceTrainerActivity.class),
+                            ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+                    );
+                } else {
+                    startActivity(
+                            new Intent(this, SequenceTrainerActivity.class)
+                    );
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
