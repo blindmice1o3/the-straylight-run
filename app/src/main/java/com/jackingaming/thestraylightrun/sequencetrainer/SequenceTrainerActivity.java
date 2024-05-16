@@ -1,7 +1,9 @@
 package com.jackingaming.thestraylightrun.sequencetrainer;
 
 import android.content.ClipDescription;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
@@ -226,16 +228,18 @@ public class SequenceTrainerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
-        // Inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//        getWindow().setAllowEnterTransitionOverlap(true);
-        // Set an exit transition
-        getWindow().setExitTransition(new Slide(Gravity.TOP));
-        // Set an enter transition
-        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Inside your activity (if you did not enable transitions in your theme)
+            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//            getWindow().setAllowEnterTransitionOverlap(true);
+            // Set an exit transition
+            getWindow().setExitTransition(new Fade(Fade.OUT));
+            // Set an enter transition
+            getWindow().setEnterTransition(new Explode());
+        }
+        ///////////////////////////////////////////////////
         setContentView(R.layout.activity_sequence_trainer);
+        ///////////////////////////////////////////////////
 
         constraintLayout = findViewById(R.id.constraintlayout_sequence_trainer);
         constraintLayout.setOnDragListener(new IceShakerDragListener());

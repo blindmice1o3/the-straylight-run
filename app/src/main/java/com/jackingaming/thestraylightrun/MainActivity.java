@@ -4,8 +4,8 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.view.Gravity;
+import android.transition.Explode;
+import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -25,15 +25,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//        getWindow().setAllowEnterTransitionOverlap(true);
-        // Set an exit transition
-        getWindow().setExitTransition(new Slide(Gravity.TOP));
-        // Set an enter transition
-        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Inside your activity (if you did not enable transitions in your theme)
+            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//            getWindow().setAllowEnterTransitionOverlap(true);
+            // Set an exit transition
+            getWindow().setExitTransition(new Explode());
+            // Set an enter transition
+            getWindow().setEnterTransition(new Fade(Fade.IN));
+        }
+        ///////////////////////////////////////
         setContentView(R.layout.activity_main);
+        ///////////////////////////////////////
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

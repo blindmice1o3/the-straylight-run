@@ -18,8 +18,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
@@ -342,19 +340,20 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        // Inside your activity (if you did not enable transitions in your theme)
-        getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//        getWindow().setAllowEnterTransitionOverlap(true);
-        // Set an exit transition
-        getWindow().setExitTransition(new Slide(Gravity.TOP));
-        // Set an enter transition
-        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
-
         soundManager = new SoundManager(this);
-
-        ///////////////////////////////////////////////////////////////////////////////
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Inside your activity (if you did not enable transitions in your theme)
+            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+//            getWindow().setAllowEnterTransitionOverlap(true);
+            // Set an exit transition
+            getWindow().setExitTransition(new Slide(Gravity.TOP));
+            // Set an enter transition
+            getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+        }
+        ///////////////////////////////////////
         setContentView(R.layout.activity_game);
+        ///////////////////////////////////////
 
         appBarLayout = findViewById(R.id.app_bar_layout);
         frameLayout = findViewById(R.id.frameLayout);
