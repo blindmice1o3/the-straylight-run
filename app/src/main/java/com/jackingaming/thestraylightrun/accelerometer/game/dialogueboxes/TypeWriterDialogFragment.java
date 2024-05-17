@@ -15,11 +15,20 @@ import androidx.fragment.app.DialogFragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 
+import java.io.Serializable;
+
 public class TypeWriterDialogFragment extends DialogFragment {
     public static final String TAG = TypeWriterDialogFragment.class.getSimpleName();
     public static final String ARG_DELAY = "delay";
     public static final String ARG_TEXT = "text";
+    public static final String ARG_DISMISS_LISTENER = "dismissListener";
     public static final String ARG_TEXT_COMPLETION_LISTENER = "textCompletionListener";
+
+    public interface DismissListener extends Serializable {
+        void onDismiss();
+    }
+
+    private DismissListener dismissListener;
 
     private TypeWriterTextView tvTypeWriter;
     private long delay;
@@ -27,12 +36,14 @@ public class TypeWriterDialogFragment extends DialogFragment {
     private TypeWriterTextView.TextCompletionListener textCompletionListener;
 
     public static TypeWriterDialogFragment newInstance(long delay, String text,
+                                                       DismissListener dismissListener,
                                                        TypeWriterTextView.TextCompletionListener textCompletionListener) {
         TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
 
         Bundle args = new Bundle();
         args.putLong(ARG_DELAY, delay);
         args.putString(ARG_TEXT, text);
+        args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         args.putSerializable(ARG_TEXT_COMPLETION_LISTENER, textCompletionListener);
         fragment.setArguments(args);
 
@@ -45,6 +56,7 @@ public class TypeWriterDialogFragment extends DialogFragment {
 
         delay = getArguments().getLong(ARG_DELAY);
         text = getArguments().getString(ARG_TEXT);
+        dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
     }
 
@@ -74,6 +86,8 @@ public class TypeWriterDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
+
+        dismissListener.onDismiss();
     }
 
     @Override

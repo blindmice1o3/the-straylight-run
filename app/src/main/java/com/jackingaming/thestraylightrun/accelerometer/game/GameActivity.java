@@ -137,6 +137,18 @@ public class GameActivity extends AppCompatActivity
                 (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
     }
 
+    private void stopEntityAnimations() {
+        for (Entity e : imageViewViaEntity.keySet()) {
+            e.stopAnimations();
+        }
+    }
+
+    private void startEntityAnimations() {
+        for (Entity e : imageViewViaEntity.keySet()) {
+            e.startAnimations();
+        }
+    }
+
     public static int durationOfFrameInMilli = 420;
 
     private void initPlayer(int xIndexSpawn, int yIndexSpawn) {
@@ -206,7 +218,14 @@ public class GameActivity extends AppCompatActivity
                                     String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
                                     TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader =
-                                            TypeWriterDialogFragment.newInstance(50L, message,
+                                            TypeWriterDialogFragment.newInstance(50L, message, new TypeWriterDialogFragment.DismissListener() {
+                                                        @Override
+                                                        public void onDismiss() {
+                                                            Log.e(TAG, "onDismiss()");
+
+                                                            startEntityAnimations();
+                                                        }
+                                                    },
                                                     new TypeWriterTextView.TextCompletionListener() {
                                                         @Override
                                                         public void onAnimationFinish() {
@@ -251,6 +270,7 @@ public class GameActivity extends AppCompatActivity
                                                             choiceDialogFragmentYesOrNo.show(getSupportFragmentManager(), ChoiceDialogFragment.TAG);
                                                         }
                                                     });
+                                    stopEntityAnimations();
                                     typeWriterDialogFragmentRivalLeader.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
                                 }
                             }
