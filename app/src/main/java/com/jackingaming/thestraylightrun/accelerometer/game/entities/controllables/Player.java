@@ -1,9 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.graphics.drawable.AnimationDrawable;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 
@@ -12,33 +10,14 @@ import java.util.Map;
 public class Player extends Entity
         implements Controllable {
 
-    private ObjectAnimator objectAnimatorUp = ObjectAnimator.ofInt(sprites.get(Direction.UP), "index", 0, sprites.get(Direction.UP).getNumberOfFrames() - 1);
-    private ObjectAnimator objectAnimatorDown = ObjectAnimator.ofInt(sprites.get(Direction.DOWN), "index", 0, sprites.get(Direction.DOWN).getNumberOfFrames() - 1);
-    private ObjectAnimator objectAnimatorLeft = ObjectAnimator.ofInt(sprites.get(Direction.LEFT), "index", 0, sprites.get(Direction.LEFT).getNumberOfFrames() - 1);
-    private ObjectAnimator objectAnimatorRight = ObjectAnimator.ofInt(sprites.get(Direction.RIGHT), "index", 0, sprites.get(Direction.RIGHT).getNumberOfFrames() - 1);
-
     private Direction directionHorizontal = Direction.RIGHT;
     private Direction directionVertical = Direction.DOWN;
 
-    public Player(Map<Direction, Animation> sprites,
+    public Player(Map<Direction, AnimationDrawable> animationsByDirection,
                   CollisionListener collisionListener, MovementListener movementListener) {
-        super(sprites, collisionListener, movementListener);
+        super(animationsByDirection, collisionListener, movementListener);
 
-        objectAnimatorUp.setDuration(500);
-        objectAnimatorUp.setRepeatCount(ValueAnimator.INFINITE);
-        objectAnimatorUp.start();
-
-        objectAnimatorDown.setDuration(500);
-        objectAnimatorDown.setRepeatCount(ValueAnimator.INFINITE);
-        objectAnimatorDown.start();
-
-        objectAnimatorLeft.setDuration(500);
-        objectAnimatorLeft.setRepeatCount(ValueAnimator.INFINITE);
-        objectAnimatorLeft.start();
-
-        objectAnimatorRight.setDuration(500);
-        objectAnimatorRight.setRepeatCount(ValueAnimator.INFINITE);
-        objectAnimatorRight.start();
+        startAnimations();
     }
 
     @Override

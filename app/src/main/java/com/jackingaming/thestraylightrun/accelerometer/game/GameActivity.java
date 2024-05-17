@@ -9,9 +9,12 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -40,7 +43,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawer
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Controllable;
@@ -135,31 +137,49 @@ public class GameActivity extends AppCompatActivity
                 (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
     }
 
+    public static int durationOfFrameInMilli = 420;
+
     private void initPlayer(int xIndexSpawn, int yIndexSpawn) {
-        Bitmap[] upPlayer = new Bitmap[3];
-        upPlayer[0] = sprites[3][1];
-        upPlayer[1] = sprites[4][1];
-        upPlayer[2] = sprites[5][1];
+        Resources resources = getResources();
 
-        Bitmap[] downPlayer = new Bitmap[3];
-        downPlayer[0] = sprites[0][1];
-        downPlayer[1] = sprites[1][1];
-        downPlayer[2] = sprites[2][1];
+        AnimationDrawable animationDrawableUp = new AnimationDrawable();
+        animationDrawableUp.setOneShot(false);
+        animationDrawableUp.addFrame(
+                new BitmapDrawable(resources, sprites[3][1]), durationOfFrameInMilli);
+        animationDrawableUp.addFrame(
+                new BitmapDrawable(resources, sprites[4][1]), durationOfFrameInMilli);
+        animationDrawableUp.addFrame(
+                new BitmapDrawable(resources, sprites[5][1]), durationOfFrameInMilli);
 
-        Bitmap[] leftPlayer = new Bitmap[2];
-        leftPlayer[0] = sprites[6][1];
-        leftPlayer[1] = sprites[7][1];
+        AnimationDrawable animationDrawableDown = new AnimationDrawable();
+        animationDrawableDown.setOneShot(false);
+        animationDrawableDown.addFrame(
+                new BitmapDrawable(resources, sprites[0][1]), durationOfFrameInMilli);
+        animationDrawableDown.addFrame(
+                new BitmapDrawable(resources, sprites[1][1]), durationOfFrameInMilli);
+        animationDrawableDown.addFrame(
+                new BitmapDrawable(resources, sprites[2][1]), durationOfFrameInMilli);
 
-        Bitmap[] rightPlayer = new Bitmap[2];
-        rightPlayer[0] = sprites[8][1];
-        rightPlayer[1] = sprites[9][1];
+        AnimationDrawable animationDrawableLeft = new AnimationDrawable();
+        animationDrawableLeft.setOneShot(false);
+        animationDrawableLeft.addFrame(
+                new BitmapDrawable(resources, sprites[6][1]), durationOfFrameInMilli);
+        animationDrawableLeft.addFrame(
+                new BitmapDrawable(resources, sprites[7][1]), durationOfFrameInMilli);
 
-        Map<Direction, Animation> spritesPlayer = new HashMap<>();
-        spritesPlayer.put(UP, new Animation(upPlayer));
-        spritesPlayer.put(DOWN, new Animation(downPlayer));
-        spritesPlayer.put(LEFT, new Animation(leftPlayer));
-        spritesPlayer.put(RIGHT, new Animation(rightPlayer));
-        Player player = new Player(spritesPlayer,
+        AnimationDrawable animationDrawableRight = new AnimationDrawable();
+        animationDrawableRight.setOneShot(false);
+        animationDrawableRight.addFrame(
+                new BitmapDrawable(resources, sprites[8][1]), durationOfFrameInMilli);
+        animationDrawableRight.addFrame(
+                new BitmapDrawable(resources, sprites[9][1]), durationOfFrameInMilli);
+
+        Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
+        animationsByDirection.put(UP, animationDrawableUp);
+        animationsByDirection.put(DOWN, animationDrawableDown);
+        animationsByDirection.put(LEFT, animationDrawableLeft);
+        animationsByDirection.put(RIGHT, animationDrawableRight);
+        Player player = new Player(animationsByDirection,
                 new Entity.CollisionListener() {
                     @Override
                     public void onJustCollided(Entity collided) {
@@ -262,7 +282,7 @@ public class GameActivity extends AppCompatActivity
         controllable = (Controllable) player;
 
         ImageView ivPlayer = new ImageView(this);
-        ivPlayer.setImageBitmap(player.getFrame());
+        ivPlayer.setImageDrawable(player.getAnimationDrawableBasedOnDirection());
         frameLayout.addView(ivPlayer, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         imageViewViaEntity.put(player, ivPlayer);
 
@@ -276,53 +296,79 @@ public class GameActivity extends AppCompatActivity
                                           Entity.CollisionListener entityCollisionListener,
                                           Entity.MovementListener entityMovementListener,
                                           View.OnClickListener viewOnClickListener) {
-        Bitmap[] upSprites = new Bitmap[3];
-        Bitmap[] downSprites = new Bitmap[3];
-        Bitmap[] leftSprites = new Bitmap[2];
-        Bitmap[] rightSprites = new Bitmap[2];
+        Resources resources = getResources();
+
+        AnimationDrawable animationDrawableUp = new AnimationDrawable();
+        animationDrawableUp.setOneShot(false);
+        AnimationDrawable animationDrawableDown = new AnimationDrawable();
+        animationDrawableDown.setOneShot(false);
+        AnimationDrawable animationDrawableLeft = new AnimationDrawable();
+        animationDrawableLeft.setOneShot(false);
+        AnimationDrawable animationDrawableRight = new AnimationDrawable();
+        animationDrawableRight.setOneShot(false);
         if (yIndexForSprites >= 0) {
-            upSprites[0] = sprites[3][yIndexForSprites];
-            upSprites[1] = sprites[4][yIndexForSprites];
-            upSprites[2] = sprites[5][yIndexForSprites];
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, sprites[3][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, sprites[4][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, sprites[5][yIndexForSprites]), durationOfFrameInMilli);
 
-            downSprites[0] = sprites[0][yIndexForSprites];
-            downSprites[1] = sprites[1][yIndexForSprites];
-            downSprites[2] = sprites[2][yIndexForSprites];
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, sprites[0][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, sprites[1][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, sprites[2][yIndexForSprites]), durationOfFrameInMilli);
 
-            leftSprites[0] = sprites[6][yIndexForSprites];
-            leftSprites[1] = sprites[7][yIndexForSprites];
+            animationDrawableLeft.addFrame(
+                    new BitmapDrawable(resources, sprites[6][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableLeft.addFrame(
+                    new BitmapDrawable(resources, sprites[7][yIndexForSprites]), durationOfFrameInMilli);
 
-            rightSprites[0] = sprites[8][yIndexForSprites];
-            rightSprites[1] = sprites[9][yIndexForSprites];
+            animationDrawableRight.addFrame(
+                    new BitmapDrawable(resources, sprites[8][yIndexForSprites]), durationOfFrameInMilli);
+            animationDrawableRight.addFrame(
+                    new BitmapDrawable(resources, sprites[9][yIndexForSprites]), durationOfFrameInMilli);
         } else {
-            upSprites[0] = spriteCoin;
-            upSprites[1] = spriteCoin;
-            upSprites[2] = spriteCoin;
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableUp.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
 
-            downSprites[0] = spriteCoin;
-            downSprites[1] = spriteCoin;
-            downSprites[2] = spriteCoin;
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableDown.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
 
-            leftSprites[0] = spriteCoin;
-            leftSprites[1] = spriteCoin;
+            animationDrawableLeft.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableLeft.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
 
-            rightSprites[0] = spriteCoin;
-            rightSprites[1] = spriteCoin;
+            animationDrawableRight.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+            animationDrawableRight.addFrame(
+                    new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
         }
 
-        Map<Direction, Animation> animationMap = new HashMap<>();
-        animationMap.put(UP, new Animation(upSprites));
-        animationMap.put(DOWN, new Animation(downSprites));
-        animationMap.put(LEFT, new Animation(leftSprites));
-        animationMap.put(RIGHT, new Animation(rightSprites));
+        Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
+        animationsByDirection.put(UP, animationDrawableUp);
+        animationsByDirection.put(DOWN, animationDrawableDown);
+        animationsByDirection.put(LEFT, animationDrawableLeft);
+        animationsByDirection.put(RIGHT, animationDrawableRight);
         NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
-                animationMap,
+                animationsByDirection,
                 directionFacing,
                 entityCollisionListener,
                 entityMovementListener);
 
         ImageView imageView = new ImageView(this);
-        imageView.setImageBitmap(nonPlayableCharacter.getFrame());
+        imageView.setImageDrawable(nonPlayableCharacter.getAnimationDrawableBasedOnDirection());
         frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         imageViewViaEntity.put(nonPlayableCharacter, imageView);
 
@@ -341,7 +387,7 @@ public class GameActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         soundManager = new SoundManager(this);
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Inside your activity (if you did not enable transitions in your theme)
             getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
@@ -352,6 +398,9 @@ public class GameActivity extends AppCompatActivity
             getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
         }
         ///////////////////////////////////////
+        // TODO: convert activity_game.xml's app_bar_main.xml to be fragment-based
+        //  (change class World [FrameLayout] into a fragment, replace app_bar_main.xml's World
+        //  with FragmentContainerView, add WorldFragment to FragmentContainerView).
         setContentView(R.layout.activity_game);
         ///////////////////////////////////////
 
@@ -627,7 +676,15 @@ public class GameActivity extends AppCompatActivity
             }
 
             // IMAGE (based on direction)
-            ivEntity.setImageBitmap(e.getFrame());
+            if (e instanceof NonPlayableCharacter) {
+                if (((NonPlayableCharacter) e).isStationary()) {
+                    ivEntity.setImageDrawable(e.getPausedFrameBasedOnDirection());
+                } else {
+                    ivEntity.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
+                }
+            } else if (e instanceof Player) {
+                ivEntity.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
+            }
 
             // POSITION
             ivEntity.setX(e.getxPos() - gameCamera.getxOffset());

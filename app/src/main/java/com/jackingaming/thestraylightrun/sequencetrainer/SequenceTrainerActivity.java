@@ -5,10 +5,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.transition.Explode;
 import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -238,6 +236,8 @@ public class SequenceTrainerActivity extends AppCompatActivity
             getWindow().setEnterTransition(new Explode());
         }
         ///////////////////////////////////////////////////
+        // TODO: convert activity_sequence_trainer.xml to be singular fragment
+        //  (create HotBarFragment and move the multiple fragments into there).
         setContentView(R.layout.activity_sequence_trainer);
         ///////////////////////////////////////////////////
 

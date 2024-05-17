@@ -1,10 +1,8 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 
@@ -17,83 +15,16 @@ public class NonPlayableCharacter extends Entity {
     private Random random = new Random();
 
     private String id;
-    private ObjectAnimator objectAnimatorUp, objectAnimatorDown, objectAnimatorLeft, objectAnimatorRight;
     private boolean stationary = false;
 
-    public NonPlayableCharacter(String id, Map<Direction, Animation> sprites, Direction directionFacing,
+    public NonPlayableCharacter(String id, Map<Direction, AnimationDrawable> animationsByDirection, Direction directionFacing,
                                 CollisionListener collisionListener, MovementListener movementListener) {
-        super(sprites, collisionListener, movementListener);
+        super(animationsByDirection, collisionListener, movementListener);
 
         this.id = id;
         this.direction = directionFacing;
 
-        initAnimations();
-//        startAnimations();
-    }
-
-    private void initAnimations() {
-        objectAnimatorUp = ObjectAnimator.ofInt(sprites.get(Direction.UP),
-                "index", 0, sprites.get(Direction.UP).getNumberOfFrames() - 1);
-        objectAnimatorUp.setDuration(500);
-        objectAnimatorUp.setRepeatCount(ValueAnimator.INFINITE);
-
-        objectAnimatorDown = ObjectAnimator.ofInt(sprites.get(Direction.DOWN),
-                "index", 0, sprites.get(Direction.DOWN).getNumberOfFrames() - 1);
-        objectAnimatorDown.setDuration(500);
-        objectAnimatorDown.setRepeatCount(ValueAnimator.INFINITE);
-
-        objectAnimatorLeft = ObjectAnimator.ofInt(sprites.get(Direction.LEFT),
-                "index", 0, sprites.get(Direction.LEFT).getNumberOfFrames() - 1);
-        objectAnimatorLeft.setDuration(500);
-        objectAnimatorLeft.setRepeatCount(ValueAnimator.INFINITE);
-
-        objectAnimatorRight = ObjectAnimator.ofInt(sprites.get(Direction.RIGHT),
-                "index", 0, sprites.get(Direction.RIGHT).getNumberOfFrames() - 1);
-        objectAnimatorRight.setDuration(500);
-        objectAnimatorRight.setRepeatCount(ValueAnimator.INFINITE);
-    }
-
-    private void startAnimations() {
-        objectAnimatorUp.start();
-        objectAnimatorDown.start();
-        objectAnimatorLeft.start();
-        objectAnimatorRight.start();
-    }
-
-    private void pauseAnimations() {
-        objectAnimatorUp.pause();
-        objectAnimatorDown.pause();
-        objectAnimatorLeft.pause();
-        objectAnimatorRight.pause();
-    }
-
-    private boolean areAnimationsPaused() {
-        return objectAnimatorUp.isPaused() ||
-                objectAnimatorDown.isPaused() ||
-                objectAnimatorLeft.isPaused() ||
-                objectAnimatorRight.isPaused();
-    }
-
-    private boolean areAnimationsStarted() {
-        return objectAnimatorUp.isStarted() &&
-                objectAnimatorDown.isStarted() &&
-                objectAnimatorLeft.isStarted() &&
-                objectAnimatorRight.isStarted();
-    }
-
-    private void updateAnimationsBasedOnStationary() {
-        if (stationary) {
-            pauseAnimations();
-
-            sprites.get(Direction.UP).setIndex(1);
-            sprites.get(Direction.DOWN).setIndex(1);
-            sprites.get(Direction.LEFT).setIndex(0);
-            sprites.get(Direction.RIGHT).setIndex(0);
-        } else {
-            if (areAnimationsPaused() || !areAnimationsStarted()) {
-                startAnimations();
-            }
-        }
+        startAnimations();
     }
 
     public void turnStationaryOn() {
@@ -110,6 +41,14 @@ public class NonPlayableCharacter extends Entity {
         Log.e(TAG, "toggleStationary()");
         stationary = !stationary;
         updateAnimationsBasedOnStationary();
+    }
+
+    public void updateAnimationsBasedOnStationary() {
+        if (stationary) {
+            stopAnimations();
+        } else {
+            startAnimations();
+        }
     }
 
     @Override
@@ -142,8 +81,8 @@ public class NonPlayableCharacter extends Entity {
 //                }
 //            }
         } else {
-            // DIRECTION (changes 10% of the time)
-            if (random.nextInt(10) < 1) {
+            // DIRECTION (changes 5% of the time)
+            if (random.nextInt(20) < 1) {
                 // determine direction
                 if (random.nextInt(2) == 0) {
                     directionHorizontal = Direction.LEFT;
@@ -308,5 +247,9 @@ public class NonPlayableCharacter extends Entity {
 
     public String getId() {
         return id;
+    }
+
+    public boolean isStationary() {
+        return stationary;
     }
 }

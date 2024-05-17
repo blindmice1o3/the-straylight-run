@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.entities;
 
-import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 
 import java.util.List;
 import java.util.Map;
@@ -29,14 +30,14 @@ public abstract class Entity {
     protected int speedMovement = DEFAULT_SPEED_MOVEMENT;
     protected float speedBonus = DEFAULT_SPEED_BONUS;
     protected Direction direction = Direction.DOWN;
-    protected Map<Direction, Animation> sprites;
+    protected Map<Direction, AnimationDrawable> animationsByDirection;
 
     protected boolean colliding;
     protected boolean justCollided;
     protected boolean cantCollide;
 
-    public Entity(Map<Direction, Animation> sprites, CollisionListener collisionListener, MovementListener movementListener) {
-        this.sprites = sprites;
+    public Entity(Map<Direction, AnimationDrawable> animationsByDirection, CollisionListener collisionListener, MovementListener movementListener) {
+        this.animationsByDirection = animationsByDirection;
         this.collisionListener = collisionListener;
         this.movementListener = movementListener;
     }
@@ -57,8 +58,30 @@ public abstract class Entity {
 
     public abstract void update();
 
-    public Bitmap getFrame() {
-        return sprites.get(direction).getFrame();
+    public void startAnimations() {
+        for (AnimationDrawable animationDrawable : animationsByDirection.values()) {
+            animationDrawable.start();
+        }
+    }
+
+    public void stopAnimations() {
+        for (AnimationDrawable animationDrawable : animationsByDirection.values()) {
+            animationDrawable.stop();
+        }
+    }
+
+    public AnimationDrawable getAnimationDrawableBasedOnDirection() {
+        return animationsByDirection.get(direction);
+    }
+
+    public Drawable getPausedFrameBasedOnDirection() {
+        int index = -1;
+        if (direction == Direction.LEFT || direction == Direction.RIGHT) {
+            index = 0;
+        } else if (direction == Direction.UP || direction == Direction.DOWN) {
+            index = 1;
+        }
+        return animationsByDirection.get(direction).getFrame(index);
     }
 
     protected boolean checkEntityCollision(float xDelta, float yDelta) {
