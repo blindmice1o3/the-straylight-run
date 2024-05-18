@@ -12,12 +12,13 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.GameActivity;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
-import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
+import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ///////////////////////////////////////
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
@@ -50,6 +54,27 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_activity_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.options_item_sprite_sheet_clip_selector ||
+                    menu.getItem(i).getItemId() == R.id.options_item_next_week_tonight ||
+                    menu.getItem(i).getItemId() == R.id.options_item_game_controller ||
+                    menu.getItem(i).getItemId() == R.id.options_item_hot_bar) {
+                menu.getItem(i).setVisible(true);
+            } else {
+                menu.getItem(i).setVisible(false);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        getSupportActionBar().show();
     }
 
     @Override
@@ -74,16 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.options_item_hot_bar:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(
-                            new Intent(this, SequenceTrainerActivity.class),
-                            ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
-                    );
-                } else {
-                    startActivity(
-                            new Intent(this, SequenceTrainerActivity.class)
-                    );
-                }
+                replaceFragmentInContainer(SequenceTrainerFragment.newInstance(null, null));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

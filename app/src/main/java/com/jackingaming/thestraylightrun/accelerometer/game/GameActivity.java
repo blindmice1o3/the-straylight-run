@@ -5,9 +5,7 @@ import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Dire
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.RIGHT;
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.UP;
 
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -50,7 +48,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllabl
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
-import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -246,18 +243,7 @@ public class GameActivity extends AppCompatActivity
                                                                                             (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
                                                                                     typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
 
-                                                                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                                                        // Apply activity trainsition
-                                                                                        startActivity(
-                                                                                                new Intent(GameActivity.this, SequenceTrainerActivity.class),
-                                                                                                ActivityOptions.makeSceneTransitionAnimation(GameActivity.this).toBundle()
-                                                                                        );
-                                                                                    } else {
-                                                                                        // Swap without transition
-                                                                                        startActivity(
-                                                                                                new Intent(GameActivity.this, SequenceTrainerActivity.class)
-                                                                                        );
-                                                                                    }
+                                                                                    // TODO:
                                                                                 }
 
                                                                                 @Override
@@ -265,6 +251,13 @@ public class GameActivity extends AppCompatActivity
                                                                                     Log.e(TAG, "NO selected");
 
                                                                                     soundManager.sfxPlay(soundManager.sfxCollision);
+
+                                                                                    choiceDialogFragment.dismiss();
+                                                                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
+                                                                                            (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                                                                    typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
+
+                                                                                    // TODO:
                                                                                 }
                                                                             });
                                                             choiceDialogFragmentYesOrNo.show(getSupportFragmentManager(), ChoiceDialogFragment.TAG);

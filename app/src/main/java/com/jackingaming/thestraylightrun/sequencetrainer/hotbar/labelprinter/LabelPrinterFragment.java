@@ -1,6 +1,5 @@
 package com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +44,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LabelPrinterFragment extends Fragment {
     public static final String TAG = LabelPrinterFragment.class.getSimpleName();
+    public static final String ARGS_LISTENER = "listener";
 
     public static final String URL_ORDERS = "http://192.168.1.143:8080/v1/orders";
     public static final long DELAY_DURATION_IN_SECONDS = 3L;
@@ -65,7 +66,7 @@ public class LabelPrinterFragment extends Fragment {
     private ScheduledFuture requestRepeatingFetchNewerOrders;
     private LocalDateTime timestampLastDrink;
 
-    public interface Listener {
+    public interface Listener extends Serializable {
         void onInitializationCompleted(LabelPrinter labelPrinter);
     }
 
@@ -81,22 +82,15 @@ public class LabelPrinterFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static LabelPrinterFragment newInstance() {
+    public static LabelPrinterFragment newInstance(Listener listener) {
         Log.e(TAG, "newInstance()");
         LabelPrinterFragment fragment = new LabelPrinterFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARGS_LISTENER, listener);
+        fragment.setArguments(args);
+
         return fragment;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        try {
-            listener = (Listener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement InitializationListener");
-        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -104,6 +98,8 @@ public class LabelPrinterFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
+
+        listener = (Listener) getArguments().getSerializable(ARGS_LISTENER);
 
         requestQueue = Volley.newRequestQueue(getContext());
         timestampLastDrink = LocalDateTime.now();

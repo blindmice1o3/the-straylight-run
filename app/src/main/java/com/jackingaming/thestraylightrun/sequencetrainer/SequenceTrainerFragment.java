@@ -1,21 +1,21 @@
 package com.jackingaming.thestraylightrun.sequencetrainer;
 
 import android.content.ClipDescription;
-import android.os.Build;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -29,10 +29,23 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.RefrigeratorFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.sink.SinkFragment;
 
-public class SequenceTrainerActivity extends AppCompatActivity
-        implements LabelPrinterFragment.Listener,
-        MastrenaFragment.IceShakerListener {
-    public static final String TAG = SequenceTrainerActivity.class.getSimpleName();
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link SequenceTrainerFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class SequenceTrainerFragment extends Fragment
+        implements MastrenaFragment.IceShakerListener {
+    public static final String TAG = SequenceTrainerFragment.class.getSimpleName();
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private ConstraintLayout constraintLayout;
     private String modeSelected = "standard";
@@ -206,7 +219,7 @@ public class SequenceTrainerActivity extends AppCompatActivity
         }
 
         if (shakeCounter == 5) {
-            Toast.makeText(SequenceTrainerActivity.this, "SHAKEN", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "SHAKEN", Toast.LENGTH_SHORT).show();
             iceShaker.shake();
         }
     }
@@ -222,34 +235,62 @@ public class SequenceTrainerActivity extends AppCompatActivity
         iceShaker.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate()");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Inside your activity (if you did not enable transitions in your theme)
-            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//            getWindow().setAllowEnterTransitionOverlap(true);
-            // Set an exit transition
-            getWindow().setExitTransition(new Fade(Fade.OUT));
-            // Set an enter transition
-            getWindow().setEnterTransition(new Explode());
-        }
-        ///////////////////////////////////////////////////
-        // TODO: convert activity_sequence_trainer.xml to be singular fragment
-        //  (create HotBarFragment and move the multiple fragments into there).
-        setContentView(R.layout.activity_sequence_trainer);
-        ///////////////////////////////////////////////////
+    public SequenceTrainerFragment() {
+        // Required empty public constructor
+    }
 
-        constraintLayout = findViewById(R.id.constraintlayout_sequence_trainer);
-        constraintLayout.setOnDragListener(new IceShakerDragListener());
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment SequenceTrainerFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static SequenceTrainerFragment newInstance(String param1, String param2) {
+        SequenceTrainerFragment fragment = new SequenceTrainerFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_sequence_trainer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         MastrenaFragment mastrenaFragment = MastrenaFragment.newInstance();
         mastrenaFragment.setIceShakerListener(this);
 
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.fcv_main, mastrenaFragment);
-        ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance());
+        ft.add(R.id.fcv_right_top, LabelPrinterFragment.newInstance(new LabelPrinterFragment.Listener() {
+            @Override
+            public void onInitializationCompleted(LabelPrinter labelPrinter) {
+                MastrenaFragment mastrenaFragment = (MastrenaFragment) getChildFragmentManager().findFragmentById(R.id.fcv_main);
+                mastrenaFragment.setLabelPrinter(labelPrinter);
+            }
+        }));
         ft.add(R.id.fcv_right_middle, CupCaddyFragment.newInstance());
         ft.add(R.id.fcv_right_bottom, SinkFragment.newInstance("", ""));
         ft.add(R.id.fcv_bottom_left, RefrigeratorFragment.newInstance());
@@ -257,7 +298,7 @@ public class SequenceTrainerActivity extends AppCompatActivity
         ft.commit();
 
         // Set the listener on the fragmentManager.
-        getSupportFragmentManager().setFragmentResultListener(LabelPrinterModeDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
+        getChildFragmentManager().setFragmentResultListener(LabelPrinterModeDialogFragment.REQUEST_KEY, this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
                 Log.e(TAG, "onFragmentResult() requestKey: " + requestKey);
@@ -265,33 +306,44 @@ public class SequenceTrainerActivity extends AppCompatActivity
                 modeSelected = result.getString(LabelPrinterModeDialogFragment.BUNDLE_KEY_MODE_SELECTED);
                 Log.e(TAG, "modeSelected: " + modeSelected);
 
-                LabelPrinterFragment labelPrinterFragment = (LabelPrinterFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_right_top);
+                LabelPrinterFragment labelPrinterFragment = (LabelPrinterFragment) getChildFragmentManager().findFragmentById(R.id.fcv_right_top);
                 labelPrinterFragment.changeLabelPrinterMode(modeSelected);
             }
         });
+
+        constraintLayout = view.findViewById(R.id.constraintlayout_sequence_trainer);
+        constraintLayout.setOnDragListener(new IceShakerDragListener());
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.options_activity_sequence_trainer, menu);
-        return true;
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        // Add your menu entries here.
+        inflater.inflate(R.menu.options_activity_sequence_trainer, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        for (int i = 0; i < menu.size(); i++) {
+            if (menu.getItem(i).getItemId() == R.id.options_item_label_printer_mode) {
+                menu.getItem(i).setVisible(true);
+            } else {
+                menu.getItem(i).setVisible(false);
+            }
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.options_item_label_printer_mode:
+                Log.e(TAG, "onOptionsItemSelected() R.id.options_item_label_printer_mode YAY!");
                 LabelPrinterModeDialogFragment labelPrinterModeDialogFragment = LabelPrinterModeDialogFragment.newInstance(modeSelected);
-                labelPrinterModeDialogFragment.show(getSupportFragmentManager(), LabelPrinterModeDialogFragment.TAG);
+                labelPrinterModeDialogFragment.show(getChildFragmentManager(), LabelPrinterModeDialogFragment.TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onInitializationCompleted(LabelPrinter labelPrinter) {
-        MastrenaFragment mastrenaFragment = (MastrenaFragment) getSupportFragmentManager().findFragmentById(R.id.fcv_main);
-        mastrenaFragment.setLabelPrinter(labelPrinter);
     }
 }
