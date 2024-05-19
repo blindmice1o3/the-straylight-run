@@ -88,12 +88,12 @@ public class GameFragment extends Fragment
     private AppBarLayout appBarLayout;
     // TODO: change FrameLayout to World
     private FrameLayout frameLayout;
-    private int xScreenSize, yScreenSize;
+    private int widthDeviceScreen, heightDeviceScreen;
     private GameCamera gameCamera;
     private Map<Entity, ImageView> imageViewViaEntity;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
-    private Bitmap tileSolid, tileWalkable, tileBoulder;
+    private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
 
     private Controllable controllable;
     private SensorManager sensorManager;
@@ -101,56 +101,92 @@ public class GameFragment extends Fragment
     private float xVel, yVel = 0.0f;
     private int widthSpriteDst, heightSpriteDst;
 
-    private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
-    private static final int HEIGHT_SPRITE_SHEET_ACTUAL = 1188;
-    private static final int COLUMNS = 10;
-    private static final int ROWS = 56; // section: Characters
-    private static final int X_OFFSET_INIT = 9;
-    private static final int Y_OFFSET_INIT = 34;
-    private static final int WIDTH_SPRITE = 16;
-    private static final int HEIGHT_SPRITE = 16;
-    private static final int WIDTH_DIVIDER = 1;
-    private static final int HEIGHT_DIVIDER = 1;
+    static class SpriteInitializer {
+        private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
+        private static final int HEIGHT_SPRITE_SHEET_ACTUAL = 1188;
+        private static final int COLUMNS = 10;
+        private static final int ROWS = 56; // section: Characters
+        private static final int X_OFFSET_INIT = 9;
+        private static final int Y_OFFSET_INIT = 34;
+        private static final int WIDTH_SPRITE = 16;
+        private static final int HEIGHT_SPRITE = 16;
+        private static final int WIDTH_DIVIDER = 1;
+        private static final int HEIGHT_DIVIDER = 1;
 
-    private void initSprites(int widthSpriteDst, int heightSpriteDst) {
-        sprites = new Bitmap[COLUMNS][ROWS];
+        private static final int xSolidTile = 10;
+        private static final int ySolidTile = 1147;
+        private static final int xWalkableTile = 10;
+        private static final int yWalkableTile = 1164;
+        private static final int xBoulderTile = 112;
+        private static final int yBoulderTile = 1088;
 
-        Bitmap spriteSheet = BitmapFactory.decodeResource(getResources(),
-                R.drawable.gbc_pokemon_red_blue_characters_overworld);
+        public static Bitmap[][] initSprites(Resources resources, int widthSpriteDst, int heightSpriteDst) {
+            Bitmap[][] sprites = new Bitmap[COLUMNS][ROWS];
 
-        float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
-        float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
+            Bitmap spriteSheet = BitmapFactory.decodeResource(resources,
+                    R.drawable.gbc_pokemon_red_blue_characters_overworld);
 
-        int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
-        int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
+            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
+            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
 
-        int yOffset = Y_OFFSET_INIT;
-        int xOffset = X_OFFSET_INIT;
-        for (int i = 0; i < COLUMNS; i++) {
-            for (int j = 0; j < ROWS; j++) {
-                int xOffsetConverted = (int) (xOffset * ratioHorizontal);
-                int yOffsetConverted = (int) (yOffset * ratioVertical);
+            int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
+            int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
 
-                Bitmap sprite = Bitmap.createBitmap(spriteSheet,
-                        xOffsetConverted, yOffsetConverted, widthSpriteConverted, heightSpriteConverted);
-                sprites[i][j] = Bitmap.createScaledBitmap(sprite, widthSpriteDst, heightSpriteDst, true);
+            int yOffset = Y_OFFSET_INIT;
+            int xOffset = X_OFFSET_INIT;
+            for (int i = 0; i < COLUMNS; i++) {
+                for (int j = 0; j < ROWS; j++) {
+                    int xOffsetConverted = (int) (xOffset * ratioHorizontal);
+                    int yOffsetConverted = (int) (yOffset * ratioVertical);
 
-                yOffset += (HEIGHT_SPRITE + HEIGHT_DIVIDER);
+                    Bitmap sprite = Bitmap.createBitmap(spriteSheet,
+                            xOffsetConverted, yOffsetConverted, widthSpriteConverted, heightSpriteConverted);
+                    sprites[i][j] = Bitmap.createScaledBitmap(sprite, widthSpriteDst, heightSpriteDst, true);
+
+                    yOffset += (HEIGHT_SPRITE + HEIGHT_DIVIDER);
+                }
+                yOffset = Y_OFFSET_INIT;
+                xOffset += (WIDTH_SPRITE + WIDTH_DIVIDER);
             }
-            yOffset = Y_OFFSET_INIT;
-            xOffset += (WIDTH_SPRITE + WIDTH_DIVIDER);
+
+            return sprites;
         }
 
-        spriteCoin = BitmapFactory.decodeResource(getResources(), R.drawable.ic_coins_l);
-        tileSolid = Bitmap.createBitmap(spriteSheet,
-                (int) (10 * ratioHorizontal), (int) (1147 * ratioVertical),
-                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
-        tileWalkable = Bitmap.createBitmap(spriteSheet,
-                (int) (10 * ratioHorizontal), (int) (1164 * ratioVertical),
-                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
-        tileBoulder = Bitmap.createBitmap(spriteSheet,
-                (int) (112 * ratioHorizontal), (int) (1088 * ratioVertical),
-                (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
+        public static Bitmap initCoinSprite(Resources resources) {
+            Bitmap spriteCoin = BitmapFactory.decodeResource(resources,
+                    R.drawable.ic_coins_l);
+
+            return spriteCoin;
+        }
+
+        public static Bitmap initSolidTileSprite(Resources resources) {
+            return initTileSprite(resources, xSolidTile, ySolidTile);
+        }
+
+        public static Bitmap initWalkableTileSprite(Resources resources) {
+            return initTileSprite(resources, xWalkableTile, yWalkableTile);
+        }
+
+        public static Bitmap initBoulderTileSprite(Resources resources) {
+            return initTileSprite(resources, xBoulderTile, yBoulderTile);
+        }
+
+        private static Bitmap initTileSprite(Resources resources, int xTile, int yTile) {
+            Bitmap spriteSheet = BitmapFactory.decodeResource(resources,
+                    R.drawable.gbc_pokemon_red_blue_characters_overworld);
+
+            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
+            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
+
+            int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
+            int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
+
+            Bitmap tileWalkable = Bitmap.createBitmap(spriteSheet,
+                    (int) (xTile * ratioHorizontal), (int) (yTile * ratioVertical),
+                    (int) (widthSpriteConverted - ratioHorizontal), (int) (heightSpriteConverted - ratioVertical));
+
+            return tileWalkable;
+        }
     }
 
     private void stopEntityAnimations() {
@@ -456,6 +492,8 @@ public class GameFragment extends Fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
+    private static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -511,14 +549,18 @@ public class GameFragment extends Fragment
         Point sizeDisplay = new Point();
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         display.getSize(sizeDisplay);
-        xScreenSize = sizeDisplay.x;
-        yScreenSize = sizeDisplay.y;
-        Log.e(TAG, "xScreenSize, yScreenSize: " + xScreenSize + ", " + yScreenSize);
-        widthSpriteDst = Math.min(xScreenSize, yScreenSize) / 12;
+        widthDeviceScreen = sizeDisplay.x;
+        heightDeviceScreen = sizeDisplay.y;
+        Log.e(TAG, "widthDeviceScreen, heightDeviceScreen: " + widthDeviceScreen + ", " + heightDeviceScreen);
+        widthSpriteDst = Math.min(widthDeviceScreen, heightDeviceScreen) / NUMBER_OF_TILES_ON_SHORTER_SIDE;
         heightSpriteDst = widthSpriteDst;
         Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
 
-        initSprites(widthSpriteDst, heightSpriteDst);
+        sprites = SpriteInitializer.initSprites(getResources(), widthSpriteDst, heightSpriteDst);
+        spriteCoin = SpriteInitializer.initCoinSprite(getResources());
+        spriteTileSolid = SpriteInitializer.initSolidTileSprite(getResources());
+        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(getResources());
+        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(getResources());
 
         Entity.CollisionListener collisionListener = new Entity.CollisionListener() {
             @Override
@@ -646,7 +688,7 @@ public class GameFragment extends Fragment
             @Override
             public boolean onSwipe(Direction direction, int yInit) {
                 if (direction == OnSwipeListener.Direction.up &&
-                        yInit > (yScreenSize - 100)) {
+                        yInit > (heightDeviceScreen - 100)) {
                     BottomDrawerDialogFragment.newInstance(new BottomDrawerDialogFragment.DrawerBottomListener() {
                                 @Override
                                 public void onClickTypeWriterTextView(View view, String tag) {
@@ -662,7 +704,7 @@ public class GameFragment extends Fragment
         });
 
         gameCamera = new GameCamera(0f, 0f,
-                xScreenSize, yScreenSize,
+                widthDeviceScreen, heightDeviceScreen,
                 ((World) frameLayout).getWorldWidthInPixels(), ((World) frameLayout).getWorldHeightInPixels());
 
         float xMax = (float) ((World) frameLayout).getWorldWidthInPixels();
@@ -776,12 +818,12 @@ public class GameFragment extends Fragment
         }
     }
 
-    public int getxScreenSize() {
-        return xScreenSize;
+    public int getWidthDeviceScreen() {
+        return widthDeviceScreen;
     }
 
-    public int getyScreenSize() {
-        return yScreenSize;
+    public int getHeightDeviceScreen() {
+        return heightDeviceScreen;
     }
 
     public GameCamera getGameCamera() {

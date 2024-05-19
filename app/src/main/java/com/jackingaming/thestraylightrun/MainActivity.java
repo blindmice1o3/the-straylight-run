@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.e("MainActivity", "onPrepareOptionsMenu()");
         for (int i = 0; i < menu.size(); i++) {
             if (menu.getItem(i).getItemId() == R.id.options_item_sprite_sheet_clip_selector ||
                     menu.getItem(i).getItemId() == R.id.options_item_next_week_tonight ||

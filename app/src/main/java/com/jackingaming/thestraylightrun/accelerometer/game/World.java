@@ -71,9 +71,9 @@ public class World extends FrameLayout {
         );
 
         int xStart = (int) Math.max(0, game.getGameCamera().getxOffset() / Tile.widthTile);
-        int xEnd = (int) Math.min(width, ((game.getGameCamera().getxOffset() + game.getxScreenSize()) / Tile.widthTile) + 1);
+        int xEnd = (int) Math.min(width, ((game.getGameCamera().getxOffset() + game.getWidthDeviceScreen()) / Tile.widthTile) + 1);
         int yStart = (int) Math.max(0, game.getGameCamera().getyOffset() / Tile.heightTile);
-        int yEnd = (int) Math.min(height, ((game.getGameCamera().getyOffset() + game.getyScreenSize()) / Tile.heightTile) + 1);
+        int yEnd = (int) Math.min(height, ((game.getGameCamera().getyOffset() + game.getHeightDeviceScreen()) / Tile.heightTile) + 1);
 
         for (int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {
