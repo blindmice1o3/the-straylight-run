@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentResultListener;
@@ -345,5 +346,12 @@ public class SequenceTrainerFragment extends Fragment
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 }

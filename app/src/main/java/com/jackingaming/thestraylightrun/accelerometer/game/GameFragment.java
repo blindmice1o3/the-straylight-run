@@ -17,20 +17,20 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.transition.Slide;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
@@ -48,18 +48,37 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllabl
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
+import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameActivity extends AppCompatActivity
-        implements SensorEventListener,
-        DrawerStartFragment.DrawerStartListener,
-        DrawerEndFragment.DrawerEndListener,
-        DrawerTopFragment.DrawerTopListener,
-        BottomDrawerDialogFragment.DrawerBottomListener {
-    public static final String TAG = GameActivity.class.getSimpleName();
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link GameFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class GameFragment extends Fragment
+        implements SensorEventListener {
+    public static final String TAG = GameFragment.class.getSimpleName();
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_REPLACE_FRAGMENT_LISTENER = "replaceFragmentListener";
+
+    public interface ReplaceFragmentListener extends Serializable {
+        void onReplaceFragment(Fragment newFragment);
+    }
+
+    private ReplaceFragmentListener replaceFragmentListener;
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private DrawerStartFragment drawerStartFragment;
     private DrawerEndFragment drawerEndFragment;
@@ -198,13 +217,13 @@ public class GameActivity extends AppCompatActivity
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
-                                TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
                                 if (typeWriterDialogFragment != null) {
                                     Log.e(TAG, "typeWriterDialogFragment != null");
 
                                     if (!typeWriterDialogFragment.isVisible()) {
                                         Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
-                                        typeWriterDialogFragment.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                        typeWriterDialogFragment.show(getChildFragmentManager(), TypeWriterDialogFragment.TAG);
                                     } else {
                                         Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
                                     }
@@ -240,10 +259,11 @@ public class GameActivity extends AppCompatActivity
 
                                                                                     choiceDialogFragment.dismiss();
                                                                                     TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
-                                                                                            (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                                                                            (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
                                                                                     typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
 
                                                                                     // TODO:
+                                                                                    replaceFragmentListener.onReplaceFragment(SequenceTrainerFragment.newInstance(null, null));
                                                                                 }
 
                                                                                 @Override
@@ -254,17 +274,17 @@ public class GameActivity extends AppCompatActivity
 
                                                                                     choiceDialogFragment.dismiss();
                                                                                     TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
-                                                                                            (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+                                                                                            (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
                                                                                     typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
 
                                                                                     // TODO:
                                                                                 }
                                                                             });
-                                                            choiceDialogFragmentYesOrNo.show(getSupportFragmentManager(), ChoiceDialogFragment.TAG);
+                                                            choiceDialogFragmentYesOrNo.show(getChildFragmentManager(), ChoiceDialogFragment.TAG);
                                                         }
                                                     });
                                     stopEntityAnimations();
-                                    typeWriterDialogFragmentRivalLeader.show(getSupportFragmentManager(), TypeWriterDialogFragment.TAG);
+                                    typeWriterDialogFragmentRivalLeader.show(getChildFragmentManager(), TypeWriterDialogFragment.TAG);
                                 }
                             }
                         }
@@ -294,7 +314,7 @@ public class GameActivity extends AppCompatActivity
                 });
         controllable = (Controllable) player;
 
-        ImageView ivPlayer = new ImageView(this);
+        ImageView ivPlayer = new ImageView(getContext());
         ivPlayer.setImageDrawable(player.getAnimationDrawableBasedOnDirection());
         frameLayout.addView(ivPlayer, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         imageViewViaEntity.put(player, ivPlayer);
@@ -380,7 +400,7 @@ public class GameActivity extends AppCompatActivity
                 entityCollisionListener,
                 entityMovementListener);
 
-        ImageView imageView = new ImageView(this);
+        ImageView imageView = new ImageView(getContext());
         imageView.setImageDrawable(nonPlayableCharacter.getAnimationDrawableBasedOnDirection());
         frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         imageViewViaEntity.put(nonPlayableCharacter, imageView);
@@ -393,38 +413,81 @@ public class GameActivity extends AppCompatActivity
         imageView.setOnClickListener(viewOnClickListener);
     }
 
+    public GameFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment GameFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static GameFragment newInstance(String param1, String param2,
+                                           ReplaceFragmentListener replaceFragmentListener) {
+        GameFragment fragment = new GameFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_REPLACE_FRAGMENT_LISTENER, replaceFragmentListener);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        soundManager = new SoundManager(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // Inside your activity (if you did not enable transitions in your theme)
-            getWindow().requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
-//            getWindow().setAllowEnterTransitionOverlap(true);
-            // Set an exit transition
-            getWindow().setExitTransition(new Slide(Gravity.TOP));
-            // Set an enter transition
-            getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+            replaceFragmentListener = (ReplaceFragmentListener) getArguments().getSerializable(ARG_REPLACE_FRAGMENT_LISTENER);
         }
-        ///////////////////////////////////////
-        // TODO: convert activity_game.xml's app_bar_main.xml to be fragment-based
-        //  (change class World [FrameLayout] into a fragment, replace app_bar_main.xml's World
-        //  with FragmentContainerView, add WorldFragment to FragmentContainerView).
-        setContentView(R.layout.activity_game);
-        ///////////////////////////////////////
 
-        appBarLayout = findViewById(R.id.app_bar_layout);
-        frameLayout = findViewById(R.id.frameLayout);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_game, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        appBarLayout = view.findViewById(R.id.app_bar_layout);
+        frameLayout = view.findViewById(R.id.frameLayout);
+
+        soundManager = new SoundManager(getContext());
 
         if (savedInstanceState == null) {
-            drawerStartFragment = DrawerStartFragment.newInstance(null, null);
-            drawerEndFragment = DrawerEndFragment.newInstance(null, null);
-            drawerTopFragment = DrawerTopFragment.newInstance(null, null);
-            getSupportFragmentManager().beginTransaction()
+            drawerStartFragment = DrawerStartFragment.newInstance(null, null, new DrawerStartFragment.DrawerStartListener() {
+                @Override
+                public void onClickTypeWriterTextView(View view, String tag) {
+                    String message = "DrawerStartFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                }
+            });
+            drawerEndFragment = DrawerEndFragment.newInstance(null, null, new DrawerEndFragment.DrawerEndListener() {
+                @Override
+                public void onClickTypeWriterTextView(View view, String tag) {
+                    String message = "DrawerEndFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                }
+            });
+            drawerTopFragment = DrawerTopFragment.newInstance(null, null, new DrawerTopFragment.DrawerTopListener() {
+                @Override
+                public void onClickTypeWriterTextView(View view, String tag) {
+                    String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                }
+            });
+            getChildFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fcv_drawer_start,
                             drawerStartFragment,
@@ -437,16 +500,16 @@ public class GameActivity extends AppCompatActivity
                             DrawerTopFragment.TAG)
                     .commit();
         } else {
-            drawerStartFragment = (DrawerStartFragment) getSupportFragmentManager().findFragmentByTag(DrawerStartFragment.TAG);
-            drawerEndFragment = (DrawerEndFragment) getSupportFragmentManager().findFragmentByTag(DrawerEndFragment.TAG);
-            drawerTopFragment = (DrawerTopFragment) getSupportFragmentManager().findFragmentByTag(DrawerTopFragment.TAG);
+            drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentByTag(DrawerStartFragment.TAG);
+            drawerEndFragment = (DrawerEndFragment) getChildFragmentManager().findFragmentByTag(DrawerEndFragment.TAG);
+            drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentByTag(DrawerTopFragment.TAG);
         }
 
         imageViewViaEntity = new HashMap<>();
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
 
         Point sizeDisplay = new Point();
-        Display display = getWindowManager().getDefaultDisplay();
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
         display.getSize(sizeDisplay);
         xScreenSize = sizeDisplay.x;
         yScreenSize = sizeDisplay.y;
@@ -584,8 +647,14 @@ public class GameActivity extends AppCompatActivity
             public boolean onSwipe(Direction direction, int yInit) {
                 if (direction == OnSwipeListener.Direction.up &&
                         yInit > (yScreenSize - 100)) {
-                    BottomDrawerDialogFragment.newInstance(GameActivity.this)
-                            .show(getSupportFragmentManager(), BottomDrawerDialogFragment.TAG);
+                    BottomDrawerDialogFragment.newInstance(new BottomDrawerDialogFragment.DrawerBottomListener() {
+                                @Override
+                                public void onClickTypeWriterTextView(View view, String tag) {
+                                    String message = "BottomDrawerDialogFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                                }
+                            })
+                            .show(getChildFragmentManager(), BottomDrawerDialogFragment.TAG);
                     return true;
                 }
                 return false;
@@ -606,12 +675,14 @@ public class GameActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         sensorManager.registerListener(this,
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
         soundManager.onStart();
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     // "Perform method calls [BEFORE] the call to the superclass.
@@ -619,21 +690,21 @@ public class GameActivity extends AppCompatActivity
     // [before] the system does it's tasks to free up resources"
     // -https://gamedevacademy.org/android-sensors-game-tutorial/
     @Override
-    protected void onStop() {
+    public void onStop() {
         sensorManager.unregisterListener(this);
         soundManager.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         soundManager.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getSupportFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
+        TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
         if (typeWriterDialogFragment != null && typeWriterDialogFragment.isVisible()) {
             return;
         }
@@ -715,22 +786,5 @@ public class GameActivity extends AppCompatActivity
 
     public GameCamera getGameCamera() {
         return gameCamera;
-    }
-
-    @Override
-    public void onClickTypeWriterTextView(View view, String tag) {
-        if (tag.equals(DrawerStartFragment.TAG)) {
-            String message = "DrawerStartFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-        } else if (tag.equals(DrawerEndFragment.TAG)) {
-            String message = "DrawerEndFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-        } else if (tag.equals(DrawerTopFragment.TAG)) {
-            String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-        } else if (tag.equals(BottomDrawerDialogFragment.TAG)) {
-            String message = "BottomDrawerDialogFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-        }
     }
 }

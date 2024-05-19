@@ -15,19 +15,6 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
-    <style name="Theme.TheStraylightRun.Fullscreen" parent="Theme.TheStraylightRun">
-        <item name="android:actionBarStyle">
-            @style/Widget.Theme.TheStraylightRun.ActionBar.Fullscreen
-        </item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-
-    <style name="ThemeOverlay.TheStraylightRun.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
-    </style>
-
     <style name="AppBottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppModalStyle</item>
     </style>

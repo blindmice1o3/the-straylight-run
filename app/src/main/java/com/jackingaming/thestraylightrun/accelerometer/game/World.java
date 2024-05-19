@@ -19,7 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.tiles.TileMapLoader;
 
 public class World extends FrameLayout {
 
-    private GameActivity game;
+    private GameFragment game;
     private int width, height;
     private Tile[][] tiles;
     private GestureDetector gestureDetector;
@@ -41,7 +41,7 @@ public class World extends FrameLayout {
         }
     }
 
-    public void init(GameActivity game, int resId, OnSwipeListener bottomDrawerSwipeListener) {
+    public void init(GameFragment game, int resId, OnSwipeListener bottomDrawerSwipeListener) {
         this.game = game;
 //        loadWorld(R.raw.world01);
         loadWorld(R.raw.tiles_world_map);
