@@ -58,21 +58,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.options_item_sprite_sheet_clip_selector:
-                replaceFragmentInContainer(SpriteSheetClipSelectorFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(SpriteSheetClipSelectorFragment.newInstance(null, null));
                 return true;
             case R.id.options_item_next_week_tonight:
-                replaceFragmentInContainer(NextWeekTonightFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(NextWeekTonightFragment.newInstance(null, null));
                 return true;
             case R.id.options_item_game_controller:
-                replaceFragmentInContainer(GameFragment.newInstance(null, null, new GameFragment.ReplaceFragmentListener() {
+                replaceFragmentInContainerUsingCardFlipAnimations(GameFragment.newInstance(null, null, new GameFragment.ReplaceFragmentListener() {
                     @Override
                     public void onReplaceFragment(Fragment newFragment) {
-                        replaceFragmentInContainer(newFragment);
+                        replaceFragmentInContainerUsingCardFlipAnimations(newFragment);
                     }
                 }));
                 return true;
             case R.id.options_item_hot_bar:
-                replaceFragmentInContainer(SequenceTrainerFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(SequenceTrainerFragment.newInstance(null, null));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -90,11 +90,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void replaceFragmentInContainer(Fragment fragment) {
+    private void replaceFragmentInContainerUsingCardFlipAnimations(Fragment fragment) {
+        // Create and commit a new fragment transaction that adds the fragment
+        // for the back of the card, uses custom animations, and is part of the
+        // fragment manager's back stack.
+
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
+
+                // Replace the default fragment animations with animator
+                // resources representing rotations when switching to the back
+                // of the car, as well as animator resources representing
+                // rotations when flipping back to the front, such as when the
+                // system Back button is pressed.
+                .setCustomAnimations(
+                        R.animator.card_flip_right_in,
+                        R.animator.card_flip_right_out,
+                        R.animator.card_flip_left_in,
+                        R.animator.card_flip_left_out)
+
+                // Replace any fragments in the container view with a fragment
+                // representing the fragment passed in.
                 .replace(R.id.fcv_main, fragment)
+
+                // Add this transaction to the back stack, letting users press
+                // Back to get to the front of the card.
                 .addToBackStack(null)
+
+                // Commit the transaction.
                 .commit();
     }
 }
