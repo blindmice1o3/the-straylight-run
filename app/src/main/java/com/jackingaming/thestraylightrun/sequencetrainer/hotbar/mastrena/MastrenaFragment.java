@@ -39,8 +39,11 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogf
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.ExpectedVsActualDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillCupColdDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.FillSteamingPitcherDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.SpriteDetailsDialogFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CaramelDrizzleBottle;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.CinnamonDispenser;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableImageView;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableTextView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.DrinkLabel;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
@@ -224,6 +227,14 @@ public class MastrenaFragment extends Fragment {
         spriteEspressoShot.setX(xCenterOfEspressoShotControl);
 //        espressoShot.setX(200 - (16 / 2));
         spriteEspressoShot.setY(458 + 64); // 64 is for espresso shot queue viewer's height.
+        spriteEspressoShot.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         constraintLayoutMastrena.addView(spriteEspressoShot);
 
         animatorEspressoShot = ObjectAnimator.ofFloat(
@@ -315,6 +326,14 @@ public class MastrenaFragment extends Fragment {
             spriteSyrup.setX(344 + 64 + 64);
         }
         spriteSyrup.setY(562);
+        spriteSyrup.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         constraintLayoutMastrena.addView(spriteSyrup);
 
         ObjectAnimator animatorSyrup = ObjectAnimator.ofFloat(
@@ -462,6 +481,14 @@ public class MastrenaFragment extends Fragment {
         iceShaker.setX(288 - 64 - 30);
         iceShaker.setY(458 - 96 - 50);
         iceShaker.setBackgroundColor(getResources().getColor(R.color.light_blue_A200));
+        iceShaker.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutRight.addView(iceShaker);
 
         // STEAMING PITCHER
@@ -479,6 +506,14 @@ public class MastrenaFragment extends Fragment {
                 dialogFragment.show(getChildFragmentManager(), FillSteamingPitcherDialogFragment.TAG);
             }
         });
+        steamingPitcher.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutRight.addView(steamingPitcher);
 
         // STEAMING WAND
@@ -487,6 +522,14 @@ public class MastrenaFragment extends Fragment {
         steamingWand.setLayoutParams(new FrameLayout.LayoutParams(32, 400));
         steamingWand.setX(128);
         steamingWand.setBackgroundColor(getResources().getColor(R.color.purple_700));
+        steamingWand.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutSteamingWand.addView(steamingWand);
 
         // ESPRESSO SHOT QUEUE VIEWER
@@ -522,6 +565,14 @@ public class MastrenaFragment extends Fragment {
         shotGlass.setLayoutParams(new FrameLayout.LayoutParams(64, 64, Gravity.CENTER_HORIZONTAL));
 //        shotGlass.setX(200 - (64 / 2));
         shotGlass.setBackgroundColor(getResources().getColor(R.color.cream));
+        shotGlass.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutLeft.addView(shotGlass);
 
         // SYRUP BOTTLE (vanilla)
@@ -596,6 +647,14 @@ public class MastrenaFragment extends Fragment {
         caramelDrizzleBottle.setX(384 - (48 + 16));
         caramelDrizzleBottle.setY(452 - (96 + 16));
         caramelDrizzleBottle.setBackgroundColor(getResources().getColor(R.color.yellow));
+        caramelDrizzleBottle.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutSyrupCaddy.addView(caramelDrizzleBottle);
 
         // CINNAMON DISPENSER
@@ -605,6 +664,14 @@ public class MastrenaFragment extends Fragment {
         cinnamonDispenser.setX(384 - (48 + 16));
         cinnamonDispenser.setY(452 - (48 + 16 + 96 + 16));
         cinnamonDispenser.setBackgroundColor(getResources().getColor(R.color.red));
+        cinnamonDispenser.setListenerShowDialog(new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+            }
+        });
         framelayoutSyrupCaddy.addView(cinnamonDispenser);
     }
 
@@ -710,6 +777,14 @@ public class MastrenaFragment extends Fragment {
                                 new FrameLayout.LayoutParams(labelPrinter.getWidth(), labelPrinter.getHeight());
                         drinkLabelNew.setLayoutParams(layoutParams);
                         drinkLabelNew.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                        drinkLabelNew.setListenerShowDialog(new ClickableAndDraggableTextView.ShowDialogFragmentListener() {
+                            @Override
+                            public void showSpriteDetailsDialogFragment(ClickableAndDraggableTextView clickableAndDraggableTextView) {
+                                SpriteDetailsDialogFragment dialogFragment =
+                                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableTextView);
+                                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+                            }
+                        });
 
                         // Get the item containing the dragged data.
                         ClipData.Item item = dragEvent.getClipData().getItemAt(0);
@@ -892,42 +967,58 @@ public class MastrenaFragment extends Fragment {
                                     dialogFragment.show(getChildFragmentManager(), ExpectedVsActualDialogFragment.TAG);
                                 }
                             };
+                            ClickableAndDraggableImageView.ShowDialogFragmentListener showDialogFragmentListener = new ClickableAndDraggableImageView.ShowDialogFragmentListener() {
+                                @Override
+                                public void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView) {
+                                    SpriteDetailsDialogFragment dialogFragment =
+                                            SpriteDetailsDialogFragment.newInstance(clickableAndDraggableImageView);
+                                    dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
+                                }
+                            };
                             if (dragData.equals(CupCaddyFragment.TAG_COLD_TALL)) {
                                 resId = R.drawable.cold_drinksize_tall;
                                 ivToBeAdded = new CupCold(getContext());
                                 ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
-                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_GRANDE)) {
                                 resId = R.drawable.cold_drinksize_grande;
                                 ivToBeAdded = new CupCold(getContext());
                                 ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
-                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_VENTI)) {
                                 resId = R.drawable.cold_drinksize_venti;
                                 ivToBeAdded = new CupCold(getContext());
                                 ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
-                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_COLD_TRENTA)) {
                                 resId = R.drawable.cold_drinksize_trenta;
                                 ivToBeAdded = new CupCold(getContext());
                                 ((CupCold) ivToBeAdded).setCupColdListener(cupColdListener);
-                                ((CupCold) ivToBeAdded).setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_VENTI)) {
                                 resId = R.drawable.hot_drinksize_venti;
                                 ivToBeAdded = new CupHot(getContext());
                                 ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_GRANDE)) {
                                 resId = R.drawable.hot_drinksize_grande;
                                 ivToBeAdded = new CupHot(getContext());
                                 ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_TALL)) {
                                 resId = R.drawable.hot_drinksize_tall;
                                 ivToBeAdded = new CupHot(getContext());
                                 ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else if (dragData.equals(CupCaddyFragment.TAG_HOT_SHORT)) {
                                 resId = R.drawable.hot_drinksize_short;
                                 ivToBeAdded = new CupHot(getContext());
                                 ivToBeAdded.setCupImageViewListener(cupImageViewListener);
+                                ivToBeAdded.setListenerShowDialog(showDialogFragmentListener);
                             } else {
                                 Log.e(TAG, "else-clause (selecting image resource for ivToBeAdded).");
                             }

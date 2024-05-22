@@ -24,7 +24,6 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
     private Drink drink;
     private CupImageView cupImageView;
 
-    private List<DrinkComponent> drinkComponents;
     private List<String> drinkComponentsPrettyPrint;
 
     public AdapterDrinkComponent(Drink drink, CupImageView cupImageView) {
@@ -32,12 +31,12 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
         this.cupImageView = cupImageView;
 
         if (drink != null) {
-            this.drinkComponents = drink.getDrinkComponents();
+            this.drinkComponentsPrettyPrint =
+                    convertToPrettyPrint(drink, null);
         } else if (cupImageView != null) {
-            this.drinkComponents = cupImageView.getDrinkComponentsAsList();
+            this.drinkComponentsPrettyPrint =
+                    convertToPrettyPrint(null, cupImageView);
         }
-
-        this.drinkComponentsPrettyPrint = convertToPrettyPrint(drinkComponents);
     }
 
     @Override
@@ -63,7 +62,14 @@ public class AdapterDrinkComponent extends RecyclerView.Adapter<AdapterDrinkComp
         return drinkComponentsPrettyPrint.size();
     }
 
-    private List<String> convertToPrettyPrint(List<DrinkComponent> drinkComponents) {
+    public static List<String> convertToPrettyPrint(Drink drink, CupImageView cupImageView) {
+        List<DrinkComponent> drinkComponents = null;
+        if (drink != null) {
+            drinkComponents = drink.getDrinkComponents();
+        } else if (cupImageView != null) {
+            drinkComponents = cupImageView.getDrinkComponentsAsList();
+        }
+
         List<String> drinkComponentsPrettyPrint = new ArrayList<>();
         // DRINK COMPONENTS
         drinkComponentsPrettyPrint.add("----- DRINK COMPONENTS -----");

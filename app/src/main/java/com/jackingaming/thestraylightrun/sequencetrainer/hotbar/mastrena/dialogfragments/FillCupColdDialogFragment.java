@@ -24,8 +24,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.refrigerator.Ref
 public class FillCupColdDialogFragment extends DialogFragment {
     public static final String TAG = FillCupColdDialogFragment.class.getSimpleName();
 
-    private static final String CUP_COLD = "cupCold";
-    private static final String CONTENT = "content";
+    private static final String ARG_CUP_COLD = "cupCold";
+    private static final String ARG_CONTENT = "content";
     private static final int MIN = 0;
     private static final int MAX = 25 * 4;
     private static final int BRACKET1 = 8 * 4;
@@ -48,11 +48,21 @@ public class FillCupColdDialogFragment extends DialogFragment {
         FillCupColdDialogFragment fragment = new FillCupColdDialogFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(CUP_COLD, cupCold);
-        args.putString(CONTENT, content);
+        args.putSerializable(ARG_CUP_COLD, cupCold);
+        args.putString(ARG_CONTENT, content);
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate()");
+        if (getArguments() != null) {
+            cupCold = (CupCold) getArguments().getSerializable(ARG_CUP_COLD);
+            content = getArguments().getString(ARG_CONTENT);
+        }
     }
 
     @Nullable
@@ -71,9 +81,6 @@ public class FillCupColdDialogFragment extends DialogFragment {
         TextView tvDisplayer = view.findViewById(R.id.tv_displayer);
         ImageView ivCupCold = view.findViewById(R.id.iv_cup_cold);
         AppCompatSeekBar seekBar = view.findViewById(R.id.seekbar);
-
-        cupCold = (CupCold) getArguments().getSerializable(CUP_COLD);
-        content = getArguments().getString(CONTENT);
 
         // TODO: find out cup size (via tag)... calculate seekBar's MIN using cup size...
         Log.e(TAG, "!!!!! cupCold.getTag() (should be cup size): " + cupCold.getTag());

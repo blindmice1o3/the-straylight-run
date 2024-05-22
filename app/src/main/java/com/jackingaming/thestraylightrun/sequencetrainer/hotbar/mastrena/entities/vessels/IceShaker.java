@@ -24,6 +24,7 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entitie
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteEspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.SpriteSyrup;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Cinnamon;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Ice;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.Syrup;
@@ -69,6 +70,7 @@ public class IceShaker extends ClickableAndDraggableImageView
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing content of ice shaker.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -136,6 +138,30 @@ public class IceShaker extends ClickableAndDraggableImageView
         textPaint.setStyle(Paint.Style.STROKE);
         textPaint.setColor(idRed);
         textPaint.setTextSize(14);
+    }
+
+    public List<DrinkComponent> getDrinkComponentsAsList() {
+        List<DrinkComponent> drinkComponentsInsideIceShaker = new ArrayList<>();
+
+        if (ice != null) {
+            drinkComponentsInsideIceShaker.add(ice);
+        }
+        if (cinnamon != null) {
+            drinkComponentsInsideIceShaker.add(cinnamon);
+        }
+        for (Syrup.Type type : Syrup.Type.values()) {
+            if (syrupsMap.containsKey(type)) {
+                List<Syrup> syrups = syrupsMap.get(type);
+                for (Syrup syrup : syrups) {
+                    drinkComponentsInsideIceShaker.add(syrup);
+                }
+            }
+        }
+        for (EspressoShot shot : shots) {
+            drinkComponentsInsideIceShaker.add(shot);
+        }
+
+        return drinkComponentsInsideIceShaker;
     }
 
     private int yLine1 = 15;

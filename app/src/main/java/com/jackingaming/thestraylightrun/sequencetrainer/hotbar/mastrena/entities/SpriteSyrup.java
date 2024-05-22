@@ -26,6 +26,7 @@ public class SpriteSyrup extends ClickableAndDraggableImageView {
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing details of syrup.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @Override

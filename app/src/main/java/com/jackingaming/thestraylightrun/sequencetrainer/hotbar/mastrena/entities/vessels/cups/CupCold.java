@@ -54,6 +54,7 @@ public class CupCold extends CupImageView {
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing content of cup.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

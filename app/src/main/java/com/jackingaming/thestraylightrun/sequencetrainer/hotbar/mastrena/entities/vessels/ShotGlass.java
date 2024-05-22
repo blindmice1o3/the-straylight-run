@@ -36,7 +36,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
     public static final String TAG = ShotGlass.class.getSimpleName();
     public static final String DRAG_LABEL = ShotGlass.class.getSimpleName();
 
-    private List<EspressoShot> shots;
+    private List<EspressoShot> espressoShots;
 
     private Collider collider;
 
@@ -55,6 +55,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing content of shot glass.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -78,7 +79,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
     }
 
     private void init() {
-        shots = new ArrayList<>();
+        espressoShots = new ArrayList<>();
 
         collider = new Collider() {
             @Override
@@ -91,7 +92,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
                     Log.e(TAG, "collider instanceof SpriteEspressoShot");
 
                     SpriteEspressoShot spriteEspressoShot = (SpriteEspressoShot) collider;
-                    shots.add(
+                    espressoShots.add(
                             spriteEspressoShot.instantiateEspressoShot()
                     );
                     invalidate();
@@ -114,10 +115,10 @@ public class ShotGlass extends ClickableAndDraggableImageView
         String typeAbbreviated = typeMostRecent.name().substring(0, 1);
         String amountOfWaterAbbreviated = EspressoShot.AmountOfWater.STANDARD.name().substring(0, 1);
         String amountOfBeanAbbreviated = EspressoShot.AmountOfBean.STANDARD.name().substring(0, 1);
-        int numberOfShots = shots.size();
+        int numberOfShots = espressoShots.size();
         if (numberOfShots != 0) {
             int indexOfLast = numberOfShots - 1;
-            EspressoShot shotMostRecent = shots.get(indexOfLast);
+            EspressoShot shotMostRecent = espressoShots.get(indexOfLast);
 
             typeMostRecent = shotMostRecent.getType();
             typeAbbreviated = typeMostRecent.name().substring(0, 1);
@@ -224,11 +225,15 @@ public class ShotGlass extends ClickableAndDraggableImageView
         return false;
     }
 
+    public List<EspressoShot> getEspressoShots() {
+        return espressoShots;
+    }
+
     @Override
     public void transferIn(HashMap<String, Object> content) {
         if (content.containsKey("shots")) {
             List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
-            shots.addAll(shotsToTransferIn);
+            espressoShots.addAll(shotsToTransferIn);
         }
 
         invalidate();
@@ -238,7 +243,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
     public HashMap<String, Object> transferOut() {
         HashMap<String, Object> content = new HashMap<>();
 
-        List<EspressoShot> shotsCopy = new ArrayList<>(shots);
+        List<EspressoShot> shotsCopy = new ArrayList<>(espressoShots);
         content.put("shots", shotsCopy);
 
         return content;
@@ -246,7 +251,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
 
     @Override
     public void empty() {
-        shots.clear();
+        espressoShots.clear();
         invalidate();
     }
 

@@ -64,6 +64,7 @@ public class SteamingPitcher extends ClickableAndDraggableImageView
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing content of steaming pitcher.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

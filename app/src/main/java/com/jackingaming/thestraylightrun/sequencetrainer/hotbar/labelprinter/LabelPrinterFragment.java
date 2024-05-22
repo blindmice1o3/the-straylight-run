@@ -34,6 +34,8 @@ import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.net
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.dtos.OrderDTO;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.MenuItemInfo;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.labelprinter.networking.models.Order;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.dialogfragments.SpriteDetailsDialogFragment;
+import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.ClickableAndDraggableTextView;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.LabelPrinter;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.DrinkComponent;
 import com.jackingaming.thestraylightrun.sequencetrainer.hotbar.mastrena.entities.drinkcomponents.EspressoShot;
@@ -168,6 +170,14 @@ public class LabelPrinterFragment extends Fragment {
                 // store timestamp of last drink from queue (before the last label is pulled).
                 //   used to check db-service for drinks that are more recent.
                 timestampLastDrink = LocalDateTime.parse(dateTimeString, formatter);
+            }
+        });
+        labelPrinter.setListenerShowDialog(new ClickableAndDraggableTextView.ShowDialogFragmentListener() {
+            @Override
+            public void showSpriteDetailsDialogFragment(ClickableAndDraggableTextView clickableAndDraggableTextView) {
+                SpriteDetailsDialogFragment dialogFragment =
+                        SpriteDetailsDialogFragment.newInstance(clickableAndDraggableTextView);
+                dialogFragment.show(getChildFragmentManager(), SpriteDetailsDialogFragment.TAG);
             }
         });
 

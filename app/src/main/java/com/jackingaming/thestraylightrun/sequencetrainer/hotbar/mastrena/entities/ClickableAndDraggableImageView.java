@@ -8,7 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-public abstract class ClickableAndDraggableImageView extends AppCompatImageView {
+import java.io.Serializable;
+
+public abstract class ClickableAndDraggableImageView extends AppCompatImageView
+        implements Serializable {
+    public interface ShowDialogFragmentListener {
+        void showSpriteDetailsDialogFragment(ClickableAndDraggableImageView clickableAndDraggableImageView);
+    }
+
+    protected ShowDialogFragmentListener listenerShowDialog;
+
     private float mDownX;
     private float mDownY;
     private final float SCROLL_THRESHOLD = 10;
@@ -50,5 +59,9 @@ public abstract class ClickableAndDraggableImageView extends AppCompatImageView 
             default:
                 return super.onTouchEvent(event);
         }
+    }
+
+    public void setListenerShowDialog(ShowDialogFragmentListener listenerShowDialog) {
+        this.listenerShowDialog = listenerShowDialog;
     }
 }

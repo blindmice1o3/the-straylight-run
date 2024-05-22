@@ -31,6 +31,7 @@ public class DrinkLabel extends ClickableAndDraggableTextView {
     @Override
     protected void doClick(MotionEvent event) {
         // TODO: open dialog listing details of drink label.
+        listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
