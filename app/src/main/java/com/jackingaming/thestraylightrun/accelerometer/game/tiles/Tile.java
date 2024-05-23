@@ -8,8 +8,8 @@ public class Tile {
 
     // STATIC STUFF
 
-    public static int widthTile;
-    public static int heightTile;
+    public static int widthSpriteDst;
+    public static int heightSpriteDst;
 
     // CLASS
 
@@ -19,9 +19,9 @@ public class Tile {
         this.texture = texture;
     }
 
-    public static void init(int widthTile, int heightTile) {
-        Tile.widthTile = widthTile;
-        Tile.heightTile = heightTile;
+    public static void init(int widthSpriteDst, int heightSpriteDst) {
+        Tile.widthSpriteDst = widthSpriteDst;
+        Tile.heightSpriteDst = heightSpriteDst;
     }
 
     public void tick() {
@@ -30,7 +30,7 @@ public class Tile {
 
     public void render(Canvas canvas, int x, int y) {
         Rect rectOfImage = new Rect(0, 0, texture.getWidth(), texture.getHeight());
-        Rect rectOnScreen = new Rect(x, y, (x + widthTile), (y + heightTile));
+        Rect rectOnScreen = new Rect(x, y, (x + widthSpriteDst), (y + heightSpriteDst));
 
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         canvas.drawBitmap(texture, rectOfImage, rectOnScreen, null);

@@ -65,7 +65,7 @@ public class Player extends Entity
             xTopLeft = (int) (xPos + xDeltaWithBonus);
             yTopLeft = (int) (yPos);
             xBottomLeft = (int) (xPos + xDeltaWithBonus);
-            yBottomLeft = (int) (yPos + Entity.getHeightSprite());
+            yBottomLeft = (int) (yPos + Entity.getHeightSpriteDst());
 
             topLeft[0] = xTopLeft;
             topLeft[1] = yTopLeft + 1;
@@ -74,10 +74,10 @@ public class Player extends Entity
 
             isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
         } else {
-            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
+            xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSpriteDst());
             yTopRight = (int) (yPos);
-            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSprite());
-            yBottomRight = (int) (yPos + Entity.getHeightSprite());
+            xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSpriteDst());
+            yBottomRight = (int) (yPos + Entity.getHeightSpriteDst());
 
             topRight[0] = xTopRight;
             topRight[1] = yTopRight + 1;
@@ -90,7 +90,7 @@ public class Player extends Entity
         if (directionVertical == Direction.UP) {
             xTopLeft = (int) (xPos);
             yTopLeft = (int) (yPos + yDeltaWithBonus);
-            xTopRight = (int) (xPos + Entity.getWidthSprite());
+            xTopRight = (int) (xPos + Entity.getWidthSpriteDst());
             yTopRight = (int) (yPos + yDeltaWithBonus);
 
             topLeft[0] = xTopLeft + 1;
@@ -101,9 +101,9 @@ public class Player extends Entity
             isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
         } else {
             xBottomLeft = (int) (xPos);
-            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
-            xBottomRight = (int) (xPos + Entity.getWidthSprite());
-            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSprite());
+            yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSpriteDst());
+            xBottomRight = (int) (xPos + Entity.getWidthSpriteDst());
+            yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSpriteDst());
 
             bottomLeft[0] = xBottomLeft + 1;
             bottomLeft[1] = yBottomLeft;
@@ -133,20 +133,6 @@ public class Player extends Entity
         }
         if (!collidingVertical && isTileWalkableVertical) {
             yPos += yDeltaWithBonus;
-        }
-
-        // Validate
-        if (xPos < xMin) {
-            xPos = xMin;
-        }
-        if (xPos > xMax) {
-            xPos = xMax;
-        }
-        if (yPos < yMin) {
-            yPos = yMin;
-        }
-        if (yPos > yMax) {
-            yPos = yMax;
         }
     }
 }

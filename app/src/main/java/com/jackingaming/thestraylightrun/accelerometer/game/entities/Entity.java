@@ -21,9 +21,8 @@ public abstract class Entity {
     public static final int DEFAULT_SPEED_MOVEMENT = 2;
     public static final float DEFAULT_SPEED_BONUS = 1f;
 
-    protected static float xMax, yMax;
-    protected static float xMin, yMin;
-    protected static float widthSprite, heightSprite;
+    protected static float widthWorldInPixels, heightWorldInPixels;
+    protected static float widthSpriteDst, heightSpriteDst;
     protected static List<Entity> entities;
 
     protected float xPos, yPos = 0f;
@@ -43,20 +42,33 @@ public abstract class Entity {
     }
 
     public static void init(List<Entity> entities,
-                            float widthSprite, float heightSprite,
-                            float xMin, float xMax, float yMin, float yMax) {
+                            float widthSpriteDst, float heightSpriteDst,
+                            float widthWorldInPixels, float heightWorldInPixels) {
         Entity.entities = entities;
-        Entity.widthSprite = widthSprite;
-        Entity.heightSprite = heightSprite;
-        Entity.xMin = xMin;
-        Entity.xMax = xMax;
-        Entity.yMin = yMin;
-        Entity.yMax = yMax;
+        Entity.widthSpriteDst = widthSpriteDst;
+        Entity.heightSpriteDst = heightSpriteDst;
+        Entity.widthWorldInPixels = widthWorldInPixels;
+        Entity.heightWorldInPixels = heightWorldInPixels;
     }
 
     public abstract void collided(Entity collider);
 
     public abstract void update();
+
+    public void validatePosition(int widthWorldInPixels, int weightWorldInPixels) {
+        if (xPos < 0) {
+            xPos = 0;
+        }
+        if (xPos > widthWorldInPixels) {
+            xPos = widthWorldInPixels;
+        }
+        if (yPos < 0) {
+            yPos = 0;
+        }
+        if (yPos > heightWorldInPixels) {
+            yPos = heightWorldInPixels;
+        }
+    }
 
     public void startAnimations() {
         for (AnimationDrawable animationDrawable : animationsByDirection.values()) {
@@ -90,10 +102,10 @@ public abstract class Entity {
                 continue;
             }
 
-            if (xPos + xDelta + 1 < e.getxPos() + Entity.getWidthSprite() &&
-                    xPos + xDelta + Entity.getWidthSprite() - 1 > e.getxPos() &&
-                    yPos + yDelta < e.getyPos() + 1 + Entity.getHeightSprite() &&
-                    yPos + yDelta + Entity.getHeightSprite() - 1 > e.getyPos()) {
+            if (xPos + xDelta + 1 < e.getxPos() + Entity.getWidthSpriteDst() &&
+                    xPos + xDelta + Entity.getWidthSpriteDst() - 1 > e.getxPos() &&
+                    yPos + yDelta < e.getyPos() + 1 + Entity.getHeightSpriteDst() &&
+                    yPos + yDelta + Entity.getHeightSpriteDst() - 1 > e.getyPos()) {
 
                 /////////////////////////////////////////////////
                 e.collided(this);
@@ -109,12 +121,12 @@ public abstract class Entity {
         return false;
     }
 
-    public static float getWidthSprite() {
-        return widthSprite;
+    public static float getWidthSpriteDst() {
+        return widthSpriteDst;
     }
 
-    public static float getHeightSprite() {
-        return heightSprite;
+    public static float getHeightSpriteDst() {
+        return heightSpriteDst;
     }
 
     public float getxPos() {

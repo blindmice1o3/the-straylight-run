@@ -4,37 +4,37 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 
 public class GameCamera {
     private float xOffset, yOffset;
-    private int xScreenSize, yScreenSize;
-    private int widthWorld, heightWorld;
+    private int widthDeviceScreen, heightDeviceScreen;
+    private int widthWorldInPixels, heightWorldInPixels;
 
     public GameCamera(float xOffset, float yOffset,
-                      int xScreenSize, int yScreenSize,
-                      int widthWorld, int heightWorld) {
+                      int widthDeviceScreen, int heightDeviceScreen,
+                      int widthWorldInPixels, int heightWorldInPixels) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
-        this.xScreenSize = xScreenSize;
-        this.yScreenSize = yScreenSize;
-        this.widthWorld = widthWorld;
-        this.heightWorld = heightWorld;
+        this.widthDeviceScreen = widthDeviceScreen;
+        this.heightDeviceScreen = heightDeviceScreen;
+        this.widthWorldInPixels = widthWorldInPixels;
+        this.heightWorldInPixels = heightWorldInPixels;
     }
 
     public void checkBlankSpace() {
         if (xOffset < 0) {
             xOffset = 0;
-        } else if (xOffset > widthWorld - xScreenSize) {
-            xOffset = widthWorld - xScreenSize;
+        } else if (xOffset > widthWorldInPixels - widthDeviceScreen) {
+            xOffset = widthWorldInPixels - widthDeviceScreen;
         }
 
         if (yOffset < 0) {
             yOffset = 0;
-        } else if (yOffset > heightWorld - yScreenSize) {
-            yOffset = heightWorld - yScreenSize;
+        } else if (yOffset > heightWorldInPixels - heightDeviceScreen) {
+            yOffset = heightWorldInPixels - heightDeviceScreen;
         }
     }
 
     public void centerOnEntity(Entity e) {
-        xOffset = e.getxPos() - (xScreenSize / 2) + (e.getWidthSprite() / 2);
-        yOffset = e.getyPos() - (yScreenSize / 2) + (e.getHeightSprite() / 2);
+        xOffset = e.getxPos() - (widthDeviceScreen / 2) + (e.getWidthSpriteDst() / 2);
+        yOffset = e.getyPos() - (heightDeviceScreen / 2) + (e.getHeightSpriteDst() / 2);
 
         checkBlankSpace();
     }
