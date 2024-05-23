@@ -7,8 +7,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
 
 import java.util.Map;
 
-public class Player extends Entity
-        implements Controllable {
+public class Player extends Entity {
 
     private Direction directionHorizontal = Direction.RIGHT;
     private Direction directionVertical = Direction.DOWN;
@@ -30,7 +29,6 @@ public class Player extends Entity
 
     }
 
-    @Override
     public void updateViaSensorEvent(float xDelta, float yDelta) {
         // DIRECTION
         if (Math.abs(yDelta) >= Math.abs(xDelta)) {

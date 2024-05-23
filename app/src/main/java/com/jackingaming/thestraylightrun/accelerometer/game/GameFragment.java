@@ -32,13 +32,13 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFra
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Controllable;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,22 +66,22 @@ public class GameFragment extends Fragment
     private String mParam1;
     private String mParam2;
 
+    private AppBarLayout appBarLayout;
     private DrawerStartFragment drawerStartFragment;
     private DrawerEndFragment drawerEndFragment;
     private DrawerTopFragment drawerTopFragment;
+    private World world;
 
-    private SoundManager soundManager;
-    private AppBarLayout appBarLayout;
-    // TODO: change FrameLayout to World
-    private FrameLayout frameLayout;
-    private int widthDeviceScreen, heightDeviceScreen;
-    private Map<Entity, ImageView> imageViewViaEntity;
-
-    private Controllable controllable;
     private SensorManager sensorManager;
+    private SoundManager soundManager;
+
+    private int widthDeviceScreen, heightDeviceScreen;
+    private int widthSpriteDst, heightSpriteDst;
+
+    private Map<Entity, ImageView> imageViewViaEntity;
+    private Player player;
     private float xAccelPrevious, yAccelPrevious = 0f;
     private float xVel, yVel = 0.0f;
-    private int widthSpriteDst, heightSpriteDst;
 
     public GameFragment() {
         // Required empty public constructor
@@ -133,7 +133,7 @@ public class GameFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         appBarLayout = view.findViewById(R.id.app_bar_layout);
-        frameLayout = view.findViewById(R.id.frameLayout);
+        world = view.findViewById(R.id.frame_layout_world);
 
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null, new DrawerStartFragment.DrawerStartListener() {
@@ -190,13 +190,13 @@ public class GameFragment extends Fragment
 
         // TODO: overall sequence: Models -> ModelToViewMapper -> Views
         // TODO: Model
-        ((World) frameLayout).setListener(new World.ShowDialogListener() {
+        world.setListener(new World.ShowDialogListener() {
             @Override
             public FragmentManager onShowDialog() {
                 return getChildFragmentManager();
             }
         });
-        ((World) frameLayout).init(widthDeviceScreen, heightDeviceScreen,
+        world.init(widthDeviceScreen, heightDeviceScreen,
                 widthSpriteDst, heightSpriteDst,
                 R.raw.tiles_world_map,
                 R.drawable.pokemon_gsc_kanto,
@@ -237,12 +237,13 @@ public class GameFragment extends Fragment
                 replaceFragmentListener);
 
         // TODO: ModelToViewMapper
+        List<Entity> entitiesFromWorld = world.getEntities();
         imageViewViaEntity = new HashMap<>();
-        for (Entity e : ((World) frameLayout).getEntities()) {
+        for (Entity e : entitiesFromWorld) {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
             if (e instanceof Player) {
-                controllable = (Controllable) e;
+                player = (Player) e;
             } else {
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -259,7 +260,7 @@ public class GameFragment extends Fragment
         }
         // TODO: View
         for (ImageView imageView : imageViewViaEntity.values()) {
-            frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+            world.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         }
     }
 
@@ -319,8 +320,8 @@ public class GameFragment extends Fragment
 
 //            Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
             updateGameEntities(xDelta, yDelta);
-            ((World) frameLayout).getGameCamera().centerOnEntity((Player) controllable);
-            frameLayout.invalidate();
+            world.getGameCamera().centerOnEntity(player);
+            world.invalidate();
 
             // Prepare for next sensor event
             xAccelPrevious = xAccel;
@@ -343,8 +344,8 @@ public class GameFragment extends Fragment
             }
             // VALIDATE MOVE.
             e.validatePosition(
-                    ((World) frameLayout).getWidthWorldInPixels(),
-                    ((World) frameLayout).getHeightWorldInPixels()
+                    world.getWidthWorldInPixels(),
+                    world.getHeightWorldInPixels()
             );
 
             ImageView ivEntity = imageViewViaEntity.get(e);
@@ -362,8 +363,8 @@ public class GameFragment extends Fragment
             }
 
             // POSITION
-            ivEntity.setX(e.getxPos() - ((World) frameLayout).getGameCamera().getxOffset());
-            ivEntity.setY(e.getyPos() - ((World) frameLayout).getGameCamera().getyOffset());
+            ivEntity.setX(e.getxPos() - world.getGameCamera().getxOffset());
+            ivEntity.setY(e.getyPos() - world.getGameCamera().getyOffset());
         }
     }
 }
