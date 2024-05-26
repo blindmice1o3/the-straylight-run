@@ -5,22 +5,18 @@ import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Dire
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.RIGHT;
 import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.UP;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.AttributeSet;
+import android.os.Handler;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
 import com.jackingaming.thestraylightrun.R;
@@ -41,28 +37,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class World extends FrameLayout {
-    public static final String TAG = World.class.getSimpleName();
+public class Game {
+    public static final String TAG = Game.class.getSimpleName();
+    public static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
+    private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_world_map;
+    private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
     public static int durationOfFrameInMilli = 420;
+
+    public interface EntityUpdateListener {
+        void onUpdate(Entity e);
+    }
+
+    private EntityUpdateListener entityUpdateListener;
+
+    public interface AccelerometerListener {
+        float[] checkAccelerometer();
+    }
+
+    private AccelerometerListener accelerometerListener;
 
     public interface ShowDialogListener {
         FragmentManager onShowDialog();
     }
 
-    private ShowDialogListener listener;
+    private ShowDialogListener showDialogListener;
 
-    private GameCamera gameCamera;
-    private int widthDeviceScreen, heightDeviceScreen;
+    private SurfaceHolder holder;
+    private Resources resources;
+    private Handler handler;
+    private int widthSurfaceView, heightSurfaceView;
     private int widthSpriteDst, heightSpriteDst;
-    private int widthWorldInTiles, heightWorldInTiles;
-    private Tile[][] tiles;
-    private List<Entity> entities;
-    private GestureDetector gestureDetector;
-    private SoundManager soundManager;
 
+    private int widthWorldInTiles, heightWorldInTiles;
+    private int widthWorldInPixels, heightWorldInPixels;
+    private Tile[][] tiles;
+
+    private SoundManager soundManager;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
     private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
+    private List<Entity> entities;
+    private Player player;
+    private UpdateableSprite ball;
+
+    private GameCamera gameCamera;
+    private boolean paused = false;
 
     static class SpriteInitializer {
         private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
@@ -164,70 +183,56 @@ public class World extends FrameLayout {
         }
     }
 
-    public World(@NonNull Context context) {
-        super(context);
+    public Game(SurfaceHolder holder, Resources resources, Handler handler,
+                int widthSurfaceView, int heightSurfaceView) {
+        this.holder = holder;
+        this.resources = resources;
+        this.handler = handler;
+        this.widthSurfaceView = widthSurfaceView;
+        this.heightSurfaceView = heightSurfaceView;
+
+        widthSpriteDst = Math.min(widthSurfaceView, heightSurfaceView) / NUMBER_OF_TILES_ON_SHORTER_SIDE;
+        heightSpriteDst = widthSpriteDst;
+
+        ball = new UpdateableSprite(widthSurfaceView, heightSurfaceView);
     }
 
-    public World(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
+    public void init(GameFragment.ReplaceFragmentListener replaceFragmentListener, SoundManager soundManager) {
+        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
+        ball.init(ballImage);
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (gestureDetector != null) {
-            return gestureDetector.onTouchEvent(event);
-        } else {
-            return super.onTouchEvent(event);
-        }
-    }
-
-    public void init(int widthDeviceScreen, int heightDeviceScreen,
-                     int widthSpriteDst, int heightSpriteDst,
-                     int resIdTileCollisionModel,
-                     int resIdTileCollisionBackground,
-                     SoundManager soundManager,
-                     OnSwipeListener bottomDrawerSwipeListener,
-                     GameFragment.ReplaceFragmentListener replaceFragmentListener) {
-        this.widthDeviceScreen = widthDeviceScreen;
-        this.heightDeviceScreen = heightDeviceScreen;
-        this.widthSpriteDst = widthSpriteDst;
-        this.heightSpriteDst = heightSpriteDst;
+        /////////////////////////////////////////////////////////////////////////////////
         this.soundManager = soundManager;
-        gestureDetector = new GestureDetector(getContext(), bottomDrawerSwipeListener);
 
-        loadWorld(resIdTileCollisionModel, resIdTileCollisionBackground, replaceFragmentListener);
-
-        gameCamera = new GameCamera(0f, 0f,
-                widthDeviceScreen, heightDeviceScreen,
-                getWidthWorldInPixels(), getHeightWorldInPixels());
-    }
-
-    public void loadWorld(int resIdTileCollisionSource, int resIdTileCollisionBackground,
-                          GameFragment.ReplaceFragmentListener replaceFragmentListener) {
-        sprites = SpriteInitializer.initSprites(getResources(), widthSpriteDst, heightSpriteDst);
-        spriteCoin = SpriteInitializer.initCoinSprite(getResources());
-        spriteTileSolid = SpriteInitializer.initSolidTileSprite(getResources());
-        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(getResources());
-        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(getResources());
+        sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
+        spriteCoin = SpriteInitializer.initCoinSprite(resources);
+        spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
+        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
+        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
 
         // TILES
-        Tile.init(widthSpriteDst, heightSpriteDst);
-        String stringOfTilesIDs = TileMapLoader.loadFileAsString(getResources(),
-                resIdTileCollisionSource);
-        Bitmap fullWorldMap = BitmapFactory.decodeResource(getResources(),
-                resIdTileCollisionBackground);
+        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
+                RES_ID_TILE_COLLISION_SOURCE);
+        Bitmap fullWorldMap = BitmapFactory.decodeResource(resources,
+                RES_ID_TILE_COLLISION_BACKGROUND);
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
+        widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
+        heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
 
         // ENTITIES
         List<Entity> entities = generateEntities(replaceFragmentListener);
         // TODO:
         Entity.init(
                 entities,
-                widthSpriteDst, heightSpriteDst,
-                getWidthWorldInPixels(), getHeightWorldInPixels()
+                widthSpriteDst, heightSpriteDst
         );
+
+        // GAME CAMERA
+        gameCamera = new GameCamera(0f, 0f,
+                widthSurfaceView, heightSurfaceView,
+                widthWorldInPixels, heightWorldInPixels);
     }
 
     private List<Entity> generateEntities(GameFragment.ReplaceFragmentListener replaceFragmentListener) {
@@ -259,10 +264,10 @@ public class World extends FrameLayout {
                 int xFutureCorner2 = futureCorner2[0];
                 int yFutureCorner2 = futureCorner2[1];
 
-                int xIndex1 = xFutureCorner1 / Tile.widthSpriteDst;
-                int yIndex1 = yFutureCorner1 / Tile.heightSpriteDst;
-                int xIndex2 = xFutureCorner2 / Tile.widthSpriteDst;
-                int yIndex2 = yFutureCorner2 / Tile.heightSpriteDst;
+                int xIndex1 = xFutureCorner1 / widthSpriteDst;
+                int yIndex1 = yFutureCorner1 / heightSpriteDst;
+                int xIndex2 = xFutureCorner2 / widthSpriteDst;
+                int yIndex2 = yFutureCorner2 / heightSpriteDst;
 
                 boolean isWalkableCorner1 = checkIsWalkableTile(xIndex1, yIndex1);
                 boolean isWalkableCorner2 = checkIsWalkableTile(xIndex2, yIndex2);
@@ -312,7 +317,8 @@ public class World extends FrameLayout {
                 true, LEFT,
                 collisionListener,
                 movementListener);
-        Player player = generatePlayer(200, 34, replaceFragmentListener);
+        player = generatePlayer(200, 34,
+                replaceFragmentListener, soundManager);
 
         entities = new ArrayList<>();
         entities.add(npcRival);
@@ -326,6 +332,8 @@ public class World extends FrameLayout {
         entities.add(player);
         ////////////////////////////////////////////////////////////
 
+        // TODO: move entities to Game, convert World to simply a FrameLayout.
+
         return entities;
     }
 
@@ -334,8 +342,6 @@ public class World extends FrameLayout {
                                                               boolean isStationary, Direction directionFacing,
                                                               Entity.CollisionListener entityCollisionListener,
                                                               Entity.MovementListener entityMovementListener) {
-        Resources resources = getResources();
-
         AnimationDrawable animationDrawableUp = new AnimationDrawable();
         animationDrawableUp.setOneShot(false);
         AnimationDrawable animationDrawableDown = new AnimationDrawable();
@@ -415,9 +421,8 @@ public class World extends FrameLayout {
     }
 
     private Player generatePlayer(int xIndexSpawn, int yIndexSpawn,
-                                  GameFragment.ReplaceFragmentListener replaceFragmentListener) {
-        Resources resources = getResources();
-
+                                  GameFragment.ReplaceFragmentListener replaceFragmentListener,
+                                  SoundManager soundManager) {
         AnimationDrawable animationDrawableUp = new AnimationDrawable();
         animationDrawableUp.setOneShot(false);
         animationDrawableUp.addFrame(
@@ -465,7 +470,7 @@ public class World extends FrameLayout {
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
-                                FragmentManager fragmentManager = listener.onShowDialog();
+                                FragmentManager fragmentManager = showDialogListener.onShowDialog();
 
                                 TypeWriterDialogFragment typeWriterDialogFragment =
                                         (TypeWriterDialogFragment) fragmentManager.findFragmentByTag(TypeWriterDialogFragment.TAG);
@@ -475,6 +480,8 @@ public class World extends FrameLayout {
 
                                     if (!typeWriterDialogFragment.isVisible()) {
                                         Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
+                                        paused = true;
+                                        stopEntityAnimations();
                                         typeWriterDialogFragment.show(fragmentManager, TypeWriterDialogFragment.TAG);
                                     } else {
                                         Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
@@ -491,6 +498,7 @@ public class World extends FrameLayout {
                                                         public void onDismiss() {
                                                             Log.e(TAG, "onDismiss()");
 
+                                                            paused = false;
                                                             startEntityAnimations();
                                                         }
                                                     },
@@ -535,6 +543,7 @@ public class World extends FrameLayout {
                                                             choiceDialogFragmentYesOrNo.show(fragmentManager, ChoiceDialogFragment.TAG);
                                                         }
                                                     });
+                                    paused = true;
                                     stopEntityAnimations();
                                     typeWriterDialogFragmentRivalLeader.show(fragmentManager, TypeWriterDialogFragment.TAG);
                                 }
@@ -550,10 +559,10 @@ public class World extends FrameLayout {
                         int xFutureCorner2 = futureCorner2[0];
                         int yFutureCorner2 = futureCorner2[1];
 
-                        int xIndex1 = xFutureCorner1 / Tile.widthSpriteDst;
-                        int yIndex1 = yFutureCorner1 / Tile.heightSpriteDst;
-                        int xIndex2 = xFutureCorner2 / Tile.widthSpriteDst;
-                        int yIndex2 = yFutureCorner2 / Tile.heightSpriteDst;
+                        int xIndex1 = xFutureCorner1 / widthSpriteDst;
+                        int yIndex1 = yFutureCorner1 / heightSpriteDst;
+                        int xIndex2 = xFutureCorner2 / widthSpriteDst;
+                        int yIndex2 = yFutureCorner2 / heightSpriteDst;
 
                         boolean isWalkableCorner1 = checkIsWalkableTile(xIndex1, yIndex1);
                         boolean isWalkableCorner2 = checkIsWalkableTile(xIndex2, yIndex2);
@@ -568,47 +577,121 @@ public class World extends FrameLayout {
         return player;
     }
 
+    public void update(long elapsed) {
+        if (paused) {
+            return;
+        }
+
+        ball.update(elapsed);
+
+        updateGameEntities();
+    }
+
+    public void draw() {
+        Canvas canvas = holder.lockCanvas();
+
+        if (canvas != null) {
+            canvas.drawColor(Color.WHITE);
+
+            int xStart = (int) Math.max(0, gameCamera.getxOffset() / widthSpriteDst);
+            int xEnd = (int) Math.min(widthWorldInTiles, ((gameCamera.getxOffset() + widthSurfaceView) / widthSpriteDst) + 1);
+            int yStart = (int) Math.max(0, gameCamera.getyOffset() / heightSpriteDst);
+            int yEnd = (int) Math.min(heightWorldInTiles, ((gameCamera.getyOffset() + heightSurfaceView) / heightSpriteDst) + 1);
+
+            for (int y = yStart; y < yEnd; y++) {
+                for (int x = xStart; x < xEnd; x++) {
+                    tiles[x][y].render(canvas,
+                            (int) (x * widthSpriteDst - gameCamera.getxOffset()),
+                            (int) (y * heightSpriteDst - gameCamera.getyOffset()),
+                            widthSpriteDst, heightSpriteDst);
+                }
+            }
+
+            ball.draw(canvas);
+
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    public void validatePosition(Entity e) {
+        if (e.getxPos() < 0) {
+            e.setxPos(0);
+        }
+        if (e.getxPos() > widthWorldInPixels) {
+            e.setxPos(widthWorldInPixels);
+        }
+        if (e.getyPos() < 0) {
+            e.setyPos(0);
+        }
+        if (e.getyPos() > heightWorldInPixels) {
+            e.setyPos(heightWorldInPixels);
+        }
+    }
+
     public boolean checkIsWalkableTile(int x, int y) {
         Tile tile = tiles[x][y];
         boolean isWalkable = !tile.isSolid();
         return isWalkable;
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        int xStart = (int) Math.max(0, gameCamera.getxOffset() / Tile.widthSpriteDst);
-        int xEnd = (int) Math.min(widthWorldInTiles, ((gameCamera.getxOffset() + widthDeviceScreen) / Tile.widthSpriteDst) + 1);
-        int yStart = (int) Math.max(0, gameCamera.getyOffset() / Tile.heightSpriteDst);
-        int yEnd = (int) Math.min(heightWorldInTiles, ((gameCamera.getyOffset() + heightDeviceScreen) / Tile.heightSpriteDst) + 1);
-
-        for (int y = yStart; y < yEnd; y++) {
-            for (int x = xStart; x < xEnd; x++) {
-                tiles[x][y].render(canvas,
-                        (int) (x * Tile.widthSpriteDst - gameCamera.getxOffset()),
-                        (int) (y * Tile.heightSpriteDst - gameCamera.getyOffset()));
+    private void updateGameEntities() {
+        for (Entity e : entities) {
+            // DO MOVE.
+            if (e instanceof Player) {
+                float[] dataAccelerometer = accelerometerListener.checkAccelerometer();
+                float xDelta = dataAccelerometer[0];
+                float yDelta = dataAccelerometer[1];
+                ((Player) e).updateViaSensorEvent(xDelta, yDelta);
+            } else {
+                e.update();
             }
-        }
-    }
+            // VALIDATE MOVE.
+            validatePosition(e);
 
-    public void setListener(ShowDialogListener listener) {
-        this.listener = listener;
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    entityUpdateListener.onUpdate(e);
+                }
+            });
+        }
+
+        gameCamera.centerOnEntity(player);
     }
 
     public GameCamera getGameCamera() {
         return gameCamera;
     }
 
-    public List<Entity> getEntities() {
-        return entities;
+    public int getWidthSpriteDst() {
+        return widthSpriteDst;
+    }
+
+    public int getHeightSpriteDst() {
+        return heightSpriteDst;
     }
 
     public int getWidthWorldInPixels() {
-        return widthWorldInTiles * Tile.widthSpriteDst;
+        return widthWorldInPixels;
     }
 
     public int getHeightWorldInPixels() {
-        return heightWorldInTiles * Tile.heightSpriteDst;
+        return heightWorldInPixels;
+    }
+
+    public void setEntityUpdateListener(EntityUpdateListener entityUpdateListener) {
+        this.entityUpdateListener = entityUpdateListener;
+    }
+
+    public void setAccelerometerListener(AccelerometerListener accelerometerListener) {
+        this.accelerometerListener = accelerometerListener;
+    }
+
+    public void setShowDialogListener(ShowDialogListener showDialogListener) {
+        this.showDialogListener = showDialogListener;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
     }
 }

@@ -8,8 +8,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,7 +47,8 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class GameFragment extends Fragment
-        implements SensorEventListener {
+        implements SensorEventListener,
+        GameView.SurfaceCreatedListener {
     public static final String TAG = GameFragment.class.getSimpleName();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -70,14 +71,14 @@ public class GameFragment extends Fragment
     private DrawerStartFragment drawerStartFragment;
     private DrawerEndFragment drawerEndFragment;
     private DrawerTopFragment drawerTopFragment;
-    private World world;
+    private FrameLayout frameLayout; // displays entities.
+    private GestureDetector gestureDetector; // opens BottomDrawerDialogFragment.
+    private GameView surfaceView; // displays tiles.
 
     private SensorManager sensorManager;
     private SoundManager soundManager;
 
-    private int widthDeviceScreen, heightDeviceScreen;
-    private int widthSpriteDst, heightSpriteDst;
-
+    private Game game;
     private Map<Entity, ImageView> imageViewViaEntity;
     private Player player;
     private float xAccelPrevious, yAccelPrevious = 0f;
@@ -126,14 +127,14 @@ public class GameFragment extends Fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
-    private static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         appBarLayout = view.findViewById(R.id.app_bar_layout);
-        world = view.findViewById(R.id.frame_layout_world);
+        frameLayout = view.findViewById(R.id.frame_layout_world);
+        surfaceView = view.findViewById(R.id.surface_view_game);
+        surfaceView.setListener(this);
 
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null, new DrawerStartFragment.DrawerStartListener() {
@@ -175,71 +176,111 @@ public class GameFragment extends Fragment
             drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentByTag(DrawerTopFragment.TAG);
         }
 
+        OnSwipeListener bottomDrawerSwipeListener = new OnSwipeListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent event) {
+                soundManager.sfxIterateAndPlay();
+
+                appBarLayout.setExpanded(false);
+
+                return super.onSingleTapUp(event);
+            }
+
+            @Override
+            public void onLongPress(MotionEvent event) {
+                super.onLongPress(event);
+                soundManager.backgroundMusicTogglePause();
+            }
+
+            @Override
+            public boolean onSwipe(Direction direction, int yInit) {
+                if (direction == OnSwipeListener.Direction.up) {
+                    Point sizeDisplay = new Point();
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    display.getSize(sizeDisplay);
+                    int widthDeviceScreen = sizeDisplay.x;
+                    int heightDeviceScreen = sizeDisplay.y;
+
+                    if (yInit > (heightDeviceScreen - 100)) {
+                        BottomDrawerDialogFragment.newInstance(new BottomDrawerDialogFragment.DrawerBottomListener() {
+                                    @Override
+                                    public void onClickTypeWriterTextView(View view, String tag) {
+                                        String message = "BottomDrawerDialogFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                                        ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                                    }
+                                })
+                                .show(getChildFragmentManager(), BottomDrawerDialogFragment.TAG);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+
+        gestureDetector = new GestureDetector(getContext(), bottomDrawerSwipeListener);
         sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         soundManager = new SoundManager(getContext());
 
-        Point sizeDisplay = new Point();
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        display.getSize(sizeDisplay);
-        widthDeviceScreen = sizeDisplay.x;
-        heightDeviceScreen = sizeDisplay.y;
-        Log.e(TAG, "widthDeviceScreen, heightDeviceScreen: " + widthDeviceScreen + ", " + heightDeviceScreen);
-        widthSpriteDst = Math.min(widthDeviceScreen, heightDeviceScreen) / NUMBER_OF_TILES_ON_SHORTER_SIDE;
-        heightSpriteDst = widthSpriteDst;
-        Log.e(TAG, "widthSpriteDst, heightSpriteDst: " + widthSpriteDst + ", " + heightSpriteDst);
+        frameLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gestureDetector != null) {
+                    return gestureDetector.onTouchEvent(motionEvent);
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
 
-        // TODO: overall sequence: Models -> ModelToViewMapper -> Views
-        // TODO: Model
-        world.setListener(new World.ShowDialogListener() {
+    @Override
+    public void onSurfaceCreated(Game game) {
+        this.game = game;
+        this.game.setEntityUpdateListener(new Game.EntityUpdateListener() {
+            @Override
+            public void onUpdate(Entity e) {
+                ImageView ivEntity = imageViewViaEntity.get(e);
+                // IMAGE (based on speed bonus)
+                if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
+                    ivEntity.setAlpha(0.5f);
+                }
+
+                // IMAGE (based on direction)
+                if (e instanceof NonPlayableCharacter &&
+                        ((NonPlayableCharacter) e).isStationary()) {
+                    ivEntity.setImageDrawable(e.getPausedFrameBasedOnDirection());
+                } else {
+                    ivEntity.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
+                }
+
+                // POSITION
+                ivEntity.setX(e.getxPos() - game.getGameCamera().getxOffset());
+                ivEntity.setY(e.getyPos() - game.getGameCamera().getyOffset());
+
+                ivEntity.invalidate();
+            }
+        });
+        this.game.setAccelerometerListener(new Game.AccelerometerListener() {
+            @Override
+            public float[] checkAccelerometer() {
+                float[] dataAccelerometer = new float[2];
+                dataAccelerometer[0] = xDelta;
+                dataAccelerometer[1] = yDelta;
+                return dataAccelerometer;
+            }
+        });
+        this.game.setShowDialogListener(new Game.ShowDialogListener() {
             @Override
             public FragmentManager onShowDialog() {
                 return getChildFragmentManager();
             }
         });
-        world.init(widthDeviceScreen, heightDeviceScreen,
-                widthSpriteDst, heightSpriteDst,
-                R.raw.tiles_world_map,
-                R.drawable.pokemon_gsc_kanto,
-                soundManager,
-                new OnSwipeListener() {
-                    @Override
-                    public boolean onSingleTapUp(MotionEvent event) {
-                        soundManager.sfxIterateAndPlay();
-
-                        appBarLayout.setExpanded(false);
-
-                        return super.onSingleTapUp(event);
-                    }
-
-                    @Override
-                    public void onLongPress(MotionEvent event) {
-                        super.onLongPress(event);
-                        soundManager.backgroundMusicTogglePause();
-                    }
-
-                    @Override
-                    public boolean onSwipe(Direction direction, int yInit) {
-                        if (direction == OnSwipeListener.Direction.up &&
-                                yInit > (heightDeviceScreen - 100)) {
-                            BottomDrawerDialogFragment.newInstance(new BottomDrawerDialogFragment.DrawerBottomListener() {
-                                        @Override
-                                        public void onClickTypeWriterTextView(View view, String tag) {
-                                            String message = "BottomDrawerDialogFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                                            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-                                        }
-                                    })
-                                    .show(getChildFragmentManager(), BottomDrawerDialogFragment.TAG);
-                            return true;
-                        }
-                        return false;
-                    }
-                },
-                replaceFragmentListener);
+        this.game.init(replaceFragmentListener, soundManager);
 
         // TODO: ModelToViewMapper
-        List<Entity> entitiesFromWorld = world.getEntities();
+        List<Entity> entitiesFromGame = this.game.getEntities();
         imageViewViaEntity = new HashMap<>();
-        for (Entity e : entitiesFromWorld) {
+        for (Entity e : entitiesFromGame) {
             ImageView imageView = new ImageView(getContext());
             imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
             if (e instanceof Player) {
@@ -259,8 +300,10 @@ public class GameFragment extends Fragment
             imageViewViaEntity.put(e, imageView);
         }
         // TODO: View
+        int widthSpriteDst = this.game.getWidthSpriteDst();
+        int heightSpriteDst = this.game.getHeightSpriteDst();
         for (ImageView imageView : imageViewViaEntity.values()) {
-            world.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+            frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
         }
     }
 
@@ -292,8 +335,14 @@ public class GameFragment extends Fragment
         super.onDestroy();
     }
 
+    private float xDelta, yDelta;
+
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        if (player == null) {
+            return;
+        }
+
         TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
         if (typeWriterDialogFragment != null && typeWriterDialogFragment.isVisible()) {
             return;
@@ -315,13 +364,13 @@ public class GameFragment extends Fragment
 //            Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", xVel, yVel));
 //            Log.e(TAG, String.format("((xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
 
-            float xDelta = (xVel / 2) * frameTime;
-            float yDelta = (yVel / 2) * frameTime;
+            xDelta = (xVel / 2) * frameTime;
+            yDelta = (yVel / 2) * frameTime;
 
 //            Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
-            updateGameEntities(xDelta, yDelta);
-            world.getGameCamera().centerOnEntity(player);
-            world.invalidate();
+            // TODO: move to game loop (move out of accelerometer updates).
+//            updateGameEntities(xDelta, yDelta);
+//            frameLayout.invalidate();
 
             // Prepare for next sensor event
             xAccelPrevious = xAccel;
@@ -332,39 +381,5 @@ public class GameFragment extends Fragment
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
         // Intentionally blank.
-    }
-
-    private void updateGameEntities(float xDelta, float yDelta) {
-        for (Entity e : imageViewViaEntity.keySet()) {
-            // DO MOVE.
-            if (e instanceof Player) {
-                ((Player) e).updateViaSensorEvent(xDelta, yDelta);
-            } else {
-                e.update();
-            }
-            // VALIDATE MOVE.
-            e.validatePosition(
-                    world.getWidthWorldInPixels(),
-                    world.getHeightWorldInPixels()
-            );
-
-            ImageView ivEntity = imageViewViaEntity.get(e);
-            // IMAGE (based on speed bonus)
-            if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
-                ivEntity.setAlpha(0.5f);
-            }
-
-            // IMAGE (based on direction)
-            if (e instanceof NonPlayableCharacter &&
-                    ((NonPlayableCharacter) e).isStationary()) {
-                ivEntity.setImageDrawable(e.getPausedFrameBasedOnDirection());
-            } else {
-                ivEntity.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
-            }
-
-            // POSITION
-            ivEntity.setX(e.getxPos() - world.getGameCamera().getxOffset());
-            ivEntity.setY(e.getyPos() - world.getGameCamera().getyOffset());
-        }
     }
 }

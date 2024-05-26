@@ -32,11 +32,17 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.World
+    <FrameLayout
         android:id="@+id/frame_layout_world"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/red"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.jackingaming.thestraylightrun.accelerometer.game.GameView
+            android:id="@+id/surface_view_game"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

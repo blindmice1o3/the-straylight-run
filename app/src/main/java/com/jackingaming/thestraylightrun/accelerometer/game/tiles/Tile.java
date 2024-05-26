@@ -5,40 +5,27 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 public class Tile {
+    protected Bitmap image;
+    private Rect rectOfImage;
 
-    // STATIC STUFF
-
-    public static int widthSpriteDst;
-    public static int heightSpriteDst;
-
-    // CLASS
-
-    protected Bitmap texture;
-
-    public Tile(Bitmap texture) {
-        this.texture = texture;
-    }
-
-    public static void init(int widthSpriteDst, int heightSpriteDst) {
-        Tile.widthSpriteDst = widthSpriteDst;
-        Tile.heightSpriteDst = heightSpriteDst;
+    public Tile(Bitmap image) {
+        this.image = image;
+        rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
     }
 
     public void tick() {
 
     }
 
-    public void render(Canvas canvas, int x, int y) {
-        Rect rectOfImage = new Rect(0, 0, texture.getWidth(), texture.getHeight());
+    public void render(Canvas canvas, int x, int y, int widthSpriteDst, int heightSpriteDst) {
         Rect rectOnScreen = new Rect(x, y, (x + widthSpriteDst), (y + heightSpriteDst));
 
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        canvas.drawBitmap(texture, rectOfImage, rectOnScreen, null);
+        canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     }
 
     public boolean isSolid() {
         return false;
     }
-
 }

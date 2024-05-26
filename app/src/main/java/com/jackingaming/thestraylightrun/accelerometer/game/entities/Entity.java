@@ -21,7 +21,6 @@ public abstract class Entity {
     public static final int DEFAULT_SPEED_MOVEMENT = 2;
     public static final float DEFAULT_SPEED_BONUS = 1f;
 
-    protected static float widthWorldInPixels, heightWorldInPixels;
     protected static float widthSpriteDst, heightSpriteDst;
     protected static List<Entity> entities;
 
@@ -42,33 +41,15 @@ public abstract class Entity {
     }
 
     public static void init(List<Entity> entities,
-                            float widthSpriteDst, float heightSpriteDst,
-                            float widthWorldInPixels, float heightWorldInPixels) {
+                            float widthSpriteDst, float heightSpriteDst) {
         Entity.entities = entities;
         Entity.widthSpriteDst = widthSpriteDst;
         Entity.heightSpriteDst = heightSpriteDst;
-        Entity.widthWorldInPixels = widthWorldInPixels;
-        Entity.heightWorldInPixels = heightWorldInPixels;
     }
 
     public abstract void collided(Entity collider);
 
     public abstract void update();
-
-    public void validatePosition(int widthWorldInPixels, int weightWorldInPixels) {
-        if (xPos < 0) {
-            xPos = 0;
-        }
-        if (xPos > widthWorldInPixels) {
-            xPos = widthWorldInPixels;
-        }
-        if (yPos < 0) {
-            yPos = 0;
-        }
-        if (yPos > heightWorldInPixels) {
-            yPos = heightWorldInPixels;
-        }
-    }
 
     public void startAnimations() {
         for (AnimationDrawable animationDrawable : animationsByDirection.values()) {
