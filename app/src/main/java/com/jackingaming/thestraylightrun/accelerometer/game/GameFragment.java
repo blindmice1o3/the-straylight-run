@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawer
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
@@ -278,32 +279,34 @@ public class GameFragment extends Fragment
         });
 
         // TODO: ModelToViewMapper
-        List<Entity> entitiesFromGame = this.game.getEntities();
-        imageViewViaEntity = new HashMap<>();
-        for (Entity e : entitiesFromGame) {
-            ImageView imageView = new ImageView(getContext());
-            imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
-            if (e instanceof Player) {
-                player = (Player) e;
-            } else {
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for (Entity e : imageViewViaEntity.keySet()) {
-                            if (imageViewViaEntity.get(e) == view) {
-                                ((NonPlayableCharacter) e).toggleStationary();
+        if (this.game.getSceneCurrent() instanceof WorldScene) {
+            List<Entity> entitiesFromGame = ((WorldScene) this.game.getSceneCurrent()).getEntities();
+            imageViewViaEntity = new HashMap<>();
+            for (Entity e : entitiesFromGame) {
+                ImageView imageView = new ImageView(getContext());
+                imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
+                if (e instanceof Player) {
+                    player = (Player) e;
+                } else {
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            for (Entity e : imageViewViaEntity.keySet()) {
+                                if (imageViewViaEntity.get(e) == view) {
+                                    ((NonPlayableCharacter) e).toggleStationary();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
+                imageViewViaEntity.put(e, imageView);
             }
-            imageViewViaEntity.put(e, imageView);
-        }
-        // TODO: View
-        int widthSpriteDst = this.game.getWidthSpriteDst();
-        int heightSpriteDst = this.game.getHeightSpriteDst();
-        for (ImageView imageView : imageViewViaEntity.values()) {
-            frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+            // TODO: View
+            int widthSpriteDst = this.game.getWidthSpriteDst();
+            int heightSpriteDst = this.game.getHeightSpriteDst();
+            for (ImageView imageView : imageViewViaEntity.values()) {
+                frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+            }
         }
     }
 

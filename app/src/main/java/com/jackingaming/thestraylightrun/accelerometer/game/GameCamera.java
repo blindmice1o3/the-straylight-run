@@ -8,12 +8,14 @@ public class GameCamera {
     private int widthWorldInPixels, heightWorldInPixels;
 
     public GameCamera(float xOffset, float yOffset,
-                      int widthDeviceScreen, int heightDeviceScreen,
-                      int widthWorldInPixels, int heightWorldInPixels) {
+                      int widthDeviceScreen, int heightDeviceScreen) {
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.widthDeviceScreen = widthDeviceScreen;
         this.heightDeviceScreen = heightDeviceScreen;
+    }
+
+    public void init(int widthWorldInPixels, int heightWorldInPixels) {
         this.widthWorldInPixels = widthWorldInPixels;
         this.heightWorldInPixels = heightWorldInPixels;
     }
