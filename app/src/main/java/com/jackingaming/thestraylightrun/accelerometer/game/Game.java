@@ -1,9 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
-import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.DOWN;
-import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.LEFT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.RIGHT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction.UP;
+import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.DOWN;
+import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.LEFT;
+import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.RIGHT;
+import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.UP;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,19 +17,22 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.View;
 
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.choiceboxes.ChoiceDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
-import com.jackingaming.thestraylightrun.accelerometer.game.tiles.Tile;
-import com.jackingaming.thestraylightrun.accelerometer.game.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 
 import java.util.ArrayList;
@@ -44,23 +47,17 @@ public class Game {
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
     public static int durationOfFrameInMilli = 420;
 
-    public interface EntityUpdateListener {
-        void onUpdate(Entity e);
+    public interface GameListener {
+        void onUpdateEntity(Entity e);
+
+        float[] onCheckAccelerometer();
+
+        void onShowDialogFragment(DialogFragment dialogFragment, String tag);
+
+        void onReplaceFragmentInMainActivity(Fragment fragment);
     }
 
-    private EntityUpdateListener entityUpdateListener;
-
-    public interface AccelerometerListener {
-        float[] checkAccelerometer();
-    }
-
-    private AccelerometerListener accelerometerListener;
-
-    public interface ShowDialogListener {
-        FragmentManager onShowDialog();
-    }
-
-    private ShowDialogListener showDialogListener;
+    private GameListener gameListener;
 
     private SurfaceHolder holder;
     private Resources resources;
@@ -76,10 +73,11 @@ public class Game {
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
     private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
+    private UpdateableSprite ball;
     private List<Entity> entities;
     private Player player;
-    private UpdateableSprite ball;
 
+    private Scene sceneCurrent = null;
     private GameCamera gameCamera;
     private boolean paused = false;
 
@@ -197,24 +195,25 @@ public class Game {
         ball = new UpdateableSprite(widthSurfaceView, heightSurfaceView);
     }
 
-    public void init(GameFragment.ReplaceFragmentListener replaceFragmentListener, SoundManager soundManager) {
-        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
-        ball.init(ballImage);
+    public void init(SoundManager soundManager, GameListener gameListener) {
+        this.soundManager = soundManager;
+        this.gameListener = gameListener;
 
         /////////////////////////////////////////////////////////////////////////////////
-        this.soundManager = soundManager;
+        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
+        ball.init(ballImage);
+        /////////////////////////////////////////////////////////////////////////////////
 
-        sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
-        spriteCoin = SpriteInitializer.initCoinSprite(resources);
-        spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
-        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
-        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
+        // SCENES
+        sceneCurrent = WorldScene.getInstance();
+        ((WorldScene) sceneCurrent).init();
 
         // TILES
-        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
-                RES_ID_TILE_COLLISION_SOURCE);
+        // [IMAGES]
         Bitmap fullWorldMap = BitmapFactory.decodeResource(resources,
                 RES_ID_TILE_COLLISION_BACKGROUND);
+        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
+                RES_ID_TILE_COLLISION_SOURCE);
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
@@ -222,7 +221,13 @@ public class Game {
         heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
 
         // ENTITIES
-        List<Entity> entities = generateEntities(replaceFragmentListener);
+        // [IMAGES]
+        sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
+        spriteCoin = SpriteInitializer.initCoinSprite(resources);
+        spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
+        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
+        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
+        List<Entity> entities = generateEntities();
         // TODO:
         Entity.init(
                 entities,
@@ -235,7 +240,67 @@ public class Game {
                 widthWorldInPixels, heightWorldInPixels);
     }
 
-    private List<Entity> generateEntities(GameFragment.ReplaceFragmentListener replaceFragmentListener) {
+    private TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader = null;
+
+    private TypeWriterDialogFragment instantiateRivalLeaderDialogFragment() {
+        String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+
+        typeWriterDialogFragmentRivalLeader =
+                TypeWriterDialogFragment.newInstance(50L, message, new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+
+                                unpause();
+                            }
+                        },
+                        new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+
+                                // TODO:
+                                ChoiceDialogFragment choiceDialogFragmentYesOrNo = ChoiceDialogFragment.newInstance(
+                                        new ChoiceDialogFragment.ChoiceListener() {
+                                            @Override
+                                            public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "YES selected");
+
+                                                soundManager.sfxPlay(soundManager.sfxGetItem);
+
+                                                choiceDialogFragment.dismiss();
+                                                typeWriterDialogFragmentRivalLeader.dismiss();
+
+                                                // TODO:
+                                                gameListener.onReplaceFragmentInMainActivity(
+                                                        SequenceTrainerFragment.newInstance(null, null)
+                                                );
+                                            }
+
+                                            @Override
+                                            public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "NO selected");
+
+                                                soundManager.sfxPlay(soundManager.sfxCollision);
+
+                                                choiceDialogFragment.dismiss();
+                                                typeWriterDialogFragmentRivalLeader.dismiss();
+
+                                                // TODO:
+                                            }
+                                        });
+
+                                gameListener.onShowDialogFragment(
+                                        choiceDialogFragmentYesOrNo,
+                                        "ChoiceYesOrNoDialogFragment"
+                                );
+                            }
+                        });
+        return typeWriterDialogFragmentRivalLeader;
+    }
+
+
+    private List<Entity> generateEntities() {
         Entity.CollisionListener collisionListener = new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
@@ -317,8 +382,7 @@ public class Game {
                 true, LEFT,
                 collisionListener,
                 movementListener);
-        player = generatePlayer(200, 34,
-                replaceFragmentListener, soundManager);
+        player = generatePlayer(200, 34, soundManager);
 
         entities = new ArrayList<>();
         entities.add(npcRival);
@@ -421,7 +485,6 @@ public class Game {
     }
 
     private Player generatePlayer(int xIndexSpawn, int yIndexSpawn,
-                                  GameFragment.ReplaceFragmentListener replaceFragmentListener,
                                   SoundManager soundManager) {
         AnimationDrawable animationDrawableUp = new AnimationDrawable();
         animationDrawableUp.setOneShot(false);
@@ -470,83 +533,12 @@ public class Game {
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
-                                FragmentManager fragmentManager = showDialogListener.onShowDialog();
+                                pause();
 
-                                TypeWriterDialogFragment typeWriterDialogFragment =
-                                        (TypeWriterDialogFragment) fragmentManager.findFragmentByTag(TypeWriterDialogFragment.TAG);
-
-                                if (typeWriterDialogFragment != null) {
-                                    Log.e(TAG, "typeWriterDialogFragment != null");
-
-                                    if (!typeWriterDialogFragment.isVisible()) {
-                                        Log.e(TAG, "!typeWriterDialogFragment.isVisible()... show TypeWriterDialogFragment.");
-                                        paused = true;
-                                        stopEntityAnimations();
-                                        typeWriterDialogFragment.show(fragmentManager, TypeWriterDialogFragment.TAG);
-                                    } else {
-                                        Log.e(TAG, "typeWriterDialogFragment.isVisible()... do nothing.");
-                                    }
-                                } else {
-                                    Log.e(TAG, "typeWriterDialogFragment == null");
-                                    Log.e(TAG, "First time instantiating TypeWriterDialogFragment... show TypeWriterDialogFragment.");
-
-                                    String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-
-                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader =
-                                            TypeWriterDialogFragment.newInstance(50L, message, new TypeWriterDialogFragment.DismissListener() {
-                                                        @Override
-                                                        public void onDismiss() {
-                                                            Log.e(TAG, "onDismiss()");
-
-                                                            paused = false;
-                                                            startEntityAnimations();
-                                                        }
-                                                    },
-                                                    new TypeWriterTextView.TextCompletionListener() {
-                                                        @Override
-                                                        public void onAnimationFinish() {
-                                                            Log.e(TAG, "onAnimationFinish()");
-
-                                                            // TODO:
-                                                            ChoiceDialogFragment choiceDialogFragmentYesOrNo =
-                                                                    ChoiceDialogFragment.newInstance(
-                                                                            new ChoiceDialogFragment.ChoiceListener() {
-                                                                                @Override
-                                                                                public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                                                    Log.e(TAG, "YES selected");
-
-                                                                                    soundManager.sfxPlay(soundManager.sfxGetItem);
-
-                                                                                    choiceDialogFragment.dismiss();
-                                                                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
-                                                                                            (TypeWriterDialogFragment) fragmentManager.findFragmentByTag(TypeWriterDialogFragment.TAG);
-                                                                                    typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
-
-                                                                                    // TODO:
-                                                                                    replaceFragmentListener.onReplaceFragment(SequenceTrainerFragment.newInstance(null, null));
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                                                    Log.e(TAG, "NO selected");
-
-                                                                                    soundManager.sfxPlay(soundManager.sfxCollision);
-
-                                                                                    choiceDialogFragment.dismiss();
-                                                                                    TypeWriterDialogFragment typeWriterDialogFragmentRivalLeaderFromFM =
-                                                                                            (TypeWriterDialogFragment) fragmentManager.findFragmentByTag(TypeWriterDialogFragment.TAG);
-                                                                                    typeWriterDialogFragmentRivalLeaderFromFM.dismiss();
-
-                                                                                    // TODO:
-                                                                                }
-                                                                            });
-                                                            choiceDialogFragmentYesOrNo.show(fragmentManager, ChoiceDialogFragment.TAG);
-                                                        }
-                                                    });
-                                    paused = true;
-                                    stopEntityAnimations();
-                                    typeWriterDialogFragmentRivalLeader.show(fragmentManager, TypeWriterDialogFragment.TAG);
-                                }
+                                gameListener.onShowDialogFragment(
+                                        instantiateRivalLeaderDialogFragment(),
+                                        "RivalLeaderDialogFragment"
+                                );
                             }
                         }
                     }
@@ -577,14 +569,36 @@ public class Game {
         return player;
     }
 
+    private void pause() {
+        Log.e(TAG, "pause()");
+
+        paused = true;
+        stopEntityAnimations();
+    }
+
+    private void unpause() {
+        Log.e(TAG, "unpause()");
+
+        paused = false;
+        startEntityAnimations();
+    }
+
     public void update(long elapsed) {
         if (paused) {
             return;
         }
 
-        ball.update(elapsed);
+        sceneCurrent.update(elapsed);
 
-        updateGameEntities();
+        // INPUTS
+        float[] dataAccelerometer = gameListener.onCheckAccelerometer();
+//        float[] dataAccelerometer = accelerometerListener.checkAccelerometer();
+        float xDelta = dataAccelerometer[0];
+        float yDelta = dataAccelerometer[1];
+
+        // ENTITIES
+        ball.update(elapsed);
+        updateGameEntities(xDelta, yDelta);
     }
 
     public void draw() {
@@ -592,6 +606,8 @@ public class Game {
 
         if (canvas != null) {
             canvas.drawColor(Color.WHITE);
+
+            sceneCurrent.draw(canvas);
 
             int xStart = (int) Math.max(0, gameCamera.getxOffset() / widthSpriteDst);
             int xEnd = (int) Math.min(widthWorldInTiles, ((gameCamera.getxOffset() + widthSurfaceView) / widthSpriteDst) + 1);
@@ -634,13 +650,10 @@ public class Game {
         return isWalkable;
     }
 
-    private void updateGameEntities() {
+    private void updateGameEntities(float xDelta, float yDelta) {
         for (Entity e : entities) {
             // DO MOVE.
             if (e instanceof Player) {
-                float[] dataAccelerometer = accelerometerListener.checkAccelerometer();
-                float xDelta = dataAccelerometer[0];
-                float yDelta = dataAccelerometer[1];
                 ((Player) e).updateViaSensorEvent(xDelta, yDelta);
             } else {
                 e.update();
@@ -651,7 +664,8 @@ public class Game {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    entityUpdateListener.onUpdate(e);
+//                    entityUpdateListener.onUpdate(e);
+                    gameListener.onUpdateEntity(e);
                 }
             });
         }
@@ -669,26 +683,6 @@ public class Game {
 
     public int getHeightSpriteDst() {
         return heightSpriteDst;
-    }
-
-    public int getWidthWorldInPixels() {
-        return widthWorldInPixels;
-    }
-
-    public int getHeightWorldInPixels() {
-        return heightWorldInPixels;
-    }
-
-    public void setEntityUpdateListener(EntityUpdateListener entityUpdateListener) {
-        this.entityUpdateListener = entityUpdateListener;
-    }
-
-    public void setAccelerometerListener(AccelerometerListener accelerometerListener) {
-        this.accelerometerListener = accelerometerListener;
-    }
-
-    public void setShowDialogListener(ShowDialogListener showDialogListener) {
-        this.showDialogListener = showDialogListener;
     }
 
     public List<Entity> getEntities() {

@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.tiles;
+package com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles;
 
 import android.graphics.Bitmap;
 

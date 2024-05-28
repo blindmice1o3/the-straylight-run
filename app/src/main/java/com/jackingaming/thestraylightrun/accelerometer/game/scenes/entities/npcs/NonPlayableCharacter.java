@@ -1,10 +1,10 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs;
+package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 import java.util.Map;
 import java.util.Random;

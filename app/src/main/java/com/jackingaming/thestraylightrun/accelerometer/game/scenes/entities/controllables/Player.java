@@ -1,9 +1,9 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables;
+package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables;
 
 import android.graphics.drawable.AnimationDrawable;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Direction;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 import java.util.Map;
 

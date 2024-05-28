@@ -20,8 +20,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
@@ -31,9 +31,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawer
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.controllables.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.npcs.NonPlayableCharacter;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.io.Serializable;
@@ -236,9 +236,9 @@ public class GameFragment extends Fragment
     @Override
     public void onSurfaceCreated(Game game) {
         this.game = game;
-        this.game.setEntityUpdateListener(new Game.EntityUpdateListener() {
+        this.game.init(soundManager, new Game.GameListener() {
             @Override
-            public void onUpdate(Entity e) {
+            public void onUpdateEntity(Entity e) {
                 ImageView ivEntity = imageViewViaEntity.get(e);
                 // IMAGE (based on speed bonus)
                 if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
@@ -259,23 +259,25 @@ public class GameFragment extends Fragment
 
                 ivEntity.invalidate();
             }
-        });
-        this.game.setAccelerometerListener(new Game.AccelerometerListener() {
+
             @Override
-            public float[] checkAccelerometer() {
+            public float[] onCheckAccelerometer() {
                 float[] dataAccelerometer = new float[2];
                 dataAccelerometer[0] = xDelta;
                 dataAccelerometer[1] = yDelta;
                 return dataAccelerometer;
             }
-        });
-        this.game.setShowDialogListener(new Game.ShowDialogListener() {
+
             @Override
-            public FragmentManager onShowDialog() {
-                return getChildFragmentManager();
+            public void onShowDialogFragment(DialogFragment dialogFragment, String tag) {
+                dialogFragment.show(getChildFragmentManager(), tag);
+            }
+
+            @Override
+            public void onReplaceFragmentInMainActivity(Fragment fragment) {
+                replaceFragmentListener.onReplaceFragment(fragment);
             }
         });
-        this.game.init(replaceFragmentListener, soundManager);
 
         // TODO: ModelToViewMapper
         List<Entity> entitiesFromGame = this.game.getEntities();

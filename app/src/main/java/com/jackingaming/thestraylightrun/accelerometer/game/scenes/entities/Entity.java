@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.entities;
+package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;

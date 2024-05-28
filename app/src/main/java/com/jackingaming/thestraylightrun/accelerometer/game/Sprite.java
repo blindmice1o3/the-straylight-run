@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 public class Sprite {
     private float x, y;

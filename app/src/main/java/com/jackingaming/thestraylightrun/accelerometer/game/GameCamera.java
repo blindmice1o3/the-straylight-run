@@ -1,6 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 public class GameCamera {
     private float xOffset, yOffset;
