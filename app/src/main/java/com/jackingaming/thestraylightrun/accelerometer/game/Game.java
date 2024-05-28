@@ -530,6 +530,7 @@ public class Game {
                         if (collided instanceof NonPlayableCharacter) {
                             if (((NonPlayableCharacter) collided).getId().equals("coin")) {
                                 soundManager.sfxPlay(soundManager.sfxGetItem);
+                                Game.this.player.setSpeedBonus(4.0f);
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
                             } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {

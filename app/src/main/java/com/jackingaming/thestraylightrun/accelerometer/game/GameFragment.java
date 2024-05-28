@@ -81,8 +81,6 @@ public class GameFragment extends Fragment
     private Game game;
     private Map<Entity, ImageView> imageViewViaEntity;
     private Player player;
-    private float xAccelPrevious, yAccelPrevious = 0f;
-    private float xVel, yVel = 0.0f;
 
     public GameFragment() {
         // Required empty public constructor
@@ -354,29 +352,10 @@ public class GameFragment extends Fragment
             float xAccel = -sensorEvent.values[0];
             float yAccel = sensorEvent.values[1];
 
-//            Log.e(TAG, String.format("(xAccel, yAccel): (%f, %f)", (xAccel / Math.abs(xAccel)), (yAccel / Math.abs(yAccel))));
-
-            float xAccelDelta = xAccel - xAccelPrevious;
-            float yAccelDelta = yAccel - yAccelPrevious;
-
-            float frameTime = 0.666f;
-            xVel += (xAccelDelta * frameTime);
-            yVel += (yAccelDelta * frameTime);
-
-//            Log.e(TAG, String.format("(xVel, yVel): (%f, %f)", xVel, yVel));
-//            Log.e(TAG, String.format("((xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))): (%f, %f)", (xVel / Math.abs(xVel)), (yVel / Math.abs(yVel))));
-
-            xDelta = (xVel / 2) * frameTime;
-            yDelta = (yVel / 2) * frameTime;
-
-//            Log.e(TAG, String.format("(xDelta, yDelta): (%f, %f)", xDelta, yDelta));
-            // TODO: move to game loop (move out of accelerometer updates).
-//            updateGameEntities(xDelta, yDelta);
-//            frameLayout.invalidate();
-
-            // Prepare for next sensor event
-            xAccelPrevious = xAccel;
-            yAccelPrevious = yAccel;
+            // Going full-tilt (assigning xAccel straight to xDelta)
+            // is too fast, damping to be only 25% of full-tilt.
+            xDelta = xAccel * 0.25f;
+            yDelta = yAccel * 0.25f;
         }
     }
 
