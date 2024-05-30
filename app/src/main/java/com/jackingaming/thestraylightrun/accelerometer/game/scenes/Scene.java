@@ -15,7 +15,9 @@ public abstract class Scene {
 
     public abstract List<Object> exit();
 
-    public abstract void enter(Player player, List<Object> args);
+    public abstract void enter(List<Object> args);
 
     public abstract boolean isPaused();
+
+    public abstract boolean checkIsWalkableTile(int x, int y);
 }

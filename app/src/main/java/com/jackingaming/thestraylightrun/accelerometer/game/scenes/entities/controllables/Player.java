@@ -12,9 +12,8 @@ public class Player extends Entity {
     private Direction directionHorizontal = Direction.RIGHT;
     private Direction directionVertical = Direction.DOWN;
 
-    public Player(Map<Direction, AnimationDrawable> animationsByDirection,
-                  CollisionListener collisionListener, MovementListener movementListener) {
-        super(animationsByDirection, collisionListener, movementListener);
+    public Player(Map<Direction, AnimationDrawable> animationsByDirection) {
+        super(animationsByDirection, null, null);
 
         startAnimations();
     }

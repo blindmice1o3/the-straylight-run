@@ -34,7 +34,8 @@ public abstract class Entity {
     protected boolean justCollided;
     protected boolean cantCollide;
 
-    public Entity(Map<Direction, AnimationDrawable> animationsByDirection, CollisionListener collisionListener, MovementListener movementListener) {
+    public Entity(Map<Direction, AnimationDrawable> animationsByDirection,
+                  CollisionListener collisionListener, MovementListener movementListener) {
         this.animationsByDirection = animationsByDirection;
         this.collisionListener = collisionListener;
         this.movementListener = movementListener;
@@ -108,6 +109,14 @@ public abstract class Entity {
 
     public static float getHeightSpriteDst() {
         return heightSpriteDst;
+    }
+
+    public void setMovementListener(MovementListener movementListener) {
+        this.movementListener = movementListener;
+    }
+
+    public void setCollisionListener(CollisionListener collisionListener) {
+        this.collisionListener = collisionListener;
     }
 
     public float getxPos() {

@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawer
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -79,9 +80,7 @@ public class GameFragment extends Fragment
     private SensorManager sensorManager;
     private SoundManager soundManager;
 
-    private Game game;
     private Map<Entity, ImageView> imageViewViaEntity;
-    private Player player;
 
     public GameFragment() {
         // Required empty public constructor
@@ -234,11 +233,11 @@ public class GameFragment extends Fragment
 
     @Override
     public void onSurfaceCreated(Game game) {
-        this.game = game;
-        this.game.init(soundManager, new Game.GameListener() {
+        game.init(soundManager, new Game.GameListener() {
             @Override
             public void onUpdateEntity(Entity e) {
                 ImageView ivEntity = imageViewViaEntity.get(e);
+
                 // IMAGE (based on speed bonus)
                 if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
                     ivEntity.setAlpha(0.5f);
@@ -276,18 +275,24 @@ public class GameFragment extends Fragment
             public void onReplaceFragmentInMainActivity(Fragment fragment) {
                 replaceFragmentListener.onReplaceFragment(fragment);
             }
+
+            @Override
+            public void onChangeScene(Scene sceneNext) {
+                game.changeScene(sceneNext);
+            }
         });
 
         // TODO: ModelToViewMapper
-        if (this.game.getSceneCurrent() instanceof WorldScene) {
-            List<Entity> entitiesFromGame = ((WorldScene) this.game.getSceneCurrent()).getEntities();
+        if (game.getSceneCurrent() instanceof WorldScene) {
+            List<Entity> entitiesFromGame = ((WorldScene) game.getSceneCurrent()).getEntities();
             imageViewViaEntity = new HashMap<>();
             for (Entity e : entitiesFromGame) {
                 ImageView imageView = new ImageView(getContext());
                 imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
-                if (e instanceof Player) {
-                    player = (Player) e;
-                } else {
+//                if (e instanceof Player) {
+//                    player = (Player) e;
+//                } else {
+                if (!(e instanceof Player)) {
                     imageView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -302,8 +307,8 @@ public class GameFragment extends Fragment
                 imageViewViaEntity.put(e, imageView);
             }
             // TODO: View
-            int widthSpriteDst = this.game.getWidthSpriteDst();
-            int heightSpriteDst = this.game.getHeightSpriteDst();
+            int widthSpriteDst = game.getWidthSpriteDst();
+            int heightSpriteDst = game.getHeightSpriteDst();
             for (ImageView imageView : imageViewViaEntity.values()) {
                 frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
             }
@@ -342,10 +347,6 @@ public class GameFragment extends Fragment
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if (player == null) {
-            return;
-        }
-
         TypeWriterDialogFragment typeWriterDialogFragment = (TypeWriterDialogFragment) getChildFragmentManager().findFragmentByTag(TypeWriterDialogFragment.TAG);
         if (typeWriterDialogFragment != null && typeWriterDialogFragment.isVisible()) {
             return;

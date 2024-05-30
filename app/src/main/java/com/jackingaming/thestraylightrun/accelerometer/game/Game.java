@@ -12,10 +12,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
+
+import java.util.List;
 
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
@@ -29,6 +32,8 @@ public class Game {
         void onShowDialogFragment(DialogFragment dialogFragment, String tag);
 
         void onReplaceFragmentInMainActivity(Fragment fragment);
+
+        void onChangeScene(Scene sceneNext);
     }
 
     private SurfaceHolder holder;
@@ -62,17 +67,31 @@ public class Game {
         /////////////////////////////////////////////////////////////////////////////////
     }
 
+    public void changeScene(Scene sceneNext) {
+        Scene sceneLeaving = sceneCurrent;
+        List<Object> args = sceneLeaving.exit();
+
+        sceneNext.enter(args);
+        sceneCurrent = sceneNext;
+    }
+
     public void init(SoundManager soundManager, GameListener gameListener) {
         this.soundManager = soundManager;
         this.gameListener = gameListener;
 
         // SCENES
-        sceneCurrent = WorldScene.getInstance();
-        ((WorldScene) sceneCurrent).init(resources, handler, soundManager,
+        WorldScene.getInstance().init(resources, handler, soundManager,
                 gameListener, gameCamera,
                 widthSurfaceView, heightSurfaceView,
                 widthSpriteDst, heightSpriteDst);
-        sceneCurrent.enter(null, null);
+        LabScene.getInstance().init(
+                WorldScene.getInstance().getPlayer(),
+                resources, handler, soundManager,
+                gameListener, gameCamera,
+                widthSurfaceView, heightSurfaceView,
+                widthSpriteDst, heightSpriteDst);
+
+        sceneCurrent = WorldScene.getInstance();
 
         /////////////////////////////////////////////////////////////////////////////////
         Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
@@ -96,7 +115,8 @@ public class Game {
         Canvas canvas = holder.lockCanvas();
 
         if (canvas != null) {
-            canvas.drawColor(Color.WHITE);
+            canvas.drawColor(Color.MAGENTA);
+//            canvas.drawColor(Color.WHITE);
 
             sceneCurrent.draw(canvas);
 

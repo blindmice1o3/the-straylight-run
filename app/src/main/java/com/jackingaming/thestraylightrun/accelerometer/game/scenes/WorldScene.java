@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.cont
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 
@@ -40,9 +42,26 @@ public class WorldScene extends Scene {
 
     private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_world_map;
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
-    private static final int X_SPAWN_INDEX = 200;
-    private static final int Y_SPAWN_INDEX = 34;
-
+    private static final int X_SPAWN_INDEX_PLAYER = 200;
+    private static final int Y_SPAWN_INDEX_PLAYER = 34;
+    private static final int X_SPAWN_INDEX_RIVAL = 200;
+    private static final int Y_SPAWN_INDEX_RIVAL = 12;
+    private static final int X_SPAWN_INDEX_COIN = 201;
+    private static final int Y_SPAWN_INDEX_COIN = 37;
+    private static final int X_SPAWN_INDEX_RIVAL_LEADER = 201;
+    private static final int Y_SPAWN_INDEX_RIVAL_LEADER = 15;
+    private static final int X_SPAWN_INDEX_JR_TRAINER = 201;
+    private static final int Y_SPAWN_INDEX_JR_TRAINER = 19;
+    private static final int X_SPAWN_INDEX_LASS_02 = 200;
+    private static final int Y_SPAWN_INDEX_LASS_02 = 22;
+    private static final int X_SPAWN_INDEX_YOUNGSTER = 201;
+    private static final int Y_SPAWN_INDEX_YOUNGSTER = 25;
+    private static final int X_SPAWN_INDEX_LASS_01 = 200;
+    private static final int Y_SPAWN_INDEX_LASS_01 = 28;
+    private static final int X_SPAWN_INDEX_BUG_CATCHER = 201;
+    private static final int Y_SPAWN_INDEX_BUG_CATCHER = 31;
+    private static final int X_TRANSFER_POINT_INDEX_LAB = X_SPAWN_INDEX_PLAYER + 1;
+    private static final int Y_TRANSFER_POINT_INDEX_LAB = Y_SPAWN_INDEX_PLAYER - 2;
     public static int durationOfFrameInMilli = 420;
 
     private static WorldScene instance;
@@ -75,6 +94,22 @@ public class WorldScene extends Scene {
         return instance;
     }
 
+    private void initTiles() {
+        Bitmap fullWorldMap = BitmapFactory.decodeResource(resources,
+                RES_ID_TILE_COLLISION_BACKGROUND);
+        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
+                RES_ID_TILE_COLLISION_SOURCE);
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
+        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB];
+        tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB] = new TransferPointTile(
+                tileBeforeBecomingTransferPoint.getImage(), LabScene.TAG
+        );
+        widthWorldInTiles = tiles.length;
+        heightWorldInTiles = tiles[0].length;
+        widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
+        heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+    }
+
     public void init(Resources resources, Handler handler, SoundManager soundManager,
                      Game.GameListener gameListener, GameCamera gameCamera,
                      int widthSurfaceView, int heightSurfaceView,
@@ -89,17 +124,12 @@ public class WorldScene extends Scene {
         this.widthSpriteDst = widthSpriteDst;
         this.heightSpriteDst = heightSpriteDst;
 
+        // TODO: calling init() in Game.changeScene() between the exit() and enter() calls
+        //  brought the tile images back and game camera was moving, but entities weren't.
+
         // TILES
         // [IMAGES]
-        Bitmap fullWorldMap = BitmapFactory.decodeResource(resources,
-                RES_ID_TILE_COLLISION_BACKGROUND);
-        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
-                RES_ID_TILE_COLLISION_SOURCE);
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
-        widthWorldInTiles = tiles.length;
-        heightWorldInTiles = tiles[0].length;
-        widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
-        heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+        initTiles();
 
         // ENTITIES
         // [IMAGES]
@@ -113,17 +143,114 @@ public class WorldScene extends Scene {
         Entity.init(
                 entities,
                 widthSpriteDst, heightSpriteDst
-        );
+        )
+        ;
+
+        collisionListenerPlayer = generateCollisionListenerForPlayer();
+        movementListenerPlayer = generateMovementListenerForPlayer();
+
+        player.setCollisionListener(collisionListenerPlayer);
+        player.setMovementListener(movementListenerPlayer);
+
+        player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+        player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
 
         // GAME CAMERA
         gameCamera.init(widthWorldInPixels, heightWorldInPixels);
+        gameCamera.centerOnEntity(player);
     }
+
+    private Entity.CollisionListener generateCollisionListenerForPlayer() {
+        return new Entity.CollisionListener() {
+            @Override
+            public void onJustCollided(Entity collided) {
+                Log.e(TAG, "WorldScene: player's  CollisionListener.onJustCollided(Entity)");
+
+                if (collided instanceof NonPlayableCharacter) {
+                    if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                        soundManager.sfxPlay(soundManager.sfxGetItem);
+                        player.setSpeedBonus(4.0f);
+                    } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
+//                                soundManager.sfxPlay(soundManager.sfxHorn);
+                    } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
+                        pause();
+
+                        gameListener.onShowDialogFragment(
+                                instantiateRivalLeaderDialogFragment(gameListener),
+                                "RivalLeaderDialogFragment"
+                        );
+                    }
+                }
+            }
+        };
+    }
+
+    private Entity.MovementListener generateMovementListenerForPlayer() {
+        return new Entity.MovementListener() {
+            @Override
+            public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                int xFutureCorner1 = futureCorner1[0];
+                int yFutureCorner1 = futureCorner1[1];
+                int xFutureCorner2 = futureCorner2[0];
+                int yFutureCorner2 = futureCorner2[1];
+
+                int xIndex1 = xFutureCorner1 / widthSpriteDst;
+                int yIndex1 = yFutureCorner1 / heightSpriteDst;
+                int xIndex2 = xFutureCorner2 / widthSpriteDst;
+                int yIndex2 = yFutureCorner2 / heightSpriteDst;
+
+                boolean isWalkableCorner1 = checkIsWalkableTile(xIndex1, yIndex1);
+                boolean isWalkableCorner2 = checkIsWalkableTile(xIndex2, yIndex2);
+
+                // TRANSFER POINTS
+                if (isWalkableCorner1) {
+                    if (tiles[xIndex1][yIndex1] instanceof TransferPointTile) {
+                        String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
+                        if (idSceneDestination.equals(LabScene.TAG)) {
+                            Log.e(TAG, "transfer point: LAB");
+                            gameListener.onChangeScene(LabScene.getInstance());
+                            return true;
+                        }
+                    }
+                } else if (isWalkableCorner2) {
+                    if (tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
+                        String idSceneDestination = ((TransferPointTile) tiles[xIndex2][yIndex2]).getIdSceneDestination();
+                        if (idSceneDestination.equals(LabScene.TAG)) {
+                            gameListener.onChangeScene(LabScene.getInstance());
+                            return true;
+                        }
+                    }
+                }
+
+                return (isWalkableCorner1 && isWalkableCorner2);
+            }
+        };
+    }
+
+    boolean hadBeenTransferred = false;
 
     @Override
     public void update(long elapsed) {
+        // TODO: REMOVE
+        if (hadBeenTransferred) {
+            player.setCollisionListener(collisionListenerPlayer);
+            player.setMovementListener(movementListenerPlayer);
+
+            player.setxPos(xBeforeTransfer);
+            player.setyPos(yBeforeTransfer);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    gameListener.onUpdateEntity(player);
+                }
+            });
+            gameCamera.centerOnEntity(player);
+
+            hadBeenTransferred = false;
+        }
+
         // INPUTS
         float[] dataAccelerometer = gameListener.onCheckAccelerometer();
-//        float[] dataAccelerometer = accelerometerListener.checkAccelerometer();
         float xDelta = dataAccelerometer[0];
         float yDelta = dataAccelerometer[1];
 
@@ -133,6 +260,9 @@ public class WorldScene extends Scene {
 
     @Override
     public void draw(Canvas canvas) {
+//        canvas.drawColor(Color.MAGENTA);
+        canvas.drawColor(Color.GREEN);
+
         // TILES
         int xStart = (int) Math.max(0, gameCamera.getxOffset() / widthSpriteDst);
         int xEnd = (int) Math.min(widthWorldInTiles, ((gameCamera.getxOffset() + widthSurfaceView) / widthSpriteDst) + 1);
@@ -149,20 +279,59 @@ public class WorldScene extends Scene {
         }
     }
 
+    private float xBeforeTransfer = -1f;
+    private float yBeforeTransfer = -1f;
+
     @Override
     public List<Object> exit() {
+        Log.e(TAG, "exit()");
+
+        xBeforeTransfer = player.getxPos();
+        Log.e(TAG, "xBeforeTransfer: " + xBeforeTransfer);
+        yBeforeTransfer = player.getyPos();
+        Log.e(TAG, "yBeforeTransfer: " + yBeforeTransfer);
+
+        hadBeenTransferred = true;
+
         return null;
     }
 
-    @Override
-    public void enter(Player player, List<Object> args) {
-        if (player != null) {
-            this.player = player;
-        }
+    private Entity.CollisionListener collisionListenerPlayer;
+    private Entity.MovementListener movementListenerPlayer;
 
-        this.player.setxPos(X_SPAWN_INDEX * widthSpriteDst);
-        this.player.setyPos(Y_SPAWN_INDEX * widthSpriteDst);
-        gameCamera.centerOnEntity(this.player);
+    @Override
+    public void enter(List<Object> args) {
+        Log.e(TAG, "enter() widthWorldInPixels: " + widthWorldInPixels);
+        Log.e(TAG, "enter() heightWorldInPixels: " + heightWorldInPixels);
+
+        player.setCollisionListener(collisionListenerPlayer);
+        player.setMovementListener(movementListenerPlayer);
+
+        Log.e(TAG, "xBeforeTransfer < 0 == " + Boolean.toString(xBeforeTransfer < 0));
+//        if (xBeforeTransfer < 0) {
+        player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+        player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+        Log.e(TAG, "player.getxPos(): " + player.getxPos());
+        Log.e(TAG, "player.getyPos(): " + player.getyPos());
+//        } else {
+//            player.setxPos(xBeforeTransfer);
+//            player.setyPos(yBeforeTransfer);
+//        }
+
+        // GAME CAMERA
+        gameCamera.init(widthWorldInPixels, heightWorldInPixels);
+        gameCamera.centerOnEntity(player);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.onUpdateEntity(player);
+            }
+        });
+
+        Log.e(TAG, "gameCamera.xoffset: " + gameCamera.getxOffset());
+        Log.e(TAG, "gameCamera.yoffset: " + gameCamera.getyOffset());
+        Log.e(TAG, "widthSpriteDst: " + widthSpriteDst);
     }
 
     @Override
@@ -170,30 +339,36 @@ public class WorldScene extends Scene {
         return paused;
     }
 
+    @Override
+    public boolean checkIsWalkableTile(int x, int y) {
+        Tile tile = tiles[x][y];
+        boolean isWalkable = !tile.isSolid();
+        return isWalkable;
+    }
+
     private void updateGameEntities(float xDelta, float yDelta) {
         for (Entity e : entities) {
             // DO MOVE.
             if (e instanceof Player) {
-                ((Player) e).updateViaSensorEvent(xDelta, yDelta);
+//                Player player = (Player) e;
+                player.updateViaSensorEvent(xDelta, yDelta);
+                validatePosition(player);
+                gameCamera.centerOnEntity(player);
             } else {
                 e.update();
+                validatePosition(e);
             }
-            // VALIDATE MOVE.
-            validatePosition(e);
 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-//                    entityUpdateListener.onUpdate(e);
                     gameListener.onUpdateEntity(e);
                 }
             });
         }
-
-        gameCamera.centerOnEntity(player);
     }
 
-    public void validatePosition(Entity e) {
+    private void validatePosition(Entity e) {
         if (e.getxPos() < 0) {
             e.setxPos(0);
         }
@@ -252,46 +427,46 @@ public class WorldScene extends Scene {
         };
 
         NonPlayableCharacter npcRival = generateNonPlayableCharacter("rival", 3,
-                200, 12,
+                X_SPAWN_INDEX_RIVAL, Y_SPAWN_INDEX_RIVAL,
                 false, DOWN,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcCoin = generateNonPlayableCharacter("coin", -1,
-                201, 14,
+                X_SPAWN_INDEX_COIN, Y_SPAWN_INDEX_COIN,
                 true, DOWN,
                 collisionListenerCoin,
                 movementListener);
         NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter("rival leader", 28,
-                201, 15,
+                X_SPAWN_INDEX_RIVAL_LEADER, Y_SPAWN_INDEX_RIVAL_LEADER,
                 true, LEFT,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter("jr trainer", 11,
-                201, 19,
+                X_SPAWN_INDEX_JR_TRAINER, Y_SPAWN_INDEX_JR_TRAINER,
                 true, LEFT,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcLass02 = generateNonPlayableCharacter("lass02", 17,
-                200, 22,
+                X_SPAWN_INDEX_LASS_02, Y_SPAWN_INDEX_LASS_02,
                 true, RIGHT,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcYoungster = generateNonPlayableCharacter("youngster", 10,
-                201, 25,
+                X_SPAWN_INDEX_YOUNGSTER, Y_SPAWN_INDEX_YOUNGSTER,
                 true, LEFT,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcLass01 = generateNonPlayableCharacter("lass01", 17,
-                200, 28,
+                X_SPAWN_INDEX_LASS_01, Y_SPAWN_INDEX_LASS_01,
                 true, RIGHT,
                 collisionListener,
                 movementListener);
         NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter("bug catcher", 10,
-                201, 31,
+                X_SPAWN_INDEX_BUG_CATCHER, Y_SPAWN_INDEX_BUG_CATCHER,
                 true, LEFT,
                 collisionListener,
                 movementListener);
-        this.player = generatePlayer();
+        player = generatePlayer();
 
         entities = new ArrayList<>();
         entities.add(npcRival);
@@ -428,47 +603,7 @@ public class WorldScene extends Scene {
         animationsByDirection.put(DOWN, animationDrawableDown);
         animationsByDirection.put(LEFT, animationDrawableLeft);
         animationsByDirection.put(RIGHT, animationDrawableRight);
-        Player player = new Player(animationsByDirection,
-                new Entity.CollisionListener() {
-                    @Override
-                    public void onJustCollided(Entity collided) {
-                        if (collided instanceof NonPlayableCharacter) {
-                            if (((NonPlayableCharacter) collided).getId().equals("coin")) {
-                                soundManager.sfxPlay(soundManager.sfxGetItem);
-                                WorldScene.this.player.setSpeedBonus(4.0f);
-                            } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
-//                                soundManager.sfxPlay(soundManager.sfxHorn);
-                            } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
-                                pause();
-
-                                gameListener.onShowDialogFragment(
-                                        instantiateRivalLeaderDialogFragment(gameListener),
-                                        "RivalLeaderDialogFragment"
-                                );
-                            }
-                        }
-                    }
-                },
-                new Entity.MovementListener() {
-                    @Override
-                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
-                        int xFutureCorner1 = futureCorner1[0];
-                        int yFutureCorner1 = futureCorner1[1];
-                        int xFutureCorner2 = futureCorner2[0];
-                        int yFutureCorner2 = futureCorner2[1];
-
-                        int xIndex1 = xFutureCorner1 / widthSpriteDst;
-                        int yIndex1 = yFutureCorner1 / heightSpriteDst;
-                        int xIndex2 = xFutureCorner2 / widthSpriteDst;
-                        int yIndex2 = yFutureCorner2 / heightSpriteDst;
-
-                        boolean isWalkableCorner1 = checkIsWalkableTile(xIndex1, yIndex1);
-                        boolean isWalkableCorner2 = checkIsWalkableTile(xIndex2, yIndex2);
-
-                        return (isWalkableCorner1 && isWalkableCorner2);
-                    }
-                });
-
+        Player player = new Player(animationsByDirection);
         return player;
     }
 
@@ -557,10 +692,8 @@ public class WorldScene extends Scene {
         }
     }
 
-    public boolean checkIsWalkableTile(int x, int y) {
-        Tile tile = tiles[x][y];
-        boolean isWalkable = !tile.isSolid();
-        return isWalkable;
+    public Player getPlayer() {
+        return player;
     }
 
     public List<Entity> getEntities() {
