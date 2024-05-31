@@ -2,11 +2,11 @@ package com.jackingaming.thestraylightrun.accelerometer.game.scenes;
 
 import android.graphics.Canvas;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
-
 import java.util.List;
 
 public abstract class Scene {
+    public static final long DEFAULT_TRANSFER_POINT_COOL_DOWN_THRESHOLD_IN_MILLI = 5000L;
+
     protected boolean paused = false;
 
     public abstract void update(long elapsed);

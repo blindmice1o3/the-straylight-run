@@ -78,6 +78,8 @@ public class WorldScene extends Scene {
     private int widthWorldInTiles, heightWorldInTiles;
     private int widthWorldInPixels, heightWorldInPixels;
     private Tile[][] tiles;
+    private long transferPointCoolDownElapsedInMillis = 0L;
+    private boolean canUseTransferPoint = true;
 
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
@@ -209,6 +211,9 @@ public class WorldScene extends Scene {
 
     private Entity.MovementListener generateMovementListenerForPlayer() {
         return new Entity.MovementListener() {
+
+            private long timePrevious;
+
             @Override
             public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
                 int xFutureCorner1 = futureCorner1[0];
@@ -225,21 +230,42 @@ public class WorldScene extends Scene {
                 boolean isWalkableCorner2 = checkIsWalkableTile(xIndex2, yIndex2);
 
                 // TRANSFER POINTS
+                if (transferPointCoolDownElapsedInMillis < DEFAULT_TRANSFER_POINT_COOL_DOWN_THRESHOLD_IN_MILLI) {
+                    long timeNow = System.currentTimeMillis();
+                    if (transferPointCoolDownElapsedInMillis == 0) {
+                        timePrevious = timeNow;
+                        timeNow = System.currentTimeMillis() + 1;
+                    }
+
+                    long elapsed = timeNow - timePrevious;
+                    transferPointCoolDownElapsedInMillis += elapsed;
+
+                    if (transferPointCoolDownElapsedInMillis >= DEFAULT_TRANSFER_POINT_COOL_DOWN_THRESHOLD_IN_MILLI) {
+                        canUseTransferPoint = true;
+                    }
+
+                    timePrevious = timeNow;
+                }
+
                 if (isWalkableCorner1) {
                     if (tiles[xIndex1][yIndex1] instanceof TransferPointTile) {
-                        String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
-                        if (idSceneDestination.equals(LabScene.TAG)) {
-                            Log.e(TAG, "transfer point: LAB");
-                            gameListener.onChangeScene(LabScene.getInstance());
-                            return true;
+                        if (canUseTransferPoint) {
+                            String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
+                            if (idSceneDestination.equals(LabScene.TAG)) {
+                                Log.e(TAG, "transfer point: LAB");
+                                gameListener.onChangeScene(LabScene.getInstance());
+                                return true;
+                            }
                         }
                     }
                 } else if (isWalkableCorner2) {
                     if (tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
-                        String idSceneDestination = ((TransferPointTile) tiles[xIndex2][yIndex2]).getIdSceneDestination();
-                        if (idSceneDestination.equals(LabScene.TAG)) {
-                            gameListener.onChangeScene(LabScene.getInstance());
-                            return true;
+                        if (canUseTransferPoint) {
+                            String idSceneDestination = ((TransferPointTile) tiles[xIndex2][yIndex2]).getIdSceneDestination();
+                            if (idSceneDestination.equals(LabScene.TAG)) {
+                                gameListener.onChangeScene(LabScene.getInstance());
+                                return true;
+                            }
                         }
                     }
                 }
@@ -333,6 +359,8 @@ public class WorldScene extends Scene {
     public void enter(List<Object> args) {
         Log.e(TAG, "enter() widthWorldInPixels: " + widthWorldInPixels);
         Log.e(TAG, "enter() heightWorldInPixels: " + heightWorldInPixels);
+        transferPointCoolDownElapsedInMillis = 0L;
+        canUseTransferPoint = false;
 
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
