@@ -198,6 +198,7 @@ public class LabScene extends Scene {
         Log.e(TAG, "enter() widthWorldInPixels: " + widthWorldInPixels);
         Log.e(TAG, "enter() heightWorldInPixels: " + heightWorldInPixels);
 
+        player.startAnimations();
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 

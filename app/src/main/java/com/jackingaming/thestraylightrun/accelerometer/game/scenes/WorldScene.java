@@ -315,6 +315,7 @@ public class WorldScene extends Scene {
 
         hadBeenTransferred = true;
 
+        stopEntityAnimations();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -362,6 +363,7 @@ public class WorldScene extends Scene {
         Log.e(TAG, "gameCamera.yoffset: " + gameCamera.getyOffset());
         Log.e(TAG, "widthSpriteDst: " + widthSpriteDst);
 
+        startEntityAnimations();
         handler.post(new Runnable() {
             @Override
             public void run() {
