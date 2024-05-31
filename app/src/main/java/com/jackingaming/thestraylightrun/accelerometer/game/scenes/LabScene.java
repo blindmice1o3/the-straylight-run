@@ -198,6 +198,7 @@ public class LabScene extends Scene {
         Log.e(TAG, "enter() widthWorldInPixels: " + widthWorldInPixels);
         Log.e(TAG, "enter() heightWorldInPixels: " + heightWorldInPixels);
 
+        player.startAnimations();
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
@@ -228,6 +229,10 @@ public class LabScene extends Scene {
 
     @Override
     public boolean checkIsWalkableTile(int x, int y) {
+        if (x < 0 || x >= widthWorldInTiles || y < 0 || y >= heightWorldInTiles) {
+            return false;
+        }
+
         Tile tile = tiles[x][y];
         boolean isWalkable = !tile.isSolid();
         return isWalkable;

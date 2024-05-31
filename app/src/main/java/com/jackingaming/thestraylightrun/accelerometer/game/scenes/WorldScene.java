@@ -315,6 +315,7 @@ public class WorldScene extends Scene {
 
         hadBeenTransferred = true;
 
+        stopEntityAnimations();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -362,6 +363,7 @@ public class WorldScene extends Scene {
         Log.e(TAG, "gameCamera.yoffset: " + gameCamera.getyOffset());
         Log.e(TAG, "widthSpriteDst: " + widthSpriteDst);
 
+        startEntityAnimations();
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -377,6 +379,10 @@ public class WorldScene extends Scene {
 
     @Override
     public boolean checkIsWalkableTile(int x, int y) {
+        if (x < 0 || x >= widthWorldInTiles || y < 0 || y >= heightWorldInTiles) {
+            return false;
+        }
+
         Tile tile = tiles[x][y];
         boolean isWalkable = !tile.isSolid();
         return isWalkable;

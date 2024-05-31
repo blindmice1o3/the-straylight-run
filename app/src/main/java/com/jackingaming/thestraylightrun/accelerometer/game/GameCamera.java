@@ -21,16 +21,62 @@ public class GameCamera {
     }
 
     public void checkBlankSpace() {
-        if (xOffset < 0) {
-            xOffset = 0;
-        } else if (xOffset > widthWorldInPixels - widthDeviceScreen) {
-            xOffset = widthWorldInPixels - widthDeviceScreen;
-        }
+        if (widthWorldInPixels > widthDeviceScreen) {
+            if (heightWorldInPixels > heightDeviceScreen) {
+                // Scene is LARGER than viewport (BOTH HORIZONTALLY AND VERTICALLY)
+                // Horizontal (LEFT)
+                if (xOffset < 0) {
+                    xOffset = 0;
+                }
+                // Horizontal (RIGHT)
+                else if (xOffset > widthWorldInPixels - widthDeviceScreen) {
+                    xOffset = widthWorldInPixels - widthDeviceScreen;
+                }
 
-        if (yOffset < 0) {
-            yOffset = 0;
-        } else if (yOffset > heightWorldInPixels - heightDeviceScreen) {
-            yOffset = heightWorldInPixels - heightDeviceScreen;
+                // Vertical (TOP)
+                if (yOffset < 0) {
+                    yOffset = 0;
+                }
+                // Vertical (BOTTOM)
+                else if (yOffset > heightWorldInPixels - heightDeviceScreen) {
+                    yOffset = heightWorldInPixels - heightDeviceScreen;
+                }
+            } else {
+                // Scene is LARGER than viewport (ONLY HORIZONTALLY)
+                // Horizontal (LEFT)
+                if (xOffset < 0) {
+                    xOffset = 0;
+                }
+                // Horizontal (RIGHT)
+                else if (xOffset > widthWorldInPixels - widthDeviceScreen) {
+                    xOffset = widthWorldInPixels - widthDeviceScreen;
+                }
+
+                // Vertical: always centered
+                yOffset = (heightWorldInPixels - heightDeviceScreen) / 2;
+            }
+        } else {
+            if (heightWorldInPixels > heightDeviceScreen) {
+                // Scene is LARGER than viewport (ONLY VERTICALLY)
+                // Horizontal: always centered
+                xOffset = (widthWorldInPixels - widthDeviceScreen) / 2;
+
+                // Vertical (TOP)
+                if (yOffset < 0) {
+                    yOffset = 0;
+                }
+                // Vertical (BOTTOM)
+                else if (yOffset > heightWorldInPixels - heightDeviceScreen) {
+                    yOffset = heightWorldInPixels - heightDeviceScreen;
+                }
+            } else {
+                // Scene is SMALLER than viewport (BOTH HORIZONTALLY AND VERTICALLY)
+                // Vertical: always centered
+                xOffset = (widthWorldInPixels - widthDeviceScreen) / 2;
+
+                // Horizontal: always centered
+                yOffset = (heightWorldInPixels - heightDeviceScreen) / 2;
+            }
         }
     }
 
