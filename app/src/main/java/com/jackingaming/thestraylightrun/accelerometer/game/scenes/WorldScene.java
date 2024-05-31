@@ -160,6 +160,8 @@ public class WorldScene extends Scene {
         gameCamera.centerOnEntity(player);
     }
 
+//    private boolean isFirstCollide = true;
+
     private Entity.CollisionListener generateCollisionListenerForPlayer() {
         return new Entity.CollisionListener() {
             @Override
@@ -170,6 +172,26 @@ public class WorldScene extends Scene {
                     if (((NonPlayableCharacter) collided).getId().equals("coin")) {
                         soundManager.sfxPlay(soundManager.sfxGetItem);
                         player.setSpeedBonus(4.0f);
+
+//                        if (isFirstCollide) {
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    gameListener.switchVisibilityOfNPCsToGone();
+//                                }
+//                            });
+//
+//                            isFirstCollide = false;
+//                        } else {
+//                            handler.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    gameListener.switchVisibilityOfNPCsToVisible();
+//                                }
+//                            });
+//
+//                            isFirstCollide = true;
+//                        }
                     } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
                     } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
@@ -293,6 +315,13 @@ public class WorldScene extends Scene {
 
         hadBeenTransferred = true;
 
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.switchVisibilityOfNPCsToGone();
+            }
+        });
+
         return null;
     }
 
@@ -308,15 +337,15 @@ public class WorldScene extends Scene {
         player.setMovementListener(movementListenerPlayer);
 
         Log.e(TAG, "xBeforeTransfer < 0 == " + Boolean.toString(xBeforeTransfer < 0));
-//        if (xBeforeTransfer < 0) {
-        player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-        player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+        if (xBeforeTransfer < 0) {
+            player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+            player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+        } else {
+            player.setxPos(xBeforeTransfer);
+            player.setyPos(yBeforeTransfer);
+        }
         Log.e(TAG, "player.getxPos(): " + player.getxPos());
         Log.e(TAG, "player.getyPos(): " + player.getyPos());
-//        } else {
-//            player.setxPos(xBeforeTransfer);
-//            player.setyPos(yBeforeTransfer);
-//        }
 
         // GAME CAMERA
         gameCamera.init(widthWorldInPixels, heightWorldInPixels);
@@ -332,6 +361,13 @@ public class WorldScene extends Scene {
         Log.e(TAG, "gameCamera.xoffset: " + gameCamera.getxOffset());
         Log.e(TAG, "gameCamera.yoffset: " + gameCamera.getyOffset());
         Log.e(TAG, "widthSpriteDst: " + widthSpriteDst);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.switchVisibilityOfNPCsToVisible();
+            }
+        });
     }
 
     @Override

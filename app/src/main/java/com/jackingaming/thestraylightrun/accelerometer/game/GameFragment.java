@@ -280,6 +280,26 @@ public class GameFragment extends Fragment
             public void onChangeScene(Scene sceneNext) {
                 game.changeScene(sceneNext);
             }
+
+            @Override
+            public void switchVisibilityOfNPCsToGone() {
+                for (Entity e : imageViewViaEntity.keySet()) {
+                    if (e instanceof NonPlayableCharacter) {
+                        ImageView ivEntity = imageViewViaEntity.get(e);
+                        ivEntity.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void switchVisibilityOfNPCsToVisible() {
+                for (Entity e : imageViewViaEntity.keySet()) {
+                    if (e instanceof NonPlayableCharacter) {
+                        ImageView ivEntity = imageViewViaEntity.get(e);
+                        ivEntity.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
         });
 
         // TODO: ModelToViewMapper

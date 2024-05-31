@@ -34,6 +34,10 @@ public class Game {
         void onReplaceFragmentInMainActivity(Fragment fragment);
 
         void onChangeScene(Scene sceneNext);
+
+        void switchVisibilityOfNPCsToGone();
+
+        void switchVisibilityOfNPCsToVisible();
     }
 
     private SurfaceHolder holder;
