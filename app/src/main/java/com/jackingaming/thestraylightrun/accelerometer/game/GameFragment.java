@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -129,6 +130,23 @@ public class GameFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        DrawerLayout drawerLayout = view.findViewById(R.id.drawer_layout);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+
+                DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);
+                DrawerEndFragment drawerEndFragment = (DrawerEndFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_end);
+                if (drawerStartFragment != null) {
+                    drawerStartFragment.stopTypeWriterTextView();
+                }
+
+                if (drawerEndFragment != null) {
+                    drawerEndFragment.stopTypeWriterTextView();
+                }
+            }
+        });
         appBarLayout = view.findViewById(R.id.app_bar_layout);
         frameLayout = view.findViewById(R.id.frame_layout_world);
         surfaceView = view.findViewById(R.id.surface_view_game);
@@ -180,6 +198,9 @@ public class GameFragment extends Fragment
                 soundManager.sfxIterateAndPlay();
 
                 appBarLayout.setExpanded(false);
+
+                DrawerTopFragment drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_top);
+                drawerTopFragment.stopTypeWriterTextView();
 
                 return super.onSingleTapUp(event);
             }

@@ -43,6 +43,10 @@ public class TypeWriterTextView extends AppCompatTextView {
         }
     };
 
+    public void stopAnimation() {
+        handler.removeCallbacks(runnable);
+    }
+
     /**
      * Display text with type writer animation
      *

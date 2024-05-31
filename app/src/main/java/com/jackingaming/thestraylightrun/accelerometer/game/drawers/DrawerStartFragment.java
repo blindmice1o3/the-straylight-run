@@ -36,6 +36,7 @@ public class DrawerStartFragment extends Fragment {
     private DrawerStartListener listener;
 
     private TypeWriterTextView typeWriterTextView;
+    private String textInitial;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -100,6 +101,7 @@ public class DrawerStartFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_start);
+        textInitial = (String) typeWriterTextView.getText();
 
         typeWriterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,5 +117,10 @@ public class DrawerStartFragment extends Fragment {
                 // TODO:
             }
         });
+    }
+
+    public void stopTypeWriterTextView() {
+        typeWriterTextView.stopAnimation();
+        typeWriterTextView.setText(textInitial);
     }
 }
