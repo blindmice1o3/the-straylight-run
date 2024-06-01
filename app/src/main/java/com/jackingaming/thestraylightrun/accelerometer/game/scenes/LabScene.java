@@ -56,6 +56,25 @@ public class LabScene extends Scene {
         return instance;
     }
 
+    private void initTiles() {
+        // [IMAGES]
+        Bitmap bitmapIndoorsHomeAndRoom = BitmapFactory.decodeResource(resources,
+                RES_ID_TILE_COLLISION_BACKGROUND);
+        Bitmap bitmapLab = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 23, 544, 160, 192);
+        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
+                RES_ID_TILE_COLLISION_SOURCE);
+        // TILES
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapLab);
+        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
+        tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
+                tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
+        );
+        widthWorldInTiles = tiles.length;
+        heightWorldInTiles = tiles[0].length;
+        widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
+        heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+    }
+
     public void init(Player player, Resources resources, Handler handler, SoundManager soundManager,
                      Game.GameListener gameListener, GameCamera gameCamera,
                      int widthSurfaceView, int heightSurfaceView,
@@ -71,22 +90,7 @@ public class LabScene extends Scene {
         this.widthSpriteDst = widthSpriteDst;
         this.heightSpriteDst = heightSpriteDst;
 
-        // TILES
-        // [IMAGES]
-        Bitmap bitmapIndoorsHomeAndRoom = BitmapFactory.decodeResource(resources,
-                RES_ID_TILE_COLLISION_BACKGROUND);
-        Bitmap bitmapLab = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 23, 544, 160, 192);
-        String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
-                RES_ID_TILE_COLLISION_SOURCE);
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapLab);
-        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
-        tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
-                tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
-        );
-        widthWorldInTiles = tiles.length;
-        heightWorldInTiles = tiles[0].length;
-        widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
-        heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+        initTiles();
 
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();

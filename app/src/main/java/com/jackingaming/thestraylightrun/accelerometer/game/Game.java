@@ -96,6 +96,7 @@ public class Game {
                 widthSpriteDst, heightSpriteDst);
 
         sceneCurrent = WorldScene.getInstance();
+        sceneCurrent.enter(null);
 
         /////////////////////////////////////////////////////////////////////////////////
         Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);

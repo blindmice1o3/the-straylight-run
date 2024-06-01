@@ -41,11 +41,13 @@ public abstract class Entity {
         this.movementListener = movementListener;
     }
 
-    public static void init(List<Entity> entities,
-                            float widthSpriteDst, float heightSpriteDst) {
-        Entity.entities = entities;
+    public static void init(float widthSpriteDst, float heightSpriteDst) {
         Entity.widthSpriteDst = widthSpriteDst;
         Entity.heightSpriteDst = heightSpriteDst;
+    }
+
+    public static void replaceEntitiesForNewScene(List<Entity> entities) {
+        Entity.entities = entities;
     }
 
     public abstract void collided(Entity collider);

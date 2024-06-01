@@ -97,10 +97,12 @@ public class WorldScene extends Scene {
     }
 
     private void initTiles() {
+        // [IMAGES]
         Bitmap fullWorldMap = BitmapFactory.decodeResource(resources,
                 RES_ID_TILE_COLLISION_BACKGROUND);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
+        // TILES
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB];
         tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB] = new TransferPointTile(
@@ -126,40 +128,11 @@ public class WorldScene extends Scene {
         this.widthSpriteDst = widthSpriteDst;
         this.heightSpriteDst = heightSpriteDst;
 
-        // TODO: calling init() in Game.changeScene() between the exit() and enter() calls
-        //  brought the tile images back and game camera was moving, but entities weren't.
-
-        // TILES
-        // [IMAGES]
         initTiles();
-
-        // ENTITIES
-        // [IMAGES]
-        sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
-        spriteCoin = SpriteInitializer.initCoinSprite(resources);
-        spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
-        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
-        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
-        List<Entity> entities = generateEntities();
-        // TODO:
-        Entity.init(
-                entities,
-                widthSpriteDst, heightSpriteDst
-        )
-        ;
+        initEntities();
 
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();
-
-        player.setCollisionListener(collisionListenerPlayer);
-        player.setMovementListener(movementListenerPlayer);
-
-        player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-        player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
-
-        // GAME CAMERA
-        gameCamera.init(widthWorldInPixels, heightWorldInPixels);
-        gameCamera.centerOnEntity(player);
     }
 
 //    private boolean isFirstCollide = true;
@@ -353,6 +326,8 @@ public class WorldScene extends Scene {
         transferPointCoolDownElapsedInMillis = 0L;
         canUseTransferPoint = false;
 
+        Entity.replaceEntitiesForNewScene(entities);
+
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
@@ -446,8 +421,10 @@ public class WorldScene extends Scene {
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    private List<Entity> generateEntities() {
-        Entity.CollisionListener collisionListener = new Entity.CollisionListener() {
+    private void initEntities() {
+        Entity.init(widthSpriteDst, heightSpriteDst);
+
+        Entity.CollisionListener collisionListenerNPC = new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
                 if (collided instanceof NonPlayableCharacter) {
@@ -467,7 +444,7 @@ public class WorldScene extends Scene {
                 }
             }
         };
-        Entity.MovementListener movementListener = new Entity.MovementListener() {
+        Entity.MovementListener movementListenerNPC = new Entity.MovementListener() {
             @Override
             public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
                 int xFutureCorner1 = futureCorner1[0];
@@ -487,46 +464,53 @@ public class WorldScene extends Scene {
             }
         };
 
+        // [IMAGES]
+        sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
+        spriteCoin = SpriteInitializer.initCoinSprite(resources);
+        spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
+        spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
+        spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
+        // ENTITIES
         NonPlayableCharacter npcRival = generateNonPlayableCharacter("rival", 3,
                 X_SPAWN_INDEX_RIVAL, Y_SPAWN_INDEX_RIVAL,
                 false, DOWN,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcCoin = generateNonPlayableCharacter("coin", -1,
                 X_SPAWN_INDEX_COIN, Y_SPAWN_INDEX_COIN,
                 true, DOWN,
                 collisionListenerCoin,
-                movementListener);
+                movementListenerNPC);
         NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter("rival leader", 28,
                 X_SPAWN_INDEX_RIVAL_LEADER, Y_SPAWN_INDEX_RIVAL_LEADER,
                 true, LEFT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter("jr trainer", 11,
                 X_SPAWN_INDEX_JR_TRAINER, Y_SPAWN_INDEX_JR_TRAINER,
                 true, LEFT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcLass02 = generateNonPlayableCharacter("lass02", 17,
                 X_SPAWN_INDEX_LASS_02, Y_SPAWN_INDEX_LASS_02,
                 true, RIGHT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcYoungster = generateNonPlayableCharacter("youngster", 10,
                 X_SPAWN_INDEX_YOUNGSTER, Y_SPAWN_INDEX_YOUNGSTER,
                 true, LEFT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcLass01 = generateNonPlayableCharacter("lass01", 17,
                 X_SPAWN_INDEX_LASS_01, Y_SPAWN_INDEX_LASS_01,
                 true, RIGHT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter("bug catcher", 10,
                 X_SPAWN_INDEX_BUG_CATCHER, Y_SPAWN_INDEX_BUG_CATCHER,
                 true, LEFT,
-                collisionListener,
-                movementListener);
+                collisionListenerNPC,
+                movementListenerNPC);
         player = generatePlayer();
 
         entities = new ArrayList<>();
@@ -539,8 +523,6 @@ public class WorldScene extends Scene {
         entities.add(npcLass01);
         entities.add(npcBugCatcher);
         entities.add(player);
-
-        return entities;
     }
 
     private NonPlayableCharacter generateNonPlayableCharacter(String id, int yIndexForSprites,
