@@ -60,8 +60,8 @@ public class WorldScene extends Scene {
     private static final int Y_SPAWN_INDEX_LASS_01 = 28;
     private static final int X_SPAWN_INDEX_BUG_CATCHER = 201;
     private static final int Y_SPAWN_INDEX_BUG_CATCHER = 31;
-    private static final int X_TRANSFER_POINT_INDEX_LAB = X_SPAWN_INDEX_PLAYER + 1;
-    private static final int Y_TRANSFER_POINT_INDEX_LAB = Y_SPAWN_INDEX_PLAYER - 2;
+    private static final int X_TRANSFER_POINT_INDEX_LAB = 239;
+    private static final int Y_TRANSFER_POINT_INDEX_LAB = 5;
     public static int durationOfFrameInMilli = 420;
 
     private static WorldScene instance;
