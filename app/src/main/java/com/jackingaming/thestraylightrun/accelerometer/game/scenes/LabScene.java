@@ -139,22 +139,13 @@ public class LabScene extends Scene {
                     timePrevious = timeNow;
                 }
 
-                if (isWalkableCorner1) {
-                    if (tiles[xIndex1][yIndex1] instanceof TransferPointTile) {
+                if (isWalkableCorner1 && isWalkableCorner2) {
+                    if (tiles[xIndex1][yIndex1] instanceof TransferPointTile &&
+                            tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
                         if (canUseTransferPoint) {
                             String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
                             if (idSceneDestination.equals(WorldScene.TAG)) {
                                 Log.e(TAG, "transfer point: WORLD");
-                                gameListener.onChangeScene(WorldScene.getInstance());
-                                return true;
-                            }
-                        }
-                    }
-                } else if (isWalkableCorner2) {
-                    if (tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
-                        if (canUseTransferPoint) {
-                            String idSceneDestination = ((TransferPointTile) tiles[xIndex2][yIndex2]).getIdSceneDestination();
-                            if (idSceneDestination.equals(WorldScene.TAG)) {
                                 gameListener.onChangeScene(WorldScene.getInstance());
                                 return true;
                             }

@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import java.util.List;
 
 public abstract class Scene {
-    public static final long DEFAULT_TRANSFER_POINT_COOL_DOWN_THRESHOLD_IN_MILLI = 5000L;
+    public static final long DEFAULT_TRANSFER_POINT_COOL_DOWN_THRESHOLD_IN_MILLI = 420L;
 
     protected boolean paused = false;
 
