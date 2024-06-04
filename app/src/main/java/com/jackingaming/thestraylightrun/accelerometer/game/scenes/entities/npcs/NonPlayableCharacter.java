@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.Log;
 
@@ -15,13 +16,16 @@ public class NonPlayableCharacter extends Entity {
     private Random random = new Random();
 
     private String id;
+    private Bitmap portrait;
     private boolean stationary = false;
 
-    public NonPlayableCharacter(String id, Map<Direction, AnimationDrawable> animationsByDirection, Direction directionFacing,
+    public NonPlayableCharacter(String id, Bitmap portrait,
+                                Map<Direction, AnimationDrawable> animationsByDirection, Direction directionFacing,
                                 CollisionListener collisionListener, MovementListener movementListener) {
         super(animationsByDirection, collisionListener, movementListener);
 
         this.id = id;
+        this.portrait = portrait;
         this.direction = directionFacing;
 
         startAnimations();
@@ -233,6 +237,10 @@ public class NonPlayableCharacter extends Entity {
 
     public String getId() {
         return id;
+    }
+
+    public Bitmap getPortrait() {
+        return portrait;
     }
 
     public boolean isStationary() {

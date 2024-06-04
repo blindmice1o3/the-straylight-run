@@ -44,20 +44,36 @@ public class WorldScene extends Scene {
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
     private static final int X_SPAWN_INDEX_PLAYER = 200;
     private static final int Y_SPAWN_INDEX_PLAYER = 34;
+    private static final int X_INDEX_PORTRAIT_RIVAL = 4;
+    private static final int Y_INDEX_PORTRAIT_RIVAL = 5;
     private static final int X_SPAWN_INDEX_RIVAL = 200;
     private static final int Y_SPAWN_INDEX_RIVAL = 12;
+    private static final int X_INDEX_PORTRAIT_COIN = 7;
+    private static final int Y_INDEX_PORTRAIT_COIN = 3;
     private static final int X_SPAWN_INDEX_COIN = 201;
     private static final int Y_SPAWN_INDEX_COIN = 37;
+    private static final int X_INDEX_PORTRAIT_RIVAL_LEADER = 6;
+    private static final int Y_INDEX_PORTRAIT_RIVAL_LEADER = 4;
     private static final int X_SPAWN_INDEX_RIVAL_LEADER = 201;
     private static final int Y_SPAWN_INDEX_RIVAL_LEADER = 15;
+    private static final int X_INDEX_PORTRAIT_JR_TRAINER = 5;
+    private static final int Y_INDEX_PORTRAIT_JR_TRAINER = 1;
     private static final int X_SPAWN_INDEX_JR_TRAINER = 201;
     private static final int Y_SPAWN_INDEX_JR_TRAINER = 19;
+    private static final int X_INDEX_PORTRAIT_LASS_02 = 4;
+    private static final int Y_INDEX_PORTRAIT_LASS_02 = 1;
     private static final int X_SPAWN_INDEX_LASS_02 = 200;
     private static final int Y_SPAWN_INDEX_LASS_02 = 22;
+    private static final int X_INDEX_PORTRAIT_YOUNGSTER = 3;
+    private static final int Y_INDEX_PORTRAIT_YOUNGSTER = 1;
     private static final int X_SPAWN_INDEX_YOUNGSTER = 201;
     private static final int Y_SPAWN_INDEX_YOUNGSTER = 25;
+    private static final int X_INDEX_PORTRAIT_LASS_01 = 4;
+    private static final int Y_INDEX_PORTRAIT_LASS_01 = 1;
     private static final int X_SPAWN_INDEX_LASS_01 = 200;
     private static final int Y_SPAWN_INDEX_LASS_01 = 28;
+    private static final int X_INDEX_PORTRAIT_BUG_CATCHER = 2;
+    private static final int Y_INDEX_PORTRAIT_BUG_CATCHER = 1;
     private static final int X_SPAWN_INDEX_BUG_CATCHER = 201;
     private static final int Y_SPAWN_INDEX_BUG_CATCHER = 31;
     private static final int X_TRANSFER_POINT_INDEX_LAB = 239;
@@ -81,6 +97,7 @@ public class WorldScene extends Scene {
     private long transferPointCoolDownElapsedInMillis = 0L;
     private boolean canUseTransferPoint = true;
 
+    private Bitmap[][] spritesCharactersBattle;
     private Bitmap[][] sprites;
     private Bitmap spriteCoin;
     private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
@@ -172,8 +189,9 @@ public class WorldScene extends Scene {
                     } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
                         pause();
 
+                        Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
                         gameListener.onShowDialogFragment(
-                                instantiateRivalLeaderDialogFragment(gameListener),
+                                instantiateRivalLeaderDialogFragment(portrait, gameListener),
                                 "RivalLeaderDialogFragment"
                         );
                     }
@@ -465,48 +483,65 @@ public class WorldScene extends Scene {
         };
 
         // [IMAGES]
+        spritesCharactersBattle = SpriteInitializer.initSpritesCharactersBattle(resources, widthSpriteDst, heightSpriteDst);
         sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
         spriteCoin = SpriteInitializer.initCoinSprite(resources);
         spriteTileSolid = SpriteInitializer.initSolidTileSprite(resources);
         spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
         spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
         // ENTITIES
-        NonPlayableCharacter npcRival = generateNonPlayableCharacter("rival", 3,
+        NonPlayableCharacter npcRival = generateNonPlayableCharacter("rival",
+                X_INDEX_PORTRAIT_RIVAL, Y_INDEX_PORTRAIT_RIVAL,
+                3,
                 X_SPAWN_INDEX_RIVAL, Y_SPAWN_INDEX_RIVAL,
                 false, DOWN,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcCoin = generateNonPlayableCharacter("coin", -1,
+        NonPlayableCharacter npcCoin = generateNonPlayableCharacter("coin",
+                X_INDEX_PORTRAIT_COIN, Y_INDEX_PORTRAIT_COIN,
+                -1,
                 X_SPAWN_INDEX_COIN, Y_SPAWN_INDEX_COIN,
                 true, DOWN,
                 collisionListenerCoin,
                 movementListenerNPC);
-        NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter("rival leader", 28,
+        NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter("rival leader",
+                X_INDEX_PORTRAIT_RIVAL_LEADER, Y_INDEX_PORTRAIT_RIVAL_LEADER,
+                28,
                 X_SPAWN_INDEX_RIVAL_LEADER, Y_SPAWN_INDEX_RIVAL_LEADER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter("jr trainer", 11,
+        NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter("jr trainer",
+                X_INDEX_PORTRAIT_JR_TRAINER, Y_INDEX_PORTRAIT_JR_TRAINER,
+                11,
                 X_SPAWN_INDEX_JR_TRAINER, Y_SPAWN_INDEX_JR_TRAINER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass02 = generateNonPlayableCharacter("lass02", 17,
+        NonPlayableCharacter npcLass02 = generateNonPlayableCharacter("lass02",
+                X_INDEX_PORTRAIT_LASS_02, Y_INDEX_PORTRAIT_LASS_02,
+                17,
                 X_SPAWN_INDEX_LASS_02, Y_SPAWN_INDEX_LASS_02,
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcYoungster = generateNonPlayableCharacter("youngster", 10,
+        NonPlayableCharacter npcYoungster = generateNonPlayableCharacter("youngster",
+                X_INDEX_PORTRAIT_YOUNGSTER, Y_INDEX_PORTRAIT_YOUNGSTER,
+                10,
                 X_SPAWN_INDEX_YOUNGSTER, Y_SPAWN_INDEX_YOUNGSTER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass01 = generateNonPlayableCharacter("lass01", 17,
+        NonPlayableCharacter npcLass01 = generateNonPlayableCharacter("lass01",
+                X_INDEX_PORTRAIT_LASS_01, Y_INDEX_PORTRAIT_LASS_01,
+                17,
                 X_SPAWN_INDEX_LASS_01, Y_SPAWN_INDEX_LASS_01,
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter("bug catcher", 10,
+        NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter("bug catcher",
+                X_INDEX_PORTRAIT_BUG_CATCHER, Y_INDEX_PORTRAIT_BUG_CATCHER,
+                10,
                 X_SPAWN_INDEX_BUG_CATCHER, Y_SPAWN_INDEX_BUG_CATCHER,
                 true, LEFT,
                 collisionListenerNPC,
@@ -525,7 +560,9 @@ public class WorldScene extends Scene {
         entities.add(player);
     }
 
-    private NonPlayableCharacter generateNonPlayableCharacter(String id, int yIndexForSprites,
+    private NonPlayableCharacter generateNonPlayableCharacter(String id,
+                                                              int xIndexForPortrait, int yIndexForPortrait,
+                                                              int yIndexForSprites,
                                                               int xIndexSpawn, int yIndexSpawn,
                                                               boolean isStationary, Direction directionFacing,
                                                               Entity.CollisionListener entityCollisionListener,
@@ -594,6 +631,7 @@ public class WorldScene extends Scene {
         animationsByDirection.put(LEFT, animationDrawableLeft);
         animationsByDirection.put(RIGHT, animationDrawableRight);
         NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
+                spritesCharactersBattle[xIndexForPortrait][yIndexForPortrait],
                 animationsByDirection,
                 directionFacing,
                 entityCollisionListener,
@@ -652,11 +690,11 @@ public class WorldScene extends Scene {
 
     private TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader = null;
 
-    private TypeWriterDialogFragment instantiateRivalLeaderDialogFragment(Game.GameListener gameListener) {
+    private TypeWriterDialogFragment instantiateRivalLeaderDialogFragment(Bitmap portrait, Game.GameListener gameListener) {
         String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
 
         typeWriterDialogFragmentRivalLeader =
-                TypeWriterDialogFragment.newInstance(50L, message, new TypeWriterDialogFragment.DismissListener() {
+                TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
@@ -746,14 +784,25 @@ public class WorldScene extends Scene {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     static class SpriteInitializer {
-        private static final int WIDTH_SPRITE_SHEET_ACTUAL = 187;
-        private static final int HEIGHT_SPRITE_SHEET_ACTUAL = 1188;
-        private static final int COLUMNS = 10;
-        private static final int ROWS = 56; // section: Characters
+        //  Battle
+        private static final int WIDTH_SPRITE_SHEET_ACTUAL_BATTLE = 520;
+        private static final int HEIGHT_SPRITE_SHEET_ACTUAL_BATTLE = 888;
+        private static final int COLUMNS_BATTLE = 8;
+        private static final int ROWS_BATTLE = 6;
+        private static final int X_MARGIN_BATTLE = 8;
+        private static final int Y_MARGIN_BATTLE = 8;
+        private static final int WIDTH_SPRITE_BATTLE = 56;
+        private static final int HEIGHT_SPRITE_BATTLE = 56;
+
+        // Overworld
+        private static final int WIDTH_SPRITE_SHEET_ACTUAL_OVERWORLD = 187;
+        private static final int HEIGHT_SPRITE_SHEET_ACTUAL_OVERWORLD = 1188;
+        private static final int COLUMNS_OVERWORLD = 10;
+        private static final int ROWS_OVERWORLD = 56;
         private static final int X_OFFSET_INIT = 9;
         private static final int Y_OFFSET_INIT = 34;
-        private static final int WIDTH_SPRITE = 16;
-        private static final int HEIGHT_SPRITE = 16;
+        private static final int WIDTH_SPRITE_OVERWORLD = 16;
+        private static final int HEIGHT_SPRITE_OVERWORLD = 16;
         private static final int WIDTH_DIVIDER = 1;
         private static final int HEIGHT_DIVIDER = 1;
 
@@ -764,22 +813,54 @@ public class WorldScene extends Scene {
         private static final int xBoulderTile = 112;
         private static final int yBoulderTile = 1088;
 
+        private static Bitmap[][] initSpritesCharactersBattle(Resources resources, int widthSpriteDst, int heightSpriteDst) {
+            Bitmap[][] spritesCharacterBattle = new Bitmap[8][6];
+
+            Bitmap spriteSheetCharacterBattle = BitmapFactory.decodeResource(resources,
+                    R.drawable.gbc_pokemon_red_blue_characters_battle);
+
+            float ratioHorizontal = (float) spriteSheetCharacterBattle.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL_BATTLE;
+            float ratioVertical = (float) spriteSheetCharacterBattle.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL_BATTLE;
+
+            int widthSpriteConverted = (int) (WIDTH_SPRITE_BATTLE * ratioHorizontal);
+            int heightSpriteConverted = (int) (HEIGHT_SPRITE_BATTLE * ratioVertical);
+
+            int yOffset = Y_MARGIN_BATTLE;
+            int xOffset = X_MARGIN_BATTLE;
+            for (int i = 0; i < COLUMNS_BATTLE; i++) {
+                for (int j = 0; j < ROWS_BATTLE; j++) {
+                    int xOffsetConverted = (int) (xOffset * ratioHorizontal);
+                    int yOffsetConverted = (int) (yOffset * ratioVertical);
+
+                    Bitmap sprite = Bitmap.createBitmap(spriteSheetCharacterBattle,
+                            xOffsetConverted, yOffsetConverted, widthSpriteConverted, heightSpriteConverted);
+                    spritesCharacterBattle[i][j] = Bitmap.createScaledBitmap(sprite, widthSpriteDst, heightSpriteDst, true);
+
+                    yOffset += (HEIGHT_SPRITE_BATTLE + Y_MARGIN_BATTLE);
+                }
+                yOffset = Y_MARGIN_BATTLE;
+                xOffset += (WIDTH_SPRITE_BATTLE + X_MARGIN_BATTLE);
+            }
+
+            return spritesCharacterBattle;
+        }
+
         public static Bitmap[][] initSprites(Resources resources, int widthSpriteDst, int heightSpriteDst) {
-            Bitmap[][] sprites = new Bitmap[COLUMNS][ROWS];
+            Bitmap[][] sprites = new Bitmap[COLUMNS_OVERWORLD][ROWS_OVERWORLD];
 
             Bitmap spriteSheet = BitmapFactory.decodeResource(resources,
                     R.drawable.gbc_pokemon_red_blue_characters_overworld);
 
-            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
-            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
+            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL_OVERWORLD;
+            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL_OVERWORLD;
 
-            int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
-            int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
+            int widthSpriteConverted = (int) (WIDTH_SPRITE_OVERWORLD * ratioHorizontal);
+            int heightSpriteConverted = (int) (HEIGHT_SPRITE_OVERWORLD * ratioVertical);
 
             int yOffset = Y_OFFSET_INIT;
             int xOffset = X_OFFSET_INIT;
-            for (int i = 0; i < COLUMNS; i++) {
-                for (int j = 0; j < ROWS; j++) {
+            for (int i = 0; i < COLUMNS_OVERWORLD; i++) {
+                for (int j = 0; j < ROWS_OVERWORLD; j++) {
                     int xOffsetConverted = (int) (xOffset * ratioHorizontal);
                     int yOffsetConverted = (int) (yOffset * ratioVertical);
 
@@ -787,10 +868,10 @@ public class WorldScene extends Scene {
                             xOffsetConverted, yOffsetConverted, widthSpriteConverted, heightSpriteConverted);
                     sprites[i][j] = Bitmap.createScaledBitmap(sprite, widthSpriteDst, heightSpriteDst, true);
 
-                    yOffset += (HEIGHT_SPRITE + HEIGHT_DIVIDER);
+                    yOffset += (HEIGHT_SPRITE_OVERWORLD + HEIGHT_DIVIDER);
                 }
                 yOffset = Y_OFFSET_INIT;
-                xOffset += (WIDTH_SPRITE + WIDTH_DIVIDER);
+                xOffset += (WIDTH_SPRITE_OVERWORLD + WIDTH_DIVIDER);
             }
 
             return sprites;
@@ -819,11 +900,11 @@ public class WorldScene extends Scene {
             Bitmap spriteSheet = BitmapFactory.decodeResource(resources,
                     R.drawable.gbc_pokemon_red_blue_characters_overworld);
 
-            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL;
-            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL;
+            float ratioHorizontal = (float) spriteSheet.getWidth() / WIDTH_SPRITE_SHEET_ACTUAL_OVERWORLD;
+            float ratioVertical = (float) spriteSheet.getHeight() / HEIGHT_SPRITE_SHEET_ACTUAL_OVERWORLD;
 
-            int widthSpriteConverted = (int) (WIDTH_SPRITE * ratioHorizontal);
-            int heightSpriteConverted = (int) (HEIGHT_SPRITE * ratioVertical);
+            int widthSpriteConverted = (int) (WIDTH_SPRITE_OVERWORLD * ratioHorizontal);
+            int heightSpriteConverted = (int) (HEIGHT_SPRITE_OVERWORLD * ratioVertical);
 
             Bitmap tileWalkable = Bitmap.createBitmap(spriteSheet,
                     (int) (xTile * ratioHorizontal), (int) (yTile * ratioVertical),

@@ -1,12 +1,15 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +18,13 @@ import androidx.fragment.app.DialogFragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
 public class TypeWriterDialogFragment extends DialogFragment {
     public static final String TAG = TypeWriterDialogFragment.class.getSimpleName();
     public static final String ARG_DELAY = "delay";
+    public static final String ARG_PORTRAIT = "portrait";
     public static final String ARG_TEXT = "text";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
     public static final String ARG_TEXT_COMPLETION_LISTENER = "textCompletionListener";
@@ -30,18 +35,27 @@ public class TypeWriterDialogFragment extends DialogFragment {
 
     private DismissListener dismissListener;
 
+    private ImageView ivEntityPortrait;
     private TypeWriterTextView tvTypeWriter;
     private long delay;
+    private Bitmap portrait;
     private String text;
     private TypeWriterTextView.TextCompletionListener textCompletionListener;
 
-    public static TypeWriterDialogFragment newInstance(long delay, String text,
+    public static TypeWriterDialogFragment newInstance(long delay, Bitmap portrait, String text,
                                                        DismissListener dismissListener,
                                                        TypeWriterTextView.TextCompletionListener textCompletionListener) {
         TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
 
+
         Bundle args = new Bundle();
         args.putLong(ARG_DELAY, delay);
+        // @@@ Bitmap portrait (convert to ByteArray) @@@
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        portrait.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArrayPortrait = stream.toByteArray();
+        args.putByteArray(ARG_PORTRAIT, byteArrayPortrait);
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         args.putString(ARG_TEXT, text);
         args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         args.putSerializable(ARG_TEXT_COMPLETION_LISTENER, textCompletionListener);
@@ -55,6 +69,10 @@ public class TypeWriterDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         delay = getArguments().getLong(ARG_DELAY);
+        // @@@ Bitmap portrait (convert from ByteArray) @@@
+        byte[] byteArrayPortrait = getArguments().getByteArray(ARG_PORTRAIT);
+        portrait = BitmapFactory.decodeByteArray(byteArrayPortrait, 0, byteArrayPortrait.length);
+        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         text = getArguments().getString(ARG_TEXT);
         dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
@@ -76,6 +94,8 @@ public class TypeWriterDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
+        ivEntityPortrait = view.findViewById(R.id.iv_entity_portrait);
+        ivEntityPortrait.setImageBitmap(portrait);
         tvTypeWriter = view.findViewById(R.id.tv_type_writer);
         tvTypeWriter.setTextCompletionListener(textCompletionListener);
         tvTypeWriter.setCharacterDelay(delay);
