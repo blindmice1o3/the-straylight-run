@@ -17,6 +17,8 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -126,7 +128,13 @@ public class LabScene extends Scene {
 
                 if (collided instanceof NonPlayableCharacter) {
                     if (((NonPlayableCharacter) collided).getId().equals("scientist")) {
-                        soundManager.sfxPlay(soundManager.sfxGetItem);
+                        pause();
+
+                        Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
+                        gameListener.onShowDialogFragment(
+                                instantiateScientistDialogFragment(portrait, gameListener),
+                                "ScientistDialogFragment"
+                        );
                     }
                 }
             }
@@ -439,6 +447,45 @@ public class LabScene extends Scene {
         }
 
         return nonPlayableCharacter;
+    }
+
+    private TypeWriterDialogFragment typeWriterDialogFragmentScientist = null;
+
+    private TypeWriterDialogFragment instantiateScientistDialogFragment(Bitmap portrait, Game.GameListener gameListener) {
+        String message = "Hello there! Welcome to the world of JAVA! My name is FOO BAR! People call me the JAVA PROF! This world is inhabited by creatures called OBJECT! For some people, OBJECT are pets. Others use them for fights. Myself... I study OBJECT as a profession. First, what is your name?";
+
+        typeWriterDialogFragmentScientist =
+                TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+
+                                unpause();
+                            }
+                        },
+                        new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+
+                                // TODO:
+                            }
+                        });
+        return typeWriterDialogFragmentScientist;
+    }
+
+    private void pause() {
+        Log.e(TAG, "pause()");
+
+        paused = true;
+        stopEntityAnimations();
+    }
+
+    private void unpause() {
+        Log.e(TAG, "unpause()");
+
+        paused = false;
+        startEntityAnimations();
     }
 
     private void stopEntityAnimations() {
