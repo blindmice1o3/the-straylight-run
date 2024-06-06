@@ -35,9 +35,11 @@ public class Game {
 
         void onChangeScene(Scene sceneNext);
 
-        void switchVisibilityOfNPCsToGone();
+        void instantiateImageViewForEntities(List<Entity> entitiesToAdd);
 
-        void switchVisibilityOfNPCsToVisible();
+        void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst);
+
+        void removeImageViewOfEntityFromFrameLayout();
     }
 
     private SurfaceHolder holder;
@@ -135,14 +137,6 @@ public class Game {
 
     public GameCamera getGameCamera() {
         return gameCamera;
-    }
-
-    public int getWidthSpriteDst() {
-        return widthSpriteDst;
-    }
-
-    public int getHeightSpriteDst() {
-        return heightSpriteDst;
     }
 
     public Scene getSceneCurrent() {

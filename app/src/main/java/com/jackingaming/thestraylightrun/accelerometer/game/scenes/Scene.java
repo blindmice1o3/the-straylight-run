@@ -2,6 +2,8 @@ package com.jackingaming.thestraylightrun.accelerometer.game.scenes;
 
 import android.graphics.Canvas;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
+
 import java.util.List;
 
 public abstract class Scene {
@@ -20,4 +22,6 @@ public abstract class Scene {
     public abstract boolean isPaused();
 
     public abstract boolean checkIsWalkableTile(int x, int y);
+
+    public abstract List<Entity> getEntities();
 }

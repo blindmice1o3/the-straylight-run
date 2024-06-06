@@ -315,19 +315,17 @@ public class WorldScene extends Scene {
     @Override
     public List<Object> exit() {
         Log.e(TAG, "exit()");
-
-        xBeforeTransfer = player.getxPos();
-        Log.e(TAG, "xBeforeTransfer: " + xBeforeTransfer);
-        yBeforeTransfer = player.getyPos();
-        Log.e(TAG, "yBeforeTransfer: " + yBeforeTransfer);
-
         hadBeenTransferred = true;
 
+        xBeforeTransfer = player.getxPos();
+        yBeforeTransfer = player.getyPos();
+
         stopEntityAnimations();
+
         handler.post(new Runnable() {
             @Override
             public void run() {
-                gameListener.switchVisibilityOfNPCsToGone();
+                gameListener.removeImageViewOfEntityFromFrameLayout();
             }
         });
 
@@ -339,17 +337,22 @@ public class WorldScene extends Scene {
 
     @Override
     public void enter(List<Object> args) {
-        Log.e(TAG, "enter() widthWorldInPixels: " + widthWorldInPixels);
-        Log.e(TAG, "enter() heightWorldInPixels: " + heightWorldInPixels);
+        Log.e(TAG, "enter()");
         transferPointCoolDownElapsedInMillis = 0L;
         canUseTransferPoint = false;
 
         Entity.replaceEntitiesForNewScene(entities);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.instantiateImageViewForEntities(entities);
+                gameListener.addImageViewOfEntityToFrameLayout(widthSpriteDst, heightSpriteDst);
+            }
+        });
 
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
-        Log.e(TAG, "xBeforeTransfer < 0 == " + Boolean.toString(xBeforeTransfer < 0));
         if (xBeforeTransfer < 0) {
             player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
             player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
@@ -357,31 +360,11 @@ public class WorldScene extends Scene {
             player.setxPos(xBeforeTransfer);
             player.setyPos(yBeforeTransfer);
         }
-        Log.e(TAG, "player.getxPos(): " + player.getxPos());
-        Log.e(TAG, "player.getyPos(): " + player.getyPos());
 
         // GAME CAMERA
         gameCamera.init(widthWorldInPixels, heightWorldInPixels);
-        gameCamera.centerOnEntity(player);
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                gameListener.onUpdateEntity(player);
-            }
-        });
-
-        Log.e(TAG, "gameCamera.xoffset: " + gameCamera.getxOffset());
-        Log.e(TAG, "gameCamera.yoffset: " + gameCamera.getyOffset());
-        Log.e(TAG, "widthSpriteDst: " + widthSpriteDst);
 
         startEntityAnimations();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                gameListener.switchVisibilityOfNPCsToVisible();
-            }
-        });
     }
 
     @Override
@@ -398,6 +381,11 @@ public class WorldScene extends Scene {
         Tile tile = tiles[x][y];
         boolean isWalkable = !tile.isSolid();
         return isWalkable;
+    }
+
+    @Override
+    public List<Entity> getEntities() {
+        return entities;
     }
 
     private void updateGameEntities(float xDelta, float yDelta) {
@@ -775,10 +763,6 @@ public class WorldScene extends Scene {
 
     public Player getPlayer() {
         return player;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////

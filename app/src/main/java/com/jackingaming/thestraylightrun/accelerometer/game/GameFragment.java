@@ -33,7 +33,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFra
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
@@ -117,6 +116,8 @@ public class GameFragment extends Fragment
         }
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        imageViewViaEntity = new HashMap<>();
     }
 
     @Override
@@ -303,57 +304,66 @@ public class GameFragment extends Fragment
             }
 
             @Override
-            public void switchVisibilityOfNPCsToGone() {
-                for (Entity e : imageViewViaEntity.keySet()) {
-                    if (e instanceof NonPlayableCharacter) {
-                        ImageView ivEntity = imageViewViaEntity.get(e);
-                        ivEntity.setVisibility(View.GONE);
-                    }
-                }
+            public void instantiateImageViewForEntities(List<Entity> entitiesToAdd) {
+                GameFragment.this.instantiateImageViewForEntities(
+                        game.getSceneCurrent().getEntities()
+                );
             }
 
             @Override
-            public void switchVisibilityOfNPCsToVisible() {
-                for (Entity e : imageViewViaEntity.keySet()) {
-                    if (e instanceof NonPlayableCharacter) {
-                        ImageView ivEntity = imageViewViaEntity.get(e);
-                        ivEntity.setVisibility(View.VISIBLE);
-                    }
-                }
+            public void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst) {
+                GameFragment.this.addImageViewOfEntityToFrameLayout(widthSpriteDst, heightSpriteDst);
+            }
+
+            @Override
+            public void removeImageViewOfEntityFromFrameLayout() {
+                GameFragment.this.removeImageViewOfEntityFromFrameLayout();
             }
         });
 
-        // TODO: ModelToViewMapper
-        if (game.getSceneCurrent() instanceof WorldScene) {
-            List<Entity> entitiesFromGame = ((WorldScene) game.getSceneCurrent()).getEntities();
-            imageViewViaEntity = new HashMap<>();
-            for (Entity e : entitiesFromGame) {
-                ImageView imageView = new ImageView(getContext());
-                imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
-//                if (e instanceof Player) {
-//                    player = (Player) e;
-//                } else {
-                if (!(e instanceof Player)) {
-                    imageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            for (Entity e : imageViewViaEntity.keySet()) {
-                                if (imageViewViaEntity.get(e) == view) {
-                                    ((NonPlayableCharacter) e).toggleStationary();
-                                }
+//        // TODO: ModelToViewMapper
+//        List<Entity> entitiesToAdd = game.getSceneCurrent().getEntities();
+//        instantiateImageViewForEntities(entitiesToAdd);
+//        addImageViewOfEntityToFrameLayout(game.getWidthSpriteDst(), game.getHeightSpriteDst());
+    }
+
+    private void instantiateImageViewForEntities(List<Entity> entitiesToAdd) {
+        for (Entity e : entitiesToAdd) {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
+            if (!(e instanceof Player)) {
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        for (Entity e : imageViewViaEntity.keySet()) {
+                            if (imageViewViaEntity.get(e) == view) {
+                                ((NonPlayableCharacter) e).toggleStationary();
                             }
                         }
-                    });
-                }
-                imageViewViaEntity.put(e, imageView);
+                    }
+                });
             }
-            // TODO: View
-            int widthSpriteDst = game.getWidthSpriteDst();
-            int heightSpriteDst = game.getHeightSpriteDst();
-            for (ImageView imageView : imageViewViaEntity.values()) {
-                frameLayout.addView(imageView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
-            }
+            imageViewViaEntity.put(e, imageView);
         }
+    }
+
+    private void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst) {
+        // TODO: View
+        for (Entity e : imageViewViaEntity.keySet()) {
+            ImageView ivToAdd = imageViewViaEntity.get(e);
+            frameLayout.addView(ivToAdd, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+        }
+        frameLayout.invalidate();
+    }
+
+    private void removeImageViewOfEntityFromFrameLayout() {
+        for (Entity e : imageViewViaEntity.keySet()) {
+            ImageView ivToRemove = imageViewViaEntity.get(e);
+            frameLayout.removeView(ivToRemove);
+        }
+        frameLayout.invalidate();
+
+        imageViewViaEntity.clear();
     }
 
     @Override
