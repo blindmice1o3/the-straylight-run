@@ -81,8 +81,8 @@ public class GameCamera {
     }
 
     public void centerOnEntity(Entity e) {
-        xOffset = e.getxPos() - (widthDeviceScreen / 2) + (e.getWidthSpriteDst() / 2);
-        yOffset = e.getyPos() - (heightDeviceScreen / 2) + (e.getHeightSpriteDst() / 2);
+        xOffset = e.getXPos() - (widthDeviceScreen / 2) + (e.getWidthSpriteDst() / 2);
+        yOffset = e.getYPos() - (heightDeviceScreen / 2) + (e.getHeightSpriteDst() / 2);
 
         checkBlankSpace();
     }

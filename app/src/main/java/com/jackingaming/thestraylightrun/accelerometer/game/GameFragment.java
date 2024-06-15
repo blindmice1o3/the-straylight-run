@@ -274,8 +274,8 @@ public class GameFragment extends Fragment
                 }
 
                 // POSITION
-                ivEntity.setX(e.getxPos() - game.getGameCamera().getxOffset());
-                ivEntity.setY(e.getyPos() - game.getGameCamera().getyOffset());
+                ivEntity.setX(e.getXPos() - game.getGameCamera().getxOffset());
+                ivEntity.setY(e.getYPos() - game.getGameCamera().getyOffset());
 
                 ivEntity.invalidate();
             }

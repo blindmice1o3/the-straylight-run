@@ -234,8 +234,8 @@ public class LabScene extends Scene {
     public List<Object> exit() {
         Log.e(TAG, "exit()");
 
-        xBeforeTransfer = player.getxPos();
-        yBeforeTransfer = player.getyPos();
+        xBeforeTransfer = player.getXPos();
+        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -271,11 +271,11 @@ public class LabScene extends Scene {
         player.setMovementListener(movementListenerPlayer);
 
         if (xBeforeTransfer < 0) {
-            player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-            player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+            player.setXPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+            player.setYPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
         } else {
-            player.setxPos(xBeforeTransfer);
-            player.setyPos(yBeforeTransfer);
+            player.setXPos(xBeforeTransfer);
+            player.setYPos(yBeforeTransfer);
         }
 
         // GAME CAMERA
@@ -328,17 +328,17 @@ public class LabScene extends Scene {
     }
 
     private void validatePosition(Entity e) {
-        if (e.getxPos() < 0) {
-            e.setxPos(0);
+        if (e.getXPos() < 0) {
+            e.setXPos(0);
         }
-        if (e.getxPos() > widthWorldInPixels) {
-            e.setxPos(widthWorldInPixels);
+        if (e.getXPos() > widthWorldInPixels) {
+            e.setXPos(widthWorldInPixels);
         }
-        if (e.getyPos() < 0) {
-            e.setyPos(0);
+        if (e.getYPos() < 0) {
+            e.setYPos(0);
         }
-        if (e.getyPos() > heightWorldInPixels) {
-            e.setyPos(heightWorldInPixels);
+        if (e.getYPos() > heightWorldInPixels) {
+            e.setYPos(heightWorldInPixels);
         }
     }
 
@@ -440,8 +440,8 @@ public class LabScene extends Scene {
                 entityCollisionListener,
                 entityMovementListener);
 
-        nonPlayableCharacter.setxPos(xIndexSpawn * widthSpriteDst);
-        nonPlayableCharacter.setyPos(yIndexSpawn * heightSpriteDst);
+        nonPlayableCharacter.setXPos(xIndexSpawn * widthSpriteDst);
+        nonPlayableCharacter.setYPos(yIndexSpawn * heightSpriteDst);
         if (isStationary) {
             nonPlayableCharacter.turnStationaryOn();
         }

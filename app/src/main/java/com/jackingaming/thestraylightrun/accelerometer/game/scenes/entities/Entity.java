@@ -86,10 +86,10 @@ public abstract class Entity {
                 continue;
             }
 
-            if (xPos + xDelta + 1 < e.getxPos() + Entity.getWidthSpriteDst() &&
-                    xPos + xDelta + Entity.getWidthSpriteDst() - 1 > e.getxPos() &&
-                    yPos + yDelta < e.getyPos() + 1 + Entity.getHeightSpriteDst() &&
-                    yPos + yDelta + Entity.getHeightSpriteDst() - 1 > e.getyPos()) {
+            if (xPos + xDelta + 1 < e.getXPos() + Entity.getWidthSpriteDst() &&
+                    xPos + xDelta + Entity.getWidthSpriteDst() - 1 > e.getXPos() &&
+                    yPos + yDelta < e.getYPos() + 1 + Entity.getHeightSpriteDst() &&
+                    yPos + yDelta + Entity.getHeightSpriteDst() - 1 > e.getYPos()) {
 
                 /////////////////////////////////////////////////
                 e.collided(this);
@@ -121,19 +121,19 @@ public abstract class Entity {
         this.collisionListener = collisionListener;
     }
 
-    public float getxPos() {
+    public float getXPos() {
         return xPos;
     }
 
-    public void setxPos(float xPos) {
+    public void setXPos(float xPos) {
         this.xPos = xPos;
     }
 
-    public float getyPos() {
+    public float getYPos() {
         return yPos;
     }
 
-    public void setyPos(float yPos) {
+    public void setYPos(float yPos) {
         this.yPos = yPos;
     }
 

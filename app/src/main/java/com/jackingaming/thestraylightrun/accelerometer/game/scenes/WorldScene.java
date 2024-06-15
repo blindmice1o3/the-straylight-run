@@ -5,6 +5,8 @@ import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entiti
 import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.RIGHT;
 import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.UP;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +17,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+
+import androidx.annotation.NonNull;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
@@ -165,6 +170,60 @@ public class WorldScene extends Scene {
                         soundManager.sfxPlay(soundManager.sfxGetItem);
                         player.setSpeedBonus(4.0f);
 
+                        // bounce coin based on player's direction.
+                        float xStartCoin = collided.getXPos();
+                        float yStartCoin = collided.getYPos();
+                        float xEndCoin = xStartCoin;
+                        float yEndCoin = yStartCoin;
+                        float numberOfTile = 3f;
+                        switch (player.getDirection()) {
+                            case LEFT:
+                                xEndCoin = xStartCoin - (numberOfTile * widthSpriteDst);
+                                break;
+                            case UP:
+                                yEndCoin = yStartCoin - (numberOfTile * heightSpriteDst);
+                                break;
+                            case RIGHT:
+                                xEndCoin = xStartCoin + (numberOfTile * widthSpriteDst);
+                                break;
+                            case DOWN:
+                                yEndCoin = yStartCoin + (numberOfTile * heightSpriteDst);
+                                break;
+                        }
+
+                        String propertyName = null;
+                        float endValue = -1f;
+                        if (player.getDirection() == LEFT || player.getDirection() == RIGHT) {
+                            propertyName = "xPos";
+                            endValue = xEndCoin;
+                        } else {
+                            propertyName = "yPos";
+                            endValue = yEndCoin;
+                        }
+
+                        ObjectAnimator animator = ObjectAnimator.ofFloat(collided,
+                                propertyName, endValue);
+                        animator.setInterpolator(new BounceInterpolator());
+//                        animator.setRepeatCount(ValueAnimator.INFINITE);
+//                        animator.setRepeatMode(ValueAnimator.REVERSE);
+                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        gameListener.onUpdateEntity(collided);
+                                    }
+                                });
+                            }
+                        });
+                        animator.setDuration(1000L);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                animator.start();
+                            }
+                        });
 //                        if (isFirstCollide) {
 //                            handler.post(new Runnable() {
 //                                @Override
@@ -266,8 +325,8 @@ public class WorldScene extends Scene {
             player.setCollisionListener(collisionListenerPlayer);
             player.setMovementListener(movementListenerPlayer);
 
-            player.setxPos(xBeforeTransfer);
-            player.setyPos(yBeforeTransfer);
+            player.setXPos(xBeforeTransfer);
+            player.setYPos(yBeforeTransfer);
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -317,8 +376,8 @@ public class WorldScene extends Scene {
         Log.e(TAG, "exit()");
         hadBeenTransferred = true;
 
-        xBeforeTransfer = player.getxPos();
-        yBeforeTransfer = player.getyPos();
+        xBeforeTransfer = player.getXPos();
+        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -354,11 +413,11 @@ public class WorldScene extends Scene {
         player.setMovementListener(movementListenerPlayer);
 
         if (xBeforeTransfer < 0) {
-            player.setxPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-            player.setyPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+            player.setXPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+            player.setYPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
         } else {
-            player.setxPos(xBeforeTransfer);
-            player.setyPos(yBeforeTransfer);
+            player.setXPos(xBeforeTransfer);
+            player.setYPos(yBeforeTransfer);
         }
 
         // GAME CAMERA
@@ -411,17 +470,17 @@ public class WorldScene extends Scene {
     }
 
     private void validatePosition(Entity e) {
-        if (e.getxPos() < 0) {
-            e.setxPos(0);
+        if (e.getXPos() < 0) {
+            e.setXPos(0);
         }
-        if (e.getxPos() > widthWorldInPixels) {
-            e.setxPos(widthWorldInPixels);
+        if (e.getXPos() > widthWorldInPixels) {
+            e.setXPos(widthWorldInPixels);
         }
-        if (e.getyPos() < 0) {
-            e.setyPos(0);
+        if (e.getYPos() < 0) {
+            e.setYPos(0);
         }
-        if (e.getyPos() > heightWorldInPixels) {
-            e.setyPos(heightWorldInPixels);
+        if (e.getYPos() > heightWorldInPixels) {
+            e.setYPos(heightWorldInPixels);
         }
     }
 
@@ -446,6 +505,8 @@ public class WorldScene extends Scene {
             @Override
             public void onJustCollided(Entity collided) {
                 if (collided instanceof Player) {
+                    Log.e(TAG, "coin hit player!!!");
+
                     soundManager.sfxPlay(soundManager.sfxHorn);
                 }
             }
@@ -625,8 +686,8 @@ public class WorldScene extends Scene {
                 entityCollisionListener,
                 entityMovementListener);
 
-        nonPlayableCharacter.setxPos(xIndexSpawn * widthSpriteDst);
-        nonPlayableCharacter.setyPos(yIndexSpawn * heightSpriteDst);
+        nonPlayableCharacter.setXPos(xIndexSpawn * widthSpriteDst);
+        nonPlayableCharacter.setYPos(yIndexSpawn * heightSpriteDst);
         if (isStationary) {
             nonPlayableCharacter.turnStationaryOn();
         }
