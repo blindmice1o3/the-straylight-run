@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/options_item_sandbox"
+        android:icon="@drawable/ic_menu_copy"
+        android:title="sandbox"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/options_item_sprite_sheet_clip_selector"
         android:icon="@drawable/ic_menu_find"
         android:title="sprite sheet 3.0"

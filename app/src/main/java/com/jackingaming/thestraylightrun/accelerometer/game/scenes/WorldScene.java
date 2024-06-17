@@ -201,12 +201,12 @@ public class WorldScene extends Scene {
                             endValue = yEndCoin;
                         }
 
-                        ObjectAnimator animator = ObjectAnimator.ofFloat(collided,
+                        ObjectAnimator animatorPosition = ObjectAnimator.ofFloat(collided,
                                 propertyName, endValue);
-                        animator.setInterpolator(new BounceInterpolator());
-//                        animator.setRepeatCount(ValueAnimator.INFINITE);
-//                        animator.setRepeatMode(ValueAnimator.REVERSE);
-                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        animatorPosition.setInterpolator(new BounceInterpolator());
+//                        animatorPosition.setRepeatCount(ValueAnimator.INFINITE);
+//                        animatorPosition.setRepeatMode(ValueAnimator.REVERSE);
+                        animatorPosition.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             @Override
                             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                                 handler.post(new Runnable() {
@@ -217,11 +217,11 @@ public class WorldScene extends Scene {
                                 });
                             }
                         });
-                        animator.setDuration(1000L);
+                        animatorPosition.setDuration(1000L);
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                animator.start();
+                                animatorPosition.start();
                             }
                         });
 //                        if (isFirstCollide) {
