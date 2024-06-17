@@ -2,9 +2,9 @@ package com.jackingaming.thestraylightrun.sandbox;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +13,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.animation.ArgbEvaluatorCompat;
 import com.jackingaming.thestraylightrun.R;
 
 import java.util.Random;
@@ -77,51 +75,62 @@ public class SandboxFragment extends Fragment {
 
     private Random random;
     private ValueAnimator animatorColor;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private int colorEnd;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvGreeting = view.findViewById(R.id.tv_greeting);
 
-        // ref: https://stackoverflow.com/questions/40422340/is-it-possible-to-change-start-end-values-of-valueanimator-on-animation-repeat
+        // ref1: https://stackoverflow.com/questions/40422340/is-it-possible-to-change-start-end-values-of-valueanimator-on-animation-repeat
+        // ref2: https://stackoverflow.com/questions/18216285/android-animate-color-change-from-color-to-color/24641977#24641977
         random = new Random();
-        float[] hsv = new float[3];
-        float[] from = new float[3];
-        float[] to = new float[3];
 
+        // start color: random.
         int colorStart = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-        int colorNext = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-        // use HSV to get a nicer (smooth) transition.
-        Color.colorToHSV(colorStart, from);
-        Color.colorToHSV(colorNext, to);
+        // end color: use HSV to get a nicer (smooth) transition.
+        colorEnd = changeHueSaturationValue(colorStart, random.nextInt(256));
 
-        animatorColor = ValueAnimator.ofObject(new ArgbEvaluatorCompat(), colorStart, colorNext);
+        animatorColor = ValueAnimator.ofArgb(colorStart, colorEnd);
+        animatorColor.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                tvGreeting.setBackgroundColor((Integer) animatorColor.getAnimatedValue());
+            }
+        });
         animatorColor.addListener(new AnimatorListenerAdapter() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onAnimationRepeat(Animator animation) {
                 super.onAnimationRepeat(animation);
 
-                int colorStart = Color.HSVToColor(to);
-                int colorNext = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
-                Color.colorToHSV(colorStart, from);
-                Color.colorToHSV(colorNext, to);
-            }
-        });
-        animatorColor.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
-                hsv[0] = from[0] + (to[0] - from[0]) * valueAnimator.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1]) * valueAnimator.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2]) * valueAnimator.getAnimatedFraction();
+                // start color: end color of previous repetition.
+                int colorStart = colorEnd;
+                // end color: use HSV to get a nicer (smooth) transition.
+                colorEnd = changeHueSaturationValue(colorStart, random.nextInt(256));
 
-                tvGreeting.setBackgroundColor(Color.HSVToColor(hsv));
+                animatorColor.setIntValues(colorStart, colorEnd);
+                animatorColor.setEvaluator(argbEvaluator);
             }
         });
-        animatorColor.setDuration(8000L);
+        animatorColor.setDuration(4000L);
         animatorColor.setRepeatCount(ValueAnimator.INFINITE);
+    }
+
+    private int changeHueSaturationValue(int color, int delta) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+
+        hsv[0] = hsv[0] + delta;
+        hsv[1] = hsv[1] + delta;
+        hsv[2] = hsv[2] + delta;
+
+        hsv[0] = hsv[0] % 256;
+        hsv[1] = hsv[1] % 256;
+        hsv[2] = hsv[2] % 256;
+
+        return Color.HSVToColor(Color.alpha(color), hsv);
     }
 
     @Override
