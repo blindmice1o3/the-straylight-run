@@ -35,4 +35,7 @@
     <color name="brown">#795548</color>
     <color name="grey">#9E9E9E</color>
     <color name="blue_grey">#607D8B</color>
+
+    <color name="colorPrimaryDark">#156912</color>
+    <color name="transparentAccent">#4F4EE147</color>
 </resources>

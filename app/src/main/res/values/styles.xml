@@ -8,4 +8,11 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="Widget.TextView.Boxed" parent="android:Widget.TextView">
+        <item name="android:background">@drawable/background</item>
+        <item name="android:padding">@dimen/standard_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:elevation">2dp</item>
+    </style>
 </resources>

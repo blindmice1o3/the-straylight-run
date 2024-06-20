@@ -12,4 +12,22 @@
         android:layout_height="match_parent"
         android:text="Hello, sandbox fragment!" />
 
+    <View
+        android:id="@+id/view_state_list_drawable"
+        style="@style/Widget.TextView.Boxed"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:foreground="@drawable/foreground_selector" />
+
+    <View
+        android:id="@+id/view_state_list_animator"
+        style="@style/Widget.TextView.Boxed"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="32dp"
+        android:stateListAnimator="@animator/selector_animator" />
+
 </FrameLayout>
