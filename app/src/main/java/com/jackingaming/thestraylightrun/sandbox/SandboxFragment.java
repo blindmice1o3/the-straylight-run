@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -83,6 +85,15 @@ public class SandboxFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView tvGreeting = view.findViewById(R.id.tv_greeting);
+
+        Animation hyperspaceJump = AnimationUtils.loadAnimation(getContext(), R.anim.hyperspace_jump);
+        View viewTweenAnimation = view.findViewById(R.id.view_tween_animation);
+        viewTweenAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewTweenAnimation.startAnimation(hyperspaceJump);
+            }
+        });
 
         // ref1: https://stackoverflow.com/questions/40422340/is-it-possible-to-change-start-end-values-of-valueanimator-on-animation-repeat
         // ref2: https://stackoverflow.com/questions/18216285/android-animate-color-change-from-color-to-color/24641977#24641977

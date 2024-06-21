@@ -40,4 +40,12 @@
         android:clickable="true"
         android:foreground="?selectableItemBackground" />
 
+    <View
+        android:id="@+id/view_tween_animation"
+        android:layout_width="224dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="288dp"
+        android:background="@color/purple_700" />
+
 </FrameLayout>
