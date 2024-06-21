@@ -30,4 +30,14 @@
         android:layout_marginTop="32dp"
         android:stateListAnimator="@animator/selector_animator" />
 
+    <View
+        android:id="@+id/view_selectable_background"
+        android:layout_width="224dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="128dp"
+        android:background="@color/white"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground" />
+
 </FrameLayout>
