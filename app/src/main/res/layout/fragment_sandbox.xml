@@ -48,4 +48,12 @@
         android:layout_marginTop="288dp"
         android:background="@color/purple_700" />
 
+    <ImageView
+        android:id="@+id/iv_scaleY"
+        android:layout_width="224dp"
+        android:layout_height="128dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="448dp"
+        android:src="@drawable/ic_menu_find" />
+
 </FrameLayout>

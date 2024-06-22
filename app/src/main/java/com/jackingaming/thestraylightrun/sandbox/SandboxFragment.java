@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -86,15 +88,6 @@ public class SandboxFragment extends Fragment {
 
         TextView tvGreeting = view.findViewById(R.id.tv_greeting);
 
-        Animation hyperspaceJump = AnimationUtils.loadAnimation(getContext(), R.anim.hyperspace_jump);
-        View viewTweenAnimation = view.findViewById(R.id.view_tween_animation);
-        viewTweenAnimation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewTweenAnimation.startAnimation(hyperspaceJump);
-            }
-        });
-
         // ref1: https://stackoverflow.com/questions/40422340/is-it-possible-to-change-start-end-values-of-valueanimator-on-animation-repeat
         // ref2: https://stackoverflow.com/questions/18216285/android-animate-color-change-from-color-to-color/24641977#24641977
         random = new Random();
@@ -127,6 +120,47 @@ public class SandboxFragment extends Fragment {
         });
         animatorColor.setDuration(4000L);
         animatorColor.setRepeatCount(ValueAnimator.INFINITE);
+
+        Animation hyperspaceJump = AnimationUtils.loadAnimation(getContext(), R.anim.hyperspace_jump);
+        View viewTweenAnimation = view.findViewById(R.id.view_tween_animation);
+        viewTweenAnimation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewTweenAnimation.startAnimation(hyperspaceJump);
+            }
+        });
+
+        ImageView ivScaleY = view.findViewById(R.id.iv_scaleY);
+        ivScaleY.setOnClickListener(new View.OnClickListener() {
+
+            private boolean isOriginalHeight = true;
+
+            @Override
+            public void onClick(View view) {
+                float scaleX = 0;
+                float scaleY = 0;
+                float alpha = 0;
+                if (isOriginalHeight) {
+                    isOriginalHeight = false;
+
+                    ivScaleY.animate()
+                            .scaleX(-1f)
+                            .scaleY(1.5f)
+                            .alpha(0.25f)
+                            .setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(2000);
+                } else {
+                    isOriginalHeight = true;
+
+                    ivScaleY.animate()
+                            .scaleX(1.0f)
+                            .scaleY(1.0f)
+                            .alpha(1f)
+                            .setInterpolator(new AccelerateDecelerateInterpolator())
+                            .setDuration(2000);
+                }
+            }
+        });
     }
 
     private int changeHueSaturationValue(int color, int delta) {
