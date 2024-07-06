@@ -168,7 +168,7 @@ public class WorldScene extends Scene {
                 if (collided instanceof NonPlayableCharacter) {
                     if (((NonPlayableCharacter) collided).getId().equals("coin")) {
                         soundManager.sfxPlay(soundManager.sfxGetItem);
-                        player.setSpeedBonus(4.0f);
+                        player.increaseMovementSpeed();
 
                         // bounce coin based on player's direction.
                         float xStartCoin = collided.getXPos();
@@ -344,6 +344,7 @@ public class WorldScene extends Scene {
         float yDelta = dataAccelerometer[1];
 
         // ENTITIES
+        Log.e(TAG, "(xDelta, yDelta): (" + xDelta + ", " + yDelta + ")");
         updateGameEntities(xDelta, yDelta);
     }
 
@@ -452,7 +453,7 @@ public class WorldScene extends Scene {
             // DO MOVE.
             if (e instanceof Player) {
 //                Player player = (Player) e;
-                player.updateViaSensorEvent(xDelta, yDelta);
+                player.updateViaSensorEvent(handler, xDelta, yDelta);
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
             } else {

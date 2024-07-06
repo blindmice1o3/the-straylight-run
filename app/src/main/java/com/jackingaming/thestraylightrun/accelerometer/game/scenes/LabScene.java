@@ -310,7 +310,7 @@ public class LabScene extends Scene {
             // DO MOVE.
             if (e instanceof Player) {
 //                Player player = (Player) e;
-                player.updateViaSensorEvent(xDelta, yDelta);
+                player.updateViaSensorEvent(handler, xDelta, yDelta);
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
             } else {

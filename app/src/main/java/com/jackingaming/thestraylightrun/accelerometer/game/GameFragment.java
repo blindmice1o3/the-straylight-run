@@ -261,8 +261,10 @@ public class GameFragment extends Fragment
                 ImageView ivEntity = imageViewViaEntity.get(e);
 
                 // IMAGE (based on speed bonus)
-                if (e.getSpeedBonus() > Entity.DEFAULT_SPEED_BONUS) {
-                    ivEntity.setAlpha(0.5f);
+                if (e instanceof Player) {
+                    if (((Player) e).isMovementSpeedIncreased()) {
+                        ivEntity.setAlpha(0.5f);
+                    }
                 }
 
                 // IMAGE (based on direction)

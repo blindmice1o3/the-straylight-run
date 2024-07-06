@@ -88,7 +88,7 @@ public abstract class Entity {
 
             if (xPos + xDelta + 1 < e.getXPos() + Entity.getWidthSpriteDst() &&
                     xPos + xDelta + Entity.getWidthSpriteDst() - 1 > e.getXPos() &&
-                    yPos + yDelta < e.getYPos() + 1 + Entity.getHeightSpriteDst() &&
+                    yPos + yDelta + 1 < e.getYPos() + Entity.getHeightSpriteDst() &&
                     yPos + yDelta + Entity.getHeightSpriteDst() - 1 > e.getYPos()) {
 
                 /////////////////////////////////////////////////
