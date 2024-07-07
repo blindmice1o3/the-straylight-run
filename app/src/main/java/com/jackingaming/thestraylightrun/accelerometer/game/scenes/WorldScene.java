@@ -338,6 +338,10 @@ public class WorldScene extends Scene {
             hadBeenTransferred = false;
         }
 
+        if (paused) {
+            return;
+        }
+
         // INPUTS
         float[] dataAccelerometer = gameListener.onCheckAccelerometer();
         float xDelta = dataAccelerometer[0];
@@ -457,7 +461,7 @@ public class WorldScene extends Scene {
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
             } else {
-                e.update();
+                e.update(handler);
                 validatePosition(e);
             }
 

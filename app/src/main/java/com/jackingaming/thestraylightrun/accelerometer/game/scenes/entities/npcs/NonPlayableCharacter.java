@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npc
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Handler;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
@@ -64,173 +65,198 @@ public class NonPlayableCharacter extends Entity {
     private Direction directionVertical = Direction.DOWN;
 
     @Override
-    public void update() {
+    public void update(Handler handler) {
         if (stationary) {
-            // DIRECTION (changes 10% of the time)
-//            if (random.nextInt(10) < 1) {
-//                // determine direction
-//                switch (random.nextInt(4)) {
-//                    case 0:
-//                        direction = Direction.UP;
-//                        break;
-//                    case 1:
-//                        direction = Direction.DOWN;
-//                        break;
-//                    case 2:
-//                        direction = Direction.LEFT;
-//                        break;
-//                    case 3:
-//                        direction = Direction.RIGHT;
-//                        break;
-//                }
-//            }
+            // do nothing.
         } else {
-            // DIRECTION (changes 5% of the time)
-            if (random.nextInt(20) < 1) {
+            if (animatorMovementRight.isRunning() || animatorMovementLeft.isRunning() ||
+                    animatorMovementDown.isRunning() || animatorMovementUp.isRunning()) {
+                return;
+            }
+
+            // DIRECTION (changes 20% of the time)
+            if (random.nextInt(5) < 1) {
                 // determine direction
-                if (random.nextInt(2) == 0) {
-                    directionHorizontal = Direction.LEFT;
-                } else {
-                    directionHorizontal = Direction.RIGHT;
-                }
-                if (random.nextInt(2) == 0) {
-                    directionVertical = Direction.UP;
-                } else {
-                    directionVertical = Direction.DOWN;
-                }
-
-                boolean isMoreHorizontalThanVertical = (random.nextInt(2) == 0);
-                if (isMoreHorizontalThanVertical) {
-                    direction = directionHorizontal;
-                } else {
-                    direction = directionVertical;
-                }
-            }
-            // don't change direction (90% of the time)
-            else {
-                // do nothing
-            }
-
-            // POSITION
-            int xDelta = 0;
-            int yDelta = 0;
-            boolean isDiagonal = (random.nextInt(2) == 0);
-            if (isDiagonal) {
-                if (directionHorizontal == Direction.RIGHT) {
-                    xDelta = speedMovement;
-                } else {
-                    xDelta = -speedMovement;
-                }
-                if (directionVertical == Direction.UP) {
-                    yDelta = -speedMovement;
-                } else {
-                    yDelta = speedMovement;
+                int directionSpecified = random.nextInt(4);
+                if (directionSpecified == 0) {
+                    direction = Direction.LEFT;
+                } else if (directionSpecified == 1) {
+                    direction = Direction.RIGHT;
+                } else if (directionSpecified == 2) {
+                    direction = Direction.UP;
+                } else if (directionSpecified == 3) {
+                    direction = Direction.DOWN;
                 }
             } else {
-                switch (direction) {
-                    case LEFT:
-                        xDelta = -speedMovement;
-                        yDelta = 0;
-                        break;
-                    case UP:
-                        xDelta = 0;
-                        yDelta = -speedMovement;
-                        break;
-                    case RIGHT:
-                        xDelta = speedMovement;
-                        yDelta = 0;
-                        break;
-                    case DOWN:
-                        xDelta = 0;
-                        yDelta = speedMovement;
-                        break;
-                }
+                // do nothing.
             }
 
-            float xDeltaWithBonus = (xDelta * speedBonus);
-            float yDeltaWithBonus = (yDelta * speedBonus);
-
-            // TILE-COLLISION
             int xTopLeft, xBottomLeft, xTopRight, xBottomRight = -1;
             int yTopLeft, yBottomLeft, yTopRight, yBottomRight = -1;
             int[] topLeft = new int[2];
             int[] bottomLeft = new int[2];
             int[] topRight = new int[2];
             int[] bottomRight = new int[2];
-            boolean isTileWalkableHorizontal = false;
-            boolean isTileWalkableVertical = false;
-            if (directionHorizontal == Direction.LEFT) {
-                xTopLeft = (int) (xPos + xDeltaWithBonus);
-                yTopLeft = (int) (yPos);
-                xBottomLeft = (int) (xPos + xDeltaWithBonus);
-                yBottomLeft = (int) (yPos + Entity.getHeightSpriteDst());
+            boolean isTileWalkable = false;
+            int xDelta = 0;
+            int yDelta = 0;
+            switch (direction) {
+                case UP:
+                    xDelta = 0;
+                    yDelta = -speedMovement;
 
-                topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft + 1;
-                bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft - 1;
+                    // TILE-COLLISION
+                    xTopLeft = (int) (xPos);
+                    yTopLeft = (int) (yPos + yDelta);
+                    xTopRight = (int) (xPos + widthSpriteDst);
+                    yTopRight = (int) (yPos + yDelta);
 
-                isTileWalkableHorizontal = movementListener.onMove(topLeft, bottomLeft);
-            } else {
-                xTopRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSpriteDst());
-                yTopRight = (int) (yPos);
-                xBottomRight = (int) (xPos + xDeltaWithBonus + Entity.getWidthSpriteDst());
-                yBottomRight = (int) (yPos + Entity.getHeightSpriteDst());
+                    topLeft[0] = xTopLeft + 1;
+                    topLeft[1] = yTopLeft;
+                    topRight[0] = xTopRight - 1;
+                    topRight[1] = yTopRight;
 
-                topRight[0] = xTopRight;
-                topRight[1] = yTopRight + 1;
-                bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight - 1;
+                    isTileWalkable = movementListener.onMove(topLeft, topRight);
 
-                isTileWalkableHorizontal = movementListener.onMove(topRight, bottomRight);
-            }
+                    // ENTITY-COLLISION
+                    colliding = checkEntityCollision(0f, -(heightSpriteDst / 2));
+                    if (cantCollide && !colliding) {
+                        cantCollide = false;
+                    } else if (justCollided) {
+                        cantCollide = true;
+                        justCollided = false;
+                    }
+                    if (!cantCollide && colliding) {
+                        justCollided = true;
+                    }
 
-            if (directionVertical == Direction.UP) {
-                xTopLeft = (int) (xPos);
-                yTopLeft = (int) (yPos + yDeltaWithBonus);
-                xTopRight = (int) (xPos + Entity.getWidthSpriteDst());
-                yTopRight = (int) (yPos + yDeltaWithBonus);
+                    if (!colliding && isTileWalkable) {
+                        animatorMovementUp.setFloatValues(yPos, yPos - heightSpriteDst);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                animatorMovementUp.start();
+                            }
+                        });
+                    }
+                    break;
+                case DOWN:
+                    xDelta = 0;
+                    yDelta = speedMovement;
 
-                topLeft[0] = xTopLeft + 1;
-                topLeft[1] = yTopLeft;
-                topRight[0] = xTopRight - 1;
-                topRight[1] = yTopRight;
+                    // TILE-COLLISION
+                    xBottomLeft = (int) (xPos);
+                    yBottomLeft = (int) (yPos + yDelta + heightSpriteDst);
+                    xBottomRight = (int) (xPos + widthSpriteDst);
+                    yBottomRight = (int) (yPos + yDelta + heightSpriteDst);
 
-                isTileWalkableVertical = movementListener.onMove(topLeft, topRight);
-            } else {
-                xBottomLeft = (int) (xPos);
-                yBottomLeft = (int) (yPos + yDeltaWithBonus + Entity.getHeightSpriteDst());
-                xBottomRight = (int) (xPos + Entity.getWidthSpriteDst());
-                yBottomRight = (int) (yPos + yDeltaWithBonus + Entity.getHeightSpriteDst());
+                    bottomLeft[0] = xBottomLeft + 1;
+                    bottomLeft[1] = yBottomLeft;
+                    bottomRight[0] = xBottomRight - 1;
+                    bottomRight[1] = yBottomRight;
 
-                bottomLeft[0] = xBottomLeft + 1;
-                bottomLeft[1] = yBottomLeft;
-                bottomRight[0] = xBottomRight - 1;
-                bottomRight[1] = yBottomRight;
+                    isTileWalkable = movementListener.onMove(bottomLeft, bottomRight);
 
-                isTileWalkableVertical = movementListener.onMove(bottomLeft, bottomRight);
-            }
+                    // ENTITY-COLLISION
+                    colliding = checkEntityCollision(0f, (heightSpriteDst / 2));
+                    if (cantCollide && !colliding) {
+                        cantCollide = false;
+                    } else if (justCollided) {
+                        cantCollide = true;
+                        justCollided = false;
+                    }
+                    if (!cantCollide && colliding) {
+                        justCollided = true;
+                    }
 
-            // ENTITY-COLLISION
-            boolean collidingHorizontal = checkEntityCollision(xDeltaWithBonus, 0f);
-            boolean collidingVertical = checkEntityCollision(0f, yDeltaWithBonus);
-            colliding = (collidingHorizontal || collidingVertical);
-            if (cantCollide && !colliding) {
-                cantCollide = false;
-            } else if (justCollided) {
-                cantCollide = true;
-                justCollided = false;
-            }
-            if (!cantCollide && colliding) {
-                justCollided = true;
-            }
+                    if (!colliding && isTileWalkable) {
+                        animatorMovementDown.setFloatValues(yPos, yPos + heightSpriteDst);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                animatorMovementDown.start();
+                            }
+                        });
+                    }
+                    break;
+                case LEFT:
+                    xDelta = -speedMovement;
+                    yDelta = 0;
 
-            // POSITION
-            if (!collidingHorizontal && isTileWalkableHorizontal) {
-                xPos += xDeltaWithBonus;
-            }
-            if (!collidingVertical && isTileWalkableVertical) {
-                yPos += yDeltaWithBonus;
+                    // TILE-COLLISION
+                    xTopLeft = (int) (xPos + xDelta);
+                    yTopLeft = (int) (yPos);
+                    xBottomLeft = (int) (xPos + xDelta);
+                    yBottomLeft = (int) (yPos + heightSpriteDst);
+
+                    topLeft[0] = xTopLeft;
+                    topLeft[1] = yTopLeft + 1;
+                    bottomLeft[0] = xBottomLeft;
+                    bottomLeft[1] = yBottomLeft - 1;
+
+                    isTileWalkable = movementListener.onMove(topLeft, bottomLeft);
+
+                    // ENTITY-COLLISION
+                    colliding = checkEntityCollision(-(widthSpriteDst / 2), 0f);
+                    if (cantCollide && !colliding) {
+                        cantCollide = false;
+                    } else if (justCollided) {
+                        cantCollide = true;
+                        justCollided = false;
+                    }
+                    if (!cantCollide && colliding) {
+                        justCollided = true;
+                    }
+
+                    if (!colliding && isTileWalkable) {
+                        animatorMovementLeft.setFloatValues(xPos, xPos - widthSpriteDst);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                animatorMovementLeft.start();
+                            }
+                        });
+                    }
+                    break;
+                case RIGHT:
+                    xDelta = speedMovement;
+                    yDelta = 0;
+
+                    // TILE-COLLISION
+                    xTopRight = (int) (xPos + xDelta + widthSpriteDst);
+                    yTopRight = (int) (yPos);
+                    xBottomRight = (int) (xPos + xDelta + widthSpriteDst);
+                    yBottomRight = (int) (yPos + heightSpriteDst);
+
+                    topRight[0] = xTopRight;
+                    topRight[1] = yTopRight + 1;
+                    bottomRight[0] = xBottomRight;
+                    bottomRight[1] = yBottomRight - 1;
+
+                    isTileWalkable = movementListener.onMove(topRight, bottomRight);
+
+                    // ENTITY-COLLISION
+                    colliding = checkEntityCollision((widthSpriteDst / 2), 0f);
+                    if (cantCollide && !colliding) {
+                        cantCollide = false;
+                    } else if (justCollided) {
+                        cantCollide = true;
+                        justCollided = false;
+                    }
+                    if (!cantCollide && colliding) {
+                        justCollided = true;
+                    }
+
+                    if (!colliding && isTileWalkable) {
+                        animatorMovementRight.setFloatValues(xPos, xPos + widthSpriteDst);
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                animatorMovementRight.start();
+                            }
+                        });
+                    }
+                    break;
             }
         }
     }

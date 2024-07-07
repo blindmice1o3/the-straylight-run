@@ -200,6 +200,10 @@ public class LabScene extends Scene {
 
     @Override
     public void update(long elapsed) {
+        if (paused) {
+            return;
+        }
+
         // INPUTS
         float[] dataAccelerometer = gameListener.onCheckAccelerometer();
         float xDelta = dataAccelerometer[0];
@@ -314,7 +318,7 @@ public class LabScene extends Scene {
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
             } else {
-                e.update();
+                e.update(handler);
                 validatePosition(e);
             }
 

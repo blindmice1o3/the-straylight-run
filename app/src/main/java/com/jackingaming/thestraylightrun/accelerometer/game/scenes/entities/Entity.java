@@ -1,7 +1,10 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities;
 
+import android.animation.ObjectAnimator;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.view.animation.LinearInterpolator;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,11 @@ public abstract class Entity {
     protected Direction direction = Direction.DOWN;
     protected Map<Direction, AnimationDrawable> animationsByDirection;
 
+    protected ObjectAnimator animatorMovementRight;
+    protected ObjectAnimator animatorMovementLeft;
+    protected ObjectAnimator animatorMovementDown;
+    protected ObjectAnimator animatorMovementUp;
+
     protected boolean colliding;
     protected boolean justCollided;
     protected boolean cantCollide;
@@ -39,6 +47,39 @@ public abstract class Entity {
         this.animationsByDirection = animationsByDirection;
         this.collisionListener = collisionListener;
         this.movementListener = movementListener;
+
+        animatorMovementRight =
+                ObjectAnimator.ofFloat(this, "xPos", xPos + widthSpriteDst);
+        animatorMovementLeft =
+                ObjectAnimator.ofFloat(this, "xPos", xPos - widthSpriteDst);
+        animatorMovementDown =
+                ObjectAnimator.ofFloat(this, "yPos", yPos + heightSpriteDst);
+        animatorMovementUp =
+                ObjectAnimator.ofFloat(this, "yPos", yPos - heightSpriteDst);
+
+        animatorMovementRight.setDuration(1000L);
+        animatorMovementLeft.setDuration(1000L);
+        animatorMovementDown.setDuration(1000L);
+        animatorMovementUp.setDuration(1000L);
+
+        animatorMovementRight.setInterpolator(new LinearInterpolator());
+        animatorMovementLeft.setInterpolator(new LinearInterpolator());
+        animatorMovementDown.setInterpolator(new LinearInterpolator());
+        animatorMovementUp.setInterpolator(new LinearInterpolator());
+    }
+
+    public void increaseMovementSpeed() {
+        animatorMovementRight.setDuration(250L);
+        animatorMovementLeft.setDuration(250L);
+        animatorMovementDown.setDuration(250L);
+        animatorMovementUp.setDuration(250L);
+    }
+
+    public boolean isMovementSpeedIncreased() {
+        return (animatorMovementRight.getDuration() < 1000L) &&
+                (animatorMovementLeft.getDuration() < 1000L) &&
+                (animatorMovementDown.getDuration() < 1000L) &&
+                (animatorMovementUp.getDuration() < 1000L);
     }
 
     public static void init(float widthSpriteDst, float heightSpriteDst) {
@@ -52,7 +93,7 @@ public abstract class Entity {
 
     public abstract void collided(Entity collider);
 
-    public abstract void update();
+    public abstract void update(Handler handler);
 
     public void startAnimations() {
         for (AnimationDrawable animationDrawable : animationsByDirection.values()) {
