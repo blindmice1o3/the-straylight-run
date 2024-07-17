@@ -21,22 +21,16 @@ public abstract class Entity {
     protected MovementListener movementListener;
     private CollisionListener collisionListener;
 
-    public static final int DEFAULT_SPEED_MOVEMENT = 2;
-    public static final float DEFAULT_SPEED_BONUS = 1f;
+    public static final long DEFAULT_MOVEMENT_DURATION = 1000L;
 
     protected static float widthSpriteDst, heightSpriteDst;
     protected static List<Entity> entities;
 
     protected float xPos, yPos = 0f;
-    protected int speedMovement = DEFAULT_SPEED_MOVEMENT;
-    protected float speedBonus = DEFAULT_SPEED_BONUS;
     protected Direction direction = Direction.DOWN;
     protected Map<Direction, AnimationDrawable> animationsByDirection;
 
-    protected ObjectAnimator animatorMovementRight;
-    protected ObjectAnimator animatorMovementLeft;
-    protected ObjectAnimator animatorMovementDown;
-    protected ObjectAnimator animatorMovementUp;
+    protected ObjectAnimator animatorMovement;
 
     protected boolean colliding;
     protected boolean justCollided;
@@ -48,38 +42,20 @@ public abstract class Entity {
         this.collisionListener = collisionListener;
         this.movementListener = movementListener;
 
-        animatorMovementRight =
-                ObjectAnimator.ofFloat(this, "xPos", xPos + widthSpriteDst);
-        animatorMovementLeft =
-                ObjectAnimator.ofFloat(this, "xPos", xPos - widthSpriteDst);
-        animatorMovementDown =
-                ObjectAnimator.ofFloat(this, "yPos", yPos + heightSpriteDst);
-        animatorMovementUp =
+        animatorMovement =
                 ObjectAnimator.ofFloat(this, "yPos", yPos - heightSpriteDst);
-
-        animatorMovementRight.setDuration(1000L);
-        animatorMovementLeft.setDuration(1000L);
-        animatorMovementDown.setDuration(1000L);
-        animatorMovementUp.setDuration(1000L);
-
-        animatorMovementRight.setInterpolator(new LinearInterpolator());
-        animatorMovementLeft.setInterpolator(new LinearInterpolator());
-        animatorMovementDown.setInterpolator(new LinearInterpolator());
-        animatorMovementUp.setInterpolator(new LinearInterpolator());
+        animatorMovement.setDuration(DEFAULT_MOVEMENT_DURATION);
+        animatorMovement.setInterpolator(new LinearInterpolator());
     }
 
     public void increaseMovementSpeed() {
-        animatorMovementRight.setDuration(250L);
-        animatorMovementLeft.setDuration(250L);
-        animatorMovementDown.setDuration(250L);
-        animatorMovementUp.setDuration(250L);
+        long quarterOfDefaultMovementDuration = DEFAULT_MOVEMENT_DURATION / 4;
+
+        animatorMovement.setDuration(quarterOfDefaultMovementDuration);
     }
 
     public boolean isMovementSpeedIncreased() {
-        return (animatorMovementRight.getDuration() < 1000L) &&
-                (animatorMovementLeft.getDuration() < 1000L) &&
-                (animatorMovementDown.getDuration() < 1000L) &&
-                (animatorMovementUp.getDuration() < 1000L);
+        return (animatorMovement.getDuration() < DEFAULT_MOVEMENT_DURATION);
     }
 
     public static void init(float widthSpriteDst, float heightSpriteDst) {
@@ -119,6 +95,131 @@ public abstract class Entity {
             index = 1;
         }
         return animationsByDirection.get(direction).getFrame(index);
+    }
+
+    private void checkTileLeft() {
+
+    }
+
+    protected void doMoveBasedOnDirection(Handler handler) {
+        int xTopLeft, xBottomLeft, xTopRight, xBottomRight = -1;
+        int yTopLeft, yBottomLeft, yTopRight, yBottomRight = -1;
+        int[] topLeft = new int[2];
+        int[] bottomLeft = new int[2];
+        int[] topRight = new int[2];
+        int[] bottomRight = new int[2];
+        boolean isTileWalkable = false;
+        float xDeltaFullStep = 0;
+        float yDeltaFullStep = 0;
+        String propertyName = null;
+        float valueStart = -1f;
+        float valueEnd = -1f;
+        switch (direction) {
+            case UP:
+                propertyName = "yPos";
+                valueStart = yPos;
+                valueEnd = (yPos - heightSpriteDst);
+                xDeltaFullStep = 0;
+                yDeltaFullStep = -(heightSpriteDst - 1);
+
+                // TILE-COLLISION
+                xTopLeft = (int) (xPos);
+                yTopLeft = (int) (yPos + yDeltaFullStep);
+                xTopRight = (int) (xPos + widthSpriteDst);
+                yTopRight = (int) (yPos + yDeltaFullStep);
+
+                topLeft[0] = xTopLeft + 1;
+                topLeft[1] = yTopLeft;
+                topRight[0] = xTopRight - 1;
+                topRight[1] = yTopRight;
+
+                isTileWalkable = movementListener.onMove(topLeft, topRight);
+                break;
+            case DOWN:
+                propertyName = "yPos";
+                valueStart = yPos;
+                valueEnd = (yPos + heightSpriteDst);
+                xDeltaFullStep = 0;
+                yDeltaFullStep = (heightSpriteDst - 1);
+
+                // TILE-COLLISION
+                xBottomLeft = (int) (xPos);
+                yBottomLeft = (int) (yPos + yDeltaFullStep + heightSpriteDst);
+                xBottomRight = (int) (xPos + widthSpriteDst);
+                yBottomRight = (int) (yPos + yDeltaFullStep + heightSpriteDst);
+
+                bottomLeft[0] = xBottomLeft + 1;
+                bottomLeft[1] = yBottomLeft;
+                bottomRight[0] = xBottomRight - 1;
+                bottomRight[1] = yBottomRight;
+
+                isTileWalkable = movementListener.onMove(bottomLeft, bottomRight);
+                break;
+            case LEFT:
+                propertyName = "xPos";
+                valueStart = xPos;
+                valueEnd = (xPos - widthSpriteDst);
+                xDeltaFullStep = -(widthSpriteDst - 1);
+                yDeltaFullStep = 0;
+
+                // TILE-COLLISION
+                xTopLeft = (int) (xPos + xDeltaFullStep);
+                yTopLeft = (int) (yPos);
+                xBottomLeft = (int) (xPos + xDeltaFullStep);
+                yBottomLeft = (int) (yPos + heightSpriteDst);
+
+                topLeft[0] = xTopLeft;
+                topLeft[1] = yTopLeft + 1;
+                bottomLeft[0] = xBottomLeft;
+                bottomLeft[1] = yBottomLeft - 1;
+
+                isTileWalkable = movementListener.onMove(topLeft, bottomLeft);
+                break;
+            case RIGHT:
+                propertyName = "xPos";
+                valueStart = xPos;
+                valueEnd = (xPos + widthSpriteDst);
+                xDeltaFullStep = (widthSpriteDst - 1);
+                yDeltaFullStep = 0;
+
+                // TILE-COLLISION
+                xTopRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
+                yTopRight = (int) (yPos);
+                xBottomRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
+                yBottomRight = (int) (yPos + heightSpriteDst);
+
+                topRight[0] = xTopRight;
+                topRight[1] = yTopRight + 1;
+                bottomRight[0] = xBottomRight;
+                bottomRight[1] = yBottomRight - 1;
+
+                isTileWalkable = movementListener.onMove(topRight, bottomRight);
+                break;
+        }
+
+        // ENTITY-COLLISION
+        colliding = checkEntityCollision(xDeltaFullStep, yDeltaFullStep);
+        if (cantCollide && !colliding) {
+            cantCollide = false;
+        } else if (justCollided) {
+            cantCollide = true;
+            justCollided = false;
+        }
+        if (!cantCollide && colliding) {
+            justCollided = true;
+        }
+
+        if (!colliding && isTileWalkable) {
+            animatorMovement.setPropertyName(propertyName);
+            animatorMovement.setFloatValues(valueStart, valueEnd);
+
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    animatorMovement.start();
+                }
+            });
+        }
     }
 
     protected boolean checkEntityCollision(float xDelta, float yDelta) {
@@ -176,14 +277,6 @@ public abstract class Entity {
 
     public void setYPos(float yPos) {
         this.yPos = yPos;
-    }
-
-    public float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    public void setSpeedBonus(float speedBonus) {
-        this.speedBonus = speedBonus;
     }
 
     public Direction getDirection() {
