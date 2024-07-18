@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.sandbox;
+package com.jackingaming.thestraylightrun.sandbox.particleexplosion;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,7 +75,7 @@ public class ParticleExplosionFragment extends Fragment {
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                particleExplosionView.updateCenterOfParticle(value);
+                particleExplosionView.updateProgressOfParticles(value);
             }
         });
     }

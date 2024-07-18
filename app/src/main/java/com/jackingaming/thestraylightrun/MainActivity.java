@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
-import com.jackingaming.thestraylightrun.sandbox.ParticleExplosionFragment;
+import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
