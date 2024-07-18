@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
-import com.jackingaming.thestraylightrun.sandbox.SandboxFragment;
+import com.jackingaming.thestraylightrun.sandbox.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
@@ -62,7 +62,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.options_item_sandbox:
-                replaceFragmentInContainerUsingCardFlipAnimations(SandboxFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(
+//                        SandboxFragment.newInstance(null, null)
+                        ParticleExplosionFragment.newInstance(null, null)
+                );
                 return true;
             case R.id.options_item_sprite_sheet_clip_selector:
                 replaceFragmentInContainerUsingCardFlipAnimations(SpriteSheetClipSelectorFragment.newInstance(null, null));
