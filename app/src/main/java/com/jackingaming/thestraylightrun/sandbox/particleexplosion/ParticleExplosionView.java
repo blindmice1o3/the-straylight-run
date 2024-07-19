@@ -74,8 +74,6 @@ public class ParticleExplosionView extends View {
 
     private float generateRandomNumberInRange(float min, float max) {
         float numberRandom = (random.nextFloat() * (max - min)) + min;
-        boolean isInRange = (numberRandom >= min) && (numberRandom <= max);
-        Log.e(TAG, "isInRange: " + isInRange);
         return numberRandom;
     }
 
@@ -116,9 +114,15 @@ public class ParticleExplosionView extends View {
 
         // Particle
         for (Particle particle : particles) {
-            paintParticle.setColor(particle.getColor());
-
-            canvas.drawCircle(particle.getCx(), particle.getCy(), 4f, paintParticle);
+            if (particle.getAlpha() != 0) {
+                int colorParticle = particle.getColor();
+                int colorParticleWithAlpha = Color.argb(particle.getAlpha(),
+                        Color.red(colorParticle),
+                        Color.green(colorParticle),
+                        Color.blue(colorParticle));
+                paintParticle.setColor(colorParticleWithAlpha);
+                canvas.drawCircle(particle.getCx(), particle.getCy(), 4f, paintParticle);
+            }
         }
     }
 }

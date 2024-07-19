@@ -1,6 +1,6 @@
 package com.jackingaming.thestraylightrun.sandbox.particleexplosion;
 
-import android.util.Log;
+import java.util.Random;
 
 public class Particle {
     int color;
@@ -39,6 +39,16 @@ public class Particle {
     private float cx; // offset
     private float cy; // offset
 
+    private Random random = new Random();
+    private float visibilityThresholdLow = generateRandomNumberInRange(0f, 0.14f);
+    private float visibilityThresholdHigh = generateRandomNumberInRange(0f, 0.4f);
+    private float alpha;
+
+    private float generateRandomNumberInRange(float min, float max) {
+        float numberRandom = (random.nextFloat() * (max - min)) + min;
+        return numberRandom;
+    }
+
     public Particle(int color, int xStart, int yStart, float maxHorizontalDisplacement, float maxVerticalDisplacement) {
         this.color = color;
         this.xStart = xStart;
@@ -56,13 +66,25 @@ public class Particle {
         return outMin + (((transformSource - inMin) / (inMax - inMin)) * (outMax - outMin));
     }
 
-    public void update(float progress) {
-        float currentTime = mapInRange(progress,
+    public void update(float progressExplosion) {
+        float progressTrajectory = 0f;
+        if (progressExplosion < visibilityThresholdLow ||
+                (progressExplosion > (1 - visibilityThresholdHigh))) {
+            alpha = 0f;
+            return;
+        } else {
+            alpha = 1f;
+            progressTrajectory = mapInRange((progressExplosion - visibilityThresholdLow),
+                    0f, (1f - visibilityThresholdHigh - visibilityThresholdLow),
+                    0f, 1f);
+        }
+
+        float currentTime = mapInRange(progressExplosion,
                 0f, 1f,
 //                0f, 1f);
                 0f, 1.4f);
 
-        float horizontalDisplacement = maxHorizontalDisplacement * progress;
+        float horizontalDisplacement = maxHorizontalDisplacement * progressTrajectory;
         // "To calculate the vertical displacement of the particle with
         // constant velocity and acceleration due to gravity, we can
         // use the second kinematic motion equation:
@@ -79,7 +101,6 @@ public class Particle {
         // [progress] increases.
         cx = xStart + horizontalDisplacement;
         cy = yStart - verticalDisplacement;
-        Log.e("Particle", "(cx, cy): (" + cx + ", " + cy + ")");
     }
 
     public int getColor() {
@@ -92,5 +113,9 @@ public class Particle {
 
     public float getCy() {
         return cy;
+    }
+
+    public float getAlpha() {
+        return alpha;
     }
 }
