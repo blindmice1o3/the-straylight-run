@@ -36,8 +36,8 @@ public class Particle {
     // a = -2v / t
     // a = -2v (for t = 1)
     float acceleration;
-    private float cx = 0; // offset
-    private float cy = 0; // offset
+    private float cx; // offset
+    private float cy; // offset
 
     public Particle(int color, int xStart, int yStart, float maxHorizontalDisplacement, float maxVerticalDisplacement) {
         this.color = color;
@@ -50,8 +50,17 @@ public class Particle {
         acceleration = -2 * velocity;
     }
 
+    private float mapInRange(float transformSource,
+                             float inMin, float inMax,
+                             float outMin, float outMax) {
+        return outMin + (((transformSource - inMin) / (inMax - inMin)) * (outMax - outMin));
+    }
+
     public void update(float progress) {
-        float currentTime = progress;
+        float currentTime = mapInRange(progress,
+                0f, 1f,
+//                0f, 1f);
+                0f, 1.4f);
 
         float horizontalDisplacement = maxHorizontalDisplacement * progress;
         // "To calculate the vertical displacement of the particle with
