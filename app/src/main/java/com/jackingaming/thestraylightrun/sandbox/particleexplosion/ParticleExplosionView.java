@@ -79,10 +79,11 @@ public class ParticleExplosionView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.e(TAG, "onMeasure()");
+
         widthInPixel = MeasureSpec.getSize(widthMeasureSpec);
         heightInPixel = MeasureSpec.getSize(heightMeasureSpec);
-        Log.e(TAG, "widthInPixel: " + widthInPixel);
-        Log.e(TAG, "heightInPixel: " + heightInPixel);
+        Log.e(TAG, "(widthInPixel, heightInPixel): (" + widthInPixel + ", " + heightInPixel + ")");
         halfWidthInPixel = widthInPixel / 2;
         halfHeightInPixel = heightInPixel / 2;
 
@@ -91,7 +92,6 @@ public class ParticleExplosionView extends View {
     }
 
     public void updateProgressOfParticles(float progress) {
-        Log.e(TAG, "progress: " + progress);
         for (Particle particle : particles) {
             particle.update(progress);
         }
@@ -121,7 +121,8 @@ public class ParticleExplosionView extends View {
                         Color.green(colorParticle),
                         Color.blue(colorParticle));
                 paintParticle.setColor(colorParticleWithAlpha);
-                canvas.drawCircle(particle.getCx(), particle.getCy(), 4f, paintParticle);
+                canvas.drawCircle(particle.getxCurrent(), particle.getyCurrent(),
+                        particle.getRadiusCurrent(), paintParticle);
             }
         }
     }

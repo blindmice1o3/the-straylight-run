@@ -36,13 +36,19 @@ public class Particle {
     // a = -2v / t
     // a = -2v (for t = 1)
     float acceleration;
-    private float cx; // offset
-    private float cy; // offset
+    private float xCurrent; // offset
+    private float yCurrent; // offset
 
     private Random random = new Random();
     private float visibilityThresholdLow = generateRandomNumberInRange(0f, 0.14f);
     private float visibilityThresholdHigh = generateRandomNumberInRange(0f, 0.4f);
     private float alpha;
+
+    private float xInitialDisplacement = 10f * generateRandomNumberInRange(-1f, 1f);
+    private float yInitialDisplacement = 10f * generateRandomNumberInRange(-1f, 1f);
+    private float radiusStart;
+    private float radiusEnd;
+    private float radiusCurrent;
 
     private float generateRandomNumberInRange(float min, float max) {
         float numberRandom = (random.nextFloat() * (max - min)) + min;
@@ -58,6 +64,13 @@ public class Particle {
 
         velocity = 4 * maxVerticalDisplacement;
         acceleration = -2 * velocity;
+
+        radiusStart = 4f;
+        radiusCurrent = radiusStart;
+        // 20% of particle's radius increase, 80% of particle's radius slightly decrease.
+        radiusEnd = (random.nextInt(100) < 20) ?
+                generateRandomNumberInRange(radiusStart, 10f) :
+                generateRandomNumberInRange(2f, radiusStart);
     }
 
     private float mapInRange(float transformSource,
@@ -73,10 +86,15 @@ public class Particle {
             alpha = 0f;
             return;
         } else {
-            alpha = 1f;
             progressTrajectory = mapInRange((progressExplosion - visibilityThresholdLow),
                     0f, (1f - visibilityThresholdHigh - visibilityThresholdLow),
                     0f, 1f);
+            alpha = (progressTrajectory < 0.7f) ?
+                    1f :
+                    mapInRange((progressTrajectory - 0.7f),
+                            0f, 0.3f,
+                            1f, 0f);
+            radiusCurrent = radiusStart + (radiusEnd - radiusStart) * progressTrajectory;
         }
 
         float currentTime = mapInRange(progressExplosion,
@@ -99,23 +117,27 @@ public class Particle {
         //   as oppose to starting at origin (0, 0).
         // verticalDisplacement subtracted to have it move up as
         // [progress] increases.
-        cx = xStart + horizontalDisplacement;
-        cy = yStart - verticalDisplacement;
+        xCurrent = xStart + xInitialDisplacement + horizontalDisplacement;
+        yCurrent = yStart + yInitialDisplacement - verticalDisplacement;
     }
 
     public int getColor() {
         return color;
     }
 
-    public float getCx() {
-        return cx;
+    public float getxCurrent() {
+        return xCurrent;
     }
 
-    public float getCy() {
-        return cy;
+    public float getyCurrent() {
+        return yCurrent;
     }
 
     public float getAlpha() {
         return alpha;
+    }
+
+    public float getRadiusCurrent() {
+        return radiusCurrent;
     }
 }
