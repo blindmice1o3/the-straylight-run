@@ -8,6 +8,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -33,6 +35,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFra
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
@@ -334,16 +338,26 @@ public class GameFragment extends Fragment
             ImageView imageView = new ImageView(getContext());
             imageView.setImageDrawable(e.getAnimationDrawableBasedOnDirection());
             if (!(e instanceof Player)) {
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        for (Entity e : imageViewViaEntity.keySet()) {
-                            if (imageViewViaEntity.get(e) == view) {
+                if (e instanceof NonPlayableCharacter) {
+                    if (((NonPlayableCharacter) e).getId().equals(WorldScene.ID_BUG_CATCH)) {
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                new MoveUpCommand(e, new Handler()).execute();
+                            }
+                        });
+                    } else {
+                        // ALL NPCs other than bug catcher.
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
                                 ((NonPlayableCharacter) e).toggleStationary();
                             }
-                        }
+                        });
                     }
-                });
+                } else {
+                    Log.e(TAG, "instantiateImageViewForEntities() NOT NonPlayableCharacter... do NOT define click listener. Entity's class: " + e.getClass().getSimpleName());
+                }
             }
             imageViewViaEntity.put(e, imageView);
         }

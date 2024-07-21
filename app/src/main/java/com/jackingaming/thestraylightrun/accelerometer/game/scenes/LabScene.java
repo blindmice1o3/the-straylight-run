@@ -40,6 +40,7 @@ public class LabScene extends Scene {
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
     private static final int X_SPAWN_INDEX_PLAYER = 4;
     private static final int Y_SPAWN_INDEX_PLAYER = 10;
+    public static final String ID_SCIENTIST = "scientist";
     private static final int X_INDEX_PORTRAIT_SCIENTIST = 0;
     private static final int Y_INDEX_PORTRAIT_SCIENTIST = 1;
     private static final int X_SPAWN_INDEX_SCIENTIST = 4;
@@ -127,7 +128,7 @@ public class LabScene extends Scene {
                 Log.e(TAG, "LabScene: player's  CollisionListener.onJustCollided(Entity)");
 
                 if (collided instanceof NonPlayableCharacter) {
-                    if (((NonPlayableCharacter) collided).getId().equals("scientist")) {
+                    if (((NonPlayableCharacter) collided).getId().equals(ID_SCIENTIST)) {
                         pause();
 
                         Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
@@ -379,7 +380,7 @@ public class LabScene extends Scene {
         spritesCharactersBattle = SpriteInitializer.initSpritesCharactersBattle(resources, widthSpriteDst, heightSpriteDst);
         sprites = SpriteInitializer.initSprites(resources, widthSpriteDst, heightSpriteDst);
         // ENTITIES
-        NonPlayableCharacter npcScientist = generateNonPlayableCharacter("scientist",
+        NonPlayableCharacter npcScientist = generateNonPlayableCharacter(ID_SCIENTIST,
                 X_INDEX_PORTRAIT_SCIENTIST, Y_INDEX_PORTRAIT_SCIENTIST,
                 4,
                 X_SPAWN_INDEX_SCIENTIST, Y_SPAWN_INDEX_SCIENTIST,

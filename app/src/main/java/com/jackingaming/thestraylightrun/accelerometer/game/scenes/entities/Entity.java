@@ -32,7 +32,6 @@ public abstract class Entity {
 
     protected ObjectAnimator animatorMovement;
 
-    protected boolean colliding;
     protected boolean justCollided;
     protected boolean cantCollide;
 
@@ -97,117 +96,65 @@ public abstract class Entity {
         return animationsByDirection.get(direction).getFrame(index);
     }
 
-    private void checkTileLeft() {
+    public void moveLeft(Handler handler) {
+        String propertyName = "xPos";
+        float valueStart = xPos;
+        float valueEnd = (xPos - widthSpriteDst);
+        float xDeltaFullStep = -(widthSpriteDst - 1);
+        float yDeltaFullStep = 0;
 
+        validateAndMove(handler, propertyName,
+                valueStart, valueEnd,
+                xDeltaFullStep, yDeltaFullStep);
     }
 
-    protected void doMoveBasedOnDirection(Handler handler) {
-        int xTopLeft, xBottomLeft, xTopRight, xBottomRight = -1;
-        int yTopLeft, yBottomLeft, yTopRight, yBottomRight = -1;
-        int[] topLeft = new int[2];
-        int[] bottomLeft = new int[2];
-        int[] topRight = new int[2];
-        int[] bottomRight = new int[2];
-        boolean isTileWalkable = false;
-        float xDeltaFullStep = 0;
+    public void moveRight(Handler handler) {
+        String propertyName = "xPos";
+        float valueStart = xPos;
+        float valueEnd = (xPos + widthSpriteDst);
+        float xDeltaFullStep = (widthSpriteDst - 1);
         float yDeltaFullStep = 0;
-        String propertyName = null;
-        float valueStart = -1f;
-        float valueEnd = -1f;
+
+        validateAndMove(handler, propertyName,
+                valueStart, valueEnd,
+                xDeltaFullStep, yDeltaFullStep);
+    }
+
+    public void moveUp(Handler handler) {
+        String propertyName = "yPos";
+        float valueStart = yPos;
+        float valueEnd = (yPos - heightSpriteDst);
+        float xDeltaFullStep = 0;
+        float yDeltaFullStep = -(heightSpriteDst - 1);
+
+        validateAndMove(handler, propertyName,
+                valueStart, valueEnd,
+                xDeltaFullStep, yDeltaFullStep);
+    }
+
+    private void validateAndMove(Handler handler, String propertyName,
+                                 float valueStart, float valueEnd,
+                                 float xDeltaFullStep, float yDeltaFullStep) {
+        // TILE-COLLISION
+        boolean isTileWalkable = false;
         switch (direction) {
-            case UP:
-                propertyName = "yPos";
-                valueStart = yPos;
-                valueEnd = (yPos - heightSpriteDst);
-                xDeltaFullStep = 0;
-                yDeltaFullStep = -(heightSpriteDst - 1);
-
-                // TILE-COLLISION
-                xTopLeft = (int) (xPos);
-                yTopLeft = (int) (yPos + yDeltaFullStep);
-                xTopRight = (int) (xPos + widthSpriteDst);
-                yTopRight = (int) (yPos + yDeltaFullStep);
-
-                topLeft[0] = xTopLeft + 1;
-                topLeft[1] = yTopLeft;
-                topRight[0] = xTopRight - 1;
-                topRight[1] = yTopRight;
-
-                isTileWalkable = movementListener.onMove(topLeft, topRight);
-                break;
-            case DOWN:
-                propertyName = "yPos";
-                valueStart = yPos;
-                valueEnd = (yPos + heightSpriteDst);
-                xDeltaFullStep = 0;
-                yDeltaFullStep = (heightSpriteDst - 1);
-
-                // TILE-COLLISION
-                xBottomLeft = (int) (xPos);
-                yBottomLeft = (int) (yPos + yDeltaFullStep + heightSpriteDst);
-                xBottomRight = (int) (xPos + widthSpriteDst);
-                yBottomRight = (int) (yPos + yDeltaFullStep + heightSpriteDst);
-
-                bottomLeft[0] = xBottomLeft + 1;
-                bottomLeft[1] = yBottomLeft;
-                bottomRight[0] = xBottomRight - 1;
-                bottomRight[1] = yBottomRight;
-
-                isTileWalkable = movementListener.onMove(bottomLeft, bottomRight);
-                break;
             case LEFT:
-                propertyName = "xPos";
-                valueStart = xPos;
-                valueEnd = (xPos - widthSpriteDst);
-                xDeltaFullStep = -(widthSpriteDst - 1);
-                yDeltaFullStep = 0;
-
-                // TILE-COLLISION
-                xTopLeft = (int) (xPos + xDeltaFullStep);
-                yTopLeft = (int) (yPos);
-                xBottomLeft = (int) (xPos + xDeltaFullStep);
-                yBottomLeft = (int) (yPos + heightSpriteDst);
-
-                topLeft[0] = xTopLeft;
-                topLeft[1] = yTopLeft + 1;
-                bottomLeft[0] = xBottomLeft;
-                bottomLeft[1] = yBottomLeft - 1;
-
-                isTileWalkable = movementListener.onMove(topLeft, bottomLeft);
+                isTileWalkable = checkTileCollisionLeft(xDeltaFullStep, yDeltaFullStep);
+                break;
+            case UP:
+                isTileWalkable = checkTileCollisionUp(xDeltaFullStep, yDeltaFullStep);
                 break;
             case RIGHT:
-                propertyName = "xPos";
-                valueStart = xPos;
-                valueEnd = (xPos + widthSpriteDst);
-                xDeltaFullStep = (widthSpriteDst - 1);
-                yDeltaFullStep = 0;
-
-                // TILE-COLLISION
-                xTopRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
-                yTopRight = (int) (yPos);
-                xBottomRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
-                yBottomRight = (int) (yPos + heightSpriteDst);
-
-                topRight[0] = xTopRight;
-                topRight[1] = yTopRight + 1;
-                bottomRight[0] = xBottomRight;
-                bottomRight[1] = yBottomRight - 1;
-
-                isTileWalkable = movementListener.onMove(topRight, bottomRight);
+                isTileWalkable = checkTileCollisionRight(xDeltaFullStep, yDeltaFullStep);
+                break;
+            case DOWN:
+                isTileWalkable = checkTileCollisionDown(xDeltaFullStep, yDeltaFullStep);
                 break;
         }
 
         // ENTITY-COLLISION
-        colliding = checkEntityCollision(xDeltaFullStep, yDeltaFullStep);
-        if (cantCollide && !colliding) {
-            cantCollide = false;
-        } else if (justCollided) {
-            cantCollide = true;
-            justCollided = false;
-        }
-        if (!cantCollide && colliding) {
-            justCollided = true;
-        }
+        boolean colliding = checkEntityCollision(xDeltaFullStep, yDeltaFullStep);
+        updateStateOfEntityCollision(colliding);
 
         if (!colliding && isTileWalkable) {
             animatorMovement.setPropertyName(propertyName);
@@ -219,6 +166,111 @@ public abstract class Entity {
                     animatorMovement.start();
                 }
             });
+        }
+    }
+
+    public void moveDown(Handler handler) {
+        String propertyName = "yPos";
+        float valueStart = yPos;
+        float valueEnd = (yPos + heightSpriteDst);
+        float xDeltaFullStep = 0;
+        float yDeltaFullStep = (heightSpriteDst - 1);
+
+        validateAndMove(handler, propertyName,
+                valueStart, valueEnd,
+                xDeltaFullStep, yDeltaFullStep);
+    }
+
+    private boolean checkTileCollisionLeft(float xDeltaFullStep, float yDeltaFullStep) {
+        int xTopLeft = (int) (xPos + xDeltaFullStep);
+        int yTopLeft = (int) (yPos);
+        int xBottomLeft = (int) (xPos + xDeltaFullStep);
+        int yBottomLeft = (int) (yPos + heightSpriteDst);
+
+        int[] topLeft = new int[2];
+        topLeft[0] = xTopLeft;
+        topLeft[1] = yTopLeft + 1;
+        int[] bottomLeft = new int[2];
+        bottomLeft[0] = xBottomLeft;
+        bottomLeft[1] = yBottomLeft - 1;
+
+        return movementListener.onMove(topLeft, bottomLeft);
+    }
+
+    private boolean checkTileCollisionRight(float xDeltaFullStep, float yDeltaFullStep) {
+        int xTopRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
+        int yTopRight = (int) (yPos);
+        int xBottomRight = (int) (xPos + xDeltaFullStep + widthSpriteDst);
+        int yBottomRight = (int) (yPos + heightSpriteDst);
+
+        int[] topRight = new int[2];
+        topRight[0] = xTopRight;
+        topRight[1] = yTopRight + 1;
+        int[] bottomRight = new int[2];
+        bottomRight[0] = xBottomRight;
+        bottomRight[1] = yBottomRight - 1;
+
+        return movementListener.onMove(topRight, bottomRight);
+    }
+
+    private boolean checkTileCollisionUp(float xDeltaFullStep, float yDeltaFullStep) {
+        int xTopLeft = (int) (xPos);
+        int yTopLeft = (int) (yPos + yDeltaFullStep);
+        int xTopRight = (int) (xPos + widthSpriteDst);
+        int yTopRight = (int) (yPos + yDeltaFullStep);
+
+        int[] topLeft = new int[2];
+        topLeft[0] = xTopLeft + 1;
+        topLeft[1] = yTopLeft;
+        int[] topRight = new int[2];
+        topRight[0] = xTopRight - 1;
+        topRight[1] = yTopRight;
+
+        return movementListener.onMove(topLeft, topRight);
+    }
+
+    private boolean checkTileCollisionDown(float xDeltaFullStep, float yDeltaFullStep) {
+        int xBottomLeft = (int) (xPos);
+        int yBottomLeft = (int) (yPos + yDeltaFullStep + heightSpriteDst);
+        int xBottomRight = (int) (xPos + widthSpriteDst);
+        int yBottomRight = (int) (yPos + yDeltaFullStep + heightSpriteDst);
+
+        int[] bottomLeft = new int[2];
+        bottomLeft[0] = xBottomLeft + 1;
+        bottomLeft[1] = yBottomLeft;
+        int[] bottomRight = new int[2];
+        bottomRight[0] = xBottomRight - 1;
+        bottomRight[1] = yBottomRight;
+
+        return movementListener.onMove(bottomLeft, bottomRight);
+    }
+
+    private void updateStateOfEntityCollision(boolean colliding) {
+        if (cantCollide && !colliding) {
+            cantCollide = false;
+        } else if (justCollided) {
+            cantCollide = true;
+            justCollided = false;
+        }
+        if (!cantCollide && colliding) {
+            justCollided = true;
+        }
+    }
+
+    protected void doMoveBasedOnDirection(Handler handler) {
+        switch (direction) {
+            case UP:
+                moveUp(handler);
+                break;
+            case DOWN:
+                moveDown(handler);
+                break;
+            case LEFT:
+                moveLeft(handler);
+                break;
+            case RIGHT:
+                moveRight(handler);
+                break;
         }
     }
 
@@ -285,10 +337,6 @@ public abstract class Entity {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
-    }
-
-    public boolean isColliding() {
-        return colliding;
     }
 
     public boolean isJustCollided() {

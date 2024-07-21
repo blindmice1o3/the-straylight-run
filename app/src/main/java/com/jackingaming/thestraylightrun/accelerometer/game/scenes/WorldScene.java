@@ -49,34 +49,42 @@ public class WorldScene extends Scene {
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
     private static final int X_SPAWN_INDEX_PLAYER = 200;
     private static final int Y_SPAWN_INDEX_PLAYER = 34;
+    public static final String ID_RIVAL = "rival";
     private static final int X_INDEX_PORTRAIT_RIVAL = 4;
     private static final int Y_INDEX_PORTRAIT_RIVAL = 5;
     private static final int X_SPAWN_INDEX_RIVAL = 200;
     private static final int Y_SPAWN_INDEX_RIVAL = 12;
+    public static final String ID_COIN = "coin";
     private static final int X_INDEX_PORTRAIT_COIN = 7;
     private static final int Y_INDEX_PORTRAIT_COIN = 3;
     private static final int X_SPAWN_INDEX_COIN = 201;
     private static final int Y_SPAWN_INDEX_COIN = 37;
+    public static final String ID_RIVAL_LEADER = "rival leader";
     private static final int X_INDEX_PORTRAIT_RIVAL_LEADER = 6;
     private static final int Y_INDEX_PORTRAIT_RIVAL_LEADER = 4;
     private static final int X_SPAWN_INDEX_RIVAL_LEADER = 201;
     private static final int Y_SPAWN_INDEX_RIVAL_LEADER = 15;
+    public static final String ID_JR_TRAINER = "jr trainer";
     private static final int X_INDEX_PORTRAIT_JR_TRAINER = 5;
     private static final int Y_INDEX_PORTRAIT_JR_TRAINER = 1;
     private static final int X_SPAWN_INDEX_JR_TRAINER = 201;
     private static final int Y_SPAWN_INDEX_JR_TRAINER = 19;
+    public static final String ID_LASS02 = "lass02";
     private static final int X_INDEX_PORTRAIT_LASS_02 = 4;
     private static final int Y_INDEX_PORTRAIT_LASS_02 = 1;
     private static final int X_SPAWN_INDEX_LASS_02 = 200;
     private static final int Y_SPAWN_INDEX_LASS_02 = 22;
+    public static final String ID_YOUNGSTER = "youngster";
     private static final int X_INDEX_PORTRAIT_YOUNGSTER = 3;
     private static final int Y_INDEX_PORTRAIT_YOUNGSTER = 1;
     private static final int X_SPAWN_INDEX_YOUNGSTER = 201;
     private static final int Y_SPAWN_INDEX_YOUNGSTER = 25;
+    public static final String ID_LASS01 = "lass01";
     private static final int X_INDEX_PORTRAIT_LASS_01 = 4;
     private static final int Y_INDEX_PORTRAIT_LASS_01 = 1;
     private static final int X_SPAWN_INDEX_LASS_01 = 200;
     private static final int Y_SPAWN_INDEX_LASS_01 = 28;
+    public static final String ID_BUG_CATCH = "bug catcher";
     private static final int X_INDEX_PORTRAIT_BUG_CATCHER = 2;
     private static final int Y_INDEX_PORTRAIT_BUG_CATCHER = 1;
     private static final int X_SPAWN_INDEX_BUG_CATCHER = 201;
@@ -166,7 +174,7 @@ public class WorldScene extends Scene {
                 Log.e(TAG, "WorldScene: player's  CollisionListener.onJustCollided(Entity)");
 
                 if (collided instanceof NonPlayableCharacter) {
-                    if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                    if (((NonPlayableCharacter) collided).getId().equals(ID_COIN)) {
                         soundManager.sfxPlay(soundManager.sfxGetItem);
                         player.increaseMovementSpeed();
 
@@ -243,9 +251,9 @@ public class WorldScene extends Scene {
 //
 //                            isFirstCollide = true;
 //                        }
-                    } else if (((NonPlayableCharacter) collided).getId().equals("rival")) {
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_RIVAL)) {
 //                                soundManager.sfxPlay(soundManager.sfxHorn);
-                    } else if (((NonPlayableCharacter) collided).getId().equals("rival leader")) {
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_RIVAL_LEADER)) {
                         pause();
 
                         Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
@@ -498,7 +506,7 @@ public class WorldScene extends Scene {
             @Override
             public void onJustCollided(Entity collided) {
                 if (collided instanceof NonPlayableCharacter) {
-                    if (((NonPlayableCharacter) collided).getId().equals("coin")) {
+                    if (((NonPlayableCharacter) collided).getId().equals(ID_COIN)) {
                         soundManager.sfxPlay(soundManager.sfxGetItem);
                     }
                 } else if (collided instanceof Player) {
@@ -544,56 +552,56 @@ public class WorldScene extends Scene {
         spriteTileWalkable = SpriteInitializer.initWalkableTileSprite(resources);
         spriteTileBoulder = SpriteInitializer.initBoulderTileSprite(resources);
         // ENTITIES
-        NonPlayableCharacter npcRival = generateNonPlayableCharacter("rival",
+        NonPlayableCharacter npcRival = generateNonPlayableCharacter(ID_RIVAL,
                 X_INDEX_PORTRAIT_RIVAL, Y_INDEX_PORTRAIT_RIVAL,
                 3,
                 X_SPAWN_INDEX_RIVAL, Y_SPAWN_INDEX_RIVAL,
                 false, DOWN,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcCoin = generateNonPlayableCharacter("coin",
+        NonPlayableCharacter npcCoin = generateNonPlayableCharacter(ID_COIN,
                 X_INDEX_PORTRAIT_COIN, Y_INDEX_PORTRAIT_COIN,
                 -1,
                 X_SPAWN_INDEX_COIN, Y_SPAWN_INDEX_COIN,
                 true, DOWN,
                 collisionListenerCoin,
                 movementListenerNPC);
-        NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter("rival leader",
+        NonPlayableCharacter npcRivalLeader = generateNonPlayableCharacter(ID_RIVAL_LEADER,
                 X_INDEX_PORTRAIT_RIVAL_LEADER, Y_INDEX_PORTRAIT_RIVAL_LEADER,
                 28,
                 X_SPAWN_INDEX_RIVAL_LEADER, Y_SPAWN_INDEX_RIVAL_LEADER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter("jr trainer",
+        NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter(ID_JR_TRAINER,
                 X_INDEX_PORTRAIT_JR_TRAINER, Y_INDEX_PORTRAIT_JR_TRAINER,
                 11,
                 X_SPAWN_INDEX_JR_TRAINER, Y_SPAWN_INDEX_JR_TRAINER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass02 = generateNonPlayableCharacter("lass02",
+        NonPlayableCharacter npcLass02 = generateNonPlayableCharacter(ID_LASS02,
                 X_INDEX_PORTRAIT_LASS_02, Y_INDEX_PORTRAIT_LASS_02,
                 17,
                 X_SPAWN_INDEX_LASS_02, Y_SPAWN_INDEX_LASS_02,
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcYoungster = generateNonPlayableCharacter("youngster",
+        NonPlayableCharacter npcYoungster = generateNonPlayableCharacter(ID_YOUNGSTER,
                 X_INDEX_PORTRAIT_YOUNGSTER, Y_INDEX_PORTRAIT_YOUNGSTER,
                 10,
                 X_SPAWN_INDEX_YOUNGSTER, Y_SPAWN_INDEX_YOUNGSTER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass01 = generateNonPlayableCharacter("lass01",
+        NonPlayableCharacter npcLass01 = generateNonPlayableCharacter(ID_LASS01,
                 X_INDEX_PORTRAIT_LASS_01, Y_INDEX_PORTRAIT_LASS_01,
                 17,
                 X_SPAWN_INDEX_LASS_01, Y_SPAWN_INDEX_LASS_01,
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter("bug catcher",
+        NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter(ID_BUG_CATCH,
                 X_INDEX_PORTRAIT_BUG_CATCHER, Y_INDEX_PORTRAIT_BUG_CATCHER,
                 10,
                 X_SPAWN_INDEX_BUG_CATCHER, Y_SPAWN_INDEX_BUG_CATCHER,
