@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
+import com.jackingaming.thestraylightrun.sandbox.SandboxFragment;
 import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
@@ -45,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         Log.e("MainActivity", "onPrepareOptionsMenu()");
         for (int i = 0; i < menu.size(); i++) {
-            if (menu.getItem(i).getItemId() == R.id.options_item_sandbox ||
+            if (menu.getItem(i).getItemId() == R.id.options_item_particleexplosion ||
+                    menu.getItem(i).getItemId() == R.id.options_item_sandbox ||
                     menu.getItem(i).getItemId() == R.id.options_item_sprite_sheet_clip_selector ||
                     menu.getItem(i).getItemId() == R.id.options_item_next_week_tonight ||
                     menu.getItem(i).getItemId() == R.id.options_item_game_controller ||
@@ -61,25 +63,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.options_item_sandbox:
+            case R.id.options_item_particleexplosion:
                 replaceFragmentInContainerUsingCardFlipAnimations(
-//                        SandboxFragment.newInstance(null, null)
                         ParticleExplosionFragment.newInstance(null, null)
                 );
                 return true;
+            case R.id.options_item_sandbox:
+                replaceFragmentInContainerUsingCardFlipAnimations(
+                        SandboxFragment.newInstance(null, null)
+                );
+                return true;
             case R.id.options_item_sprite_sheet_clip_selector:
-                replaceFragmentInContainerUsingCardFlipAnimations(SpriteSheetClipSelectorFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(
+                        SpriteSheetClipSelectorFragment.newInstance(null, null)
+                );
                 return true;
             case R.id.options_item_next_week_tonight:
-                replaceFragmentInContainerUsingCardFlipAnimations(NextWeekTonightFragment.newInstance(null, null));
+                replaceFragmentInContainerUsingCardFlipAnimations(
+                        NextWeekTonightFragment.newInstance(null, null)
+                );
                 return true;
             case R.id.options_item_game_controller:
-                replaceFragmentInContainerUsingCardFlipAnimations(GameFragment.newInstance(null, null, new GameFragment.ReplaceFragmentListener() {
-                    @Override
-                    public void onReplaceFragment(Fragment newFragment) {
-                        replaceFragmentInContainerUsingCardFlipAnimations(newFragment);
-                    }
-                }));
+                replaceFragmentInContainerUsingCardFlipAnimations(
+                        GameFragment.newInstance(null, null,
+                                new GameFragment.ReplaceFragmentListener() {
+                                    @Override
+                                    public void onReplaceFragment(Fragment newFragment) {
+                                        replaceFragmentInContainerUsingCardFlipAnimations(
+                                                newFragment
+                                        );
+                                    }
+                                })
+                );
                 return true;
             case R.id.options_item_hot_bar:
                 replaceFragmentInContainerUsingCardFlipAnimations(SequenceTrainerFragment.newInstance(null, null));
