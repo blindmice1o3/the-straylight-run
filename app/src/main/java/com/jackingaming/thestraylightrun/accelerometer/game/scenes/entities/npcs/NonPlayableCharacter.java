@@ -32,6 +32,12 @@ public class NonPlayableCharacter extends Entity {
         startAnimations();
     }
 
+    @Override
+    protected void resetMovementCommands() {
+        super.resetMovementCommands();
+        turnStationaryOn();
+    }
+
     public void turnStationaryOn() {
         stationary = true;
         updateAnimationsBasedOnStationary();

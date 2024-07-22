@@ -1,7 +1,5 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -348,47 +346,32 @@ public class GameFragment extends Fragment
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Handler handler = new Handler();
-                                List<MovementCommand> movementCommands = new ArrayList<>();
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveLeftCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveRightCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveLeftCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveUpCommand(e, handler));
-                                movementCommands.add(new MoveRightCommand(e, handler));
+                                if (((NonPlayableCharacter) e).isStationary()) {
+                                    Handler handler = new Handler();
+                                    List<MovementCommand> movementCommands = new ArrayList<>();
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveLeftCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveRightCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveLeftCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveUpCommand(e, handler));
+                                    movementCommands.add(new MoveRightCommand(e, handler));
 
-                                e.attachAnimatorListenerAdapterToAnimatorMovement(
-                                        new AnimatorListenerAdapter() {
-                                            @Override
-                                            public void onAnimationEnd(Animator animation) {
-                                                super.onAnimationEnd(animation);
-
-                                                if (!e.getMovementCommands().isEmpty()) {
-                                                    if (e.getIndexMovementCommands() == e.getMovementCommands().size()) {
-                                                        e.setIndexMovementCommands(0);
-                                                        e.getMovementCommands().clear();
-                                                        return;
-                                                    }
-
-                                                    e.runMovementCommands();
-                                                }
-                                            }
-                                        }
-                                );
-                                e.appendMovementCommands(movementCommands);
-                                e.runMovementCommands();
+                                    e.appendMovementCommands(movementCommands);
+                                    ((NonPlayableCharacter) e).turnStationaryOff();
+                                    e.runMovementCommands();
+                                }
                             }
                         });
                     } else {

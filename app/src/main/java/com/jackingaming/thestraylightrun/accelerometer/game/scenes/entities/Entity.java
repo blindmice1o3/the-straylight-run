@@ -30,19 +30,23 @@ public abstract class Entity {
         movementCommands.addAll(movementCommandsToAdd);
     }
 
-    public void attachAnimatorListenerAdapterToAnimatorMovement(AnimatorListenerAdapter adapter) {
-        animatorMovement.addListener(adapter);
-    }
-
     public void runMovementCommands() {
         if (!movementCommands.isEmpty()) {
-            if (indexMovementCommands < movementCommands.size()) {
-
-                MovementCommand movementCommand = movementCommands.get(indexMovementCommands);
-                indexMovementCommands++;
-                movementCommand.execute();
+            if (indexMovementCommands >= movementCommands.size()) {
+                resetMovementCommands();
+                return;
             }
+
+            MovementCommand movementCommand = movementCommands.get(indexMovementCommands);
+            indexMovementCommands++;
+            movementCommand.execute();
         }
+    }
+
+    protected void resetMovementCommands() {
+        indexMovementCommands = 0;
+        movementCommands.clear();
+        animatorMovement.removeAllListeners();
     }
 
     protected MovementListener movementListener;
@@ -72,6 +76,16 @@ public abstract class Entity {
                 ObjectAnimator.ofFloat(this, "yPos", yPos - heightSpriteDst);
         animatorMovement.setDuration(DEFAULT_MOVEMENT_DURATION);
         animatorMovement.setInterpolator(new LinearInterpolator());
+        animatorMovement.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                if (!movementCommands.isEmpty()) {
+                    runMovementCommands();
+                }
+            }
+        });
     }
 
     public void increaseMovementSpeed() {
@@ -124,6 +138,7 @@ public abstract class Entity {
     }
 
     public void moveLeft(Handler handler) {
+        direction = Direction.LEFT;
         String propertyName = "xPos";
         float valueStart = xPos;
         float valueEnd = (xPos - widthSpriteDst);
@@ -136,6 +151,7 @@ public abstract class Entity {
     }
 
     public void moveRight(Handler handler) {
+        direction = Direction.RIGHT;
         String propertyName = "xPos";
         float valueStart = xPos;
         float valueEnd = (xPos + widthSpriteDst);
@@ -148,11 +164,25 @@ public abstract class Entity {
     }
 
     public void moveUp(Handler handler) {
+        direction = Direction.UP;
         String propertyName = "yPos";
         float valueStart = yPos;
         float valueEnd = (yPos - heightSpriteDst);
         float xDeltaFullStep = 0;
         float yDeltaFullStep = -(heightSpriteDst - 1);
+
+        validateAndMove(handler, propertyName,
+                valueStart, valueEnd,
+                xDeltaFullStep, yDeltaFullStep);
+    }
+
+    public void moveDown(Handler handler) {
+        direction = Direction.DOWN;
+        String propertyName = "yPos";
+        float valueStart = yPos;
+        float valueEnd = (yPos + heightSpriteDst);
+        float xDeltaFullStep = 0;
+        float yDeltaFullStep = (heightSpriteDst - 1);
 
         validateAndMove(handler, propertyName,
                 valueStart, valueEnd,
@@ -194,18 +224,6 @@ public abstract class Entity {
                 }
             });
         }
-    }
-
-    public void moveDown(Handler handler) {
-        String propertyName = "yPos";
-        float valueStart = yPos;
-        float valueEnd = (yPos + heightSpriteDst);
-        float xDeltaFullStep = 0;
-        float yDeltaFullStep = (heightSpriteDst - 1);
-
-        validateAndMove(handler, propertyName,
-                valueStart, valueEnd,
-                xDeltaFullStep, yDeltaFullStep);
     }
 
     private boolean checkTileCollisionLeft(float xDeltaFullStep, float yDeltaFullStep) {
