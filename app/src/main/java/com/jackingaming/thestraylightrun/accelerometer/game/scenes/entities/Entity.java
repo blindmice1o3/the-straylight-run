@@ -1,11 +1,16 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.animation.LinearInterpolator;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.MovementCommand;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +21,28 @@ public abstract class Entity {
 
     public interface CollisionListener {
         void onJustCollided(Entity collided);
+    }
+
+    private List<MovementCommand> movementCommands = new ArrayList<>();
+    private int indexMovementCommands = 0;
+
+    public void appendMovementCommands(List<MovementCommand> movementCommandsToAdd) {
+        movementCommands.addAll(movementCommandsToAdd);
+    }
+
+    public void attachAnimatorListenerAdapterToAnimatorMovement(AnimatorListenerAdapter adapter) {
+        animatorMovement.addListener(adapter);
+    }
+
+    public void runMovementCommands() {
+        if (!movementCommands.isEmpty()) {
+            if (indexMovementCommands < movementCommands.size()) {
+
+                MovementCommand movementCommand = movementCommands.get(indexMovementCommands);
+                indexMovementCommands++;
+                movementCommand.execute();
+            }
+        }
     }
 
     protected MovementListener movementListener;
@@ -345,5 +372,17 @@ public abstract class Entity {
 
     public boolean isCantCollide() {
         return cantCollide;
+    }
+
+    public int getIndexMovementCommands() {
+        return indexMovementCommands;
+    }
+
+    public void setIndexMovementCommands(int indexMovementCommands) {
+        this.indexMovementCommands = indexMovementCommands;
+    }
+
+    public List<MovementCommand> getMovementCommands() {
+        return movementCommands;
     }
 }

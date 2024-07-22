@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -36,6 +38,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartF
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -43,6 +47,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -343,7 +348,47 @@ public class GameFragment extends Fragment
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                new MoveUpCommand(e, new Handler()).execute();
+                                Handler handler = new Handler();
+                                List<MovementCommand> movementCommands = new ArrayList<>();
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveLeftCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveRightCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveLeftCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveUpCommand(e, handler));
+                                movementCommands.add(new MoveRightCommand(e, handler));
+
+                                e.attachAnimatorListenerAdapterToAnimatorMovement(
+                                        new AnimatorListenerAdapter() {
+                                            @Override
+                                            public void onAnimationEnd(Animator animation) {
+                                                super.onAnimationEnd(animation);
+
+                                                if (!e.getMovementCommands().isEmpty()) {
+                                                    if (e.getIndexMovementCommands() == e.getMovementCommands().size()) {
+                                                        e.setIndexMovementCommands(0);
+                                                        e.getMovementCommands().clear();
+                                                        return;
+                                                    }
+
+                                                    e.runMovementCommands();
+                                                }
+                                            }
+                                        }
+                                );
+                                e.appendMovementCommands(movementCommands);
+                                e.runMovementCommands();
                             }
                         });
                     } else {
