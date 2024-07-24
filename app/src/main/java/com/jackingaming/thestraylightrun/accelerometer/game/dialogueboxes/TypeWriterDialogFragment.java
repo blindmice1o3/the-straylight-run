@@ -21,7 +21,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 
-public class TypeWriterDialogFragment extends DialogFragment {
+public class TypeWriterDialogFragment extends DialogFragment
+        implements Serializable {
     public static final String TAG = TypeWriterDialogFragment.class.getSimpleName();
     public static final String ARG_DELAY = "delay";
     public static final String ARG_PORTRAIT = "portrait";

@@ -18,6 +18,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
@@ -474,6 +475,40 @@ public class LabScene extends Scene {
                                 Log.e(TAG, "onAnimationFinish()");
 
                                 // TODO:
+                                EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(
+                                        typeWriterDialogFragmentScientist,
+                                        new EditTextDialogFragment.EnterListener() {
+                                            @Override
+                                            public void onEnterKeyPressed(String name) {
+                                                pause();
+
+                                                String message = "Hello, " + name + "!";
+                                                Log.e(TAG, message);
+
+                                                TypeWriterDialogFragment typeWriterDialogFragmentScientistHelloName = TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
+                                                    @Override
+                                                    public void onDismiss() {
+                                                        unpause();
+                                                    }
+                                                }, new TypeWriterTextView.TextCompletionListener() {
+                                                    @Override
+                                                    public void onAnimationFinish() {
+                                                        // blank.
+                                                    }
+                                                });
+
+                                                gameListener.onShowDialogFragment(
+                                                        typeWriterDialogFragmentScientistHelloName,
+                                                        "TypeWriterDialogFragmentScientistHelloName"
+                                                );
+                                            }
+                                        }
+                                );
+
+                                gameListener.onShowDialogFragment(
+                                        editTextDialogFragment,
+                                        "EditTextDialogFragment"
+                                );
                             }
                         });
         return typeWriterDialogFragmentScientist;
