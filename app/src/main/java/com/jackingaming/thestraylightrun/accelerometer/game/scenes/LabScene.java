@@ -457,7 +457,7 @@ public class LabScene extends Scene {
     private TypeWriterDialogFragment typeWriterDialogFragmentScientist = null;
 
     private TypeWriterDialogFragment instantiateScientistDialogFragment(Bitmap portrait, Game.GameListener gameListener) {
-        String message = "Hello there! Welcome to the world of JAVA! My name is FOO BAR! People call me the JAVA PROF! This world is inhabited by creatures called OBJECT! For some people, OBJECT are pets. Others use them for fights. Myself... I study OBJECT as a profession. First, what is your name?";
+        String message = resources.getString(R.string.scientist_dialogue00);
 
         typeWriterDialogFragmentScientist =
                 TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {

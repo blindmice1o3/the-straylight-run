@@ -752,7 +752,7 @@ public class WorldScene extends Scene {
     private TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader = null;
 
     private TypeWriterDialogFragment instantiateRivalLeaderDialogFragment(Bitmap portrait, Game.GameListener gameListener) {
-        String message = "Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+        String message = resources.getString(R.string.rival_leader_dialogue00);
 
         typeWriterDialogFragmentRivalLeader =
                 TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
