@@ -356,7 +356,6 @@ public class WorldScene extends Scene {
         float yDelta = dataAccelerometer[1];
 
         // ENTITIES
-        Log.e(TAG, "(xDelta, yDelta): (" + xDelta + ", " + yDelta + ")");
         updateGameEntities(xDelta, yDelta);
     }
 

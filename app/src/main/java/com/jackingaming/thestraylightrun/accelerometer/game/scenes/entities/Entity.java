@@ -38,7 +38,6 @@ public abstract class Entity {
             }
 
             MovementCommand movementCommand = movementCommands.get(indexMovementCommands);
-            indexMovementCommands++;
             movementCommand.execute();
         }
     }
@@ -82,6 +81,7 @@ public abstract class Entity {
                 super.onAnimationEnd(animation);
 
                 if (!movementCommands.isEmpty()) {
+                    indexMovementCommands++;
                     runMovementCommands();
                 }
             }

@@ -76,21 +76,23 @@ public class NonPlayableCharacter extends Entity {
                 return;
             }
 
-            // DIRECTION (changes 20% of the time)
-            if (random.nextInt(5) < 1) {
-                // determine direction
-                int directionSpecified = random.nextInt(4);
-                if (directionSpecified == 0) {
-                    direction = Direction.LEFT;
-                } else if (directionSpecified == 1) {
-                    direction = Direction.RIGHT;
-                } else if (directionSpecified == 2) {
-                    direction = Direction.UP;
-                } else if (directionSpecified == 3) {
-                    direction = Direction.DOWN;
+            if (getMovementCommands().isEmpty()) {
+                // DIRECTION (changes 20% of the time)
+                if (random.nextInt(5) < 1) {
+                    // determine direction
+                    int directionSpecified = random.nextInt(4);
+                    if (directionSpecified == 0) {
+                        direction = Direction.LEFT;
+                    } else if (directionSpecified == 1) {
+                        direction = Direction.RIGHT;
+                    } else if (directionSpecified == 2) {
+                        direction = Direction.UP;
+                    } else if (directionSpecified == 3) {
+                        direction = Direction.DOWN;
+                    }
+                } else {
+                    // do nothing.
                 }
-            } else {
-                // do nothing.
             }
 
             doMoveBasedOnDirection(handler);
