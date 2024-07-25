@@ -17,8 +17,8 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.EditTextDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
@@ -135,7 +135,7 @@ public class LabScene extends Scene {
                         Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
                         gameListener.onShowDialogFragment(
                                 instantiateScientistDialogFragment(portrait, gameListener),
-                                "ScientistDialogFragment"
+                                "ScientistDialogue00"
                         );
                     }
                 }
@@ -455,17 +455,16 @@ public class LabScene extends Scene {
         return nonPlayableCharacter;
     }
 
-    private TypeWriterDialogFragment typeWriterDialogFragmentScientist = null;
+    private void onDismissScientistDialogue04(Bitmap portraitScientist) {
+        String messageScientistDialogue05 = resources.getString(R.string.scientist_dialogue05);
 
-    private TypeWriterDialogFragment instantiateScientistDialogFragment(Bitmap portrait, Game.GameListener gameListener) {
-        String message = resources.getString(R.string.scientist_dialogue00);
-
-        typeWriterDialogFragmentScientist =
-                TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
+        TypeWriterDialogFragment dialogFragmentScientistDialogue05 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue05,
+                        new TypeWriterDialogFragment.DismissListener() {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
-
                                 unpause();
                             }
                         },
@@ -473,45 +472,210 @@ public class LabScene extends Scene {
                             @Override
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
+                            }
+                        }
+                );
 
-                                // TODO:
-                                EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(
-                                        typeWriterDialogFragmentScientist,
-                                        new EditTextDialogFragment.EnterListener() {
-                                            @Override
-                                            public void onEnterKeyPressed(String name) {
-                                                pause();
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue05,
+                "ScientistDialogue05"
+        );
+    }
 
-                                                String message = "Hello, " + name + "!";
-                                                Log.e(TAG, message);
+    private void onDismissScientistDialogue03(Bitmap portraitScientist) {
+        String messageTemplate04 = resources.getString(R.string.scientist_dialogue04_template);
+        String messageScientistDialogue04 = String.format(messageTemplate04, nameUser);
 
-                                                TypeWriterDialogFragment typeWriterDialogFragmentScientistHelloName = TypeWriterDialogFragment.newInstance(50L, portrait, message, new TypeWriterDialogFragment.DismissListener() {
-                                                    @Override
-                                                    public void onDismiss() {
-                                                        unpause();
-                                                    }
-                                                }, new TypeWriterTextView.TextCompletionListener() {
-                                                    @Override
-                                                    public void onAnimationFinish() {
-                                                        // blank.
-                                                    }
-                                                });
+        dialogFragmentScientistDialogue04 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue04,
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+                                onDismissScientistDialogue04(portraitScientist);
+                            }
+                        },
+                        new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+                            }
+                        });
 
-                                                gameListener.onShowDialogFragment(
-                                                        typeWriterDialogFragmentScientistHelloName,
-                                                        "TypeWriterDialogFragmentScientistHelloName"
-                                                );
-                                            }
-                                        }
-                                );
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue04,
+                "ScientistDialogue04"
+        );
+    }
 
-                                gameListener.onShowDialogFragment(
-                                        editTextDialogFragment,
-                                        "EditTextDialogFragment"
+    private void onEnterKeyPressedScientistInput01(Bitmap portraitScientist, String nameRival) {
+        pause();
+
+        String messageTemplate03 = resources.getString(R.string.scientist_dialogue03_template);
+        String messageScientistDialogue03 = String.format(messageTemplate03, nameRival);
+
+        TypeWriterDialogFragment dialogFragmentScientistDialogue03 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue03,
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+                                onDismissScientistDialogue03(portraitScientist);
+                            }
+                        }, new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+                            }
+                        });
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue03,
+                "ScientistDialogue03"
+        );
+    }
+
+    private void onAnimationFinishScientistDialogue02(TypeWriterDialogFragment typeWriterDialogFragmentScientistDialogue02,
+                                                      Bitmap portraitScientist) {
+        EditTextDialogFragment dialogFragmentScientistInput01 = EditTextDialogFragment.newInstance(
+                new EditTextDialogFragment.EnterListener() {
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "onDismiss()");
+                        typeWriterDialogFragmentScientistDialogue02.dismiss();
+                    }
+
+                    @Override
+                    public void onEnterKeyPressed(String name) {
+                        Log.e(TAG, "onEnterKeyPressed()");
+                        nameRival = name;
+                        onEnterKeyPressedScientistInput01(portraitScientist, name);
+                    }
+                }
+        );
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistInput01,
+                "ScientistInput00"
+        );
+    }
+
+    private void onDismissScientistDialogue01(Bitmap portraitScientist) {
+        String messageScientistDialogue02 = resources.getString(R.string.scientist_dialogue02);
+
+        dialogFragmentScientistDialogue02 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue02,
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+                                unpause();
+                            }
+                        },
+                        new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+                                onAnimationFinishScientistDialogue02(
+                                        dialogFragmentScientistDialogue02,
+                                        portraitScientist
                                 );
                             }
                         });
-        return typeWriterDialogFragmentScientist;
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue02,
+                "ScientistDialogue02"
+        );
+    }
+
+    private void onEnterKeyPressedScientistInput00(Bitmap portraitScientist, String nameUser) {
+        pause();
+
+        String messageTemplate01 = resources.getString(R.string.scientist_dialogue01_template);
+        String messageScientistDialogue01 = String.format(messageTemplate01, nameUser);
+
+        TypeWriterDialogFragment dialogFragmentScientistDialogue01 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue01,
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+                                onDismissScientistDialogue01(portraitScientist);
+                            }
+                        }, new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+                            }
+                        });
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue01,
+                "ScientistDialogue01"
+        );
+    }
+
+    private void onAnimationFinishScientistDialogue00(TypeWriterDialogFragment typeWriterDialogFragmentScientistDialogue00,
+                                                      Bitmap portraitScientist) {
+        EditTextDialogFragment dialogFragmentScientistInput00 = EditTextDialogFragment.newInstance(
+                new EditTextDialogFragment.EnterListener() {
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "onDismiss()");
+                        typeWriterDialogFragmentScientistDialogue00.dismiss();
+                    }
+
+                    @Override
+                    public void onEnterKeyPressed(String name) {
+                        Log.e(TAG, "onEnterKeyPressed()");
+                        nameUser = name;
+                        onEnterKeyPressedScientistInput00(portraitScientist, name);
+                    }
+                }
+        );
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistInput00,
+                "ScientistInput00"
+        );
+    }
+
+    private String nameRival;
+    private String nameUser;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue00;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue02;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue04;
+
+    // 00 (START)
+    private TypeWriterDialogFragment instantiateScientistDialogFragment(Bitmap portraitScientist, Game.GameListener gameListener) {
+        String messageScientistDialogue00 = resources.getString(R.string.scientist_dialogue00);
+
+        dialogFragmentScientistDialogue00 =
+                TypeWriterDialogFragment.newInstance(50L, portraitScientist,
+                        messageScientistDialogue00,
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "onDismiss()");
+                                unpause();
+                            }
+                        },
+                        new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "onAnimationFinish()");
+                                onAnimationFinishScientistDialogue00(
+                                        dialogFragmentScientistDialogue00,
+                                        portraitScientist
+                                );
+                            }
+                        });
+        return dialogFragmentScientistDialogue00;
     }
 
     private void pause() {

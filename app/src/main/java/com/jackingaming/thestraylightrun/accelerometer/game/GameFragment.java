@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;

@@ -22,31 +22,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.TypeWriterDialogFragment;
 
 import java.io.Serializable;
 
 public class EditTextDialogFragment extends DialogFragment {
     public static final String TAG = EditTextDialogFragment.class.getSimpleName();
-    public static final String ARG_SOURCE_DIALOG_FRAGMENT = "sourceDialogFragment";
     public static final String ARG_ENTER_LISTENER = "enterListener";
 
     public interface EnterListener extends Serializable {
+        void onDismiss();
+
         void onEnterKeyPressed(String name);
     }
 
-    private DialogFragment sourceDialogFragment;
     private EnterListener listener;
 
     private EditText editText;
     private Button buttonDone;
 
-    public static EditTextDialogFragment newInstance(TypeWriterDialogFragment sourceDialogFragment,
-                                                     EnterListener listener) {
+    public static EditTextDialogFragment newInstance(EnterListener listener) {
         EditTextDialogFragment fragment = new EditTextDialogFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_SOURCE_DIALOG_FRAGMENT, sourceDialogFragment);
         args.putSerializable(ARG_ENTER_LISTENER, listener);
         fragment.setArguments(args);
 
@@ -57,7 +54,6 @@ public class EditTextDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        sourceDialogFragment = (TypeWriterDialogFragment) getArguments().getSerializable(ARG_SOURCE_DIALOG_FRAGMENT);
         listener = (EnterListener) getArguments().getSerializable(ARG_ENTER_LISTENER);
     }
 
@@ -65,9 +61,6 @@ public class EditTextDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView()");
-
-        getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-
         return inflater.inflate(R.layout.dialogfragment_edittext, container, false);
     }
 
@@ -104,21 +97,17 @@ public class EditTextDialogFragment extends DialogFragment {
                 }
             }
         });
-    }
-
-    public void onResume() {
-        super.onResume();
 
         Window window = getDialog().getWindow();
-        Point size = new Point();
-
         Display display = window.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
         display.getSize(size);
-
         int width = size.x;
-
         window.setLayout((int) (width * 0.75), WindowManager.LayoutParams.WRAP_CONTENT);
         window.setGravity(Gravity.CENTER);
+
+        editText.requestFocus();
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override
@@ -126,7 +115,7 @@ public class EditTextDialogFragment extends DialogFragment {
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
 
-        sourceDialogFragment.dismiss();
+        listener.onDismiss();
     }
 
     @Override
