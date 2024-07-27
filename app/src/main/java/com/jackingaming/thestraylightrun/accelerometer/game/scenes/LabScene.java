@@ -133,10 +133,7 @@ public class LabScene extends Scene {
                         pause();
 
                         Bitmap portrait = ((NonPlayableCharacter) collided).getPortrait();
-                        gameListener.onShowDialogFragment(
-                                instantiateScientistDialogFragment(portrait, gameListener),
-                                "ScientistDialogue00"
-                        );
+                        startDialogueWithScientist(portrait);
                     }
                 }
             }
@@ -465,6 +462,9 @@ public class LabScene extends Scene {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
+
+                                // TODO: change scene to WorldScene (maybe indoors [player's house]).
+
                                 unpause();
                             }
                         },
@@ -522,6 +522,8 @@ public class LabScene extends Scene {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
+                                completedDialogue02 = true;
+
                                 onDismissScientistDialogue03(portraitScientist);
                             }
                         }, new TypeWriterTextView.TextCompletionListener() {
@@ -605,6 +607,8 @@ public class LabScene extends Scene {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
+                                completedDialogue00 = true;
+
                                 onDismissScientistDialogue01(portraitScientist);
                             }
                         }, new TypeWriterTextView.TextCompletionListener() {
@@ -645,14 +649,7 @@ public class LabScene extends Scene {
         );
     }
 
-    private String nameRival;
-    private String nameUser;
-    TypeWriterDialogFragment dialogFragmentScientistDialogue00;
-    TypeWriterDialogFragment dialogFragmentScientistDialogue02;
-    TypeWriterDialogFragment dialogFragmentScientistDialogue04;
-
-    // 00 (START)
-    private TypeWriterDialogFragment instantiateScientistDialogFragment(Bitmap portraitScientist, Game.GameListener gameListener) {
+    private void onShowScientistDialogue00(Bitmap portraitScientist) {
         String messageScientistDialogue00 = resources.getString(R.string.scientist_dialogue00);
 
         dialogFragmentScientistDialogue00 =
@@ -674,8 +671,32 @@ public class LabScene extends Scene {
                                         portraitScientist
                                 );
                             }
-                        });
-        return dialogFragmentScientistDialogue00;
+                        }
+                );
+
+        gameListener.onShowDialogFragment(
+                dialogFragmentScientistDialogue00,
+                "ScientistDialogue00"
+        );
+    }
+
+    private String nameRival;
+    private String nameUser;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue00;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue02;
+    TypeWriterDialogFragment dialogFragmentScientistDialogue04;
+    private boolean completedDialogue00 = false;
+    private boolean completedDialogue02 = false;
+
+    // 00 (START)
+    private void startDialogueWithScientist(Bitmap portraitScientist) {
+        if (completedDialogue02) {
+            onDismissScientistDialogue03(portraitScientist);
+        } else if (completedDialogue00) {
+            onDismissScientistDialogue01(portraitScientist);
+        } else {
+            onShowScientistDialogue00(portraitScientist);
+        }
     }
 
     private void pause() {
