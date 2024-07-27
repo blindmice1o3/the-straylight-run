@@ -47,8 +47,10 @@ public class WorldScene extends Scene {
 
     private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_world_map;
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
-    private static final int X_SPAWN_INDEX_PLAYER = 200;
-    private static final int Y_SPAWN_INDEX_PLAYER = 34;
+    private static final int X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE = 200;
+    private static final int Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE = 34;
+    private static final int X_SPAWN_INDEX_PLAYER_HOMETOWN = 69;
+    private static final int Y_SPAWN_INDEX_PLAYER_HOMETOWN = 207;
     public static final String ID_RIVAL = "rival";
     private static final int X_INDEX_PORTRAIT_RIVAL = 4;
     private static final int Y_INDEX_PORTRAIT_RIVAL = 5;
@@ -333,8 +335,13 @@ public class WorldScene extends Scene {
             player.setCollisionListener(collisionListenerPlayer);
             player.setMovementListener(movementListenerPlayer);
 
-            player.setXPos(xBeforeTransfer);
-            player.setYPos(yBeforeTransfer);
+            if (!spawnHometown) {
+                player.setXPos(xBeforeTransfer);
+                player.setYPos(yBeforeTransfer);
+            } else {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_HOMETOWN * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOMETOWN * heightSpriteDst);
+            }
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -405,6 +412,7 @@ public class WorldScene extends Scene {
 
     private Entity.CollisionListener collisionListenerPlayer;
     private Entity.MovementListener movementListenerPlayer;
+    private boolean spawnHometown = false;
 
     @Override
     public void enter(List<Object> args) {
@@ -425,11 +433,19 @@ public class WorldScene extends Scene {
         player.setMovementListener(movementListenerPlayer);
 
         if (xBeforeTransfer < 0) {
-            player.setXPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+            player.setXPos(X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst);
+            player.setYPos(Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * heightSpriteDst);
         } else {
-            player.setXPos(xBeforeTransfer);
-            player.setYPos(yBeforeTransfer);
+            Log.e(TAG, "xBeforeTransfer >= 0");
+            if (args != null) {
+                Log.e(TAG, "args != null");
+                boolean dismissCompletedDialog04 = (boolean) args.get(0);
+                spawnHometown = dismissCompletedDialog04;
+            } else {
+                Log.e(TAG, "args == null");
+                player.setXPos(xBeforeTransfer);
+                player.setYPos(yBeforeTransfer);
+            }
         }
 
         // GAME CAMERA

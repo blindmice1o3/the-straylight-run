@@ -249,6 +249,12 @@ public class LabScene extends Scene {
             }
         });
 
+        if (dismissCompletedDialog04) {
+            List<Object> argsSceneTransfer = new ArrayList<>();
+            argsSceneTransfer.add(dismissCompletedDialog04);
+            return argsSceneTransfer;
+        }
+
         return null;
     }
 
@@ -463,7 +469,10 @@ public class LabScene extends Scene {
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
 
-                                // TODO: change scene to WorldScene (maybe indoors [player's house]).
+                                if (completedDialogue04) {
+                                    // Used in exit() (determines: xBeforeTransfer or X_SPAWN_HOMETOWN)
+                                    dismissCompletedDialog04 = true;
+                                }
 
                                 unpause();
                             }
@@ -472,6 +481,7 @@ public class LabScene extends Scene {
                             @Override
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
+                                completedDialogue04 = true;
                             }
                         }
                 );
@@ -687,6 +697,8 @@ public class LabScene extends Scene {
     TypeWriterDialogFragment dialogFragmentScientistDialogue04;
     private boolean completedDialogue00 = false;
     private boolean completedDialogue02 = false;
+    private boolean completedDialogue04 = false;
+    private boolean dismissCompletedDialog04 = false;
 
     // 00 (START)
     private void startDialogueWithScientist(Bitmap portraitScientist) {
