@@ -26,6 +26,10 @@ public class Inanimate extends Entity {
 
     @Override
     public void update(Handler handler) {
+        // do nothing.
+    }
 
+    public String getId() {
+        return id;
     }
 }
