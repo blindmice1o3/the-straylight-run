@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom02Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
@@ -91,6 +93,18 @@ public class Game {
                 widthSurfaceView, heightSurfaceView,
                 widthSpriteDst, heightSpriteDst);
         LabScene.getInstance().init(
+                WorldScene.getInstance().getPlayer(),
+                resources, handler, soundManager,
+                gameListener, gameCamera,
+                widthSurfaceView, heightSurfaceView,
+                widthSpriteDst, heightSpriteDst);
+        HomePlayerRoom02Scene.getInstance().init(
+                WorldScene.getInstance().getPlayer(),
+                resources, handler, soundManager,
+                gameListener, gameCamera,
+                widthSurfaceView, heightSurfaceView,
+                widthSpriteDst, heightSpriteDst);
+        HomePlayerRoom01Scene.getInstance().init(
                 WorldScene.getInstance().getPlayer(),
                 resources, handler, soundManager,
                 gameListener, gameCamera,

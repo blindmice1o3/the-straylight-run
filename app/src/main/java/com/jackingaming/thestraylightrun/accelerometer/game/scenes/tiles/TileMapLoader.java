@@ -105,6 +105,9 @@ public class TileMapLoader {
 
                 // SolidTile
                 if (tokens[((y * columns) + x) + 2].equals("1") ||
+                        tokens[((y * columns) + x) + 2].equals("3") ||
+                        tokens[((y * columns) + x) + 2].equals("4") ||
+                        tokens[((y * columns) + x) + 2].equals("5") ||
                         tokens[((y * columns) + x) + 2].equals("9")) {
                     tiles[x][y] = new SolidTile(spriteTile);
                 }

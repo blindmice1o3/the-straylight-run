@@ -407,7 +407,9 @@ public class WorldScene extends Scene {
             }
         });
 
-        return null;
+        List<Object> argsSceneTransfer = new ArrayList<>();
+        argsSceneTransfer.add(WorldScene.TAG);
+        return argsSceneTransfer;
     }
 
     private Entity.CollisionListener collisionListenerPlayer;
@@ -439,8 +441,15 @@ public class WorldScene extends Scene {
             Log.e(TAG, "xBeforeTransfer >= 0");
             if (args != null) {
                 Log.e(TAG, "args != null");
-                boolean dismissCompletedDialog04 = (boolean) args.get(0);
-                spawnHometown = dismissCompletedDialog04;
+                String idScene = (String) args.get(0);
+                if (idScene.equals(LabScene.TAG)) {
+                    player.setXPos(xBeforeTransfer);
+                    player.setYPos(yBeforeTransfer);
+                } else if (idScene.equals(HomePlayerRoom01Scene.TAG)) {
+                    spawnHometown = true;
+                    player.setXPos(X_SPAWN_INDEX_PLAYER_HOMETOWN * widthSpriteDst);
+                    player.setYPos(Y_SPAWN_INDEX_PLAYER_HOMETOWN * heightSpriteDst);
+                }
             } else {
                 Log.e(TAG, "args == null");
                 player.setXPos(xBeforeTransfer);
@@ -452,11 +461,6 @@ public class WorldScene extends Scene {
         gameCamera.init(widthWorldInPixels, heightWorldInPixels);
 
         startEntityAnimations();
-    }
-
-    @Override
-    public boolean isPaused() {
-        return paused;
     }
 
     @Override

@@ -19,7 +19,9 @@ public abstract class Scene {
 
     public abstract void enter(List<Object> args);
 
-    public abstract boolean isPaused();
+    public boolean isPaused() {
+        return paused;
+    }
 
     public abstract boolean checkIsWalkableTile(int x, int y);
 

@@ -184,8 +184,14 @@ public class LabScene extends Scene {
                         if (canUseTransferPoint) {
                             String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
                             if (idSceneDestination.equals(WorldScene.TAG)) {
-                                Log.e(TAG, "transfer point: WORLD");
-                                gameListener.onChangeScene(WorldScene.getInstance());
+                                if (dismissCompletedDialog04) {
+                                    Log.e(TAG, "transfer point: HOME PLAYER ROOM 02");
+                                    gameListener.onChangeScene(HomePlayerRoom02Scene.getInstance());
+                                } else {
+                                    Log.e(TAG, "transfer point: WORLD");
+                                    gameListener.onChangeScene(WorldScene.getInstance());
+                                }
+
                                 return true;
                             }
                         }
@@ -249,13 +255,9 @@ public class LabScene extends Scene {
             }
         });
 
-        if (dismissCompletedDialog04) {
-            List<Object> argsSceneTransfer = new ArrayList<>();
-            argsSceneTransfer.add(dismissCompletedDialog04);
-            return argsSceneTransfer;
-        }
-
-        return null;
+        List<Object> argsSceneTransfer = new ArrayList<>();
+        argsSceneTransfer.add(LabScene.TAG);
+        return argsSceneTransfer;
     }
 
     private Entity.CollisionListener collisionListenerPlayer;
@@ -291,11 +293,6 @@ public class LabScene extends Scene {
         gameCamera.init(widthWorldInPixels, heightWorldInPixels);
 
         startEntityAnimations();
-    }
-
-    @Override
-    public boolean isPaused() {
-        return paused;
     }
 
     @Override
