@@ -45,7 +45,9 @@ public class ChoiceDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        listener = (ChoiceListener) getArguments().getSerializable(ARG_CHOICE_LISTENER);
+        if (getArguments() != null) {
+            listener = (ChoiceListener) getArguments().getSerializable(ARG_CHOICE_LISTENER);
+        }
     }
 
     @Nullable

@@ -14,9 +14,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -25,6 +29,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
+import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +137,22 @@ public class HomePlayerRoom01Scene extends Scene {
                     if (((Inanimate) collided).getId().equals(ID_TELEVISION)) {
                         Log.e(TAG, "TELEVISION inanimate entity collision!!!");
                         // TODO: show dialog fragment TELEVISION.
+                        pause();
+
+                        boolean showToolbarOnDismiss = false;
+                        Fragment fragment = NextWeekTonightFragment.newInstance(showToolbarOnDismiss);
+                        String tag = NextWeekTonightFragment.TAG;
+                        DialogFragment dialogFragment =
+                                FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        unpause();
+                                    }
+                                });
+
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
+                        );
                     }
                 }
             }
@@ -382,6 +403,20 @@ public class HomePlayerRoom01Scene extends Scene {
         entities = new ArrayList<>();
         entities.add(television);
         entities.add(player);
+    }
+
+    private void pause() {
+        Log.e(TAG, "pause()");
+
+        paused = true;
+        stopEntityAnimations();
+    }
+
+    private void unpause() {
+        Log.e(TAG, "unpause()");
+
+        paused = false;
+        startEntityAnimations();
     }
 
     private void stopEntityAnimations() {

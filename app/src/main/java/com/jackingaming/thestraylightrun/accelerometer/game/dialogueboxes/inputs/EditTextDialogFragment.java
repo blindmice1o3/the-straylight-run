@@ -54,7 +54,9 @@ public class EditTextDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        listener = (EnterListener) getArguments().getSerializable(ARG_ENTER_LISTENER);
+        if (getArguments() != null) {
+            listener = (EnterListener) getArguments().getSerializable(ARG_ENTER_LISTENER);
+        }
     }
 
     @Nullable

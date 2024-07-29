@@ -79,8 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 );
                 return true;
             case R.id.options_item_next_week_tonight:
+                boolean showToolbarOnDismiss = true;
                 replaceFragmentInContainerUsingCardFlipAnimations(
-                        NextWeekTonightFragment.newInstance(null, null)
+                        NextWeekTonightFragment.newInstance(showToolbarOnDismiss)
                 );
                 return true;
             case R.id.options_item_game_controller:

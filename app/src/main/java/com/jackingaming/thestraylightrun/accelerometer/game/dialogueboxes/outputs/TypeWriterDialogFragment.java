@@ -69,14 +69,16 @@ public class TypeWriterDialogFragment extends DialogFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        delay = getArguments().getLong(ARG_DELAY);
-        // @@@ Bitmap portrait (convert from ByteArray) @@@
-        byte[] byteArrayPortrait = getArguments().getByteArray(ARG_PORTRAIT);
-        portrait = BitmapFactory.decodeByteArray(byteArrayPortrait, 0, byteArrayPortrait.length);
-        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        text = getArguments().getString(ARG_TEXT);
-        dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
-        textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
+        if (getArguments() != null) {
+            delay = getArguments().getLong(ARG_DELAY);
+            // @@@ Bitmap portrait (convert from ByteArray) @@@
+            byte[] byteArrayPortrait = getArguments().getByteArray(ARG_PORTRAIT);
+            portrait = BitmapFactory.decodeByteArray(byteArrayPortrait, 0, byteArrayPortrait.length);
+            // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            text = getArguments().getString(ARG_TEXT);
+            dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
+            textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
+        }
     }
 
     @Nullable

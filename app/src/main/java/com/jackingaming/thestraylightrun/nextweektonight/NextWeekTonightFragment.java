@@ -3,17 +3,7 @@ package com.jackingaming.thestraylightrun.nextweektonight;
 import android.content.Context;
 import android.hardware.Camera;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -23,22 +13,32 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.jackingaming.thestraylightrun.R;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NextWeekTonightFragment extends Fragment {
+public class NextWeekTonightFragment extends Fragment
+        implements Serializable {
     public static final String TAG = NextWeekTonightFragment.class.getSimpleName();
+    public static final String ARG_SHOW_TOOLBAR_ON_DISMISS = "showToolbarOnDismiss";
     private static final int CAMERA_ID_BACK_CAMERA = 0;
     private static final int CAMERA_ID_FRONT_CAMERA = 1;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+    private boolean showToolbarOnDismiss;
 
     private FrameLayout frameLayoutParent;
     private RecyclerView recyclerView;
@@ -50,12 +50,13 @@ public class NextWeekTonightFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static NextWeekTonightFragment newInstance(String param1, String param2) {
+    public static NextWeekTonightFragment newInstance(boolean showToolbarOnDismiss) {
         NextWeekTonightFragment fragment = new NextWeekTonightFragment();
+
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS, showToolbarOnDismiss);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -63,7 +64,7 @@ public class NextWeekTonightFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.i(TAG, "onAttach()");
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override
@@ -72,8 +73,7 @@ public class NextWeekTonightFragment extends Fragment {
         Log.i(TAG, "onCreate()");
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            showToolbarOnDismiss = getArguments().getBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS);
         }
     }
 
@@ -252,7 +252,9 @@ public class NextWeekTonightFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.i(TAG, "onStop()");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        if (showToolbarOnDismiss) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        }
 //        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
 
