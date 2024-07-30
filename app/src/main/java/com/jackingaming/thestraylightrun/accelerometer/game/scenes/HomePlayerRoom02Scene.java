@@ -1,35 +1,25 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.scenes;
 
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.DOWN;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.LEFT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.RIGHT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.UP;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.inanimates.Inanimate;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HomePlayerRoom02Scene extends Scene {
     public static final String TAG = HomePlayerRoom02Scene.class.getSimpleName();
@@ -42,12 +32,6 @@ public class HomePlayerRoom02Scene extends Scene {
     private static final int Y_SPAWN_INDEX_PLAYER_FROM_STAIRS = 1;
     private static final int X_TRANSFER_POINT_INDEX_PLAYER_ROOM_01 = X_SPAWN_INDEX_PLAYER_FROM_STAIRS + 1;
     private static final int Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_01 = Y_SPAWN_INDEX_PLAYER_FROM_STAIRS;
-    private static final int X_SPAWN_INDEX_COMPUTER = 0;
-    private static final int Y_SPAWN_INDEX_COMPUTER = 1;
-    public static final String ID_COMPUTER = "computer";
-    private static final int X_SPAWN_INDEX_GAME_CONSOLE = 3;
-    private static final int Y_SPAWN_INDEX_GAME_CONSOLE = 5;
-    public static final String ID_GAME_CONSOLE = "game console";
 
     private static HomePlayerRoom02Scene instance;
 
@@ -123,17 +107,7 @@ public class HomePlayerRoom02Scene extends Scene {
         return new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
-                Log.e(TAG, "HomePlayerRoom02Scene: player's  CollisionListener.onJustCollided(Entity)");
-
-                if (collided instanceof Inanimate) {
-                    if (((Inanimate) collided).getId().equals(ID_COMPUTER)) {
-                        Log.e(TAG, "COMPUTER inanimate entity collision!!!");
-                        // TODO: show dialog fragment COMPUTER.
-                    } else if (((Inanimate) collided).getId().equals(ID_GAME_CONSOLE)) {
-                        Log.e(TAG, "GAME CONSOLE inanimate entity collision!!!");
-                        // TODO: show dialog fragment GAME CONSOLE.
-                    }
-                }
+                Log.e(TAG, "player's CollisionListener.onJustCollided(Entity)");
             }
         };
     }
@@ -176,6 +150,7 @@ public class HomePlayerRoom02Scene extends Scene {
                     timePrevious = timeNow;
                 }
 
+                // BOTH WALKABLE
                 if (isWalkableCorner1 && isWalkableCorner2) {
                     if (tiles[xIndex1][yIndex1] instanceof TransferPointTile &&
                             tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
@@ -187,6 +162,30 @@ public class HomePlayerRoom02Scene extends Scene {
                                 return true;
                             }
                         }
+                    } else {
+                        Log.e(TAG, "tile is NOT TransferPointTile");
+                    }
+                }
+                // BOTH SOLID
+                else if (!isWalkableCorner1 && !isWalkableCorner2 &&
+                        xIndex1 >= 0 && xIndex1 < tiles.length &&
+                        yIndex1 >= 0 && yIndex1 < tiles[xIndex1].length &&
+                        xIndex2 >= 0 && xIndex2 < tiles.length &&
+                        yIndex2 >= 0 && yIndex2 < tiles[xIndex1].length) {
+                    if (tiles[xIndex1][yIndex1] instanceof UniqueSolidTile &&
+                            tiles[xIndex2][yIndex2] instanceof UniqueSolidTile) {
+                        String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
+                        if (id.equals(UniqueSolidTile.COMPUTER)) {
+                            Log.e(TAG, "unique solid tile: COMPUTER");
+                            // TODO:
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.GAME_CONSOLE)) {
+                            Log.e(TAG, "unique solid tile: GAME CONSOLE");
+                            // TODO:
+                            return false;
+                        }
+                    } else {
+                        Log.e(TAG, "tile is NOT UniqueSolidTile");
                     }
                 }
 
@@ -342,44 +341,7 @@ public class HomePlayerRoom02Scene extends Scene {
     }
 
     private void initEntities() {
-        Entity.CollisionListener collisionListenerInanimate = null;
-        Entity.MovementListener movementListenerInanimate = null;
-
-        // [IMAGES]
-        Bitmap imageComputer = tiles[X_SPAWN_INDEX_COMPUTER][Y_SPAWN_INDEX_COMPUTER].getImage();
-        AnimationDrawable animationDrawableComputer = new AnimationDrawable();
-        animationDrawableComputer.setOneShot(false);
-        animationDrawableComputer.addFrame(new BitmapDrawable(resources, imageComputer), 420);
-        Map<Direction, AnimationDrawable> animationsByDirectionComputer = new HashMap<>();
-        animationsByDirectionComputer.put(UP, animationDrawableComputer);
-        animationsByDirectionComputer.put(DOWN, animationDrawableComputer);
-        animationsByDirectionComputer.put(LEFT, animationDrawableComputer);
-        animationsByDirectionComputer.put(RIGHT, animationDrawableComputer);
-        // [IMAGES]
-        Bitmap imageGameConsole = tiles[X_SPAWN_INDEX_GAME_CONSOLE][Y_SPAWN_INDEX_GAME_CONSOLE].getImage();
-        AnimationDrawable animationDrawableGameConsole = new AnimationDrawable();
-        animationDrawableGameConsole.setOneShot(false);
-        animationDrawableGameConsole.addFrame(new BitmapDrawable(resources, imageGameConsole), 420);
-        Map<Direction, AnimationDrawable> animationsByDirectionGameConsole = new HashMap<>();
-        animationsByDirectionGameConsole.put(UP, animationDrawableGameConsole);
-        animationsByDirectionGameConsole.put(DOWN, animationDrawableGameConsole);
-        animationsByDirectionGameConsole.put(LEFT, animationDrawableGameConsole);
-        animationsByDirectionGameConsole.put(RIGHT, animationDrawableGameConsole);
-
-        // ENTITIES
-        Inanimate computer = new Inanimate(ID_COMPUTER, animationsByDirectionComputer,
-                collisionListenerInanimate, movementListenerInanimate);
-        computer.setXPos(X_SPAWN_INDEX_COMPUTER * widthSpriteDst);
-        computer.setYPos(Y_SPAWN_INDEX_COMPUTER * heightSpriteDst);
-        // ENTITIES
-        Inanimate gameConsole = new Inanimate(ID_GAME_CONSOLE, animationsByDirectionGameConsole,
-                collisionListenerInanimate, movementListenerInanimate);
-        gameConsole.setXPos(X_SPAWN_INDEX_GAME_CONSOLE * widthSpriteDst);
-        gameConsole.setYPos(Y_SPAWN_INDEX_GAME_CONSOLE * heightSpriteDst);
-
         entities = new ArrayList<>();
-        entities.add(computer);
-        entities.add(gameConsole);
         entities.add(player);
     }
 

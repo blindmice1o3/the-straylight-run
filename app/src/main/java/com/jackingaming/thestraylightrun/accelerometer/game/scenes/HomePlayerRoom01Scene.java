@@ -1,16 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.scenes;
 
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.DOWN;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.LEFT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.RIGHT;
-import static com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction.UP;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.Log;
 
@@ -21,20 +14,17 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.FCVDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.inanimates.Inanimate;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class HomePlayerRoom01Scene extends Scene {
     public static final String TAG = HomePlayerRoom01Scene.class.getSimpleName();
@@ -49,9 +39,6 @@ public class HomePlayerRoom01Scene extends Scene {
     private static final int Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_FROM_STAIRS;
     private static final int X_TRANSFER_POINT_INDEX_WORLD = X_SPAWN_INDEX_PLAYER_FROM_DOOR;
     private static final int Y_TRANSFER_POINT_INDEX_WORLD = Y_SPAWN_INDEX_PLAYER_FROM_DOOR + 1;
-    private static final int X_SPAWN_INDEX_TELEVISION = 3;
-    private static final int Y_SPAWN_INDEX_TELEVISION = 1;
-    public static final String ID_TELEVISION = "television";
 
     private static HomePlayerRoom01Scene instance;
 
@@ -131,30 +118,7 @@ public class HomePlayerRoom01Scene extends Scene {
         return new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
-                Log.e(TAG, "HomePlayerRoom01Scene: player's  CollisionListener.onJustCollided(Entity)");
-
-                if (collided instanceof Inanimate) {
-                    if (((Inanimate) collided).getId().equals(ID_TELEVISION)) {
-                        Log.e(TAG, "TELEVISION inanimate entity collision!!!");
-                        // TODO: show dialog fragment TELEVISION.
-                        pause();
-
-                        boolean showToolbarOnDismiss = false;
-                        Fragment fragment = NextWeekTonightFragment.newInstance(showToolbarOnDismiss);
-                        String tag = NextWeekTonightFragment.TAG;
-                        DialogFragment dialogFragment =
-                                FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
-                                    @Override
-                                    public void onDismiss() {
-                                        unpause();
-                                    }
-                                });
-
-                        gameListener.onShowDialogFragment(
-                                dialogFragment, tag
-                        );
-                    }
-                }
+                Log.e(TAG, "player's CollisionListener.onJustCollided(Entity)");
             }
         };
     }
@@ -197,6 +161,7 @@ public class HomePlayerRoom01Scene extends Scene {
                     timePrevious = timeNow;
                 }
 
+                // BOTH WALKABLE
                 if (isWalkableCorner1 && isWalkableCorner2) {
                     if (tiles[xIndex1][yIndex1] instanceof TransferPointTile &&
                             tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
@@ -212,6 +177,42 @@ public class HomePlayerRoom01Scene extends Scene {
                                 return true;
                             }
                         }
+                    } else {
+                        Log.e(TAG, "tile is NOT TransferPointTile");
+                    }
+                }
+                // BOTH SOLID
+                else if (!isWalkableCorner1 && !isWalkableCorner2 &&
+                        xIndex1 >= 0 && xIndex1 < tiles.length &&
+                        yIndex1 >= 0 && yIndex1 < tiles[xIndex1].length &&
+                        xIndex2 >= 0 && xIndex2 < tiles.length &&
+                        yIndex2 >= 0 && yIndex2 < tiles[xIndex1].length) {
+                    if (tiles[xIndex1][yIndex1] instanceof UniqueSolidTile &&
+                            tiles[xIndex2][yIndex2] instanceof UniqueSolidTile) {
+                        String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
+                        if (id.equals(UniqueSolidTile.TELEVISION)) {
+                            Log.e(TAG, "unique solid tile: TELEVISION");
+                            pause();
+
+                            boolean showToolbarOnDismiss = false;
+                            Fragment fragment = NextWeekTonightFragment.newInstance(showToolbarOnDismiss);
+                            String tag = NextWeekTonightFragment.TAG;
+                            DialogFragment dialogFragment =
+                                    FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            unpause();
+                                        }
+                                    });
+
+                            gameListener.onShowDialogFragment(
+                                    dialogFragment, tag
+                            );
+
+                            return false;
+                        }
+                    } else {
+                        Log.e(TAG, "tile is NOT UniqueSolidTile");
                     }
                 }
 
@@ -380,28 +381,7 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     private void initEntities() {
-        Entity.CollisionListener collisionListenerInanimate = null;
-        Entity.MovementListener movementListenerInanimate = null;
-
-        // [IMAGES]
-        Bitmap image = tiles[X_SPAWN_INDEX_TELEVISION][Y_SPAWN_INDEX_TELEVISION].getImage();
-        AnimationDrawable animationDrawable = new AnimationDrawable();
-        animationDrawable.setOneShot(false);
-        animationDrawable.addFrame(new BitmapDrawable(resources, image), 420);
-        Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
-        animationsByDirection.put(UP, animationDrawable);
-        animationsByDirection.put(DOWN, animationDrawable);
-        animationsByDirection.put(LEFT, animationDrawable);
-        animationsByDirection.put(RIGHT, animationDrawable);
-
-        // ENTITIES
-        Inanimate television = new Inanimate(ID_TELEVISION, animationsByDirection,
-                collisionListenerInanimate, movementListenerInanimate);
-        television.setXPos(X_SPAWN_INDEX_TELEVISION * widthSpriteDst);
-        television.setYPos(Y_SPAWN_INDEX_TELEVISION * heightSpriteDst);
-
         entities = new ArrayList<>();
-        entities.add(television);
         entities.add(player);
     }
 

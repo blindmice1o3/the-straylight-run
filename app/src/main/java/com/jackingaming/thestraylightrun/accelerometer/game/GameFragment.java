@@ -41,7 +41,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.Move
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.inanimates.Inanimate;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
@@ -384,10 +383,8 @@ public class GameFragment extends Fragment
                             }
                         });
                     }
-                } else if (e instanceof Inanimate) {
-                    Log.e(TAG, "instantiateImageViewForEntities(), do NOT define click listener. Entity's class: " + e.getClass().getSimpleName());
                 } else {
-                    Log.e(TAG, "instantiateImageViewForEntities() else-clause (NOT NonPlayableCharacter nor Inanimate), do NOT define click listener. Entity's class: " + e.getClass().getSimpleName());
+                    Log.e(TAG, "instantiateImageViewForEntities() else-clause (NOT NonPlayableCharacter), do NOT define click listener. Entity's class: " + e.getClass().getSimpleName());
                 }
             }
             imageViewViaEntity.put(e, imageView);

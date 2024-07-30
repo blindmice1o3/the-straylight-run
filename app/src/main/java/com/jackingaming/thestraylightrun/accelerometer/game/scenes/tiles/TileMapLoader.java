@@ -103,11 +103,20 @@ public class TileMapLoader {
                 Bitmap spriteTile = Bitmap.createBitmap(fullWorldMap,
                         xOffset, yOffset, widthTile, heightTile);
 
+                // UniqueSolidTile (television)
+                if (tokens[((y * columns) + x) + 2].equals("3")) {
+                    tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.TELEVISION, spriteTile);
+                }
+                // UniqueSolidTile (computer)
+                else if (tokens[((y * columns) + x) + 2].equals("4")) {
+                    tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.COMPUTER, spriteTile);
+                }
+                // UniqueSolidTile (game console)
+                else if (tokens[((y * columns) + x) + 2].equals("5")) {
+                    tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.GAME_CONSOLE, spriteTile);
+                }
                 // SolidTile
-                if (tokens[((y * columns) + x) + 2].equals("1") ||
-                        tokens[((y * columns) + x) + 2].equals("3") ||
-                        tokens[((y * columns) + x) + 2].equals("4") ||
-                        tokens[((y * columns) + x) + 2].equals("5") ||
+                else if (tokens[((y * columns) + x) + 2].equals("1") ||
                         tokens[((y * columns) + x) + 2].equals("9")) {
                     tiles[x][y] = new SolidTile(spriteTile);
                 }
