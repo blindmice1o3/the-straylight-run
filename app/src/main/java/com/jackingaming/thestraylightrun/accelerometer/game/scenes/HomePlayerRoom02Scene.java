@@ -7,9 +7,14 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.FCVDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
@@ -181,7 +186,24 @@ public class HomePlayerRoom02Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.GAME_CONSOLE)) {
                             Log.e(TAG, "unique solid tile: GAME CONSOLE");
-                            // TODO:
+                            pause();
+
+                            // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                            String gameTitle = "Pooh Farmer";
+                            Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                            String tag = GameConsoleFragment.TAG;
+                            DialogFragment dialogFragment =
+                                    FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            unpause();
+                                        }
+                                    });
+
+                            gameListener.onShowDialogFragment(
+                                    dialogFragment, tag
+                            );
+
                             return false;
                         }
                     } else {
@@ -343,6 +365,20 @@ public class HomePlayerRoom02Scene extends Scene {
     private void initEntities() {
         entities = new ArrayList<>();
         entities.add(player);
+    }
+
+    private void pause() {
+        Log.e(TAG, "pause()");
+
+        paused = true;
+        stopEntityAnimations();
+    }
+
+    private void unpause() {
+        Log.e(TAG, "unpause()");
+
+        paused = false;
+        startEntityAnimations();
     }
 
     private void stopEntityAnimations() {

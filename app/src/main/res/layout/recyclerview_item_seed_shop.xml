@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageview_recyclerview_item_seed_shop"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:padding="1dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@id/textview_recyclerview_item_seed_shop"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.85"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textview_recyclerview_item_seed_shop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="1dp"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@id/imageview_recyclerview_item_seed_shop"
+        app:layout_constraintRight_toRightOf="@id/imageview_recyclerview_item_seed_shop"
+        app:layout_constraintTop_toBottomOf="@id/imageview_recyclerview_item_seed_shop" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
