@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
@@ -27,6 +28,7 @@ import java.io.Serializable;
 public class GameConsoleFragment extends Fragment
         implements Serializable,
         MySurfaceView.MySurfaceViewSurfaceChangeListener,
+        Game.TextboxListener,
         Game.StatsChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
@@ -112,6 +114,7 @@ public class GameConsoleFragment extends Fragment
             game = new Game(gameTitle);
         }
 
+        game.setTextboxListener(this);
         game.setStatsChangeListener(this);
 
         if (savedInstanceState == null) {
@@ -163,23 +166,63 @@ public class GameConsoleFragment extends Fragment
     }
 
     @Override
+    public void showTextbox(TypeWriterDialogFragment typeWriterDialogFragment) {
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_from_bottom_via_translate, R.anim.slide_to_top_via_translate)
+                .replace(R.id.fcv_statsdisplayerfragment, typeWriterDialogFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showStatsDisplayer() {
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_from_bottom_via_translate, R.anim.slide_to_top_via_translate)
+                .replace(R.id.fcv_statsdisplayerfragment, statsDisplayerFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void onCurrencyChange(float currency) {
-        statsDisplayerFragment.setCurrency(currency);
+        Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
+        if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
+            statsDisplayerFragment.setCurrency(currency);
+        } else {
+            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
+        }
     }
 
     @Override
     public void onTimeChange(long timePlayedInMilliseconds) {
-        statsDisplayerFragment.setTime(timePlayedInMilliseconds);
+        Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
+        if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
+            statsDisplayerFragment.setTime(timePlayedInMilliseconds);
+        } else {
+//            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
+        }
     }
 
     @Override
     public void onButtonHolderAChange(Bitmap image) {
-        statsDisplayerFragment.setImageForButtonHolderA(image);
+        Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
+        if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
+            statsDisplayerFragment.setImageForButtonHolderA(image);
+        } else {
+            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
+        }
     }
 
     @Override
     public void onButtonHolderBChange(Bitmap image) {
-        statsDisplayerFragment.setImageForButtonHolderB(image);
+        Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
+        if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
+            statsDisplayerFragment.setImageForButtonHolderB(image);
+        } else {
+            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
+        }
     }
 
     @Override

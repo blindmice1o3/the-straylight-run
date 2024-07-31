@@ -483,7 +483,8 @@ public class LabScene extends Scene {
                                 Log.e(TAG, "onAnimationFinish()");
                                 completedDialogue04 = true;
                             }
-                        }
+                        },
+                        null
                 );
 
         gameListener.onShowDialogFragment(
@@ -511,7 +512,8 @@ public class LabScene extends Scene {
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
                             }
-                        });
+                        },
+                        null);
 
         gameListener.onShowDialogFragment(
                 dialogFragmentScientistDialogue04,
@@ -541,7 +543,8 @@ public class LabScene extends Scene {
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
                             }
-                        });
+                        },
+                        null);
 
         gameListener.onShowDialogFragment(
                 dialogFragmentScientistDialogue03,
@@ -596,7 +599,8 @@ public class LabScene extends Scene {
                                         portraitScientist
                                 );
                             }
-                        });
+                        },
+                        null);
 
         gameListener.onShowDialogFragment(
                 dialogFragmentScientistDialogue02,
@@ -626,7 +630,8 @@ public class LabScene extends Scene {
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
                             }
-                        });
+                        },
+                        null);
 
         gameListener.onShowDialogFragment(
                 dialogFragmentScientistDialogue01,
@@ -681,7 +686,8 @@ public class LabScene extends Scene {
                                         portraitScientist
                                 );
                             }
-                        }
+                        },
+                        null
                 );
 
         gameListener.onShowDialogFragment(

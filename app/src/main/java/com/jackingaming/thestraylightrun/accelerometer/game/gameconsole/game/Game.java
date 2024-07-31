@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.adapters.ItemRecyclerViewAdapter;
@@ -48,6 +49,18 @@ import java.util.concurrent.FutureTask;
 
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
+
+    public interface TextboxListener {
+        void showTextbox(TypeWriterDialogFragment typeWriterDialogFragment);
+
+        void showStatsDisplayer();
+    }
+
+    private TextboxListener textboxListener;
+
+    public void setTextboxListener(TextboxListener textboxListener) {
+        this.textboxListener = textboxListener;
+    }
 
     public interface StatsChangeListener {
         void onCurrencyChange(float currency);
@@ -477,5 +490,9 @@ public class Game {
 
     public void setPaused(boolean paused) {
         this.paused = paused;
+    }
+
+    public TextboxListener getTextboxListener() {
+        return textboxListener;
     }
 }

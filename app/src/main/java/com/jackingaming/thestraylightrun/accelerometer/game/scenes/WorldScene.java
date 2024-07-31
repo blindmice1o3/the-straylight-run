@@ -862,7 +862,8 @@ public class WorldScene extends Scene {
                                         "ChoiceYesOrNoDialogFragment"
                                 );
                             }
-                        });
+                        },
+                        null);
         return typeWriterDialogFragmentRivalLeader;
     }
 
