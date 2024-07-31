@@ -53,8 +53,14 @@ public class WorldScene extends Scene {
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.pokemon_gsc_kanto;
     private static final int X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE = 200;
     private static final int Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE = 34;
-    private static final int X_SPAWN_INDEX_PLAYER_HOMETOWN = 69;
-    private static final int Y_SPAWN_INDEX_PLAYER_HOMETOWN = 207;
+    private static final int X_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA = 239;
+    private static final int Y_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA = 6;
+    private static final int X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 = 65;
+    private static final int Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 = 204;
+    private static final int X_SPAWN_INDEX_PLAYER_HOME_RIVAL = 73;
+    private static final int Y_SPAWN_INDEX_PLAYER_HOME_RIVAL = 204;
+    private static final int X_SPAWN_INDEX_PLAYER_LAB_HOMETOWN = 72;
+    private static final int Y_SPAWN_INDEX_PLAYER_LAB_HOMETOWN = 210;
     public static final String ID_RIVAL = "rival";
     private static final int X_INDEX_PORTRAIT_RIVAL = 4;
     private static final int Y_INDEX_PORTRAIT_RIVAL = 5;
@@ -95,8 +101,10 @@ public class WorldScene extends Scene {
     private static final int Y_INDEX_PORTRAIT_BUG_CATCHER = 1;
     private static final int X_SPAWN_INDEX_BUG_CATCHER = 201;
     private static final int Y_SPAWN_INDEX_BUG_CATCHER = 31;
-    private static final int X_TRANSFER_POINT_INDEX_LAB = 239;
-    private static final int Y_TRANSFER_POINT_INDEX_LAB = 5;
+    private static final int X_TRANSFER_POINT_INDEX_LAB_PROF_JAVA = 239;
+    private static final int Y_TRANSFER_POINT_INDEX_LAB_PROF_JAVA = 5;
+    private static final int X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = 65;
+    private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = 203;
     public static int durationOfFrameInMilli = 420;
 
     private static WorldScene instance;
@@ -138,12 +146,20 @@ public class WorldScene extends Scene {
                 RES_ID_TILE_COLLISION_BACKGROUND);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
-        // TILES
+
+        // [TILES]
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
-        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB];
-        tiles[X_TRANSFER_POINT_INDEX_LAB][Y_TRANSFER_POINT_INDEX_LAB] = new TransferPointTile(
+        // transfer point: lab prof java
+        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_LAB_PROF_JAVA][Y_TRANSFER_POINT_INDEX_LAB_PROF_JAVA];
+        tiles[X_TRANSFER_POINT_INDEX_LAB_PROF_JAVA][Y_TRANSFER_POINT_INDEX_LAB_PROF_JAVA] = new TransferPointTile(
                 tileBeforeBecomingTransferPoint.getImage(), LabScene.TAG
         );
+        // transfer point: home player room01
+        tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01];
+        tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01] = new TransferPointTile(
+                tileBeforeBecomingTransferPoint.getImage(), HomePlayerRoom01Scene.TAG
+        );
+
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
@@ -341,6 +357,10 @@ public class WorldScene extends Scene {
                                 Log.e(TAG, "transfer point: LAB");
                                 gameListener.onChangeScene(LabScene.getInstance());
                                 return true;
+                            } else if (idSceneDestination.equals(HomePlayerRoom01Scene.TAG)) {
+                                Log.e(TAG, "transfer point: HomePlayerRoom01Scene");
+                                gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+                                return true;
                             }
                         }
                     }
@@ -355,17 +375,20 @@ public class WorldScene extends Scene {
 
     @Override
     public void update(long elapsed) {
-        // TODO: REMOVE
+        // TODO: without this... transferring back to world causes a blank background.
         if (hadBeenTransferred) {
             player.setCollisionListener(collisionListenerPlayer);
             player.setMovementListener(movementListenerPlayer);
 
-            if (!spawnHometown) {
-                player.setXPos(xBeforeTransfer);
-                player.setYPos(yBeforeTransfer);
-            } else {
-                player.setXPos(X_SPAWN_INDEX_PLAYER_HOMETOWN * widthSpriteDst);
-                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOMETOWN * heightSpriteDst);
+            if (idScenePrevious.equals("init")) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * heightSpriteDst);
+            } else if (idScenePrevious.equals(LabScene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * heightSpriteDst);
+            } else if (idScenePrevious.equals(HomePlayerRoom01Scene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * heightSpriteDst);
             }
             handler.post(new Runnable() {
                 @Override
@@ -412,16 +435,10 @@ public class WorldScene extends Scene {
         }
     }
 
-    private float xBeforeTransfer = -1f;
-    private float yBeforeTransfer = -1f;
-
     @Override
     public List<Object> exit() {
         Log.e(TAG, "exit()");
         hadBeenTransferred = true;
-
-        xBeforeTransfer = player.getXPos();
-        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -439,7 +456,7 @@ public class WorldScene extends Scene {
 
     private Entity.CollisionListener collisionListenerPlayer;
     private Entity.MovementListener movementListenerPlayer;
-    private boolean spawnHometown = false;
+    private String idScenePrevious;
 
     @Override
     public void enter(List<Object> args) {
@@ -459,27 +476,23 @@ public class WorldScene extends Scene {
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
-        if (xBeforeTransfer < 0) {
-            player.setXPos(X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * heightSpriteDst);
-        } else {
-            Log.e(TAG, "xBeforeTransfer >= 0");
-            if (args != null) {
-                Log.e(TAG, "args != null");
-                String idScene = (String) args.get(0);
-                if (idScene.equals(LabScene.TAG)) {
-                    player.setXPos(xBeforeTransfer);
-                    player.setYPos(yBeforeTransfer);
-                } else if (idScene.equals(HomePlayerRoom01Scene.TAG)) {
-                    spawnHometown = true;
-                    player.setXPos(X_SPAWN_INDEX_PLAYER_HOMETOWN * widthSpriteDst);
-                    player.setYPos(Y_SPAWN_INDEX_PLAYER_HOMETOWN * heightSpriteDst);
-                }
-            } else {
-                Log.e(TAG, "args == null");
-                player.setXPos(xBeforeTransfer);
-                player.setYPos(yBeforeTransfer);
+        if (args != null) {
+            Log.e(TAG, "args != null");
+            idScenePrevious = (String) args.get(0);
+            if (idScenePrevious.equals("init")) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * heightSpriteDst);
+            } else if (idScenePrevious.equals(LabScene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * heightSpriteDst);
+            } else if (idScenePrevious.equals(HomePlayerRoom01Scene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * heightSpriteDst);
             }
+        } else {
+            Log.e(TAG, "args == null");
+            player.setXPos(0);
+            player.setYPos(0);
         }
 
         // GAME CAMERA

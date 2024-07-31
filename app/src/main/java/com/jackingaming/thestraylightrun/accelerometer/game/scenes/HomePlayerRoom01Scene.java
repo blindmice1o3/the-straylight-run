@@ -31,14 +31,14 @@ public class HomePlayerRoom01Scene extends Scene {
 
     private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_home_player_01;
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
-    private static final int X_SPAWN_INDEX_PLAYER_FROM_STAIRS = 6;
-    private static final int Y_SPAWN_INDEX_PLAYER_FROM_STAIRS = 1;
-    private static final int X_SPAWN_INDEX_PLAYER_FROM_DOOR = 2;
-    private static final int Y_SPAWN_INDEX_PLAYER_FROM_DOOR = 6;
-    private static final int X_TRANSFER_POINT_INDEX_PLAYER_ROOM_02 = X_SPAWN_INDEX_PLAYER_FROM_STAIRS + 1;
-    private static final int Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_FROM_STAIRS;
-    private static final int X_TRANSFER_POINT_INDEX_WORLD = X_SPAWN_INDEX_PLAYER_FROM_DOOR;
-    private static final int Y_TRANSFER_POINT_INDEX_WORLD = Y_SPAWN_INDEX_PLAYER_FROM_DOOR + 1;
+    private static final int X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 6;
+    private static final int Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 1;
+    private static final int X_SPAWN_INDEX_PLAYER_WORLD = 2;
+    private static final int Y_SPAWN_INDEX_PLAYER_WORLD = 6;
+    private static final int X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 + 1;
+    private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02;
+    private static final int X_TRANSFER_POINT_INDEX_WORLD = X_SPAWN_INDEX_PLAYER_WORLD;
+    private static final int Y_TRANSFER_POINT_INDEX_WORLD = Y_SPAWN_INDEX_PLAYER_WORLD + 1;
 
     private static HomePlayerRoom01Scene instance;
 
@@ -76,16 +76,20 @@ public class HomePlayerRoom01Scene extends Scene {
         Bitmap bitmapHomePlayerRoom01 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 160, 16, 128, 128);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
-        // TILES
+
+        // [TILES]
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom01);
+        // transfer point: world
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
         tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
                 tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
         );
-        tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_02];
-        tiles[X_TRANSFER_POINT_INDEX_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_02] = new TransferPointTile(
+        // transfer point: home player room02
+        tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02];
+        tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02] = new TransferPointTile(
                 tileBeforeBecomingTransferPoint.getImage(), HomePlayerRoom02Scene.TAG
         );
+
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
@@ -255,15 +259,9 @@ public class HomePlayerRoom01Scene extends Scene {
         }
     }
 
-    private float xBeforeTransfer = -1f;
-    private float yBeforeTransfer = -1f;
-
     @Override
     public List<Object> exit() {
         Log.e(TAG, "exit()");
-
-        xBeforeTransfer = player.getXPos();
-        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -281,6 +279,7 @@ public class HomePlayerRoom01Scene extends Scene {
 
     private Entity.CollisionListener collisionListenerPlayer;
     private Entity.MovementListener movementListenerPlayer;
+    private String idScenePrevious;
 
     @Override
     public void enter(List<Object> args) {
@@ -300,25 +299,20 @@ public class HomePlayerRoom01Scene extends Scene {
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
-        if (xBeforeTransfer < 0) {
-            player.setXPos(X_SPAWN_INDEX_PLAYER_FROM_STAIRS * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER_FROM_STAIRS * heightSpriteDst);
-        } else {
-            Log.e(TAG, "xBeforeTransfer >= 0");
-            if (args != null) {
-                Log.e(TAG, "args != null");
-                String idScene = (String) args.get(0);
-
-                if (idScene.equals(HomePlayerRoom02Scene.TAG)) {
-                    player.setXPos(X_SPAWN_INDEX_PLAYER_FROM_STAIRS * widthSpriteDst);
-                    player.setYPos(Y_SPAWN_INDEX_PLAYER_FROM_STAIRS * heightSpriteDst);
-                } else if (idScene.equals(WorldScene.TAG)) {
-                    player.setXPos(X_SPAWN_INDEX_PLAYER_FROM_DOOR * widthSpriteDst);
-                    player.setYPos(Y_SPAWN_INDEX_PLAYER_FROM_DOOR * heightSpriteDst);
-                }
-            } else {
-                Log.e(TAG, "args == null");
+        if (args != null) {
+            Log.e(TAG, "args != null");
+            idScenePrevious = (String) args.get(0);
+            if (idScenePrevious.equals(HomePlayerRoom02Scene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 * heightSpriteDst);
+            } else if (idScenePrevious.equals(WorldScene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_WORLD * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_WORLD * heightSpriteDst);
             }
+        } else {
+            Log.e(TAG, "args == null");
+            player.setXPos(0);
+            player.setYPos(0);
         }
 
         // GAME CAMERA

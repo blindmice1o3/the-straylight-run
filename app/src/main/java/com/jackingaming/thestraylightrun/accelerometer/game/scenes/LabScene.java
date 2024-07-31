@@ -88,12 +88,15 @@ public class LabScene extends Scene {
         Bitmap bitmapLab = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 23, 544, 160, 192);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
-        // TILES
+
+        // [TILES]
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapLab);
+        // transfer point: world
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
         tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
                 tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
         );
+
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
@@ -236,15 +239,9 @@ public class LabScene extends Scene {
         }
     }
 
-    private float xBeforeTransfer = -1f;
-    private float yBeforeTransfer = -1f;
-
     @Override
     public List<Object> exit() {
         Log.e(TAG, "exit()");
-
-        xBeforeTransfer = player.getXPos();
-        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -262,6 +259,7 @@ public class LabScene extends Scene {
 
     private Entity.CollisionListener collisionListenerPlayer;
     private Entity.MovementListener movementListenerPlayer;
+    private String idScenePrevious;
 
     @Override
     public void enter(List<Object> args) {
@@ -281,12 +279,17 @@ public class LabScene extends Scene {
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
-        if (xBeforeTransfer < 0) {
-            player.setXPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+        if (args != null) {
+            Log.e(TAG, "args != null");
+            idScenePrevious = (String) args.get(0);
+            if (idScenePrevious.equals(WorldScene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER * heightSpriteDst);
+            }
         } else {
-            player.setXPos(xBeforeTransfer);
-            player.setYPos(yBeforeTransfer);
+            Log.e(TAG, "args == null");
+            player.setXPos(0);
+            player.setYPos(0);
         }
 
         // GAME CAMERA

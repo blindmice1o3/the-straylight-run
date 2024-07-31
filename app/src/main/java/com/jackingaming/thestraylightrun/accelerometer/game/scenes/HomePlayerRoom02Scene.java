@@ -31,12 +31,12 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_home_player_02;
     private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
-    private static final int X_SPAWN_INDEX_PLAYER_FROM_LAB = 3;
-    private static final int Y_SPAWN_INDEX_PLAYER_FROM_LAB = 5;
-    private static final int X_SPAWN_INDEX_PLAYER_FROM_STAIRS = 6;
-    private static final int Y_SPAWN_INDEX_PLAYER_FROM_STAIRS = 1;
-    private static final int X_TRANSFER_POINT_INDEX_PLAYER_ROOM_01 = X_SPAWN_INDEX_PLAYER_FROM_STAIRS + 1;
-    private static final int Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_01 = Y_SPAWN_INDEX_PLAYER_FROM_STAIRS;
+    private static final int X_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA = 3;
+    private static final int Y_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA = 5;
+    private static final int X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 = 6;
+    private static final int Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 = 1;
+    private static final int X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 + 1;
+    private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01;
 
     private static HomePlayerRoom02Scene instance;
 
@@ -74,12 +74,15 @@ public class HomePlayerRoom02Scene extends Scene {
         Bitmap bitmapHomePlayerRoom02 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 16, 16, 128, 128);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
-        // TILES
+
+        // [TILES]
         tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom02);
-        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_PLAYER_ROOM_01][Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_01];
-        tiles[X_TRANSFER_POINT_INDEX_PLAYER_ROOM_01][Y_TRANSFER_POINT_INDEX_PLAYER_ROOM_01] = new TransferPointTile(
+        // transfer point: home player room01
+        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01];
+        tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01] = new TransferPointTile(
                 tileBeforeBecomingTransferPoint.getImage(), HomePlayerRoom01Scene.TAG
         );
+
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
@@ -250,15 +253,9 @@ public class HomePlayerRoom02Scene extends Scene {
         }
     }
 
-    private float xBeforeTransfer = -1f;
-    private float yBeforeTransfer = -1f;
-
     @Override
     public List<Object> exit() {
         Log.e(TAG, "exit()");
-
-        xBeforeTransfer = player.getXPos();
-        yBeforeTransfer = player.getYPos();
 
         stopEntityAnimations();
 
@@ -276,6 +273,7 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private Entity.CollisionListener collisionListenerPlayer;
     private Entity.MovementListener movementListenerPlayer;
+    private String idScenePrevious;
 
     @Override
     public void enter(List<Object> args) {
@@ -295,12 +293,20 @@ public class HomePlayerRoom02Scene extends Scene {
         player.setCollisionListener(collisionListenerPlayer);
         player.setMovementListener(movementListenerPlayer);
 
-        if (xBeforeTransfer < 0) {
-            player.setXPos(X_SPAWN_INDEX_PLAYER_FROM_LAB * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER_FROM_LAB * heightSpriteDst);
+        if (args != null) {
+            Log.e(TAG, "args != null");
+            idScenePrevious = (String) args.get(0);
+            if (idScenePrevious.equals(LabScene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_LAB_PROF_JAVA * heightSpriteDst);
+            } else if (idScenePrevious.equals(HomePlayerRoom01Scene.TAG)) {
+                player.setXPos(X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * widthSpriteDst);
+                player.setYPos(Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM01 * heightSpriteDst);
+            }
         } else {
-            player.setXPos(X_SPAWN_INDEX_PLAYER_FROM_STAIRS * widthSpriteDst);
-            player.setYPos(Y_SPAWN_INDEX_PLAYER_FROM_STAIRS * heightSpriteDst);
+            Log.e(TAG, "args == null");
+            player.setXPos(0);
+            player.setYPos(0);
         }
 
         // GAME CAMERA

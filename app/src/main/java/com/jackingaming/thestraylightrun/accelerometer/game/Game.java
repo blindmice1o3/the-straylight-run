@@ -20,6 +20,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -112,7 +113,9 @@ public class Game {
                 widthSpriteDst, heightSpriteDst);
 
         sceneCurrent = WorldScene.getInstance();
-        sceneCurrent.enter(null);
+        List<Object> argsSceneTransfer = new ArrayList<>();
+        argsSceneTransfer.add("init");
+        sceneCurrent.enter(argsSceneTransfer);
 
         /////////////////////////////////////////////////////////////////////////////////
         Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
