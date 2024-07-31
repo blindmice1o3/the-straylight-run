@@ -1,5 +1,6 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
 public class MySurfaceViewUpdaterThread extends Thread {

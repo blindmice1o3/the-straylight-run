@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.MySurfaceView;
 
 import java.util.HashMap;
 import java.util.Map;

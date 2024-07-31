@@ -1,19 +1,21 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad;
-
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport;
 
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment;
 
-public class GamePadFragment extends Fragment {
-    public static final String TAG = GamePadFragment.class.getSimpleName();
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ViewportFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ViewportFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,10 +26,7 @@ public class GamePadFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private DirectionPadFragment directionPadFragment;
-    private ButtonPadFragment buttonPadFragment;
-
-    public GamePadFragment() {
+    public ViewportFragment() {
         // Required empty public constructor
     }
 
@@ -37,11 +36,11 @@ public class GamePadFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment GamePadFragment.
+     * @return A new instance of fragment ViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static GamePadFragment newInstance(String param1, String param2) {
-        GamePadFragment fragment = new GamePadFragment();
+    public static ViewportFragment newInstance(String param1, String param2) {
+        ViewportFragment fragment = new ViewportFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,10 +58,9 @@ public class GamePadFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_game_pad, container, false);
-        directionPadFragment = (DirectionPadFragment) getChildFragmentManager().findFragmentById(R.id.directionpadfragment_game_pad_fragment);
-        buttonPadFragment = (ButtonPadFragment) getChildFragmentManager().findFragmentById(R.id.buttonpadfragment_game_pad_fragment);
-        return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_viewport, container, false);
     }
 }

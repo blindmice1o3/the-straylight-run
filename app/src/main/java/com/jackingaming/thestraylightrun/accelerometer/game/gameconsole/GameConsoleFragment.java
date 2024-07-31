@@ -19,6 +19,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.MySurfaceView;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.ViewportFragment;
 
 import java.io.Serializable;
 
@@ -27,9 +29,10 @@ public class GameConsoleFragment extends Fragment
         MySurfaceView.MySurfaceViewSurfaceChangeListener,
         Game.StatsChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener {
-    public static final String TAG = "GameConsoleFragment";
+    public static final String TAG = GameConsoleFragment.class.getSimpleName();
     public static final String ARG_GAME_TITLE = "game";
 
+    private ViewportFragment viewportFragment;
     private MySurfaceView mySurfaceView;
     private StatsDisplayerFragment statsDisplayerFragment;
     private GamePadFragment gamePadFragment;
@@ -46,45 +49,58 @@ public class GameConsoleFragment extends Fragment
 
     public static GameConsoleFragment newInstance(String gameTitle) {
         GameConsoleFragment fragment = new GameConsoleFragment();
-
         Bundle args = new Bundle();
         args.putString(ARG_GAME_TITLE, gameTitle);
         fragment.setArguments(args);
-
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, getClass().getSimpleName() + ".onCreate(Bundle savedInstanceState)");
+        Log.e(TAG, "onCreate()");
         inputManager = new InputManager();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, getClass().getSimpleName() + ".onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)");
+        Log.e(TAG, "onCreateView()");
+        return inflater.inflate(R.layout.fragment_game_console, container, false);
+    }
 
-        View view = inflater.inflate(R.layout.fragment_game_console, container, false);
-        mySurfaceView = view.findViewById(R.id.mysurfaceview_game_console_fragment);
-        mySurfaceView.setMySurfaceViewSurfaceChangeListener(this);
-        mySurfaceView.setMySurfaceViewTouchListener(inputManager);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.e(TAG, "onViewCreated()");
 
-        statsDisplayerFragment = (StatsDisplayerFragment) getChildFragmentManager().findFragmentById(R.id.statsdisplayerfragment_game_console_fragment);
-        statsDisplayerFragment.setButtonHolderClickListener(this);
+        viewportFragment = ViewportFragment.newInstance(null, null);
+        statsDisplayerFragment = StatsDisplayerFragment.newInstance(null, null);
+        gamePadFragment = GamePadFragment.newInstance(null, null);
 
-        gamePadFragment = (GamePadFragment) getChildFragmentManager().findFragmentById(R.id.gamepadfragment_game_console_fragment);
-        directionPadFragment = (DirectionPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.directionpadfragment_game_pad_fragment);
-        directionPadFragment.setDirectionPadListener(inputManager);
-        buttonPadFragment = (ButtonPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.buttonpadfragment_game_pad_fragment);
-        buttonPadFragment.setButtonPadListener(inputManager);
-        return view;
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fcv_mysurfaceview, viewportFragment)
+                .add(R.id.fcv_statsdisplayerfragment, statsDisplayerFragment)
+                .add(R.id.fcv_gamepadfragment, gamePadFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState)");
+        Log.e(TAG, "onActivityCreated()");
+
+        mySurfaceView = viewportFragment.getView().findViewById(R.id.mysurfaceview_game_console_fragment);
+        mySurfaceView.setMySurfaceViewSurfaceChangeListener(this);
+        mySurfaceView.setMySurfaceViewTouchListener(inputManager);
+
+        statsDisplayerFragment.setButtonHolderClickListener(this);
+
+        directionPadFragment = (DirectionPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.directionpadfragment_game_pad_fragment);
+        directionPadFragment.setDirectionPadListener(inputManager);
+        buttonPadFragment = (ButtonPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.buttonpadfragment_game_pad_fragment);
+        buttonPadFragment.setButtonPadListener(inputManager);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -111,38 +127,39 @@ public class GameConsoleFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG, getClass().getSimpleName() + ".onStart()");
+        Log.e(TAG, "onStart()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, getClass().getSimpleName() + ".onResume()");
+        Log.e(TAG, "onResume()");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, getClass().getSimpleName() + ".onPause()");
+        Log.e(TAG, "onPause()");
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG, getClass().getSimpleName() + ".onSaveInstanceState(Bundle outState)");
+        Log.e(TAG, "onSaveInstanceState()");
+
         game.saveViaOS();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Log.d(TAG, getClass().getSimpleName() + ".onAttach(Context context)");
+        Log.e(TAG, "onAttach()");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(TAG, getClass().getSimpleName() + ".onDetach()");
+        Log.e(TAG, "onDetach()");
     }
 
     @Override

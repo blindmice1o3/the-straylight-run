@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:weightSum="100">
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.MySurfaceView
-        android:id="@+id/mysurfaceview_game_console_fragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_mysurfaceview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="50" />
 
-    <fragment
-        android:id="@+id/statsdisplayerfragment_game_console_fragment"
-        android:name="com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_statsdisplayerfragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="15" />
 
-    <fragment
-        android:id="@+id/gamepadfragment_game_console_fragment"
-        android:name="com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_gamepadfragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="35" />

@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
 public class MySurfaceView extends SurfaceView
