@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time;
 
+import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
 import java.io.Serializable;
@@ -29,7 +30,12 @@ public class TimeManager
         timer += elapsed;
         if (timer >= TIMER_MAX) {
             ///////////////////////////////////////////////////////////
-            statsChangeListener.onTimeChange(timePlayedInMilliseconds);
+            ((MainActivity) game.getContext()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    statsChangeListener.onTimeChange(timePlayedInMilliseconds);
+                }
+            });
             ///////////////////////////////////////////////////////////
             timer = 0;
         }

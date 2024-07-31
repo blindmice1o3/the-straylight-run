@@ -197,8 +197,9 @@ public class HomePlayerRoom01Scene extends Scene {
                             boolean showToolbarOnDismiss = false;
                             Fragment fragment = NextWeekTonightFragment.newInstance(showToolbarOnDismiss);
                             String tag = NextWeekTonightFragment.TAG;
+                            boolean canceledOnTouchOutside = true;
                             DialogFragment dialogFragment =
-                                    FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
+                                    FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
                                         @Override
                                         public void onDismiss() {
                                             unpause();

@@ -192,8 +192,9 @@ public class HomePlayerRoom02Scene extends Scene {
                             String gameTitle = "Pooh Farmer";
                             Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
                             String tag = GameConsoleFragment.TAG;
+                            boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment =
-                                    FCVDialogFragment.newInstance(fragment, tag, new FCVDialogFragment.DismissListener() {
+                                    FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
                                         @Override
                                         public void onDismiss() {
                                             unpause();

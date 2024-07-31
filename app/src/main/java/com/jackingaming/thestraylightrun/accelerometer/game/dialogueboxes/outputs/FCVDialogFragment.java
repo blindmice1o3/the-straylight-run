@@ -24,6 +24,7 @@ public class FCVDialogFragment extends DialogFragment {
     public static final String TAG = FCVDialogFragment.class.getSimpleName();
     public static final String ARG_FRAGMENT = "fragment";
     public static final String ARG_TAG = "tag";
+    public static final String ARG_CANCELED_ON_TOUCH_OUTSIDE = "canceledOnTouchOutside";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
 
     public interface DismissListener extends Serializable {
@@ -34,14 +35,17 @@ public class FCVDialogFragment extends DialogFragment {
 
     private Fragment fragmentToShow;
     private String tag;
+    private boolean canceledOnTouchOutside;
 
     public static FCVDialogFragment newInstance(Fragment fragmentToShow, String tag,
+                                                boolean canceledOnTouchOutside,
                                                 DismissListener listener) {
         FCVDialogFragment fragment = new FCVDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_FRAGMENT, (Serializable) fragmentToShow);
         args.putString(ARG_TAG, tag);
+        args.putBoolean(ARG_CANCELED_ON_TOUCH_OUTSIDE, canceledOnTouchOutside);
         args.putSerializable(ARG_DISMISS_LISTENER, (Serializable) listener);
         fragment.setArguments(args);
 
@@ -55,6 +59,7 @@ public class FCVDialogFragment extends DialogFragment {
         if (getArguments() != null) {
             fragmentToShow = (Fragment) getArguments().getSerializable(ARG_FRAGMENT);
             tag = getArguments().getString(ARG_TAG);
+            canceledOnTouchOutside = getArguments().getBoolean(ARG_CANCELED_ON_TOUCH_OUTSIDE);
             listener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         }
     }
@@ -79,6 +84,8 @@ public class FCVDialogFragment extends DialogFragment {
         int height = size.y;
         window.setLayout((int) (width * 0.75), (int) (height * 0.75));
         window.setGravity(Gravity.CENTER);
+
+        getDialog().setCanceledOnTouchOutside(canceledOnTouchOutside);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)

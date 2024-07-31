@@ -20,13 +20,17 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.ChoiceDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -262,6 +266,27 @@ public class WorldScene extends Scene {
                         gameListener.onShowDialogFragment(
                                 instantiateRivalLeaderDialogFragment(portrait, gameListener),
                                 "RivalLeaderDialogFragment"
+                        );
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_BUG_CATCH)) {
+                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
+                        pause();
+
+                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                        String gameTitle = "Pooh Farmer";
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        String tag = GameConsoleFragment.TAG;
+                        boolean canceledOnTouchOutside = false;
+                        DialogFragment dialogFragment =
+                                FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        unpause();
+                                    }
+                                });
+
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
                         );
                     }
                 }
