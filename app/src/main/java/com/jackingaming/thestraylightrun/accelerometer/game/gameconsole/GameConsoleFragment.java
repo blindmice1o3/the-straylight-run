@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
@@ -28,6 +29,7 @@ import java.io.Serializable;
 public class GameConsoleFragment extends Fragment
         implements Serializable,
         MySurfaceView.MySurfaceViewSurfaceChangeListener,
+        Game.ReplaceViewportListener,
         Game.TextboxListener,
         Game.StatsChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener {
@@ -114,6 +116,7 @@ public class GameConsoleFragment extends Fragment
             game = new Game(gameTitle);
         }
 
+        game.setReplaceViewportListener(this);
         game.setTextboxListener(this);
         game.setStatsChangeListener(this);
 
@@ -163,6 +166,37 @@ public class GameConsoleFragment extends Fragment
     public void onDetach() {
         super.onDetach();
         Log.e(TAG, "onDetach()");
+    }
+
+    private Fragment fragmentReplacingSurfaceView;
+
+    @Override
+    public void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView) {
+        this.fragmentReplacingSurfaceView = fragmentReplacingSurfaceView;
+
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fcv_mysurfaceview, fragmentReplacingSurfaceView)
+                .hide(viewportFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showSurfaceView() {
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+        if (fragmentReplacingSurfaceView != null) {
+            fragmentTransaction.remove(fragmentReplacingSurfaceView);
+        }
+
+        fragmentTransaction
+                .setReorderingAllowed(true)
+                .show(viewportFragment)
+                .addToBackStack(null)
+                .commit();
+
+        fragmentReplacingSurfaceView = null;
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
@@ -30,7 +29,7 @@ public class SceneFarm extends Scene {
     public static final int Y_SPAWN_INDEX_DEFAULT = 4;
     private static SceneFarm uniqueInstance;
 
-    private boolean inSeedShopDialogState;
+    private boolean inSeedShopState;
     private SeedShopDialogFragment seedShopDialogFragment;
 
     private SceneFarm() {
@@ -40,16 +39,16 @@ public class SceneFarm extends Scene {
         List<Item> itemsForFarm = createItemsForFarm();
         itemManager.loadItems(itemsForFarm);
 
-        inSeedShopDialogState = false;
+        inSeedShopState = false;
         seedShopDialogFragment = new SeedShopDialogFragment();
     }
 
-    public boolean isInSeedShopDialogState() {
-        return inSeedShopDialogState;
+    public boolean isInSeedShopState() {
+        return inSeedShopState;
     }
 
-    public void setInSeedShopDialogState(boolean inSeedShopDialogState) {
-        this.inSeedShopDialogState = inSeedShopDialogState;
+    public void setInSeedShopState(boolean inSeedShopState) {
+        this.inSeedShopState = inSeedShopState;
     }
 
     public SeedShopDialogFragment getSeedShopDialogFragment() {
@@ -84,31 +83,32 @@ public class SceneFarm extends Scene {
 
         seedShopDialogFragment.init(game);
 
-        if (needLaunchSeedShopDialog) {
-            needLaunchSeedShopDialog = false;
-            showSeedShopDialog();
+        if (needDisplaySeedShopFragment) {
+            needDisplaySeedShopFragment = false;
+            showSeedShopFragment();
         }
     }
 
-    public void showSeedShopDialog() {
-        game.setPaused(true);
-        inSeedShopDialogState = true;
-        ((MainActivity) game.getContext()).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                seedShopDialogFragment.show(((MainActivity) game.getContext()).getSupportFragmentManager(), SeedShopDialogFragment.TAG);
-            }
-        });
+    public void showSeedShopFragment() {
+        inSeedShopState = true;
+
+        game.getReplaceViewportListener().showFragmentAndHideSurfaceView(seedShopDialogFragment);
     }
 
-    private boolean needLaunchSeedShopDialog;
+    public void removeSeedShopFragment() {
+        game.getReplaceViewportListener().showSurfaceView();
 
-    public boolean isNeedLaunchSeedShopDialog() {
-        return needLaunchSeedShopDialog;
+        inSeedShopState = false;
     }
 
-    public void setNeedLaunchSeedShopDialog(boolean needLaunchSeedShopDialog) {
-        this.needLaunchSeedShopDialog = needLaunchSeedShopDialog;
+    private boolean needDisplaySeedShopFragment;
+
+    public boolean isNeedDisplaySeedShopFragment() {
+        return needDisplaySeedShopFragment;
+    }
+
+    public void setNeedDisplaySeedShopFragment(boolean needDisplaySeedShopFragment) {
+        this.needDisplaySeedShopFragment = needDisplaySeedShopFragment;
     }
 
     @Override

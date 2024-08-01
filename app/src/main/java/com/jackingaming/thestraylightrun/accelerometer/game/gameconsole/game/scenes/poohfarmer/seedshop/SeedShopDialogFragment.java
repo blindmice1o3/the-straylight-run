@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
@@ -125,24 +127,45 @@ public class SeedShopDialogFragment extends DialogFragment
                     ViewGroup.LayoutParams.WRAP_CONTENT);
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
+
+        Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
+        String message = game.getContext().getResources().getString(R.string.seed_shop_dialogue00);
+        TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                50L, image, message,
+                new TypeWriterDialogFragment.DismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "onDismiss(): seed_shop_dialogue00");
+                    }
+                }, new TypeWriterTextView.TextCompletionListener() {
+                    @Override
+                    public void onAnimationFinish() {
+                        Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
+                    }
+                }
+        );
+
+        game.getTextboxListener().showTextbox(
+                typeWriterDialogFragment
+        );
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG, getClass().getSimpleName() + ".onPause() SceneFarm's needLaunchSeedShopDialog: " + SceneFarm.getInstance().isNeedLaunchSeedShopDialog());
-        if (SceneFarm.getInstance().isInSeedShopDialogState()) {
-            SceneFarm.getInstance().setNeedLaunchSeedShopDialog(true);
+        Log.d(TAG, getClass().getSimpleName() + ".onPause() SceneFarm's needLaunchSeedShopDialog: " + SceneFarm.getInstance().isNeedDisplaySeedShopFragment());
+        if (SceneFarm.getInstance().isInSeedShopState()) {
+            SceneFarm.getInstance().setNeedDisplaySeedShopFragment(true);
             dismiss();
         }
-        Log.d(TAG, getClass().getSimpleName() + ".onPause() SceneFarm's needLaunchSeedShopDialog: " + SceneFarm.getInstance().isNeedLaunchSeedShopDialog());
+        Log.d(TAG, getClass().getSimpleName() + ".onPause() SceneFarm's needLaunchSeedShopDialog: " + SceneFarm.getInstance().isNeedDisplaySeedShopFragment());
     }
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
-        Log.d(TAG, getClass().getSimpleName() + ".onDismiss(DialogInterface) SceneFarm's inSeedShopDialogState: " + SceneFarm.getInstance().isInSeedShopDialogState());
-        SceneFarm.getInstance().setInSeedShopDialogState(false);
-        Log.d(TAG, getClass().getSimpleName() + ".onDismiss(DialogInterface) SceneFarm's inSeedShopDialogState: " + SceneFarm.getInstance().isInSeedShopDialogState());
+        Log.d(TAG, getClass().getSimpleName() + ".onDismiss(DialogInterface) SceneFarm's inSeedShopDialogState: " + SceneFarm.getInstance().isInSeedShopState());
+        SceneFarm.getInstance().setInSeedShopState(false);
+        Log.d(TAG, getClass().getSimpleName() + ".onDismiss(DialogInterface) SceneFarm's inSeedShopDialogState: " + SceneFarm.getInstance().isInSeedShopState());
         game.setPaused(false);
         super.onDismiss(dialog);
     }

@@ -1,13 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
@@ -80,33 +76,13 @@ public class PoohForm
                 } else if (player.checkTileCurrentlyFacing().getId().equals("4")) {
                     game.getSceneManager().changeScene("COMPUTER");
                 }
-            } else if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
-                String message = game.getContext().getResources().getString(R.string.seed_shop_dialogue00);
-                TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                        50L, image, message,
-                        new TypeWriterDialogFragment.DismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                Log.e(TAG, "onDismiss(): seed_shop_dialogue00");
-                            }
-                        }, new TypeWriterTextView.TextCompletionListener() {
-                            @Override
-                            public void onAnimationFinish() {
-                                Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
-                            }
-                        }, new TypeWriterDialogFragment.ClickListener() {
-                            @Override
-                            public void onClick() {
-                                Log.e(TAG, "onClick(): seed_shop_dialogue00");
-                                game.getTextboxListener().showStatsDisplayer();
-                            }
-                        }
-                );
-
-                game.getTextboxListener().showTextbox(
-                        typeWriterDialogFragment
-                );
+            }
+        } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
+            Log.d(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
+            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm &&
+                    ((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
+                ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
+                game.getTextboxListener().showStatsDisplayer();
             }
         } else if (game.getInputManager().isPressing(InputManager.Button.B)) {
             String idTileCurrentlyFacing = player.checkTileCurrentlyFacing().getId();

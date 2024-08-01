@@ -29,13 +29,6 @@ public class TypeWriterDialogFragment extends DialogFragment
     public static final String ARG_TEXT = "text";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
     public static final String ARG_TEXT_COMPLETION_LISTENER = "textCompletionListener";
-    public static final String ARG_CLICK_LISTENER = "clickListener";
-
-    public interface ClickListener extends Serializable {
-        void onClick();
-    }
-
-    private ClickListener clickListener;
 
     public interface DismissListener extends Serializable {
         void onDismiss();
@@ -52,8 +45,7 @@ public class TypeWriterDialogFragment extends DialogFragment
 
     public static TypeWriterDialogFragment newInstance(long delay, Bitmap portrait, String text,
                                                        DismissListener dismissListener,
-                                                       TypeWriterTextView.TextCompletionListener textCompletionListener,
-                                                       ClickListener clickListener) {
+                                                       TypeWriterTextView.TextCompletionListener textCompletionListener) {
         TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
 
 
@@ -68,7 +60,6 @@ public class TypeWriterDialogFragment extends DialogFragment
         args.putString(ARG_TEXT, text);
         args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         args.putSerializable(ARG_TEXT_COMPLETION_LISTENER, textCompletionListener);
-        args.putSerializable(ARG_CLICK_LISTENER, clickListener);
         fragment.setArguments(args);
 
         return fragment;
@@ -87,7 +78,6 @@ public class TypeWriterDialogFragment extends DialogFragment
             text = getArguments().getString(ARG_TEXT);
             dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
             textCompletionListener = (TypeWriterTextView.TextCompletionListener) getArguments().getSerializable(ARG_TEXT_COMPLETION_LISTENER);
-            clickListener = (ClickListener) getArguments().getSerializable(ARG_CLICK_LISTENER);
         }
     }
 
@@ -117,17 +107,6 @@ public class TypeWriterDialogFragment extends DialogFragment
         tvTypeWriter.setTextCompletionListener(textCompletionListener);
         tvTypeWriter.setCharacterDelay(delay);
         tvTypeWriter.displayTextWithAnimation(text);
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clickListener != null) {
-                    clickListener.onClick();
-                } else {
-                    Log.e(TAG, "onViewCreated()... clickListener == null");
-                }
-            }
-        });
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,22 @@ import java.util.concurrent.FutureTask;
 
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
+
+    public interface ReplaceViewportListener {
+        void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView);
+
+        void showSurfaceView();
+    }
+
+    private ReplaceViewportListener replaceViewportListener;
+
+    public ReplaceViewportListener getReplaceViewportListener() {
+        return replaceViewportListener;
+    }
+
+    public void setReplaceViewportListener(ReplaceViewportListener replaceViewportListener) {
+        this.replaceViewportListener = replaceViewportListener;
+    }
 
     public interface TextboxListener {
         void showTextbox(TypeWriterDialogFragment typeWriterDialogFragment);

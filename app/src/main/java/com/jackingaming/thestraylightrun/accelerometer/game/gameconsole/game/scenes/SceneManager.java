@@ -157,9 +157,9 @@ public class SceneManager
                 push(SceneCowBarn.getInstance());
             } else if (idOfCollidedTransferPoint.equals("SEEDS_SHOP")) {
                 // TODO:
-                Log.d(TAG, getClass().getSimpleName() + ".changeScene() inSeedShopDialogState: " + ((SceneFarm) getCurrentScene()).isInSeedShopDialogState());
-                if (!((SceneFarm) getCurrentScene()).isInSeedShopDialogState()) {
-                    ((SceneFarm) getCurrentScene()).showSeedShopDialog();
+                Log.d(TAG, getClass().getSimpleName() + ".changeScene() inSeedShopState: " + ((SceneFarm) getCurrentScene()).isInSeedShopState());
+                if (!((SceneFarm) getCurrentScene()).isInSeedShopState()) {
+                    ((SceneFarm) getCurrentScene()).showSeedShopFragment();
                 }
             }
         } else if (getCurrentScene() instanceof SceneHouseLevel01) {
