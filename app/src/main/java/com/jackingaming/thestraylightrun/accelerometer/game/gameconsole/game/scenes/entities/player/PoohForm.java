@@ -11,9 +11,14 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneWorldMapPart01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
 public class PoohForm
         implements Form {
@@ -63,12 +68,70 @@ public class PoohForm
         // Intentionally blank.
     }
 
+    private void doShovelAction() {
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+        if (tileCurrentlyFacing instanceof GrowableTile) {
+            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
+            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
+            if (growableTile.getState() == GrowableTile.State.UNTILLED) {
+                Log.e(TAG, "growableTile.changeToTilled()");
+                growableTile.changeToTilled();
+            }
+        } else {
+            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
+        }
+    }
+
+    private void doMysterySeedAction() {
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+        if (tileCurrentlyFacing instanceof GrowableTile) {
+            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
+            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
+            if (growableTile.getState() == GrowableTile.State.TILLED) {
+                Log.e(TAG, "growableTile.changeToUnwatered()");
+                growableTile.changeToUnwatered();
+                Log.e(TAG, "growableTile.changeToSeeded()");
+                growableTile.changeToSeeded();
+            }
+        } else {
+            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
+        }
+    }
+
+    private void doWateringCanAction() {
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+        if (tileCurrentlyFacing instanceof GrowableTile) {
+            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
+            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
+            if (growableTile.getState() == GrowableTile.State.TILLED ||
+                    growableTile.getState() == GrowableTile.State.SEEDED ||
+                    growableTile.getState() == GrowableTile.State.OCCUPIED) {
+                Log.e(TAG, "growableTile.changeToWatered()");
+                growableTile.changeToWatered();
+            }
+        } else {
+            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
+        }
+    }
+
     @Override
     public void interpretInput() {
         // Check InputManager's ButtonPadFragment-specific boolean fields.
         if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
-            Log.d(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
-            if (game.getSceneManager().getCurrentScene() instanceof SceneWorldMapPart01) {
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
+            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                // TODO: check item occupying StatsDisplayerFragment's button holder.
+                if (game.getItemStoredInButtonHolderA() instanceof Shovel) {
+                    doShovelAction();
+                } else if (game.getItemStoredInButtonHolderA() instanceof MysterySeed) {
+                    doMysterySeedAction();
+                } else if (game.getItemStoredInButtonHolderA() instanceof WateringCan) {
+                    doWateringCanAction();
+                }
+            } else if (game.getSceneManager().getCurrentScene() instanceof SceneWorldMapPart01) {
                 player.doCheckItemCollisionViaClick();
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneHome02) {
                 if (player.checkTileCurrentlyFacing().getId().equals("5")) {
@@ -78,15 +141,25 @@ public class PoohForm
                 }
             }
         } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
-            Log.d(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
-            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm &&
-                    ((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
-                ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
-                game.getTextboxListener().showStatsDisplayer();
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
+            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
+                    ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
+                    game.getTextboxListener().showStatsDisplayer();
+                } else {
+                    // TODO: check item occupying StatsDisplayerFragment's button holder.
+                    if (game.getItemStoredInButtonHolderB() instanceof Shovel) {
+                        doShovelAction();
+                    } else if (game.getItemStoredInButtonHolderB() instanceof MysterySeed) {
+                        doMysterySeedAction();
+                    } else if (game.getItemStoredInButtonHolderB() instanceof WateringCan) {
+                        doWateringCanAction();
+                    }
+                }
             }
         } else if (game.getInputManager().isPressing(InputManager.Button.B)) {
             String idTileCurrentlyFacing = player.checkTileCurrentlyFacing().getId();
-            Log.d(TAG, getClass().getSimpleName() + ".interpretInput() isPressing(InputManager.Button.B) idTileCurrentlyFacing: " + idTileCurrentlyFacing);
+//            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isPressing(InputManager.Button.B) idTileCurrentlyFacing: " + idTileCurrentlyFacing);
 
             float doubledMoveSpeedDefault = 2 * Creature.MOVE_SPEED_DEFAULT;
             player.setMoveSpeed(doubledMoveSpeedDefault);
@@ -96,7 +169,7 @@ public class PoohForm
                 game.getSceneManager().pop();
             }
         } else if (game.getInputManager().isJustPressed(InputManager.Button.MENU)) {
-            Log.d(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.MENU)");
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.MENU)");
             game.getStateManager().toggleMenuState();
         }
 
@@ -147,7 +220,7 @@ public class PoohForm
 
     @Override
     public void respondToTransferPointCollision(String key) {
-        Log.d(TAG, getClass().getSimpleName() + ".respondToTransferPointCollision(String key) key: " + key);
+        Log.e(TAG, getClass().getSimpleName() + ".respondToTransferPointCollision(String key) key: " + key);
         // TODO: change scene.
         game.getSceneManager().changeScene(key);
     }

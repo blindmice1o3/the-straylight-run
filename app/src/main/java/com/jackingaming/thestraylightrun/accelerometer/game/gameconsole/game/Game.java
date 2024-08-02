@@ -30,6 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
@@ -136,8 +137,9 @@ public class Game {
         currency = 100f;
 
         backpack = new ArrayList<Item>();
-        backpack.add(new BugCatchingNet());
         backpack.add(new Shovel());
+        backpack.add(new WateringCan());
+        backpack.add(new BugCatchingNet());
         backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<Item>();
 
         itemStoredInButtonHolderA = null;
@@ -511,5 +513,13 @@ public class Game {
 
     public TextboxListener getTextboxListener() {
         return textboxListener;
+    }
+
+    public Item getItemStoredInButtonHolderA() {
+        return itemStoredInButtonHolderA;
+    }
+
+    public Item getItemStoredInButtonHolderB() {
+        return itemStoredInButtonHolderB;
     }
 }

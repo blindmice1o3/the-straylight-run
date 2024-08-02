@@ -14,9 +14,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +157,8 @@ public class SceneFarm extends Scene {
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new GenericSolidTile(gameCartridge, x, y);
                 } else if (pixel == Color.WHITE) {
-                    Tile tile = new Tile("white");
+//                    Tile tile = new Tile("white");
+                    Tile tile = new GrowableTile(GrowableTile.TAG, game.getContext().getResources());
                     tile.init(game, x, y, tileSprite);
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new GrowableGroundTile(gameCartridge, x, y);

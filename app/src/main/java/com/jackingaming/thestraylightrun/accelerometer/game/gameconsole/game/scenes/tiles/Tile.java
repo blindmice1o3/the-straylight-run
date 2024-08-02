@@ -20,7 +20,7 @@ public class Tile
     private boolean walkable = true;
     private int xIndex;
     private int yIndex;
-    transient private Bitmap image;
+    transient protected Bitmap image;
 
     private int x0InScene;
     private int y0InScene;
