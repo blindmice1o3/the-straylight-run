@@ -113,43 +113,44 @@ public class Player extends Creature {
     public Tile checkTileCurrentlyFacing() {
         Tile[][] tiles = game.getSceneManager().getCurrentScene().getTileManager().getTiles();
 
-        int xIndex = (int) (x / Tile.WIDTH);
-        int yIndex = (int) (y / Tile.HEIGHT);
+        float xCenter = x + (Tile.WIDTH / 2);
+        float yCenter = y + (Tile.HEIGHT / 2);
+
+        int xIndex = (int) ((xCenter) / Tile.WIDTH);
+        int yIndex = (int) ((yCenter) / Tile.HEIGHT);
         switch (direction) {
             case UP:
-                yIndex = yIndex - 1;
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
             case DOWN:
-                yIndex = yIndex + 1;
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
             case LEFT:
-                xIndex = xIndex - 1;
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
                 break;
             case RIGHT:
-                xIndex = xIndex + 1;
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
                 break;
             case CENTER:
-                xIndex = xIndex;
-                yIndex = yIndex;
+//                xIndex = (int) ((xCenter) / Tile.WIDTH);
+//                yIndex = (int) ((yCenter) / Tile.HEIGHT);
                 break;
             case UP_LEFT:
-                xIndex = xIndex - 1;
-                yIndex = yIndex - 1;
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
             case UP_RIGHT:
-                xIndex = xIndex + 1;
-                yIndex = yIndex - 1;
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
             case DOWN_LEFT:
-                xIndex = xIndex - 1;
-                yIndex = yIndex + 1;
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
             case DOWN_RIGHT:
-                xIndex = xIndex + 1;
-                yIndex = yIndex + 1;
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
                 break;
-            default:
-                return null;
         }
 
         if ((yIndex < 0) || (yIndex > (tiles.length - 1)) ||

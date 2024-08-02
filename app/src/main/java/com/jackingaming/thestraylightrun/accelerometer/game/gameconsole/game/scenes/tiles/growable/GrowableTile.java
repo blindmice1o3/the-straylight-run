@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class GrowableTile extends Tile {
 
     private boolean watered;
     private State state;
+    private String idSeed;
     private Entity entity;
     private Map<State, Bitmap> imageUnwateredViaState;
     private Map<State, Bitmap> imageWateredViaState;
@@ -26,6 +28,7 @@ public class GrowableTile extends Tile {
         super(id);
         watered = false;
         state = State.UNTILLED;
+        idSeed = null;
         entity = null;
         initImageMaps(resources);
     }
@@ -68,12 +71,19 @@ public class GrowableTile extends Tile {
         updateImage();
     }
 
+    public void changeToUntilled() {
+        state = State.UNTILLED;
+        updateImage();
+    }
+
     public void changeToTilled() {
         state = State.TILLED;
         updateImage();
     }
 
-    public void changeToSeeded() {
+    public void changeToSeeded(Item itemSeed) {
+        idSeed = itemSeed.getName();
+
         state = State.SEEDED;
         updateImage();
     }

@@ -68,7 +68,7 @@ public class PoohForm
         // Intentionally blank.
     }
 
-    private void doShovelAction() {
+    private void doShovelAction(Item itemShovel) {
         Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
         Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
         if (tileCurrentlyFacing instanceof GrowableTile) {
@@ -83,7 +83,7 @@ public class PoohForm
         }
     }
 
-    private void doMysterySeedAction() {
+    private void doMysterySeedAction(Item itemMysterySeed) {
         Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
         Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
         if (tileCurrentlyFacing instanceof GrowableTile) {
@@ -93,14 +93,14 @@ public class PoohForm
                 Log.e(TAG, "growableTile.changeToUnwatered()");
                 growableTile.changeToUnwatered();
                 Log.e(TAG, "growableTile.changeToSeeded()");
-                growableTile.changeToSeeded();
+                growableTile.changeToSeeded(itemMysterySeed);
             }
         } else {
             Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
         }
     }
 
-    private void doWateringCanAction() {
+    private void doWateringCanAction(Item itemWateringCan) {
         Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
         Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
         if (tileCurrentlyFacing instanceof GrowableTile) {
@@ -125,11 +125,14 @@ public class PoohForm
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 // TODO: check item occupying StatsDisplayerFragment's button holder.
                 if (game.getItemStoredInButtonHolderA() instanceof Shovel) {
-                    doShovelAction();
+                    Shovel shovel = (Shovel) game.getItemStoredInButtonHolderA();
+                    doShovelAction(shovel);
                 } else if (game.getItemStoredInButtonHolderA() instanceof MysterySeed) {
-                    doMysterySeedAction();
+                    MysterySeed mysterySeed = (MysterySeed) game.getItemStoredInButtonHolderA();
+                    doMysterySeedAction(mysterySeed);
                 } else if (game.getItemStoredInButtonHolderA() instanceof WateringCan) {
-                    doWateringCanAction();
+                    WateringCan wateringCan = (WateringCan) game.getItemStoredInButtonHolderA();
+                    doWateringCanAction(wateringCan);
                 }
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneWorldMapPart01) {
                 player.doCheckItemCollisionViaClick();
@@ -149,11 +152,14 @@ public class PoohForm
                 } else {
                     // TODO: check item occupying StatsDisplayerFragment's button holder.
                     if (game.getItemStoredInButtonHolderB() instanceof Shovel) {
-                        doShovelAction();
+                        Shovel shovel = (Shovel) game.getItemStoredInButtonHolderB();
+                        doShovelAction(shovel);
                     } else if (game.getItemStoredInButtonHolderB() instanceof MysterySeed) {
-                        doMysterySeedAction();
+                        MysterySeed mysterySeed = (MysterySeed) game.getItemStoredInButtonHolderB();
+                        doMysterySeedAction(mysterySeed);
                     } else if (game.getItemStoredInButtonHolderB() instanceof WateringCan) {
-                        doWateringCanAction();
+                        WateringCan wateringCan = (WateringCan) game.getItemStoredInButtonHolderB();
+                        doWateringCanAction(wateringCan);
                     }
                 }
             }
