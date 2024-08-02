@@ -1,22 +1,27 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Consumer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.fish.Assets;
 
 public class Meat extends Item
         implements Consumeable {
+    private static final String NAME_DEFAULT = "Meat";
+    private static final float PRICE_DEFAULT = -1f;
     private static final int REWARD_EXPERIENCE_POINTS = 125;
     private static final int REWARD_HEALTH = 2;
 
-    public Meat() {
-        super();
-        name = "Meat";
+    @Override
+    void initName() {
+        name = NAME_DEFAULT;
     }
 
     @Override
-    public void init(Game game) {
-        super.init(game);
+    void initPrice() {
+        price = PRICE_DEFAULT;
+    }
+
+    @Override
+    void initImage() {
         image = Assets.meat;
     }
 

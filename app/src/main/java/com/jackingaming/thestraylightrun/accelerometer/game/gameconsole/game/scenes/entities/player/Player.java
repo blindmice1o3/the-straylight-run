@@ -174,8 +174,12 @@ public class Player extends Creature {
         return game.getCurrency() >= price;
     }
 
-    public void buy(Item item) {
-        game.addItemToBackpack(item);
+    public void buyItem(Item item) {
+        receiveItem(item);
         game.decrementCurrencyBy(item.getPrice());
+    }
+
+    public void receiveItem(Item item) {
+        game.addItemToBackpack(item);
     }
 }

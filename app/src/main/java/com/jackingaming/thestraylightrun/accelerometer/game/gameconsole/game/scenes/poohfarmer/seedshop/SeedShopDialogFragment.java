@@ -27,6 +27,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 
 import java.io.Serializable;
@@ -45,6 +46,7 @@ public class SeedShopDialogFragment extends DialogFragment
 
     public SeedShopDialogFragment() {
         seedShopInventory = new ArrayList<Item>();
+        seedShopInventory.add(new MysterySeed());
         seedShopInventory.add(new BugCatchingNet());
         seedShopInventory.add(new HoneyPot());
         seedShopInventory.add(new BugCatchingNet());
@@ -66,7 +68,7 @@ public class SeedShopDialogFragment extends DialogFragment
         float priceOfItemToTrade = itemToTrade.getPrice();
         if (priceOfItemToTrade > 0) {
             if (player.canAffordToBuy(priceOfItemToTrade)) {
-                player.buy(itemToTrade);
+                player.buyItem(itemToTrade);
                 seedShopInventory.remove(itemToTrade);
                 itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
             } else {
@@ -74,6 +76,9 @@ public class SeedShopDialogFragment extends DialogFragment
             }
         } else {
             Log.d(TAG, getClass().getSimpleName() + ".performTrade(Item, Player) itemToTrade has NEGATIVE price.");
+            player.receiveItem(itemToTrade);
+            seedShopInventory.remove(itemToTrade);
+            itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
         }
     }
 
@@ -141,6 +146,20 @@ public class SeedShopDialogFragment extends DialogFragment
                     @Override
                     public void onAnimationFinish() {
                         Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
+
+                        if (!givenMysterySeed) {
+                            if (seedShopInventory.get(0) instanceof MysterySeed) {
+                                MysterySeed mysterySeed = (MysterySeed) seedShopInventory.get(0);
+
+                                performTrade(mysterySeed, Player.getInstance());
+                                givenMysterySeed = true;
+                                Log.e(TAG, "first item is mysterySeed... mysterySeed GIVEN");
+                            } else {
+                                Log.e(TAG, "first item is NOT mysterySeed... mysterySeed NOT GIVEN");
+                            }
+                        } else {
+                            Log.e(TAG, "Had already been GIVEN mysterySeed");
+                        }
                     }
                 }
         );
@@ -149,6 +168,8 @@ public class SeedShopDialogFragment extends DialogFragment
                 typeWriterDialogFragment
         );
     }
+
+    private boolean givenMysterySeed = false;
 
     @Override
     public void onPause() {

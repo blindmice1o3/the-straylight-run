@@ -69,7 +69,7 @@ public class ComputerDialogFragment extends DialogFragment
         float priceOfItemToTrade = itemToTrade.getPrice();
         if (priceOfItemToTrade > 0) {
             if (player.canAffordToBuy(priceOfItemToTrade)) {
-                player.buy(itemToTrade);
+                player.buyItem(itemToTrade);
                 seedShopInventory.remove(itemToTrade);
                 itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
             } else {

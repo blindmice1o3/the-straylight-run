@@ -10,7 +10,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 import java.io.Serializable;
 
-public class Item
+public abstract class Item
         implements Serializable {
     transient protected Game game;
 
@@ -35,7 +35,16 @@ public class Item
     public void init(Game game) {
         this.game = game;
         bounds = new Rect(0, 0, width, height);
+        initName();
+        initPrice();
+        initImage();
     }
+
+    abstract void initName();
+
+    abstract void initPrice();
+
+    abstract void initImage();
 
     public void draw(Canvas canvas) {
         if (image != null) {

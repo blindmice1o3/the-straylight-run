@@ -5,9 +5,9 @@ import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class BugCatchingNet extends Item {
-    private static final String NAME_DEFAULT = "Bug Catching Net";
-    private static final float PRICE_DEFAULT = 3f;
+public class MysterySeed extends Item {
+    private static final String NAME_DEFAULT = "Mystery Seed";
+    private static final float PRICE_DEFAULT = -1f;
 
     @Override
     void initName() {
@@ -21,7 +21,7 @@ public class BugCatchingNet extends Item {
 
     @Override
     void initImage() {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
-        image = Bitmap.createBitmap(spriteSheet, 103, 52, 16, 16);
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm_seeds_shop);
+        image = Bitmap.createBitmap(spriteSheet, 156, 150, 16, 16);
     }
 }

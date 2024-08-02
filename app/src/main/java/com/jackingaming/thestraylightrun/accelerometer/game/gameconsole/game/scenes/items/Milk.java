@@ -4,18 +4,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
 public class Milk extends Item {
+    private static final String NAME_DEFAULT = "Milk";
+    private static final float PRICE_DEFAULT = -1f;
 
-    public Milk() {
-        super();
-        name = "Milk";
+    @Override
+    void initName() {
+        name = NAME_DEFAULT;
     }
 
     @Override
-    public void init(Game game) {
-        super.init(game);
+    void initPrice() {
+        price = PRICE_DEFAULT;
+    }
+
+    @Override
+    void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
         image = Bitmap.createBitmap(spriteSheet, 1, 18, 16, 16);
     }
