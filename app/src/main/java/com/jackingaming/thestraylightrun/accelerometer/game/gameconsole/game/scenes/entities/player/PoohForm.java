@@ -140,8 +140,7 @@ public class PoohForm
                 Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
                 Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                 if (tileCurrentlyFacing instanceof BedTile) {
-                    ((SceneHouseLevel01)game.getSceneManager().getCurrentScene()).onBedTileClicked();
-                    game.startNewDay();
+                    ((SceneHouseLevel01) game.getSceneManager().getCurrentScene()).onBedTileClicked();
                 }
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneWorldMapPart01) {
                 player.doCheckItemCollisionViaClick();

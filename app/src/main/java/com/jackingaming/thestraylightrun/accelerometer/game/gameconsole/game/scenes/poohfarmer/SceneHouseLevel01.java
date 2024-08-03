@@ -28,7 +28,7 @@ public class SceneHouseLevel01 extends Scene {
     public static final int X_SPAWN_INDEX_DEFAULT = 4;
     public static final int Y_SPAWN_INDEX_DEFAULT = 8;
 
-    private boolean leftHouseToday;
+    private boolean leftHouseToday; // initialize to false if game starts if game starts in SceneHouseLevel01.
     private boolean slept;
 
     private static SceneHouseLevel01 uniqueInstance;
@@ -39,7 +39,7 @@ public class SceneHouseLevel01 extends Scene {
         entityManager.loadEntities(entitiesForHouseLevel01);
         List<Item> itemsForHouseLevel01 = createItemsForHouseLevel01();
         itemManager.loadItems(itemsForHouseLevel01);
-        leftHouseToday = true;
+        leftHouseToday = true; // started game in SceneFarm.
         slept = false;
     }
 

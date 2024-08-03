@@ -8,6 +8,15 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 public class Plant extends Entity {
+    public static final int BRACKET01_MIN_INCLUSIVE = 0;
+    public static final int BRACKET01_MAX_EXCLUSIVE = 1;
+    public static final int BRACKET02_MIN_INCLUSIVE = 1;
+    public static final int BRACKET02_MAX_EXCLUSIVE = 3;
+    public static final int BRACKET03_MIN_INCLUSIVE = 3;
+    public static final int BRACKET03_MAX_EXCLUSIVE = 5;
+    public static final int BRACKET04_MIN_INCLUSIVE = 5;
+    public static final int BRACKET04_MAX_EXCLUSIVE = 7;
+
     private int ageInDays;
     private boolean harvestable;
     private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04, imageHarvestable;
@@ -35,13 +44,13 @@ public class Plant extends Entity {
     }
 
     private void updateBasedOnAgeInDays() {
-        if (ageInDays >= 0 && ageInDays < 1) {
+        if (ageInDays >= BRACKET01_MIN_INCLUSIVE && ageInDays < BRACKET01_MAX_EXCLUSIVE) {
             image = imageBracket01;
-        } else if (ageInDays >= 1 && ageInDays < 3) {
+        } else if (ageInDays >= BRACKET02_MIN_INCLUSIVE && ageInDays < BRACKET02_MAX_EXCLUSIVE) {
             image = imageBracket02;
-        } else if (ageInDays >= 3 && ageInDays < 5) {
+        } else if (ageInDays >= BRACKET03_MIN_INCLUSIVE && ageInDays < BRACKET03_MAX_EXCLUSIVE) {
             image = imageBracket03;
-        } else if (ageInDays >= 5 && ageInDays < 7) {
+        } else if (ageInDays >= BRACKET04_MIN_INCLUSIVE && ageInDays < BRACKET04_MAX_EXCLUSIVE) {
             image = imageBracket04;
         } else {
             harvestable = true;
