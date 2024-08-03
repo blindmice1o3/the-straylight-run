@@ -17,6 +17,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneWorldMapPart01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
@@ -133,6 +135,13 @@ public class PoohForm
                 } else if (game.getItemStoredInButtonHolderA() instanceof WateringCan) {
                     WateringCan wateringCan = (WateringCan) game.getItemStoredInButtonHolderA();
                     doWateringCanAction(wateringCan);
+                }
+            } else if (game.getSceneManager().getCurrentScene() instanceof SceneHouseLevel01) {
+                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                if (tileCurrentlyFacing instanceof BedTile) {
+                    ((SceneHouseLevel01)game.getSceneManager().getCurrentScene()).onBedTileClicked();
+                    game.startNewDay();
                 }
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneWorldMapPart01) {
                 player.doCheckItemCollisionViaClick();

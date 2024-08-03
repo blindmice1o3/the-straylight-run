@@ -13,6 +13,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
 
@@ -27,6 +28,9 @@ public class SceneHouseLevel01 extends Scene {
     public static final int X_SPAWN_INDEX_DEFAULT = 4;
     public static final int Y_SPAWN_INDEX_DEFAULT = 8;
 
+    private boolean leftHouseToday;
+    private boolean slept;
+
     private static SceneHouseLevel01 uniqueInstance;
 
     private SceneHouseLevel01() {
@@ -35,6 +39,27 @@ public class SceneHouseLevel01 extends Scene {
         entityManager.loadEntities(entitiesForHouseLevel01);
         List<Item> itemsForHouseLevel01 = createItemsForHouseLevel01();
         itemManager.loadItems(itemsForHouseLevel01);
+        leftHouseToday = true;
+        slept = false;
+    }
+
+    public void onExitToFarm() {
+        leftHouseToday = true;
+
+        if (slept) {
+            ///////////////////
+            game.startNewDay();
+            ///////////////////
+
+            slept = false;
+        }
+    }
+
+    public void onBedTileClicked() {
+        if (leftHouseToday) {
+            slept = true;
+            leftHouseToday = false;
+        }
     }
 
     public static SceneHouseLevel01 getInstance() {
@@ -104,8 +129,9 @@ public class SceneHouseLevel01 extends Scene {
                 //BedTile
                 else if (tile.getId().equals("b")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    houseLevel01[y][x] = new BedTile(BedTile.TAG);
+                    houseLevel01[y][x].init(game, x, y, tileSprite);
+                    houseLevel01[y][x].setWalkable(false);
                 } else {
                     Bitmap defaultImage = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.icon_gridview);
                     tile.init(game, x, y, defaultImage);

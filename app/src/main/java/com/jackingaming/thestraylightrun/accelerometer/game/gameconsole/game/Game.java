@@ -33,6 +33,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
@@ -148,6 +149,18 @@ public class Game {
 
         paused = false;
         inBackpackDialogState = false;
+    }
+
+    public void startNewDay() {
+        timeManager.incrementDayOfMonth();
+
+        // TODO: implement startNewDay().
+        SceneFarm.getInstance().startNewDay();
+//        SceneFarm.getInstance().startNewDay(); //SEED_SHOP
+//        SceneChickenCoop.getInstance().startNewDay();
+//        SceneCowBarn.getInstance().startNewDay();
+//        SceneSheepPen.getInstance().startNewDay();
+//        SceneHothouse.getInstance().startNewDay();
     }
 
     public void addItemToBackpack(Item item) {

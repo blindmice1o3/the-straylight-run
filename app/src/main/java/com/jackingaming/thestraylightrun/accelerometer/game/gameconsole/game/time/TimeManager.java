@@ -14,6 +14,7 @@ public class TimeManager
     private long timer = 0L;
 
     private long timePlayedInMilliseconds;
+    private int dayOfMonth = 1;
 
     public TimeManager() {
         timePlayedInMilliseconds = 0L;
@@ -47,5 +48,12 @@ public class TimeManager
 
     public void setTimePlayedInMilliseconds(long timePlayedInMilliseconds) {
         this.timePlayedInMilliseconds = timePlayedInMilliseconds;
+    }
+
+    public void incrementDayOfMonth() {
+        dayOfMonth++;
+        if (dayOfMonth > 30) {
+            dayOfMonth = 1;
+        }
     }
 }

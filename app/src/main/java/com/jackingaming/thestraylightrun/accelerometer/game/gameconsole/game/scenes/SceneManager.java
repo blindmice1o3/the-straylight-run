@@ -164,6 +164,7 @@ public class SceneManager
             }
         } else if (getCurrentScene() instanceof SceneHouseLevel01) {
             if (idOfCollidedTransferPoint.equals("FARM")) {
+                ((SceneHouseLevel01) getCurrentScene()).onExitToFarm();
                 pop();
             }
         } else if (getCurrentScene() instanceof SceneChickenCoop) {

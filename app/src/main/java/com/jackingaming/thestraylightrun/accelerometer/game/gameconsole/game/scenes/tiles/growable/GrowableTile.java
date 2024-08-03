@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
@@ -15,8 +17,15 @@ import java.util.Map;
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
+    public interface EntityListener {
+        void addEntityToScene(Entity entityToAdd);
+    }
+
+    private EntityListener entityListener;
+
     public enum State {UNTILLED, TILLED, SEEDED, OCCUPIED;}
 
+    transient private Game game;
     private boolean watered;
     private State state;
     private String idSeed;
@@ -24,13 +33,34 @@ public class GrowableTile extends Tile {
     private Map<State, Bitmap> imageUnwateredViaState;
     private Map<State, Bitmap> imageWateredViaState;
 
-    public GrowableTile(String id, Resources resources) {
+    public GrowableTile(String id, Game game, EntityListener entityListener) {
         super(id);
+        this.game = game;
+        this.entityListener = entityListener;
         watered = false;
         state = State.UNTILLED;
         idSeed = null;
         entity = null;
-        initImageMaps(resources);
+        initImageMaps(game.getContext().getResources());
+    }
+
+    public void startNewDay() {
+        if (watered) {
+            if (state == State.SEEDED) {
+                entity = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
+                entity.init(game);
+                entityListener.addEntityToScene(entity);
+
+                state = State.OCCUPIED;
+            } else if (state == State.OCCUPIED) {
+                if (entity instanceof Plant) {
+                    ((Plant) entity).incrementAgeInDays();
+                }
+            }
+
+            watered = false;
+            updateImage();
+        }
     }
 
     private void initImageMaps(Resources resources) {

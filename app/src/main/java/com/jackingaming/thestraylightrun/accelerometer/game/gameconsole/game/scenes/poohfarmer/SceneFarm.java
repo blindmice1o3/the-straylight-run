@@ -33,6 +33,8 @@ public class SceneFarm extends Scene {
     private boolean inSeedShopState;
     private SeedShopDialogFragment seedShopDialogFragment;
 
+    private List<GrowableTile> growableTiles;
+
     private SceneFarm() {
         super();
         List<Entity> entitiesForFarm = createEntitiesForFarm();
@@ -42,6 +44,15 @@ public class SceneFarm extends Scene {
 
         inSeedShopState = false;
         seedShopDialogFragment = new SeedShopDialogFragment();
+
+        growableTiles = new ArrayList<>();
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+        for (GrowableTile growableTile : growableTiles) {
+            growableTile.startNewDay();
+        }
     }
 
     public boolean isInSeedShopState() {
@@ -78,6 +89,16 @@ public class SceneFarm extends Scene {
         Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
         tileManager.init(game); // updates tileManager's reference to the new game.
+
+        for (int y = 0; y < tilesForFarm.length; y++) {
+            for (int x = 0; x < tilesForFarm[y].length; x++) {
+                Tile tile = tilesForFarm[y][x];
+                if (tile instanceof GrowableTile) {
+                    growableTiles.add(((GrowableTile) tile));
+                }
+            }
+        }
+        Log.e(TAG, "growableTiles.size() is " + growableTiles.size());
 
         entityManager.init(game);
         itemManager.init(game);
@@ -158,7 +179,12 @@ public class SceneFarm extends Scene {
 //                    tiles[y][x] = new GenericSolidTile(gameCartridge, x, y);
                 } else if (pixel == Color.WHITE) {
 //                    Tile tile = new Tile("white");
-                    Tile tile = new GrowableTile(GrowableTile.TAG, game.getContext().getResources());
+                    Tile tile = new GrowableTile(GrowableTile.TAG, game, new GrowableTile.EntityListener() {
+                        @Override
+                        public void addEntityToScene(Entity entityToAdd) {
+                            entityManager.addEntity(entityToAdd);
+                        }
+                    });
                     tile.init(game, x, y, tileSprite);
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new GrowableGroundTile(gameCartridge, x, y);

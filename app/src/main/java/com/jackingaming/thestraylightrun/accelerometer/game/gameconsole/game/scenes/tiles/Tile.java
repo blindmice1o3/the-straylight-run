@@ -18,8 +18,8 @@ public class Tile
 
     private String id;
     private boolean walkable = true;
-    private int xIndex;
-    private int yIndex;
+    protected int xIndex;
+    protected int yIndex;
     transient protected Bitmap image;
 
     private int x0InScene;
