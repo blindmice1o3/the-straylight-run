@@ -7,6 +7,8 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
+import java.util.Random;
+
 public class Plant extends Entity {
     public static final int BRACKET01_MIN_INCLUSIVE = 0;
     public static final int BRACKET01_MAX_EXCLUSIVE = 1;
@@ -19,7 +21,9 @@ public class Plant extends Entity {
 
     private int ageInDays;
     private boolean harvestable;
-    private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04, imageHarvestable;
+    private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
+    private Bitmap imageHarvestableGreen, imageHarvestablePurple;
+    private Bitmap imageHarvestable;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -34,7 +38,15 @@ public class Plant extends Entity {
         imageBracket02 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green256);
         imageBracket03 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green266);
         imageBracket04 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green280);
-        imageHarvestable = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green2174);
+
+        imageHarvestableGreen = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green2174);
+        imageHarvestablePurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.purple2174);
+
+        Random random = new Random();
+        int numberRandom = random.nextInt();
+        imageHarvestable = (numberRandom % 2 == 0) ?
+                imageHarvestableGreen : imageHarvestablePurple;
+
         updateBasedOnAgeInDays();
     }
 
