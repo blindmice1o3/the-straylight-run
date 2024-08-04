@@ -1,8 +1,14 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
+import android.graphics.Rect;
+import android.util.Log;
+
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 
 public abstract class Creature extends Entity {
+    public static final String TAG = Creature.class.getSimpleName();
+
     public static final float MOVE_SPEED_DEFAULT = 1f;
 
     public enum Direction {UP, DOWN, LEFT, RIGHT, CENTER, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT;}
@@ -231,6 +237,71 @@ public abstract class Creature extends Entity {
                 }
                 break;
         }
+    }
+
+    public Entity getEntityCurrentlyFacing() {
+        Log.e(TAG, "getEntityCurrentlyFacing()");
+
+        Entity tempEntityReturner = null;
+
+        int creatureCenterX = (int) (x + (width / 2));
+        int creatureCenterY = (int) (y + (height / 2));
+
+        Rect entityCollisionBox = new Rect();
+        switch (direction) {
+            case DOWN:
+                entityCollisionBox.left = (creatureCenterX - (Tile.WIDTH / 4));
+                entityCollisionBox.top = (creatureCenterY + (Tile.HEIGHT / 2) + ((int) (0.3) * Tile.HEIGHT));
+                entityCollisionBox.right = (creatureCenterX - (Tile.WIDTH / 4)) +
+                        (Tile.WIDTH / 2);
+                entityCollisionBox.bottom = (creatureCenterY + (Tile.HEIGHT / 2) + ((int) (0.3) * Tile.HEIGHT)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case UP:
+                entityCollisionBox.left = (creatureCenterX - (Tile.WIDTH / 4));
+                entityCollisionBox.top = (creatureCenterY - ((int) (1.4) * Tile.HEIGHT));
+                entityCollisionBox.right = (creatureCenterX - (Tile.WIDTH / 4)) +
+                        (Tile.WIDTH / 2);
+                entityCollisionBox.bottom = (creatureCenterY - ((int) (1.4) * Tile.HEIGHT)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case LEFT:
+                entityCollisionBox.left = (creatureCenterX - ((int) (1.4) * Tile.WIDTH));
+                entityCollisionBox.top = (creatureCenterY - (Tile.HEIGHT / 4));
+                entityCollisionBox.right = (creatureCenterX - ((int) (1.4) * Tile.WIDTH)) +
+                        (Tile.WIDTH / 2);
+                entityCollisionBox.bottom = (creatureCenterY - (Tile.HEIGHT / 4)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case RIGHT:
+                entityCollisionBox.left = (creatureCenterX + (Tile.WIDTH / 2) + ((int) (0.3) * Tile.WIDTH));
+                entityCollisionBox.top = (creatureCenterY - (Tile.HEIGHT / 4));
+                entityCollisionBox.right = (creatureCenterX + (Tile.WIDTH / 2) + ((int) (0.3) * Tile.WIDTH)) +
+                        (Tile.WIDTH / 2);
+                entityCollisionBox.bottom = (creatureCenterY - (Tile.HEIGHT / 4)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            default:
+                break;
+        }
+
+        for (Entity e : game.getSceneManager().getCurrentScene().getEntityManager().getEntities()) {
+            if (e.equals(this)) {
+                continue;
+            }
+
+            if (entityCollisionBox.intersect(e.getCollisionBounds(0, 0))) {
+                tempEntityReturner = e;
+            }
+        }
+
+        if (tempEntityReturner != null) {
+            Log.e(TAG, "entity: " + tempEntityReturner.toString());
+        } else {
+            Log.e(TAG, "entity is null");
+        }
+
+        return tempEntityReturner;
     }
 
     public Direction getDirection() {

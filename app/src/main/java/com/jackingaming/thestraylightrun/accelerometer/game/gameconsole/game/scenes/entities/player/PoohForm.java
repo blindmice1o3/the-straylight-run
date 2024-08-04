@@ -9,6 +9,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
@@ -125,8 +126,14 @@ public class PoohForm
         if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+                if (entityCurrentlyFacing != null) {
+                    if (entityCurrentlyFacing instanceof Robot) {
+                        ((Robot) entityCurrentlyFacing).toggleState();
+                    }
+                }
                 // TODO: check item occupying StatsDisplayerFragment's button holder.
-                if (game.getItemStoredInButtonHolderA() instanceof Shovel) {
+                else if (game.getItemStoredInButtonHolderA() instanceof Shovel) {
                     Shovel shovel = (Shovel) game.getItemStoredInButtonHolderA();
                     doShovelAction(shovel);
                 } else if (game.getItemStoredInButtonHolderA() instanceof MysterySeed) {
