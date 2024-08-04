@@ -3,7 +3,10 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
+import android.view.View;
 
+import com.jackingaming.thestraylightrun.MainActivity;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
@@ -129,7 +132,35 @@ public class PoohForm
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
                 if (entityCurrentlyFacing != null) {
                     if (entityCurrentlyFacing instanceof Robot) {
-                        ((Robot) entityCurrentlyFacing).toggleState();
+                        game.setPaused(true);
+
+                        RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
+                            @Override
+                            public void onOffButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                                Log.e(TAG, "OFF");
+                                ((Robot) entityCurrentlyFacing).changeToOff();
+                                game.setPaused(false);
+                            }
+
+                            @Override
+                            public void onWalkButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                                Log.e(TAG, "WALK");
+                                ((Robot) entityCurrentlyFacing).changeToWalk();
+                                game.setPaused(false);
+                            }
+
+                            @Override
+                            public void onRunButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                                Log.e(TAG, "RUN");
+                                ((Robot) entityCurrentlyFacing).changeToRun();
+                                game.setPaused(false);
+                            }
+                        });
+
+                        robotDialogFragment.show(
+                                ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                                RobotDialogFragment.TAG
+                        );
                     }
                 }
                 // TODO: check item occupying StatsDisplayerFragment's button holder.

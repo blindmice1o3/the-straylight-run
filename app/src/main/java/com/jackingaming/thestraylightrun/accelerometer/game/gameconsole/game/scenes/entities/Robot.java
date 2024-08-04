@@ -107,6 +107,18 @@ public class Robot extends Creature {
 
     }
 
+    public void changeToOff() {
+        state = State.OFF;
+    }
+
+    public void changeToWalk() {
+        state = State.WALK;
+    }
+
+    public void changeToRun() {
+        state = State.RUN;
+    }
+
     public void toggleState() {
         int indexStateCurrent = state.ordinal();
 

@@ -12,4 +12,8 @@
     <string name="scientist_dialogue05">Your very own JAVA legend is about to unfold! A world of dreams and adventure with OBJECT awaits! Let\'s go!</string>
 
     <string name="seed_shop_dialogue00">Hello! Please germinate these mystery seeds and self-pollinate for 3 generations.</string>
+
+    <string name="robot_dialogfragment_off">off</string>
+    <string name="robot_dialogfragment_walk">walk</string>
+    <string name="robot_dialogfragment_run">run</string>
 </resources>
