@@ -8,9 +8,17 @@ import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.SeedGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WalkDownTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Robot extends Creature {
@@ -36,6 +44,19 @@ public class Robot extends Creature {
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
+        tileCommands = new ArrayList<>();
+        tileCommands.add(new TillGrowableTileCommand(null));
+        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        tileCommands.add(new WaterGrowableTileCommand(null));
+        tileCommands.add(new WalkDownTileCommand(this));
+        tileCommands.add(new TillGrowableTileCommand(null));
+        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        tileCommands.add(new WaterGrowableTileCommand(null));
+        tileCommands.add(new WalkDownTileCommand(this));
+        tileCommands.add(new TillGrowableTileCommand(null));
+        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        tileCommands.add(new WaterGrowableTileCommand(null));
+        tileCommands.add(new WalkDownTileCommand(this));
 
         state = State.OFF;
         random = new Random();
@@ -48,13 +69,32 @@ public class Robot extends Creature {
         robotAnimationManager.init(game);
     }
 
+    private List<TileCommand> tileCommands;
+    private int counter = 0;
+
     @Override
     public void update(long elapsed) {
         robotAnimationManager.update(elapsed);
 
-        if (!movementAnimator.isRunning()) {
-            determineNextMove();
-            move();
+        if (state != State.OFF) {
+            if (!tileCommands.isEmpty()) {
+                counter++;
+                if (counter == 50) {
+                    TileCommand tileCommand = tileCommands.get(0);
+                    Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+
+                    tileCommand.setTile(tileCurrentlyFacing);
+                    tileCommand.execute();
+                    tileCommands.remove(tileCommand);
+
+                    counter = 0;
+                }
+            } else {
+                if (!movementAnimator.isRunning()) {
+                    determineNextMove();
+                    move();
+                }
+            }
         }
 
         determineNextImage();
@@ -64,28 +104,28 @@ public class Robot extends Creature {
     private float valueStart = 0;
     private float valueEnd = 0;
 
-    private void prepareMoveDown() {
+    public void prepareMoveDown() {
         yMove = (1 * Tile.HEIGHT);
         propertyName = "y";
         valueStart = y;
         valueEnd = y + yMove;
     }
 
-    private void prepareMoveLeft() {
+    public void prepareMoveLeft() {
         xMove = -(1 * Tile.WIDTH);
         propertyName = "x";
         valueStart = x;
         valueEnd = x + xMove;
     }
 
-    private void prepareMoveUp() {
+    public void prepareMoveUp() {
         yMove = -(1 * Tile.HEIGHT);
         propertyName = "y";
         valueStart = y;
         valueEnd = y + yMove;
     }
 
-    private void prepareMoveRight() {
+    public void prepareMoveRight() {
         xMove = (1 * Tile.WIDTH);
         propertyName = "x";
         valueStart = x;

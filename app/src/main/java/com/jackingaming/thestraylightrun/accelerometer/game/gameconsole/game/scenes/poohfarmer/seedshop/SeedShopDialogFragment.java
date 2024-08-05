@@ -23,6 +23,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -47,7 +48,11 @@ public class SeedShopDialogFragment extends DialogFragment
 
     public SeedShopDialogFragment() {
         seedShopInventory = new ArrayList<Item>();
-        seedShopInventory.add(new MysterySeed());
+        seedShopInventory.add(
+                new MysterySeed(
+                        new SeedGrowableTileCommand(null, MysterySeed.TAG)
+                )
+        );
         seedShopInventory.add(new BugCatchingNet());
         seedShopInventory.add(new HoneyPot());
         seedShopInventory.add(new BugCatchingNet());

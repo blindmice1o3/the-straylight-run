@@ -3,12 +3,13 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.util.HashMap;
@@ -47,7 +48,14 @@ public class GrowableTile extends Tile {
     public void startNewDay() {
         if (watered) {
             if (state == State.SEEDED) {
-                entity = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
+                Entity entityToAdd = null;
+                if (idSeed.equals(MysterySeed.TAG)) {
+                    entityToAdd = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
+                } else {
+                    Log.e(TAG, "startNewDay() else-clause: idSeed does NOT match defined options");
+                }
+
+                entity = entityToAdd;
                 entity.init(game);
                 entityListener.addEntityToScene(entity);
 
@@ -111,8 +119,8 @@ public class GrowableTile extends Tile {
         updateImage();
     }
 
-    public void changeToSeeded(Item itemSeed) {
-        idSeed = itemSeed.getName();
+    public void changeToSeeded(String idSeed) {
+        this.idSeed = idSeed;
 
         state = State.SEEDED;
         updateImage();

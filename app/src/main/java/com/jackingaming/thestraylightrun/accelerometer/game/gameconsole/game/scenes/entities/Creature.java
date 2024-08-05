@@ -322,6 +322,59 @@ public abstract class Creature extends Entity {
         return tempEntityReturner;
     }
 
+    public Tile checkTileCurrentlyFacing() {
+        Tile[][] tiles = game.getSceneManager().getCurrentScene().getTileManager().getTiles();
+
+        float xCenter = x + (Tile.WIDTH / 2);
+        float yCenter = y + (Tile.HEIGHT / 2);
+
+        int xIndex = (int) ((xCenter) / Tile.WIDTH);
+        int yIndex = (int) ((yCenter) / Tile.HEIGHT);
+        switch (direction) {
+            case UP:
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+            case DOWN:
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+            case LEFT:
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
+                break;
+            case RIGHT:
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
+                break;
+            case CENTER:
+//                xIndex = (int) ((xCenter) / Tile.WIDTH);
+//                yIndex = (int) ((yCenter) / Tile.HEIGHT);
+                break;
+            case UP_LEFT:
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+            case UP_RIGHT:
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter - (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+            case DOWN_LEFT:
+                xIndex = (int) ((xCenter - (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+            case DOWN_RIGHT:
+                xIndex = (int) ((xCenter + (1 * Tile.WIDTH)) / Tile.WIDTH);
+                yIndex = (int) ((yCenter + (1 * Tile.HEIGHT)) / Tile.HEIGHT);
+                break;
+        }
+
+        if ((yIndex < 0) || (yIndex > (tiles.length - 1)) ||
+                (xIndex < 0) || (xIndex > (tiles[0].length - 1))) {
+            Tile nonWalkableTile = new Tile("x");
+            nonWalkableTile.setWalkable(false);
+            return nonWalkableTile;
+        }
+
+        return tiles[yIndex][xIndex];
+    }
+
     public Direction getDirection() {
         return direction;
     }

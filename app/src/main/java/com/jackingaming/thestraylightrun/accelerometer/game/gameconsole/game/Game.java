@@ -25,6 +25,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameCons
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.adapters.ItemRecyclerViewAdapter;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.SceneManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
@@ -138,8 +140,16 @@ public class Game {
         currency = 100f;
 
         backpack = new ArrayList<Item>();
-        backpack.add(new Shovel());
-        backpack.add(new WateringCan());
+        backpack.add(
+                new Shovel(
+                        new TillGrowableTileCommand(null)
+                )
+        );
+        backpack.add(
+                new WateringCan(
+                        new WaterGrowableTileCommand(null)
+                )
+        );
         backpack.add(new BugCatchingNet());
         backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<Item>();
 

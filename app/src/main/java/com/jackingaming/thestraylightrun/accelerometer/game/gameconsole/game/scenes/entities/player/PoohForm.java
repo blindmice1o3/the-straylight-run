@@ -10,21 +10,19 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneWorldMapPart01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
 public class PoohForm
         implements Form {
@@ -74,55 +72,6 @@ public class PoohForm
         // Intentionally blank.
     }
 
-    private void doShovelAction(Item itemShovel) {
-        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-        if (tileCurrentlyFacing instanceof GrowableTile) {
-            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
-            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
-            if (growableTile.getState() == GrowableTile.State.UNTILLED) {
-                Log.e(TAG, "growableTile.changeToTilled()");
-                growableTile.changeToTilled();
-            }
-        } else {
-            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
-        }
-    }
-
-    private void doMysterySeedAction(Item itemMysterySeed) {
-        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-        if (tileCurrentlyFacing instanceof GrowableTile) {
-            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
-            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
-            if (growableTile.getState() == GrowableTile.State.TILLED) {
-                Log.e(TAG, "growableTile.changeToUnwatered()");
-                growableTile.changeToUnwatered();
-                Log.e(TAG, "growableTile.changeToSeeded()");
-                growableTile.changeToSeeded(itemMysterySeed);
-            }
-        } else {
-            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
-        }
-    }
-
-    private void doWateringCanAction(Item itemWateringCan) {
-        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-        if (tileCurrentlyFacing instanceof GrowableTile) {
-            GrowableTile growableTile = (GrowableTile) tileCurrentlyFacing;
-            Log.e(TAG, "tileCurrentlyFacing has state: " + growableTile.getState());
-            if (growableTile.getState() == GrowableTile.State.TILLED ||
-                    growableTile.getState() == GrowableTile.State.SEEDED ||
-                    growableTile.getState() == GrowableTile.State.OCCUPIED) {
-                Log.e(TAG, "growableTile.changeToWatered()");
-                growableTile.changeToWatered();
-            }
-        } else {
-            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tileCurrentlyFacing.getId());
-        }
-    }
-
     @Override
     public void interpretInput() {
         // Check InputManager's ButtonPadFragment-specific boolean fields.
@@ -164,15 +113,14 @@ public class PoohForm
                     }
                 }
                 // TODO: check item occupying StatsDisplayerFragment's button holder.
-                else if (game.getItemStoredInButtonHolderA() instanceof Shovel) {
-                    Shovel shovel = (Shovel) game.getItemStoredInButtonHolderA();
-                    doShovelAction(shovel);
-                } else if (game.getItemStoredInButtonHolderA() instanceof MysterySeed) {
-                    MysterySeed mysterySeed = (MysterySeed) game.getItemStoredInButtonHolderA();
-                    doMysterySeedAction(mysterySeed);
-                } else if (game.getItemStoredInButtonHolderA() instanceof WateringCan) {
-                    WateringCan wateringCan = (WateringCan) game.getItemStoredInButtonHolderA();
-                    doWateringCanAction(wateringCan);
+                else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                    TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                    TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                    Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                    tileCommand.setTile(tileCurrentlyFacing);
+                    tileCommand.execute();
                 }
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneHouseLevel01) {
                 Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
@@ -197,15 +145,14 @@ public class PoohForm
                     game.getTextboxListener().showStatsDisplayer();
                 } else {
                     // TODO: check item occupying StatsDisplayerFragment's button holder.
-                    if (game.getItemStoredInButtonHolderB() instanceof Shovel) {
-                        Shovel shovel = (Shovel) game.getItemStoredInButtonHolderB();
-                        doShovelAction(shovel);
-                    } else if (game.getItemStoredInButtonHolderB() instanceof MysterySeed) {
-                        MysterySeed mysterySeed = (MysterySeed) game.getItemStoredInButtonHolderB();
-                        doMysterySeedAction(mysterySeed);
-                    } else if (game.getItemStoredInButtonHolderB() instanceof WateringCan) {
-                        WateringCan wateringCan = (WateringCan) game.getItemStoredInButtonHolderB();
-                        doWateringCanAction(wateringCan);
+                    if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+                        TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+                        TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                        tileCommand.setTile(tileCurrentlyFacing);
+                        tileCommand.execute();
                     }
                 }
             }
