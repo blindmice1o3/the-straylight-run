@@ -26,6 +26,28 @@ public abstract class Creature extends Entity {
         yMove = 0f;
     }
 
+    public void performMove() {
+        switch (direction) {
+            case UP:
+            case DOWN:
+                y += yMove;
+                break;
+            case LEFT:
+            case RIGHT:
+                x += xMove;
+                break;
+            case CENTER:
+                break;
+            case UP_LEFT:
+            case UP_RIGHT:
+            case DOWN_LEFT:
+            case DOWN_RIGHT:
+                x += xMove;
+                y += yMove;
+                break;
+        }
+    }
+
     public void move() {
         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
         int xFutureLeft = 0;
@@ -51,9 +73,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -75,9 +97,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -99,9 +121,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -123,9 +145,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -151,10 +173,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -177,10 +198,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -203,10 +223,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;
@@ -229,10 +248,9 @@ public abstract class Creature extends Entity {
                             return; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        ///////////
-                        x += xMove;
-                        y += yMove;
-                        ///////////
+                        //////////////
+                        performMove();
+                        //////////////
                     }
                 }
                 break;

@@ -54,7 +54,7 @@ public class Robot extends Creature {
 
         if (!movementAnimator.isRunning()) {
             determineNextMove();
-            doMove();
+            move();
         }
 
         determineNextImage();
@@ -92,20 +92,17 @@ public class Robot extends Creature {
         valueEnd = x + xMove;
     }
 
-    // TODO: change to validateAndMove().
-    //  Currently no tile/entity collision detection.
-    private void doMove() {
-        if (state == State.WALK || state == State.RUN) {
-            movementAnimator.setPropertyName(propertyName);
-            movementAnimator.setFloatValues(valueStart, valueEnd);
+    @Override
+    public void performMove() {
+        movementAnimator.setPropertyName(propertyName);
+        movementAnimator.setFloatValues(valueStart, valueEnd);
 
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    movementAnimator.start();
-                }
-            });
-        }
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                movementAnimator.start();
+            }
+        });
     }
 
     private void determineNextMove() {
@@ -168,7 +165,7 @@ public class Robot extends Creature {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
-        return false;
+        return true;
     }
 
     @Override
