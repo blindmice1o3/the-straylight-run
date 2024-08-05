@@ -8,11 +8,17 @@ import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.SeedGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TillGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WalkDownTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WaterGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceRightCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
@@ -44,19 +50,49 @@ public class Robot extends Creature {
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
-        tileCommands = new ArrayList<>();
-        tileCommands.add(new TillGrowableTileCommand(null));
-        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        tileCommands.add(new WaterGrowableTileCommand(null));
-        tileCommands.add(new WalkDownTileCommand(this));
-        tileCommands.add(new TillGrowableTileCommand(null));
-        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        tileCommands.add(new WaterGrowableTileCommand(null));
-        tileCommands.add(new WalkDownTileCommand(this));
-        tileCommands.add(new TillGrowableTileCommand(null));
-        tileCommands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        tileCommands.add(new WaterGrowableTileCommand(null));
-        tileCommands.add(new WalkDownTileCommand(this));
+        commands = new ArrayList<>();
+        commands.add(new WalkDownCommand(this));
+        commands.add(new FaceRightCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkRightCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkRightCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkRightCommand(this));
+        commands.add(new FaceDownCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkDownCommand(this));
+        commands.add(new FaceLeftCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkLeftCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkLeftCommand(this));
+        commands.add(new FaceDownCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkDownCommand(this));
+        commands.add(new FaceRightCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+        commands.add(new WalkRightCommand(this));
+        commands.add(new TillGrowableTileCommand(null));
+        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+        commands.add(new WaterGrowableTileCommand(null));
+
 
         state = State.OFF;
         random = new Random();
@@ -69,7 +105,7 @@ public class Robot extends Creature {
         robotAnimationManager.init(game);
     }
 
-    private List<TileCommand> tileCommands;
+    private List<Command> commands;
     private int counter = 0;
 
     @Override
@@ -77,15 +113,19 @@ public class Robot extends Creature {
         robotAnimationManager.update(elapsed);
 
         if (state != State.OFF) {
-            if (!tileCommands.isEmpty()) {
+            if (!commands.isEmpty()) {
                 counter++;
                 if (counter == 50) {
-                    TileCommand tileCommand = tileCommands.get(0);
-                    Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+                    Command command = commands.get(0);
 
-                    tileCommand.setTile(tileCurrentlyFacing);
-                    tileCommand.execute();
-                    tileCommands.remove(tileCommand);
+                    if (command instanceof TileCommand) {
+                        Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+
+                        ((TileCommand) command).setTile(tileCurrentlyFacing);
+                    }
+
+                    command.execute();
+                    commands.remove(command);
 
                     counter = 0;
                 }

@@ -1,18 +1,20 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles;
 
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
-public class TillGrowableTileCommand
+public class SeedGrowableTileCommand
         implements TileCommand {
-    public static final String TAG = TillGrowableTileCommand.class.getSimpleName();
+    public static final String TAG = SeedGrowableTileCommand.class.getSimpleName();
 
     private Tile tile;
+    private final String idSeed;
 
-    public TillGrowableTileCommand(Tile tile) {
+    public SeedGrowableTileCommand(Tile tile, String idSeed) {
         this.tile = tile;
+        this.idSeed = idSeed;
     }
 
     @Override
@@ -25,9 +27,11 @@ public class TillGrowableTileCommand
         if (tile instanceof GrowableTile) {
             GrowableTile growableTile = (GrowableTile) tile;
             Log.e(TAG, "growableTile has state: " + growableTile.getState());
-            if (growableTile.getState() == GrowableTile.State.UNTILLED) {
-                Log.e(TAG, "growableTile.changeToTilled()");
-                growableTile.changeToTilled();
+            if (growableTile.getState() == GrowableTile.State.TILLED) {
+                Log.e(TAG, "growableTile.changeToUnwatered()");
+                growableTile.changeToUnwatered();
+                Log.e(TAG, "growableTile.changeToSeeded()");
+                growableTile.changeToSeeded(idSeed);
             }
         } else {
             Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tile.getId());

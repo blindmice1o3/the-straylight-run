@@ -25,8 +25,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameCons
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.adapters.ItemRecyclerViewAdapter;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.SceneManager;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.TillGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.WaterGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
