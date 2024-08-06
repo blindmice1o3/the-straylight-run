@@ -4,8 +4,12 @@ import android.animation.ObjectAnimator;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import com.jackingaming.thestraylightrun.MainActivity;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.TileSelectorDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
@@ -277,15 +281,63 @@ public class Robot extends Creature {
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
     }
 
-    public void toggleState() {
-        int indexStateCurrent = state.ordinal();
+    public RobotDialogFragment instantiateRobotDialogFragment() {
+        RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
+            @Override
+            public void onOffButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                Log.e(TAG, "OFF");
+                changeToOff();
+                game.setPaused(false);
+            }
 
-        indexStateCurrent++;
+            @Override
+            public void onWalkButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                Log.e(TAG, "WALK");
+                changeToWalk();
+                game.setPaused(false);
+            }
 
-        if (indexStateCurrent >= State.values().length) {
-            indexStateCurrent = 0;
-        }
+            @Override
+            public void onRunButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                Log.e(TAG, "RUN");
+                changeToRun();
+                game.setPaused(false);
+            }
 
-        state = State.values()[indexStateCurrent];
+            @Override
+            public void onTileSelectorButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                TileSelectorDialogFragment tileSelectorDialogFragment =
+                        TileSelectorDialogFragment.newInstance(
+                                game.getSceneManager().getCurrentScene().getTileManager(),
+                                new TileSelectorDialogFragment.TileSelectorListener() {
+                                    @Override
+                                    public void selected(List<Tile> tiles) {
+                                        // TODO:
+                                        //  (1) walk to these tiles,
+                                        //  (2) tile/seed/water these tiles.
+                                        for (Tile tile : tiles) {
+                                            Log.e(TAG, tile.getxIndex() + ", " + tile.getyIndex());
+                                        }
+                                    }
+                                }, new TileSelectorDialogFragment.DismissListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        robotDialogFragment.dismiss();
+                                    }
+                                });
+
+                tileSelectorDialogFragment.show(
+                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                        TileSelectorDialogFragment.TAG
+                );
+            }
+        }, new RobotDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                game.setPaused(false);
+            }
+        });
+
+        return robotDialogFragment;
     }
 }

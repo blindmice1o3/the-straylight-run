@@ -65,4 +65,12 @@ public class Tile
     public String getId() {
         return id;
     }
+
+    public int getxIndex() {
+        return xIndex;
+    }
+
+    public int getyIndex() {
+        return yIndex;
+    }
 }

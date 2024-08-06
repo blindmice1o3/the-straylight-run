@@ -20,6 +20,7 @@ import java.io.Serializable;
 public class RobotDialogFragment extends DialogFragment {
     public static final String TAG = RobotDialogFragment.class.getSimpleName();
     public static final String ARG_BUTTON_LISTENER = "buttonListener";
+    public static final String ARG_DISMISS_LISTENER = "dismissListener";
 
     public interface ButtonListener extends Serializable {
         void onOffButtonClick(View view, RobotDialogFragment robotDialogFragment);
@@ -27,17 +28,26 @@ public class RobotDialogFragment extends DialogFragment {
         void onWalkButtonClick(View view, RobotDialogFragment robotDialogFragment);
 
         void onRunButtonClick(View view, RobotDialogFragment robotDialogFragment);
+
+        void onTileSelectorButtonClick(View view, RobotDialogFragment robotDialogFragment);
     }
 
-    private ButtonListener listener;
+    public interface DismissListener extends Serializable {
+        void onDismiss();
+    }
 
-    private TextView tvOff, tvWalk, tvRun;
+    private ButtonListener buttonListener;
+    private DismissListener dismissListener;
 
-    public static RobotDialogFragment newInstance(ButtonListener listener) {
+    private TextView tvOff, tvWalk, tvRun, tvTileSelector;
+
+    public static RobotDialogFragment newInstance(ButtonListener buttonListener,
+                                                  DismissListener dismissListener) {
         RobotDialogFragment fragment = new RobotDialogFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_BUTTON_LISTENER, listener);
+        args.putSerializable(ARG_BUTTON_LISTENER, buttonListener);
+        args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         fragment.setArguments(args);
 
         return fragment;
@@ -48,7 +58,8 @@ public class RobotDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            listener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
+            buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
+            dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         }
     }
 
@@ -71,11 +82,12 @@ public class RobotDialogFragment extends DialogFragment {
         tvOff = view.findViewById(R.id.tv_off);
         tvWalk = view.findViewById(R.id.tv_walk);
         tvRun = view.findViewById(R.id.tv_run);
+        tvTileSelector = view.findViewById(R.id.tv_tile_selector);
 
         tvOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onOffButtonClick(view, RobotDialogFragment.this);
+                buttonListener.onOffButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });
@@ -83,7 +95,7 @@ public class RobotDialogFragment extends DialogFragment {
         tvWalk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onWalkButtonClick(view, RobotDialogFragment.this);
+                buttonListener.onWalkButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });
@@ -91,7 +103,14 @@ public class RobotDialogFragment extends DialogFragment {
         tvRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onRunButtonClick(view, RobotDialogFragment.this);
+                buttonListener.onRunButtonClick(view, RobotDialogFragment.this);
+                dismiss();
+            }
+        });
+        tvTileSelector.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener.onTileSelectorButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });
@@ -101,6 +120,8 @@ public class RobotDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
+
+        dismissListener.onDismiss();
     }
 
     @Override
