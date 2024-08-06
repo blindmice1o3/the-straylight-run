@@ -52,7 +52,8 @@ public class RobotAnimationManager
     public Bitmap getCurrentFrame(Creature.Direction direction, Robot.State state, float xMove, float yMove) {
         if (state == Robot.State.OFF) {
             return stateOff;
-        } else if (state == Robot.State.WALK) {
+        } else if (state == Robot.State.WALK ||
+                state == Robot.State.TILE_SELECTED) {
             if (direction == Creature.Direction.DOWN ||
                     direction == Creature.Direction.LEFT ||
                     direction == Creature.Direction.UP ||

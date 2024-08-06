@@ -13,18 +13,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceDownCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceLeftCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceRightCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.util.ArrayList;
@@ -36,7 +26,7 @@ public class Robot extends Creature {
     public static final long DEFAULT_MOVEMENT_DURATION = 1000L;
     public static final long RUNNING_MOVEMENT_DURATION = 500L;
 
-    public enum State {OFF, WALK, RUN;}
+    public enum State {OFF, WALK, RUN, TILE_SELECTED;}
 
     private RobotAnimationManager robotAnimationManager;
     private ObjectAnimator movementAnimator;
@@ -55,47 +45,47 @@ public class Robot extends Creature {
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
         commands = new ArrayList<>();
-        commands.add(new WalkDownCommand(this));
-        commands.add(new FaceRightCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkRightCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkRightCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkRightCommand(this));
-        commands.add(new FaceDownCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkDownCommand(this));
-        commands.add(new FaceLeftCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkLeftCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkLeftCommand(this));
-        commands.add(new FaceDownCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkDownCommand(this));
-        commands.add(new FaceRightCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
-        commands.add(new WalkRightCommand(this));
-        commands.add(new TillGrowableTileCommand(null));
-        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
-        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkDownCommand(this));
+//        commands.add(new FaceRightCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkRightCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkRightCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkRightCommand(this));
+//        commands.add(new FaceDownCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkDownCommand(this));
+//        commands.add(new FaceLeftCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkLeftCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkLeftCommand(this));
+//        commands.add(new FaceDownCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkDownCommand(this));
+//        commands.add(new FaceRightCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
+//        commands.add(new WalkRightCommand(this));
+//        commands.add(new TillGrowableTileCommand(null));
+//        commands.add(new SeedGrowableTileCommand(null, MysterySeed.TAG));
+//        commands.add(new WaterGrowableTileCommand(null));
 
 
         state = State.OFF;
@@ -110,35 +100,105 @@ public class Robot extends Creature {
     }
 
     private List<Command> commands;
-    private int counter = 0;
+    private int counterCommands = 0;
+    private int counterTileSelected = 0;
+    boolean movingDown, movingRight;
 
     @Override
     public void update(long elapsed) {
         robotAnimationManager.update(elapsed);
 
-        if (state != State.OFF) {
-            if (!commands.isEmpty()) {
-                counter++;
-                if (counter == 50) {
-                    Command command = commands.get(0);
+        switch (state) {
+            case OFF:
+                break;
+            case WALK:
+                if (!commands.isEmpty()) {
+                    counterCommands++;
+                    if (counterCommands == 50) {
+                        Command command = commands.get(0);
 
-                    if (command instanceof TileCommand) {
-                        Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+                        if (command instanceof TileCommand) {
+                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
 
-                        ((TileCommand) command).setTile(tileCurrentlyFacing);
+                            ((TileCommand) command).setTile(tileCurrentlyFacing);
+                        }
+
+                        command.execute();
+                        commands.remove(command);
+
+                        counterCommands = 0;
+                    }
+                } else {
+                    if (!movementAnimator.isRunning()) {
+                        determineNextMove();
+                        move();
+                    }
+                }
+                break;
+            case RUN:
+                if (!commands.isEmpty()) {
+                    counterCommands++;
+                    if (counterCommands == 50) {
+                        Command command = commands.get(0);
+
+                        if (command instanceof TileCommand) {
+                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+
+                            ((TileCommand) command).setTile(tileCurrentlyFacing);
+                        }
+
+                        command.execute();
+                        commands.remove(command);
+
+                        counterCommands = 0;
+                    }
+                } else {
+                    if (!movementAnimator.isRunning()) {
+                        determineNextMove();
+                        move();
+                    }
+                }
+                break;
+            case TILE_SELECTED:
+                if (movingDown) {
+                    if (counterTileSelected == 50) {
+                        direction = Direction.DOWN;
+                        prepareMoveDown();
+                        move();
+
+                        yIndexSrc++;
+                        movingDown = yIndexDest > yIndexSrc;
+                        if (!movingDown) {
+                            movingDown = false;
+                            movingRight = true;
+                        }
+
+                        counterTileSelected = 0;
                     }
 
-                    command.execute();
-                    commands.remove(command);
+                    counterTileSelected++;
+                } else if (movingRight) {
+                    if (counterTileSelected == 50) {
+                        direction = Direction.RIGHT;
+                        prepareMoveRight();
+                        move();
 
-                    counter = 0;
+                        xIndexSrc++;
+                        movingRight = xIndexDest > xIndexSrc;
+                        if (!movingRight) {
+                            movingRight = false;
+                        }
+
+                        counterTileSelected = 0;
+                    }
+
+                    counterTileSelected++;
                 }
-            } else {
-                if (!movementAnimator.isRunning()) {
-                    determineNextMove();
-                    move();
+
+                if (!movingDown && !movingRight) {
+                    state = State.OFF;
                 }
-            }
+                break;
         }
 
         determineNextImage();
@@ -281,6 +341,9 @@ public class Robot extends Creature {
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
     }
 
+    private int xIndexSrc, yIndexSrc = -1;
+    private int xIndexDest, yIndexDest = -1;
+
     public RobotDialogFragment instantiateRobotDialogFragment() {
         RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
             @Override
@@ -318,6 +381,15 @@ public class Robot extends Creature {
                                         for (Tile tile : tiles) {
                                             Log.e(TAG, tile.getxIndex() + ", " + tile.getyIndex());
                                         }
+
+                                        state = State.TILE_SELECTED;
+
+                                        xIndexSrc = ((int) x / Tile.WIDTH);
+                                        yIndexSrc = ((int) y / Tile.HEIGHT);
+                                        xIndexDest = tiles.get(0).getxIndex();
+                                        yIndexDest = tiles.get(0).getyIndex();
+
+                                        movingDown = yIndexDest > yIndexSrc;
                                     }
                                 }, new TileSelectorDialogFragment.DismissListener() {
                                     @Override
