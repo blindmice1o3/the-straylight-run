@@ -1,7 +1,5 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,8 +13,16 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkUpCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 
@@ -36,17 +42,27 @@ public class Robot extends Creature {
 
     private State state;
     private Random random;
+    private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
+            tillTileCommand, seedTileCommand, waterTileCommand;
+
 
     public Robot(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
 
         direction = Direction.DOWN;
         robotAnimationManager = new RobotAnimationManager();
-        // TODO: change movement from update() to ObjectAnimator.
         movementAnimator =
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
+
+        walkLeftCommand = new WalkLeftCommand(this);
+        walkUpCommand = new WalkUpCommand(this);
+        walkRightCommand = new WalkRightCommand(this);
+        walkDownCommand = new WalkDownCommand(this);
+        tillTileCommand = new TillGrowableTileCommand(null);
+        seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
+        waterTileCommand = new WaterGrowableTileCommand(null);
         commands = new ArrayList<>();
 //        commands.add(new WalkDownCommand(this));
 //        commands.add(new FaceRightCommand(this));
@@ -114,147 +130,57 @@ public class Robot extends Creature {
             case OFF:
                 break;
             case WALK:
-                if (!commands.isEmpty()) {
-                    counterCommands++;
-                    if (counterCommands == 50) {
-                        Command command = commands.get(0);
-
-                        if (command instanceof TileCommand) {
-                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
-
-                            ((TileCommand) command).setTile(tileCurrentlyFacing);
-                        }
-
-                        command.execute();
-                        commands.remove(command);
-
-                        counterCommands = 0;
-                    }
-                } else {
-                    if (!movementAnimator.isRunning()) {
-                        determineNextMove();
-                        move();
-                    }
-                }
-                break;
             case RUN:
-                if (!commands.isEmpty()) {
-                    counterCommands++;
-                    if (counterCommands == 50) {
-                        Command command = commands.get(0);
-
-                        if (command instanceof TileCommand) {
-                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
-
-                            ((TileCommand) command).setTile(tileCurrentlyFacing);
-                        }
-
-                        command.execute();
-                        commands.remove(command);
-
-                        counterCommands = 0;
-                    }
-                } else {
-                    if (!movementAnimator.isRunning()) {
-                        determineNextMove();
-                        move();
-                    }
+                if (!movementAnimator.isRunning()) {
+                    determineNextMove();
+                    move();
                 }
                 break;
             case TILE_SELECTED:
-                if (!pathToTravel.isEmpty()) {
-                    counterTileSelected++;
+                if (!commands.isEmpty()) {
+                    counterCommands++;
+                    if (counterCommands == 50) {
+                        counterCommands = 0;
 
-                    if (counterTileSelected == 50) {
-                        counterTileSelected = 0;
+                        Command command = commands.get(0);
+                        if (command instanceof TileCommand) {
+                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
 
-                        Tile tileNext = pathToTravel.get(0);
-
-                        int xIndexStart = ((int) x / Tile.WIDTH);
-                        int yIndexStart = ((int) y / Tile.HEIGHT);
-                        int xIndexEnd = tileNext.getxIndex();
-                        int yIndexEnd = tileNext.getyIndex();
-
-                        // move right
-                        if (xIndexStart < xIndexEnd) {
-                            direction = Direction.RIGHT;
-                            prepareMoveRight();
-                            move();
-                        }
-                        // move left
-                        else if (xIndexStart > xIndexEnd) {
-                            direction = Direction.LEFT;
-                            prepareMoveLeft();
-                            move();
-                        }
-                        // move down
-                        else if (yIndexStart < yIndexEnd) {
-                            direction = Direction.DOWN;
-                            prepareMoveDown();
-                            move();
-                        }
-                        // move up
-                        else if (yIndexStart > yIndexEnd) {
-                            direction = Direction.UP;
-                            prepareMoveUp();
-                            move();
+                            ((TileCommand) command).setTile(tileCurrentlyFacing);
                         }
 
-                        pathToTravel.remove(tileNext);
+                        command.execute();
+                        commands.remove(command);
+
+                        if (commands.isEmpty()) {
+                            tilesToTillSeedWater.remove(0);
+                        }
                     }
-                }
-//                    else {
-//                        Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
-//
-//                        TileCommand tillCommand = new TillGrowableTileCommand(null);
-//                        tillCommand.setTile(tileCurrentlyFacing);
-//                        tillCommand.execute();
-//
-//                        TileCommand seedCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
-//                        seedCommand.setTile(tileCurrentlyFacing);
-//                        seedCommand.execute();
-//
-//                        TileCommand waterCommand = new WaterGrowableTileCommand(null);
-//                        waterCommand.setTile(tileCurrentlyFacing);
-//                        waterCommand.execute();
+                } else {
+                    if (!tilesToTillSeedWater.isEmpty()) {
+                        xIndexSrc = ((int) x / Tile.WIDTH);
+                        yIndexSrc = ((int) y / Tile.HEIGHT);
+                        xIndexDest = tilesToTillSeedWater.get(0).getxIndex();
+                        yIndexDest = tilesToTillSeedWater.get(0).getyIndex();
 
-//                if (movingDown) {
-//                    if (counterTileSelected == 50) {
-//                        direction = Direction.DOWN;
-//                        prepareMoveDown();
-//                        move();
-//
-//                        yIndexSrc++;
-//                        movingDown = yIndexDest > yIndexSrc;
-//                        if (!movingDown) {
-//                            movingRight = true;
-//                        }
-//
-//                        counterTileSelected = 0;
-//                    }
-//
-//                    counterTileSelected++;
-//                } else if (movingRight) {
-//                    if (counterTileSelected == 50) {
-//                        direction = Direction.RIGHT;
-//                        prepareMoveRight();
-//                        move();
-//
-//                        xIndexSrc++;
-//                        movingRight = xIndexDest > xIndexSrc;
-//                        if (!movingRight) {
-//                            // not needed.
-//                        }
-//
-//                        counterTileSelected = 0;
-//                    }
-//
-//                    counterTileSelected++;
-//                }
-//
-//                if (!movingDown && !movingRight) {
-//                    state = State.OFF;
-//                }
+                        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+                        Tile[][] tilesScene = tileManager.getTiles();
+                        List<Tile> pathToTravel = tileManager.doesExistPath(
+                                tilesScene[yIndexSrc][xIndexSrc],
+                                tilesScene[yIndexDest][xIndexDest]
+                        );
+
+                        convertPathToTravelIntoCommands(pathToTravel);
+                    } else {
+                        counterCommands++;
+                        if (counterCommands == 50) {
+                            counterCommands = 0;
+
+                            state = State.OFF;
+                        }
+                    }
+
+                }
                 break;
         }
 
@@ -293,31 +219,10 @@ public class Robot extends Creature {
         valueEnd = x + xMove;
     }
 
-//    private AnimatorListenerAdapter listenerOnAnimationEnd = new AnimatorListenerAdapter() {
-//        @Override
-//        public void onAnimationEnd(Animator animation) {
-//            super.onAnimationEnd(animation);
-//
-//            state = State.OFF;
-//            movementAnimator.removeListener(listenerOnAnimationEnd);
-//        }
-//    };
-
     @Override
     public void performMove() {
         movementAnimator.setPropertyName(propertyName);
         movementAnimator.setFloatValues(valueStart, valueEnd);
-
-        if (pathToTravel.size() == 1) {
-            movementAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-
-                    state = State.OFF;
-                }
-            });
-        }
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -421,7 +326,6 @@ public class Robot extends Creature {
 
     private int xIndexSrc, yIndexSrc = -1;
     private int xIndexDest, yIndexDest = -1;
-    private List<Tile> pathToTravel;
 
     public RobotDialogFragment instantiateRobotDialogFragment() {
         RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
@@ -454,26 +358,7 @@ public class Robot extends Creature {
                                 new TileSelectorDialogFragment.TileSelectorListener() {
                                     @Override
                                     public void selected(List<Tile> tiles) {
-                                        // TODO:
-                                        //  (1) walk to these tiles,
-                                        //  (2) tile/seed/water these tiles.
-                                        for (Tile tile : tiles) {
-                                            Log.e(TAG, tile.getxIndex() + ", " + tile.getyIndex());
-                                        }
-
-                                        xIndexSrc = ((int) x / Tile.WIDTH);
-                                        yIndexSrc = ((int) y / Tile.HEIGHT);
-                                        xIndexDest = tiles.get(0).getxIndex();
-                                        yIndexDest = tiles.get(0).getyIndex();
-
-//                                        movingDown = yIndexDest > yIndexSrc;
-
-                                        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
-                                        Tile[][] tilesScene = tileManager.getTiles();
-                                        pathToTravel = tileManager.doesExistPath(
-                                                tilesScene[yIndexSrc][xIndexSrc],
-                                                tilesScene[yIndexDest][xIndexDest]
-                                        );
+                                        tilesToTillSeedWater.addAll(tiles);
 
                                         state = State.TILE_SELECTED;
                                     }
@@ -497,6 +382,52 @@ public class Robot extends Creature {
         });
 
         return robotDialogFragment;
+    }
+
+    private void convertPathToTravelIntoCommands(List<Tile> pathToTravel) {
+        Log.e(TAG, "begin conversion");
+        Tile tileStepPrevious = null;
+        for (Tile tileStep : pathToTravel) {
+            int xIndexStart = (tileStepPrevious == null) ?
+                    ((int) x / Tile.WIDTH) : (tileStepPrevious.getxIndex());
+            int yIndexStart = (tileStepPrevious == null) ?
+                    ((int) y / Tile.HEIGHT) : (tileStepPrevious.getyIndex());
+            int xIndexEnd = tileStep.getxIndex();
+            int yIndexEnd = tileStep.getyIndex();
+
+            // move right
+            if (xIndexStart < xIndexEnd) {
+                Log.e(TAG, "r");
+                commands.add(walkRightCommand);
+            }
+            // move left
+            else if (xIndexStart > xIndexEnd) {
+                Log.e(TAG, "l");
+                commands.add(walkLeftCommand);
+            }
+            // move down
+            else if (yIndexStart < yIndexEnd) {
+                Log.e(TAG, "d");
+                commands.add(walkDownCommand);
+            }
+            // move up
+            else if (yIndexStart > yIndexEnd) {
+                Log.e(TAG, "u");
+                commands.add(walkUpCommand);
+            }
+
+            tileStepPrevious = tileStep;
+        }
+        Log.e(TAG, "end conversion");
+
+        Log.e(TAG, "removing LAST walk command");
+        int indexEnd = commands.size() - 1;
+        commands.remove(indexEnd);
+
+        Log.e(TAG, "adding till/seed/water");
+        commands.add(tillTileCommand);
+        commands.add(seedTileCommand);
+        commands.add(waterTileCommand);
     }
 
     private List<Tile> tilesToTillSeedWater = new ArrayList<>();
