@@ -2,12 +2,13 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.TileSelectorDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,99 @@ public class TileManager
 //                tiles[yIndex][xIndex] = new Tile();
 //            }
 //        }
+    }
+
+    private boolean isWithinBounds(int xIndex, int yIndex) {
+        return ((xIndex >= 0) && (xIndex < tiles[0].length) &&
+                (yIndex >= 0) && (yIndex < tiles.length));
+    }
+
+    public List<Tile> determineWalkableNeighbors(Tile tile) {
+        List<Tile> tileNeighbors = new ArrayList<>();
+        int xIndexUp = tile.getxIndex();
+        int yIndexUp = tile.getyIndex() - 1;
+        int xIndexDown = tile.getxIndex();
+        int yIndexDown = tile.getyIndex() + 1;
+        int xIndexLeft = tile.getxIndex() - 1;
+        int yIndexLeft = tile.getyIndex();
+        int xIndexRight = tile.getxIndex() + 1;
+        int yIndexRight = tile.getyIndex();
+
+        if (isWithinBounds(xIndexUp, yIndexUp)) {
+            Tile tileUp = tiles[yIndexUp][xIndexUp];
+            if (tileUp.isWalkable()) {
+                tileNeighbors.add(tileUp);
+            }
+        }
+
+        if (isWithinBounds(xIndexDown, yIndexDown)) {
+            Tile tileDown = tiles[yIndexDown][xIndexDown];
+            if (tileDown.isWalkable()) {
+                tileNeighbors.add(tileDown);
+            }
+        }
+
+        if (isWithinBounds(xIndexLeft, yIndexLeft)) {
+            Tile tileLeft = tiles[yIndexLeft][xIndexLeft];
+            if (tileLeft.isWalkable()) {
+                tileNeighbors.add(tileLeft);
+            }
+        }
+
+        if (isWithinBounds(xIndexRight, yIndexRight)) {
+            Tile tileRight = tiles[yIndexRight][xIndexRight];
+            if (tileRight.isWalkable()) {
+                tileNeighbors.add(tileRight);
+            }
+        }
+
+        return tileNeighbors;
+    }
+
+    public List<Tile> doesExistPath(Tile src, Tile dest) {
+        List<List<Tile>> queueSearch = new ArrayList<>();
+        List<Tile> visited = new ArrayList<>();
+        List<Tile> pathToDest = new ArrayList<>();
+        pathToDest.add(src);
+        queueSearch.add(pathToDest);
+
+        while (!queueSearch.isEmpty()) {
+            pathToDest = queueSearch.get(0);
+            // get last element the current list stored in queueSearch.
+            Tile tile = pathToDest.get(pathToDest.size() - 1);
+
+            if (tile.getxIndex() == dest.getxIndex() &&
+                    tile.getyIndex() == dest.getyIndex()) {
+                Log.e("TileManager", "FOUND!!!");
+
+                for (Tile tilePath : pathToDest) {
+                    Log.e("tilePath: ", tilePath.getxIndex() + ", " + tilePath.getyIndex());
+                }
+
+                return pathToDest;
+            } else {
+                Log.e("TileManager", "adding neighbors");
+                List<Tile> tilesNeighbor = determineWalkableNeighbors(tile);
+                Log.e("TileManager", "tilesNeighbor.size(): " + tilesNeighbor.size());
+
+                for (Tile tileNeighbor : tilesNeighbor) {
+                    if (!visited.contains(tileNeighbor)) {
+                        visited.add(tileNeighbor);
+
+                        List<Tile> pathToNextTile = new ArrayList<>();
+                        pathToNextTile.addAll(pathToDest);
+                        pathToNextTile.add(tileNeighbor);
+                        queueSearch.add(pathToNextTile);
+                    }
+                }
+            }
+
+            Log.e("TileManager", "removing: " + tile.xIndex + ", " + tile.getyIndex());
+            queueSearch.remove(0);
+        }
+
+        Log.e("TileManager", "NOT FOUND!!!");
+        return pathToDest;
     }
 
     public void loadTransferPoints(Map<String, Rect> transferPointsToBeLoaded) {

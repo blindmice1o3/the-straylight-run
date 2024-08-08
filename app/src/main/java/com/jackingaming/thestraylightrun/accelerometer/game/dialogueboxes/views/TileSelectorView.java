@@ -20,6 +20,7 @@ import java.util.List;
 
 public class TileSelectorView extends View {
     public static final String TAG = TileSelectorView.class.getSimpleName();
+    public static final int COLOR_DEFAULT = Color.GREEN;
 
     private TileManager tileManager;
     private Tile[][] tiles;
@@ -49,7 +50,7 @@ public class TileSelectorView extends View {
 
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.GREEN);
+        paint.setColor(COLOR_DEFAULT);
     }
 
     @Override
@@ -89,7 +90,24 @@ public class TileSelectorView extends View {
             heightTileOnScreen = getHeight() / rows;
         }
 
+        for (Tile[] rows : tiles) {
+            for (Tile tile : rows) {
+                int color = (tile.isWalkable()) ? Color.WHITE : Color.BLACK;
+                paint.setColor(color);
+
+                int left = tile.getxIndex() * widthTileOnScreen;
+                int top = tile.getyIndex() * heightTileOnScreen;
+                int right = left + widthTileOnScreen;
+                int bottom = top + heightTileOnScreen;
+                Rect rect = new Rect(left, top, right, bottom);
+
+                canvas.drawRect(rect, paint);
+            }
+        }
+
         for (Tile tile : tilesSelected) {
+            paint.setColor(COLOR_DEFAULT);
+
             int left = tile.getxIndex() * widthTileOnScreen;
             int top = tile.getyIndex() * heightTileOnScreen;
             int right = left + widthTileOnScreen;

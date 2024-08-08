@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +105,6 @@ public class Robot extends Creature {
     private List<Command> commands;
     private int counterCommands = 0;
     private int counterTileSelected = 0;
-    boolean movingDown, movingRight;
 
     @Override
     public void update(long elapsed) {
@@ -160,44 +162,99 @@ public class Robot extends Creature {
                 }
                 break;
             case TILE_SELECTED:
-                if (movingDown) {
-                    if (counterTileSelected == 50) {
-                        direction = Direction.DOWN;
-                        prepareMoveDown();
-                        move();
+                if (!pathToTravel.isEmpty()) {
+                    counterTileSelected++;
 
-                        yIndexSrc++;
-                        movingDown = yIndexDest > yIndexSrc;
-                        if (!movingDown) {
-                            movingDown = false;
-                            movingRight = true;
+                    if (counterTileSelected == 50) {
+                        counterTileSelected = 0;
+
+                        Tile tileNext = pathToTravel.get(0);
+
+                        int xIndexStart = ((int) x / Tile.WIDTH);
+                        int yIndexStart = ((int) y / Tile.HEIGHT);
+                        int xIndexEnd = tileNext.getxIndex();
+                        int yIndexEnd = tileNext.getyIndex();
+
+                        // move right
+                        if (xIndexStart < xIndexEnd) {
+                            direction = Direction.RIGHT;
+                            prepareMoveRight();
+                            move();
+                        }
+                        // move left
+                        else if (xIndexStart > xIndexEnd) {
+                            direction = Direction.LEFT;
+                            prepareMoveLeft();
+                            move();
+                        }
+                        // move down
+                        else if (yIndexStart < yIndexEnd) {
+                            direction = Direction.DOWN;
+                            prepareMoveDown();
+                            move();
+                        }
+                        // move up
+                        else if (yIndexStart > yIndexEnd) {
+                            direction = Direction.UP;
+                            prepareMoveUp();
+                            move();
                         }
 
-                        counterTileSelected = 0;
+                        pathToTravel.remove(tileNext);
                     }
-
-                    counterTileSelected++;
-                } else if (movingRight) {
-                    if (counterTileSelected == 50) {
-                        direction = Direction.RIGHT;
-                        prepareMoveRight();
-                        move();
-
-                        xIndexSrc++;
-                        movingRight = xIndexDest > xIndexSrc;
-                        if (!movingRight) {
-                            movingRight = false;
-                        }
-
-                        counterTileSelected = 0;
-                    }
-
-                    counterTileSelected++;
                 }
+//                    else {
+//                        Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+//
+//                        TileCommand tillCommand = new TillGrowableTileCommand(null);
+//                        tillCommand.setTile(tileCurrentlyFacing);
+//                        tillCommand.execute();
+//
+//                        TileCommand seedCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
+//                        seedCommand.setTile(tileCurrentlyFacing);
+//                        seedCommand.execute();
+//
+//                        TileCommand waterCommand = new WaterGrowableTileCommand(null);
+//                        waterCommand.setTile(tileCurrentlyFacing);
+//                        waterCommand.execute();
 
-                if (!movingDown && !movingRight) {
-                    state = State.OFF;
-                }
+//                if (movingDown) {
+//                    if (counterTileSelected == 50) {
+//                        direction = Direction.DOWN;
+//                        prepareMoveDown();
+//                        move();
+//
+//                        yIndexSrc++;
+//                        movingDown = yIndexDest > yIndexSrc;
+//                        if (!movingDown) {
+//                            movingRight = true;
+//                        }
+//
+//                        counterTileSelected = 0;
+//                    }
+//
+//                    counterTileSelected++;
+//                } else if (movingRight) {
+//                    if (counterTileSelected == 50) {
+//                        direction = Direction.RIGHT;
+//                        prepareMoveRight();
+//                        move();
+//
+//                        xIndexSrc++;
+//                        movingRight = xIndexDest > xIndexSrc;
+//                        if (!movingRight) {
+//                            // not needed.
+//                        }
+//
+//                        counterTileSelected = 0;
+//                    }
+//
+//                    counterTileSelected++;
+//                }
+//
+//                if (!movingDown && !movingRight) {
+//                    state = State.OFF;
+//                }
                 break;
         }
 
@@ -236,10 +293,31 @@ public class Robot extends Creature {
         valueEnd = x + xMove;
     }
 
+//    private AnimatorListenerAdapter listenerOnAnimationEnd = new AnimatorListenerAdapter() {
+//        @Override
+//        public void onAnimationEnd(Animator animation) {
+//            super.onAnimationEnd(animation);
+//
+//            state = State.OFF;
+//            movementAnimator.removeListener(listenerOnAnimationEnd);
+//        }
+//    };
+
     @Override
     public void performMove() {
         movementAnimator.setPropertyName(propertyName);
         movementAnimator.setFloatValues(valueStart, valueEnd);
+
+        if (pathToTravel.size() == 1) {
+            movementAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    state = State.OFF;
+                }
+            });
+        }
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -343,6 +421,7 @@ public class Robot extends Creature {
 
     private int xIndexSrc, yIndexSrc = -1;
     private int xIndexDest, yIndexDest = -1;
+    private List<Tile> pathToTravel;
 
     public RobotDialogFragment instantiateRobotDialogFragment() {
         RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
@@ -382,14 +461,21 @@ public class Robot extends Creature {
                                             Log.e(TAG, tile.getxIndex() + ", " + tile.getyIndex());
                                         }
 
-                                        state = State.TILE_SELECTED;
-
                                         xIndexSrc = ((int) x / Tile.WIDTH);
                                         yIndexSrc = ((int) y / Tile.HEIGHT);
                                         xIndexDest = tiles.get(0).getxIndex();
                                         yIndexDest = tiles.get(0).getyIndex();
 
-                                        movingDown = yIndexDest > yIndexSrc;
+//                                        movingDown = yIndexDest > yIndexSrc;
+
+                                        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+                                        Tile[][] tilesScene = tileManager.getTiles();
+                                        pathToTravel = tileManager.doesExistPath(
+                                                tilesScene[yIndexSrc][xIndexSrc],
+                                                tilesScene[yIndexDest][xIndexDest]
+                                        );
+
+                                        state = State.TILE_SELECTED;
                                     }
                                 }, new TileSelectorDialogFragment.DismissListener() {
                                     @Override
@@ -412,4 +498,6 @@ public class Robot extends Creature {
 
         return robotDialogFragment;
     }
+
+    private List<Tile> tilesToTillSeedWater = new ArrayList<>();
 }
