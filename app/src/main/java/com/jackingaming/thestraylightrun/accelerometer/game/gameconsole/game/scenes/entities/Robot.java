@@ -17,6 +17,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceUpCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.StandStillCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
@@ -48,7 +49,7 @@ public class Robot extends Creature {
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
             faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
-            tillTileCommand, seedTileCommand, waterTileCommand;
+            standStillCommand, tillTileCommand, seedTileCommand, waterTileCommand;
 
 
     public Robot(int xSpawn, int ySpawn) {
@@ -69,6 +70,7 @@ public class Robot extends Creature {
         faceUpCommand = new FaceUpCommand(this);
         faceRightCommand = new FaceRightCommand(this);
         faceDownCommand = new FaceDownCommand(this);
+        standStillCommand = new StandStillCommand(this);
         tillTileCommand = new TillGrowableTileCommand(null);
         seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
@@ -396,6 +398,7 @@ public class Robot extends Creature {
     private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel) {
         Log.e(TAG, "begin conversion");
         Tile tileStepPrevious = null;
+
         for (Tile tileStep : pathToTravel) {
             int xIndexStart = (tileStepPrevious == null) ?
                     ((int) x / Tile.WIDTH) : (tileStepPrevious.getxIndex());
@@ -423,13 +426,16 @@ public class Robot extends Creature {
             else if (yIndexStart > yIndexEnd) {
                 Log.e(TAG, "adding walk-up command");
                 commands.add(walkUpCommand);
+            } else {
+                Log.e(TAG, "else-clause... standing on same tile??? adding stand-still command");
+                commands.add(standStillCommand);
             }
 
             tileStepPrevious = tileStep;
         }
         Log.e(TAG, "end conversion");
 
-        Log.e(TAG, "removing LAST walk command");
+        Log.e(TAG, "removing LAST command");
         int indexEnd = commands.size() - 1;
         commands.remove(indexEnd);
 
@@ -450,8 +456,42 @@ public class Robot extends Creature {
 
             faceCorrectDirectionCommand = generateCommandToFaceCorrectDirection(null, tileEnd);
         }
-        Log.e(TAG, "adding face-correct-direction command");
-        commands.add(faceCorrectDirectionCommand);
+
+        if (faceCorrectDirectionCommand != null) {
+            Log.e(TAG, "adding face-correct-direction command");
+            commands.add(faceCorrectDirectionCommand);
+        } else {
+            Log.e(TAG, "faceCorrectDirectionCommand == null... already standing on tile.");
+            direction = Direction.LEFT;
+            Tile tileToCheck = checkTileCurrentlyFacing();
+            if (tileToCheck.isWalkable()) {
+                commands.add(walkLeftCommand);
+                commands.add(faceRightCommand);
+            } else {
+                direction = Direction.RIGHT;
+                tileToCheck = checkTileCurrentlyFacing();
+                if (tileToCheck.isWalkable()) {
+                    commands.add(walkRightCommand);
+                    commands.add(faceLeftCommand);
+                } else {
+                    direction = Direction.UP;
+                    tileToCheck = checkTileCurrentlyFacing();
+                    if (tileToCheck.isWalkable()) {
+                        commands.add(walkUpCommand);
+                        commands.add(faceDownCommand);
+                    } else {
+                        direction = Direction.DOWN;
+                        tileToCheck = checkTileCurrentlyFacing();
+                        if (tileToCheck.isWalkable()) {
+                            commands.add(walkDownCommand);
+                            commands.add(faceUpCommand);
+                        } else {
+                            Log.e(TAG, "CHECKED ALL 4 directions.... all NOT WALKABLE!!!");
+                        }
+                    }
+                }
+            }
+        }
 
         Log.e(TAG, "adding till/seed/water commands");
         commands.add(tillTileCommand);
@@ -484,6 +524,7 @@ public class Robot extends Creature {
             return faceUpCommand;
         } else {
             Log.e(TAG, "generateCommandToFaceCorrectDirection() else-clause returning null");
+            // TODO: could be already standing on the tileTarget.
             return null;
         }
     }
