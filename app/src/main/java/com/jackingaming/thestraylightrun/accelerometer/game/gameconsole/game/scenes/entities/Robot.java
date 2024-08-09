@@ -13,6 +13,10 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceRightCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceUpCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
@@ -43,6 +47,7 @@ public class Robot extends Creature {
     private State state;
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
+            faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
             tillTileCommand, seedTileCommand, waterTileCommand;
 
 
@@ -60,6 +65,10 @@ public class Robot extends Creature {
         walkUpCommand = new WalkUpCommand(this);
         walkRightCommand = new WalkRightCommand(this);
         walkDownCommand = new WalkDownCommand(this);
+        faceLeftCommand = new FaceLeftCommand(this);
+        faceUpCommand = new FaceUpCommand(this);
+        faceRightCommand = new FaceRightCommand(this);
+        faceDownCommand = new FaceDownCommand(this);
         tillTileCommand = new TillGrowableTileCommand(null);
         seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
@@ -170,7 +179,7 @@ public class Robot extends Creature {
                                 tilesScene[yIndexDest][xIndexDest]
                         );
 
-                        convertPathToTravelIntoCommands(pathToTravel);
+                        convertPathToTravelAndAppendToCommands(pathToTravel);
                     } else {
                         counterCommands++;
                         if (counterCommands == 50) {
@@ -384,7 +393,7 @@ public class Robot extends Creature {
         return robotDialogFragment;
     }
 
-    private void convertPathToTravelIntoCommands(List<Tile> pathToTravel) {
+    private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel) {
         Log.e(TAG, "begin conversion");
         Tile tileStepPrevious = null;
         for (Tile tileStep : pathToTravel) {
@@ -397,22 +406,22 @@ public class Robot extends Creature {
 
             // move right
             if (xIndexStart < xIndexEnd) {
-                Log.e(TAG, "r");
+                Log.e(TAG, "adding walk-right command");
                 commands.add(walkRightCommand);
             }
             // move left
             else if (xIndexStart > xIndexEnd) {
-                Log.e(TAG, "l");
+                Log.e(TAG, "adding walk-left command");
                 commands.add(walkLeftCommand);
             }
             // move down
             else if (yIndexStart < yIndexEnd) {
-                Log.e(TAG, "d");
+                Log.e(TAG, "adding walk-down command");
                 commands.add(walkDownCommand);
             }
             // move up
             else if (yIndexStart > yIndexEnd) {
-                Log.e(TAG, "u");
+                Log.e(TAG, "adding walk-up command");
                 commands.add(walkUpCommand);
             }
 
@@ -424,10 +433,59 @@ public class Robot extends Creature {
         int indexEnd = commands.size() - 1;
         commands.remove(indexEnd);
 
-        Log.e(TAG, "adding till/seed/water");
+        // determine tile to face
+        Tile tileBeforeEnd = null;
+        Tile tileEnd = null;
+        Command faceCorrectDirectionCommand = null;
+        if (pathToTravel.size() > 1) {
+            int indexEndPathToTravel = pathToTravel.size() - 1;
+            tileEnd = pathToTravel.get(indexEndPathToTravel);
+            int indexBeforeEndPathToTravel = pathToTravel.size() - 2;
+            tileBeforeEnd = pathToTravel.get(indexBeforeEndPathToTravel);
+
+            faceCorrectDirectionCommand = generateCommandToFaceCorrectDirection(tileBeforeEnd, tileEnd);
+        } else {
+            int indexEndPathToTravel = pathToTravel.size() - 1;
+            tileEnd = pathToTravel.get(indexEndPathToTravel);
+
+            faceCorrectDirectionCommand = generateCommandToFaceCorrectDirection(null, tileEnd);
+        }
+        Log.e(TAG, "adding face-correct-direction command");
+        commands.add(faceCorrectDirectionCommand);
+
+        Log.e(TAG, "adding till/seed/water commands");
         commands.add(tillTileCommand);
         commands.add(seedTileCommand);
         commands.add(waterTileCommand);
+    }
+
+    private Command generateCommandToFaceCorrectDirection(Tile tileBeforeTarget, Tile tileTarget) {
+        int xIndexStart = (tileBeforeTarget != null) ?
+                (tileBeforeTarget.getxIndex()) : ((int) (x / Tile.WIDTH));
+        int yIndexStart = (tileBeforeTarget != null) ?
+                (tileBeforeTarget.getyIndex()) : ((int) (y / Tile.HEIGHT));
+        int xIndexEnd = tileTarget.getxIndex();
+        int yIndexEnd = tileTarget.getyIndex();
+
+        // face right
+        if (xIndexStart < xIndexEnd) {
+            return faceRightCommand;
+        }
+        // face left
+        else if (xIndexStart > xIndexEnd) {
+            return faceLeftCommand;
+        }
+        // face down
+        else if (yIndexStart < yIndexEnd) {
+            return faceDownCommand;
+        }
+        // face up
+        else if (yIndexStart > yIndexEnd) {
+            return faceUpCommand;
+        } else {
+            Log.e(TAG, "generateCommandToFaceCorrectDirection() else-clause returning null");
+            return null;
+        }
     }
 
     private List<Tile> tilesToTillSeedWater = new ArrayList<>();
