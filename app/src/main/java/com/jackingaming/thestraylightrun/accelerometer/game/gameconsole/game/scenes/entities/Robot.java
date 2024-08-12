@@ -17,7 +17,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.FaceUpCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.StandStillCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkDownCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
@@ -49,7 +48,7 @@ public class Robot extends Creature {
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
             faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
-            standStillCommand, tillTileCommand, seedTileCommand, waterTileCommand;
+            tillTileCommand, seedTileCommand, waterTileCommand;
 
 
     public Robot(int xSpawn, int ySpawn) {
@@ -70,7 +69,6 @@ public class Robot extends Creature {
         faceUpCommand = new FaceUpCommand(this);
         faceRightCommand = new FaceRightCommand(this);
         faceDownCommand = new FaceDownCommand(this);
-        standStillCommand = new StandStillCommand(this);
         tillTileCommand = new TillGrowableTileCommand(null);
         seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
@@ -397,106 +395,101 @@ public class Robot extends Creature {
 
     private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel) {
         Log.e(TAG, "begin conversion");
-        Tile tileStepPrevious = null;
+        Log.e(TAG, "pathToTravel.size(): " + pathToTravel.size());
 
-        for (Tile tileStep : pathToTravel) {
-            int xIndexStart = (tileStepPrevious == null) ?
-                    ((int) x / Tile.WIDTH) : (tileStepPrevious.getxIndex());
-            int yIndexStart = (tileStepPrevious == null) ?
-                    ((int) y / Tile.HEIGHT) : (tileStepPrevious.getyIndex());
-            int xIndexEnd = tileStep.getxIndex();
-            int yIndexEnd = tileStep.getyIndex();
-
-            // move right
-            if (xIndexStart < xIndexEnd) {
-                Log.e(TAG, "adding walk-right command");
-                commands.add(walkRightCommand);
-            }
-            // move left
-            else if (xIndexStart > xIndexEnd) {
-                Log.e(TAG, "adding walk-left command");
-                commands.add(walkLeftCommand);
-            }
-            // move down
-            else if (yIndexStart < yIndexEnd) {
-                Log.e(TAG, "adding walk-down command");
-                commands.add(walkDownCommand);
-            }
-            // move up
-            else if (yIndexStart > yIndexEnd) {
-                Log.e(TAG, "adding walk-up command");
-                commands.add(walkUpCommand);
-            } else {
-                Log.e(TAG, "else-clause... standing on same tile??? adding stand-still command");
-                commands.add(standStillCommand);
-            }
-
-            tileStepPrevious = tileStep;
+        // selected tile is tile-standing-on
+        if (pathToTravel.size() == 1) {
+            Log.e(TAG, "selected tile is tile-standing-on");
+            handleMoveAsideThenFaceTargetTile();
         }
-        Log.e(TAG, "end conversion");
-
-        Log.e(TAG, "removing LAST command");
-        int indexEnd = commands.size() - 1;
-        commands.remove(indexEnd);
-
-        // determine tile to face
-        Tile tileBeforeEnd = null;
-        Tile tileEnd = null;
-        Command faceCorrectDirectionCommand = null;
-        if (pathToTravel.size() > 1) {
-            int indexEndPathToTravel = pathToTravel.size() - 1;
-            tileEnd = pathToTravel.get(indexEndPathToTravel);
-            int indexBeforeEndPathToTravel = pathToTravel.size() - 2;
-            tileBeforeEnd = pathToTravel.get(indexBeforeEndPathToTravel);
-
-            faceCorrectDirectionCommand = generateCommandToFaceCorrectDirection(tileBeforeEnd, tileEnd);
-        } else {
-            int indexEndPathToTravel = pathToTravel.size() - 1;
-            tileEnd = pathToTravel.get(indexEndPathToTravel);
-
-            faceCorrectDirectionCommand = generateCommandToFaceCorrectDirection(null, tileEnd);
+        // selected tile is direct-neighbor
+        else if (pathToTravel.size() == 2) {
+            Log.e(TAG, "selected tile is direct-neighbor");
+            int indexLast = pathToTravel.size() - 1;
+            Tile tileTarget = pathToTravel.get(indexLast);
+            Command commandFaceTargetTile = generateCommandToFaceCorrectDirection(null, tileTarget);
+            commands.add(commandFaceTargetTile);
         }
+        // selected tile is one-step-or-more-away
+        else if (pathToTravel.size() > 2) {
+            Log.e(TAG, "selected tile is one-step-or-more-away");
+            Tile tileStepPrevious = null;
+            int indexLast = pathToTravel.size() - 1; // do NOT include last element.
+            for (int i = 0; i < indexLast; i++) {
+                Tile tileStep = pathToTravel.get(i);
 
-        if (faceCorrectDirectionCommand != null) {
-            Log.e(TAG, "adding face-correct-direction command");
-            commands.add(faceCorrectDirectionCommand);
-        } else {
-            Log.e(TAG, "faceCorrectDirectionCommand == null... already standing on tile.");
-            direction = Direction.LEFT;
-            Tile tileToCheck = checkTileCurrentlyFacing();
-            if (tileToCheck.isWalkable()) {
-                commands.add(walkLeftCommand);
-                commands.add(faceRightCommand);
-            } else {
-                direction = Direction.RIGHT;
-                tileToCheck = checkTileCurrentlyFacing();
-                if (tileToCheck.isWalkable()) {
+                int xIndexStart = (tileStepPrevious == null) ?
+                        ((int) x / Tile.WIDTH) : (tileStepPrevious.getxIndex());
+                int yIndexStart = (tileStepPrevious == null) ?
+                        ((int) y / Tile.HEIGHT) : (tileStepPrevious.getyIndex());
+                int xIndexEnd = tileStep.getxIndex();
+                int yIndexEnd = tileStep.getyIndex();
+
+                // move right
+                if (xIndexStart < xIndexEnd) {
+                    Log.e(TAG, "adding walk-right command");
                     commands.add(walkRightCommand);
-                    commands.add(faceLeftCommand);
-                } else {
-                    direction = Direction.UP;
-                    tileToCheck = checkTileCurrentlyFacing();
-                    if (tileToCheck.isWalkable()) {
-                        commands.add(walkUpCommand);
-                        commands.add(faceDownCommand);
-                    } else {
-                        direction = Direction.DOWN;
-                        tileToCheck = checkTileCurrentlyFacing();
-                        if (tileToCheck.isWalkable()) {
-                            commands.add(walkDownCommand);
-                            commands.add(faceUpCommand);
-                        } else {
-                            Log.e(TAG, "CHECKED ALL 4 directions.... all NOT WALKABLE!!!");
-                        }
-                    }
                 }
+                // move left
+                else if (xIndexStart > xIndexEnd) {
+                    Log.e(TAG, "adding walk-left command");
+                    commands.add(walkLeftCommand);
+                }
+                // move down
+                else if (yIndexStart < yIndexEnd) {
+                    Log.e(TAG, "adding walk-down command");
+                    commands.add(walkDownCommand);
+                }
+                // move up
+                else if (yIndexStart > yIndexEnd) {
+                    Log.e(TAG, "adding walk-up command");
+                    commands.add(walkUpCommand);
+                } else {
+                    Log.e(TAG, "else-clause... standing on same tile??? no command added.");
+                }
+
+                tileStepPrevious = tileStep;
             }
+
+            Tile tileTarget = pathToTravel.get(indexLast);
+            Command commandFaceTargetTile = generateCommandToFaceCorrectDirection(tileStepPrevious, tileTarget);
+            commands.add(commandFaceTargetTile);
         }
 
         Log.e(TAG, "adding till/seed/water commands");
         commands.add(tillTileCommand);
         commands.add(seedTileCommand);
         commands.add(waterTileCommand);
+
+        Log.e(TAG, "end conversion");
+    }
+
+    private void handleMoveAsideThenFaceTargetTile() {
+        direction = Direction.LEFT;
+        if (checkTileCurrentlyFacing().isWalkable()) {
+            commands.add(walkLeftCommand);
+            commands.add(faceRightCommand);
+        } else {
+            direction = Direction.RIGHT;
+            if (checkTileCurrentlyFacing().isWalkable()) {
+                commands.add(walkRightCommand);
+                commands.add(faceLeftCommand);
+            } else {
+                direction = Direction.UP;
+                if (checkTileCurrentlyFacing().isWalkable()) {
+                    commands.add(walkUpCommand);
+                    commands.add(faceDownCommand);
+                } else {
+                    direction = Direction.DOWN;
+                    if (checkTileCurrentlyFacing().isWalkable()) {
+                        commands.add(walkDownCommand);
+                        commands.add(faceUpCommand);
+                    } else {
+                        Log.e(TAG, "CHECKED ALL 4 directions.... all NOT WALKABLE!!!");
+                    }
+                }
+            }
+        }
     }
 
     private Command generateCommandToFaceCorrectDirection(Tile tileBeforeTarget, Tile tileTarget) {
