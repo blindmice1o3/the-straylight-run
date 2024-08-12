@@ -78,18 +78,17 @@ public class PoohForm
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
-                if (entityCurrentlyFacing != null) {
-                    if (entityCurrentlyFacing instanceof Robot) {
-                        game.setPaused(true);
+                if (entityCurrentlyFacing != null &&
+                        entityCurrentlyFacing instanceof Robot) {
+                    game.setPaused(true);
 
-                        RobotDialogFragment robotDialogFragment =
-                                ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();
+                    RobotDialogFragment robotDialogFragment =
+                            ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();
 
-                        robotDialogFragment.show(
-                                ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                                RobotDialogFragment.TAG
-                        );
-                    }
+                    robotDialogFragment.show(
+                            ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                            RobotDialogFragment.TAG
+                    );
                 }
                 // TODO: check item occupying StatsDisplayerFragment's button holder.
                 else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {

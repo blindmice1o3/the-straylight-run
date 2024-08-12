@@ -66,8 +66,7 @@ public class GrowableTile extends Tile {
                 }
             }
 
-            watered = false;
-            updateImage();
+            changeToUnwatered();
         }
     }
 
