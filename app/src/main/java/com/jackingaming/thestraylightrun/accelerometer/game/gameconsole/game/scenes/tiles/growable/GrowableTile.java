@@ -133,4 +133,8 @@ public class GrowableTile extends Tile {
     public State getState() {
         return state;
     }
+
+    public Entity getEntity() {
+        return entity;
+    }
 }

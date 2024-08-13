@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,26 +56,28 @@ public class TileSelectorView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int xTouch = (int) event.getX();
-        int yTouch = (int) event.getY();
-
-        int xIndexTouch = xTouch / widthTileOnScreen;
-        int yIndexTouch = yTouch / heightTileOnScreen;
-        Log.e(TAG, "(xIndexTouch, yIndexTouch): (" + xIndexTouch + ", " + yIndexTouch + ")");
-
         if (event.getAction() == MotionEvent.ACTION_UP) {
+            int xTouch = (int) event.getX();
+            int yTouch = (int) event.getY();
+            int xIndexTouch = xTouch / widthTileOnScreen;
+            int yIndexTouch = yTouch / heightTileOnScreen;
+            Log.e(TAG, "(xIndexTouch, yIndexTouch): (" + xIndexTouch + ", " + yIndexTouch + ")");
+
             if (xIndexTouch < 0 || xIndexTouch >= columns ||
                     yIndexTouch < 0 || yIndexTouch >= rows) {
+                Log.e(TAG, "(xIndexTouch, yIndexTouch) is out of bounds of the tile map.");
                 return false;
             }
 
             Tile tile = tiles[yIndexTouch][xIndexTouch];
-            if (!tilesSelected.contains(tile)) {
-                tilesSelected.add(tile);
-                invalidate();
-            } else {
-                tilesSelected.remove(tile);
-                invalidate();
+            if (tile instanceof GrowableTile) {
+                if (!tilesSelected.contains(tile)) {
+                    tilesSelected.add(tile);
+                    invalidate();
+                } else {
+                    tilesSelected.remove(tile);
+                    invalidate();
+                }
             }
         }
 
@@ -92,7 +95,20 @@ public class TileSelectorView extends View {
 
         for (Tile[] rows : tiles) {
             for (Tile tile : rows) {
-                int color = (tile.isWalkable()) ? Color.WHITE : Color.BLACK;
+                int color = -1;
+                if (tile.isWalkable()) {
+                    if (tile instanceof GrowableTile) {
+                        if (((GrowableTile) tile).getEntity() == null) {
+                            color = Color.WHITE;
+                        } else {
+                            color = Color.MAGENTA;
+                        }
+                    } else {
+                        color = Color.YELLOW;
+                    }
+                } else {
+                    color = Color.BLACK;
+                }
                 paint.setColor(color);
 
                 int left = tile.getxIndex() * widthTileOnScreen;
