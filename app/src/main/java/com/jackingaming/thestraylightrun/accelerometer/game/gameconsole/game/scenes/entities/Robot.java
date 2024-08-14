@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator;
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.TileSelectorDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
@@ -29,6 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,15 +164,17 @@ public class Robot extends Creature {
                         commands.remove(command);
 
                         if (commands.isEmpty()) {
-                            tilesToTillSeedWater.remove(0);
+                            tileWorkRequests.remove(0);
                         }
                     }
                 } else {
-                    if (!tilesToTillSeedWater.isEmpty()) {
+                    if (!tileWorkRequests.isEmpty()) {
+                        TileWorkRequest tileWorkRequestHead = tileWorkRequests.get(0);
+
                         xIndexSrc = ((int) x / Tile.WIDTH);
                         yIndexSrc = ((int) y / Tile.HEIGHT);
-                        xIndexDest = tilesToTillSeedWater.get(0).getxIndex();
-                        yIndexDest = tilesToTillSeedWater.get(0).getyIndex();
+                        xIndexDest = tileWorkRequestHead.getTile().getxIndex();
+                        yIndexDest = tileWorkRequestHead.getTile().getyIndex();
 
                         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
                         Tile[][] tilesScene = tileManager.getTiles();
@@ -179,7 +183,8 @@ public class Robot extends Creature {
                                 tilesScene[yIndexDest][xIndexDest]
                         );
 
-                        convertPathToTravelAndAppendToCommands(pathToTravel);
+                        convertPathToTravelAndAppendToCommands(pathToTravel,
+                                tileWorkRequestHead.getModeForTileSelectorView());
                     } else {
                         counterCommands++;
                         if (counterCommands == 50) {
@@ -360,27 +365,18 @@ public class Robot extends Creature {
             }
 
             @Override
-            public void onTileSelectorButtonClick(View view, RobotDialogFragment robotDialogFragment) {
-                TileSelectorDialogFragment tileSelectorDialogFragment =
-                        TileSelectorDialogFragment.newInstance(
-                                game.getSceneManager().getCurrentScene().getTileManager(),
-                                new TileSelectorDialogFragment.TileSelectorListener() {
-                                    @Override
-                                    public void selected(List<Tile> tiles) {
-                                        tilesToTillSeedWater.addAll(tiles);
+            public void onTillSeedWaterButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                showRobotDialogFragment(
+                        TileSelectorView.Mode.TILL_SEED_WATER,
+                        robotDialogFragment
+                );
+            }
 
-                                        state = State.TILE_SELECTED;
-                                    }
-                                }, new TileSelectorDialogFragment.DismissListener() {
-                                    @Override
-                                    public void onDismiss() {
-                                        robotDialogFragment.dismiss();
-                                    }
-                                });
-
-                tileSelectorDialogFragment.show(
-                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                        TileSelectorDialogFragment.TAG
+            @Override
+            public void onWaterButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                showRobotDialogFragment(
+                        TileSelectorView.Mode.ONLY_WATER,
+                        robotDialogFragment
                 );
             }
         }, new RobotDialogFragment.DismissListener() {
@@ -393,7 +389,39 @@ public class Robot extends Creature {
         return robotDialogFragment;
     }
 
-    private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel) {
+    private void showRobotDialogFragment(TileSelectorView.Mode modeForTileSelectorView,
+                                         RobotDialogFragment robotDialogFragment) {
+        TileSelectorDialogFragment tileSelectorDialogFragment =
+                TileSelectorDialogFragment.newInstance(
+                        game.getSceneManager().getCurrentScene().getTileManager(),
+                        modeForTileSelectorView,
+                        new TileSelectorDialogFragment.TileSelectorListener() {
+                            @Override
+                            public void selected(List<Tile> tiles,
+                                                 TileSelectorView.Mode modeForTileSelectorView) {
+                                for (Tile tile : tiles) {
+                                    tileWorkRequests.add(
+                                            new TileWorkRequest(tile, modeForTileSelectorView)
+                                    );
+                                }
+
+                                state = State.TILE_SELECTED;
+                            }
+                        }, new TileSelectorDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                robotDialogFragment.dismiss();
+                            }
+                        });
+
+        tileSelectorDialogFragment.show(
+                ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                TileSelectorDialogFragment.TAG
+        );
+    }
+
+    private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel,
+                                                        TileSelectorView.Mode modeForTileSelectorView) {
         Log.e(TAG, "begin conversion");
         Log.e(TAG, "pathToTravel.size(): " + pathToTravel.size());
 
@@ -456,10 +484,20 @@ public class Robot extends Creature {
             commands.add(commandFaceTargetTile);
         }
 
-        Log.e(TAG, "adding till/seed/water commands");
-        commands.add(tillTileCommand);
-        commands.add(seedTileCommand);
-        commands.add(waterTileCommand);
+        switch (modeForTileSelectorView) {
+            case TILL_SEED_WATER:
+                Log.e(TAG, "adding till/seed/water commands");
+                commands.add(tillTileCommand);
+                commands.add(seedTileCommand);
+                commands.add(waterTileCommand);
+                break;
+            case ONLY_WATER:
+                Log.e(TAG, "adding water command");
+                commands.add(waterTileCommand);
+                break;
+            default:
+                Log.e(TAG, "modeForTileSelectorView is undefined.");
+        }
 
         Log.e(TAG, "end conversion");
     }
@@ -522,5 +560,5 @@ public class Robot extends Creature {
         }
     }
 
-    private List<Tile> tilesToTillSeedWater = new ArrayList<>();
+    private List<TileWorkRequest> tileWorkRequests = new ArrayList<>();
 }

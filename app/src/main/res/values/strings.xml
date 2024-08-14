@@ -16,5 +16,6 @@
     <string name="robot_dialogfragment_off">off</string>
     <string name="robot_dialogfragment_walk">walk</string>
     <string name="robot_dialogfragment_run">run</string>
-    <string name="robot_dialogfragment_tile_selector">tile selector</string>
+    <string name="robot_dialogfragment_till_seed_water">till/seed/water</string>
+    <string name="robot_dialogfragment_water">water</string>
 </resources>

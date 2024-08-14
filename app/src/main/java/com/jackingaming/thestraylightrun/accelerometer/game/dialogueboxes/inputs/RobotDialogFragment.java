@@ -29,7 +29,9 @@ public class RobotDialogFragment extends DialogFragment {
 
         void onRunButtonClick(View view, RobotDialogFragment robotDialogFragment);
 
-        void onTileSelectorButtonClick(View view, RobotDialogFragment robotDialogFragment);
+        void onTillSeedWaterButtonClick(View view, RobotDialogFragment robotDialogFragment);
+
+        void onWaterButtonClick(View view, RobotDialogFragment robotDialogFragment);
     }
 
     public interface DismissListener extends Serializable {
@@ -39,7 +41,7 @@ public class RobotDialogFragment extends DialogFragment {
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
-    private TextView tvOff, tvWalk, tvRun, tvTileSelector;
+    private TextView tvOff, tvWalk, tvRun, tvTillSeedWater, tvWater;
 
     public static RobotDialogFragment newInstance(ButtonListener buttonListener,
                                                   DismissListener dismissListener) {
@@ -82,7 +84,8 @@ public class RobotDialogFragment extends DialogFragment {
         tvOff = view.findViewById(R.id.tv_off);
         tvWalk = view.findViewById(R.id.tv_walk);
         tvRun = view.findViewById(R.id.tv_run);
-        tvTileSelector = view.findViewById(R.id.tv_tile_selector);
+        tvTillSeedWater = view.findViewById(R.id.tv_till_seed_water);
+        tvWater = view.findViewById(R.id.tv_water);
 
         tvOff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,10 +110,19 @@ public class RobotDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-        tvTileSelector.setOnClickListener(new View.OnClickListener() {
+
+        tvTillSeedWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonListener.onTileSelectorButtonClick(view, RobotDialogFragment.this);
+                buttonListener.onTillSeedWaterButtonClick(view, RobotDialogFragment.this);
+                dismiss();
+            }
+        });
+
+        tvWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener.onWaterButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });

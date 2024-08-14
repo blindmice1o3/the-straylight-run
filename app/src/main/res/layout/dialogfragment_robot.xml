@@ -44,24 +44,40 @@
         android:layout_marginBottom="2dp"
         android:text="@string/robot_dialogfragment_run"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/tv_tile_selector"
+        app:layout_constraintBottom_toTopOf="@id/tv_till_seed_water"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_walk" />
 
     <TextView
-        android:id="@+id/tv_tile_selector"
+        android:id="@+id/tv_till_seed_water"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="2dp"
-        android:text="@string/robot_dialogfragment_tile_selector"
+        android:text="@string/robot_dialogfragment_till_seed_water"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_water"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_run" />
+
+    <TextView
+        android:id="@+id/tv_water"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/robot_dialogfragment_water"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_run" />
+        app:layout_constraintTop_toBottomOf="@id/tv_till_seed_water" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

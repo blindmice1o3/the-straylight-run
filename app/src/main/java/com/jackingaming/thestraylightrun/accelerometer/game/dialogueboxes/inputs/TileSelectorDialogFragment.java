@@ -28,9 +28,10 @@ public class TileSelectorDialogFragment extends DialogFragment {
     public static final String ARG_TILE_MANAGER = "tileManager";
     public static final String ARG_TILE_SELECTOR_LISTENER = "tileSelectorListener";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
+    public static final String ARG_MODE_FOR_TILE_SELECTOR_VIEW = "modeForTileSelectorView";
 
     public interface TileSelectorListener extends Serializable {
-        void selected(List<Tile> tiles);
+        void selected(List<Tile> tiles, TileSelectorView.Mode modeForTileSelectorView);
     }
 
     public interface DismissListener extends Serializable {
@@ -40,16 +41,19 @@ public class TileSelectorDialogFragment extends DialogFragment {
     private TileSelectorListener tileSelectorListener;
     private DismissListener dismissListener;
     private TileManager tileManager;
+    private TileSelectorView.Mode modeForTileSelectorView;
 
     private TileSelectorView tileSelectorView;
 
     public static TileSelectorDialogFragment newInstance(TileManager tileManager,
+                                                         TileSelectorView.Mode modeForTileSelectorView,
                                                          TileSelectorListener tileSelectorListener,
                                                          DismissListener dismissListener) {
         TileSelectorDialogFragment fragment = new TileSelectorDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_TILE_MANAGER, tileManager);
+        args.putSerializable(ARG_MODE_FOR_TILE_SELECTOR_VIEW, modeForTileSelectorView);
         args.putSerializable(ARG_TILE_SELECTOR_LISTENER, tileSelectorListener);
         args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         fragment.setArguments(args);
@@ -63,6 +67,7 @@ public class TileSelectorDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             tileManager = (TileManager) getArguments().getSerializable(ARG_TILE_MANAGER);
+            modeForTileSelectorView = (TileSelectorView.Mode) getArguments().getSerializable(ARG_MODE_FOR_TILE_SELECTOR_VIEW);
             tileSelectorListener = (TileSelectorListener) getArguments().getSerializable(ARG_TILE_SELECTOR_LISTENER);
             dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         }
@@ -93,6 +98,7 @@ public class TileSelectorDialogFragment extends DialogFragment {
 
         tileSelectorView = (TileSelectorView) view.findViewById(R.id.view_tile_selector);
         tileSelectorView.init(tileManager);
+        tileSelectorView.setMode(modeForTileSelectorView);
     }
 
     @Override
@@ -101,7 +107,8 @@ public class TileSelectorDialogFragment extends DialogFragment {
         Log.e(TAG, "onDismiss()");
 
         tileSelectorListener.selected(
-                tileSelectorView.getTilesSelected()
+                tileSelectorView.getTilesSelected(),
+                modeForTileSelectorView
         );
         dismissListener.onDismiss();
     }

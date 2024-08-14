@@ -23,6 +23,10 @@ public class TileSelectorView extends View {
     public static final String TAG = TileSelectorView.class.getSimpleName();
     public static final int COLOR_DEFAULT = Color.GREEN;
 
+    public enum Mode {TILL_SEED_WATER, ONLY_WATER;}
+
+    private Mode mode = Mode.TILL_SEED_WATER;
+
     private TileManager tileManager;
     private Tile[][] tiles;
     private int rows, columns;
@@ -71,12 +75,34 @@ public class TileSelectorView extends View {
 
             Tile tile = tiles[yIndexTouch][xIndexTouch];
             if (tile instanceof GrowableTile) {
-                if (!tilesSelected.contains(tile)) {
-                    tilesSelected.add(tile);
-                    invalidate();
-                } else {
-                    tilesSelected.remove(tile);
-                    invalidate();
+                switch (mode) {
+                    case TILL_SEED_WATER:
+                        if (((GrowableTile) tile).getState() == GrowableTile.State.UNTILLED ||
+                                ((GrowableTile) tile).getState() == GrowableTile.State.TILLED) {
+                            if (!tilesSelected.contains(tile)) {
+                                tilesSelected.add(tile);
+                                invalidate();
+                            } else {
+                                tilesSelected.remove(tile);
+                                invalidate();
+                            }
+                        }
+                        break;
+                    case ONLY_WATER:
+                        if (((GrowableTile) tile).getState() == GrowableTile.State.SEEDED ||
+                                ((GrowableTile) tile).getState() == GrowableTile.State.OCCUPIED) {
+                            if (!tilesSelected.contains(tile)) {
+                                tilesSelected.add(tile);
+                                invalidate();
+                            } else {
+                                tilesSelected.remove(tile);
+                                invalidate();
+                            }
+                        }
+                        break;
+                    default:
+                        Log.e(TAG, "switch() default block: mode NOT defined.");
+                        break;
                 }
             }
         }
@@ -98,10 +124,15 @@ public class TileSelectorView extends View {
                 int color = -1;
                 if (tile.isWalkable()) {
                     if (tile instanceof GrowableTile) {
-                        if (((GrowableTile) tile).getEntity() == null) {
-                            color = Color.WHITE;
-                        } else {
-                            color = Color.MAGENTA;
+                        switch (((GrowableTile) tile).getState()) {
+                            case UNTILLED:
+                            case TILLED:
+                                color = Color.WHITE;
+                                break;
+                            case SEEDED:
+                            case OCCUPIED:
+                                color = Color.MAGENTA;
+                                break;
                         }
                     } else {
                         color = Color.YELLOW;
@@ -136,5 +167,13 @@ public class TileSelectorView extends View {
 
     public List<Tile> getTilesSelected() {
         return tilesSelected;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
     }
 }
