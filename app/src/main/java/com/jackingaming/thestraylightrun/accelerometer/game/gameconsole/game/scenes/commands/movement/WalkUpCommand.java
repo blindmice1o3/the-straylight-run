@@ -14,9 +14,9 @@ public class WalkUpCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         robot.setDirection(Creature.Direction.UP);
         robot.prepareMoveUp();
-        robot.move();
+        return robot.move();
     }
 }

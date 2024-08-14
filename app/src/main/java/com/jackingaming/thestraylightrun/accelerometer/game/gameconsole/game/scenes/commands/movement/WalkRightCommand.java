@@ -14,9 +14,9 @@ public class WalkRightCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         robot.setDirection(Creature.Direction.RIGHT);
         robot.prepareMoveRight();
-        robot.move();
+        return robot.move();
     }
 }

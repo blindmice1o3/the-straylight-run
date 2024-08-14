@@ -23,7 +23,7 @@ public class SeedGrowableTileCommand
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         if (tile instanceof GrowableTile) {
             GrowableTile growableTile = (GrowableTile) tile;
             Log.e(TAG, "growableTile has state: " + growableTile.getState());
@@ -32,9 +32,10 @@ public class SeedGrowableTileCommand
                 growableTile.changeToUnwatered();
                 Log.e(TAG, "growableTile.changeToSeeded()");
                 growableTile.changeToSeeded(idSeed);
+                return true;
             }
-        } else {
-            Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tile.getId());
         }
+        Log.e(TAG, "tile is NOT GrowableTile... tile's id: " + tile.getId());
+        return false;
     }
 }

@@ -14,9 +14,9 @@ public class WalkDownCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         robot.setDirection(Creature.Direction.DOWN);
         robot.prepareMoveDown();
-        robot.move();
+        return robot.move();
     }
 }

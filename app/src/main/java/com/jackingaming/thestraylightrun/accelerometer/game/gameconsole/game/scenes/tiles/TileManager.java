@@ -84,6 +84,7 @@ public class TileManager
         return tileNeighbors;
     }
 
+    // TODO: account for entity-collision.
     public List<Tile> doesExistPath(Tile src, Tile dest) {
         List<List<Tile>> queueSearch = new ArrayList<>();
         List<Tile> visited = new ArrayList<>();

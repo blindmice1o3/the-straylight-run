@@ -15,7 +15,8 @@ public class FaceUpCommand
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         robot.setDirection(Creature.Direction.UP);
+        return true;
     }
 }

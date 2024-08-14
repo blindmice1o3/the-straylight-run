@@ -15,7 +15,8 @@ public class FaceLeftCommand
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         robot.setDirection(Creature.Direction.LEFT);
+        return true;
     }
 }

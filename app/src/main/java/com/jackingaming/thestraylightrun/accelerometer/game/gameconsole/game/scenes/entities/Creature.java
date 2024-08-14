@@ -26,29 +26,32 @@ public abstract class Creature extends Entity {
         yMove = 0f;
     }
 
-    public void performMove() {
+    public boolean performMove() {
         switch (direction) {
             case UP:
             case DOWN:
                 y += yMove;
-                break;
+                return true;
             case LEFT:
             case RIGHT:
                 x += xMove;
-                break;
+                return true;
             case CENTER:
-                break;
+                return true;
             case UP_LEFT:
             case UP_RIGHT:
             case DOWN_LEFT:
             case DOWN_RIGHT:
                 x += xMove;
                 y += yMove;
-                break;
+                return true;
+            default:
+                Log.e(TAG, "performMove() switch's default.");
+                return false;
         }
     }
 
-    public void move() {
+    public boolean move() {
         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
         int xFutureLeft = 0;
         int xFutureRight = 0;
@@ -70,15 +73,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, 0f, false)) {
 
                         if (checkTransferPointCollision(xMove, 0f)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case RIGHT:
                 // to_move: RIGHT
                 xFutureLeft = (int) (x + xMove);
@@ -94,15 +97,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, 0f, false)) {
 
                         if (checkTransferPointCollision(xMove, 0f)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case UP:
                 // to_move: UP
                 yFutureTop = (int) (y + yMove);
@@ -118,15 +121,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(0f, yMove, false)) {
 
                         if (checkTransferPointCollision(0f, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case DOWN:
                 // to_move: DOWN
                 yFutureTop = (int) (y + yMove);
@@ -142,18 +145,18 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(0f, yMove, false)) {
 
                         if (checkTransferPointCollision(0f, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case CENTER:
                 // NO MOVEMENT
-                break;
+                return false;
             case UP_LEFT:
                 // to_move: UP_LEFT
                 xFutureLeft = (int) (x + xMove);
@@ -170,15 +173,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, yMove, false)) {
 
                         if (checkTransferPointCollision(xMove, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case UP_RIGHT:
                 // to_move: UP_RIGHT
                 xFutureLeft = (int) (x + xMove);
@@ -195,15 +198,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, yMove, false)) {
 
                         if (checkTransferPointCollision(xMove, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case DOWN_LEFT:
                 // to_move: DOWN_LEFT
                 xFutureLeft = (int) (x + xMove);
@@ -220,15 +223,15 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, yMove, false)) {
 
                         if (checkTransferPointCollision(xMove, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
             case DOWN_RIGHT:
                 // to_move: DOWN_RIGHT
                 xFutureLeft = (int) (x + xMove);
@@ -245,15 +248,18 @@ public abstract class Creature extends Entity {
                             !checkItemCollision(xMove, yMove, false)) {
 
                         if (checkTransferPointCollision(xMove, yMove)) {
-                            return; // Entity.respondToTransferPointCollision(String key) was triggered.
+                            return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
 
-                        //////////////
-                        performMove();
-                        //////////////
+                        /////////////////////
+                        return performMove();
+                        /////////////////////
                     }
                 }
-                break;
+                return false;
+            default:
+                Log.e(TAG, "move()'s switch's default.");
+                return false;
         }
     }
 

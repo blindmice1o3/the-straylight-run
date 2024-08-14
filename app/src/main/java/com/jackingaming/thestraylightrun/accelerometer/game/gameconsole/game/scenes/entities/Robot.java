@@ -160,8 +160,13 @@ public class Robot extends Creature {
                             ((TileCommand) command).setTile(tileCurrentlyFacing);
                         }
 
-                        command.execute();
-                        commands.remove(command);
+                        boolean success = command.execute();
+                        if (success) {
+                            Log.e(TAG, "command successfully executed... removing command from front of queue.");
+                            commands.remove(command);
+                        } else {
+                            Log.e(TAG, "command NOT successfully executed... keep queue the same.");
+                        }
 
                         if (commands.isEmpty()) {
                             tileWorkRequests.remove(0);
@@ -234,16 +239,29 @@ public class Robot extends Creature {
     }
 
     @Override
-    public void performMove() {
-        movementAnimator.setPropertyName(propertyName);
-        movementAnimator.setFloatValues(valueStart, valueEnd);
+    public boolean performMove() {
+        boolean collision = false;
+        if (propertyName.equals("x")) {
+            collision = checkEntityCollision(xMove, 0);
+        } else if (propertyName.equals("y")) {
+            collision = checkEntityCollision(0, yMove);
+        }
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                movementAnimator.start();
-            }
-        });
+        if (!collision) {
+            movementAnimator.setPropertyName(propertyName);
+            movementAnimator.setFloatValues(valueStart, valueEnd);
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    movementAnimator.start();
+                }
+            });
+
+            return true;
+        }
+
+        return false;
     }
 
     private void determineNextMove() {
