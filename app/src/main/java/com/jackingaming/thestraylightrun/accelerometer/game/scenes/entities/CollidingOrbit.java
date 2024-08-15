@@ -10,10 +10,12 @@ import java.util.Map;
 
 public class CollidingOrbit extends Entity {
     public static final String TAG = CollidingOrbit.class.getSimpleName();
+    public static final int ANGLE_OF_ROTATION_IN_DEGREE = 2;
 
     private Entity entityToOrbit;
     private boolean clockwise;
-    private int angleOfRotationInDegree;
+    private double cosCW, sinCW;
+    private double cosCCW, sinCCW;
 
     public CollidingOrbit(Map<Direction, AnimationDrawable> animationsByDirection,
                           Entity entityToOrbit,
@@ -22,7 +24,13 @@ public class CollidingOrbit extends Entity {
         super(animationsByDirection, collisionListener, movementListener);
         this.entityToOrbit = entityToOrbit;
         clockwise = true;
-        angleOfRotationInDegree = 2;
+
+        double angleOfRotationInRadianCW = Math.toRadians(ANGLE_OF_ROTATION_IN_DEGREE);
+        cosCW = Math.cos(angleOfRotationInRadianCW);
+        sinCW = Math.sin(angleOfRotationInRadianCW);
+        double angleOfRotationInRadianCCW = Math.toRadians(-ANGLE_OF_ROTATION_IN_DEGREE);
+        cosCCW = Math.cos(angleOfRotationInRadianCCW);
+        sinCCW = Math.sin(angleOfRotationInRadianCCW);
     }
 
     @Override
@@ -47,12 +55,9 @@ public class CollidingOrbit extends Entity {
         double yToRotate = yPos;
         double xCenterOfRotation = entityToOrbit.getXPos() + (Tile.WIDTH / 2);
         double yCenterOfRotation = entityToOrbit.getYPos() + (Tile.HEIGHT / 2);
-        double angleOfRotationInRadian = Math.toRadians(angleOfRotationInDegree);
 
-        double cos = Math.cos(angleOfRotationInRadian);
-        double sin = Math.sin(angleOfRotationInRadian);
-        double temp = ((xToRotate - xCenterOfRotation) * cos) - ((yToRotate - yCenterOfRotation) * sin) + xCenterOfRotation;
-        double yRotated = ((xToRotate - xCenterOfRotation) * sin) + ((yToRotate - yCenterOfRotation) * cos) + yCenterOfRotation;
+        double temp = ((xToRotate - xCenterOfRotation) * cosCW) - ((yToRotate - yCenterOfRotation) * sinCW) + xCenterOfRotation;
+        double yRotated = ((xToRotate - xCenterOfRotation) * sinCW) + ((yToRotate - yCenterOfRotation) * cosCW) + yCenterOfRotation;
         double xRotated = temp;
 
         xPos = (float) xRotated;
@@ -64,12 +69,9 @@ public class CollidingOrbit extends Entity {
         double yToRotate = yPos;
         double xCenterOfRotation = entityToOrbit.getXPos() + (Tile.WIDTH / 2);
         double yCenterOfRotation = entityToOrbit.getYPos() + (Tile.HEIGHT / 2);
-        double angleOfRotationInRadian = Math.toRadians(-angleOfRotationInDegree);
 
-        double cos = Math.cos(angleOfRotationInRadian);
-        double sin = Math.sin(angleOfRotationInRadian);
-        double temp = ((xToRotate - xCenterOfRotation) * cos) - ((yToRotate - yCenterOfRotation) * sin) + xCenterOfRotation;
-        double yRotated = ((xToRotate - xCenterOfRotation) * sin) + ((yToRotate - yCenterOfRotation) * cos) + yCenterOfRotation;
+        double temp = ((xToRotate - xCenterOfRotation) * cosCCW) - ((yToRotate - yCenterOfRotation) * sinCCW) + xCenterOfRotation;
+        double yRotated = ((xToRotate - xCenterOfRotation) * sinCCW) + ((yToRotate - yCenterOfRotation) * cosCCW) + yCenterOfRotation;
         double xRotated = temp;
 
         xPos = (float) xRotated;
