@@ -290,7 +290,7 @@ public abstract class Entity {
         return movementListener.onMove(bottomLeft, bottomRight);
     }
 
-    private void updateStateOfEntityCollision(boolean colliding) {
+    protected void updateStateOfEntityCollision(boolean colliding) {
         if (cantCollide && !colliding) {
             cantCollide = false;
         } else if (justCollided) {

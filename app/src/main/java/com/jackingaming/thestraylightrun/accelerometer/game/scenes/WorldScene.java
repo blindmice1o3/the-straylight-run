@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.output
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -106,6 +107,8 @@ public class WorldScene extends Scene {
     private static final int X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = 65;
     private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01 = 203;
     public static int durationOfFrameInMilli = 420;
+    private static final int X_SPAWN_INDEX_COLLIDING_ORBIT = 200;
+    private static final int Y_SPAWN_INDEX_COLLIDING_ORBIT = 33;
 
     private static WorldScene instance;
 
@@ -114,6 +117,7 @@ public class WorldScene extends Scene {
     private SoundManager soundManager;
     private Game.GameListener gameListener;
     private Player player;
+    private CollidingOrbit collidingOrbit;
     private GameCamera gameCamera;
     private int widthSurfaceView, heightSurfaceView;
     private int widthSpriteDst, heightSpriteDst;
@@ -557,6 +561,8 @@ public class WorldScene extends Scene {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     private void initEntities() {
+        entities = new ArrayList<>();
+
         Entity.init(widthSpriteDst, heightSpriteDst);
 
         Entity.CollisionListener collisionListenerNPC = new Entity.CollisionListener() {
@@ -667,7 +673,104 @@ public class WorldScene extends Scene {
                 movementListenerNPC);
         player = generatePlayer();
 
-        entities = new ArrayList<>();
+        // COLLIDING ORBIT
+        AnimationDrawable animationForCollidingOrbit = new AnimationDrawable();
+        animationForCollidingOrbit.setOneShot(false);
+        animationForCollidingOrbit.addFrame(
+                new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
+        Map<Direction, AnimationDrawable> animationsForCollidingOrbit = new HashMap<>();
+        animationsForCollidingOrbit.put(DOWN, animationForCollidingOrbit);
+        collidingOrbit = new CollidingOrbit(animationsForCollidingOrbit,
+                player,
+                new Entity.CollisionListener() {
+                    @Override
+                    public void onJustCollided(Entity collided) {
+                        Log.e(TAG, "onJustCollided()");
+
+                        if (collided instanceof NonPlayableCharacter) {
+                            Log.e(TAG, "collided instanceof NonPlayableCharacter");
+                            // bounce NonPlayableCharacter based on CollidingOrbit's cw/ccw.
+                            float xStartNPC = collided.getXPos();
+                            float yStartNPC = collided.getYPos();
+                            float xEndNPC = xStartNPC;
+                            float yEndNPC = yStartNPC;
+                            float numberOfTile = 2f;
+
+                            // RIGHT of player
+                            if (xStartNPC > player.getXPos()) {
+                                // BELOW player
+                                if (yStartNPC > player.getYPos()) {
+                                    xEndNPC = xStartNPC + (numberOfTile * widthSpriteDst);
+                                    yEndNPC = yStartNPC + (numberOfTile * heightSpriteDst);
+                                }
+                                // ABOVE PLAYER
+                                else {
+                                    xEndNPC = xStartNPC + (numberOfTile * widthSpriteDst);
+                                    yEndNPC = yStartNPC - (numberOfTile * heightSpriteDst);
+                                }
+                            }
+                            // LEFT of player
+                            else {
+                                // BELOW player
+                                if (yStartNPC > player.getYPos()) {
+                                    xEndNPC = xStartNPC - (numberOfTile * widthSpriteDst);
+                                    yEndNPC = yStartNPC + (numberOfTile * heightSpriteDst);
+                                }
+                                // ABOVE PLAYER
+                                else {
+                                    xEndNPC = xStartNPC - (numberOfTile * widthSpriteDst);
+                                    yEndNPC = yStartNPC - (numberOfTile * heightSpriteDst);
+                                }
+                            }
+
+                            String propertyName = null;
+                            float endValue = -1f;
+                            if (player.getDirection() == LEFT || player.getDirection() == RIGHT) {
+                                propertyName = "xPos";
+                                endValue = xEndNPC;
+                            } else {
+                                propertyName = "yPos";
+                                endValue = yEndNPC;
+                            }
+
+                            ObjectAnimator animatorPosition = ObjectAnimator.ofFloat(collided,
+                                    propertyName, endValue);
+                            animatorPosition.setInterpolator(new BounceInterpolator());
+//                        animatorPosition.setRepeatCount(ValueAnimator.INFINITE);
+//                        animatorPosition.setRepeatMode(ValueAnimator.REVERSE);
+                            animatorPosition.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            gameListener.onUpdateEntity(collided);
+                                        }
+                                    });
+                                }
+                            });
+                            animatorPosition.setDuration(1000L);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    animatorPosition.start();
+                                }
+                            });
+
+                            collidingOrbit.toggleClockwise();
+                        }
+                    }
+                },
+                new Entity.MovementListener() {
+                    @Override
+                    public boolean onMove(int[] futureCorner1, int[] futureCorner2) {
+                        return false;
+                    }
+                });
+        collidingOrbit.setXPos(X_SPAWN_INDEX_COLLIDING_ORBIT * widthSpriteDst);
+        collidingOrbit.setYPos(Y_SPAWN_INDEX_COLLIDING_ORBIT * heightSpriteDst);
+        entities.add(collidingOrbit);
+
         entities.add(npcRival);
         entities.add(npcCoin);
         entities.add(npcRivalLeader);

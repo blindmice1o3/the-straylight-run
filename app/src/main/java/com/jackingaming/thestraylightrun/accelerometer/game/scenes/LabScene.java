@@ -352,6 +352,8 @@ public class LabScene extends Scene {
     }
 
     private void initEntities() {
+        entities = new ArrayList<>();
+
         Entity.CollisionListener collisionListenerNPC = new Entity.CollisionListener() {
             @Override
             public void onJustCollided(Entity collided) {
@@ -392,7 +394,6 @@ public class LabScene extends Scene {
                 collisionListenerNPC,
                 movementListenerNPC);
 
-        entities = new ArrayList<>();
         entities.add(npcScientist);
         entities.add(player);
     }

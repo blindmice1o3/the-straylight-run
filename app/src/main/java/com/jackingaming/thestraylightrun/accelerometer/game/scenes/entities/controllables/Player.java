@@ -30,7 +30,6 @@ public class Player extends Entity {
         if (animatorMovement.isRunning()) {
             return;
         }
-
         // DIRECTION
         if (Math.abs(yDelta) >= Math.abs(xDelta)) {
             // more vertical than horizontal (or equal)
