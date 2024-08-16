@@ -42,6 +42,12 @@ public class GrowableTile extends Tile {
         state = State.UNTILLED;
         idSeed = null;
         entity = null;
+    }
+
+    @Override
+    public void init(Game game, int xIndex, int yIndex, Bitmap image) {
+        super.init(game, xIndex, yIndex, image);
+
         initImageMaps(game.getContext().getResources());
     }
 
