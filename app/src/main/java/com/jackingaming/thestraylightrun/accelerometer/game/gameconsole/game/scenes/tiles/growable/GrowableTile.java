@@ -51,21 +51,25 @@ public class GrowableTile extends Tile {
         initImageMaps(game.getContext().getResources());
     }
 
+    public void germinateSeed() {
+        Entity entityToAdd = null;
+        if (idSeed.equals(MysterySeed.TAG)) {
+            entityToAdd = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
+        } else {
+            Log.e(TAG, "startNewDay() else-clause: idSeed does NOT match defined options");
+        }
+
+        entityToAdd.init(game);
+        entityListener.addEntityToScene(entityToAdd);
+
+        entity = entityToAdd;
+        changeToOccupied();
+    }
+
     public void startNewDay() {
         if (watered) {
             if (state == State.SEEDED) {
-                Entity entityToAdd = null;
-                if (idSeed.equals(MysterySeed.TAG)) {
-                    entityToAdd = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
-                } else {
-                    Log.e(TAG, "startNewDay() else-clause: idSeed does NOT match defined options");
-                }
-
-                entity = entityToAdd;
-                entity.init(game);
-                entityListener.addEntityToScene(entity);
-
-                state = State.OCCUPIED;
+                germinateSeed();
             } else if (state == State.OCCUPIED) {
                 if (entity instanceof Plant) {
                     ((Plant) entity).incrementAgeInDays();

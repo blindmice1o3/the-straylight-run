@@ -12,9 +12,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
@@ -91,6 +93,13 @@ public class SceneFarm extends Scene {
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
         tileManager.init(game); // updates tileManager's reference to the new game.
 
+        // Set up GrowableTile in front of player's house with a [plant].
+        Tile tileInitializedForHarvesting = tilesForFarm[17][12];
+        if (tileInitializedForHarvesting instanceof GrowableTile) {
+            ((GrowableTile) tileInitializedForHarvesting).changeToSeeded(MysterySeed.TAG);
+            ((GrowableTile) tileInitializedForHarvesting).germinateSeed();
+        }
+
         for (int y = 0; y < tilesForFarm.length; y++) {
             for (int x = 0; x < tilesForFarm[y].length; x++) {
                 Tile tile = tilesForFarm[y][x];
@@ -103,6 +112,16 @@ public class SceneFarm extends Scene {
 
         entityManager.init(game);
         itemManager.init(game);
+
+        // Age the [plant] so it's almost harvestable
+        // (has to be done after Entity.init(), which sets ageInDays to 0).
+        if (tileInitializedForHarvesting instanceof GrowableTile) {
+            Plant plant = (Plant) ((GrowableTile) tileInitializedForHarvesting).getEntity();
+            for (int i = 0; i < 6; i++) {
+                Log.e(TAG, "incrementing age: " + i);
+                plant.incrementAgeInDays();
+            }
+        }
 
         seedShopDialogFragment.init(game);
 
