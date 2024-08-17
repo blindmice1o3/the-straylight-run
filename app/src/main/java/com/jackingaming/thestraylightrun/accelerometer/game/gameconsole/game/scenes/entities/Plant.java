@@ -94,4 +94,13 @@ public class Plant extends Entity {
     public void respondToTransferPointCollision(String key) {
 
     }
+
+    @Override
+    public boolean isCarryable() {
+        return true;
+    }
+
+    public boolean isHarvestable() {
+        return harvestable;
+    }
 }

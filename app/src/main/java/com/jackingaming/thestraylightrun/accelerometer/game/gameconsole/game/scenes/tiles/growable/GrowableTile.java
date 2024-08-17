@@ -120,6 +120,10 @@ public class GrowableTile extends Tile {
 
     public void changeToUntilled() {
         state = State.UNTILLED;
+        watered = false;
+        idSeed = null;
+        entity = null;
+
         updateImage();
     }
 

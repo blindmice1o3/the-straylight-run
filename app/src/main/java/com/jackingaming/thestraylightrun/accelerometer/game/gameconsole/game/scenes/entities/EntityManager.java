@@ -65,10 +65,18 @@ public class EntityManager
         }
     }
 
-    public void addEntity(Entity e) {
+    public boolean addEntity(Entity e) {
         if (!entities.contains(e)) {
-            entities.add(e);
+            return entities.add(e);
         }
+        return false;
+    }
+
+    public boolean removeEntity(Entity e) {
+        if (entities.contains(e)) {
+            return entities.remove(e);
+        }
+        return false;
     }
 
     public List<Entity> getEntities() {

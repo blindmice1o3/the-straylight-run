@@ -12,7 +12,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import java.io.Serializable;
 
 public abstract class Entity
-        implements Serializable {
+        implements Carryable, Serializable {
     transient protected Game game;
 
     protected float x;
@@ -101,6 +101,30 @@ public abstract class Entity
                 (int) (y + bounds.top + yOffset),
                 (int) (x + bounds.left + xOffset) + bounds.right,
                 (int) (y + bounds.top + yOffset) + bounds.bottom);
+    }
+
+    @Override
+    public boolean isCarryable() {
+        return false;
+    }
+
+    @Override
+    public void becomeCarried() {
+        active = false;
+    }
+
+    @Override
+    public boolean becomeNotCarried(Tile tileToLandOn) {
+        active = true;
+        x = tileToLandOn.getxIndex() * Tile.WIDTH;
+        y = tileToLandOn.getyIndex() * Tile.HEIGHT;
+        return game.getSceneManager().getCurrentScene().getEntityManager().addEntity(this);
+    }
+
+    @Override
+    public void moveWithCarrier(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     public float getX() {

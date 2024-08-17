@@ -12,6 +12,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.ani
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -22,6 +23,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
 public class PoohForm
         implements Form {
@@ -64,6 +66,9 @@ public class PoohForm
 
         // PREPARE_FOR_RENDER
         determineNextImage();
+
+        // CARRYABLE
+        player.moveCarryable();
     }
 
     @Override
@@ -76,9 +81,24 @@ public class PoohForm
         // Check InputManager's ButtonPadFragment-specific boolean fields.
         if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
+
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
-                if (entityCurrentlyFacing != null &&
+
+                if (player.hasCarryable() && entityCurrentlyFacing == null) {
+                    player.placeDown();
+                } else if (entityCurrentlyFacing != null &&
+                        entityCurrentlyFacing instanceof Plant &&
+                        ((Plant) entityCurrentlyFacing).isHarvestable()) {
+                    player.pickUp(entityCurrentlyFacing);
+
+                    Tile tileFacing = player.checkTileCurrentlyFacing();
+                    if (tileFacing instanceof GrowableTile) {
+                        ((GrowableTile) tileFacing).changeToUntilled();
+                    } else {
+                        Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+                    }
+                } else if (entityCurrentlyFacing != null &&
                         entityCurrentlyFacing instanceof Robot) {
                     game.setPaused(true);
 

@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -17,6 +18,8 @@ public abstract class Creature extends Entity {
     protected float moveSpeed;
     protected float xMove;
     protected float yMove;
+
+    protected Carryable carryable;
 
     public Creature(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -260,6 +263,52 @@ public abstract class Creature extends Entity {
             default:
                 Log.e(TAG, "move()'s switch's default.");
                 return false;
+        }
+    }
+
+    public boolean hasCarryable() {
+        return carryable != null;
+    }
+
+    public void moveCarryable() {
+        if (carryable != null) {
+            float xCarryable = x + (Tile.WIDTH / 2);
+            float yCarryable = y - (Tile.HEIGHT / 2);
+
+            carryable.moveWithCarrier(xCarryable, yCarryable);
+        }
+    }
+
+    public void pickUp(Carryable carryable) {
+        Log.e(TAG, "pickUp()");
+
+        if (carryable.isCarryable()) {
+            carryable.becomeCarried();
+            this.carryable = carryable;
+        } else {
+            Log.e(TAG, "carryable.isCarryable() is returning false.");
+        }
+    }
+
+    public void placeDown() {
+        Log.e(TAG, "placeDown()");
+
+        if (carryable != null) {
+            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+            boolean successfulPlaceDown = carryable.becomeNotCarried(tileCurrentlyFacing);
+            Log.e(TAG, "successfulPlaceDown: " + successfulPlaceDown);
+            carryable = null;
+        } else {
+            Log.e(TAG, "carryable == null");
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+
+        if (carryable != null) {
+            ((Entity) carryable).draw(canvas);
         }
     }
 
