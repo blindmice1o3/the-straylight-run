@@ -32,6 +32,8 @@ public class RobotDialogFragment extends DialogFragment {
         void onTillSeedWaterButtonClick(View view, RobotDialogFragment robotDialogFragment);
 
         void onWaterButtonClick(View view, RobotDialogFragment robotDialogFragment);
+
+        void onHarvestButtonClick(View view, RobotDialogFragment robotDialogFragment);
     }
 
     public interface DismissListener extends Serializable {
@@ -41,7 +43,7 @@ public class RobotDialogFragment extends DialogFragment {
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
-    private TextView tvOff, tvWalk, tvRun, tvTillSeedWater, tvWater;
+    private TextView tvOff, tvWalk, tvRun, tvTillSeedWater, tvWater, tvHarvest;
 
     public static RobotDialogFragment newInstance(ButtonListener buttonListener,
                                                   DismissListener dismissListener) {
@@ -86,6 +88,7 @@ public class RobotDialogFragment extends DialogFragment {
         tvRun = view.findViewById(R.id.tv_run);
         tvTillSeedWater = view.findViewById(R.id.tv_till_seed_water);
         tvWater = view.findViewById(R.id.tv_water);
+        tvHarvest = view.findViewById(R.id.tv_harvest);
 
         tvOff.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +126,14 @@ public class RobotDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 buttonListener.onWaterButtonClick(view, RobotDialogFragment.this);
+                dismiss();
+            }
+        });
+
+        tvHarvest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener.onHarvestButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });

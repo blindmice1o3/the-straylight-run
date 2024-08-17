@@ -22,6 +22,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkUpCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.HarvestGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
@@ -38,6 +39,7 @@ import java.util.Random;
 
 public class Robot extends Creature {
     public static final String TAG = Robot.class.getSimpleName();
+    private static final int COUNTER_COMMANDS_TARGET = 25;
     public static final long DEFAULT_MOVEMENT_DURATION = 1000L;
     public static final long RUNNING_MOVEMENT_DURATION = 500L;
 
@@ -50,7 +52,7 @@ public class Robot extends Creature {
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
             faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
-            tillTileCommand, seedTileCommand, waterTileCommand;
+            tillTileCommand, seedTileCommand, waterTileCommand, harvestTileCommand;
 
 
     public Robot(int xSpawn, int ySpawn) {
@@ -60,7 +62,7 @@ public class Robot extends Creature {
         robotAnimationManager = new RobotAnimationManager();
         movementAnimator =
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
-        movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
+        movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
 
         walkLeftCommand = new WalkLeftCommand(this);
@@ -74,6 +76,7 @@ public class Robot extends Creature {
         tillTileCommand = new TillGrowableTileCommand(null);
         seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
+        harvestTileCommand = new HarvestGrowableTileCommand(null, this);
         commands = new ArrayList<>();
 //        commands.add(new WalkDownCommand(this));
 //        commands.add(new FaceRightCommand(this));
@@ -131,7 +134,6 @@ public class Robot extends Creature {
 
     private List<Command> commands;
     private int counterCommands = 0;
-    private int counterTileSelected = 0;
 
     @Override
     public void update(long elapsed) {
@@ -150,7 +152,7 @@ public class Robot extends Creature {
             case TILE_SELECTED:
                 if (!commands.isEmpty()) {
                     counterCommands++;
-                    if (counterCommands == 50) {
+                    if (counterCommands == COUNTER_COMMANDS_TARGET) {
                         counterCommands = 0;
 
                         Command command = commands.get(0);
@@ -192,7 +194,7 @@ public class Robot extends Creature {
                                 tileWorkRequestHead.getModeForTileSelectorView());
                     } else {
                         counterCommands++;
-                        if (counterCommands == 50) {
+                        if (counterCommands == COUNTER_COMMANDS_TARGET) {
                             counterCommands = 0;
 
                             state = State.OFF;
@@ -344,6 +346,7 @@ public class Robot extends Creature {
 
     public void changeToOff() {
         state = State.OFF;
+        commands.clear();
     }
 
     public void changeToWalk() {
@@ -394,6 +397,14 @@ public class Robot extends Creature {
             public void onWaterButtonClick(View view, RobotDialogFragment robotDialogFragment) {
                 showRobotDialogFragment(
                         TileSelectorView.Mode.ONLY_WATER,
+                        robotDialogFragment
+                );
+            }
+
+            @Override
+            public void onHarvestButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                showRobotDialogFragment(
+                        TileSelectorView.Mode.HARVEST,
                         robotDialogFragment
                 );
             }
@@ -512,6 +523,10 @@ public class Robot extends Creature {
             case ONLY_WATER:
                 Log.e(TAG, "adding water command");
                 commands.add(waterTileCommand);
+                break;
+            case HARVEST:
+                Log.e(TAG, "adding harvest command");
+                commands.add(harvestTileCommand);
                 break;
             default:
                 Log.e(TAG, "modeForTileSelectorView is undefined.");

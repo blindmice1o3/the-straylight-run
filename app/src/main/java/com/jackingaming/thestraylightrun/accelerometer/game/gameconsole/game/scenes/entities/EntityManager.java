@@ -46,6 +46,8 @@ public class EntityManager
         entities.add(Player.getInstance());
     }
 
+    private List<Entity> entitiesToBeAdded = new ArrayList<>();
+
     public void update(long elapsed) {
         Iterator<Entity> iterator = entities.iterator();
         while (iterator.hasNext()) {
@@ -57,6 +59,11 @@ public class EntityManager
                 iterator.remove();
             }
         }
+
+        if (!entitiesToBeAdded.isEmpty()) {
+            entities.addAll(entitiesToBeAdded);
+            entitiesToBeAdded.clear();
+        }
     }
 
     public void draw(Canvas canvas) {
@@ -67,7 +74,7 @@ public class EntityManager
 
     public boolean addEntity(Entity e) {
         if (!entities.contains(e)) {
-            return entities.add(e);
+            return entitiesToBeAdded.add(e);
         }
         return false;
     }

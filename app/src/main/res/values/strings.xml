@@ -18,4 +18,5 @@
     <string name="robot_dialogfragment_run">run</string>
     <string name="robot_dialogfragment_till_seed_water">till/seed/water</string>
     <string name="robot_dialogfragment_water">water</string>
+    <string name="robot_dialogfragment_harvest">harvest</string>
 </resources>

@@ -12,6 +12,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
@@ -23,7 +24,7 @@ public class TileSelectorView extends View {
     public static final String TAG = TileSelectorView.class.getSimpleName();
     public static final int COLOR_DEFAULT = Color.GREEN;
 
-    public enum Mode {TILL_SEED_WATER, ONLY_WATER;}
+    public enum Mode {TILL_SEED_WATER, ONLY_WATER, HARVEST;}
 
     private Mode mode = Mode.TILL_SEED_WATER;
 
@@ -91,6 +92,18 @@ public class TileSelectorView extends View {
                     case ONLY_WATER:
                         if (((GrowableTile) tile).getState() == GrowableTile.State.SEEDED ||
                                 ((GrowableTile) tile).getState() == GrowableTile.State.OCCUPIED) {
+                            if (!tilesSelected.contains(tile)) {
+                                tilesSelected.add(tile);
+                                invalidate();
+                            } else {
+                                tilesSelected.remove(tile);
+                                invalidate();
+                            }
+                        }
+                        break;
+                    case HARVEST:
+                        if (((GrowableTile) tile).getState() == GrowableTile.State.OCCUPIED &&
+                                ((Plant) ((GrowableTile) tile).getEntity()).isHarvestable()) {
                             if (!tilesSelected.contains(tile)) {
                                 tilesSelected.add(tile);
                                 invalidate();
