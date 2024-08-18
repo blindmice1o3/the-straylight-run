@@ -555,8 +555,11 @@ public class FishForm
     @Override
     public void respondToItemCollisionViaMove(Item item) {
         if (item instanceof HoneyPot) {
+            game.incrementCurrency(
+                    item.getPrice()
+            );
+
             game.getSceneManager().getCurrentScene().getItemManager().removeItem(item);
-            game.incrementCurrency();
         }
     }
 

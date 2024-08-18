@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -9,7 +10,10 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 import java.util.Random;
 
-public class Plant extends Entity {
+public class Plant extends Entity
+        implements Sellable {
+    public static final String TAG = Plant.class.getSimpleName();
+
     public static final int BRACKET01_MIN_INCLUSIVE = 0;
     public static final int BRACKET01_MAX_EXCLUSIVE = 1;
     public static final int BRACKET02_MIN_INCLUSIVE = 1;
@@ -18,12 +22,18 @@ public class Plant extends Entity {
     public static final int BRACKET03_MAX_EXCLUSIVE = 5;
     public static final int BRACKET04_MIN_INCLUSIVE = 5;
     public static final int BRACKET04_MAX_EXCLUSIVE = 7;
+    private static final float PRICE_GREEN = 60f;
+    private static final float PRICE_PURPLE = 85f;
+
+    public enum Color {GREEN, PURPLE;}
 
     private int ageInDays;
     private boolean harvestable;
     private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
     private Bitmap imageHarvestableGreen, imageHarvestablePurple;
     private Bitmap imageHarvestable;
+    private Color color;
+    private float price;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -43,9 +53,23 @@ public class Plant extends Entity {
         imageHarvestablePurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.purple2174);
 
         Random random = new Random();
-        int numberRandom = random.nextInt();
-        imageHarvestable = (numberRandom % 2 == 0) ?
-                imageHarvestableGreen : imageHarvestablePurple;
+        int numberRandom = random.nextInt(100);
+        color = (numberRandom < 50) ?
+                Color.GREEN : Color.PURPLE;
+
+        switch (color) {
+            case GREEN:
+                imageHarvestable = imageHarvestableGreen;
+                price = PRICE_GREEN;
+                break;
+            case PURPLE:
+                imageHarvestable = imageHarvestablePurple;
+                price = PRICE_PURPLE;
+                break;
+            default:
+                Log.e(TAG, "color not defined.");
+                break;
+        }
 
         updateBasedOnAgeInDays();
     }
@@ -102,5 +126,10 @@ public class Plant extends Entity {
 
     public boolean isHarvestable() {
         return harvestable;
+    }
+
+    @Override
+    public float getPrice() {
+        return price;
     }
 }

@@ -3,6 +3,8 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -223,7 +225,13 @@ public class GameConsoleFragment extends Fragment
     public void onCurrencyChange(float currency) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setCurrency(currency);
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    statsDisplayerFragment.setCurrency(currency);
+                }
+            });
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
         }

@@ -14,6 +14,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
@@ -21,9 +22,10 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneWorldMapPart01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.BedTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 public class PoohForm
         implements Form {
@@ -85,8 +87,24 @@ public class PoohForm
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
-                if (player.hasCarryable() && entityCurrentlyFacing == null) {
-                    player.placeDown();
+                if (!player.hasCarryable() &&
+                        entityCurrentlyFacing == null) {
+                    Log.e(TAG, "no carryable and entityFacing is null");
+                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                    if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                        Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                        ShippingBinTile.sellStash();
+                    }
+                } else if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
+                        entityCurrentlyFacing == null) {
+                    Log.e(TAG, "has carryable and carryable is Sellable and entityFacing is null");
+                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                    if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                        Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                        player.placeInShippingBin();
+                    } else if (tileCurrentlyFacing.isWalkable()) {
+                        player.placeDown();
+                    }
                 } else if (entityCurrentlyFacing != null &&
                         entityCurrentlyFacing instanceof Plant &&
                         ((Plant) entityCurrentlyFacing).isHarvestable()) {
@@ -256,8 +274,11 @@ public class PoohForm
     @Override
     public void respondToItemCollisionViaMove(Item item) {
         if (item instanceof HoneyPot) {
+            game.incrementCurrency(
+                    item.getPrice()
+            );
+
             game.getSceneManager().getCurrentScene().getItemManager().removeItem(item);
-            game.incrementCurrency();
         }
     }
 }

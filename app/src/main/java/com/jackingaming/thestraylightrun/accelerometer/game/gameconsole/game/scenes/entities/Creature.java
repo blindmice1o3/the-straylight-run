@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 public abstract class Creature extends Entity {
     public static final String TAG = Creature.class.getSimpleName();
@@ -270,6 +271,10 @@ public abstract class Creature extends Entity {
         return carryable != null;
     }
 
+    public Carryable getCarryable() {
+        return carryable;
+    }
+
     public void moveCarryable() {
         if (carryable != null) {
             float xCarryable = x + (Tile.WIDTH / 2);
@@ -298,6 +303,22 @@ public abstract class Creature extends Entity {
             boolean successfulPlaceDown = carryable.becomeNotCarried(tileCurrentlyFacing);
             Log.e(TAG, "successfulPlaceDown: " + successfulPlaceDown);
             carryable = null;
+        } else {
+            Log.e(TAG, "carryable == null");
+        }
+    }
+
+    public void placeInShippingBin() {
+        if (carryable != null) {
+            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+            if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                if (carryable instanceof Sellable) {
+                    ((ShippingBinTile) tileCurrentlyFacing).addSellable(
+                            (Sellable) carryable
+                    );
+                    carryable = null;
+                }
+            }
         } else {
             Log.e(TAG, "carryable == null");
         }
