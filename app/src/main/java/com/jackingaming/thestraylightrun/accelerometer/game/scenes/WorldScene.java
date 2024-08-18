@@ -687,8 +687,9 @@ public class WorldScene extends Scene {
                     public void onJustCollided(Entity collided) {
                         Log.e(TAG, "onJustCollided()");
 
-                        if (collided instanceof NonPlayableCharacter) {
-                            Log.e(TAG, "collided instanceof NonPlayableCharacter");
+                        if (collided instanceof NonPlayableCharacter &&
+                                !((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
+                            Log.e(TAG, "collided instanceof NonPlayableCharacter  && !((NonPlayableCharacter) collided).getId().equals(ID_LASS01)");
                             // bounce NonPlayableCharacter based on CollidingOrbit's cw/ccw.
                             float xStartNPC = collided.getXPos();
                             float yStartNPC = collided.getYPos();

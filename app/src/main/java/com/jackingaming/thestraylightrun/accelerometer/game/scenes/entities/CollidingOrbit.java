@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 
 import java.util.Map;
 
@@ -36,6 +37,12 @@ public class CollidingOrbit extends Entity {
     @Override
     public void collided(Entity collider) {
         Log.e(TAG, "collided()");
+    }
+
+    @Override
+    protected boolean skipEntityCollisionCheck(Entity e) {
+        return super.skipEntityCollisionCheck(e) ||
+                (e instanceof Player);
     }
 
     @Override

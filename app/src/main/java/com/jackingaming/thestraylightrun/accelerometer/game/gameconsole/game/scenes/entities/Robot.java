@@ -326,6 +326,9 @@ public class Robot extends Creature {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
+        if (e instanceof Plant) {
+            return false;
+        }
         return true;
     }
 

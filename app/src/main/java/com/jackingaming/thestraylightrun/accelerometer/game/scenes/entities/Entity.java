@@ -319,9 +319,13 @@ public abstract class Entity {
         }
     }
 
+    protected boolean skipEntityCollisionCheck(Entity e) {
+        return e.equals(this);
+    }
+
     protected boolean checkEntityCollision(float xDelta, float yDelta) {
         for (Entity e : entities) {
-            if (e.equals(this)) {
+            if (skipEntityCollisionCheck(e)) {
                 continue;
             }
 
