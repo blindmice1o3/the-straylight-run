@@ -23,6 +23,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.movement.WalkUpCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.HarvestGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.PlaceInShippingBinTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
@@ -34,14 +35,22 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Robot extends Creature {
     public static final String TAG = Robot.class.getSimpleName();
     private static final int COUNTER_COMMANDS_TARGET = 25;
-    public static final long DEFAULT_MOVEMENT_DURATION = 1000L;
-    public static final long RUNNING_MOVEMENT_DURATION = 500L;
+    private static final long DEFAULT_MOVEMENT_DURATION = 1000L;
+    private static final long RUNNING_MOVEMENT_DURATION = 500L;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TL = 10;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TL = 19;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TR = 11;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TR = 19;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_BR = 11;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_BR = 20;
 
     public enum State {OFF, WALK, RUN, TILE_SELECTED;}
 
@@ -52,8 +61,12 @@ public class Robot extends Creature {
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
             faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
-            tillTileCommand, seedTileCommand, waterTileCommand, harvestTileCommand;
+            tillTileCommand, seedTileCommand, waterTileCommand,
+            harvestTileCommand, placeInShippingBinTileCommand;
 
+    private List<Command> commands;
+    private int counterCommands = 0;
+    private List<Tile> tilesShippingBinDrop;
 
     public Robot(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -77,6 +90,7 @@ public class Robot extends Creature {
         seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
         harvestTileCommand = new HarvestGrowableTileCommand(null, this);
+        placeInShippingBinTileCommand = new PlaceInShippingBinTileCommand(null, this);
         commands = new ArrayList<>();
 //        commands.add(new WalkDownCommand(this));
 //        commands.add(new FaceRightCommand(this));
@@ -130,10 +144,18 @@ public class Robot extends Creature {
         super.init(game);
 
         robotAnimationManager.init(game);
-    }
 
-    private List<Command> commands;
-    private int counterCommands = 0;
+        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+        Tile[][] tilesScene = tileManager.getTiles();
+        Tile tileShippingBinTL = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_TL][X_INDEX_SHIPPING_BIN_DROP_TILE_TL];
+        Tile tileShippingBinTR = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_TR][X_INDEX_SHIPPING_BIN_DROP_TILE_TR];
+        Tile tileShippingBinBR = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_BR][X_INDEX_SHIPPING_BIN_DROP_TILE_BR];
+
+        tilesShippingBinDrop = new ArrayList<>();
+        tilesShippingBinDrop.add(tileShippingBinTL);
+        tilesShippingBinDrop.add(tileShippingBinTR);
+        tilesShippingBinDrop.add(tileShippingBinBR);
+    }
 
     @Override
     public void update(long elapsed) {
@@ -164,10 +186,22 @@ public class Robot extends Creature {
 
                         boolean success = command.execute();
                         if (success) {
-                            Log.e(TAG, "command successfully executed... removing command from front of queue.");
+                            Log.e(TAG, "command successfully executed... removing command from front of queue. command: " + command.getClass().getSimpleName());
                             commands.remove(command);
+
+                            if (command instanceof HarvestGrowableTileCommand) {
+                                List<Command> pathToShippingBinAsCommands =
+                                        handleFindShortestPathToShippingBin();
+                                commands.addAll(pathToShippingBinAsCommands);
+
+                                commands.add(placeInShippingBinTileCommand);
+                            } else if (command instanceof PlaceInShippingBinTileCommand) {
+                                List<Command> pathFromShippingBinAsCommands =
+                                        handleFindPathBackFromShippingBin();
+                                commands.addAll(pathFromShippingBinAsCommands);
+                            }
                         } else {
-                            Log.e(TAG, "command NOT successfully executed... keep queue the same.");
+                            Log.e(TAG, "command NOT successfully executed... keep queue the same. command: " + command.getClass().getSimpleName());
                         }
 
                         if (commands.isEmpty()) {
@@ -178,20 +212,20 @@ public class Robot extends Creature {
                     if (!tileWorkRequests.isEmpty()) {
                         TileWorkRequest tileWorkRequestHead = tileWorkRequests.get(0);
 
-                        xIndexSrc = ((int) x / Tile.WIDTH);
-                        yIndexSrc = ((int) y / Tile.HEIGHT);
-                        xIndexDest = tileWorkRequestHead.getTile().getxIndex();
-                        yIndexDest = tileWorkRequestHead.getTile().getyIndex();
+                        int xIndexSrc = ((int) x / Tile.WIDTH);
+                        int yIndexSrc = ((int) y / Tile.HEIGHT);
+                        int xIndexDest = tileWorkRequestHead.getTile().getxIndex();
+                        int yIndexDest = tileWorkRequestHead.getTile().getyIndex();
 
                         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
                         Tile[][] tilesScene = tileManager.getTiles();
-                        List<Tile> pathToTravel = tileManager.doesExistPath(
-                                tilesScene[yIndexSrc][xIndexSrc],
-                                tilesScene[yIndexDest][xIndexDest]
-                        );
+                        Tile tileSrc = tilesScene[yIndexSrc][xIndexSrc];
+                        Tile tileDest = tilesScene[yIndexDest][xIndexDest];
+                        List<Tile> pathToTravel = tileManager.doesExistPath(tileSrc, tileDest);
 
-                        convertPathToTravelAndAppendToCommands(pathToTravel,
+                        List<Command> pathToTravelAsCommands = convertPathToTravelToCommands(pathToTravel,
                                 tileWorkRequestHead.getModeForTileSelectorView());
+                        commands.addAll(pathToTravelAsCommands);
                     } else {
                         counterCommands++;
                         if (counterCommands == COUNTER_COMMANDS_TARGET) {
@@ -206,6 +240,9 @@ public class Robot extends Creature {
         }
 
         determineNextImage();
+
+        // CARRYABLE
+        moveCarryable();
     }
 
     private String propertyName = null;
@@ -362,9 +399,6 @@ public class Robot extends Creature {
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
     }
 
-    private int xIndexSrc, yIndexSrc = -1;
-    private int xIndexDest, yIndexDest = -1;
-
     public RobotDialogFragment instantiateRobotDialogFragment() {
         RobotDialogFragment robotDialogFragment = RobotDialogFragment.newInstance(new RobotDialogFragment.ButtonListener() {
             @Override
@@ -452,15 +486,76 @@ public class Robot extends Creature {
         );
     }
 
-    private void convertPathToTravelAndAppendToCommands(List<Tile> pathToTravel,
-                                                        TileSelectorView.Mode modeForTileSelectorView) {
+    private List<Command> handleFindPathBackFromShippingBin() {
+        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+        Tile[][] tilesScene = tileManager.getTiles();
+        int xIndexSrc = ((int) x / Tile.WIDTH);
+        int yIndexSrc = ((int) y / Tile.HEIGHT);
+        Tile tileSrc = tilesScene[yIndexSrc][xIndexSrc];
+        Tile tileDest = tileBeforeWalkingToShippingBin;
+
+        List<Tile> pathToTileBeforeWalkingToShippingBin = tileManager.doesExistPath(tileSrc, tileDest);
+
+        tileShippingBin = null;
+        tileBeforeWalkingToShippingBin = null;
+
+        List<Command> commandsBackFromShippingBin =
+                convertToMovementCommands(pathToTileBeforeWalkingToShippingBin);
+
+        return commandsBackFromShippingBin;
+    }
+
+    Tile tileBeforeWalkingToShippingBin;
+    Tile tileShippingBin;
+
+    private List<Command> handleFindShortestPathToShippingBin() {
+        Map<List<Tile>, Integer> optionsPathToTravel = new HashMap<>();
+
+        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+        Tile[][] tilesScene = tileManager.getTiles();
+        int xIndexSrc = ((int) x / Tile.WIDTH);
+        int yIndexSrc = ((int) y / Tile.HEIGHT);
+        Tile tileSrc = tilesScene[yIndexSrc][xIndexSrc];
+        for (Tile tileShippingBinDrop : tilesShippingBinDrop) {
+            int xIndexDest = tileShippingBinDrop.getxIndex();
+            int yIndexDest = tileShippingBinDrop.getyIndex();
+            Tile tileDest = tilesScene[yIndexDest][xIndexDest];
+
+            List<Tile> pathToTravel = tileManager.doesExistPath(tileSrc, tileDest);
+
+            optionsPathToTravel.put(pathToTravel, pathToTravel.size());
+        }
+
+        // find shortest path, record tileDest/tileSrc.
+        List<Tile> pathToShippingBinShortest = null;
+        int min = Integer.MAX_VALUE;
+        for (List<Tile> key : optionsPathToTravel.keySet()) {
+            Integer numberOfTiles = optionsPathToTravel.get(key);
+            if (numberOfTiles < min) {
+                min = numberOfTiles;
+                pathToShippingBinShortest = key;
+            }
+        }
+
+        Tile tileDest = pathToShippingBinShortest.get(
+                pathToShippingBinShortest.size() - 1
+        );
+        
+        tileShippingBin = tileDest;
+        tileBeforeWalkingToShippingBin = tileSrc;
+
+        return convertToMovementCommands(pathToShippingBinShortest);
+    }
+
+    private List<Command> convertToMovementCommands(List<Tile> pathToTravel) {
         Log.e(TAG, "begin conversion");
         Log.e(TAG, "pathToTravel.size(): " + pathToTravel.size());
+        List<Command> pathToTravelAsCommands = new ArrayList<>();
 
         // selected tile is tile-standing-on
         if (pathToTravel.size() == 1) {
             Log.e(TAG, "selected tile is tile-standing-on");
-            handleMoveAsideThenFaceTargetTile();
+            handleMoveAsideThenFaceTargetTile(pathToTravelAsCommands);
         }
         // selected tile is direct-neighbor
         else if (pathToTravel.size() == 2) {
@@ -468,7 +563,7 @@ public class Robot extends Creature {
             int indexLast = pathToTravel.size() - 1;
             Tile tileTarget = pathToTravel.get(indexLast);
             Command commandFaceTargetTile = generateCommandToFaceCorrectDirection(null, tileTarget);
-            commands.add(commandFaceTargetTile);
+            pathToTravelAsCommands.add(commandFaceTargetTile);
         }
         // selected tile is one-step-or-more-away
         else if (pathToTravel.size() > 2) {
@@ -488,22 +583,22 @@ public class Robot extends Creature {
                 // move right
                 if (xIndexStart < xIndexEnd) {
                     Log.e(TAG, "adding walk-right command");
-                    commands.add(walkRightCommand);
+                    pathToTravelAsCommands.add(walkRightCommand);
                 }
                 // move left
                 else if (xIndexStart > xIndexEnd) {
                     Log.e(TAG, "adding walk-left command");
-                    commands.add(walkLeftCommand);
+                    pathToTravelAsCommands.add(walkLeftCommand);
                 }
                 // move down
                 else if (yIndexStart < yIndexEnd) {
                     Log.e(TAG, "adding walk-down command");
-                    commands.add(walkDownCommand);
+                    pathToTravelAsCommands.add(walkDownCommand);
                 }
                 // move up
                 else if (yIndexStart > yIndexEnd) {
                     Log.e(TAG, "adding walk-up command");
-                    commands.add(walkUpCommand);
+                    pathToTravelAsCommands.add(walkUpCommand);
                 } else {
                     Log.e(TAG, "else-clause... standing on same tile??? no command added.");
                 }
@@ -513,51 +608,65 @@ public class Robot extends Creature {
 
             Tile tileTarget = pathToTravel.get(indexLast);
             Command commandFaceTargetTile = generateCommandToFaceCorrectDirection(tileStepPrevious, tileTarget);
-            commands.add(commandFaceTargetTile);
+            pathToTravelAsCommands.add(commandFaceTargetTile);
         }
+        Log.e(TAG, "end conversion");
 
+        return pathToTravelAsCommands;
+    }
+
+    private List<Command> appendWorkCommands(List<Command> pathToTravelAsCommands,
+                                             TileSelectorView.Mode modeForTileSelectorView) {
         switch (modeForTileSelectorView) {
             case TILL_SEED_WATER:
                 Log.e(TAG, "adding till/seed/water commands");
-                commands.add(tillTileCommand);
-                commands.add(seedTileCommand);
-                commands.add(waterTileCommand);
+                pathToTravelAsCommands.add(tillTileCommand);
+                pathToTravelAsCommands.add(seedTileCommand);
+                pathToTravelAsCommands.add(waterTileCommand);
                 break;
             case ONLY_WATER:
                 Log.e(TAG, "adding water command");
-                commands.add(waterTileCommand);
+                pathToTravelAsCommands.add(waterTileCommand);
                 break;
             case HARVEST:
                 Log.e(TAG, "adding harvest command");
-                commands.add(harvestTileCommand);
+                pathToTravelAsCommands.add(harvestTileCommand);
                 break;
             default:
                 Log.e(TAG, "modeForTileSelectorView is undefined.");
         }
 
-        Log.e(TAG, "end conversion");
+        return pathToTravelAsCommands;
     }
 
-    private void handleMoveAsideThenFaceTargetTile() {
+    private List<Command> convertPathToTravelToCommands(List<Tile> pathToTravel,
+                                                        TileSelectorView.Mode modeForTileSelectorView) {
+        List<Command> pathToTravelAsCommands = convertToMovementCommands(pathToTravel);
+        appendWorkCommands(pathToTravelAsCommands, modeForTileSelectorView);
+
+        return pathToTravelAsCommands;
+    }
+
+    private void handleMoveAsideThenFaceTargetTile(List<Command> pathToTravelAsCommands) {
         direction = Direction.LEFT;
         if (checkTileCurrentlyFacing().isWalkable()) {
-            commands.add(walkLeftCommand);
-            commands.add(faceRightCommand);
+            pathToTravelAsCommands.add(walkLeftCommand);
+            pathToTravelAsCommands.add(faceRightCommand);
         } else {
             direction = Direction.RIGHT;
             if (checkTileCurrentlyFacing().isWalkable()) {
-                commands.add(walkRightCommand);
-                commands.add(faceLeftCommand);
+                pathToTravelAsCommands.add(walkRightCommand);
+                pathToTravelAsCommands.add(faceLeftCommand);
             } else {
                 direction = Direction.UP;
                 if (checkTileCurrentlyFacing().isWalkable()) {
-                    commands.add(walkUpCommand);
-                    commands.add(faceDownCommand);
+                    pathToTravelAsCommands.add(walkUpCommand);
+                    pathToTravelAsCommands.add(faceDownCommand);
                 } else {
                     direction = Direction.DOWN;
                     if (checkTileCurrentlyFacing().isWalkable()) {
-                        commands.add(walkDownCommand);
-                        commands.add(faceUpCommand);
+                        pathToTravelAsCommands.add(walkDownCommand);
+                        pathToTravelAsCommands.add(faceUpCommand);
                     } else {
                         Log.e(TAG, "CHECKED ALL 4 directions.... all NOT WALKABLE!!!");
                     }
@@ -591,7 +700,6 @@ public class Robot extends Creature {
             return faceUpCommand;
         } else {
             Log.e(TAG, "generateCommandToFaceCorrectDirection() else-clause returning null");
-            // TODO: could be already standing on the tileTarget.
             return null;
         }
     }

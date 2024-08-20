@@ -30,8 +30,10 @@ import java.util.Map;
 public class SceneFarm extends Scene {
     public static final String TAG = SceneFarm.class.getSimpleName();
 
-    public static final int X_SPAWN_INDEX_DEFAULT = 4;
-    public static final int Y_SPAWN_INDEX_DEFAULT = 4;
+    private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
+    private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
+    private static final int X_INDEX_SPAWN_ROBOT = 7;
+    private static final int Y_INDEX_SPAWN_ROBOT = 4;
     private static SceneFarm uniqueInstance;
 
     private boolean inSeedShopState;
@@ -181,8 +183,8 @@ public class SceneFarm extends Scene {
         super.enter();
 
         if (xLastKnown == 0 && yLastKnown == 0) {
-            Player.getInstance().setX(X_SPAWN_INDEX_DEFAULT * Tile.WIDTH);
-            Player.getInstance().setY(Y_SPAWN_INDEX_DEFAULT * Tile.HEIGHT);
+            Player.getInstance().setX(X_INDEX_SPAWN_PLAYER_DEFAULT * Tile.WIDTH);
+            Player.getInstance().setY(Y_INDEX_SPAWN_PLAYER_DEFAULT * Tile.HEIGHT);
         } else {
             Player.getInstance().setX(xLastKnown);
             Player.getInstance().setY(yLastKnown);
@@ -386,7 +388,7 @@ public class SceneFarm extends Scene {
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
-        entities.add(new Robot((7 * Tile.WIDTH), (4 * Tile.HEIGHT)));
+        entities.add(new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH), (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT)));
         return entities;
     }
 

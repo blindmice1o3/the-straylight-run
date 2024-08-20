@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,28 +56,28 @@ public class TileManager
 
         if (isWithinBounds(xIndexUp, yIndexUp)) {
             Tile tileUp = tiles[yIndexUp][xIndexUp];
-            if (tileUp.isWalkable()) {
+            if (tileUp.isWalkable() || tileUp instanceof ShippingBinTile) {
                 tileNeighbors.add(tileUp);
             }
         }
 
         if (isWithinBounds(xIndexDown, yIndexDown)) {
             Tile tileDown = tiles[yIndexDown][xIndexDown];
-            if (tileDown.isWalkable()) {
+            if (tileDown.isWalkable() || tileDown instanceof ShippingBinTile) {
                 tileNeighbors.add(tileDown);
             }
         }
 
         if (isWithinBounds(xIndexLeft, yIndexLeft)) {
             Tile tileLeft = tiles[yIndexLeft][xIndexLeft];
-            if (tileLeft.isWalkable()) {
+            if (tileLeft.isWalkable() || tileLeft instanceof ShippingBinTile) {
                 tileNeighbors.add(tileLeft);
             }
         }
 
         if (isWithinBounds(xIndexRight, yIndexRight)) {
             Tile tileRight = tiles[yIndexRight][xIndexRight];
-            if (tileRight.isWalkable()) {
+            if (tileRight.isWalkable() || tileRight instanceof ShippingBinTile) {
                 tileNeighbors.add(tileRight);
             }
         }

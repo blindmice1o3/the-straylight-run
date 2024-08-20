@@ -31,14 +31,11 @@ public class HarvestGrowableTileCommand
             GrowableTile growableTile = (GrowableTile) tile;
             Log.e(TAG, "growableTile has state: " + growableTile.getState());
             if (growableTile.getState() == GrowableTile.State.OCCUPIED) {
-//                Log.e(TAG, "growableTile.changeToWatered()");
                 Entity entityToHarvest = growableTile.getEntity();
                 if (entityToHarvest instanceof Plant) {
                     if (((Plant) entityToHarvest).isHarvestable()) {
                         creatureHarvester.pickUp(entityToHarvest);
                         growableTile.changeToUntilled();
-                        creatureHarvester.setDirection(Creature.Direction.UP);
-                        creatureHarvester.placeDown();
                         return true;
                     }
                 }
