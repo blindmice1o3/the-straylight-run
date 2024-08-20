@@ -6,7 +6,8 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class TileManager
                 (yIndex >= 0) && (yIndex < tiles.length));
     }
 
-    public List<Tile> determineWalkableNeighbors(Tile tile) {
+    public List<Tile> determineWalkableNeighbors(Tile tile, Tile tileDest) {
         List<Tile> tileNeighbors = new ArrayList<>();
         int xIndexUp = tile.getxIndex();
         int yIndexUp = tile.getyIndex() - 1;
@@ -56,29 +57,105 @@ public class TileManager
 
         if (isWithinBounds(xIndexUp, yIndexUp)) {
             Tile tileUp = tiles[yIndexUp][xIndexUp];
-            if (tileUp.isWalkable() || tileUp instanceof ShippingBinTile) {
+            if (tileUp.equals(tileDest)) {
                 tileNeighbors.add(tileUp);
+            } else if (tileUp.isWalkable()) {
+                boolean isFreeOfEntityCollision = true;
+                List<Entity> entities = game.getSceneManager().getCurrentScene().getEntityManager().getEntities();
+                for (Entity e : entities) {
+                    if (e instanceof Plant) {
+                        continue;
+                    }
+
+                    int xIndex = (int) e.getX() / Tile.WIDTH;
+                    int yIndex = (int) e.getY() / Tile.HEIGHT;
+
+                    if (xIndex == tileUp.getxIndex() && yIndex == tileUp.getyIndex()) {
+                        isFreeOfEntityCollision = false;
+                    }
+                }
+
+                if (isFreeOfEntityCollision) {
+                    tileNeighbors.add(tileUp);
+                }
             }
         }
 
         if (isWithinBounds(xIndexDown, yIndexDown)) {
             Tile tileDown = tiles[yIndexDown][xIndexDown];
-            if (tileDown.isWalkable() || tileDown instanceof ShippingBinTile) {
+            if (tileDown.equals(tileDest)) {
                 tileNeighbors.add(tileDown);
+            } else if (tileDown.isWalkable()) {
+                boolean isFreeOfEntityCollision = true;
+                List<Entity> entities = game.getSceneManager().getCurrentScene().getEntityManager().getEntities();
+                for (Entity e : entities) {
+                    if (e instanceof Plant) {
+                        continue;
+                    }
+
+                    int xIndex = (int) e.getX() / Tile.WIDTH;
+                    int yIndex = (int) e.getY() / Tile.HEIGHT;
+
+                    if (xIndex == tileDown.getxIndex() && yIndex == tileDown.getyIndex()) {
+                        isFreeOfEntityCollision = false;
+                    }
+                }
+
+                if (isFreeOfEntityCollision) {
+                    tileNeighbors.add(tileDown);
+                }
             }
         }
 
         if (isWithinBounds(xIndexLeft, yIndexLeft)) {
             Tile tileLeft = tiles[yIndexLeft][xIndexLeft];
-            if (tileLeft.isWalkable() || tileLeft instanceof ShippingBinTile) {
+            if (tileLeft.equals(tileDest)) {
                 tileNeighbors.add(tileLeft);
+            } else if (tileLeft.isWalkable()) {
+                boolean isFreeOfEntityCollision = true;
+                List<Entity> entities = game.getSceneManager().getCurrentScene().getEntityManager().getEntities();
+                for (Entity e : entities) {
+                    if (e instanceof Plant) {
+                        continue;
+                    }
+
+                    int xIndex = (int) e.getX() / Tile.WIDTH;
+                    int yIndex = (int) e.getY() / Tile.HEIGHT;
+
+                    if (xIndex == tileLeft.getxIndex() && yIndex == tileLeft.getyIndex()) {
+                        isFreeOfEntityCollision = false;
+                    }
+                }
+
+                if (isFreeOfEntityCollision) {
+                    tileNeighbors.add(tileLeft);
+                }
             }
         }
 
         if (isWithinBounds(xIndexRight, yIndexRight)) {
             Tile tileRight = tiles[yIndexRight][xIndexRight];
-            if (tileRight.isWalkable() || tileRight instanceof ShippingBinTile) {
+            if (tileRight.equals(tileDest)) {
                 tileNeighbors.add(tileRight);
+            } else if (tileRight.isWalkable()) {
+                boolean isFreeOfEntityCollision = true;
+                List<Entity> entities = game.getSceneManager().getCurrentScene().getEntityManager().getEntities();
+                for (Entity e : entities) {
+                    if (e instanceof Plant) {
+                        continue;
+                    }
+
+                    int xIndex = (int) e.getX() / Tile.WIDTH;
+                    int yIndex = (int) e.getY() / Tile.HEIGHT;
+
+                    if (xIndex == tileRight.getxIndex() && yIndex == tileRight.getyIndex()) {
+                        isFreeOfEntityCollision = false;
+                    }
+                }
+
+                if (isFreeOfEntityCollision) {
+                    tileNeighbors.add(tileRight);
+                }
             }
         }
 
@@ -109,7 +186,7 @@ public class TileManager
                 return pathToDest;
             } else {
                 Log.e("TileManager", "adding neighbors");
-                List<Tile> tilesNeighbor = determineWalkableNeighbors(tile);
+                List<Tile> tilesNeighbor = determineWalkableNeighbors(tile, dest);
                 Log.e("TileManager", "tilesNeighbor.size(): " + tilesNeighbor.size());
 
                 for (Tile tileNeighbor : tilesNeighbor) {

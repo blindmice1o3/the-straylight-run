@@ -200,12 +200,18 @@ public class Robot extends Creature {
                                         handleFindPathBackFromShippingBin();
                                 commands.addAll(pathFromShippingBinAsCommands);
                             }
+
+                            if (commands.isEmpty()) {
+                                tileWorkRequests.remove(0);
+                            }
                         } else {
                             Log.e(TAG, "command NOT successfully executed... keep queue the same. command: " + command.getClass().getSimpleName());
-                        }
-
-                        if (commands.isEmpty()) {
-                            tileWorkRequests.remove(0);
+                            if (command instanceof WalkUpCommand || command instanceof WalkDownCommand ||
+                                    command instanceof WalkLeftCommand || command instanceof WalkRightCommand) {
+                                commands.clear();
+                            } else {
+                                Log.e(TAG, "command NOT instanceof WalkUpCommand, WalkDownCommand, WalkLeftCommand, nor WalkRightCommand.");
+                            }
                         }
                     }
                 } else {
@@ -540,7 +546,7 @@ public class Robot extends Creature {
         Tile tileDest = pathToShippingBinShortest.get(
                 pathToShippingBinShortest.size() - 1
         );
-        
+
         tileShippingBin = tileDest;
         tileBeforeWalkingToShippingBin = tileSrc;
 
