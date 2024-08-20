@@ -1,7 +1,11 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
@@ -37,7 +42,10 @@ public class GameConsoleFragment extends Fragment
         StatsDisplayerFragment.ButtonHolderClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
     public static final String ARG_GAME_TITLE = "game";
+    private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
 
+    private ObjectAnimator animatorBackgroundColor;
+    private FragmentContainerView fcvUsedAsBorderForViewport;
     private ViewportFragment viewportFragment;
     private MySurfaceView mySurfaceView;
     private StatsDisplayerFragment statsDisplayerFragment;
@@ -79,6 +87,7 @@ public class GameConsoleFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
+        fcvUsedAsBorderForViewport = view.findViewById(R.id.fcv_mysurfaceview);
         viewportFragment = ViewportFragment.newInstance(null, null);
         statsDisplayerFragment = StatsDisplayerFragment.newInstance(null, null);
         gamePadFragment = GamePadFragment.newInstance(null, null);
@@ -96,6 +105,14 @@ public class GameConsoleFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated()");
+
+        fcvUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
+        animatorBackgroundColor = ObjectAnimator.ofInt(fcvUsedAsBorderForViewport, "backgroundColor", Color.WHITE, Color.RED);
+        animatorBackgroundColor.setDuration(400L);
+        animatorBackgroundColor.setEvaluator(new ArgbEvaluator());
+        animatorBackgroundColor.setRepeatMode(ValueAnimator.REVERSE);
+        animatorBackgroundColor.setRepeatCount(ValueAnimator.INFINITE);
+//        animatorBackgroundColor.start();
 
         mySurfaceView = viewportFragment.getView().findViewById(R.id.mysurfaceview_game_console_fragment);
         mySurfaceView.setMySurfaceViewSurfaceChangeListener(this);
@@ -168,6 +185,21 @@ public class GameConsoleFragment extends Fragment
     public void onDetach() {
         super.onDetach();
         Log.e(TAG, "onDetach()");
+    }
+
+    @Override
+    public void startBlinkingBorder() {
+        if (!animatorBackgroundColor.isRunning()) {
+            animatorBackgroundColor.start();
+        }
+    }
+
+    @Override
+    public void stopBlinkingBorder() {
+        if (animatorBackgroundColor.isRunning()) {
+            animatorBackgroundColor.cancel();
+            fcvUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
+        }
     }
 
     private Fragment fragmentReplacingSurfaceView;

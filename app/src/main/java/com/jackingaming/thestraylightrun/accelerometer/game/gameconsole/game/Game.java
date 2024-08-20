@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -61,6 +59,10 @@ public class Game {
         void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView);
 
         void showSurfaceView();
+
+        void startBlinkingBorder();
+
+        void stopBlinkingBorder();
     }
 
     private ReplaceViewportListener replaceViewportListener;

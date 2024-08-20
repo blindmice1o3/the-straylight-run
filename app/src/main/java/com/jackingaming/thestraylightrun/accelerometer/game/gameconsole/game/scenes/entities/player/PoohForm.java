@@ -2,6 +2,8 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.MainActivity;
@@ -119,6 +121,14 @@ public class PoohForm
                 } else if (entityCurrentlyFacing != null &&
                         entityCurrentlyFacing instanceof Robot) {
                     game.setPaused(true);
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.getReplaceViewportListener().startBlinkingBorder();
+                        }
+                    });
 
                     RobotDialogFragment robotDialogFragment =
                             ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();

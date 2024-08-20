@@ -1,7 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,11 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -90,7 +91,6 @@ public class SeedShopDialogFragment extends DialogFragment
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final Context contextFinal = getContext();
         itemRecyclerViewAdapterSeedShop = new ItemRecyclerViewAdapterSeedShop(getContext(), seedShopInventory);
         ItemRecyclerViewAdapterSeedShop.ItemClickListener itemClickListener = new ItemRecyclerViewAdapterSeedShop.ItemClickListener() {
             @Override
@@ -102,7 +102,6 @@ public class SeedShopDialogFragment extends DialogFragment
             }
         };
         itemRecyclerViewAdapterSeedShop.setClickListener(itemClickListener);
-
 
         View viewContainingRecyclerView = inflater.inflate(R.layout.dialog_seed_shop, null);
 
@@ -125,6 +124,15 @@ public class SeedShopDialogFragment extends DialogFragment
         imageViewBackgroundBottom.setImageBitmap(seedShopBackgroundBottom);
 
         return viewContainingRecyclerView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout clBaseLayout = view.findViewById(R.id.cl_base_layout);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) clBaseLayout.getLayoutParams();
+        params.setMargins(8, 8, 8, 8);
+        clBaseLayout.setLayoutParams(params);
     }
 
     @Override
