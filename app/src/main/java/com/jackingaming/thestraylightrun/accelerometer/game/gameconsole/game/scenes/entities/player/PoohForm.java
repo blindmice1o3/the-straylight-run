@@ -122,14 +122,6 @@ public class PoohForm
                         entityCurrentlyFacing instanceof Robot) {
                     game.setPaused(true);
 
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.getReplaceViewportListener().startBlinkingBorder();
-                        }
-                    });
-
                     RobotDialogFragment robotDialogFragment =
                             ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();
 

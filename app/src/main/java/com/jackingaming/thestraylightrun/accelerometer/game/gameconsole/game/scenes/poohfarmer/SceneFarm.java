@@ -14,6 +14,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
@@ -34,6 +35,9 @@ public class SceneFarm extends Scene {
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
+    private static final int X_INDEX_SPAWN_EEL = 15;
+    private static final int Y_INDEX_SPAWN_EEL = 9;
+    private static final int PATROL_LENGTH_EEL = 5 * Tile.WIDTH;
     private static SceneFarm uniqueInstance;
 
     private boolean inSeedShopState;
@@ -159,11 +163,11 @@ public class SceneFarm extends Scene {
     public void showSeedShopFragment() {
         inSeedShopState = true;
 
-        game.getReplaceViewportListener().showFragmentAndHideSurfaceView(seedShopDialogFragment);
+        game.getViewportListener().showFragmentAndHideSurfaceView(seedShopDialogFragment);
     }
 
     public void removeSeedShopFragment() {
-        game.getReplaceViewportListener().showSurfaceView();
+        game.getViewportListener().showSurfaceView();
 
         inSeedShopState = false;
     }
@@ -388,7 +392,16 @@ public class SceneFarm extends Scene {
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
-        entities.add(new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH), (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT)));
+        entities.add(
+                new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
+                        (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT))
+        );
+        entities.add(
+                new Eel((X_INDEX_SPAWN_EEL * Tile.WIDTH),
+                        (Y_INDEX_SPAWN_EEL * Tile.HEIGHT),
+                        Eel.DirectionFacing.LEFT,
+                        PATROL_LENGTH_EEL)
+        );
         return entities;
     }
 

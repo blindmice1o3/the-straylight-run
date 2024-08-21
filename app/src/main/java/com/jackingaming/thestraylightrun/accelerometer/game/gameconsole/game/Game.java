@@ -55,7 +55,7 @@ import java.util.concurrent.FutureTask;
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
 
-    public interface ReplaceViewportListener {
+    public interface ViewportListener {
         void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView);
 
         void showSurfaceView();
@@ -65,14 +65,14 @@ public class Game {
         void stopBlinkingBorder();
     }
 
-    private ReplaceViewportListener replaceViewportListener;
+    private ViewportListener viewportListener;
 
-    public ReplaceViewportListener getReplaceViewportListener() {
-        return replaceViewportListener;
+    public ViewportListener getViewportListener() {
+        return viewportListener;
     }
 
-    public void setReplaceViewportListener(ReplaceViewportListener replaceViewportListener) {
-        this.replaceViewportListener = replaceViewportListener;
+    public void setViewportListener(ViewportListener viewportListener) {
+        this.viewportListener = viewportListener;
     }
 
     public interface TextboxListener {

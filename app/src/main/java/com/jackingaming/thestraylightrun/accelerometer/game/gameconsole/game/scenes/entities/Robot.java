@@ -455,14 +455,6 @@ public class Robot extends Creature {
             @Override
             public void onDismiss() {
                 game.setPaused(false);
-
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        game.getReplaceViewportListener().stopBlinkingBorder();
-                    }
-                });
             }
         });
 

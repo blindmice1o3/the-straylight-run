@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -123,6 +125,7 @@ public class Eel extends Creature
     }
 
     private int ticker = 0;
+    boolean isBlinkingBorder = false;
 
     private void determineNextMove() {
         switch (state) {
@@ -158,6 +161,18 @@ public class Eel extends Creature
                 // Still chasing: move() Eel and see if hurt() should be called.
                 if (checkDetectionCollisions(0f, 0f)) {
                     Log.d(TAG, "IMMA GETCHA!");
+                    if (!isBlinkingBorder) {
+                        isBlinkingBorder = true;
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.getViewportListener().startBlinkingBorder();
+                            }
+                        });
+                    }
+
                     if (player.getX() < x && player.getY() < y) {
                         xMove = -moveSpeed;
                         yMove = -moveSpeed;
@@ -201,6 +216,18 @@ public class Eel extends Creature
                 // Player is beyond detection range.
                 else {
                     Log.d(TAG, "awwww........ like sand slipping through the fingers (whatever those are).");
+                    if (isBlinkingBorder) {
+                        isBlinkingBorder = false;
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.getViewportListener().stopBlinkingBorder();
+                            }
+                        });
+                    }
+
                     // RETURNING TO PATROL POSITION
                     if (x < xBeforeChase && y < yBeforeChase) {
                         xMove = moveSpeed;
@@ -316,8 +343,13 @@ public class Eel extends Creature
         // TODO: change to State.ATTACK... handle attack cooldown and doDamage() in update().
         if (e instanceof Player) {
             Player player = (Player) e;
-            FishForm fishForm = ((FishForm) player.getForm());
-            doDamage(fishForm);
+
+            if (player.getForm() instanceof FishForm) {
+                FishForm fishForm = ((FishForm) player.getForm());
+                doDamage(fishForm);
+            } else {
+                Log.e(TAG, "player.getForm() NOT instanceof FishForm");
+            }
         }
         return true;
     }

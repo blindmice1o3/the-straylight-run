@@ -36,7 +36,7 @@ import java.io.Serializable;
 public class GameConsoleFragment extends Fragment
         implements Serializable,
         MySurfaceView.MySurfaceViewSurfaceChangeListener,
-        Game.ReplaceViewportListener,
+        Game.ViewportListener,
         Game.TextboxListener,
         Game.StatsChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener {
@@ -135,7 +135,7 @@ public class GameConsoleFragment extends Fragment
             game = new Game(gameTitle);
         }
 
-        game.setReplaceViewportListener(this);
+        game.setViewportListener(this);
         game.setTextboxListener(this);
         game.setStatsChangeListener(this);
 
