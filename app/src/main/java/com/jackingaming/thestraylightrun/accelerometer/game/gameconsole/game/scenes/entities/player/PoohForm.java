@@ -2,8 +2,6 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.MainActivity;
@@ -32,6 +30,16 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class PoohForm
         implements Form {
     public static final String TAG = PoohForm.class.getSimpleName();
+
+    public interface MovementListener {
+        void onMove(float xMove, float yMove);
+    }
+
+    private MovementListener movementListener;
+
+    public void setMovementListener(MovementListener movementListener) {
+        this.movementListener = movementListener;
+    }
 
     transient private Game game;
 
@@ -66,7 +74,10 @@ public class PoohForm
         interpretInput();
 
         // MOVEMENT (check tile, item, entity, and transfer point collisions... actual movement)
-        player.move();
+        boolean successfulMove = player.move();
+        if (successfulMove) {
+            movementListener.onMove(player.getxMove(), player.getyMove());
+        }
 
         // PREPARE_FOR_RENDER
         determineNextImage();

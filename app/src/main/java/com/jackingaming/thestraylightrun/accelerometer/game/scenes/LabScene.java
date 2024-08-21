@@ -316,7 +316,6 @@ public class LabScene extends Scene {
 
     private void updateGameEntities(float xDelta, float yDelta) {
         for (Entity e : entities) {
-            // DO MOVE.
             if (e instanceof Player) {
 //                Player player = (Player) e;
                 player.updateViaSensorEvent(handler, xDelta, yDelta);

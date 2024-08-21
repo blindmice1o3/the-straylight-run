@@ -81,9 +81,13 @@ public abstract class Entity
         return false;
     }
 
+    protected boolean skipEntityCollisionCheck(Entity e) {
+        return e.equals(this);
+    }
+
     public boolean checkEntityCollision(float xOffset, float yOffset) {
         for (Entity e : game.getSceneManager().getCurrentScene().getEntityManager().getEntities()) {
-            if (e.equals(this)) {
+            if (skipEntityCollisionCheck(e)) {
                 continue;
             }
 

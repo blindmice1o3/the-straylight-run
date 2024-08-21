@@ -48,17 +48,27 @@ public class EntityManager
 
     private List<Entity> entitiesToBeAdded = new ArrayList<>();
 
+    private Entity collidingOrbit;
+
     public void update(long elapsed) {
         Iterator<Entity> iterator = entities.iterator();
         while (iterator.hasNext()) {
             Entity e = iterator.next();
 
-            e.update(elapsed);
+            if (e instanceof CollidingOrbit) {
+                collidingOrbit = (CollidingOrbit) e;
+            } else if (e instanceof Player) {
+                ((Player) e).update(elapsed);
+            } else {
+                e.update(elapsed);
+            }
 
             if (!e.isActive()) {
                 iterator.remove();
             }
         }
+
+        collidingOrbit.update(elapsed);
 
         if (!entitiesToBeAdded.isEmpty()) {
             entities.addAll(entitiesToBeAdded);

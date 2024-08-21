@@ -11,6 +11,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
@@ -38,6 +39,8 @@ public class SceneFarm extends Scene {
     private static final int X_INDEX_SPAWN_EEL = 15;
     private static final int Y_INDEX_SPAWN_EEL = 9;
     private static final int PATROL_LENGTH_EEL = 5 * Tile.WIDTH;
+    private static final int X_INDEX_SPAWN_COLLIDING_ORBIT = X_INDEX_SPAWN_PLAYER_DEFAULT + 2;
+    private static final int Y_INDEX_SPAWN_COLLIDING_ORBIT = Y_INDEX_SPAWN_PLAYER_DEFAULT;
     private static SceneFarm uniqueInstance;
 
     private boolean inSeedShopState;
@@ -401,6 +404,11 @@ public class SceneFarm extends Scene {
                         (Y_INDEX_SPAWN_EEL * Tile.HEIGHT),
                         Eel.DirectionFacing.LEFT,
                         PATROL_LENGTH_EEL)
+        );
+        entities.add(
+                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
+                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
+                        Player.getInstance())
         );
         return entities;
     }

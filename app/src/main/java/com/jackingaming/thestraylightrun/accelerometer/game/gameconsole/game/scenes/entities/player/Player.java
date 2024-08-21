@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.graphics.Canvas;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -23,6 +24,12 @@ public class Player extends Creature {
                     (2 * Tile.WIDTH), (3 * Tile.HEIGHT));
         }
         return uniqueInstance;
+    }
+
+    @Override
+    protected boolean skipEntityCollisionCheck(Entity e) {
+        return super.skipEntityCollisionCheck(e) ||
+                (e instanceof CollidingOrbit);
     }
 
     @Override

@@ -333,17 +333,15 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private void updateGameEntities(float xDelta, float yDelta) {
         for (Entity e : entities) {
-            // DO MOVE.
             if (e instanceof Player) {
 //                Player player = (Player) e;
                 player.updateViaSensorEvent(handler, xDelta, yDelta);
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
+            } else {
+                e.update(handler);
+                validatePosition(e);
             }
-//            else {
-//                e.update(handler);
-//                validatePosition(e);
-//            }
 
             handler.post(new Runnable() {
                 @Override

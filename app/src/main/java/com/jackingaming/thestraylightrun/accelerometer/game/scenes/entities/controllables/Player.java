@@ -3,14 +3,12 @@ package com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.con
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 import java.util.Map;
 
 public class Player extends Entity {
-
     public Player(Map<Direction, AnimationDrawable> animationsByDirection) {
         super(animationsByDirection, null, null);
 
@@ -20,12 +18,6 @@ public class Player extends Entity {
     @Override
     public void collided(Entity collider) {
 
-    }
-
-    @Override
-    protected boolean skipEntityCollisionCheck(Entity e) {
-        return super.skipEntityCollisionCheck(e) ||
-                (e instanceof CollidingOrbit);
     }
 
     @Override
