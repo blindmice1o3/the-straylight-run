@@ -85,34 +85,34 @@ public class CollidingOrbit extends Creature {
             // bounce Eel based on CollidingOrbit's cw/ccw.
             float xStartEel = e.getX();
             float yStartEel = e.getY();
-            float xEndNPC = xStartEel;
-            float yEndNPC = yStartEel;
+            float xEndEel = xStartEel;
+            float yEndEel = yStartEel;
             float numberOfTile = 2f;
 
             // RIGHT of player
             if (xStartEel > player.getX()) {
                 // BELOW player
                 if (yStartEel > player.getY()) {
-                    xEndNPC = xStartEel + (numberOfTile * Tile.WIDTH);
-                    yEndNPC = yStartEel + (numberOfTile * Tile.HEIGHT);
+                    xEndEel = xStartEel + (numberOfTile * Tile.WIDTH);
+                    yEndEel = yStartEel + (numberOfTile * Tile.HEIGHT);
                 }
                 // ABOVE PLAYER
                 else {
-                    xEndNPC = xStartEel + (numberOfTile * Tile.WIDTH);
-                    yEndNPC = yStartEel - (numberOfTile * Tile.HEIGHT);
+                    xEndEel = xStartEel + (numberOfTile * Tile.WIDTH);
+                    yEndEel = yStartEel - (numberOfTile * Tile.HEIGHT);
                 }
             }
             // LEFT of player
             else {
                 // BELOW player
                 if (yStartEel > player.getY()) {
-                    xEndNPC = xStartEel - (numberOfTile * Tile.WIDTH);
-                    yEndNPC = yStartEel + (numberOfTile * Tile.HEIGHT);
+                    xEndEel = xStartEel - (numberOfTile * Tile.WIDTH);
+                    yEndEel = yStartEel + (numberOfTile * Tile.HEIGHT);
                 }
                 // ABOVE PLAYER
                 else {
-                    xEndNPC = xStartEel - (numberOfTile * Tile.WIDTH);
-                    yEndNPC = yStartEel - (numberOfTile * Tile.HEIGHT);
+                    xEndEel = xStartEel - (numberOfTile * Tile.WIDTH);
+                    yEndEel = yStartEel - (numberOfTile * Tile.HEIGHT);
                 }
             }
 
@@ -120,10 +120,10 @@ public class CollidingOrbit extends Creature {
             float endValue = -1f;
             if (player.getDirection() == Direction.LEFT || player.getDirection() == Direction.RIGHT) {
                 propertyName = "x";
-                endValue = xEndNPC;
+                endValue = xEndEel;
             } else {
                 propertyName = "y";
-                endValue = yEndNPC;
+                endValue = yEndEel;
             }
 
             ObjectAnimator animatorPosition = ObjectAnimator.ofFloat(e,

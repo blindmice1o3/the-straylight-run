@@ -15,6 +15,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.DamageDoer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Damageable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.fish.FishForm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -50,7 +51,8 @@ public class Eel extends Creature
     private int healthMax;
     private int health;
 
-    public Eel(int xSpawn, int ySpawn, DirectionFacing directionFacing, int patrolLengthInPixelMax) {
+    public Eel(int xSpawn, int ySpawn,
+               DirectionFacing directionFacing, int patrolLengthInPixelMax) {
         super(xSpawn, ySpawn);
         width = Tile.WIDTH;
         height = Tile.HEIGHT / 2;
@@ -80,14 +82,16 @@ public class Eel extends Creature
                 (int) (y + (height / 2) + detectionRectangleBounds.top + yOffset) + detectionRectangleBounds.bottom);
     }
 
-    private boolean checkDetectionCollisions(float xOffset, float yOffset) {
-        Entity player = Player.getInstance();
-
-        if (player.getCollisionBounds(0f, 0f).intersect(getDetectionRectangle(xOffset, yOffset))) {
-            return true;
+    private Entity checkDetectionCollisions(float xOffset, float yOffset) {
+        for (Entity e : game.getSceneManager().getCurrentScene().getEntityManager().getEntities()) {
+            if (e instanceof Player || e instanceof Plant) {
+                if (e.getCollisionBounds(0f, 0f).intersect(getDetectionRectangle(xOffset, yOffset))) {
+                    return e;
+                }
+            }
         }
 
-        return false;
+        return null;
     }
 
     @Override
@@ -126,12 +130,14 @@ public class Eel extends Creature
 
     private int ticker = 0;
     boolean isBlinkingBorder = false;
+    private Entity target;
 
     private void determineNextMove() {
         switch (state) {
             case PATROL:
-                // CHECK FOR SEARCH-TARGET (is player within detection range?)
-                if (checkDetectionCollisions(0, 0)) {
+                // CHECK FOR SEARCH-TARGET (is target within detection range?)
+                target = checkDetectionCollisions(0f, 0f);
+                if (target != null) {
                     xBeforeChase = x;
                     yBeforeChase = y;
                     ///////////////////////////
@@ -157,11 +163,11 @@ public class Eel extends Creature
                 }
                 break;
             case CHASE:
-                Player player = Player.getInstance();
                 // Still chasing: move() Eel and see if hurt() should be called.
-                if (checkDetectionCollisions(0f, 0f)) {
+                target = checkDetectionCollisions(0f, 0f);
+                if (target != null) {
                     Log.d(TAG, "IMMA GETCHA!");
-                    if (!isBlinkingBorder) {
+                    if (!isBlinkingBorder && target instanceof Plant) {
                         isBlinkingBorder = true;
 
                         Handler handler = new Handler(Looper.getMainLooper());
@@ -173,47 +179,47 @@ public class Eel extends Creature
                         });
                     }
 
-                    if (player.getX() < x && player.getY() < y) {
+                    if (target.getX() < x && target.getY() < y) {
                         xMove = -moveSpeed;
                         yMove = -moveSpeed;
                         direction = Direction.UP_LEFT;
                         directionFacing = DirectionFacing.LEFT;
-                    } else if (player.getX() < x && player.getY() > y) {
+                    } else if (target.getX() < x && target.getY() > y) {
                         xMove = -moveSpeed;
                         yMove = moveSpeed;
                         direction = Direction.DOWN_LEFT;
                         directionFacing = DirectionFacing.LEFT;
-                    } else if (player.getX() > x && player.getY() < y) {
+                    } else if (target.getX() > x && target.getY() < y) {
                         xMove = moveSpeed;
                         yMove = -moveSpeed;
                         direction = Direction.UP_RIGHT;
                         directionFacing = DirectionFacing.RIGHT;
-                    } else if (player.getX() > x && player.getY() > y) {
+                    } else if (target.getX() > x && target.getY() > y) {
                         xMove = moveSpeed;
                         yMove = moveSpeed;
                         direction = Direction.DOWN_RIGHT;
                         directionFacing = DirectionFacing.RIGHT;
-                    } else if (player.getX() < x && player.getY() == y) {
+                    } else if (target.getX() < x && target.getY() == y) {
                         xMove = -moveSpeed;
                         yMove = 0;
                         direction = Direction.LEFT;
                         directionFacing = DirectionFacing.LEFT;
-                    } else if (player.getX() > x && player.getY() == y) {
+                    } else if (target.getX() > x && target.getY() == y) {
                         xMove = moveSpeed;
                         yMove = 0;
                         direction = Direction.RIGHT;
                         directionFacing = DirectionFacing.RIGHT;
-                    } else if (player.getY() < y && player.getX() == x) {
+                    } else if (target.getY() < y && target.getX() == x) {
                         xMove = 0;
                         yMove = -moveSpeed;
                         direction = Direction.UP;
-                    } else if (player.getY() > y && player.getX() == x) {
+                    } else if (target.getY() > y && target.getX() == x) {
                         xMove = 0;
                         yMove = moveSpeed;
                         direction = Direction.DOWN;
                     } // enter State.ATTACK through move()'s entity-collision response.
                 }
-                // Player is beyond detection range.
+                // target is beyond detection range.
                 else {
                     Log.d(TAG, "awwww........ like sand slipping through the fingers (whatever those are).");
                     if (isBlinkingBorder) {
@@ -349,6 +355,22 @@ public class Eel extends Creature
                 doDamage(fishForm);
             } else {
                 Log.e(TAG, "player.getForm() NOT instanceof FishForm");
+            }
+        } else if (e instanceof Plant) {
+            doDamage(((Plant) e));
+
+            if (((Plant) e).getHealth() <= 0) {
+                if (isBlinkingBorder) {
+                    isBlinkingBorder = false;
+
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.getViewportListener().stopBlinkingBorder();
+                        }
+                    });
+                }
             }
         }
         return true;

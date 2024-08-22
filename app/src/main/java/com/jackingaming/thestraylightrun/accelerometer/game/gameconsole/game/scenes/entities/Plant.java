@@ -2,16 +2,20 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 import java.util.Random;
 
 public class Plant extends Entity
-        implements Sellable {
+        implements Sellable, Damageable {
     public static final String TAG = Plant.class.getSimpleName();
 
     public static final int BRACKET01_MIN_INCLUSIVE = 0;
@@ -24,6 +28,7 @@ public class Plant extends Entity
     public static final int BRACKET04_MAX_EXCLUSIVE = 7;
     private static final float PRICE_GREEN = 60f;
     private static final float PRICE_PURPLE = 85f;
+    private static final int HEALTH_MAX_DEFAULT = 3;
 
     public enum Color {GREEN, PURPLE;}
 
@@ -34,6 +39,9 @@ public class Plant extends Entity
     private Bitmap imageHarvestable;
     private Color color;
     private float price;
+
+    private int health;
+    private Paint paintBorder;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -71,15 +79,22 @@ public class Plant extends Entity
                 break;
         }
 
-        updateBasedOnAgeInDays();
+        updateImageBasedOnAgeInDays();
+
+        health = HEALTH_MAX_DEFAULT;
+        paintBorder = new Paint();
+        paintBorder.setAntiAlias(true);
+        paintBorder.setStyle(Paint.Style.STROKE);
+        paintBorder.setStrokeWidth(4f);
+        paintBorder.setColor(android.graphics.Color.GREEN);
     }
 
     public void incrementAgeInDays() {
         ageInDays++;
-        updateBasedOnAgeInDays();
+        updateImageBasedOnAgeInDays();
     }
 
-    private void updateBasedOnAgeInDays() {
+    private void updateImageBasedOnAgeInDays() {
         if (ageInDays >= BRACKET01_MIN_INCLUSIVE && ageInDays < BRACKET01_MAX_EXCLUSIVE) {
             image = imageBracket01;
         } else if (ageInDays >= BRACKET02_MIN_INCLUSIVE && ageInDays < BRACKET02_MAX_EXCLUSIVE) {
@@ -131,5 +146,48 @@ public class Plant extends Entity
     @Override
     public float getPrice() {
         return price;
+    }
+
+    @Override
+    public void takeDamage(int incomingDamage) {
+        health -= incomingDamage;
+        updateBorderColor();
+
+        if (health <= 0) {
+            active = false;
+            die();
+        }
+    }
+
+    private void updateBorderColor() {
+        if (health == HEALTH_MAX_DEFAULT) {
+            paintBorder.setColor(android.graphics.Color.GREEN);
+        } else if (health > 1 && health < HEALTH_MAX_DEFAULT) {
+            paintBorder.setColor(android.graphics.Color.YELLOW);
+        } else {
+            paintBorder.setColor(android.graphics.Color.RED);
+        }
+    }
+
+    @Override
+    public void die() {
+        Log.d(TAG, getClass().getSimpleName() + ".die()");
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        if (image != null) {
+            Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
+            Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
+
+            // BORDER
+            canvas.drawRect(rectOnScreen, paintBorder);
+            // CONTENT
+            canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
+        }
+    }
+
+    public int getHealth() {
+        return health;
     }
 }
