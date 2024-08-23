@@ -154,8 +154,10 @@ public class Eel extends Creature
                 // END OF PATROL LENGTH (reverse direction).
                 else {
                     patrolLengthInPixelCurrent = 0f;
+                    ////////////////////////////
                     state = State.TURN;
                     changeBoundsToWideShortVersion();
+                    ////////////////////////////
                 }
                 break;
             case CHASE:
@@ -213,7 +215,9 @@ public class Eel extends Creature
                         xMove = 0;
                         yMove = moveSpeed;
                         direction = Direction.DOWN;
-                    } // enter State.ATTACK through move()'s entity-collision response.
+                    }
+                    // enter State.ATTACK through move()'s entity-collision
+                    // response (Eel.respondToEntityCollision).
                 }
                 // target is beyond detection range.
                 else {
@@ -286,18 +290,36 @@ public class Eel extends Creature
                     direction = Direction.LEFT;
                     directionFacing = DirectionFacing.LEFT;
                 }
+                ////////////////////////////
                 state = State.PATROL;
                 changeBoundsToWideShortVersion();
+                ////////////////////////////
                 break;
             case ATTACK:
-                ticker++;
                 //TODO: is this attack-timer-target long enough to iterate through all 2 attackFrames images???
                 //make transition-back-to-State.PATROL be based on the index of attackFrames???
-                // TODO: doDamage()?
+                if (target instanceof Damageable) {
+                    if (target instanceof Player) {
+                        Player player = (Player) target;
+
+                        if (player.getForm() instanceof FishForm) {
+                            FishForm fishForm = ((FishForm) player.getForm());
+                            doDamage(fishForm);
+                        } else {
+                            Log.e(TAG, "player.getForm() NOT instanceof FishForm");
+                        }
+                    } else {
+                        doDamage((Damageable) target);
+                    }
+                }
+
+                ticker++;
                 if (ticker == 40) {
                     ticker = 0;
+                    ////////////////////////////
                     state = State.PATROL;
                     changeBoundsToWideShortVersion();
+                    ////////////////////////////
                 }
                 break;
             case HURT:
@@ -306,8 +328,10 @@ public class Eel extends Creature
                 //CAN BE BASED ON A TIME LIMIT (as oppose to State.ATTACK being based on its Animation's index).
                 if (ticker == 40) {
                     ticker = 0;
+                    ////////////////////////////
                     state = State.PATROL;
                     changeBoundsToWideShortVersion();
+                    ////////////////////////////
                 }
                 break;
             default:
@@ -315,6 +339,8 @@ public class Eel extends Creature
                 break;
         }
     }
+
+    private boolean canDoDamage = false;
 
     private void determineNextImage() {
         image = eelAnimationManager.getCurrentFrame(state, directionFacing);
@@ -342,33 +368,11 @@ public class Eel extends Creature
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
-        // TODO: change to State.ATTACK... handle attack cooldown and doDamage() in update().
-        if (e instanceof Player) {
-            Player player = (Player) e;
-
-            if (player.getForm() instanceof FishForm) {
-                FishForm fishForm = ((FishForm) player.getForm());
-                doDamage(fishForm);
-            } else {
-                Log.e(TAG, "player.getForm() NOT instanceof FishForm");
-            }
-        } else if (e instanceof Plant) {
-            doDamage(((Plant) e));
-
-            if (((Plant) e).getHealth() <= 0) {
-                if (isBlinkingBorder) {
-                    isBlinkingBorder = false;
-
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            game.getViewportListener().stopBlinkingBorder();
-                        }
-                    });
-                }
-            }
-        }
+        target = e;
+        ////////////////////////////
+        state = State.ATTACK;
+        changeBoundsToNarrowTallVersion();
+        ////////////////////////////
         return true;
     }
 
@@ -389,8 +393,10 @@ public class Eel extends Creature
 
     @Override
     public void takeDamage(int incomingDamage) {
+        ////////////////////////////
         state = State.HURT;
         changeBoundsToWideShortVersion();
+        ////////////////////////////
         health -= incomingDamage;
 
         if (health <= 0) {
@@ -441,13 +447,26 @@ public class Eel extends Creature
 
     @Override
     public void doDamage(Damageable damageable) {
-        state = State.ATTACK;
-        changeBoundsToNarrowTallVersion();
-
         if (attackCooldownTimer.isCooldowned()) {
             attackCooldownTimer.reset();
 
             damageable.takeDamage(attackDamage);
+
+            if (damageable instanceof Plant) {
+                if (((Plant) damageable).getHealth() <= 0) {
+                    if (isBlinkingBorder) {
+                        isBlinkingBorder = false;
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                game.getViewportListener().stopBlinkingBorder();
+                            }
+                        });
+                    }
+                }
+            }
         }
     }
 }

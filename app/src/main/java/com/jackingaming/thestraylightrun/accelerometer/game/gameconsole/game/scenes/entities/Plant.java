@@ -29,7 +29,7 @@ public class Plant extends Entity
     public static final int BRACKET04_MAX_EXCLUSIVE = 7;
     private static final float PRICE_GREEN = 60f;
     private static final float PRICE_PURPLE = 85f;
-    private static final int HEALTH_MAX_DEFAULT = 3;
+    private static final int HEALTH_MAX_DEFAULT = 10;
 
     public enum Color {GREEN, PURPLE;}
 
@@ -174,11 +174,11 @@ public class Plant extends Entity
     }
 
     private void updateBorderColor() {
-        if (health == HEALTH_MAX_DEFAULT) {
+        if (health > (int) (HEALTH_MAX_DEFAULT * 0.66f)) {
             paintBorder.setColor(android.graphics.Color.GREEN);
-        } else if (health > 1 && health < HEALTH_MAX_DEFAULT) {
+        } else if (health > (int) (HEALTH_MAX_DEFAULT * 0.33f) && health <= (int) (HEALTH_MAX_DEFAULT * 0.66f)) {
             paintBorder.setColor(android.graphics.Color.YELLOW);
-        } else {
+        } else if (health <= (int) (HEALTH_MAX_DEFAULT * 0.33f)) {
             paintBorder.setColor(android.graphics.Color.RED);
         }
     }
