@@ -10,6 +10,7 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.CooldownTimer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 import java.util.Random;
@@ -42,9 +43,14 @@ public class Plant extends Entity
 
     private int health;
     private Paint paintBorder;
+    private boolean isShowingBorder = false;
+    private CooldownTimer damageReceivedCooldownTimer;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
+
+        damageReceivedCooldownTimer = new CooldownTimer();
+        damageReceivedCooldownTimer.setCooldownTarget(3000L);
     }
 
     @Override
@@ -111,7 +117,12 @@ public class Plant extends Entity
 
     @Override
     public void update(long elapsed) {
-
+        damageReceivedCooldownTimer.update(elapsed);
+        if (damageReceivedCooldownTimer.isCooldowned()) {
+            if (isShowingBorder) {
+                isShowingBorder = false;
+            }
+        }
     }
 
     @Override
@@ -151,6 +162,9 @@ public class Plant extends Entity
     @Override
     public void takeDamage(int incomingDamage) {
         health -= incomingDamage;
+
+        damageReceivedCooldownTimer.reset();
+        isShowingBorder = true;
         updateBorderColor();
 
         if (health <= 0) {
@@ -181,7 +195,9 @@ public class Plant extends Entity
             Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
 
             // BORDER
-            canvas.drawRect(rectOnScreen, paintBorder);
+            if (isShowingBorder) {
+                canvas.drawRect(rectOnScreen, paintBorder);
+            }
             // CONTENT
             canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
         }

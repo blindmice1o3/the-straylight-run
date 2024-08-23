@@ -16,7 +16,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Damageable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.AttackCooldownManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.CooldownTimer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.fish.FishForm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -45,7 +45,7 @@ public class Eel extends Creature
     private float patrolLengthInPixelMax;
     private float patrolLengthInPixelCurrent;
 
-    private AttackCooldownManager attackCooldownManager;
+    private CooldownTimer attackCooldownTimer;
 
     private int attackDamage;
     private int healthMax;
@@ -63,7 +63,7 @@ public class Eel extends Creature
         this.patrolLengthInPixelMax = patrolLengthInPixelMax;
         patrolLengthInPixelCurrent = 0f;
 
-        attackCooldownManager = new AttackCooldownManager();
+        attackCooldownTimer = new CooldownTimer();
 
         attackDamage = 1;
         healthMax = HEALTH_MAX_DEFAULT;
@@ -113,7 +113,7 @@ public class Eel extends Creature
     public void update(long elapsed) {
         eelAnimationManager.update(elapsed);
 
-        attackCooldownManager.update(elapsed);
+        attackCooldownTimer.update(elapsed);
 
         xMove = 0f;
         yMove = 0f;
@@ -444,8 +444,8 @@ public class Eel extends Creature
         state = State.ATTACK;
         changeBoundsToNarrowTallVersion();
 
-        if (attackCooldownManager.isCooldowned()) {
-            attackCooldownManager.reset();
+        if (attackCooldownTimer.isCooldowned()) {
+            attackCooldownTimer.reset();
 
             damageable.takeDamage(attackDamage);
         }
