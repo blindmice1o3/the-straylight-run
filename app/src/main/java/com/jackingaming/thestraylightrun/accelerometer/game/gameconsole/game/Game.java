@@ -344,7 +344,7 @@ public class Game {
 
             // Scenes where player's form is specified need enter()
             // called because exit() was called at start of saving.
-            sceneManager.getCurrentScene().enter();
+            sceneManager.getCurrentScene().enter(null);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

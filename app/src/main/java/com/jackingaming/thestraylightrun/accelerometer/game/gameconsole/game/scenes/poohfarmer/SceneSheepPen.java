@@ -62,8 +62,15 @@ public class SceneSheepPen extends Scene {
     }
 
     @Override
-    public void enter() {
-        super.enter();
+    public List<Object> exit() {
+        List<Object> args = super.exit();
+        args.add(1, TAG);
+        return args;
+    }
+
+    @Override
+    public void enter(List<Object> args) {
+        super.enter(args);
 
         if (xLastKnown == 0 && yLastKnown == 0) {
             Player.getInstance().setX(X_SPAWN_INDEX_DEFAULT * Tile.WIDTH);

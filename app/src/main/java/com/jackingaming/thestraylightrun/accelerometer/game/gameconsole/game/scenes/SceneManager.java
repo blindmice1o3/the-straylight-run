@@ -71,7 +71,7 @@ public class SceneManager
             }
 
             scene.init(game);
-            scene.enter();
+            scene.enter(null);
         }
     }
 
@@ -93,15 +93,15 @@ public class SceneManager
 
     public void pop() {
         Scene sceneCurrent = getCurrentScene();
-        sceneCurrent.exit();
+        List<Object> args = sceneCurrent.exit();
 
         sceneStack.remove(sceneCurrent);
 
-        getCurrentScene().enter();
+        getCurrentScene().enter(args);
     }
 
     public void push(Scene newScene) {
-        getCurrentScene().exit();
+        List<Object> args = getCurrentScene().exit();
 
         newScene.getEntityManager().addEntity(Player.getInstance());
         if (newScene.getTileManager().getTiles() == null) {
@@ -110,7 +110,7 @@ public class SceneManager
 
         sceneStack.add(newScene);
 
-        getCurrentScene().enter();
+        getCurrentScene().enter(args);
     }
 
     public void changeScene(String idOfCollidedTransferPoint) {

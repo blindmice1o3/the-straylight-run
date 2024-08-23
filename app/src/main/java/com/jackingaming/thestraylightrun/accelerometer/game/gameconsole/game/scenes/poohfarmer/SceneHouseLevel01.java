@@ -10,6 +10,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -86,8 +87,15 @@ public class SceneHouseLevel01 extends Scene {
     }
 
     @Override
-    public void enter() {
-        super.enter();
+    public List<Object> exit() {
+        List<Object> args = super.exit();
+        args.add(1, TAG);
+        return args;
+    }
+
+    @Override
+    public void enter(List<Object> args) {
+        super.enter(args);
 
         if (xLastKnown == 0 && yLastKnown == 0) {
             Player.getInstance().setX(X_SPAWN_INDEX_DEFAULT * Tile.WIDTH);

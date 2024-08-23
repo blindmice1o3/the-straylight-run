@@ -19,7 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class CollidingOrbit extends Creature {
     public static final String TAG = CollidingOrbit.class.getSimpleName();
-    public static final int ANGLE_OF_ROTATION_IN_DEGREE = 3;
+    public static final int ANGLE_OF_ROTATION_IN_DEGREE = 4;
 
     public Entity entityToOrbit;
     private boolean clockwise;

@@ -153,8 +153,8 @@ public class SceneEvo extends Scene {
     private Form formForThisScene;
 
     @Override
-    public void enter() {
-        super.enter();
+    public void enter(List<Object> args) {
+        super.enter(args);
 
         if (xLastKnown == 0 && yLastKnown == 0) {
             Player.getInstance().setX(X_SPAWN_INDEX_DEFAULT * Tile.WIDTH);
@@ -173,10 +173,10 @@ public class SceneEvo extends Scene {
     }
 
     @Override
-    public void exit() {
-        super.exit();
-
+    public List<Object> exit() {
         Player.getInstance().setForm(formBeforeThisScene);
+
+        return super.exit();
     }
 
     private boolean compareTwoSprites(Bitmap sprite1, Bitmap sprite2, int x, int y) {
