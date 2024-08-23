@@ -16,6 +16,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Damageable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.AttackCooldownManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.fish.FishForm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -44,8 +45,7 @@ public class Eel extends Creature
     private float patrolLengthInPixelMax;
     private float patrolLengthInPixelCurrent;
 
-    //ATTACK TIMER
-    private long attackCooldown = 1_500L, attackTimer = attackCooldown;
+    private AttackCooldownManager attackCooldownManager;
 
     private int attackDamage;
     private int healthMax;
@@ -62,6 +62,8 @@ public class Eel extends Creature
         direction = (directionFacing == DirectionFacing.LEFT) ? (Direction.LEFT) : (Direction.RIGHT);
         this.patrolLengthInPixelMax = patrolLengthInPixelMax;
         patrolLengthInPixelCurrent = 0f;
+
+        attackCooldownManager = new AttackCooldownManager();
 
         attackDamage = 1;
         healthMax = HEALTH_MAX_DEFAULT;
@@ -111,8 +113,7 @@ public class Eel extends Creature
     public void update(long elapsed) {
         eelAnimationManager.update(elapsed);
 
-        // ATTACK_COOLDOWN
-        tickAttackCooldown(elapsed);
+        attackCooldownManager.update(elapsed);
 
         xMove = 0f;
         yMove = 0f;
@@ -121,11 +122,6 @@ public class Eel extends Creature
         move();
 
         determineNextImage();
-    }
-
-    private void tickAttackCooldown(long elapsed) {
-        attackTimer += elapsed;
-        //attackTimer gets reset to 0 in doDamage(Damageable).
     }
 
     private int ticker = 0;
@@ -448,13 +444,10 @@ public class Eel extends Creature
         state = State.ATTACK;
         changeBoundsToNarrowTallVersion();
 
-        // ATTACK_COOLDOWN
-        if (attackTimer < attackCooldown) {
-            return;
-        }
-        attackTimer = 0;
+        if (attackCooldownManager.isCooldowned()) {
+            attackCooldownManager.reset();
 
-        // PERFORM ATTACK
-        damageable.takeDamage(attackDamage);
+            damageable.takeDamage(attackDamage);
+        }
     }
 }
