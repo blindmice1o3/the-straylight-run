@@ -3,7 +3,10 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -164,15 +167,16 @@ public class SceneFarm extends Scene {
     }
 
     public void showSeedShopFragment() {
+        game.getTimeManager().setIsPaused(true);
         inSeedShopState = true;
 
         game.getViewportListener().showFragmentAndHideSurfaceView(seedShopDialogFragment);
     }
 
     public void removeSeedShopFragment() {
-        game.getViewportListener().showSurfaceView();
-
+        game.getTimeManager().setIsPaused(false);
         inSeedShopState = false;
+        game.getViewportListener().showSurfaceView();
     }
 
     private boolean needDisplaySeedShopFragment;
@@ -195,6 +199,7 @@ public class SceneFarm extends Scene {
     @Override
     public void enter(List<Object> args) {
         super.enter(args);
+        game.getTimeManager().setIsPaused(false);
 
         if (xLastKnown == 0 && yLastKnown == 0) {
             Player.getInstance().setX(X_INDEX_SPAWN_PLAYER_DEFAULT * Tile.WIDTH);
@@ -204,6 +209,38 @@ public class SceneFarm extends Scene {
             Player.getInstance().setY(yLastKnown);
         }
         GameCamera.getInstance().update(0L);
+    }
+
+    private Bitmap backgroundDaylight;
+    private Bitmap backgroundTwilight;
+    private Bitmap backgroundNight;
+
+    private void initBackgroundImages() {
+        Log.e(TAG, "initBackgroundImages()");
+
+        //DAYLIGHT BACKGROUND
+        //////////////////////////////////////////
+        backgroundDaylight = cropImageFarm(game.getContext().getResources(), Season.SPRING);
+//        backgroundDaylight = cropImageFarm(game.getContext().getResources(), Season.WINTER);
+        //////////////////////////////////////////
+
+        //TWILIGHT BACKGROUND
+        Paint paintTintTwilight = new Paint();
+        paintTintTwilight.setColorFilter(new LightingColorFilter(0xFFFFF000, 0x00000000));
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        backgroundTwilight = Bitmap.createBitmap(backgroundDaylight.getWidth(), backgroundDaylight.getHeight(), Bitmap.Config.ARGB_8888);
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        Canvas canvasTwilight = new Canvas(backgroundTwilight);
+        canvasTwilight.drawBitmap(backgroundDaylight, 0, 0, paintTintTwilight);
+
+        //NIGHT BACKGROUND
+        Paint paintTintNight = new Paint();
+        paintTintNight.setColorFilter(new LightingColorFilter(0xFF00FFFF, 0x00000000));
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        backgroundNight = Bitmap.createBitmap(backgroundDaylight.getWidth(), backgroundDaylight.getHeight(), Bitmap.Config.ARGB_8888);
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        Canvas canvasNight = new Canvas(backgroundNight);
+        canvasNight.drawBitmap(backgroundDaylight, 0, 0, paintTintNight);
     }
 
     private Tile[][] createAndInitTilesForFarm(Game game) {
@@ -216,7 +253,8 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        Bitmap imageFarm = cropImageFarm(game.getContext().getResources(), Season.SPRING);
+        initBackgroundImages();
+        Bitmap imageFarm = backgroundDaylight;
         //DEFINE EACH ELEMENT.
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {

@@ -36,6 +36,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
@@ -90,7 +91,7 @@ public class Game {
     public interface StatsChangeListener {
         void onCurrencyChange(float currency);
 
-        void onTimeChange(long timePlayedInMilliseconds);
+        void onTimeChange(String inGameClockTime, String calendarText);
 
         void onButtonHolderAChange(Bitmap image);
 
@@ -166,7 +167,10 @@ public class Game {
     }
 
     public void startNewDay() {
-        timeManager.incrementDayOfMonth();
+        timeManager.callRemainingActiveEventTimeObjects();
+        timeManager.setAllEventTimeObjectsToActive();
+        timeManager.resetInGameClock();
+        timeManager.incrementDay();
 
         // TODO: implement startNewDay().
         SceneFarm.getInstance().startNewDay();
@@ -189,6 +193,13 @@ public class Game {
         this.heightViewport = heightViewport;
 
         timeManager.init(this, statsChangeListener);
+        timeManager.registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                ShippingBinTile.sellStash();
+            }
+        }, 5, 0, true);
+
         sceneManager.init(this);
         stateManager.init(this);
 
@@ -510,6 +521,10 @@ public class Game {
 
     public float getCurrency() {
         return currency;
+    }
+
+    public void updateCurrency() {
+        statsChangeListener.onCurrencyChange(currency);
     }
 
     public void incrementCurrency(float amountToIncrement) {

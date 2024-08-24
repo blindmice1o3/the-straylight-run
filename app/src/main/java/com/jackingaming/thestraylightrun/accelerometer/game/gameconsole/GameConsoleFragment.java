@@ -74,6 +74,10 @@ public class GameConsoleFragment extends Fragment
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
         inputManager = new InputManager();
+
+        viewportFragment = ViewportFragment.newInstance(null, null);
+        statsDisplayerFragment = StatsDisplayerFragment.newInstance(null, null);
+        gamePadFragment = GamePadFragment.newInstance(null, null);
     }
 
     @Override
@@ -88,9 +92,6 @@ public class GameConsoleFragment extends Fragment
         Log.e(TAG, "onViewCreated()");
 
         fcvUsedAsBorderForViewport = view.findViewById(R.id.fcv_mysurfaceview);
-        viewportFragment = ViewportFragment.newInstance(null, null);
-        statsDisplayerFragment = StatsDisplayerFragment.newInstance(null, null);
-        gamePadFragment = GamePadFragment.newInstance(null, null);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -251,29 +252,26 @@ public class GameConsoleFragment extends Fragment
                 .replace(R.id.fcv_statsdisplayerfragment, statsDisplayerFragment)
                 .addToBackStack(null)
                 .commit();
+
+        game.updateCurrency();
     }
 
     @Override
     public void onCurrencyChange(float currency) {
-        Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
-        if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    statsDisplayerFragment.setCurrency(currency);
-                }
-            });
-        } else {
-            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
-        }
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                statsDisplayerFragment.setCurrency(currency);
+            }
+        });
     }
 
     @Override
-    public void onTimeChange(long timePlayedInMilliseconds) {
+    public void onTimeChange(String inGameClockTime, String calendarText) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setTime(timePlayedInMilliseconds);
+            statsDisplayerFragment.setTime(inGameClockTime, calendarText);
         } else {
 //            Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
         }

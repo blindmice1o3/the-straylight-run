@@ -137,19 +137,20 @@ public class StatsDisplayerFragment extends Fragment {
         textViewCurrency.setText(currencyAsString);
     }
 
-    private static final int MILLISECONDS_PER_SECOND = 1_000;
-    private static final int SECONDS_PER_MINUTE = 60;
-    private static final int MINUTES_PER_HOUR = 60;
+//    private static final int MILLISECONDS_PER_SECOND = 1_000;
+//    private static final int SECONDS_PER_MINUTE = 60;
+//    private static final int MINUTES_PER_HOUR = 60;
 
-    public void setTime(long timePlayedInMilliseconds) {
-        // TODO: translate from milliseconds to HH:MM:SS
-        long secondsTotal = timePlayedInMilliseconds / MILLISECONDS_PER_SECOND;
-        long minutesTotal = secondsTotal / SECONDS_PER_MINUTE;
-        long secondsCalculated = secondsTotal % SECONDS_PER_MINUTE;
-        long hoursTotal = minutesTotal / MINUTES_PER_HOUR;
-        long minutesCaculated = minutesTotal % MINUTES_PER_HOUR;
-        String timeFormatted = String.format("%02d:%02d:%02d", hoursTotal, minutesCaculated, secondsCalculated);
-        textViewTime.setText(timeFormatted);
+    public void setTime(String inGameClockTime, String calendarText) {
+//        // TODO: translate from milliseconds to HH:MM:SS
+//        long secondsTotal = timePlayedInMilliseconds / MILLISECONDS_PER_SECOND;
+//        long minutesTotal = secondsTotal / SECONDS_PER_MINUTE;
+//        long secondsCalculated = secondsTotal % SECONDS_PER_MINUTE;
+//        long hoursTotal = minutesTotal / MINUTES_PER_HOUR;
+//        long minutesCaculated = minutesTotal % MINUTES_PER_HOUR;
+//        String timeFormatted = String.format("%02d:%02d:%02d", hoursTotal, minutesCaculated, secondsCalculated);
+//        textViewTime.setText(timeFormatted);
+        textViewTime.setText(inGameClockTime + "\n" + calendarText);
     }
 
     public void setImageForButtonHolderA(Bitmap image) {
