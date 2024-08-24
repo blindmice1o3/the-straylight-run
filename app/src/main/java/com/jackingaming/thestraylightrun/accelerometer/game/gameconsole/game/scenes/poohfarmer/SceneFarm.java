@@ -406,10 +406,13 @@ public class SceneFarm extends Scene {
                 new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                         (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT))
         );
+
+        Eel eel = new Eel((X_INDEX_SPAWN_EEL * Tile.WIDTH),
+                (Y_INDEX_SPAWN_EEL * Tile.HEIGHT),
+                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
+        eel.setState(Eel.State.MOVE_RANDOMLY);
         entities.add(
-                new Eel((X_INDEX_SPAWN_EEL * Tile.WIDTH),
-                        (Y_INDEX_SPAWN_EEL * Tile.HEIGHT),
-                        Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL)
+                eel
         );
         entities.add(
                 new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),

@@ -23,6 +23,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
+import java.util.Random;
+
 public class Eel extends Creature
         implements Damageable, DamageDoer {
     public static final String TAG = Eel.class.getSimpleName();
@@ -32,7 +34,7 @@ public class Eel extends Creature
     private static final int WIDTH_NARROW_TALL = Tile.WIDTH / 2;
     private static final int HEIGHT_NARROW_TALL = Tile.HEIGHT;
 
-    public enum State {PATROL, TURN, CHASE, ATTACK, HURT;}
+    public enum State {MOVE_RANDOMLY, PATROL, TURN, CHASE, ATTACK, HURT;}
 
     public enum DirectionFacing {LEFT, RIGHT;}
 
@@ -44,6 +46,7 @@ public class Eel extends Creature
     private DirectionFacing directionFacing;
     private float patrolLengthInPixelMax;
     private float patrolLengthInPixelCurrent;
+    private boolean isMoveRandomly = false;
 
     private CooldownTimer attackCooldownTimer;
 
@@ -127,9 +130,54 @@ public class Eel extends Creature
     private int ticker = 0;
     boolean isBlinkingBorder = false;
     private Entity target;
+    private Random random = new Random();
 
     private void determineNextMove() {
         switch (state) {
+            case MOVE_RANDOMLY:
+                // CHECK FOR SEARCH-TARGET (is target within detection range?)
+                target = checkDetectionCollisions(0f, 0f);
+                if (target != null) {
+                    xBeforeChase = x;
+                    yBeforeChase = y;
+                    ///////////////////////////
+                    state = State.CHASE;
+                    changeBoundsToWideShortVersion();
+                    ///////////////////////////
+                }
+                // MOVE_RANDOMLY (set value for future-change-in-position).
+                else {
+                    // 10% chance to choose direction
+                    if (random.nextInt(100) < 10) {
+                        int indexDirection = random.nextInt(4);
+                        if (indexDirection == 0) {
+                            direction = Direction.LEFT;
+                            directionFacing = DirectionFacing.LEFT;
+                        } else if (indexDirection == 1) {
+                            direction = Direction.UP;
+                        } else if (indexDirection == 2) {
+                            direction = Direction.RIGHT;
+                            directionFacing = DirectionFacing.RIGHT;
+                        } else if (indexDirection == 3) {
+                            direction = Direction.DOWN;
+                        }
+                    } else {
+                        if (direction == Direction.LEFT) {
+                            xMove = -moveSpeed;
+                            yMove = 0f;
+                        } else if (direction == Direction.UP) {
+                            xMove = 0f;
+                            yMove = -moveSpeed;
+                        } else if (direction == Direction.RIGHT) {
+                            xMove = moveSpeed;
+                            yMove = 0f;
+                        } else if (direction == Direction.DOWN) {
+                            xMove = 0f;
+                            yMove = moveSpeed;
+                        }
+                    }
+                }
+                break;
             case PATROL:
                 // CHECK FOR SEARCH-TARGET (is target within detection range?)
                 target = checkDetectionCollisions(0f, 0f);
@@ -274,10 +322,17 @@ public class Eel extends Creature
                         yMove = moveSpeed;
                         direction = Direction.DOWN;
                     } else if ((x == xBeforeChase) && (y == yBeforeChase)) {
-                        ////////////////////////////
-                        state = State.PATROL;
-                        changeBoundsToWideShortVersion();
-                        ////////////////////////////
+                        if (isMoveRandomly) {
+                            ////////////////////////////
+                            state = State.MOVE_RANDOMLY;
+                            changeBoundsToWideShortVersion();
+                            ////////////////////////////
+                        } else {
+                            ////////////////////////////
+                            state = State.PATROL;
+                            changeBoundsToWideShortVersion();
+                            ////////////////////////////
+                        }
                     }
                 }
 
@@ -467,6 +522,16 @@ public class Eel extends Creature
                     }
                 }
             }
+        }
+    }
+
+    public void setState(State state) {
+        this.state = state;
+
+        if (state == State.MOVE_RANDOMLY) {
+            isMoveRandomly = true;
+        } else if (state == State.PATROL) {
+            isMoveRandomly = false;
         }
     }
 }

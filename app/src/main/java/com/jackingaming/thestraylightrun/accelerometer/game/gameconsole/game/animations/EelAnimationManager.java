@@ -61,6 +61,7 @@ public class EelAnimationManager
     public Bitmap getCurrentFrame(Eel.State state, Eel.DirectionFacing directionFacing) {
         Bitmap imageByState = null;
         switch (state) {
+            case MOVE_RANDOMLY:
             case PATROL:
                 if (directionFacing == Eel.DirectionFacing.LEFT) {
                     imageByState = animationPatrolLeft.getCurrentFrame();
