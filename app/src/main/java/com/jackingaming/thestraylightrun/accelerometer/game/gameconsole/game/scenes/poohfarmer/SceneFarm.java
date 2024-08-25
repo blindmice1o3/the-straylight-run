@@ -40,8 +40,14 @@ public class SceneFarm extends Scene {
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
-    private static final int X_INDEX_SPAWN_EEL = 20;
-    private static final int Y_INDEX_SPAWN_EEL = 17;
+    private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
+    private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
+    private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;
+    private static final int Y_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 9;
+    private static final int X_INDEX_SPAWN_EEL_NEAR_SEEDSHOP = 6;
+    private static final int Y_INDEX_SPAWN_EEL_NEAR_SEEDSHOP = 15;
+    private static final int X_INDEX_SPAWN_EEL_NEAR_HOTHOUSE = 20;
+    private static final int Y_INDEX_SPAWN_EEL_NEAR_HOTHOUSE = 17;
     private static final int PATROL_LENGTH_EEL = 3 * Tile.WIDTH;
     private static final int X_INDEX_SPAWN_COLLIDING_ORBIT = X_INDEX_SPAWN_PLAYER_DEFAULT + 2;
     private static final int Y_INDEX_SPAWN_COLLIDING_ORBIT = Y_INDEX_SPAWN_PLAYER_DEFAULT;
@@ -106,6 +112,31 @@ public class SceneFarm extends Scene {
     @Override
     public void init(Game game) {
         this.game = game;
+
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                addSwarmOfEel();
+            }
+        }, 7, 0, false);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                removeSwarmOfEel();
+            }
+        }, 9, 0, false);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                addSwarmOfEel();
+            }
+        }, 4, 0, true);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                removeSwarmOfEel();
+            }
+        }, 6, 0, true);
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -478,20 +509,55 @@ public class SceneFarm extends Scene {
                 new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                         (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT))
         );
-
-        Eel eel = new Eel((X_INDEX_SPAWN_EEL * Tile.WIDTH),
-                (Y_INDEX_SPAWN_EEL * Tile.HEIGHT),
-                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
-        eel.setState(Eel.State.MOVE_RANDOMLY);
-        entities.add(
-                eel
-        );
         entities.add(
                 new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
                         (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
                         Player.getInstance())
         );
         return entities;
+    }
+
+    public void addSwarmOfEel() {
+        Eel eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_COWBARN * Tile.WIDTH),
+                (Y_INDEX_SPAWN_EEL_NEAR_COWBARN * Tile.HEIGHT),
+                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
+        eel.setState(Eel.State.MOVE_RANDOMLY);
+        eel.init(game);
+        entityManager.addEntity(
+                eel
+        );
+        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP * Tile.WIDTH),
+                (Y_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP * Tile.HEIGHT),
+                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
+        eel.setState(Eel.State.MOVE_RANDOMLY);
+        eel.init(game);
+        entityManager.addEntity(
+                eel
+        );
+        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_SEEDSHOP * Tile.WIDTH),
+                (Y_INDEX_SPAWN_EEL_NEAR_SEEDSHOP * Tile.HEIGHT),
+                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
+        eel.setState(Eel.State.MOVE_RANDOMLY);
+        eel.init(game);
+        entityManager.addEntity(
+                eel
+        );
+        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_HOTHOUSE * Tile.WIDTH),
+                (Y_INDEX_SPAWN_EEL_NEAR_HOTHOUSE * Tile.HEIGHT),
+                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
+        eel.setState(Eel.State.MOVE_RANDOMLY);
+        eel.init(game);
+        entityManager.addEntity(
+                eel
+        );
+    }
+
+    public void removeSwarmOfEel() {
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof Eel) {
+                e.setActive(false);
+            }
+        }
     }
 
     private List<Item> createItemsForFarm() {
