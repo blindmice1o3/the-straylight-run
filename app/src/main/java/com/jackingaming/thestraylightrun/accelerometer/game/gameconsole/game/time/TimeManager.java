@@ -124,8 +124,18 @@ public class TimeManager
                     hour++;
                     minute = 0;
 
+                    //6am
+                    if ((hour == 6) && (!isPM)) {
+                        modeOfDay = ModeOfDay.DAYLIGHT;
+
+                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
+                                    modeOfDay
+                            );
+                        }
+                    }
                     //noon
-                    if ((hour == 12) && (!isPM)) {
+                    else if ((hour == 12) && (!isPM)) {
                         isPM = true;
                     }
                     //1 o'clock (for both am and pm)
@@ -252,8 +262,8 @@ public class TimeManager
 
     public void resetInGameClock() {
         ticker = 0L;
-        hour = 6;
-        minute = 0;
+        hour = 5;
+        minute = 59;
         isPM = false;
         modeOfDay = ModeOfDay.DAYLIGHT;
     }
