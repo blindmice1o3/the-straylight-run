@@ -247,13 +247,12 @@ public class SceneFarm extends Scene {
     private Bitmap backgroundTwilight;
     private Bitmap backgroundNight;
 
-    private void initBackgroundImages() {
+    private void initBackgroundImages(TimeManager.Season season) {
         Log.e(TAG, "initBackgroundImages()");
 
         //DAYLIGHT BACKGROUND
         //////////////////////////////////////////
-        backgroundDaylight = cropImageFarm(game.getContext().getResources(), Season.SPRING);
-//        backgroundDaylight = cropImageFarm(game.getContext().getResources(), Season.WINTER);
+        backgroundDaylight = cropImageFarm(game.getContext().getResources(), season);
         //////////////////////////////////////////
 
         //TWILIGHT BACKGROUND
@@ -273,6 +272,11 @@ public class SceneFarm extends Scene {
         ////////////////////////////////////////////////////////////////////////////////////////////
         Canvas canvasNight = new Canvas(backgroundNight);
         canvasNight.drawBitmap(backgroundDaylight, 0, 0, paintTintNight);
+    }
+
+    public void updateTilesBySeason(TimeManager.Season season, TimeManager.ModeOfDay modeOfDay) {
+        initBackgroundImages(season);
+        updateTilesByModeOfDay(modeOfDay);
     }
 
     public void updateTilesByModeOfDay(TimeManager.ModeOfDay modeOfDay) {
@@ -318,7 +322,7 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        initBackgroundImages();
+        initBackgroundImages(game.getTimeManager().getSeason());
         Bitmap imageFarm = backgroundDaylight;
         //DEFINE EACH ELEMENT.
         for (int y = 0; y < rows; y++) {
@@ -421,10 +425,8 @@ public class SceneFarm extends Scene {
         return tiles;
     }
 
-    public enum Season {SPRING, SUMMER, FALL, WINTER;}
-
-    public static Bitmap cropImageFarm(Resources resources, Season season) {
-        Log.d(TAG, "SceneFarm.cropImageFarm(Resources resources, Season season)");
+    public static Bitmap cropImageFarm(Resources resources, TimeManager.Season season) {
+        Log.d(TAG, "SceneFarm.cropImageFarm(Resources resources, TimeManager.Season season)");
 
         Bitmap farmSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.gbc_hm3_farm);
         Bitmap croppedImageFarm = null;

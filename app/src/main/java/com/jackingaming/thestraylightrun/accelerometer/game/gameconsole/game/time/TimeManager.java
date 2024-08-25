@@ -112,7 +112,6 @@ public class TimeManager
         //////////////////////
 
         /////////////////////////////////////////////
-        //TODO: TIME STOPS WHEN INDOORS
         if (!isPaused) {
             ticker += elapsed;
 
@@ -128,11 +127,7 @@ public class TimeManager
                     if ((hour == 6) && (!isPM)) {
                         modeOfDay = ModeOfDay.DAYLIGHT;
 
-                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
-                                    modeOfDay
-                            );
-                        }
+                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
                     }
                     //noon
                     else if ((hour == 12) && (!isPM)) {
@@ -146,21 +141,13 @@ public class TimeManager
                     else if ((hour == 3) && (isPM)) {
                         modeOfDay = ModeOfDay.TWILIGHT;
 
-                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
-                                    modeOfDay
-                            );
-                        }
+                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
                     }
                     //6pm
                     else if ((hour == 6) && (isPM)) {
                         modeOfDay = ModeOfDay.NIGHT;
 
-                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
-                                    modeOfDay
-                            );
-                        }
+                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
                     }
                     //midnight => TimeManager stops in-game clock.
                     else if ((hour == 12) && (isPM)) {
@@ -232,6 +219,8 @@ public class TimeManager
             indexNextSeason = 0;
         }
         season = Season.values()[indexNextSeason];
+
+        SceneFarm.getInstance().updateTilesBySeason(season, modeOfDay);
     }
 
     private void incrementYear() {
