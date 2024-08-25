@@ -26,6 +26,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +109,7 @@ public class SceneFarm extends Scene {
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
-        Tile[][] tilesForFarm = createAndInitTilesForFarm(game);
+        Tile[][] tilesForFarm = createAndInitTiles(game);
         tileManager.loadTiles(tilesForFarm);
         Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
@@ -243,7 +244,40 @@ public class SceneFarm extends Scene {
         canvasNight.drawBitmap(backgroundDaylight, 0, 0, paintTintNight);
     }
 
-    private Tile[][] createAndInitTilesForFarm(Game game) {
+    public void updateTilesByModeOfDay(TimeManager.ModeOfDay modeOfDay) {
+        Bitmap imageFarm = null;
+        switch (modeOfDay) {
+            case DAYLIGHT:
+                imageFarm = backgroundDaylight;
+                break;
+            case TWILIGHT:
+                imageFarm = backgroundTwilight;
+                break;
+            case NIGHT:
+                imageFarm = backgroundNight;
+                break;
+        }
+
+        Tile[][] tiles = tileManager.getTiles();
+        int rows = tiles.length;
+        Log.e(TAG, "rows: " + rows);
+        int columns = tiles[0].length;
+        Log.e(TAG, "columns: " + columns);
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                int xInPixel = x * Tile.WIDTH;
+                int yInPixel = y * Tile.HEIGHT;
+                int widthInPixel = Tile.WIDTH;
+                int heightInPixel = Tile.HEIGHT;
+                Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                Tile tile = tiles[y][x];
+                tile.setImage(tileSprite);
+            }
+        }
+    }
+
+    private Tile[][] createAndInitTiles(Game game) {
         //rgbTileMapFarm is an image where each pixel represents a tile.
         Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
         int columns = rgbTileMapFarm.getWidth();            //Always need.

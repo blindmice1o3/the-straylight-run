@@ -73,4 +73,8 @@ public class Tile
     public int getyIndex() {
         return yIndex;
     }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
+    }
 }

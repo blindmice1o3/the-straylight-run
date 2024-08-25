@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -134,10 +135,22 @@ public class TimeManager
                     //3pm
                     else if ((hour == 3) && (isPM)) {
                         modeOfDay = ModeOfDay.TWILIGHT;
+
+                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
+                                    modeOfDay
+                            );
+                        }
                     }
                     //6pm
                     else if ((hour == 6) && (isPM)) {
                         modeOfDay = ModeOfDay.NIGHT;
+
+                        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                            ((SceneFarm) game.getSceneManager().getCurrentScene()).updateTilesByModeOfDay(
+                                    modeOfDay
+                            );
+                        }
                     }
                     //midnight => TimeManager stops in-game clock.
                     else if ((hour == 12) && (isPM)) {

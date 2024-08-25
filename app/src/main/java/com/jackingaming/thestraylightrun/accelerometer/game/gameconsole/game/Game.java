@@ -199,7 +199,6 @@ public class Game {
                 ShippingBinTile.sellStash();
             }
         }, 5, 0, true);
-
         sceneManager.init(this);
         stateManager.init(this);
 
