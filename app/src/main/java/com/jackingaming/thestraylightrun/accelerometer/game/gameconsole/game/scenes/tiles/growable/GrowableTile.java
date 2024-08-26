@@ -80,6 +80,15 @@ public class GrowableTile extends Tile {
         }
     }
 
+    public void updateImageForStateUntilled(Bitmap image) {
+        imageUnwateredViaState.put(State.UNTILLED, image);
+        imageWateredViaState.put(State.UNTILLED, image);
+
+        if (state == State.UNTILLED) {
+            updateImage();
+        }
+    }
+
     private void initImageMaps(Resources resources) {
         Bitmap spriteSheetCropsAndItems = BitmapFactory.decodeResource(resources, R.drawable.gbc_hm_crops_and_items);
         Bitmap unwateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 7, 19, 16, 16);

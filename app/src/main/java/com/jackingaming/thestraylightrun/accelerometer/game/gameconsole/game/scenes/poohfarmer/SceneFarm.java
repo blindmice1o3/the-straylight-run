@@ -335,13 +335,7 @@ public class SceneFarm extends Scene {
                 Tile tile = tiles[y][x];
 
                 Bitmap tileSprite = null;
-                if (!(tile instanceof ShippingBinTile)) {
-                    int xInPixel = x * Tile.WIDTH;
-                    int yInPixel = y * Tile.HEIGHT;
-                    int widthInPixel = Tile.WIDTH;
-                    int heightInPixel = Tile.HEIGHT;
-                    tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                } else {
+                if (tile instanceof ShippingBinTile) {
                     if (x == xIndexShippingBinQ1 && y == yIndexShippingBinQ1) {
                         tileSprite = imageShippingBinQ1;
                     } else if (x == xIndexShippingBinQ2 && y == yIndexShippingBinQ2) {
@@ -351,9 +345,21 @@ public class SceneFarm extends Scene {
                     } else if (x == xIndexShippingBinQ4 && y == yIndexShippingBinQ4) {
                         tileSprite = imageShippingBinQ4;
                     }
-                }
 
-                tile.setImage(tileSprite);
+                    tile.setImage(tileSprite);
+                } else {
+                    int xInPixel = x * Tile.WIDTH;
+                    int yInPixel = y * Tile.HEIGHT;
+                    int widthInPixel = Tile.WIDTH;
+                    int heightInPixel = Tile.HEIGHT;
+                    tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                    if (tile instanceof GrowableTile) {
+                        ((GrowableTile) tile).updateImageForStateUntilled(tileSprite);
+                    } else {
+                        tile.setImage(tileSprite);
+                    }
+                }
             }
         }
     }

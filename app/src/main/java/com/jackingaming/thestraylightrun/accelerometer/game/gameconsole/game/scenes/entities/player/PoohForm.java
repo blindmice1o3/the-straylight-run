@@ -100,15 +100,7 @@ public class PoohForm
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
-                if (!player.hasCarryable() &&
-                        entityCurrentlyFacing == null) {
-                    Log.e(TAG, "no carryable and entityFacing is null");
-                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-                    if (tileCurrentlyFacing instanceof ShippingBinTile) {
-                        Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
-                        ShippingBinTile.sellStash();
-                    }
-                } else if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
+                if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
                         entityCurrentlyFacing == null) {
                     Log.e(TAG, "has carryable and carryable is Sellable and entityFacing is null");
                     Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
@@ -150,6 +142,14 @@ public class PoohForm
                     Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                     tileCommand.setTile(tileCurrentlyFacing);
                     tileCommand.execute();
+                } else if (!player.hasCarryable() &&
+                        entityCurrentlyFacing == null) {
+                    Log.e(TAG, "no carryable and entityFacing is null");
+                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                    if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                        Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                        ShippingBinTile.sellStash();
+                    }
                 }
             } else if (game.getSceneManager().getCurrentScene() instanceof SceneHouseLevel01) {
                 Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
