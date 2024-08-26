@@ -77,11 +77,11 @@ public class CollidingOrbit extends Creature {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
-        Log.e(TAG, "respondToEntityCollision()");
+//        Log.e(TAG, "respondToEntityCollision()");
         Player player = Player.getInstance();
 
         if (e instanceof Eel) {
-            Log.e(TAG, "e instanceof Eel");
+            Log.e(TAG, "respondToEntityCollision(): e instanceof Eel");
             // bounce Eel based on CollidingOrbit's cw/ccw.
             float xStartEel = e.getX();
             float yStartEel = e.getY();
@@ -138,9 +138,11 @@ public class CollidingOrbit extends Creature {
             });
 
             toggleClockwise();
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override
