@@ -128,7 +128,6 @@ public class Eel extends Creature
     }
 
     private int ticker = 0;
-    boolean isBlinkingBorder = false;
     private Entity target;
     private Random random = new Random();
 
@@ -213,9 +212,7 @@ public class Eel extends Creature
                 target = checkDetectionCollisions(0f, 0f);
                 if (target != null) {
                     Log.d(TAG, "IMMA GETCHA!");
-                    if (!isBlinkingBorder && target instanceof Plant) {
-                        isBlinkingBorder = true;
-
+                    if (target instanceof Plant) {
                         Handler handler = new Handler(Looper.getMainLooper());
                         handler.post(new Runnable() {
                             @Override
@@ -270,17 +267,13 @@ public class Eel extends Creature
                 // target is beyond detection range.
                 else {
                     Log.d(TAG, "awwww........ like sand slipping through the fingers (whatever those are).");
-                    if (isBlinkingBorder) {
-                        isBlinkingBorder = false;
-
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.getViewportListener().stopBlinkingBorder();
-                            }
-                        });
-                    }
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.getViewportListener().stopBlinkingBorder();
+                        }
+                    });
 
                     // RETURNING TO PATROL POSITION
                     if (x < xBeforeChase && y < yBeforeChase) {
@@ -395,8 +388,6 @@ public class Eel extends Creature
         }
     }
 
-    private boolean canDoDamage = false;
-
     private void determineNextImage() {
         image = eelAnimationManager.getCurrentFrame(state, directionFacing);
     }
@@ -509,17 +500,13 @@ public class Eel extends Creature
 
             if (damageable instanceof Plant) {
                 if (((Plant) damageable).getHealth() <= 0) {
-                    if (isBlinkingBorder) {
-                        isBlinkingBorder = false;
-
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                game.getViewportListener().stopBlinkingBorder();
-                            }
-                        });
-                    }
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            game.getViewportListener().stopBlinkingBorder();
+                        }
+                    });
                 }
             }
         }

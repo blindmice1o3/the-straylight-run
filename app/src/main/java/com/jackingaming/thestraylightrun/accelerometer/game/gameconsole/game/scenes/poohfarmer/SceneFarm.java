@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
@@ -649,6 +651,14 @@ public class SceneFarm extends Scene {
                 e.setActive(false);
             }
         }
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                game.getViewportListener().stopBlinkingBorder();
+            }
+        });
     }
 
     private List<Item> createItemsForFarm() {
