@@ -1,7 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.graphics.Canvas;
-import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -90,7 +89,6 @@ public class EntityManager
     public boolean addEntity(Entity e) {
         if (!entities.contains(e)) {
             if (e instanceof CollidingOrbit) {
-                Log.e("EntityManager", "e instanceof CollidingOrbit");
                 collidingOrbit = (CollidingOrbit) e;
             }
             return entitiesToBeAdded.add(e);

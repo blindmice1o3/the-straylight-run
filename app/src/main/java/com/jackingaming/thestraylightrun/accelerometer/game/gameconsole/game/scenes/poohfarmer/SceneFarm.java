@@ -79,8 +79,12 @@ public class SceneFarm extends Scene {
         };
     }
 
+    private boolean newDay = false;
+
     public void startNewDay() {
         Log.e(TAG, "startNewDay()");
+        newDay = true;
+
         for (GrowableTile growableTile : growableTiles) {
             growableTile.startNewDay();
         }
@@ -195,6 +199,18 @@ public class SceneFarm extends Scene {
         if (needDisplaySeedShopFragment) {
             needDisplaySeedShopFragment = false;
             showSeedShopFragment();
+        }
+    }
+
+    @Override
+    public void update(long elapsed) {
+        super.update(elapsed);
+
+        if (newDay) {
+            Log.e(TAG, "NEW DAY");
+            newDay = false;
+
+            removeSwarmOfEel();
         }
     }
 
