@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -325,11 +326,11 @@ public abstract class Creature extends Entity {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
+        super.draw(canvas, paintLightingColorFilter);
 
         if (carryable != null) {
-            ((Entity) carryable).draw(canvas);
+            ((Entity) carryable).draw(canvas, paintLightingColorFilter);
         }
     }
 

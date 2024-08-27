@@ -393,7 +393,7 @@ public class Eel extends Creature
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         // DETECTION-RECTANGLE
         Rect detectionSquare = getDetectionRectangle(0, 0);
         Paint paintDetectionSquare = new Paint();
@@ -409,7 +409,7 @@ public class Eel extends Creature
         // EEL
         Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
         Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
-        canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
+        canvas.drawBitmap(image, rectOfImage, rectOnScreen, paintLightingColorFilter);
     }
 
     @Override

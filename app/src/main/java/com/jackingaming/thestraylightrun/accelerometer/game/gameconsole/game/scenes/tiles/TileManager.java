@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -251,7 +252,7 @@ public class TileManager
 //        }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         ////////////////////////////////////////////////////////////////////////////////////////////
         // RENDERING EFFICIENCY from youtube's CodeNMore NEW Beginner 2D Game Programming series. //
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +271,7 @@ public class TileManager
         // RENDER TILES
         for (int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {
-                tiles[y][x].draw(canvas);
+                tiles[y][x].draw(canvas, paintLightingColorFilter);
             }
         }
     }

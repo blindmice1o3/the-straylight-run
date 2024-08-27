@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -262,7 +263,7 @@ public class FishForm
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         //ACTUAL IMAGE OF FISH
         if (directionFacing == DirectionFacing.RIGHT) {
             Bitmap imageOfBody = currentBodyAnimation.getCurrentFrame();
@@ -276,8 +277,8 @@ public class FishForm
             Rect rectOfHeadImage = new Rect(0, 0, imageOfHead.getWidth(), imageOfHead.getHeight());
             Rect rectOfHeadOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(rectOfHeadInGame);
 
-            canvas.drawBitmap(imageOfBody, rectOfBodyImage, rectOfBodyOnScreen, null);
-            canvas.drawBitmap(imageOfHead, rectOfHeadImage, rectOfHeadOnScreen, null);
+            canvas.drawBitmap(imageOfBody, rectOfBodyImage, rectOfBodyOnScreen, paintLightingColorFilter);
+            canvas.drawBitmap(imageOfHead, rectOfHeadImage, rectOfHeadOnScreen, paintLightingColorFilter);
         } else if (directionFacing == DirectionFacing.LEFT) {
             //FLIP IMAGES of head and body.
             Bitmap imageOfHeadFlipped = Animation.flipImageHorizontally(currentHeadAnimation.getCurrentFrame());
@@ -291,8 +292,8 @@ public class FishForm
             Rect rectOfBodyImage = new Rect(0, 0, imageOfBodyFlipped.getWidth(), imageOfBodyFlipped.getHeight());
             Rect rectOfBodyOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(rectOfBodyInGame);
 
-            canvas.drawBitmap(imageOfHeadFlipped, rectOfHeadImage, rectOfHeadOnScreen, null);
-            canvas.drawBitmap(imageOfBodyFlipped, rectOfBodyImage, rectOfBodyOnScreen, null);
+            canvas.drawBitmap(imageOfHeadFlipped, rectOfHeadImage, rectOfHeadOnScreen, paintLightingColorFilter);
+            canvas.drawBitmap(imageOfBodyFlipped, rectOfBodyImage, rectOfBodyOnScreen, paintLightingColorFilter);
         }
     }
 

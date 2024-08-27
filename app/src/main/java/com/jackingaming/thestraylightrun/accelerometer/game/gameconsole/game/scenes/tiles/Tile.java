@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -45,12 +46,12 @@ public class Tile
         collisionBoundsInScene = new Rect(x0InScene, y0InScene, x1InScene, y1InScene);
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         if (image != null) {
             Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
             Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(collisionBoundsInScene);
 
-            canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
+            canvas.drawBitmap(image, rectOfImage, rectOnScreen, paintLightingColorFilter);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -80,9 +81,9 @@ public class EntityManager
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         for (Entity e : entities) {
-            e.draw(canvas);
+            e.draw(canvas, paintLightingColorFilter);
         }
     }
 

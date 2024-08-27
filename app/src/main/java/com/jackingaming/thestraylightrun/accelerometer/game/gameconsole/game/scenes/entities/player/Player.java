@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
@@ -44,10 +45,10 @@ public class Player extends Creature {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
+        super.draw(canvas, paintLightingColorFilter);
 
-        form.draw(canvas);
+        form.draw(canvas, paintLightingColorFilter);
     }
 
     @Override

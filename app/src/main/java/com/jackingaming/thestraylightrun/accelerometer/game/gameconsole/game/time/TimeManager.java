@@ -127,7 +127,7 @@ public class TimeManager
                     if ((hour == 6) && (!isPM)) {
                         modeOfDay = ModeOfDay.DAYLIGHT;
 
-                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
+                        SceneFarm.getInstance().updatePaintLightingColorFilter(modeOfDay);
                     }
                     //noon
                     else if ((hour == 12) && (!isPM)) {
@@ -141,13 +141,13 @@ public class TimeManager
                     else if ((hour == 3) && (isPM)) {
                         modeOfDay = ModeOfDay.TWILIGHT;
 
-                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
+                        SceneFarm.getInstance().updatePaintLightingColorFilter(modeOfDay);
                     }
                     //6pm
                     else if ((hour == 6) && (isPM)) {
                         modeOfDay = ModeOfDay.NIGHT;
 
-                        SceneFarm.getInstance().updateTilesByModeOfDay(modeOfDay);
+                        SceneFarm.getInstance().updatePaintLightingColorFilter(modeOfDay);
                     }
                     //midnight => TimeManager stops in-game clock.
                     else if ((hour == 12) && (isPM)) {
@@ -220,7 +220,7 @@ public class TimeManager
         }
         season = Season.values()[indexNextSeason];
 
-        SceneFarm.getInstance().updateTilesBySeason(season, modeOfDay);
+        SceneFarm.getInstance().updateTilesBySeason(season);
     }
 
     private void incrementYear() {

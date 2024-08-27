@@ -2,6 +2,8 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
@@ -11,6 +13,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -84,12 +87,34 @@ public abstract class Scene
         entityManager.update(elapsed);
     }
 
+    private Paint paintLightingColorFilter;
+
+    public void updatePaintLightingColorFilter(TimeManager.ModeOfDay modeOfDay) {
+        switch (modeOfDay) {
+            case DAYLIGHT:
+                paintLightingColorFilter = null;
+                break;
+            case TWILIGHT:
+                paintLightingColorFilter = new Paint();
+                paintLightingColorFilter.setColorFilter(
+                        new LightingColorFilter(0xFFFFF000, 0x00000000)
+                );
+                break;
+            case NIGHT:
+                paintLightingColorFilter = new Paint();
+                paintLightingColorFilter.setColorFilter(
+                        new LightingColorFilter(0xFF00FFFF, 0x00000000)
+                );
+                break;
+        }
+    }
+
     public void drawCurrentFrame(Canvas canvas) {
         canvas.drawColor(Color.WHITE);
 
-        tileManager.draw(canvas);
-        itemManager.draw(canvas);
-        entityManager.draw(canvas);
+        tileManager.draw(canvas, paintLightingColorFilter);
+        itemManager.draw(canvas, paintLightingColorFilter);
+        entityManager.draw(canvas, paintLightingColorFilter);
     }
 
     public TileManager getTileManager() {

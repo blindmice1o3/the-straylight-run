@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
@@ -13,7 +14,7 @@ public interface Form extends Serializable {
 
     void update(long elapsed);
 
-    void draw(Canvas canvas);
+    void draw(Canvas canvas, Paint paintLightingColorFilter);
 
     void interpretInput();
 

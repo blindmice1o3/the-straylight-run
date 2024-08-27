@@ -189,7 +189,7 @@ public class Plant extends Entity
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         if (image != null) {
             Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
             Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
@@ -199,7 +199,7 @@ public class Plant extends Entity
                 canvas.drawRect(rectOnScreen, paintBorder);
             }
             // CONTENT
-            canvas.drawBitmap(image, rectOfImage, rectOnScreen, null);
+            canvas.drawBitmap(image, rectOfImage, rectOnScreen, paintLightingColorFilter);
         }
     }
 

@@ -283,65 +283,14 @@ public class SceneFarm extends Scene {
         return nightVersion;
     }
 
-    private Bitmap backgroundDaylight, backgroundTwilight, backgroundNight;
-    private Bitmap shippingBinQ1Daylight, shippingBinQ1Twilight, shippingBinQ1Night;
-    private Bitmap shippingBinQ2Daylight, shippingBinQ2Twilight, shippingBinQ2Night;
-    private Bitmap shippingBinQ3Daylight, shippingBinQ3Twilight, shippingBinQ3Night;
-    private Bitmap shippingBinQ4Daylight, shippingBinQ4Twilight, shippingBinQ4Night;
+    private Bitmap imageFarm;
+    private Bitmap tileSpriteAndShippingBinQ1;
+    private Bitmap tileSpriteAndShippingBinQ2;
+    private Bitmap tileSpriteAndShippingBinQ3;
+    private Bitmap tileSpriteAndShippingBinQ4;
 
-    private void initBackgroundImages(TimeManager.Season season) {
-        Log.e(TAG, "initBackgroundImages()");
-
-        //DAYLIGHT BACKGROUND
-        /////////////////////////////////////////////////////////////////////////////
-        backgroundDaylight = cropImageFarm(game.getContext().getResources(), season);
-        /////////////////////////////////////////////////////////////////////////////
-
-        //TWILIGHT BACKGROUND
-        //////////////////////////////////////////////////////////////////////////
-        backgroundTwilight = applyTwilightLightingColorFilter(backgroundDaylight);
-        //////////////////////////////////////////////////////////////////////////
-
-        //NIGHT BACKGROUND
-        ////////////////////////////////////////////////////////////////////
-        backgroundNight = applyNightLightingColorFilter(backgroundDaylight);
-        ////////////////////////////////////////////////////////////////////
-    }
-
-    public void updateTilesBySeason(TimeManager.Season season, TimeManager.ModeOfDay modeOfDay) {
-        initBackgroundImages(season);
-        updateTilesByModeOfDay(modeOfDay);
-    }
-
-    public void updateTilesByModeOfDay(TimeManager.ModeOfDay modeOfDay) {
-        Bitmap imageFarm = null;
-        Bitmap imageShippingBinQ1 = null;
-        Bitmap imageShippingBinQ2 = null;
-        Bitmap imageShippingBinQ3 = null;
-        Bitmap imageShippingBinQ4 = null;
-        switch (modeOfDay) {
-            case DAYLIGHT:
-                imageFarm = backgroundDaylight;
-                imageShippingBinQ1 = shippingBinQ1Daylight;
-                imageShippingBinQ2 = shippingBinQ2Daylight;
-                imageShippingBinQ3 = shippingBinQ3Daylight;
-                imageShippingBinQ4 = shippingBinQ4Daylight;
-                break;
-            case TWILIGHT:
-                imageFarm = backgroundTwilight;
-                imageShippingBinQ1 = shippingBinQ1Twilight;
-                imageShippingBinQ2 = shippingBinQ2Twilight;
-                imageShippingBinQ3 = shippingBinQ3Twilight;
-                imageShippingBinQ4 = shippingBinQ4Twilight;
-                break;
-            case NIGHT:
-                imageFarm = backgroundNight;
-                imageShippingBinQ1 = shippingBinQ1Night;
-                imageShippingBinQ2 = shippingBinQ2Night;
-                imageShippingBinQ3 = shippingBinQ3Night;
-                imageShippingBinQ4 = shippingBinQ4Night;
-                break;
-        }
+    public void updateTilesBySeason(TimeManager.Season season) {
+        imageFarm = cropImageFarm(game.getContext().getResources(), season);
 
         Tile[][] tiles = tileManager.getTiles();
         int rows = tiles.length;
@@ -350,33 +299,57 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "columns: " + columns);
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
+                int xInPixel = x * Tile.WIDTH;
+                int yInPixel = y * Tile.HEIGHT;
+                int widthInPixel = Tile.WIDTH;
+                int heightInPixel = Tile.HEIGHT;
+                Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
                 Tile tile = tiles[y][x];
 
-                Bitmap tileSprite = null;
                 if (tile instanceof ShippingBinTile) {
                     if (x == xIndexShippingBinQ1 && y == yIndexShippingBinQ1) {
-                        tileSprite = imageShippingBinQ1;
+                        Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
+                                ShippingBinTile.Quadrant.TOP_LEFT);
+                        tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                        canvas.drawBitmap(tileSprite, 0, 0, null);
+                        canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                        tileSprite = tileSpriteAndShippingBinQ1;
                     } else if (x == xIndexShippingBinQ2 && y == yIndexShippingBinQ2) {
-                        tileSprite = imageShippingBinQ2;
+                        Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
+                                ShippingBinTile.Quadrant.TOP_RIGHT);
+                        tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                        canvas.drawBitmap(tileSprite, 0, 0, null);
+                        canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                        tileSprite = tileSpriteAndShippingBinQ2;
                     } else if (x == xIndexShippingBinQ3 && y == yIndexShippingBinQ3) {
-                        tileSprite = imageShippingBinQ3;
+                        Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
+                                ShippingBinTile.Quadrant.BOTTOM_LEFT);
+                        tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                        canvas.drawBitmap(tileSprite, 0, 0, null);
+                        canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                        tileSprite = tileSpriteAndShippingBinQ3;
                     } else if (x == xIndexShippingBinQ4 && y == yIndexShippingBinQ4) {
-                        tileSprite = imageShippingBinQ4;
+                        Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
+                                ShippingBinTile.Quadrant.BOTTOM_RIGHT);
+                        tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                        canvas.drawBitmap(tileSprite, 0, 0, null);
+                        canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                        tileSprite = tileSpriteAndShippingBinQ4;
                     }
 
                     tile.setImage(tileSprite);
+                } else if (tile instanceof GrowableTile) {
+                    ((GrowableTile) tile).updateImageForStateUntilled(tileSprite);
                 } else {
-                    int xInPixel = x * Tile.WIDTH;
-                    int yInPixel = y * Tile.HEIGHT;
-                    int widthInPixel = Tile.WIDTH;
-                    int heightInPixel = Tile.HEIGHT;
-                    tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
-
-                    if (tile instanceof GrowableTile) {
-                        ((GrowableTile) tile).updateImageForStateUntilled(tileSprite);
-                    } else {
-                        tile.setImage(tileSprite);
-                    }
+                    tile.setImage(tileSprite);
                 }
             }
         }
@@ -397,8 +370,9 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        initBackgroundImages(game.getTimeManager().getSeason());
-        Bitmap imageFarm = backgroundDaylight;
+        imageFarm = cropImageFarm(
+                game.getContext().getResources(),
+                game.getTimeManager().getSeason());
         //DEFINE EACH ELEMENT.
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
@@ -449,18 +423,15 @@ public class SceneFarm extends Scene {
 
                     Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
                             ShippingBinTile.Quadrant.TOP_LEFT);
-                    shippingBinQ1Daylight = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(shippingBinQ1Daylight);
+                    tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ1, 0, 0, null);
-
-                    shippingBinQ1Twilight = applyTwilightLightingColorFilter(shippingBinQ1Daylight);
-                    shippingBinQ1Night = applyNightLightingColorFilter(shippingBinQ1Daylight);
 
                     Tile tile = new ShippingBinTile(ShippingBinTile.TAG,
                             ShippingBinTile.Quadrant.TOP_LEFT,
                             shippingBinIncomeListener);
-                    tile.init(game, x, y, shippingBinQ1Daylight);
+                    tile.init(game, x, y, tileSpriteAndShippingBinQ1);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
                 } else if ((red == 255) && (green == 255) && (blue == 2)) {
@@ -469,18 +440,15 @@ public class SceneFarm extends Scene {
 
                     Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
                             ShippingBinTile.Quadrant.TOP_RIGHT);
-                    shippingBinQ2Daylight = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(shippingBinQ2Daylight);
+                    tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ2, 0, 0, null);
-
-                    shippingBinQ2Twilight = applyTwilightLightingColorFilter(shippingBinQ2Daylight);
-                    shippingBinQ2Night = applyNightLightingColorFilter(shippingBinQ2Daylight);
 
                     Tile tile = new ShippingBinTile(ShippingBinTile.TAG,
                             ShippingBinTile.Quadrant.TOP_RIGHT,
                             shippingBinIncomeListener);
-                    tile.init(game, x, y, shippingBinQ2Daylight);
+                    tile.init(game, x, y, tileSpriteAndShippingBinQ2);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
                 } else if ((red == 255) && (green == 255) && (blue == 3)) {
@@ -489,18 +457,15 @@ public class SceneFarm extends Scene {
 
                     Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
                             ShippingBinTile.Quadrant.BOTTOM_LEFT);
-                    shippingBinQ3Daylight = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(shippingBinQ3Daylight);
+                    tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ3, 0, 0, null);
-
-                    shippingBinQ3Twilight = applyTwilightLightingColorFilter(shippingBinQ3Daylight);
-                    shippingBinQ3Night = applyNightLightingColorFilter(shippingBinQ3Daylight);
 
                     Tile tile = new ShippingBinTile(ShippingBinTile.TAG,
                             ShippingBinTile.Quadrant.BOTTOM_LEFT,
                             shippingBinIncomeListener);
-                    tile.init(game, x, y, shippingBinQ3Daylight);
+                    tile.init(game, x, y, tileSpriteAndShippingBinQ3);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
                 } else if ((red == 255) && (green == 255) && (blue == 4)) {
@@ -509,18 +474,15 @@ public class SceneFarm extends Scene {
 
                     Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
                             ShippingBinTile.Quadrant.BOTTOM_RIGHT);
-                    shippingBinQ4Daylight = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(shippingBinQ4Daylight);
+                    tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ4, 0, 0, null);
-
-                    shippingBinQ4Twilight = applyTwilightLightingColorFilter(shippingBinQ4Daylight);
-                    shippingBinQ4Night = applyNightLightingColorFilter(shippingBinQ4Daylight);
 
                     Tile tile = new ShippingBinTile(ShippingBinTile.TAG,
                             ShippingBinTile.Quadrant.BOTTOM_RIGHT,
                             shippingBinIncomeListener);
-                    tile.init(game, x, y, shippingBinQ4Daylight);
+                    tile.init(game, x, y, tileSpriteAndShippingBinQ4);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
                 }

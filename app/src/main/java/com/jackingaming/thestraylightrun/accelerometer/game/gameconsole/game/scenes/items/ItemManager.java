@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
@@ -31,9 +32,9 @@ public class ItemManager
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         for (Item item : items) {
-            item.draw(canvas);
+            item.draw(canvas, paintLightingColorFilter);
         }
     }
 
