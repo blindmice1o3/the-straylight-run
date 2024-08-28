@@ -376,6 +376,7 @@ public abstract class Creature extends Entity {
                 entityCollisionBox.bottom = (creatureCenterY - (Tile.HEIGHT / 4)) +
                         (Tile.HEIGHT / 2);
                 break;
+            // TODO: implement diagonal directions to get BounceEntityCommand (BugCatchingNet) to work.
             default:
                 break;
         }

@@ -24,6 +24,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
@@ -53,13 +54,23 @@ public class SeedShopDialogFragment extends DialogFragment
                         new SeedGrowableTileCommand(null, MysterySeed.TAG)
                 )
         );
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
         seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet());
-        seedShopInventory.add(new BugCatchingNet());
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
         seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
     }
 
     public void init(Game game) {

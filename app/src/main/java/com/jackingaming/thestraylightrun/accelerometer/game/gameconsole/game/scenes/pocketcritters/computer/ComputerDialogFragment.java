@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -46,13 +47,23 @@ public class ComputerDialogFragment extends DialogFragment
     public ComputerDialogFragment() {
         Log.d(TAG, getClass().getSimpleName() + "() constructor");
         seedShopInventory = new ArrayList<Item>();
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
         seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet());
-        seedShopInventory.add(new BugCatchingNet());
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
         seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet());
+        seedShopInventory.add(new BugCatchingNet(
+                new BounceEntityCommand(null)
+        ));
     }
 
     public void init(Game game) {

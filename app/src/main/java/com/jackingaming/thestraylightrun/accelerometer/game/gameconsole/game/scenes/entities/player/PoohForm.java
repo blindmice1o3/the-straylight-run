@@ -10,12 +10,14 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
@@ -143,6 +145,15 @@ public class PoohForm
                     Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                     tileCommand.setTile(tileCurrentlyFacing);
                     tileCommand.execute();
+                } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                    if (entityCurrentlyFacing != null) {
+                        EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                        EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                        Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                        entityCommand.setEntity(entityCurrentlyFacing);
+                        entityCommand.execute();
+                    }
                 } else if (!player.hasCarryable() &&
                         entityCurrentlyFacing == null) {
                     Log.e(TAG, "no carryable and entityFacing is null");
@@ -170,6 +181,8 @@ public class PoohForm
         } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
             if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
                 if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
                     ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
                     game.getTextboxListener().showStatsDisplayer();
@@ -183,6 +196,15 @@ public class PoohForm
                         Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                         tileCommand.setTile(tileCurrentlyFacing);
                         tileCommand.execute();
+                    } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+                        if (entityCurrentlyFacing != null) {
+                            EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                            EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                            Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                            entityCommand.setEntity(entityCurrentlyFacing);
+                            entityCommand.execute();
+                        }
                     }
                 }
             }
