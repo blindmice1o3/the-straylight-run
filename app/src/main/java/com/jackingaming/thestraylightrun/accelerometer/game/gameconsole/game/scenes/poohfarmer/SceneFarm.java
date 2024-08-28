@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LightingColorFilter;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,7 +14,6 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
@@ -240,13 +237,6 @@ public class SceneFarm extends Scene {
     }
 
     @Override
-    public List<Object> exit() {
-        List<Object> args = super.exit();
-        args.add(1, TAG);
-        return args;
-    }
-
-    @Override
     public void enter(List<Object> args) {
         super.enter(args);
         game.getTimeManager().setIsPaused(false);
@@ -259,28 +249,6 @@ public class SceneFarm extends Scene {
             Player.getInstance().setY(yLastKnown);
         }
         GameCamera.getInstance().update(0L);
-    }
-
-    private Bitmap applyTwilightLightingColorFilter(Bitmap bitmapDaylight) {
-        Paint paintTintTwilight = new Paint();
-        paintTintTwilight.setColorFilter(new LightingColorFilter(0xFFFFF000, 0x00000000));
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        Bitmap twilightVersion = Bitmap.createBitmap(bitmapDaylight.getWidth(), bitmapDaylight.getHeight(), Bitmap.Config.ARGB_8888);
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        Canvas canvasTwilight = new Canvas(twilightVersion);
-        canvasTwilight.drawBitmap(bitmapDaylight, 0, 0, paintTintTwilight);
-        return twilightVersion;
-    }
-
-    private Bitmap applyNightLightingColorFilter(Bitmap bitmapDaylight) {
-        Paint paintTintNight = new Paint();
-        paintTintNight.setColorFilter(new LightingColorFilter(0xFF00FFFF, 0x00000000));
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        Bitmap nightVersion = Bitmap.createBitmap(bitmapDaylight.getWidth(), bitmapDaylight.getHeight(), Bitmap.Config.ARGB_8888);
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        Canvas canvasNight = new Canvas(nightVersion);
-        canvasNight.drawBitmap(bitmapDaylight, 0, 0, paintTintNight);
-        return nightVersion;
     }
 
     private Bitmap imageFarm;
@@ -592,11 +560,11 @@ public class SceneFarm extends Scene {
                 new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                         (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT))
         );
-        entities.add(
-                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
-                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
-                        Player.getInstance())
-        );
+//        entities.add(
+//                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
+//                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
+//                        Player.getInstance())
+//        );
         return entities;
     }
 

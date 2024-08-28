@@ -57,6 +57,16 @@ import java.util.concurrent.FutureTask;
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
 
+    public interface ItemInButtonHolderListener {
+        void onChangeItemInButtonHolder(Item itemButtonHolderA, Item itemButtonHolderB);
+    }
+
+    private ItemInButtonHolderListener itemInButtonHolderListener;
+
+    public void setItemInButtonHolderListener(ItemInButtonHolderListener itemInButtonHolderListener) {
+        this.itemInButtonHolderListener = itemInButtonHolderListener;
+    }
+
     public interface ViewportListener {
         void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView);
 
@@ -247,6 +257,10 @@ public class Game {
                         backpackDialog.dismiss();
                         break;
                 }
+
+                itemInButtonHolderListener.onChangeItemInButtonHolder(
+                        itemStoredInButtonHolderA, itemStoredInButtonHolderB
+                );
             }
         };
         itemRecyclerViewAdapter.setClickListener(itemClickListener);

@@ -189,8 +189,4 @@ public class CollidingOrbit extends Creature {
     public void toggleClockwise() {
         clockwise = !clockwise;
     }
-
-    public boolean isClockwise() {
-        return clockwise;
-    }
 }

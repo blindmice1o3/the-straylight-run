@@ -78,7 +78,7 @@ public class PoohForm
 
         // MOVEMENT (check tile, item, entity, and transfer point collisions... actual movement)
         boolean successfulMove = player.move();
-        if (successfulMove) {
+        if (successfulMove && movementListener != null) {
             movementListener.onMove(player.getxMove(), player.getyMove());
         }
 

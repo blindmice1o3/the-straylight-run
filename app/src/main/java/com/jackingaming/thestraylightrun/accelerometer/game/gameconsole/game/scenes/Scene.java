@@ -10,6 +10,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.EntityManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
@@ -45,28 +46,42 @@ public abstract class Scene
         yLastKnown = Player.getInstance().getY();
 
         List<Object> args = new ArrayList<>();
-        if (entityManager.getCollidingOrbit() != null) {
-            CollidingOrbit collidingOrbit = entityManager.getCollidingOrbit();
-            args.add(0, collidingOrbit);
-        }
+        // Add any necessary arguments.
         return args;
     }
 
     boolean isJustEntered = false;
 
     public void enter(List<Object> args) {
+        isJustEntered = true;
+
         GameCamera.getInstance().init(Player.getInstance(),
                 game.getWidthViewport(), game.getHeightViewport(),
                 tileManager.getWidthScene(), tileManager.getHeightScene());
 
-        if (args != null) {
-            if (args.get(0) instanceof CollidingOrbit) {
-                isJustEntered = true;
-
-                CollidingOrbit collidingOrbit = (CollidingOrbit) args.get(0);
-                entityManager.addEntity(
-                        collidingOrbit
-                );
+        // CollidingOrbit currently off.
+        if (entityManager.getCollidingOrbit() == null) {
+            if ((game.getItemStoredInButtonHolderA() != null && game.getItemStoredInButtonHolderA() instanceof BugCatchingNet) ||
+                    (game.getItemStoredInButtonHolderB() != null && game.getItemStoredInButtonHolderB() instanceof BugCatchingNet)) {
+                // Add CollidingOrbital to EntityManager
+                CollidingOrbit collidingOrbit = new CollidingOrbit(
+                        (int) Player.getInstance().getX(), (int) (Player.getInstance().getY() + (2 * Tile.HEIGHT)),
+                        Player.getInstance());
+                // CollidingOrbit.init() is called in Scene.update().
+                game.getSceneManager().getCurrentScene().getEntityManager().addEntity(collidingOrbit);
+            }
+        }
+        // CollidingOrbit currently on.
+        else {
+            if ((game.getItemStoredInButtonHolderA() == null && game.getItemStoredInButtonHolderB() == null) ||
+                    (game.getItemStoredInButtonHolderA() == null &&
+                            (game.getItemStoredInButtonHolderB() != null && !(game.getItemStoredInButtonHolderB() instanceof BugCatchingNet))) ||
+                    (game.getItemStoredInButtonHolderB() == null &&
+                            (game.getItemStoredInButtonHolderA() != null && !(game.getItemStoredInButtonHolderA() instanceof BugCatchingNet))) ||
+                    (game.getItemStoredInButtonHolderA() != null && !(game.getItemStoredInButtonHolderA() instanceof BugCatchingNet)) &&
+                            (game.getItemStoredInButtonHolderB() != null && !(game.getItemStoredInButtonHolderB() instanceof BugCatchingNet))) {
+                // Remove CollidingOrbit from EntityManager.
+                game.getSceneManager().getCurrentScene().getEntityManager().removeCollidingOrbit();
             }
         }
     }
@@ -76,12 +91,15 @@ public abstract class Scene
             isJustEntered = false;
 
             CollidingOrbit collidingOrbit = entityManager.getCollidingOrbit();
-            collidingOrbit.setX(
-                    Player.getInstance().getX()
-            );
-            collidingOrbit.setY(
-                    Player.getInstance().getY() + (2 * Tile.HEIGHT)
-            );
+            if (collidingOrbit != null) {
+                collidingOrbit.init(game);
+                collidingOrbit.setX(
+                        Player.getInstance().getX()
+                );
+                collidingOrbit.setY(
+                        Player.getInstance().getY() + (2 * Tile.HEIGHT)
+                );
+            }
         }
 
         entityManager.update(elapsed);

@@ -7,6 +7,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
@@ -37,6 +38,37 @@ public class Player extends Creature {
     public void init(Game game) {
         super.init(game);
         form.init(game);
+
+        game.setItemInButtonHolderListener(new Game.ItemInButtonHolderListener() {
+            @Override
+            public void onChangeItemInButtonHolder(Item itemButtonHolderA, Item itemButtonHolderB) {
+                // CollidingOrbit currently off.
+                if (game.getSceneManager().getCurrentScene().getEntityManager().getCollidingOrbit() == null) {
+                    if ((itemButtonHolderA != null && itemButtonHolderA instanceof BugCatchingNet) ||
+                            (itemButtonHolderB != null && itemButtonHolderB instanceof BugCatchingNet)) {
+                        // Add CollidingOrbital to EntityManager
+                        CollidingOrbit collidingOrbit = new CollidingOrbit(
+                                (int) x, (int) (y + (2 * Tile.HEIGHT)),
+                                Player.this);
+                        collidingOrbit.init(game);
+                        game.getSceneManager().getCurrentScene().getEntityManager().addEntity(collidingOrbit);
+                    }
+                }
+                // CollidingOrbit currently on.
+                else {
+                    if ((itemButtonHolderA == null && itemButtonHolderB == null) ||
+                            (itemButtonHolderA == null &&
+                                    (itemButtonHolderB != null && !(itemButtonHolderB instanceof BugCatchingNet))) ||
+                            (itemButtonHolderB == null &&
+                                    (itemButtonHolderA != null && !(itemButtonHolderA instanceof BugCatchingNet))) ||
+                            (itemButtonHolderA != null && !(itemButtonHolderA instanceof BugCatchingNet)) &&
+                                    (itemButtonHolderB != null && !(itemButtonHolderB instanceof BugCatchingNet))) {
+                        // Remove CollidingOrbit from EntityManager.
+                        game.getSceneManager().getCurrentScene().getEntityManager().removeCollidingOrbit();
+                    }
+                }
+            }
+        });
     }
 
     @Override

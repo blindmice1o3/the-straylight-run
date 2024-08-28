@@ -62,17 +62,11 @@ public class EntityManager
         while (iterator.hasNext()) {
             Entity e = iterator.next();
 
-            if (!(e instanceof CollidingOrbit)) {
-                e.update(elapsed);
-            }
+            e.update(elapsed);
 
             if (!e.isActive()) {
                 iterator.remove();
             }
-        }
-
-        if (collidingOrbit != null) {
-            collidingOrbit.update(elapsed);
         }
 
         if (!entitiesToBeAdded.isEmpty()) {
@@ -110,6 +104,19 @@ public class EntityManager
 
     public CollidingOrbit getCollidingOrbit() {
         return collidingOrbit;
+    }
+
+    public void removeCollidingOrbit() {
+        Iterator<Entity> iterator = entities.iterator();
+        while (iterator.hasNext()) {
+            Entity e = iterator.next();
+
+            if (e instanceof CollidingOrbit) {
+                iterator.remove();
+            }
+        }
+
+        collidingOrbit = null;
     }
 
     public void setCollidingOrbit(CollidingOrbit collidingOrbit) {

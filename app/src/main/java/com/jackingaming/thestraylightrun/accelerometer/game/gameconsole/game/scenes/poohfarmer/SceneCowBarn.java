@@ -61,13 +61,6 @@ public class SceneCowBarn extends Scene {
     }
 
     @Override
-    public List<Object> exit() {
-        List<Object> args = super.exit();
-        args.add(1, TAG);
-        return args;
-    }
-
-    @Override
     public void enter(List<Object> args) {
         super.enter(args);
         game.getTimeManager().setIsPaused(true);
