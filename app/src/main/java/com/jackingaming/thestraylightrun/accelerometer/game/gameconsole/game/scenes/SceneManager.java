@@ -59,6 +59,7 @@ public class SceneManager
     }
 
     public void init(Game game) {
+        Log.e(TAG, "init()");
         this.game = game;
 
         for (int i = 0; i < sceneStack.size(); i++) {
@@ -72,6 +73,26 @@ public class SceneManager
 
             scene.init(game);
             scene.enter(null);
+        }
+    }
+
+    public void reload(Game game) {
+        this.game = game;
+
+        for (int i = 0; i < sceneStack.size(); i++) {
+            Scene scene = sceneStack.get(i);
+
+            if (scene instanceof SceneFarm) {
+                SceneFarm.setInstance(((SceneFarm) scene));
+            } else if (scene instanceof SceneHome02) {
+                SceneHome02.setInstance((SceneHome02) scene);
+            }
+
+            if (scene instanceof SceneFarm) {
+                ((SceneFarm) scene).reload(game);
+            } else {
+                scene.init(game);
+            }
         }
     }
 

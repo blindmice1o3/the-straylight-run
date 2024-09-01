@@ -5,6 +5,7 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ public class ShippingBinTile extends Tile {
 
     public enum Quadrant {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT;}
 
-    public interface IncomeListener {
+    public interface IncomeListener extends Serializable {
         void incrementCurrency(float amountToIncrement);
     }
 

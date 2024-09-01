@@ -1,6 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables;
 
-public class CooldownTimer {
+import java.io.Serializable;
+
+public class CooldownTimer
+        implements Serializable {
     public static final long COOLDOWN_TARGET_DEFAULT = 1_500L;
 
     private long cooldownTarget;

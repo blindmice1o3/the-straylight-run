@@ -8,7 +8,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import java.io.Serializable;
 
-public class TypeWriterTextView extends AppCompatTextView {
+public class TypeWriterTextView extends AppCompatTextView
+        implements Serializable {
     public interface TextCompletionListener extends Serializable {
         void onAnimationFinish();
     }
@@ -27,8 +28,8 @@ public class TypeWriterTextView extends AppCompatTextView {
         super(context, attrs);
     }
 
-    private Handler handler = new Handler();
-    private Runnable runnable = new Runnable() {
+    transient private Handler handler = new Handler();
+    transient private Runnable runnable = new Runnable() {
 
         @Override
         public void run() {

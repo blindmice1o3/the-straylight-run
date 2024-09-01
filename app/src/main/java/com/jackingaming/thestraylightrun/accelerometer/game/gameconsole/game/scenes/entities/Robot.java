@@ -55,7 +55,7 @@ public class Robot extends Creature {
     public enum State {OFF, WALK, RUN, TILE_SELECTED;}
 
     private RobotAnimationManager robotAnimationManager;
-    private ObjectAnimator movementAnimator;
+    transient private ObjectAnimator movementAnimator;
 
     private State state;
     private Random random;
@@ -73,10 +73,6 @@ public class Robot extends Creature {
 
         direction = Direction.DOWN;
         robotAnimationManager = new RobotAnimationManager();
-        movementAnimator =
-                ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
-        movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
-        movementAnimator.setInterpolator(new LinearInterpolator());
 
         walkLeftCommand = new WalkLeftCommand(this);
         walkUpCommand = new WalkUpCommand(this);
@@ -144,6 +140,11 @@ public class Robot extends Creature {
         super.init(game);
 
         robotAnimationManager.init(game);
+
+        movementAnimator =
+                ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
+        movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
+        movementAnimator.setInterpolator(new LinearInterpolator());
 
         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
         Tile[][] tilesScene = tileManager.getTiles();

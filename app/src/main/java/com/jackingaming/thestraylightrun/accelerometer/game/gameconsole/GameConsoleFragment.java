@@ -44,18 +44,18 @@ public class GameConsoleFragment extends Fragment
     public static final String ARG_GAME_TITLE = "game";
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
 
-    private ObjectAnimator animatorBackgroundColor;
-    private FragmentContainerView fcvUsedAsBorderForViewport;
+    transient private ObjectAnimator animatorBackgroundColor;
+    transient private FragmentContainerView fcvUsedAsBorderForViewport;
     private ViewportFragment viewportFragment;
-    private MySurfaceView mySurfaceView;
+    transient private MySurfaceView mySurfaceView;
     private StatsDisplayerFragment statsDisplayerFragment;
-    private GamePadFragment gamePadFragment;
-    private DirectionPadFragment directionPadFragment;
-    private ButtonPadFragment buttonPadFragment;
+    transient private GamePadFragment gamePadFragment;
+    transient private DirectionPadFragment directionPadFragment;
+    transient private ButtonPadFragment buttonPadFragment;
 
     private String gameTitle;
-    private Game game;
-    private InputManager inputManager;
+    transient private Game game;
+    transient private InputManager inputManager;
 
     public GameConsoleFragment() {
         // Required empty public constructor

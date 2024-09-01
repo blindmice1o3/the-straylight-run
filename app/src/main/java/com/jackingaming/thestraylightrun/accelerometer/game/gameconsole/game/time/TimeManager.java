@@ -17,7 +17,7 @@ public class TimeManager
         implements Serializable {
     public static final String TAG = TimeManager.class.getSimpleName();
 
-    public interface TimeManagerListener {
+    public interface TimeManagerListener extends Serializable {
         void executeTimedEvent();
     }
 
@@ -55,7 +55,7 @@ public class TimeManager
         }
     }
 
-    private Map<EventTime, TimeManagerListener> timeManagerListeners;
+    transient private Map<EventTime, TimeManagerListener> timeManagerListeners;
 
     public void registerTimeManagerListener(TimeManagerListener timeManagerListener,
                                             int hour, int minute, boolean isPM) {
@@ -90,8 +90,6 @@ public class TimeManager
     private boolean isPaused;
 
     public TimeManager() {
-        timeManagerListeners = new HashMap<EventTime, TimeManagerListener>();
-
         year = 1;
         season = Season.SPRING;
         day = 1;
@@ -104,6 +102,7 @@ public class TimeManager
     public void init(Game game, Game.StatsChangeListener statsChangeListener) {
         this.game = game;
         this.statsChangeListener = statsChangeListener;
+        timeManagerListeners = new HashMap<EventTime, TimeManagerListener>();
     }
 
     public void update(long elapsed) {

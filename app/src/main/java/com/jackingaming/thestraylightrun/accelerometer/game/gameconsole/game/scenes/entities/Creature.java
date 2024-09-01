@@ -23,6 +23,8 @@ public abstract class Creature extends Entity {
 
     protected Carryable carryable;
 
+    protected Direction directionLastKnown;
+
     public Creature(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
         direction = Direction.CENTER;

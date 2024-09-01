@@ -12,6 +12,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,12 @@ public class TileManager
     private int numberOfRows;
     private Tile[][] tiles;
     transient private Map<String, Rect> transferPoints;
+
+    public void reload(Game game) {
+        this.game = game;
+
+        transferPoints = new HashMap<>();
+    }
 
     public TileManager() {
 //        numberOfColumns = NUMBER_OF_COLUMNS_DEFAULT;

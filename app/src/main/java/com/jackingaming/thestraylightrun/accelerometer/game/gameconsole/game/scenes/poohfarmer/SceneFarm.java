@@ -53,7 +53,7 @@ public class SceneFarm extends Scene {
     private static SceneFarm uniqueInstance;
 
     private boolean inSeedShopState;
-    private SeedShopDialogFragment seedShopDialogFragment;
+    transient private SeedShopDialogFragment seedShopDialogFragment;
 
     private List<GrowableTile> growableTiles;
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
@@ -66,7 +66,6 @@ public class SceneFarm extends Scene {
         itemManager.loadItems(itemsForFarm);
 
         inSeedShopState = false;
-        seedShopDialogFragment = new SeedShopDialogFragment();
 
         growableTiles = new ArrayList<>();
 
@@ -112,10 +111,8 @@ public class SceneFarm extends Scene {
         uniqueInstance = sceneFarm;
     }
 
-    @Override
-    public void init(Game game) {
+    public void reload(Game game) {
         this.game = game;
-
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
@@ -134,6 +131,64 @@ public class SceneFarm extends Scene {
                 addSwarmOfEel();
             }
         }, 4, 0, true);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                ShippingBinTile.sellStash();
+            }
+        }, 5, 0, true);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                removeSwarmOfEel();
+            }
+        }, 6, 0, true);
+
+        Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
+        tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
+        reloadTileManager(game);
+
+        entityManager.init(game);
+        itemManager.init(game);
+
+        seedShopDialogFragment = new SeedShopDialogFragment();
+        seedShopDialogFragment.init(game);
+
+        if (needDisplaySeedShopFragment) {
+            needDisplaySeedShopFragment = false;
+            showSeedShopFragment();
+        }
+    }
+
+    @Override
+    public void init(Game game) {
+        Log.e(TAG, "init()");
+
+        this.game = game;
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                addSwarmOfEel();
+            }
+        }, 7, 0, false);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                removeSwarmOfEel();
+            }
+        }, 9, 0, false);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                addSwarmOfEel();
+            }
+        }, 4, 0, true);
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                ShippingBinTile.sellStash();
+            }
+        }, 5, 0, true);
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
@@ -193,12 +248,17 @@ public class SceneFarm extends Scene {
             }
         }
 
+        Log.e(TAG, "BEFORE seedShipDialogFragment.init()");
+        seedShopDialogFragment = new SeedShopDialogFragment();
         seedShopDialogFragment.init(game);
+        Log.e(TAG, "AFTER seedShipDialogFragment.init()");
 
         if (needDisplaySeedShopFragment) {
             needDisplaySeedShopFragment = false;
             showSeedShopFragment();
         }
+
+        Log.e(TAG, "init() END");
     }
 
     @Override
@@ -247,15 +307,16 @@ public class SceneFarm extends Scene {
         } else {
             Player.getInstance().setX(xLastKnown);
             Player.getInstance().setY(yLastKnown);
+            Player.getInstance().setDirection(directionLastKnown);
         }
         GameCamera.getInstance().update(0L);
     }
 
-    private Bitmap imageFarm;
-    private Bitmap tileSpriteAndShippingBinQ1;
-    private Bitmap tileSpriteAndShippingBinQ2;
-    private Bitmap tileSpriteAndShippingBinQ3;
-    private Bitmap tileSpriteAndShippingBinQ4;
+    transient private Bitmap imageFarm;
+    transient private Bitmap tileSpriteAndShippingBinQ1;
+    transient private Bitmap tileSpriteAndShippingBinQ2;
+    transient private Bitmap tileSpriteAndShippingBinQ3;
+    transient private Bitmap tileSpriteAndShippingBinQ4;
 
     public void updateTilesBySeason(TimeManager.Season season) {
         imageFarm = cropImageFarm(game.getContext().getResources(), season);
@@ -327,6 +388,99 @@ public class SceneFarm extends Scene {
     private int xIndexShippingBinQ2, yIndexShippingBinQ2;
     private int xIndexShippingBinQ3, yIndexShippingBinQ3;
     private int xIndexShippingBinQ4, yIndexShippingBinQ4;
+
+    public void reloadTileManager(Game game) {
+        //rgbTileMapFarm is an image where each pixel represents a tile.
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
+        int columns = rgbTileMapFarm.getWidth();            //Always need.
+        int rows = rgbTileMapFarm.getHeight();              //Always need.
+
+        Tile[][] tiles = tileManager.getTiles();
+
+        imageFarm = cropImageFarm(
+                game.getContext().getResources(),
+                game.getTimeManager().getSeason());
+        //DEFINE EACH ELEMENT.
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                int xInPixel = x * Tile.WIDTH;
+                int yInPixel = y * Tile.HEIGHT;
+                int widthInPixel = Tile.WIDTH;
+                int heightInPixel = Tile.HEIGHT;
+                Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                int pixel = rgbTileMapFarm.getPixel(x, y);
+                int red = Color.red(pixel);
+                int green = Color.green(pixel);
+                int blue = Color.blue(pixel);
+                if (pixel == Color.BLACK) {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                } else if (pixel == Color.WHITE) {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                } else if (pixel == Color.RED) {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                } else if (pixel == Color.GREEN) {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                }
+                //SHIPPING_BIN_TILE
+                else if ((red == 255) && (green == 255) && (blue == 1)) {
+                    xIndexShippingBinQ1 = x;
+                    yIndexShippingBinQ1 = y;
+
+                    Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
+                            ShippingBinTile.Quadrant.TOP_LEFT);
+                    tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                    tiles[y][x].init(game, x, y, tileSpriteAndShippingBinQ1);
+                } else if ((red == 255) && (green == 255) && (blue == 2)) {
+                    xIndexShippingBinQ2 = x;
+                    yIndexShippingBinQ2 = y;
+
+                    Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
+                            ShippingBinTile.Quadrant.TOP_RIGHT);
+                    tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                    tiles[y][x].init(game, x, y, tileSpriteAndShippingBinQ2);
+                } else if ((red == 255) && (green == 255) && (blue == 3)) {
+                    xIndexShippingBinQ3 = x;
+                    yIndexShippingBinQ3 = y;
+
+                    Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
+                            ShippingBinTile.Quadrant.BOTTOM_LEFT);
+                    tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                    tiles[y][x].init(game, x, y, tileSpriteAndShippingBinQ3);
+                } else if ((red == 255) && (green == 255) && (blue == 4)) {
+                    xIndexShippingBinQ4 = x;
+                    yIndexShippingBinQ4 = y;
+
+                    Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
+                            ShippingBinTile.Quadrant.BOTTOM_RIGHT);
+                    tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                    tiles[y][x].init(game, x, y, tileSpriteAndShippingBinQ4);
+                }
+//                //TODO: handle special tiles (stashWood, flowerPlot, hotSpring)
+                else if (pixel == Color.BLUE) {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                } else {
+                    tiles[y][x].init(game, x, y, tileSprite);
+                }
+            }
+        }
+    }
 
     private Tile[][] createAndInitTiles(Game game) {
         //rgbTileMapFarm is an image where each pixel represents a tile.

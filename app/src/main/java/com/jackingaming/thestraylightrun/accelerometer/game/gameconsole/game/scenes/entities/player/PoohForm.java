@@ -30,11 +30,13 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.BedTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
+import java.io.Serializable;
+
 public class PoohForm
         implements Form {
     public static final String TAG = PoohForm.class.getSimpleName();
 
-    public interface MovementListener {
+    public interface MovementListener extends Serializable {
         void onMove(float xMove, float yMove);
     }
 

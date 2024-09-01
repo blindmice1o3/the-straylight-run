@@ -36,10 +36,10 @@ public class TypeWriterDialogFragment extends DialogFragment
 
     private DismissListener dismissListener;
 
-    private ImageView ivEntityPortrait;
+    transient private ImageView ivEntityPortrait;
     private TypeWriterTextView tvTypeWriter;
     private long delay;
-    private Bitmap portrait;
+    transient private Bitmap portrait;
     private String text;
     private TypeWriterTextView.TextCompletionListener textCompletionListener;
 

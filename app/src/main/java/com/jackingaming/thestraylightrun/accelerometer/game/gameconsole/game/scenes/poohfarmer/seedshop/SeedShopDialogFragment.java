@@ -74,6 +74,7 @@ public class SeedShopDialogFragment extends DialogFragment
     }
 
     public void init(Game game) {
+        Log.e(TAG, "init()");
         this.game = game;
 
         for (Item item : seedShopInventory) {

@@ -18,7 +18,10 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.buttonholder.ButtonHolderFragment;
 
-public class StatsDisplayerFragment extends Fragment {
+import java.io.Serializable;
+
+public class StatsDisplayerFragment extends Fragment
+        implements Serializable {
     public static final String TAG = StatsDisplayerFragment.class.getSimpleName();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -30,7 +33,7 @@ public class StatsDisplayerFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public interface ButtonHolderClickListener {
+    public interface ButtonHolderClickListener extends Serializable {
         void onButtonHolderClicked(ButtonHolder buttonHolder);
     }
 
@@ -42,8 +45,8 @@ public class StatsDisplayerFragment extends Fragment {
 
     public enum ButtonHolder {A, B;}
 
-    private Bitmap honeyPot;
-    private Bitmap calendar;
+    transient private Bitmap honeyPot;
+    transient private Bitmap calendar;
 
     private TextView textViewCurrency;
     private TextView textViewTime;

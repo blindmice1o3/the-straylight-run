@@ -35,19 +35,29 @@ public class Plant extends Entity
 
     private int ageInDays;
     private boolean harvestable;
-    private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
-    private Bitmap imageHarvestableGreen, imageHarvestablePurple;
-    private Bitmap imageHarvestable;
+    transient private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
+    transient private Bitmap imageHarvestableGreen, imageHarvestablePurple;
+    transient private Bitmap imageHarvestable;
     private Color color;
     private float price;
 
     private int health;
-    private Paint paintBorder;
+    transient private Paint paintBorder;
     private boolean isShowingBorder = false;
     private CooldownTimer damageReceivedCooldownTimer;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
+
+        ageInDays = 0;
+        harvestable = false;
+
+        Random random = new Random();
+        int numberRandom = random.nextInt(100);
+        color = (numberRandom < 50) ?
+                Color.GREEN : Color.PURPLE;
+
+        health = HEALTH_MAX_DEFAULT;
 
         damageReceivedCooldownTimer = new CooldownTimer();
         damageReceivedCooldownTimer.setCooldownTarget(3000L);
@@ -56,8 +66,7 @@ public class Plant extends Entity
     @Override
     public void init(Game game) {
         super.init(game);
-        ageInDays = 0;
-        harvestable = false;
+
         imageBracket01 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green249);
         imageBracket02 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green256);
         imageBracket03 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green266);
@@ -65,11 +74,6 @@ public class Plant extends Entity
 
         imageHarvestableGreen = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green2174);
         imageHarvestablePurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.purple2174);
-
-        Random random = new Random();
-        int numberRandom = random.nextInt(100);
-        color = (numberRandom < 50) ?
-                Color.GREEN : Color.PURPLE;
 
         switch (color) {
             case GREEN:
@@ -87,7 +91,6 @@ public class Plant extends Entity
 
         updateImageBasedOnAgeInDays();
 
-        health = HEALTH_MAX_DEFAULT;
         paintBorder = new Paint();
         paintBorder.setAntiAlias(true);
         paintBorder.setStyle(Paint.Style.STROKE);

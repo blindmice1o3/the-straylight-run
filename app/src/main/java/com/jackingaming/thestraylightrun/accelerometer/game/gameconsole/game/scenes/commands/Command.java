@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands;
 
-public interface Command {
+import java.io.Serializable;
+
+public interface Command extends Serializable {
     boolean execute();
 }

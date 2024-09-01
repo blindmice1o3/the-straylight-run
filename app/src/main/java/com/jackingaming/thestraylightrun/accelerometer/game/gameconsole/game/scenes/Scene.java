@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.EntityManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
@@ -30,6 +31,7 @@ public abstract class Scene
 
     protected float xLastKnown;
     protected float yLastKnown;
+    protected Creature.Direction directionLastKnown;
 
     public Scene() {
         tileManager = new TileManager();
@@ -44,6 +46,7 @@ public abstract class Scene
     public List<Object> exit() {
         xLastKnown = Player.getInstance().getX();
         yLastKnown = Player.getInstance().getY();
+        directionLastKnown = Player.getInstance().getDirection();
 
         List<Object> args = new ArrayList<>();
         // Add any necessary arguments.
@@ -105,7 +108,7 @@ public abstract class Scene
         entityManager.update(elapsed);
     }
 
-    private Paint paintLightingColorFilter;
+    transient private Paint paintLightingColorFilter;
 
     public void updatePaintLightingColorFilter(TimeManager.ModeOfDay modeOfDay) {
         switch (modeOfDay) {

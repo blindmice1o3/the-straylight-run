@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -35,6 +36,8 @@ public class EntityManager
     }
 
     public void init(Game game) {
+        Log.e("EntityManager", "init()");
+
         this.game = game;
 
         Iterator<Entity> iterator = entities.iterator();

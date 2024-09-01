@@ -37,7 +37,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
@@ -48,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -57,7 +57,7 @@ import java.util.concurrent.FutureTask;
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
 
-    public interface ItemInButtonHolderListener {
+    public interface ItemInButtonHolderListener extends Serializable {
         void onChangeItemInButtonHolder(Item itemButtonHolderA, Item itemButtonHolderB);
     }
 
@@ -67,7 +67,7 @@ public class Game {
         this.itemInButtonHolderListener = itemInButtonHolderListener;
     }
 
-    public interface ViewportListener {
+    public interface ViewportListener extends Serializable {
         void showFragmentAndHideSurfaceView(Fragment fragmentReplacingSurfaceView);
 
         void showSurfaceView();
@@ -87,7 +87,7 @@ public class Game {
         this.viewportListener = viewportListener;
     }
 
-    public interface TextboxListener {
+    public interface TextboxListener extends Serializable {
         void showTextbox(TypeWriterDialogFragment typeWriterDialogFragment);
 
         void showStatsDisplayer();
@@ -99,7 +99,7 @@ public class Game {
         this.textboxListener = textboxListener;
     }
 
-    public interface StatsChangeListener {
+    public interface StatsChangeListener extends Serializable {
         void onCurrencyChange(float currency);
 
         void onTimeChange(String inGameClockTime, String calendarText);
@@ -208,12 +208,7 @@ public class Game {
         this.heightViewport = heightViewport;
 
         timeManager.init(this, statsChangeListener);
-        timeManager.registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                ShippingBinTile.sellStash();
-            }
-        }, 5, 0, true);
+
         sceneManager.init(this);
         stateManager.init(this);
 
@@ -335,7 +330,7 @@ public class Game {
     }
 
     private void saveToFile(String fileName) {
-        Log.d(TAG, getClass().getSimpleName() + ".saveToFile(String fileName) START fileName: " + fileName);
+        Log.e(TAG, getClass().getSimpleName() + ".saveToFile(String fileName) START fileName: " + fileName);
         try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
             // MUST save form before exit() (otherwise it'll load formBeforeThisScene).
@@ -343,7 +338,9 @@ public class Game {
             // Record player's xLastKnown and yLastKnown for the current scene.
             sceneManager.getCurrentScene().exit();
 
+            Log.e(TAG, "BEFORE timeManager");
             os.writeObject(timeManager);
+            Log.e(TAG, "AFTER timeManager");
             os.writeObject(sceneManager);
             os.writeFloat(currency);
 
@@ -393,13 +390,19 @@ public class Game {
             timeManager.init(this, statsChangeListener);
 
             sceneManager = (SceneManager) os.readObject();
+            Log.e(TAG, "loadFromFile(): BEFORE GameConsoleFragment loading.");
             GameConsoleFragment gameConsoleFragment = (GameConsoleFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag(GameConsoleFragment.TAG);
-            ComputerDialogFragment computerDialogFragmentBeforeRestart = (ComputerDialogFragment) gameConsoleFragment.getFragmentManager().findFragmentByTag(ComputerDialogFragment.TAG);
-            if ((sceneManager.getCurrentScene() instanceof SceneHome02) &&
-                    (computerDialogFragmentBeforeRestart != null)) {
-                ((SceneHome02) sceneManager.getCurrentScene()).setComputerDialogFragment(computerDialogFragmentBeforeRestart);
+            Log.e(TAG, "loadFromFile(): AFTER GameConsoleFragment loading.");
+            if (gameConsoleFragment != null) {
+                ComputerDialogFragment computerDialogFragmentBeforeRestart = (ComputerDialogFragment) gameConsoleFragment.getFragmentManager().findFragmentByTag(ComputerDialogFragment.TAG);
+                if ((sceneManager.getCurrentScene() instanceof SceneHome02) &&
+                        (computerDialogFragmentBeforeRestart != null)) {
+                    ((SceneHome02) sceneManager.getCurrentScene()).setComputerDialogFragment(computerDialogFragmentBeforeRestart);
+                }
+            } else {
+                Log.e(TAG, "gameConsoleFragment == null");
             }
-            sceneManager.init(this);
+            sceneManager.reload(this);
             Player.getInstance().setForm(form);
             currency = os.readFloat();
             statsChangeListener.onCurrencyChange(currency);
@@ -416,6 +419,7 @@ public class Game {
                 item.init(this);
             }
             boolean hasItemInButtonHolderA = os.readBoolean();
+            Log.e(TAG, "hasItemInButtonHolderA: " + hasItemInButtonHolderA);
             if (hasItemInButtonHolderA) {
                 itemStoredInButtonHolderA = (Item) os.readObject();
                 itemStoredInButtonHolderA.init(this);
@@ -428,7 +432,6 @@ public class Game {
                 statsChangeListener.onButtonHolderBChange(itemStoredInButtonHolderB.getImage());
             }
             int ordinalValueOfButtonHolderCurrentlySelected = os.readInt();
-            Log.d(TAG, getClass().getSimpleName() + ".loadFromFile(String fileName) ordinalValueOfButtonHolderCurrenlySelected: " + ordinalValueOfButtonHolderCurrentlySelected);
             buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.values()[ordinalValueOfButtonHolderCurrentlySelected];
             /////////////////////////////////////////////////////
             refreshBackpackWithoutItemsDisplayingInButtonHolders();
@@ -452,6 +455,8 @@ public class Game {
             }
 //            inSeedShopDialogState = os.readBoolean();
             Player.getInstance().init(this);
+            sceneManager.getCurrentScene().enter(null);
+            Log.e(TAG, "loadFromFile() end.");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

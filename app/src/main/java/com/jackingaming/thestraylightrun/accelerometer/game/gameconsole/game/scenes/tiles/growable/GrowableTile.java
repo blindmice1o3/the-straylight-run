@@ -12,13 +12,14 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
-    public interface EntityListener {
+    public interface EntityListener extends Serializable {
         void addEntityToScene(Entity entityToAdd);
     }
 
@@ -31,8 +32,8 @@ public class GrowableTile extends Tile {
     private State state;
     private String idSeed;
     private Entity entity;
-    private Map<State, Bitmap> imageUnwateredViaState;
-    private Map<State, Bitmap> imageWateredViaState;
+    transient private Map<State, Bitmap> imageUnwateredViaState;
+    transient private Map<State, Bitmap> imageWateredViaState;
 
     public GrowableTile(String id, Game game, EntityListener entityListener) {
         super(id);
@@ -49,6 +50,7 @@ public class GrowableTile extends Tile {
         super.init(game, xIndex, yIndex, image);
 
         initImageMaps(game.getContext().getResources());
+        updateImage();
     }
 
     public void germinateSeed() {
