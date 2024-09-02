@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.util.TypedValue;
@@ -431,12 +432,20 @@ public class Game {
                 itemStoredInButtonHolderA = (Item) os.readObject();
                 itemStoredInButtonHolderA.init(this);
                 statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA.getImage());
+            } else {
+                itemStoredInButtonHolderA = null;
+                Bitmap imageDefault = BitmapFactory.decodeResource(context.getResources(), StatsDisplayerFragment.IMAGE_DEFAULT);
+                statsChangeListener.onButtonHolderAChange(imageDefault);
             }
             boolean hasItemInButtonHolderB = os.readBoolean();
             if (hasItemInButtonHolderB) {
                 itemStoredInButtonHolderB = (Item) os.readObject();
                 itemStoredInButtonHolderB.init(this);
                 statsChangeListener.onButtonHolderBChange(itemStoredInButtonHolderB.getImage());
+            } else {
+                itemStoredInButtonHolderB = null;
+                Bitmap imageDefault = BitmapFactory.decodeResource(context.getResources(), StatsDisplayerFragment.IMAGE_DEFAULT);
+                statsChangeListener.onButtonHolderBChange(imageDefault);
             }
             int ordinalValueOfButtonHolderCurrentlySelected = os.readInt();
             buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.values()[ordinalValueOfButtonHolderCurrentlySelected];
@@ -451,6 +460,18 @@ public class Game {
                         ((CollidingOrbit) e).setEntityToOrbit(Player.getInstance());
                         break;
                     }
+                }
+            } else {
+                List<Entity> entities = sceneManager.getCurrentScene().getEntityManager().getEntities();
+                boolean doesExistCollidingOrbit = false;
+                for (Entity e : entities) {
+                    if (e instanceof CollidingOrbit) {
+                        doesExistCollidingOrbit = true;
+                        break;
+                    }
+                }
+                if (doesExistCollidingOrbit) {
+                    sceneManager.getCurrentScene().getEntityManager().removeCollidingOrbit();
                 }
             }
 

@@ -23,6 +23,7 @@ import java.io.Serializable;
 public class StatsDisplayerFragment extends Fragment
         implements Serializable {
     public static final String TAG = StatsDisplayerFragment.class.getSimpleName();
+    public static final int IMAGE_DEFAULT = R.drawable.btn_star_on_normal_holo_light;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

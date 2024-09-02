@@ -87,13 +87,19 @@ public class SceneManager
             } else if (scene instanceof SceneHome02) {
                 SceneHome02.setInstance((SceneHome02) scene);
             }
-
-            if (scene instanceof SceneFarm) {
-                ((SceneFarm) scene).reload(game);
-            } else {
-                scene.init(game);
-            }
         }
+
+        SceneFarm.getInstance().reload(game);
+
+        SceneHouseLevel01.getInstance().setGame(game);
+
+        SceneHothouse.getInstance().setGame(game);
+
+        SceneSheepPen.getInstance().setGame(game);
+
+        SceneChickenCoop.getInstance().setGame(game);
+
+        SceneCowBarn.getInstance().setGame(game);
     }
 
     public void update(long elapsed) {

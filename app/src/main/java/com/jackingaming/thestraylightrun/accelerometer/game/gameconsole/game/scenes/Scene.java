@@ -149,4 +149,8 @@ public abstract class Scene
     public EntityManager getEntityManager() {
         return entityManager;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
