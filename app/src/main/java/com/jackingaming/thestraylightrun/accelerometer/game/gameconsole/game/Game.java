@@ -28,6 +28,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
@@ -75,6 +77,8 @@ public class Game {
         void startBlinkingBorder();
 
         void stopBlinkingBorder();
+
+        boolean isBlinkingBorderOn();
     }
 
     private ViewportListener viewportListener;
@@ -361,6 +365,9 @@ public class Game {
 
 //            os.writeObject(seedShopInventory);
 
+            boolean isBlinkingBorderOn = viewportListener.isBlinkingBorderOn();
+            os.writeBoolean(isBlinkingBorderOn);
+
             os.writeBoolean(paused);
             os.writeBoolean(inBackpackDialogState);
             if (inBackpackDialogState) {
@@ -436,11 +443,28 @@ public class Game {
             /////////////////////////////////////////////////////
             refreshBackpackWithoutItemsDisplayingInButtonHolders();
             /////////////////////////////////////////////////////
+            if (itemStoredInButtonHolderA instanceof BugCatchingNet ||
+                    itemStoredInButtonHolderB instanceof BugCatchingNet) {
+                List<Entity> entities = sceneManager.getCurrentScene().getEntityManager().getEntities();
+                for (Entity e : entities) {
+                    if (e instanceof CollidingOrbit) {
+                        ((CollidingOrbit) e).setEntityToOrbit(Player.getInstance());
+                        break;
+                    }
+                }
+            }
 
 //            seedShopInventory = (List<Item>) os.readObject();
 //            for (Item item : seedShopInventory) {
 //                item.init(this);
 //            }
+
+            boolean isBlinkingBorderOn = os.readBoolean();
+            if (isBlinkingBorderOn) {
+                viewportListener.startBlinkingBorder();
+            } else {
+                viewportListener.stopBlinkingBorder();
+            }
 
             paused = os.readBoolean();
             if (holder != null) {

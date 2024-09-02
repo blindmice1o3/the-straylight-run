@@ -203,6 +203,11 @@ public class GameConsoleFragment extends Fragment
         }
     }
 
+    @Override
+    public boolean isBlinkingBorderOn() {
+        return animatorBackgroundColor.isRunning();
+    }
+
     private Fragment fragmentReplacingSurfaceView;
 
     @Override

@@ -189,4 +189,8 @@ public class CollidingOrbit extends Creature {
     public void toggleClockwise() {
         clockwise = !clockwise;
     }
+
+    public void setEntityToOrbit(Entity entityToOrbit) {
+        this.entityToOrbit = entityToOrbit;
+    }
 }
