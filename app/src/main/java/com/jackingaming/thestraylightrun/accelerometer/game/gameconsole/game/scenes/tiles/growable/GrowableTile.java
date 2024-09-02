@@ -27,7 +27,6 @@ public class GrowableTile extends Tile {
 
     public enum State {UNTILLED, TILLED, SEEDED, OCCUPIED;}
 
-    transient private Game game;
     private boolean watered;
     private State state;
     private String idSeed;
@@ -35,9 +34,8 @@ public class GrowableTile extends Tile {
     transient private Map<State, Bitmap> imageUnwateredViaState;
     transient private Map<State, Bitmap> imageWateredViaState;
 
-    public GrowableTile(String id, Game game, EntityListener entityListener) {
+    public GrowableTile(String id, EntityListener entityListener) {
         super(id);
-        this.game = game;
         this.entityListener = entityListener;
         watered = false;
         state = State.UNTILLED;

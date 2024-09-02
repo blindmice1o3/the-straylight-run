@@ -149,6 +149,11 @@ public class SceneFarm extends Scene {
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
         reloadTileManager(game);
 
+        for (GrowableTile growableTile : growableTiles) {
+            growableTile.setGame(game);
+        }
+        Log.e(TAG, "growableTiles.size() is " + growableTiles.size());
+
         entityManager.init(game);
         itemManager.init(game);
 
@@ -517,7 +522,7 @@ public class SceneFarm extends Scene {
 //                    tiles[y][x] = new GenericSolidTile(gameCartridge, x, y);
                 } else if (pixel == Color.WHITE) {
 //                    Tile tile = new Tile("white");
-                    Tile tile = new GrowableTile(GrowableTile.TAG, game, new GrowableTile.EntityListener() {
+                    Tile tile = new GrowableTile(GrowableTile.TAG, new GrowableTile.EntityListener() {
                         @Override
                         public void addEntityToScene(Entity entityToAdd) {
                             entityManager.addEntity(entityToAdd);

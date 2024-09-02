@@ -15,7 +15,7 @@ public class Tile
     public static final int WIDTH = 16;
     public static final int HEIGHT = 16;
 
-    transient private Game game;
+    transient protected Game game;
 
     private String id;
     private boolean walkable = true;
@@ -77,5 +77,9 @@ public class Tile
 
     public void setImage(Bitmap image) {
         this.image = image;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
