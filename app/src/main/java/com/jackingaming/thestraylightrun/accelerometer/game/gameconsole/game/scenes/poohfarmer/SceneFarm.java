@@ -144,6 +144,7 @@ public class SceneFarm extends Scene {
             }
         }, 6, 0, true);
 
+        tileManager.reload(game);
         Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
         reloadTileManager(game);
