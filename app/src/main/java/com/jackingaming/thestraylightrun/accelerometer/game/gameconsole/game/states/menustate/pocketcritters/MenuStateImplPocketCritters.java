@@ -63,6 +63,7 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
     @Override
     public void enter(Object[] args) {
         indexMenu = 0;
+        initOrUpdateDestinationBoundsOfMenuCursorImage();
     }
 
     @Override

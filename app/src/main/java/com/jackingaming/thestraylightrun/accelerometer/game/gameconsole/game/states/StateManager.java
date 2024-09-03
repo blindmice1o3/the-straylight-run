@@ -13,6 +13,7 @@ import java.util.List;
 public class StateManager {
     private Game game;
 
+    private NewOrContinueState newOrContinueState;
     private GameStateImpl gameState;
     private MenuStateImpl menuState;
     private TextboxStateImpl textboxState;
@@ -20,10 +21,12 @@ public class StateManager {
     private List<State> stateStack;
 
     public StateManager() {
+        newOrContinueState = new NewOrContinueState();
         gameState = new GameStateImpl();
 
         stateStack = new ArrayList<State>();
         stateStack.add(gameState);
+        stateStack.add(newOrContinueState);
     }
 
     public void init(Game game) {
@@ -58,7 +61,7 @@ public class StateManager {
         return stateStack.get(getIndexOfTop());
     }
 
-    private void pop() {
+    public void pop() {
         State stateCurrent = getCurrentState();
         stateCurrent.exit();
 
