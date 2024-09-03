@@ -364,7 +364,11 @@ public class Game {
             Log.d(TAG, getClass().getSimpleName() + ".saveToFile(String fileName) ordinalValueOfButtonHolderCurrenlySelected: " + ordinalValueOfButtonHolderCurrentlySelected);
             os.writeInt(ordinalValueOfButtonHolderCurrentlySelected);
 
-//            os.writeObject(seedShopInventory);
+            // do AFTER SceneFarm is reloaded.
+            List<Item> seedShopInventory = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedShopInventory();
+            boolean givenMysterySeed = SceneFarm.getInstance().getSeedShopDialogFragment().isGivenMysterySeed();
+            os.writeObject(seedShopInventory);
+            os.writeBoolean(givenMysterySeed);
 
             boolean isBlinkingBorderOn = viewportListener.isBlinkingBorderOn();
             os.writeBoolean(isBlinkingBorderOn);
@@ -475,10 +479,11 @@ public class Game {
                 }
             }
 
-//            seedShopInventory = (List<Item>) os.readObject();
-//            for (Item item : seedShopInventory) {
-//                item.init(this);
-//            }
+            // do AFTER SceneFarm is reloaded.
+            List<Item> seedShopInventory = (List<Item>) os.readObject();
+            boolean givenMysterySeed = os.readBoolean();
+            SceneFarm.getInstance().getSeedShopDialogFragment().reload(
+                    this, seedShopInventory, givenMysterySeed);
 
             boolean isBlinkingBorderOn = os.readBoolean();
             if (isBlinkingBorderOn) {

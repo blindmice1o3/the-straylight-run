@@ -33,19 +33,30 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeedShopDialogFragment extends DialogFragment
-        implements Serializable {
+public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
 
-    transient private Game game;
-    transient private Bitmap seedShopBackgroundTop;
-    transient private Bitmap seedShopBackgroundBottom;
+    private Game game;
+    private Bitmap seedShopBackgroundTop;
+    private Bitmap seedShopBackgroundBottom;
+    private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
-    transient private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
+    private boolean givenMysterySeed = false;
+
+    public void reload(Game game, List<Item> seedShopInventory, boolean givenMysterySeed) {
+        this.game = game;
+
+        this.seedShopInventory.clear();
+        this.seedShopInventory.addAll(seedShopInventory);
+        for (Item item : seedShopInventory) {
+            item.init(game);
+        }
+
+        this.givenMysterySeed = givenMysterySeed;
+    }
 
     public SeedShopDialogFragment() {
         seedShopInventory = new ArrayList<Item>();
@@ -194,8 +205,6 @@ public class SeedShopDialogFragment extends DialogFragment
         );
     }
 
-    private boolean givenMysterySeed = false;
-
     @Override
     public void onPause() {
         super.onPause();
@@ -214,5 +223,13 @@ public class SeedShopDialogFragment extends DialogFragment
         Log.d(TAG, getClass().getSimpleName() + ".onDismiss(DialogInterface) SceneFarm's inSeedShopDialogState: " + SceneFarm.getInstance().isInSeedShopState());
         game.setPaused(false);
         super.onDismiss(dialog);
+    }
+
+    public List<Item> getSeedShopInventory() {
+        return seedShopInventory;
+    }
+
+    public boolean isGivenMysterySeed() {
+        return givenMysterySeed;
     }
 }

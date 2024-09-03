@@ -264,12 +264,16 @@ public class GameConsoleFragment extends Fragment
         handler.post(new Runnable() {
             @Override
             public void run() {
-                statsDisplayerFragment.setImageForButtonHolderA(
-                        game.getItemStoredInButtonHolderA().getImage()
-                );
-                statsDisplayerFragment.setImageForButtonHolderB(
-                        game.getItemStoredInButtonHolderB().getImage()
-                );
+                if (game.getItemStoredInButtonHolderA() != null) {
+                    statsDisplayerFragment.setImageForButtonHolderA(
+                            game.getItemStoredInButtonHolderA().getImage()
+                    );
+                }
+                if (game.getItemStoredInButtonHolderB() != null) {
+                    statsDisplayerFragment.setImageForButtonHolderB(
+                            game.getItemStoredInButtonHolderB().getImage()
+                    );
+                }
             }
         });
     }
