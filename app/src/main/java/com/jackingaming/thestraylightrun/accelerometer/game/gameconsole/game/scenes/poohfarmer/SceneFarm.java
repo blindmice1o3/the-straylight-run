@@ -143,6 +143,7 @@ public class SceneFarm extends Scene {
                 removeSwarmOfEel();
             }
         }, 6, 0, true);
+        updatePaintLightingColorFilter(game.getTimeManager().getModeOfDay());
 
         tileManager.reload(game);
         Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
