@@ -187,6 +187,7 @@ public class PoohForm
 
                 if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
                     ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
+
                     game.getTextboxListener().showStatsDisplayer();
                 } else {
                     // TODO: check item occupying StatsDisplayerFragment's button holder.

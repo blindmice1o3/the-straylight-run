@@ -259,6 +259,19 @@ public class GameConsoleFragment extends Fragment
                 .commit();
 
         game.updateCurrency();
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                statsDisplayerFragment.setImageForButtonHolderA(
+                        game.getItemStoredInButtonHolderA().getImage()
+                );
+                statsDisplayerFragment.setImageForButtonHolderB(
+                        game.getItemStoredInButtonHolderB().getImage()
+                );
+            }
+        });
     }
 
     @Override
