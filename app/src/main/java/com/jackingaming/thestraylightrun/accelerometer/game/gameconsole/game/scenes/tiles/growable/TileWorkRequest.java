@@ -3,7 +3,10 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
-public class TileWorkRequest {
+import java.io.Serializable;
+
+public class TileWorkRequest
+        implements Serializable {
     private Tile tile;
     private TileSelectorView.Mode modeForTileSelectorView;
 
