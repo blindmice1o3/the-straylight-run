@@ -33,7 +33,7 @@ public class NonPlayableCharacter extends Entity {
     }
 
     @Override
-    protected void resetMovementCommands() {
+    public void resetMovementCommands() {
         super.resetMovementCommands();
         turnStationaryOn();
     }
@@ -93,11 +93,11 @@ public class NonPlayableCharacter extends Entity {
                 } else {
                     // do nothing.
                 }
+
+                doMoveBasedOnDirection(handler);
             } else {
                 runMovementCommands();
             }
-
-            doMoveBasedOnDirection(handler);
         }
     }
 

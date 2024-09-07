@@ -310,52 +310,50 @@ public class WorldScene extends Scene {
                                 dialogFragment, tag
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
-                        if (!collided.isInParty()) {
-                            // first move is towards Player's tile.
-                            MovementCommand movementCommand = null;
-                            switch (player.getDirection()) {
-                                case LEFT:
-                                    movementCommand = new MoveRightCommand(collided, handler);
-                                    break;
-                                case UP:
-                                    movementCommand = new MoveDownCommand(collided, handler);
-                                    break;
-                                case RIGHT:
-                                    movementCommand = new MoveLeftCommand(collided, handler);
-                                    break;
-                                case DOWN:
-                                    movementCommand = new MoveUpCommand(collided, handler);
-                                    break;
-                            }
-                            collided.appendMovementCommand(movementCommand);
+                        collided.resetMovementCommands();
 
-                            ((NonPlayableCharacter) collided).turnStationaryOff();
-
-                            // subsequent moves are same as Player's moves.
-                            player.setPartyMovementListener(new Player.PartyMovementListener() {
-                                @Override
-                                public void onPartyLeaderMove(Direction direction) {
-                                    MovementCommand movementCommand = null;
-                                    switch (player.getDirection()) {
-                                        case LEFT:
-                                            movementCommand = new MoveLeftCommand(collided, handler);
-                                            break;
-                                        case UP:
-                                            movementCommand = new MoveUpCommand(collided, handler);
-                                            break;
-                                        case RIGHT:
-                                            movementCommand = new MoveRightCommand(collided, handler);
-                                            break;
-                                        case DOWN:
-                                            movementCommand = new MoveDownCommand(collided, handler);
-                                            break;
-                                    }
-                                    collided.appendMovementCommand(movementCommand);
-                                }
-                            });
-
-                            collided.setInParty(true);
+                        // first move is towards Player's tile.
+                        MovementCommand movementCommand = null;
+                        switch (player.getDirection()) {
+                            case LEFT:
+                                movementCommand = new MoveRightCommand(collided, handler);
+                                break;
+                            case UP:
+                                movementCommand = new MoveDownCommand(collided, handler);
+                                break;
+                            case RIGHT:
+                                movementCommand = new MoveLeftCommand(collided, handler);
+                                break;
+                            case DOWN:
+                                movementCommand = new MoveUpCommand(collided, handler);
+                                break;
                         }
+                        collided.appendMovementCommand(movementCommand);
+
+                        ((NonPlayableCharacter) collided).turnStationaryOff();
+
+                        // subsequent moves are same as Player's moves.
+                        player.setPartyMovementListener(new Player.PartyMovementListener() {
+                            @Override
+                            public void onPartyLeaderMove(Direction direction) {
+                                MovementCommand movementCommand = null;
+                                switch (player.getDirection()) {
+                                    case LEFT:
+                                        movementCommand = new MoveLeftCommand(collided, handler);
+                                        break;
+                                    case UP:
+                                        movementCommand = new MoveUpCommand(collided, handler);
+                                        break;
+                                    case RIGHT:
+                                        movementCommand = new MoveRightCommand(collided, handler);
+                                        break;
+                                    case DOWN:
+                                        movementCommand = new MoveDownCommand(collided, handler);
+                                        break;
+                                }
+                                collided.appendMovementCommand(movementCommand);
+                            }
+                        });
                     }
                 }
             }

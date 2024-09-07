@@ -26,16 +26,6 @@ public abstract class Entity {
     private List<MovementCommand> movementCommands = new ArrayList<>();
     private int indexMovementCommands = 0;
 
-    private boolean inParty = false;
-
-    public boolean isInParty() {
-        return inParty;
-    }
-
-    public void setInParty(boolean inParty) {
-        this.inParty = inParty;
-    }
-
     public void appendMovementCommands(List<MovementCommand> movementCommandsToAdd) {
         movementCommands.addAll(movementCommandsToAdd);
     }
@@ -56,10 +46,9 @@ public abstract class Entity {
         }
     }
 
-    protected void resetMovementCommands() {
+    public void resetMovementCommands() {
         indexMovementCommands = 0;
         movementCommands.clear();
-        animatorMovement.removeAllListeners();
     }
 
     protected MovementListener movementListener;
