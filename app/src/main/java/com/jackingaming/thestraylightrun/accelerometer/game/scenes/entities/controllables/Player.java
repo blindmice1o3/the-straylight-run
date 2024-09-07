@@ -9,6 +9,16 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Enti
 import java.util.Map;
 
 public class Player extends Entity {
+    public interface PartyMovementListener {
+        void onPartyLeaderMove(Direction direction);
+    }
+
+    private PartyMovementListener partyMovementListener;
+
+    public void setPartyMovementListener(PartyMovementListener partyMovementListener) {
+        this.partyMovementListener = partyMovementListener;
+    }
+
     public Player(Map<Direction, AnimationDrawable> animationsByDirection) {
         super(animationsByDirection, null, null);
 
@@ -39,5 +49,13 @@ public class Player extends Entity {
         }
 
         doMoveBasedOnDirection(handler);
+    }
+
+    @Override
+    protected void moveAfterValidation(Handler handler, String propertyName, float valueStart, float valueEnd) {
+        if (partyMovementListener != null) {
+            partyMovementListener.onPartyLeaderMove(direction);
+        }
+        super.moveAfterValidation(handler, propertyName, valueStart, valueEnd);
     }
 }

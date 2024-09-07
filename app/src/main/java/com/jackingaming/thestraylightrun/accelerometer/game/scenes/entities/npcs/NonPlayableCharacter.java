@@ -93,6 +93,8 @@ public class NonPlayableCharacter extends Entity {
                 } else {
                     // do nothing.
                 }
+            } else {
+                runMovementCommands();
             }
 
             doMoveBasedOnDirection(handler);

@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.animation.LinearInterpolator;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.MovementCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,22 @@ public abstract class Entity {
     private List<MovementCommand> movementCommands = new ArrayList<>();
     private int indexMovementCommands = 0;
 
+    private boolean inParty = false;
+
+    public boolean isInParty() {
+        return inParty;
+    }
+
+    public void setInParty(boolean inParty) {
+        this.inParty = inParty;
+    }
+
     public void appendMovementCommands(List<MovementCommand> movementCommandsToAdd) {
         movementCommands.addAll(movementCommandsToAdd);
+    }
+
+    public void appendMovementCommand(MovementCommand movementCommandToAdd) {
+        movementCommands.add(movementCommandToAdd);
     }
 
     public void runMovementCommands() {
@@ -189,6 +203,19 @@ public abstract class Entity {
                 xDeltaFullStep, yDeltaFullStep);
     }
 
+    protected void moveAfterValidation(Handler handler, String propertyName,
+                                       float valueStart, float valueEnd) {
+        animatorMovement.setPropertyName(propertyName);
+        animatorMovement.setFloatValues(valueStart, valueEnd);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                animatorMovement.start();
+            }
+        });
+    }
+
     private void validateAndMove(Handler handler, String propertyName,
                                  float valueStart, float valueEnd,
                                  float xDeltaFullStep, float yDeltaFullStep) {
@@ -214,15 +241,7 @@ public abstract class Entity {
         updateStateOfEntityCollision(colliding);
 
         if (!colliding && isTileWalkable) {
-            animatorMovement.setPropertyName(propertyName);
-            animatorMovement.setFloatValues(valueStart, valueEnd);
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    animatorMovement.start();
-                }
-            });
+            moveAfterValidation(handler, propertyName, valueStart, valueEnd);
         }
     }
 

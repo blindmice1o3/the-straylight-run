@@ -2,7 +2,6 @@ package com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands;
 
 import android.os.Handler;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.MovementCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 
 public class MoveDownCommand implements MovementCommand {

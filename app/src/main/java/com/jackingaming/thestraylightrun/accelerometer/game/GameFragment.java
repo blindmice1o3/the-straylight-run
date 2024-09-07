@@ -39,6 +39,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;

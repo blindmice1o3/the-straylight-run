@@ -31,6 +31,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.output
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Direction;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -304,6 +309,53 @@ public class WorldScene extends Scene {
                         gameListener.onShowDialogFragment(
                                 dialogFragment, tag
                         );
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
+                        if (!collided.isInParty()) {
+                            // first move is towards Player's tile.
+                            MovementCommand movementCommand = null;
+                            switch (player.getDirection()) {
+                                case LEFT:
+                                    movementCommand = new MoveRightCommand(collided, handler);
+                                    break;
+                                case UP:
+                                    movementCommand = new MoveDownCommand(collided, handler);
+                                    break;
+                                case RIGHT:
+                                    movementCommand = new MoveLeftCommand(collided, handler);
+                                    break;
+                                case DOWN:
+                                    movementCommand = new MoveUpCommand(collided, handler);
+                                    break;
+                            }
+                            collided.appendMovementCommand(movementCommand);
+
+                            ((NonPlayableCharacter) collided).turnStationaryOff();
+
+                            // subsequent moves are same as Player's moves.
+                            player.setPartyMovementListener(new Player.PartyMovementListener() {
+                                @Override
+                                public void onPartyLeaderMove(Direction direction) {
+                                    MovementCommand movementCommand = null;
+                                    switch (player.getDirection()) {
+                                        case LEFT:
+                                            movementCommand = new MoveLeftCommand(collided, handler);
+                                            break;
+                                        case UP:
+                                            movementCommand = new MoveUpCommand(collided, handler);
+                                            break;
+                                        case RIGHT:
+                                            movementCommand = new MoveRightCommand(collided, handler);
+                                            break;
+                                        case DOWN:
+                                            movementCommand = new MoveDownCommand(collided, handler);
+                                            break;
+                                    }
+                                    collided.appendMovementCommand(movementCommand);
+                                }
+                            });
+
+                            collided.setInParty(true);
+                        }
                     }
                 }
             }
