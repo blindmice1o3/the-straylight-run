@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.bubblepop.SceneBubblePop;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.evo.SceneEvo;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.frogger.SceneFrogger;
@@ -41,6 +42,9 @@ public class SceneManager
                 break;
             case "Pooh Farmer":
                 sceneStack.add(SceneFarm.getInstance());
+                break;
+            case "Bubble Pop":
+                sceneStack.add(SceneBubblePop.getInstance());
                 break;
             case "Evo":
                 sceneStack.add(SceneEvo.getInstance());
@@ -100,6 +104,8 @@ public class SceneManager
         SceneChickenCoop.getInstance().setGame(game);
 
         SceneCowBarn.getInstance().setGame(game);
+
+        SceneBubblePop.getInstance().setGame(game);
     }
 
     public void update(long elapsed) {
@@ -210,6 +216,8 @@ public class SceneManager
             if (idOfCollidedTransferPoint.equals("FARM")) {
                 pop();
             }
+        } else if (getCurrentScene() instanceof SceneBubblePop) {
+            Log.i(TAG, "changeScene(String): case where getCurrentScene() instanceof SceneBubblePop");
         }
     }
 }

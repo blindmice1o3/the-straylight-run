@@ -289,7 +289,26 @@ public class WorldScene extends Scene {
                                 "RivalLeaderDialogFragment"
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_BUG_CATCH)) {
-                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+//                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+
+                        pause();
+
+                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                        String gameTitle = "Bubble Pop";
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        String tag = GameConsoleFragment.TAG;
+                        boolean canceledOnTouchOutside = false;
+                        DialogFragment dialogFragment =
+                                FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        unpause();
+                                    }
+                                });
+
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
+                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
                         pause();
 

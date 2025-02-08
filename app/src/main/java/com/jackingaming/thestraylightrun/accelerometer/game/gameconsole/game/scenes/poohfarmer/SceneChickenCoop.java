@@ -76,7 +76,9 @@ public class SceneChickenCoop extends Scene {
     }
 
     private Tile[][] createAndInitTilesForChickenCoop(Game game) {
-        String chickenCoopLoadedAsString = TileManagerLoader.loadFileAsString(game.getContext().getResources(), R.raw.tile_chicken_coop);
+        String chickenCoopLoadedAsString = TileManagerLoader.loadFileAsString(
+                game.getContext().getResources(), R.raw.tile_chicken_coop
+        );
         Tile[][] chickenCoop = TileManagerLoader.convertStringToTiles(chickenCoopLoadedAsString);
         Bitmap imageChickenCoop = cropImageChickenCoop(game.getContext().getResources());
 
