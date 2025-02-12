@@ -1,12 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player;
 
-import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Handler;
 import android.util.Log;
-import android.view.animation.BounceInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
@@ -115,23 +112,13 @@ public class PoohForm
                 if (entityCurrentlyFacing instanceof Bubblun) {
                     Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubblun.");
 
-                    ((Bubblun) entityCurrentlyFacing).addBubbleEntityToScene();
+                    Bubble bubble = ((Bubblun) entityCurrentlyFacing).addBubbleEntityToScene();
+                    bubble.bounceToRight();
                 } else if (entityCurrentlyFacing instanceof Bubble) {
                     Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubble.");
 
                     Bubble bubble = (Bubble) entityCurrentlyFacing;
-                    float xEnd = bubble.getX() + (2 * Tile.WIDTH);
-                    ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(bubble, "x", xEnd);
-                    positionAnimator.setInterpolator(new BounceInterpolator());
-                    positionAnimator.setDuration(1000L);
-
-                    Handler handler = new Handler(game.getContext().getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            positionAnimator.start();
-                        }
-                    });
+                    bubble.bounceToRight();
                 } else {
                     Log.d(TAG, "SceneBubblePop entityCurrentlyFacing NOT instanceof Bubblun or Bubble.");
                 }

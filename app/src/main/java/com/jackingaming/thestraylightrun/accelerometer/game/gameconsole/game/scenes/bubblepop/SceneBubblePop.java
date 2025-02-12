@@ -11,6 +11,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Bubblun;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Monsta;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
@@ -133,9 +134,12 @@ public class SceneBubblePop extends Scene {
 
     private List<Entity> createEntitiesForBubblePop() {
         List<Entity> entitiesForBubblePop = new ArrayList<>();
+
         // TODO: Insert scene specific entities here.
-        Bubblun bubblun = new Bubblun(5 * Tile.WIDTH, 3 * Tile.HEIGHT);
+        Bubblun bubblun = new Bubblun(3 * Tile.WIDTH, 3 * Tile.HEIGHT);
         entitiesForBubblePop.add(bubblun);
+        Monsta monsta = new Monsta(7 * Tile.WIDTH, 3 * Tile.HEIGHT);
+        entitiesForBubblePop.add(monsta);
 
         return entitiesForBubblePop;
     }

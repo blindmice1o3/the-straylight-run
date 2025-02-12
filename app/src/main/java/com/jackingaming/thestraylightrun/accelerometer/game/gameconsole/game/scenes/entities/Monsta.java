@@ -2,16 +2,19 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.Animation;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.projectiles.Bubble;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
-public class Bubblun extends Entity {
-    public Bubblun(int xSpawn, int ySpawn) {
+public class Monsta extends Entity {
+    public static final String TAG = Monsta.class.getSimpleName();
+
+    private Bitmap monstaLeft, monstaLeftBubbled;
+
+    public Monsta(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
     }
 
@@ -19,24 +22,16 @@ public class Bubblun extends Entity {
     public void init(Game game) {
         super.init(game);
 
-        // Bubblun [Entity]: first frame
+        // Monsta [Entity]: first frame
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.arcade_bubble_bobble);
-        Bitmap bubblunLeft = Bitmap.createBitmap(spriteSheet, 6, 16, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
-        Bitmap bubblunRight = Animation.flipImageHorizontally(bubblunLeft);
-        image = bubblunRight;
+        monstaLeft = Bitmap.createBitmap(spriteSheet, 6, 333, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+        monstaLeftBubbled = Bitmap.createBitmap(spriteSheet, 267, 333, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+
+        image = monstaLeft;
     }
 
-    public Bubble addBubbleEntityToScene() {
-        Bubble bubble = new Bubble(
-                (int) (x + width), (int) y
-        );
-        bubble.init(game);
-
-        game.getSceneManager().getCurrentScene().getEntityManager().addEntity(
-                bubble
-        );
-
-        return bubble;
+    public void becomeBubbled() {
+        image = monstaLeftBubbled;
     }
 
     @Override
@@ -46,6 +41,7 @@ public class Bubblun extends Entity {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
+        Log.e(TAG, "respondToEntityCollision(Entity)");
         return true;
     }
 
