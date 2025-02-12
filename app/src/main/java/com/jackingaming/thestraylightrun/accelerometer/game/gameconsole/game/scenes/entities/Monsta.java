@@ -12,7 +12,15 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class Monsta extends Entity {
     public static final String TAG = Monsta.class.getSimpleName();
 
-    private Bitmap monstaLeft, monstaLeftBubbled;
+    private boolean bubbled;
+
+    private int counterFrame;
+    private int counterFrameTarget;
+
+    private Bitmap[] monstaPatrol;
+    private int indexMonstaPatrol;
+    private Bitmap[] monstaBubbled;
+    private int indexMonstaBubbled;
 
     public Monsta(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -22,21 +30,62 @@ public class Monsta extends Entity {
     public void init(Game game) {
         super.init(game);
 
-        // Monsta [Entity]: first frame
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.arcade_bubble_bobble);
-        monstaLeft = Bitmap.createBitmap(spriteSheet, 6, 333, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
-        monstaLeftBubbled = Bitmap.createBitmap(spriteSheet, 267, 333, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+        bubbled = false;
+        counterFrame = 0;
+        counterFrameTarget = 30;
 
-        image = monstaLeft;
+        // Monsta [Entity]
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.arcade_bubble_bobble);
+
+        indexMonstaPatrol = 0;
+        monstaPatrol = new Bitmap[2];
+        for (int i = 0; i < monstaPatrol.length; i++) {
+            int y = 333;
+            int x = 6 + (i * (16 + 5));
+
+            monstaPatrol[i] = Bitmap.createBitmap(spriteSheet, x, y, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+        }
+
+        indexMonstaBubbled = 0;
+        monstaBubbled = new Bitmap[3];
+        for (int i = 0; i < monstaBubbled.length; i++) {
+            int y = 333;
+            int x = 267 + (i * (16 + 2));
+
+            monstaBubbled[i] = Bitmap.createBitmap(spriteSheet, x, y, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+        }
+
+        image = monstaPatrol[0];
     }
 
     public void becomeBubbled() {
-        image = monstaLeftBubbled;
+        bubbled = true;
     }
 
     @Override
     public void update(long elapsed) {
+        counterFrame++;
 
+        if (counterFrame >= counterFrameTarget) {
+
+            if (bubbled) {
+                indexMonstaBubbled++;
+                if (indexMonstaBubbled >= monstaBubbled.length) {
+                    indexMonstaBubbled = 0;
+                }
+
+                image = monstaBubbled[indexMonstaBubbled];
+            } else {
+                indexMonstaPatrol++;
+                if (indexMonstaPatrol >= monstaPatrol.length) {
+                    indexMonstaPatrol = 0;
+                }
+
+                image = monstaPatrol[indexMonstaPatrol];
+            }
+
+            counterFrame = 0;
+        }
     }
 
     @Override
