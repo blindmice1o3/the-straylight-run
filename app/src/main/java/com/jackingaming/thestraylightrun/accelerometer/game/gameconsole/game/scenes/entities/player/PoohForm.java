@@ -1,22 +1,28 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player;
 
+import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.util.Log;
+import android.view.animation.BounceInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.bubblepop.SceneBubblePop;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Bubblun;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.projectiles.Bubble;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -102,7 +108,34 @@ public class PoohForm
         if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
 
-            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+            if (game.getSceneManager().getCurrentScene() instanceof SceneBubblePop) {
+                // TODO: check if entityCurrentlyFacing is Bubblun.
+                Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+                if (entityCurrentlyFacing instanceof Bubblun) {
+                    Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubblun.");
+
+                    ((Bubblun) entityCurrentlyFacing).addBubbleEntityToScene();
+                } else if (entityCurrentlyFacing instanceof Bubble) {
+                    Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubble.");
+
+                    Bubble bubble = (Bubble) entityCurrentlyFacing;
+                    float xEnd = bubble.getX() + (2 * Tile.WIDTH);
+                    ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(bubble, "x", xEnd);
+                    positionAnimator.setInterpolator(new BounceInterpolator());
+                    positionAnimator.setDuration(1000L);
+
+                    Handler handler = new Handler(game.getContext().getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            positionAnimator.start();
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "SceneBubblePop entityCurrentlyFacing NOT instanceof Bubblun or Bubble.");
+                }
+            } else if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
                 if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
@@ -182,7 +215,10 @@ public class PoohForm
             }
         } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
             Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
-            if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+
+            if (game.getSceneManager().getCurrentScene() instanceof SceneBubblePop) {
+                // TODO: change to RunState.
+            } else if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
                 Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
                 if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
