@@ -1,11 +1,16 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
@@ -13,14 +18,18 @@ public class Monsta extends Entity {
     public static final String TAG = Monsta.class.getSimpleName();
 
     private boolean bubbled;
+    private boolean movingLeft;
 
     private int counterFrame;
     private int counterFrameTarget;
 
-    private Bitmap[] monstaPatrol;
+    private Bitmap[] monstaPatrolLeft;
+    private Bitmap[] monstaPatrolRight;
     private int indexMonstaPatrol;
     private Bitmap[] monstaBubbled;
     private int indexMonstaBubbled;
+    private ObjectAnimator movementLeftAnimator;
+    private ObjectAnimator movementRightAnimator;
 
     public Monsta(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -38,12 +47,14 @@ public class Monsta extends Entity {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.arcade_bubble_bobble);
 
         indexMonstaPatrol = 0;
-        monstaPatrol = new Bitmap[2];
-        for (int i = 0; i < monstaPatrol.length; i++) {
+        monstaPatrolLeft = new Bitmap[2];
+        monstaPatrolRight = new Bitmap[2];
+        for (int i = 0; i < monstaPatrolLeft.length; i++) {
             int y = 333;
             int x = 6 + (i * (16 + 5));
 
-            monstaPatrol[i] = Bitmap.createBitmap(spriteSheet, x, y, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+            monstaPatrolLeft[i] = Bitmap.createBitmap(spriteSheet, x, y, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
+            monstaPatrolRight[i] = Animation.flipImageHorizontally(monstaPatrolLeft[i]);
         }
 
         indexMonstaBubbled = 0;
@@ -55,11 +66,60 @@ public class Monsta extends Entity {
             monstaBubbled[i] = Bitmap.createBitmap(spriteSheet, x, y, 1 * Tile.WIDTH, 1 * Tile.HEIGHT);
         }
 
-        image = monstaPatrol[0];
+        int xCurrent = (int) x;
+        movementLeftAnimator = ObjectAnimator.ofFloat(this, "x",
+                (xCurrent - (2 * Tile.WIDTH)));
+        movementLeftAnimator.setDuration(1000L);
+        movementLeftAnimator.setInterpolator(new LinearInterpolator());
+        movementRightAnimator = ObjectAnimator.ofFloat(this, "x",
+                (xCurrent + (2 * Tile.WIDTH)));
+        movementRightAnimator.setDuration(1000L);
+        movementRightAnimator.setInterpolator(new LinearInterpolator());
+
+        movementLeftAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                if (!bubbled) {
+                    int xCurrent = (int) x;
+
+                    movingLeft = false;
+                    image = monstaPatrolRight[indexMonstaPatrol];
+                    movementRightAnimator.setFloatValues(xCurrent, (xCurrent + (2 * Tile.WIDTH)));
+                    movementRightAnimator.start();
+                }
+            }
+        });
+        movementRightAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                if (!bubbled) {
+                    int xCurrent = (int) x;
+
+                    movingLeft = true;
+                    image = monstaPatrolLeft[indexMonstaPatrol];
+                    movementLeftAnimator.setFloatValues(xCurrent, (xCurrent - (2 * Tile.WIDTH)));
+                    movementLeftAnimator.start();
+                }
+            }
+        });
+
+        movingLeft = true;
+        image = monstaPatrolLeft[0];
+        movementLeftAnimator.start();
     }
 
     public void becomeBubbled() {
         bubbled = true;
+        movementLeftAnimator.cancel();
+        movementRightAnimator.cancel();
+    }
+
+    public boolean isBubbled() {
+        return bubbled;
     }
 
     @Override
@@ -77,11 +137,13 @@ public class Monsta extends Entity {
                 image = monstaBubbled[indexMonstaBubbled];
             } else {
                 indexMonstaPatrol++;
-                if (indexMonstaPatrol >= monstaPatrol.length) {
+                if (indexMonstaPatrol >= monstaPatrolLeft.length) {
                     indexMonstaPatrol = 0;
                 }
 
-                image = monstaPatrol[indexMonstaPatrol];
+                image = (movingLeft) ?
+                        monstaPatrolLeft[indexMonstaPatrol] :
+                        monstaPatrolRight[indexMonstaPatrol];
             }
 
             counterFrame = 0;

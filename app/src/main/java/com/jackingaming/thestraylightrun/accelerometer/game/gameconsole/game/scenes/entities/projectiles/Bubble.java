@@ -20,6 +20,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class Bubble extends Entity {
     public static final String TAG = Bubble.class.getSimpleName();
 
+    private boolean growing;
+
     private int counterFrameTarget;
     private int counterFrame;
 
@@ -34,10 +36,12 @@ public class Bubble extends Entity {
     public void init(Game game) {
         super.init(game);
 
+        growing = true;
+
         // Bubble [projectile]: all frames.
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.arcade_bubble_bobble);
         counterFrame = 0;
-        counterFrameTarget = 30;
+        counterFrameTarget = 10;
         indexFramesBubble = 0;
         framesBubble = new Bitmap[6];
         for (int i = 0; i < framesBubble.length; i++) {
@@ -50,10 +54,10 @@ public class Bubble extends Entity {
     }
 
     public void bounceToRight() {
-        float xEnd = x + (1 * Tile.WIDTH);
+        float xEnd = x + (2 * Tile.WIDTH);
         ObjectAnimator positionAnimator = ObjectAnimator.ofFloat(this, "x", xEnd);
         positionAnimator.setInterpolator(new LinearInterpolator());
-        positionAnimator.setDuration(2000L);
+        positionAnimator.setDuration(1000L);
         positionAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
@@ -79,6 +83,7 @@ public class Bubble extends Entity {
             if (indexFramesBubble >= framesBubble.length) {
 //                indexFramesBubble = 0;
                 indexFramesBubble = framesBubble.length - 1;
+                growing = false;
             }
 
             image = framesBubble[indexFramesBubble];
@@ -90,9 +95,14 @@ public class Bubble extends Entity {
     @Override
     public boolean respondToEntityCollision(Entity e) {
         Log.e(TAG, "respondToEntityCollision(Entity)");
-        if (e instanceof Monsta) {
-            ((Monsta) e).becomeBubbled();
-            active = false;
+        if (growing) {
+            if (e instanceof Monsta) {
+                boolean isBubbled = ((Monsta) e).isBubbled();
+                if (!isBubbled) {
+                    ((Monsta) e).becomeBubbled();
+                    active = false;
+                }
+            }
         }
         return true;
     }
