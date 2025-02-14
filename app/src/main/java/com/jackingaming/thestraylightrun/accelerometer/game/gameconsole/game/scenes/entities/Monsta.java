@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
@@ -23,6 +24,9 @@ public class Monsta extends Entity {
     private int counterFrame;
     private int counterFrameTarget;
 
+    private int timerEscape;
+    private int timerEscapeTarget;
+
     private Bitmap[] monstaPatrolLeft;
     private Bitmap[] monstaPatrolRight;
     private int indexMonstaPatrol;
@@ -40,6 +44,8 @@ public class Monsta extends Entity {
         super.init(game);
 
         bubbled = false;
+        timerEscape = 0;
+        timerEscapeTarget = 4000;
         counterFrame = 0;
         counterFrameTarget = 30;
 
@@ -114,8 +120,25 @@ public class Monsta extends Entity {
 
     public void becomeBubbled() {
         bubbled = true;
+
         movementLeftAnimator.cancel();
         movementRightAnimator.cancel();
+    }
+
+    public void becomeUnbubbled() {
+        bubbled = false;
+
+        int xCurrent = (int) x;
+        movingLeft = false;
+        image = monstaPatrolRight[indexMonstaPatrol];
+        movementRightAnimator.setFloatValues(xCurrent, (xCurrent + (2 * Tile.WIDTH)));
+        Handler handler = new Handler(game.getContext().getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                movementRightAnimator.start();
+            }
+        });
     }
 
     public boolean isBubbled() {
@@ -147,6 +170,18 @@ public class Monsta extends Entity {
             }
 
             counterFrame = 0;
+        }
+
+        // check escape timer
+        if (bubbled) {
+            timerEscape += elapsed;
+            Log.e(TAG, "timerEscape: " + timerEscape);
+
+            if (timerEscape >= timerEscapeTarget) {
+                timerEscape = 0;
+
+                becomeUnbubbled();
+            }
         }
     }
 
