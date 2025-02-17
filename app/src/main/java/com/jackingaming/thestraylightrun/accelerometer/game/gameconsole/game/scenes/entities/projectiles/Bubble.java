@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Monsta;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.monsta.Monsta;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
@@ -97,9 +97,8 @@ public class Bubble extends Entity {
         Log.e(TAG, "respondToEntityCollision(Entity)");
         if (growing) {
             if (e instanceof Monsta) {
-                boolean isBubbled = ((Monsta) e).isBubbled();
-                if (!isBubbled) {
-                    ((Monsta) e).becomeBubbled();
+                boolean didBecomeBubbled = ((Monsta) e).becomeBubbled();
+                if (didBecomeBubbled) {
                     active = false;
                 }
             }
