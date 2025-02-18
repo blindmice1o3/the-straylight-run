@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;

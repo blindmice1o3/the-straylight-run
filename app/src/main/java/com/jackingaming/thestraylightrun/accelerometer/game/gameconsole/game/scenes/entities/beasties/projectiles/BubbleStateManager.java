@@ -1,9 +1,9 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.projectiles;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.projectiles;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.State;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.StateManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.StateManager;
 
 public class BubbleStateManager extends StateManager {
     public static final String GROWING_STATE = "GrowingState";

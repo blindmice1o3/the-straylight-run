@@ -86,6 +86,17 @@ public class SceneHouseLevel01 extends Scene {
     }
 
     @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Tile tileCurrentlyFacing = Player.getInstance().checkTileCurrentlyFacing();
+        Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+        if (tileCurrentlyFacing instanceof BedTile) {
+            ((SceneHouseLevel01) game.getSceneManager().getCurrentScene()).onBedTileClicked();
+        }
+    }
+
+    @Override
     public void enter(List<Object> args) {
         super.enter(args);
         game.getTimeManager().setIsPaused(true);

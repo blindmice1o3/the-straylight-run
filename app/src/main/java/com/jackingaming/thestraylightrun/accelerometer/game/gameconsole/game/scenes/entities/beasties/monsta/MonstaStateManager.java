@@ -2,8 +2,8 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.State;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.StateManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.StateManager;
 
 public class MonstaStateManager extends StateManager {
     public static final String PATROL_STATE = "PatrolState";

@@ -61,6 +61,13 @@ public class SceneWorldMapPart01 extends Scene {
     }
 
     @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player.getInstance().doCheckItemCollisionViaClick();
+    }
+
+    @Override
     public void enter(List<Object> args) {
         super.enter(args);
 

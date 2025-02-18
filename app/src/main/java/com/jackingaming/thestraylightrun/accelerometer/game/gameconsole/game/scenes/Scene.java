@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
+import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
@@ -13,6 +15,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
@@ -23,6 +26,8 @@ import java.util.List;
 
 public abstract class Scene
         implements Serializable {
+    public static final String TAG = Scene.class.getSimpleName();
+
     transient protected Game game;
 
     protected TileManager tileManager;
@@ -105,7 +110,93 @@ public abstract class Scene
             }
         }
 
+        // RESET [offset-of-next-step] TO ZERO (standing still)
+        Player player = Player.getInstance();
+        player.setxMove(0f);
+        player.setyMove(0f);
+        player.setMoveSpeed(Creature.MOVE_SPEED_DEFAULT);
+
+        interpretInput();
         entityManager.update(elapsed);
+    }
+
+    protected void doJustPressedButtonA() {
+
+    }
+
+    protected void doJustPressedButtonB() {
+
+    }
+
+    protected void doPressingButtonB() {
+        Player player = Player.getInstance();
+        String idTileCurrentlyFacing = player.checkTileCurrentlyFacing().getId();
+//            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isPressing(InputManager.Button.B) idTileCurrentlyFacing: " + idTileCurrentlyFacing);
+
+        float doubledMoveSpeedDefault = 2 * Creature.MOVE_SPEED_DEFAULT;
+        player.setMoveSpeed(doubledMoveSpeedDefault);
+
+        if (game.getGameTitle().equals("Pocket Critters") &&
+                game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+            game.getSceneManager().pop();
+        }
+    }
+
+    protected void doJustPressedButtonMenu() {
+        Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.MENU)");
+        game.getStateManager().toggleMenuState();
+    }
+
+    protected void interpretInput() {
+        if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.A)");
+            doJustPressedButtonA();
+        } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.B)");
+            doJustPressedButtonB();
+        } else if (game.getInputManager().isPressing(InputManager.Button.B)) {
+            doPressingButtonB();
+        } else if (game.getInputManager().isJustPressed(InputManager.Button.MENU)) {
+            Log.e(TAG, getClass().getSimpleName() + ".interpretInput() isJustPressed(InputManager.Button.MENU)");
+            doJustPressedButtonMenu();
+        }
+
+        Player player = Player.getInstance();
+        float moveSpeed = player.getMoveSpeed();
+        // Check InputManager's DirectionPadFragment-specific boolean fields.
+        if (game.getInputManager().isPressing(InputManager.Button.UP)) {
+            player.setDirection(Creature.Direction.UP);
+            player.setyMove(-moveSpeed);    // vertical NEGATIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.DOWN)) {
+            player.setDirection(Creature.Direction.DOWN);
+            player.setyMove(moveSpeed);     // vertical POSITIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.LEFT)) {
+            player.setDirection(Creature.Direction.LEFT);
+            player.setxMove(-moveSpeed);    // horizontal NEGATIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.RIGHT)) {
+            player.setDirection(Creature.Direction.RIGHT);
+            player.setxMove(moveSpeed);     // horizontal POSITIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.CENTER)) {
+            player.setDirection(Creature.Direction.CENTER);
+            player.setxMove(0f);            // horizontal ZERO
+            player.setyMove(0f);            // vertical ZERO
+        } else if (game.getInputManager().isPressing(InputManager.Button.UPLEFT)) {
+            player.setDirection(Creature.Direction.UP_LEFT);
+            player.setxMove(-moveSpeed);    // horizontal NEGATIVE
+            player.setyMove(-moveSpeed);    // vertical NEGATIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.UPRIGHT)) {
+            player.setDirection(Creature.Direction.UP_RIGHT);
+            player.setxMove(moveSpeed);     // horizontal POSITIVE
+            player.setyMove(-moveSpeed);    // vertical NEGATIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.DOWNLEFT)) {
+            player.setDirection(Creature.Direction.DOWN_LEFT);
+            player.setxMove(-moveSpeed);    // horizontal NEGATIVE
+            player.setyMove(moveSpeed);     // vertical POSITIVE
+        } else if (game.getInputManager().isPressing(InputManager.Button.DOWNRIGHT)) {
+            player.setDirection(Creature.Direction.DOWN_RIGHT);
+            player.setxMove(moveSpeed);     // horizontal POSITIVE
+            player.setyMove(moveSpeed);     // vertical POSITIVE
+        }
     }
 
     transient private Paint paintLightingColorFilter;

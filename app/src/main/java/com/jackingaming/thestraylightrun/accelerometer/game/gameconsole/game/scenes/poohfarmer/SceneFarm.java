@@ -10,17 +10,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
@@ -266,6 +273,109 @@ public class SceneFarm extends Scene {
         }
 
         Log.e(TAG, "init() END");
+    }
+
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+        if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
+                entityCurrentlyFacing == null) {
+            Log.e(TAG, "has carryable and carryable is Sellable and entityFacing is null");
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                player.placeInShippingBin();
+            } else if (tileCurrentlyFacing.isWalkable()) {
+                player.placeDown();
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof Plant &&
+                ((Plant) entityCurrentlyFacing).isHarvestable()) {
+            player.pickUp(entityCurrentlyFacing);
+
+            Tile tileFacing = player.checkTileCurrentlyFacing();
+            if (tileFacing instanceof GrowableTile) {
+                ((GrowableTile) tileFacing).changeToUntilled();
+            } else {
+                Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof Robot) {
+            game.setPaused(true);
+
+            RobotDialogFragment robotDialogFragment =
+                    ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();
+
+            robotDialogFragment.show(
+                    ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                    RobotDialogFragment.TAG
+            );
+        }
+        // TODO: check item occupying StatsDisplayerFragment's button holder.
+        else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+            tileCommand.setTile(tileCurrentlyFacing);
+            tileCommand.execute();
+        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+            if (entityCurrentlyFacing != null) {
+                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                entityCommand.setEntity(entityCurrentlyFacing);
+                entityCommand.execute();
+            }
+        } else if (!player.hasCarryable() &&
+                entityCurrentlyFacing == null) {
+            Log.e(TAG, "no carryable and entityFacing is null");
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                ShippingBinTile.sellStash();
+            }
+        }
+    }
+
+    @Override
+    protected void doJustPressedButtonB() {
+        super.doJustPressedButtonB();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+        if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
+            ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
+
+            game.getTextboxListener().showStatsDisplayer();
+        } else {
+            // TODO: check item occupying StatsDisplayerFragment's button holder.
+            if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+                TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+                TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                tileCommand.setTile(tileCurrentlyFacing);
+                tileCommand.execute();
+            } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+                if (entityCurrentlyFacing != null) {
+                    EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                    EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                    Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                    entityCommand.setEntity(entityCurrentlyFacing);
+                    entityCommand.execute();
+                }
+            }
+        }
     }
 
     @Override

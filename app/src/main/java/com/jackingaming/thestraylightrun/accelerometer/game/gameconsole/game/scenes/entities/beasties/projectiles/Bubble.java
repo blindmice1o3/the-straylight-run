@@ -1,8 +1,7 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.projectiles;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.projectiles;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
 import android.os.Handler;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;

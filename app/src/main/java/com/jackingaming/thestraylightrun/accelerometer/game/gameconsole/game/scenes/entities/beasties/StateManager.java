@@ -1,8 +1,9 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties;
 
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 import java.util.ArrayList;

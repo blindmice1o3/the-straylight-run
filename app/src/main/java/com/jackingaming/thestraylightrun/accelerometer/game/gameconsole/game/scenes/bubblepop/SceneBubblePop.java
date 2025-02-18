@@ -9,9 +9,11 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Bubblun;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.Bubblun;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.monsta.Monsta;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.projectiles.Bubble;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
@@ -56,6 +58,28 @@ public class SceneBubblePop extends Scene {
 
         entityManager.init(game);
         itemManager.init(game);
+    }
+
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        // TODO: check if entityCurrentlyFacing is Bubblun.
+        Entity entityCurrentlyFacing = Player.getInstance().getEntityCurrentlyFacing();
+
+        if (entityCurrentlyFacing instanceof Bubblun) {
+            Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubblun.");
+
+            Bubble bubble = ((Bubblun) entityCurrentlyFacing).addBubbleEntityToScene();
+            bubble.bounceToRight();
+        } else if (entityCurrentlyFacing instanceof Bubble) {
+            Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubble.");
+
+            Bubble bubble = (Bubble) entityCurrentlyFacing;
+            bubble.bounceToRight();
+        } else {
+            Log.d(TAG, "SceneBubblePop entityCurrentlyFacing NOT instanceof Bubblun or Bubble.");
+        }
     }
 
     private Tile[][] createAndInitTilesForBubblePop(Game game) {

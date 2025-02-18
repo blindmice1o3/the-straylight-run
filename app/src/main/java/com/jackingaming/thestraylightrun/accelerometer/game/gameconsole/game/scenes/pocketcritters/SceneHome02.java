@@ -80,6 +80,18 @@ public class SceneHome02 extends Scene {
         computerDialogFragment.init(game);
     }
 
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player player = Player.getInstance();
+        if (player.checkTileCurrentlyFacing().getId().equals("5")) {
+            game.getSceneManager().changeScene("FARM");
+        } else if (player.checkTileCurrentlyFacing().getId().equals("4")) {
+            game.getSceneManager().changeScene("COMPUTER");
+        }
+    }
+
     public void showComputerDialog() {
         game.setPaused(true);
         computerDialogFragment.show(((MainActivity) game.getContext()).getSupportFragmentManager(), ComputerDialogFragment.TAG);
