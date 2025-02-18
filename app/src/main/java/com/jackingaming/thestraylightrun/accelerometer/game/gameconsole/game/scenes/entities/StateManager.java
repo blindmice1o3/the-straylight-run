@@ -1,9 +1,8 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.monsta;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 import java.util.ArrayList;
@@ -11,25 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StateManager {
+public abstract class StateManager {
     public static final String TAG = StateManager.class.getSimpleName();
 
-    public static final String PATROL_STATE = "PatrolState";
-    public static final String BUBBLED_STATE = "BubbledState";
+    protected Map<String, State> states = new HashMap<>();
+    protected List<State> stateStack = new ArrayList<>();
 
-    private Monsta monsta;
-    private Map<String, State> states;
-    private List<State> stateStack;
-
-    public StateManager() {
-        states = new HashMap<>();
-        states.put(PATROL_STATE, new PatrolState());
-        states.put(BUBBLED_STATE, new BubbledState());
-
-        stateStack = new ArrayList<>();
-        State patrolState = states.get(PATROL_STATE);
-        stateStack.add(patrolState);
-    }
+    public abstract void init(Game game, Entity e);
 
     public void changeState(String nextStateTag) {
         Log.e(TAG, "changeState(String)");
@@ -56,29 +43,23 @@ public class StateManager {
         return stateStack.get(indexLast);
     }
 
-    public void init(Game game, Monsta monsta) {
-        for (State state : states.values()) {
-            state.init(game, monsta);
-        }
-    }
-
     public void update(long elapsed) {
         getCurrentState().update(elapsed);
     }
 
-    boolean respondToEntityCollision(Entity e) {
+    public boolean respondToEntityCollision(Entity e) {
         return getCurrentState().respondToEntityCollision(e);
     }
 
-    void respondToItemCollisionViaClick(Item i) {
+    public void respondToItemCollisionViaClick(Item i) {
         getCurrentState().respondToItemCollisionViaClick(i);
     }
 
-    void respondToItemCollisionViaMove(Item i) {
+    public void respondToItemCollisionViaMove(Item i) {
         getCurrentState().respondToItemCollisionViaMove(i);
     }
 
-    void respondToTransferPointCollision(String key) {
+    public void respondToTransferPointCollision(String key) {
         getCurrentState().respondToTransferPointCollision(key);
     }
 }
