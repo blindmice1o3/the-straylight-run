@@ -64,14 +64,12 @@ public class SceneBubblePop extends Scene {
     protected void doJustPressedButtonA() {
         super.doJustPressedButtonA();
 
-        // TODO: check if entityCurrentlyFacing is Bubblun.
         Entity entityCurrentlyFacing = Player.getInstance().getEntityCurrentlyFacing();
 
         if (entityCurrentlyFacing instanceof Bubblun) {
             Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubblun.");
 
-            Bubble bubble = ((Bubblun) entityCurrentlyFacing).addBubbleEntityToScene();
-            bubble.bounceToRight();
+            ((Bubblun) entityCurrentlyFacing).changeToAttackState();
         } else if (entityCurrentlyFacing instanceof Bubble) {
             Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubble.");
 
