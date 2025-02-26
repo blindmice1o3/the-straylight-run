@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class BubblunStateManager extends StateManager {
-    public static final String IDLE_STATE = "IdleState";
+    public static final String WALK_STATE = "WalkState";
     public static final String JUMP_STATE = "JumpState";
+    public static final String IDLE_STATE = "IdleState";
     public static final String ATTACK_STATE = "AttackState";
 
     public enum StateLayer {
@@ -31,12 +32,13 @@ public class BubblunStateManager extends StateManager {
 
     @Override
     public void init(Game game, Entity e) {
+        statesMovement.put(WALK_STATE, new WalkState());
         statesMovement.put(JUMP_STATE, new JumpState());
-        statesAttack.put(ATTACK_STATE, new AttackState());
         statesAttack.put(IDLE_STATE, new IdleState());
+        statesAttack.put(ATTACK_STATE, new AttackState());
 
         stateStackMovement.add(
-                statesMovement.get(JUMP_STATE)
+                statesMovement.get(WALK_STATE)
         );
         stateStackAttack.add(
                 statesAttack.get(IDLE_STATE)

@@ -70,6 +70,7 @@ public class SceneBubblePop extends Scene {
             Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubblun.");
 
             ((Bubblun) entityCurrentlyFacing).changeToAttackState();
+            ((Bubblun) entityCurrentlyFacing).changeToJumpState();
         } else if (entityCurrentlyFacing instanceof Bubble) {
             Log.d(TAG, "SceneBubblePop entityCurrentlyFacing instanceof Bubble.");
 

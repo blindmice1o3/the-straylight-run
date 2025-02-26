@@ -34,8 +34,23 @@ public class Bubblun extends Entity {
         }
     }
 
+    public void changeToJumpState() {
+        Log.e(TAG, "changeToJumpState()");
+
+        boolean isCurrentlyJumpState = bubblunStateManager.getCurrentState(BubblunStateManager.StateLayer.MOVEMENT) instanceof JumpState;
+        if (!isCurrentlyJumpState) {
+            bubblunStateManager.changeState(BubblunStateManager.StateLayer.MOVEMENT, BubblunStateManager.JUMP_STATE);
+        } else {
+            Log.d(TAG, "ALREADY JUMP STATE!!!");
+        }
+    }
+
     public void popAttackState() {
         bubblunStateManager.popState(BubblunStateManager.StateLayer.ATTACK);
+    }
+
+    public void popMovementState() {
+        bubblunStateManager.popState(BubblunStateManager.StateLayer.MOVEMENT);
     }
 
     @Override
