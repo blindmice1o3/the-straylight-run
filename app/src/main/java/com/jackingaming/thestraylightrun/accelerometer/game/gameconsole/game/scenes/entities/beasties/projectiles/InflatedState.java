@@ -16,7 +16,7 @@ public class InflatedState
 
     @Override
     public void enter() {
-
+        bubble.bounceUpAndDown();
     }
 
     @Override

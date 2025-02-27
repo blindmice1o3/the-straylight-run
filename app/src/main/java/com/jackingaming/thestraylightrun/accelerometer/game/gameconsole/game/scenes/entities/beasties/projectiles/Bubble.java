@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.projectiles;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Handler;
@@ -48,6 +50,67 @@ public class Bubble extends Entity {
             @Override
             public void run() {
                 positionAnimator.start();
+            }
+        });
+    }
+
+    public void bounceUpAndDown() {
+        // UP
+        float yUpStart = y;
+        float yUpEnd = yUpStart - (Tile.HEIGHT / 2);
+        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(this, "y", yUpStart, yUpEnd);
+        upAnimator.setInterpolator(new LinearInterpolator());
+        upAnimator.setDuration(750L);
+
+        // DOWN
+        float yDownStart = y;
+        float yDownEnd = yDownStart + (Tile.HEIGHT / 2);
+        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(this, "y", yDownStart, yDownEnd);
+        downAnimator.setInterpolator(new LinearInterpolator());
+        downAnimator.setDuration(750L);
+
+        upAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                Handler handler = new Handler(game.getContext().getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        float yDownStart = y;
+                        float yDownEnd = yDownStart + (Tile.HEIGHT / 2);
+                        downAnimator.setFloatValues(yDownStart, yDownEnd);
+
+                        downAnimator.start();
+                    }
+                });
+            }
+        });
+        downAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+
+                Handler handler = new Handler(game.getContext().getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        float yUpStart = y;
+                        float yUpEnd = yUpStart - (Tile.HEIGHT / 2);
+                        upAnimator.setFloatValues(yUpStart, yUpEnd);
+
+                        upAnimator.start();
+                    }
+                });
+            }
+        });
+
+        Handler handler = new Handler(game.getContext().getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                upAnimator.start();
             }
         });
     }
