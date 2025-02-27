@@ -6,6 +6,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.StateManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.AttackState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.IdleState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.WalkState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 import java.util.ArrayList;
@@ -16,6 +21,7 @@ import java.util.Map;
 public class BubblunStateManager extends StateManager {
     public static final String WALK_STATE = "WalkState";
     public static final String JUMP_STATE = "JumpState";
+    public static final String FALL_STATE = "FallState";
     public static final String IDLE_STATE = "IdleState";
     public static final String ATTACK_STATE = "AttackState";
 
@@ -34,6 +40,7 @@ public class BubblunStateManager extends StateManager {
     public void init(Game game, Entity e) {
         statesMovement.put(WALK_STATE, new WalkState());
         statesMovement.put(JUMP_STATE, new JumpState());
+        statesMovement.put(FALL_STATE, new FallState());
         statesAttack.put(IDLE_STATE, new IdleState());
         statesAttack.put(ATTACK_STATE, new AttackState());
 
@@ -78,6 +85,10 @@ public class BubblunStateManager extends StateManager {
                 Log.e(TAG, "switch(stateLayer)'s default-clause for (stateLayer, nextStatetag): (" + stateLayer.name() + ", " + nextStateTag + ").");
                 break;
         }
+    }
+
+    public int getSizeOfStateStackMovement() {
+        return stateStackMovement.size();
     }
 
     public void popState(StateLayer stateLayer) {

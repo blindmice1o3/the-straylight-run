@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,39 +9,27 @@ import android.view.animation.LinearInterpolator;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.Bubblun;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
-public class JumpState
+public class FallState
         implements State {
 
     private Game game;
     private Bubblun bubblun;
-    private ObjectAnimator jumpAnimator;
+    private ObjectAnimator fallAnimator;
 
-    private boolean jumping;
+    private boolean falling = false;
 
     @Override
     public void enter() {
-        jumping = true;
-
-        float yCurrent = bubblun.getY();
-        jumpAnimator = ObjectAnimator.ofFloat(bubblun, "y", yCurrent, yCurrent - Tile.HEIGHT);
-        jumpAnimator.setInterpolator(new LinearInterpolator());
-        jumpAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-
-                bubblun.popMovementState();
-            }
-        });
-        jumpAnimator.setDuration(500L);
+        falling = true;
     }
 
     @Override
     public void exit() {
-        jumping = false;
+        falling = false;
     }
 
     @Override
@@ -54,16 +42,30 @@ public class JumpState
 
     @Override
     public void update(long elapsed) {
-        if (jumping) {
+        if (falling) {
+            float yCurrent = bubblun.getY();
+            float yEnd = yCurrent + Tile.HEIGHT;
+            fallAnimator = ObjectAnimator.ofFloat(bubblun, "y", yCurrent, yEnd);
+            fallAnimator.setDuration(500L);
+            fallAnimator.setInterpolator(new LinearInterpolator());
+            fallAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    bubblun.changeToBaseState();
+                }
+            });
+
             Handler handler = new Handler(game.getContext().getMainLooper());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    jumpAnimator.start();
+                    fallAnimator.start();
                 }
             });
 
-            jumping = false;
+            falling = false;
         }
     }
 

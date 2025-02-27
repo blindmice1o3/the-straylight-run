@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.AttackState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 public class Bubblun extends Entity {
@@ -42,6 +45,32 @@ public class Bubblun extends Entity {
             bubblunStateManager.changeState(BubblunStateManager.StateLayer.MOVEMENT, BubblunStateManager.JUMP_STATE);
         } else {
             Log.d(TAG, "ALREADY JUMP STATE!!!");
+        }
+    }
+
+    public void changeToFallState() {
+        Log.e(TAG, "changeToFallState()");
+
+        boolean isCurrentlyFallState = bubblunStateManager.getCurrentState(BubblunStateManager.StateLayer.MOVEMENT) instanceof FallState;
+        if (!isCurrentlyFallState) {
+            bubblunStateManager.changeState(BubblunStateManager.StateLayer.MOVEMENT, BubblunStateManager.FALL_STATE);
+        } else {
+            Log.d(TAG, "ALREADY FALL STATE!!!");
+        }
+    }
+
+    public void changeToBaseState() {
+        Log.e(TAG, "changeToBaseState()");
+
+        boolean isCurrentlyBaseState = bubblunStateManager.getSizeOfStateStackMovement() == 1;
+        if (!isCurrentlyBaseState) {
+            int sizeOfStateStackMovement = bubblunStateManager.getSizeOfStateStackMovement();
+            int numberOfStatesToPopFromStack = sizeOfStateStackMovement - 1;
+            for (int i = 0; i < numberOfStatesToPopFromStack; i++) {
+                bubblunStateManager.popState(BubblunStateManager.StateLayer.MOVEMENT);
+            }
+        } else {
+            Log.d(TAG, "ALREADY IN BASE STATE!!!");
         }
     }
 
