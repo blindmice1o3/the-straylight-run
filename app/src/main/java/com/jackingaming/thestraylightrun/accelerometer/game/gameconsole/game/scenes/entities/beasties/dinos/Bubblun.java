@@ -3,13 +3,14 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.AttackState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
-public class Bubblun extends Entity {
+public class Bubblun extends Creature {
     public static final String TAG = Bubblun.class.getSimpleName();
 
     private BubblunStateManager bubblunStateManager;

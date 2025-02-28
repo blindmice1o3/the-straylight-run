@@ -3,10 +3,14 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Handler;
 import android.view.animation.LinearInterpolator;
 
+import androidx.annotation.NonNull;
+
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.Bubblun;
@@ -25,6 +29,7 @@ public class FallState
     @Override
     public void enter() {
         falling = true;
+        bubblun.setDirection(Creature.Direction.DOWN);
     }
 
     @Override
@@ -48,12 +53,27 @@ public class FallState
             fallAnimator = ObjectAnimator.ofFloat(bubblun, "y", yCurrent, yEnd);
             fallAnimator.setDuration(500L);
             fallAnimator.setInterpolator(new LinearInterpolator());
+            fallAnimator.setRepeatMode(ValueAnimator.RESTART);
+            fallAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            fallAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                    boolean isAbleToMove = bubblun.move();
+                    if (!isAbleToMove) {
+                        fallAnimator.cancel();
+
+                        bubblun.changeToBaseState();
+                    }
+                }
+            });
             fallAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
-                public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
+                public void onAnimationRepeat(Animator animation) {
+                    super.onAnimationRepeat(animation);
 
-                    bubblun.changeToBaseState();
+                    float yCurrent = bubblun.getY();
+                    float yEnd = yCurrent + Tile.HEIGHT;
+                    fallAnimator.setFloatValues(yCurrent, yEnd);
                 }
             });
 
