@@ -19,6 +19,7 @@ public class Bubble extends Entity {
     public static final String TAG = Bubble.class.getSimpleName();
 
     private BubbleStateManager bubbleStateManager;
+    private ObjectAnimator upAnimator, downAnimator;
 
     public Bubble(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -54,18 +55,29 @@ public class Bubble extends Entity {
         });
     }
 
-    public void bounceUpAndDown() {
+    public void bounceUpAndDownStop() {
+        Handler handler = new Handler(game.getContext().getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                upAnimator.cancel();
+                downAnimator.cancel();
+            }
+        });
+    }
+
+    public void bounceUpAndDownStart() {
         // UP
         float yUpStart = y;
         float yUpEnd = yUpStart - (Tile.HEIGHT / 2);
-        ObjectAnimator upAnimator = ObjectAnimator.ofFloat(this, "y", yUpStart, yUpEnd);
+        upAnimator = ObjectAnimator.ofFloat(this, "y", yUpStart, yUpEnd);
         upAnimator.setInterpolator(new LinearInterpolator());
         upAnimator.setDuration(750L);
 
         // DOWN
         float yDownStart = y;
         float yDownEnd = yDownStart + (Tile.HEIGHT / 2);
-        ObjectAnimator downAnimator = ObjectAnimator.ofFloat(this, "y", yDownStart, yDownEnd);
+        downAnimator = ObjectAnimator.ofFloat(this, "y", yDownStart, yDownEnd);
         downAnimator.setInterpolator(new LinearInterpolator());
         downAnimator.setDuration(750L);
 

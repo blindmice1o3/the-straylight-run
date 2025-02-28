@@ -66,6 +66,7 @@ public class GrowingState
             if (indexFramesBubble >= framesBubble.length) {
                 indexFramesBubble = framesBubble.length - 1;
                 bubble.becomeFullyInflated();
+                return;
             }
 
             bubble.setImage(framesBubble[indexFramesBubble]);
