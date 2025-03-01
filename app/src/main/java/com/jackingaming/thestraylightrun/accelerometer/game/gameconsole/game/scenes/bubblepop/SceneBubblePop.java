@@ -60,6 +60,10 @@ public class SceneBubblePop extends Scene {
         itemManager.init(game);
     }
 
+    public boolean isSolidTile(int xInPixel, int yInPixel) {
+        return tileManager.isSolid(xInPixel, yInPixel);
+    }
+
     @Override
     protected void doJustPressedButtonA() {
         super.doJustPressedButtonA();
@@ -78,6 +82,17 @@ public class SceneBubblePop extends Scene {
             bubble.bounceToRight();
         } else {
             Log.d(TAG, "SceneBubblePop entityCurrentlyFacing NOT instanceof Bubblun or Bubble.");
+        }
+    }
+
+    @Override
+    protected void doJustPressedButtonB() {
+        super.doJustPressedButtonB();
+
+        Entity entityCurrentlyFacing = Player.getInstance().getEntityCurrentlyFacing();
+
+        if (entityCurrentlyFacing instanceof Bubblun) {
+            ((Bubblun) entityCurrentlyFacing).changeToWalkState();
         }
     }
 

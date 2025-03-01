@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class FallState
         implements State {
+    public static final String TAG = FallState.class.getSimpleName();
 
     private Game game;
     private Bubblun bubblun;
@@ -63,6 +65,7 @@ public class FallState
                         fallAnimator.cancel();
 
                         bubblun.changeToBaseState();
+                        Log.e(TAG, bubblun.getCurrentMovementState().toString());
                     }
                 }
             });

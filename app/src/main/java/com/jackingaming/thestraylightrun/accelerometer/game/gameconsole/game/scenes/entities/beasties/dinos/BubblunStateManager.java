@@ -10,6 +10,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.IdleState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.StillState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.WalkState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
@@ -19,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 public class BubblunStateManager extends StateManager {
+    public static final String TAG = BubblunStateManager.class.getSimpleName();
+
+    public static final String STILL_STATE = "StillState";
     public static final String WALK_STATE = "WalkState";
     public static final String JUMP_STATE = "JumpState";
     public static final String FALL_STATE = "FallState";
@@ -38,6 +42,7 @@ public class BubblunStateManager extends StateManager {
 
     @Override
     public void init(Game game, Entity e) {
+        statesMovement.put(STILL_STATE, new StillState());
         statesMovement.put(WALK_STATE, new WalkState());
         statesMovement.put(JUMP_STATE, new JumpState());
         statesMovement.put(FALL_STATE, new FallState());
@@ -45,7 +50,7 @@ public class BubblunStateManager extends StateManager {
         statesAttack.put(ATTACK_STATE, new AttackState());
 
         stateStackMovement.add(
-                statesMovement.get(WALK_STATE)
+                statesMovement.get(STILL_STATE)
         );
         stateStackAttack.add(
                 statesAttack.get(IDLE_STATE)
@@ -116,8 +121,6 @@ public class BubblunStateManager extends StateManager {
     }
 
     public State getCurrentState(StateLayer stateLayer) {
-        Log.i(TAG, "getCurrentState(StateLayer)");
-
         switch (stateLayer) {
             case MOVEMENT:
                 int indexMovementLast = stateStackMovement.size() - 1;

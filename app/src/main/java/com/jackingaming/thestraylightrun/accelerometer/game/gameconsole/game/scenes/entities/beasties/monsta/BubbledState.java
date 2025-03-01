@@ -88,7 +88,6 @@ public class BubbledState
     public void update(long elapsed) {
         // check escape timer
         timerEscape += elapsed;
-        Log.e(TAG, "timerEscape: " + timerEscape);
 
         if (timerEscape >= timerEscapeTarget) {
             timerEscape = 0;

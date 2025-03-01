@@ -5,9 +5,11 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.State;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.attacks.AttackState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.WalkState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 public class Bubblun extends Creature {
@@ -27,6 +29,10 @@ public class Bubblun extends Creature {
         super.init(game);
 
         bubblunStateManager.init(game, this);
+    }
+
+    public State getCurrentMovementState() {
+        return bubblunStateManager.getCurrentState(BubblunStateManager.StateLayer.MOVEMENT);
     }
 
     public void changeToAttackState() {
@@ -57,6 +63,17 @@ public class Bubblun extends Creature {
             bubblunStateManager.changeState(BubblunStateManager.StateLayer.MOVEMENT, BubblunStateManager.FALL_STATE);
         } else {
             Log.d(TAG, "ALREADY FALL STATE!!!");
+        }
+    }
+
+    public void changeToWalkState() {
+        Log.e(TAG, "changeToWalkState()");
+
+        boolean isCurrentlyWalkState = bubblunStateManager.getCurrentState(BubblunStateManager.StateLayer.MOVEMENT) instanceof WalkState;
+        if (!isCurrentlyWalkState) {
+            bubblunStateManager.changeState(BubblunStateManager.StateLayer.MOVEMENT, BubblunStateManager.WALK_STATE);
+        } else {
+            Log.d(TAG, "ALREADY WALK STATE!!!");
         }
     }
 
