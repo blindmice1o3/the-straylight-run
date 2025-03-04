@@ -10,6 +10,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.FallState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.JumpState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.dinos.movements.WalkState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.monsta.BubbledState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.beasties.monsta.Monsta;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 
 public class Bubblun extends Creature {
@@ -29,6 +31,13 @@ public class Bubblun extends Creature {
         super.init(game);
 
         bubblunStateManager.init(game, this);
+    }
+
+    @Override
+    protected boolean skipEntityCollisionCheck(Entity e) {
+        boolean collisionFromSelf = super.skipEntityCollisionCheck(e);
+        boolean collisionFromMonstaBubbled = (e instanceof Monsta) && (((Monsta) e).getCurrentState() instanceof BubbledState);
+        return collisionFromSelf || collisionFromMonstaBubbled;
     }
 
     public State getCurrentMovementState() {
@@ -85,6 +94,7 @@ public class Bubblun extends Creature {
             int sizeOfStateStackMovement = bubblunStateManager.getSizeOfStateStackMovement();
             int numberOfStatesToPopFromStack = sizeOfStateStackMovement - 1;
             for (int i = 0; i < numberOfStatesToPopFromStack; i++) {
+                bubblunStateManager.getCurrentState(BubblunStateManager.StateLayer.MOVEMENT).exit();
                 bubblunStateManager.popState(BubblunStateManager.StateLayer.MOVEMENT);
             }
         } else {

@@ -56,6 +56,56 @@ public class WalkState
             @Override
             public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
                 if (game.getSceneManager().getCurrentScene() instanceof SceneBubblePop) {
+                    // check left/right move for tile/entity collision.
+                    if (facingLeft) {
+                        int xLeftTop = (int) bubblun.getX();
+                        int yLeftTop = (int) bubblun.getY();
+                        int xLeftBottom = (int) bubblun.getX();
+                        int yLeftBottom = (int) (bubblun.getY() + bubblun.getHeight() - 2);
+
+                        // CHECKING tile collision: LEFT-TOP and LEFT-BOTTOM
+                        boolean isLeftTopSolid =
+                                ((SceneBubblePop) game.getSceneManager().getCurrentScene()).isSolidTile(
+                                        xLeftTop, yLeftTop
+                                );
+                        boolean isLeftBottomSolid =
+                                ((SceneBubblePop) game.getSceneManager().getCurrentScene()).isSolidTile(
+                                        xLeftBottom, yLeftBottom
+                                );
+                        // CHECKING entity collision AND item collision
+                        boolean isEntityCollision = bubblun.checkEntityCollision(0f, 0f);
+                        boolean isItemCollision = bubblun.checkItemCollision(0f, 0f, false);
+                        if (isLeftTopSolid || isLeftBottomSolid ||
+                                isEntityCollision || isItemCollision) {
+                            walkAnimator.cancel();
+                            bubblun.changeToBaseState();
+                        }
+                    } else {
+                        int xRightTop = (int) (bubblun.getX() + bubblun.getWidth());
+                        int yRightTop = (int) bubblun.getY();
+                        int xRightBottom = (int) (bubblun.getX() + bubblun.getWidth());
+                        int yRightBottom = (int) (bubblun.getY() + bubblun.getHeight() - 2);
+
+                        // CHECKING tile collision: RIGHT-TOP and RIGHT-BOTTOM
+                        boolean isRightTopSolid =
+                                ((SceneBubblePop) game.getSceneManager().getCurrentScene()).isSolidTile(
+                                        xRightTop, yRightTop
+                                );
+                        boolean isRightBottomSolid =
+                                ((SceneBubblePop) game.getSceneManager().getCurrentScene()).isSolidTile(
+                                        xRightBottom, yRightBottom
+                                );
+                        // CHECKING entity collision AND item collision
+                        boolean isEntityCollision = bubblun.checkEntityCollision(0f, 0f);
+                        boolean isItemCollision = bubblun.checkItemCollision(0f, 0f, false);
+                        if (isRightTopSolid || isRightBottomSolid ||
+                                isEntityCollision || isItemCollision) {
+                            walkAnimator.cancel();
+                            bubblun.changeToBaseState();
+                        }
+                    }
+
+                    // after successful left/right move... check if walked off platform.
                     int xLeftBottom = (int) bubblun.getX();
                     int yLeftBottom = (int) (bubblun.getY() + bubblun.getHeight());
                     boolean isLeftBottomSolid =
@@ -73,6 +123,7 @@ public class WalkState
                     if (!isLeftBottomSolid && !isRightBottomSolid) {
                         walkAnimator.cancel();
 
+                        bubblun.changeToBaseState();
                         bubblun.changeToFallState();
                     }
                 }
