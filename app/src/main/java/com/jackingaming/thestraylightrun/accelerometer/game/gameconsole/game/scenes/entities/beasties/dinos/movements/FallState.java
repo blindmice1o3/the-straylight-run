@@ -64,6 +64,12 @@ public class FallState
                     if (!isAbleToMove) {
                         fallAnimator.cancel();
 
+                        // use (y-coordinate divided by Tile.HEIGHT) as
+                        // a way to lob off extra pixels caused by fall.
+                        float yIndex = bubblun.getY() / Tile.HEIGHT;
+                        float yWithoutExtraPixels = yIndex * Tile.HEIGHT;
+                        bubblun.setY(yWithoutExtraPixels);
+
                         bubblun.changeToBaseState();
                         Log.e(TAG, bubblun.getCurrentMovementState().toString());
                     }
