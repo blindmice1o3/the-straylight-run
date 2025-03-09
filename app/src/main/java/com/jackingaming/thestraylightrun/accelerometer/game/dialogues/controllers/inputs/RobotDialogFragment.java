@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs;
+package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs;
 
 import android.content.DialogInterface;
 import android.os.Bundle;

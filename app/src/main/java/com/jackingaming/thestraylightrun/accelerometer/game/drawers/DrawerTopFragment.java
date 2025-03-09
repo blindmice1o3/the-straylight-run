@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 
 import java.io.Serializable;
 

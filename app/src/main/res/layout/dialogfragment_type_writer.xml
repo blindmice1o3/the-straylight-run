@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:padding="4dp" />
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView
+    <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
         android:id="@+id/tv_type_writer"
         android:layout_width="550dp"
         android:layout_height="255dp"

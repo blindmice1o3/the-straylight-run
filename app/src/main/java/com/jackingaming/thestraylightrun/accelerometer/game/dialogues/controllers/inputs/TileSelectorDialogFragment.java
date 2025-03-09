@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs;
+package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs;
 
 import android.content.DialogInterface;
 import android.graphics.Point;
@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 

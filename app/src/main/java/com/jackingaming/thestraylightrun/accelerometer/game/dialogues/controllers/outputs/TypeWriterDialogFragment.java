@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.outputs;
+package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -16,7 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;

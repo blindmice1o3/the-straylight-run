@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TypeWriterTextView
+    <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
         android:id="@+id/type_writer_tv_in_drawer_bottom"
         android:layout_width="match_parent"
         android:layout_height="350dp"

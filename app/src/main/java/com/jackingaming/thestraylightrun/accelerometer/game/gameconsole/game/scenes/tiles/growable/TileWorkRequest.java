@@ -1,6 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.io.Serializable;

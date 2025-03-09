@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views;
+package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views;
 
 import android.content.Context;
 import android.graphics.Canvas;

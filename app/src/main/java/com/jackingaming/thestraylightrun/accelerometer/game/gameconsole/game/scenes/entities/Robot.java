@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.RobotDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.inputs.TileSelectorDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;

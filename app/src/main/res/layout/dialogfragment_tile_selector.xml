@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogueboxes.views.TileSelectorView
+    <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView
         android:id="@+id/view_tile_selector"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
