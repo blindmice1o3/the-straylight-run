@@ -106,7 +106,22 @@ public class TypeWriterDialogFragment extends DialogFragment
         tvTypeWriter = view.findViewById(R.id.tv_type_writer);
         tvTypeWriter.setTextCompletionListener(textCompletionListener);
         tvTypeWriter.setCharacterDelay(delay);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume()");
+
         tvTypeWriter.displayTextWithAnimation(text);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause()");
+
+        tvTypeWriter.stopAnimation();
     }
 
     @Override
@@ -114,7 +129,6 @@ public class TypeWriterDialogFragment extends DialogFragment
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
 
-        tvTypeWriter.stopAnimation();
         dismissListener.onDismiss();
     }
 

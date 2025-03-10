@@ -11,5 +11,7 @@ public interface Quest {
 
     State getCurrentState();
 
+    int getDialogueForCurrentState();
+
     String getTAG();
 }

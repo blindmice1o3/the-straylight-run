@@ -175,9 +175,7 @@ public class SeedShopDialogFragment extends DialogFragment {
                 Player.getInstance().getQuestManager().alreadyHaveQuest(seedShopOwnerQuest00);
 
         Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
-        int stringId = (!alreadyHaveQuest) ?
-                R.string.seed_shop_dialogue00_0 :
-                R.string.seed_shop_dialogue00_1;
+        int stringId = seedShopOwnerQuest00.getDialogueForCurrentState();
         String message = game.getContext().getResources().getString(stringId);
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                 50L, image, message,
@@ -185,6 +183,7 @@ public class SeedShopDialogFragment extends DialogFragment {
                     @Override
                     public void onDismiss() {
                         Log.e(TAG, "onDismiss(): seed_shop_dialogue00");
+
                     }
                 }, new TypeWriterTextView.TextCompletionListener() {
                     @Override

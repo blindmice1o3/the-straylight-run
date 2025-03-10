@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_di
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 public class SeedShopOwnerQuest00
@@ -32,6 +33,19 @@ public class SeedShopOwnerQuest00
     @Override
     public State getCurrentState() {
         return state;
+    }
+
+    @Override
+    public int getDialogueForCurrentState() {
+        switch (state) {
+            case NOT_STARTED:
+                return R.string.seed_shop_dialogue00_0;
+            case STARTED:
+                return R.string.seed_shop_dialogue00_1;
+            case COMPLETED:
+                return R.string.seed_shop_dialogue00_2;
+        }
+        return -1;
     }
 
     @Override
