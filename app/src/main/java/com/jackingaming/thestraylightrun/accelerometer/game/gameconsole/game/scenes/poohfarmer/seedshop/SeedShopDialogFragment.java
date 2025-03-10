@@ -32,6 +32,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +47,9 @@ public class SeedShopDialogFragment extends DialogFragment {
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
-    private boolean givenMysterySeed = false;
+    private QuestManager questManager;
 
-    public void reload(Game game, List<Item> seedShopInventory, boolean givenMysterySeed) {
+    public void reload(Game game, List<Item> seedShopInventory, QuestManager questManager) {
         this.game = game;
 
         this.seedShopInventory.clear();
@@ -55,7 +58,7 @@ public class SeedShopDialogFragment extends DialogFragment {
             item.init(game);
         }
 
-        this.givenMysterySeed = givenMysterySeed;
+        this.questManager = questManager;
     }
 
     public SeedShopDialogFragment() {
@@ -82,6 +85,12 @@ public class SeedShopDialogFragment extends DialogFragment {
         seedShopInventory.add(new BugCatchingNet(
                 new BounceEntityCommand(null)
         ));
+
+        List<Quest> quests = new ArrayList<>();
+        quests.add(
+                new SeedShopOwnerQuest00()
+        );
+        questManager = new QuestManager(quests);
     }
 
     public void init(Game game) {
@@ -183,12 +192,12 @@ public class SeedShopDialogFragment extends DialogFragment {
                     public void onAnimationFinish() {
                         Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
 
-                        if (!givenMysterySeed) {
+                        if (questManager.getCurrentQuest().getCurrentState() == Quest.State.NOT_STARTED) {
                             if (seedShopInventory.get(0) instanceof MysterySeed) {
                                 MysterySeed mysterySeed = (MysterySeed) seedShopInventory.get(0);
 
                                 performTrade(mysterySeed, Player.getInstance());
-                                givenMysterySeed = true;
+                                questManager.getCurrentQuest().changeToNextState();
                                 Log.e(TAG, "first item is mysterySeed... mysterySeed GIVEN");
                             } else {
                                 Log.e(TAG, "first item is NOT mysterySeed... mysterySeed NOT GIVEN");
@@ -229,7 +238,11 @@ public class SeedShopDialogFragment extends DialogFragment {
         return seedShopInventory;
     }
 
-    public boolean isGivenMysterySeed() {
-        return givenMysterySeed;
+    public QuestManager getQuestManager() {
+        return questManager;
+    }
+
+    public void setQuestManager(QuestManager questManager) {
+        this.questManager = questManager;
     }
 }
