@@ -10,14 +10,17 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 
 public class Player extends Creature {
     private static Player uniqueInstance;
     private Form form;
+    private QuestManager questManager;
 
     private Player(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
         form = new PoohForm();
+        questManager = new QuestManager();
     }
 
     public static Player getInstance() {
@@ -156,6 +159,14 @@ public class Player extends Creature {
 
     public void setForm(Form form) {
         this.form = form;
+    }
+
+    public QuestManager getQuestManager() {
+        return questManager;
+    }
+
+    public void setQuestManager(QuestManager questManager) {
+        this.questManager = questManager;
     }
 
     public boolean canAffordToBuy(float price) {

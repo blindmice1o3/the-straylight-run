@@ -43,7 +43,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -367,9 +366,7 @@ public class Game {
 
             // do AFTER SceneFarm is reloaded.
             List<Item> seedShopInventory = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedShopInventory();
-            QuestManager questManager = SceneFarm.getInstance().getSeedShopDialogFragment().getQuestManager();
             os.writeObject(seedShopInventory);
-            os.writeObject(questManager);
 
             boolean isBlinkingBorderOn = viewportListener.isBlinkingBorderOn();
             os.writeBoolean(isBlinkingBorderOn);
@@ -482,9 +479,8 @@ public class Game {
 
             // do AFTER SceneFarm is reloaded.
             List<Item> seedShopInventory = (List<Item>) os.readObject();
-            QuestManager questManager = (QuestManager) os.readObject();
             SceneFarm.getInstance().getSeedShopDialogFragment().reload(
-                    this, seedShopInventory, questManager);
+                    this, seedShopInventory);
 
             boolean isBlinkingBorderOn = os.readBoolean();
             if (isBlinkingBorderOn) {

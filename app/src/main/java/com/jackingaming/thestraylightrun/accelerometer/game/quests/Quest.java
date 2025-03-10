@@ -10,4 +10,6 @@ public interface Quest {
     void changeToNextState();
 
     State getCurrentState();
+
+    String getTAG();
 }

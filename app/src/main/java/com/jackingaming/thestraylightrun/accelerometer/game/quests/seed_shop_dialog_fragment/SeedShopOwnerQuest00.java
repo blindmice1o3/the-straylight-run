@@ -33,4 +33,9 @@ public class SeedShopOwnerQuest00
     public State getCurrentState() {
         return state;
     }
+
+    @Override
+    public String getTAG() {
+        return TAG;
+    }
 }
