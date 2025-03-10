@@ -11,7 +11,8 @@
     <string name="scientist_dialogue04_template">%s!</string>
     <string name="scientist_dialogue05">Your very own JAVA legend is about to unfold! A world of dreams and adventure with OBJECT awaits! Let\'s go!</string>
 
-    <string name="seed_shop_dialogue00">Hello! Please germinate these mystery seeds and self-pollinate for 3 generations.</string>
+    <string name="seed_shop_dialogue00_0">Hello! I was cleaning out my father\'s belongings when I found these mystery seeds. I can\'t keep a cactus alive. You have a green thumb, how about you grow these seeds for me? If you get me 3 mystery products, I\'ll give you some coins! Also, you can keep the shovel, watering can, and mystery seeds!</string>
+    <string name="seed_shop_dialogue00_1">Hello! Please germinate and grow the mystery seeds, then harvest 3 mystery products and place them in the shipping bin.</string>
 
     <string name="robot_dialogfragment_off">off</string>
     <string name="robot_dialogfragment_walk">walk</string>

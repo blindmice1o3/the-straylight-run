@@ -13,6 +13,7 @@
         android:id="@+id/tv_type_writer"
         android:layout_width="550dp"
         android:layout_height="255dp"
+        android:paddingRight="4dp"
         android:text="Hello, TypeWriterTextView" />
 
 </LinearLayout>

@@ -46,6 +46,7 @@ public class SeedShopDialogFragment extends DialogFragment {
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
+    private Quest seedShopOwnerQuest00;
 
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
@@ -81,6 +82,8 @@ public class SeedShopDialogFragment extends DialogFragment {
         seedShopInventory.add(new BugCatchingNet(
                 new BounceEntityCommand(null)
         ));
+
+        seedShopOwnerQuest00 = new SeedShopOwnerQuest00();
     }
 
     public void init(Game game) {
@@ -168,8 +171,14 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
+        boolean alreadyHaveQuest =
+                Player.getInstance().getQuestManager().alreadyHaveQuest(seedShopOwnerQuest00);
+
         Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
-        String message = game.getContext().getResources().getString(R.string.seed_shop_dialogue00);
+        int stringId = (!alreadyHaveQuest) ?
+                R.string.seed_shop_dialogue00_0 :
+                R.string.seed_shop_dialogue00_1;
+        String message = game.getContext().getResources().getString(stringId);
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                 50L, image, message,
                 new TypeWriterDialogFragment.DismissListener() {
@@ -182,9 +191,6 @@ public class SeedShopDialogFragment extends DialogFragment {
                     public void onAnimationFinish() {
                         Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
 
-                        Quest seedShopOwnerQuest00 = new SeedShopOwnerQuest00();
-                        boolean alreadyHaveQuest =
-                                Player.getInstance().getQuestManager().alreadyHaveQuest(seedShopOwnerQuest00);
                         if (!alreadyHaveQuest) {
                             Log.e(TAG, "!alreadyHaveQuest");
                             if (seedShopInventory.get(0) instanceof MysterySeed) {
