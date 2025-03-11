@@ -16,11 +16,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
@@ -43,6 +45,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.QuestAdapter;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.RecyclerViewFragment;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -543,6 +548,28 @@ public class Game {
         showBackpackDialog();
     }
 
+    public void doClickIcon(View view, FragmentManager fm) {
+        String tagOfIcon = (String) view.getTag();
+
+        if (tagOfIcon.equals(StatsDisplayerFragment.TAG_CURRENCY_ICON)) {
+            Log.e(TAG, "doClickIcon(View): " + StatsDisplayerFragment.TAG_CURRENCY_ICON);
+        } else if (tagOfIcon.equals(StatsDisplayerFragment.TAG_TIME_ICON)) {
+            Log.e(TAG, "doClickIcon(View): " + StatsDisplayerFragment.TAG_TIME_ICON);
+        } else if (tagOfIcon.equals(StatsDisplayerFragment.TAG_QUEST_ICON)) {
+            Log.e(TAG, "doClickIcon(View): " + StatsDisplayerFragment.TAG_QUEST_ICON);
+            // TODO: show QuestDisplayer dialog.
+            List<Quest> quests = Player.getInstance().getQuestManager().getQuests();
+
+            if (!quests.isEmpty()) {
+                showQuestLogDialog(fm);
+            } else {
+                Log.e(TAG, "player does NOT have any quests.");
+            }
+        } else {
+            Log.e(TAG, "doClickIcon(View) else-clause");
+        }
+    }
+
     private void refreshBackpackWithoutItemsDisplayingInButtonHolders() {
         backpackWithoutItemsDisplayingInButtonHolders.clear();
         backpackWithoutItemsDisplayingInButtonHolders.addAll(backpack);
@@ -559,6 +586,42 @@ public class Game {
         paused = true;
         inBackpackDialogState = true;
         backpackDialog.show();
+    }
+
+    private void showQuestLogDialog(FragmentManager fm) {
+        paused = true;
+
+        List<Quest> questsPlayer = Player.getInstance().getQuestManager().getQuests();
+        RecyclerViewFragment recyclerViewFragment = RecyclerViewFragment.newInstance(null, null);
+        QuestAdapter questAdapter = new QuestAdapter(questsPlayer,
+                new QuestAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View itemView, int position) {
+                        Log.e(TAG, "onItemClick() position: " + position);
+
+                        Quest questClicked = questsPlayer.get(position);
+                        Log.e(TAG, "questClicked: " + questClicked.getTAG());
+                    }
+                }
+        );
+
+        FCVDialogFragment fcvDialogFragment = FCVDialogFragment.newInstance(recyclerViewFragment, RecyclerViewFragment.TAG,
+                false, 0.6f, 0.6f,
+                new FCVDialogFragment.LifecycleListener() {
+                    @Override
+                    public void onResume() {
+                        Log.e(TAG, "FCVDialogFragment onResume()");
+                        recyclerViewFragment.attachAdapter(questAdapter);
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "FCVDialogFragment onDismiss()");
+                        paused = false;
+                    }
+                });
+
+        fcvDialogFragment.show(fm, FCVDialogFragment.TAG);
     }
 
     public Context getContext() {

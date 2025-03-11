@@ -339,16 +339,6 @@ public class GameConsoleFragment extends Fragment
 
     @Override
     public void onIconClicked(View view) {
-        String tagOfIcon = (String) view.getTag();
-
-        if (tagOfIcon.equals("honeyPot")) {
-            Log.e(TAG, "onIconClicked(View) honeyPot");
-        } else if (tagOfIcon.equals("calendar")) {
-            Log.e(TAG, "onIconClicked(View) calendar");
-        } else if (tagOfIcon.equals("quest")) {
-            Log.e(TAG, "onIconClicked(View) quest");
-        } else {
-            Log.e(TAG, "onIconClicked(View) else-clause");
-        }
+        game.doClickIcon(view, getChildFragmentManager());
     }
 }

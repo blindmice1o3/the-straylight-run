@@ -24,6 +24,9 @@ public class StatsDisplayerFragment extends Fragment
         implements Serializable {
     public static final String TAG = StatsDisplayerFragment.class.getSimpleName();
     public static final int IMAGE_DEFAULT = R.drawable.btn_star_on_normal_holo_light;
+    public static final String TAG_CURRENCY_ICON = "currencyIcon";
+    public static final String TAG_TIME_ICON = "timeIcon";
+    public static final String TAG_QUEST_ICON = "questIcon";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -126,7 +129,7 @@ public class StatsDisplayerFragment extends Fragment
         initImageHoneyPot(getResources());
         ImageView imageViewCurrencyIcon = view.findViewById(R.id.imageview_currency_stats_displayer_fragment);
         imageViewCurrencyIcon.setImageBitmap(honeyPot);
-        imageViewCurrencyIcon.setTag("honeyPot");
+        imageViewCurrencyIcon.setTag(TAG_CURRENCY_ICON);
         imageViewCurrencyIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,7 +140,7 @@ public class StatsDisplayerFragment extends Fragment
         initImageCalendar(getResources());
         ImageView imageViewTimeIcon = view.findViewById(R.id.imageview_time_stats_displayer_fragment);
         imageViewTimeIcon.setImageBitmap(calendar);
-        imageViewTimeIcon.setTag("calendar");
+        imageViewTimeIcon.setTag(TAG_TIME_ICON);
         imageViewTimeIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,10 +149,10 @@ public class StatsDisplayerFragment extends Fragment
         });
 
         initImageQuest(getResources());
-        ImageView imageViewQuest = view.findViewById(R.id.imageview_quest_stats_displayer_fragment);
-        imageViewQuest.setImageBitmap(quest);
-        imageViewQuest.setTag("quest");
-        imageViewQuest.setOnClickListener(new View.OnClickListener() {
+        ImageView imageViewQuestIcon = view.findViewById(R.id.imageview_quest_stats_displayer_fragment);
+        imageViewQuestIcon.setImageBitmap(quest);
+        imageViewQuestIcon.setTag(TAG_QUEST_ICON);
+        imageViewQuestIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 iconClickListener.onIconClicked(view);

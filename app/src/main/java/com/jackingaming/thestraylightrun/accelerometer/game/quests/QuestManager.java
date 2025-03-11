@@ -27,4 +27,8 @@ public class QuestManager {
         }
         return false;
     }
+
+    public List<Quest> getQuests() {
+        return quests;
+    }
 }

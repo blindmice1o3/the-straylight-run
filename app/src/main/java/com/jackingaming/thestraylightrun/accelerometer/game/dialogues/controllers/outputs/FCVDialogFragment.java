@@ -22,31 +22,43 @@ import java.io.Serializable;
 
 public class FCVDialogFragment extends DialogFragment {
     public static final String TAG = FCVDialogFragment.class.getSimpleName();
+    public static final float DEFAULT_WIDTH_IN_DECIMAL = 0.75f;
+    public static final float DEFAULT_HEIGHT_IN_DECIMAL = 0.75f;
+
     public static final String ARG_FRAGMENT = "fragment";
     public static final String ARG_TAG = "tag";
     public static final String ARG_CANCELED_ON_TOUCH_OUTSIDE = "canceledOnTouchOutside";
-    public static final String ARG_DISMISS_LISTENER = "dismissListener";
+    public static final String ARG_WIDTH_IN_DECIMAL = "widthInDecimal";
+    public static final String ARG_HEIGHT_IN_DECIMAL = "heightInDecimal";
+    public static final String ARG_LIFE_CYCLE_LISTENER = "lifeCycleListener";
 
-    public interface DismissListener extends Serializable {
+    public interface LifecycleListener extends Serializable {
+        void onResume();
+
         void onDismiss();
     }
 
-    private DismissListener listener;
+    private LifecycleListener listener;
 
     private Fragment fragmentToShow;
     private String tag;
     private boolean canceledOnTouchOutside;
+    private float widthInDecimal;
+    private float heightInDecimal;
 
     public static FCVDialogFragment newInstance(Fragment fragmentToShow, String tag,
                                                 boolean canceledOnTouchOutside,
-                                                DismissListener listener) {
+                                                float widthInDecimal, float heightInDecimal,
+                                                LifecycleListener listener) {
         FCVDialogFragment fragment = new FCVDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_FRAGMENT, (Serializable) fragmentToShow);
         args.putString(ARG_TAG, tag);
         args.putBoolean(ARG_CANCELED_ON_TOUCH_OUTSIDE, canceledOnTouchOutside);
-        args.putSerializable(ARG_DISMISS_LISTENER, (Serializable) listener);
+        args.putFloat(ARG_WIDTH_IN_DECIMAL, widthInDecimal);
+        args.putFloat(ARG_HEIGHT_IN_DECIMAL, heightInDecimal);
+        args.putSerializable(ARG_LIFE_CYCLE_LISTENER, (Serializable) listener);
         fragment.setArguments(args);
 
         return fragment;
@@ -60,7 +72,9 @@ public class FCVDialogFragment extends DialogFragment {
             fragmentToShow = (Fragment) getArguments().getSerializable(ARG_FRAGMENT);
             tag = getArguments().getString(ARG_TAG);
             canceledOnTouchOutside = getArguments().getBoolean(ARG_CANCELED_ON_TOUCH_OUTSIDE);
-            listener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
+            widthInDecimal = getArguments().getFloat(ARG_WIDTH_IN_DECIMAL);
+            heightInDecimal = getArguments().getFloat(ARG_HEIGHT_IN_DECIMAL);
+            listener = (LifecycleListener) getArguments().getSerializable(ARG_LIFE_CYCLE_LISTENER);
         }
     }
 
@@ -82,7 +96,7 @@ public class FCVDialogFragment extends DialogFragment {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        window.setLayout((int) (width * 0.75), (int) (height * 0.75));
+        window.setLayout((int) (width * widthInDecimal), (int) (height * heightInDecimal));
         window.setGravity(Gravity.CENTER);
 
         getDialog().setCanceledOnTouchOutside(canceledOnTouchOutside);
@@ -92,6 +106,14 @@ public class FCVDialogFragment extends DialogFragment {
                 .replace(R.id.fcv_dialog_fragment, fragmentToShow)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume()");
+
+        listener.onResume();
     }
 
     @Override

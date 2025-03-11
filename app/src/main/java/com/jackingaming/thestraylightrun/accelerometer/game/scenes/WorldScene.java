@@ -299,12 +299,19 @@ public class WorldScene extends Scene {
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =
-                                FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
-                                    @Override
-                                    public void onDismiss() {
-                                        unpause();
-                                    }
-                                });
+                                FCVDialogFragment.newInstance(fragment, tag,
+                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                        new FCVDialogFragment.LifecycleListener() {
+                                            @Override
+                                            public void onResume() {
+                                                // Intentionally blank.
+                                            }
+
+                                            @Override
+                                            public void onDismiss() {
+                                                unpause();
+                                            }
+                                        });
 
                         gameListener.onShowDialogFragment(
                                 dialogFragment, tag
@@ -318,12 +325,19 @@ public class WorldScene extends Scene {
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =
-                                FCVDialogFragment.newInstance(fragment, tag, canceledOnTouchOutside, new FCVDialogFragment.DismissListener() {
-                                    @Override
-                                    public void onDismiss() {
-                                        unpause();
-                                    }
-                                });
+                                FCVDialogFragment.newInstance(fragment, tag,
+                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                        new FCVDialogFragment.LifecycleListener() {
+                                            @Override
+                                            public void onResume() {
+                                                // Intentionally blank.
+                                            }
+
+                                            @Override
+                                            public void onDismiss() {
+                                                unpause();
+                                            }
+                                        });
 
                         gameListener.onShowDialogFragment(
                                 dialogFragment, tag
