@@ -64,8 +64,21 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/imageview_currency_stats_displayer_fragment"
-        app:layout_constraintRight_toLeftOf="@id/buttonholderfragment_a_stats_displayer_fragment"
+        app:layout_constraintRight_toLeftOf="@id/imageview_quest_stats_displayer_fragment"
         app:layout_constraintTop_toBottomOf="@id/textview_time_stats_displayer_fragment" />
+
+    <ImageView
+        android:id="@+id/imageview_quest_stats_displayer_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:padding="4dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@id/imageview_currency_stats_displayer_fragment"
+        app:layout_constraintLeft_toRightOf="@id/textview_currency_stats_displayer_fragment"
+        app:layout_constraintRight_toLeftOf="@id/buttonholderfragment_a_stats_displayer_fragment"
+        app:layout_constraintTop_toTopOf="@id/imageview_currency_stats_displayer_fragment"
+        app:srcCompat="@drawable/icon_gridview" />
 
     <fragment
         android:id="@+id/buttonholderfragment_a_stats_displayer_fragment"
@@ -75,7 +88,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/textview_currency_stats_displayer_fragment"
+        app:layout_constraintLeft_toRightOf="@id/textview_time_stats_displayer_fragment"
         app:layout_constraintRight_toLeftOf="@id/buttonholderfragment_b_stats_displayer_fragment"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -39,7 +39,8 @@ public class GameConsoleFragment extends Fragment
         Game.ViewportListener,
         Game.TextboxListener,
         Game.StatsChangeListener,
-        StatsDisplayerFragment.ButtonHolderClickListener {
+        StatsDisplayerFragment.ButtonHolderClickListener,
+        StatsDisplayerFragment.IconClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
     public static final String ARG_GAME_TITLE = "game";
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
@@ -120,6 +121,7 @@ public class GameConsoleFragment extends Fragment
         mySurfaceView.setMySurfaceViewTouchListener(inputManager);
 
         statsDisplayerFragment.setButtonHolderClickListener(this);
+        statsDisplayerFragment.setIconClickListener(this);
 
         directionPadFragment = (DirectionPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.directionpadfragment_game_pad_fragment);
         directionPadFragment.setDirectionPadListener(inputManager);
@@ -333,5 +335,20 @@ public class GameConsoleFragment extends Fragment
     @Override
     public void onButtonHolderClicked(StatsDisplayerFragment.ButtonHolder buttonHolder) {
         game.doClickButtonHolder(buttonHolder);
+    }
+
+    @Override
+    public void onIconClicked(View view) {
+        String tagOfIcon = (String) view.getTag();
+
+        if (tagOfIcon.equals("honeyPot")) {
+            Log.e(TAG, "onIconClicked(View) honeyPot");
+        } else if (tagOfIcon.equals("calendar")) {
+            Log.e(TAG, "onIconClicked(View) calendar");
+        } else if (tagOfIcon.equals("quest")) {
+            Log.e(TAG, "onIconClicked(View) quest");
+        } else {
+            Log.e(TAG, "onIconClicked(View) else-clause");
+        }
     }
 }

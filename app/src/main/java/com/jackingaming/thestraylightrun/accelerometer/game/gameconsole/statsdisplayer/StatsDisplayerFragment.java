@@ -34,6 +34,16 @@ public class StatsDisplayerFragment extends Fragment
     private String mParam1;
     private String mParam2;
 
+    public interface IconClickListener extends Serializable {
+        void onIconClicked(View view);
+    }
+
+    private IconClickListener iconClickListener;
+
+    public void setIconClickListener(IconClickListener iconClickListener) {
+        this.iconClickListener = iconClickListener;
+    }
+
     public interface ButtonHolderClickListener extends Serializable {
         void onButtonHolderClicked(ButtonHolder buttonHolder);
     }
@@ -48,6 +58,7 @@ public class StatsDisplayerFragment extends Fragment
 
     transient private Bitmap honeyPot;
     transient private Bitmap calendar;
+    transient private Bitmap quest;
 
     private TextView textViewCurrency;
     private TextView textViewTime;
@@ -115,15 +126,44 @@ public class StatsDisplayerFragment extends Fragment
         initImageHoneyPot(getResources());
         ImageView imageViewCurrencyIcon = view.findViewById(R.id.imageview_currency_stats_displayer_fragment);
         imageViewCurrencyIcon.setImageBitmap(honeyPot);
+        imageViewCurrencyIcon.setTag("honeyPot");
+        imageViewCurrencyIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iconClickListener.onIconClicked(view);
+            }
+        });
 
         initImageCalendar(getResources());
         ImageView imageViewTimeIcon = view.findViewById(R.id.imageview_time_stats_displayer_fragment);
         imageViewTimeIcon.setImageBitmap(calendar);
+        imageViewTimeIcon.setTag("calendar");
+        imageViewTimeIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iconClickListener.onIconClicked(view);
+            }
+        });
+
+        initImageQuest(getResources());
+        ImageView imageViewQuest = view.findViewById(R.id.imageview_quest_stats_displayer_fragment);
+        imageViewQuest.setImageBitmap(quest);
+        imageViewQuest.setTag("quest");
+        imageViewQuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iconClickListener.onIconClicked(view);
+            }
+        });
 
         ButtonHolderFragment buttonHolderFragmentA = (ButtonHolderFragment) getChildFragmentManager().findFragmentById(R.id.buttonholderfragment_a_stats_displayer_fragment);
         buttonHolderFragmentA.setTextForTextView("A");
         ButtonHolderFragment buttonHolderFragmentB = (ButtonHolderFragment) getChildFragmentManager().findFragmentById(R.id.buttonholderfragment_b_stats_displayer_fragment);
         buttonHolderFragmentB.setTextForTextView("B");
+    }
+
+    private void initImageQuest(Resources resources) {
+        quest = BitmapFactory.decodeResource(resources, R.drawable.icon_quest);
     }
 
     private void initImageCalendar(Resources resources) {
