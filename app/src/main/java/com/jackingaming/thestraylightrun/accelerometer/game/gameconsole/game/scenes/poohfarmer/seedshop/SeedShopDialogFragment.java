@@ -171,6 +171,7 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
+        // TODO: give quest (vs. check if fulfilled quest's requirements).
         boolean alreadyHaveQuest =
                 Player.getInstance().getQuestManager().alreadyHaveQuest(seedShopOwnerQuest00);
 

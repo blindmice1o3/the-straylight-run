@@ -47,7 +47,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.tim
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.QuestAdapter;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.RecyclerViewFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.QuestDetailFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.controllers.QuestLogFragment;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -588,11 +589,34 @@ public class Game {
         backpackDialog.show();
     }
 
+    private void showQuestDetailDialog(FragmentManager fm, Quest questSelected) {
+        paused = true;
+
+        QuestDetailFragment questDetailFragment = QuestDetailFragment.newInstance(questSelected);
+
+        FCVDialogFragment fcvDialogFragment = FCVDialogFragment.newInstance(questDetailFragment, QuestLogFragment.TAG,
+                true, 0.5f, 0.5f,
+                new FCVDialogFragment.LifecycleListener() {
+                    @Override
+                    public void onResume() {
+                        // Intentionally blank.
+                    }
+
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "FCVDialogFragment onDismiss()");
+                        paused = false;
+                    }
+                });
+
+        fcvDialogFragment.show(fm, FCVDialogFragment.TAG);
+    }
+
     private void showQuestLogDialog(FragmentManager fm) {
         paused = true;
 
         List<Quest> questsPlayer = Player.getInstance().getQuestManager().getQuests();
-        RecyclerViewFragment recyclerViewFragment = RecyclerViewFragment.newInstance(null, null);
+        QuestLogFragment questLogFragment = QuestLogFragment.newInstance(null, null);
         QuestAdapter questAdapter = new QuestAdapter(questsPlayer,
                 new QuestAdapter.OnItemClickListener() {
                     @Override
@@ -601,17 +625,18 @@ public class Game {
 
                         Quest questClicked = questsPlayer.get(position);
                         Log.e(TAG, "questClicked: " + questClicked.getTAG());
+                        showQuestDetailDialog(fm, questClicked);
                     }
                 }
         );
 
-        FCVDialogFragment fcvDialogFragment = FCVDialogFragment.newInstance(recyclerViewFragment, RecyclerViewFragment.TAG,
+        FCVDialogFragment fcvDialogFragment = FCVDialogFragment.newInstance(questLogFragment, QuestLogFragment.TAG,
                 false, 0.6f, 0.6f,
                 new FCVDialogFragment.LifecycleListener() {
                     @Override
                     public void onResume() {
                         Log.e(TAG, "FCVDialogFragment onResume()");
-                        recyclerViewFragment.attachAdapter(questAdapter);
+                        questLogFragment.attachAdapter(questAdapter);
                     }
 
                     @Override

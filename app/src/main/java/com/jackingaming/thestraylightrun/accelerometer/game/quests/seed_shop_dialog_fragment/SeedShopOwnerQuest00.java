@@ -3,16 +3,43 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_di
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SeedShopOwnerQuest00
         implements Quest {
     public static final String TAG = SeedShopOwnerQuest00.class.getSimpleName();
+    public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;
 
+    private Map<String, Integer> requirementsAsString;
+    private Map<String, Integer> rewardsAsString;
+
     public SeedShopOwnerQuest00() {
         state = State.NOT_STARTED;
+        initRequirements();
+        initRewards();
+    }
+
+    public void
+
+    public boolean checkIfRequirementsAreFulfilled() {
+
+    }
+
+    private void initRequirements() {
+        requirementsAsString = new HashMap<>();
+        Plant plant = new Plant(0, 0);
+        requirementsAsString.put(Plant.TAG)
+
+    }
+
+    private void initRewards() {
+        rewardsAsString = new HashMap<>();
     }
 
     @Override

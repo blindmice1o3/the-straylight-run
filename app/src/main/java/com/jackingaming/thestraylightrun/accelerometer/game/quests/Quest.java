@@ -1,6 +1,8 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.quests;
 
-public interface Quest {
+import java.io.Serializable;
+
+public interface Quest extends Serializable {
     enum State {
         NOT_STARTED,
         STARTED,
