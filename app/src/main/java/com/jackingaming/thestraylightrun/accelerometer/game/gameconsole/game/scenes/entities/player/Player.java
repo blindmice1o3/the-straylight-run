@@ -31,6 +31,10 @@ public class Player extends Creature {
         return uniqueInstance;
     }
 
+    public void incrementCurrency(float amountToIncrement) {
+        game.incrementCurrency(amountToIncrement);
+    }
+
     public boolean alreadyHaveQuest(String questTAG) {
         return questManager.alreadyHaveQuest(questTAG);
     }

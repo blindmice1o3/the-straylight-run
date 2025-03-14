@@ -3,7 +3,9 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_di
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
@@ -14,6 +16,7 @@ import java.util.Set;
 public class SeedShopOwnerQuest00
         implements Quest {
     public static final String TAG = SeedShopOwnerQuest00.class.getSimpleName();
+    public static final int QUANTITY_REQUIRED = 2;
     public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;
@@ -32,7 +35,7 @@ public class SeedShopOwnerQuest00
         requirements = new HashMap<>();
 
         entitiesAsString = new HashMap<>();
-        entitiesAsString.put(Plant.TAG, 3);
+        entitiesAsString.put(Plant.TAG, QUANTITY_REQUIRED);
 
         requirements.put(RequirementType.ENTITY, entitiesAsString);
     }
@@ -121,5 +124,40 @@ public class SeedShopOwnerQuest00
     @Override
     public String getTAG() {
         return TAG;
+    }
+
+    @Override
+    public void attachListener() {
+        Player.getInstance().setPlaceInShippingBinListener(
+                new Creature.PlaceInShippingBinListener() {
+                    @Override
+                    public void sellableAdded(Sellable sellableAdded) {
+                        if (sellableAdded instanceof Plant) {
+                            Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
+                            Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(Plant.TAG));
+                            if (checkIfMetRequirements()) {
+                                Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                                Map<String, Integer> rewards = dispenseRewards();
+                                for (String rewardAsString : rewards.keySet()) {
+                                    if (rewardAsString.equals(Quest.REWARD_COINS)) {
+                                        int amountOfCoins = rewards.get(rewardAsString);
+
+                                        Player.getInstance().incrementCurrency(amountOfCoins);
+                                    }
+                                }
+                                changeToNextState();
+                                detachListener();
+                            } else {
+                                Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                            }
+                        }
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void detachListener() {
+        Player.getInstance().setPlaceInShippingBinListener(null);
     }
 }

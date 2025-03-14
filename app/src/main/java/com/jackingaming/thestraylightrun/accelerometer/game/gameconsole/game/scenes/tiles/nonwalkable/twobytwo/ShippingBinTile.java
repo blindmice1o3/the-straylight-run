@@ -30,8 +30,8 @@ public class ShippingBinTile extends Tile {
         this.listener = listener;
     }
 
-    public void addSellable(Sellable sellable) {
-        stash.add(sellable);
+    public boolean addSellable(Sellable sellable) {
+        return stash.add(sellable);
     }
 
     public static void sellStash() {

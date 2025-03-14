@@ -37,7 +37,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dia
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
@@ -179,20 +178,7 @@ public class SeedShopDialogFragment extends DialogFragment {
                 @Override
                 public void onAnimationFinish() {
                     Log.e(TAG, "alreadyHaveQuest");
-
-                    // TODO: move checking quest completion to somewhere else.
-                    if (seedShopOwnerQuest00.checkIfMetRequirements()) {
-                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        Map<String, Integer> rewards = seedShopOwnerQuest00.dispenseRewards();
-                        for (String rewardAsString : rewards.keySet()) {
-                            if (rewardAsString.equals(Quest.REWARD_COINS)) {
-                                int amountOfCoins = rewards.get(rewardAsString);
-                                game.incrementCurrency(amountOfCoins);
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                    }
+                    // TODO:
                 }
             };
         } else {
@@ -204,7 +190,7 @@ public class SeedShopDialogFragment extends DialogFragment {
                     if (seedShopInventory.get(0) instanceof MysterySeed) {
                         Log.e(TAG, "first item is mysterySeed");
                         boolean wasQuestAccepted =
-                                Player.getInstance().getQuestManager().acceptQuest(
+                                Player.getInstance().getQuestManager().acceptQuestAndAttachListener(
                                         seedShopOwnerQuest00
                                 );
 

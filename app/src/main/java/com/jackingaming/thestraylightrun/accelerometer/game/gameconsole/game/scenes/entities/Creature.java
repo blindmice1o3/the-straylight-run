@@ -5,13 +5,22 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 public abstract class Creature extends Entity {
     public static final String TAG = Creature.class.getSimpleName();
+
+    public interface PlaceInShippingBinListener {
+        void sellableAdded(Sellable sellableAdded);
+    }
+
+    private PlaceInShippingBinListener placeInShippingBinListener;
+
+    public void setPlaceInShippingBinListener(PlaceInShippingBinListener placeInShippingBinListener) {
+        this.placeInShippingBinListener = placeInShippingBinListener;
+    }
 
     public static final float MOVE_SPEED_DEFAULT = 1f;
 
@@ -317,13 +326,22 @@ public abstract class Creature extends Entity {
             Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
             if (tileCurrentlyFacing instanceof ShippingBinTile) {
                 if (carryable instanceof Sellable) {
-                    ((ShippingBinTile) tileCurrentlyFacing).addSellable(
-                            (Sellable) carryable
-                    );
+                    boolean addSellableSuccessful =
+                            ((ShippingBinTile) tileCurrentlyFacing).addSellable(
+                                    (Sellable) carryable
+                            );
 
-                    // updating QuestManager
-                    if (carryable instanceof Plant) {
-                        Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
+                    if (addSellableSuccessful) {
+                        Log.e(TAG, "addSellableSuccessful");
+                        if (placeInShippingBinListener != null) {
+                            placeInShippingBinListener.sellableAdded(
+                                    (Sellable) carryable
+                            );
+                        } else {
+                            Log.e(TAG, "placeInShippingBinListener == null");
+                        }
+                    } else {
+                        Log.e(TAG, "!addSellableSuccessful");
                     }
 
                     carryable = null;

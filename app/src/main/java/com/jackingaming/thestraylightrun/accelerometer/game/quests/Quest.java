@@ -29,4 +29,8 @@ public interface Quest extends Serializable {
     int getDialogueForCurrentState();
 
     String getTAG();
+
+    void attachListener();
+
+    void detachListener();
 }
