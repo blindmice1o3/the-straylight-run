@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
@@ -319,6 +320,12 @@ public abstract class Creature extends Entity {
                     ((ShippingBinTile) tileCurrentlyFacing).addSellable(
                             (Sellable) carryable
                     );
+
+                    // updating QuestManager
+                    if (carryable instanceof Plant) {
+                        Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
+                    }
+
                     carryable = null;
                 }
             }

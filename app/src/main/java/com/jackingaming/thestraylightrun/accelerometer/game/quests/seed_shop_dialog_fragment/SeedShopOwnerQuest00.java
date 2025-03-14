@@ -4,10 +4,12 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class SeedShopOwnerQuest00
         implements Quest {
@@ -16,7 +18,8 @@ public class SeedShopOwnerQuest00
 
     private Quest.State state;
 
-    private Map<String, Integer> requirementsAsString;
+    private Map<RequirementType, Map<String, Integer>> requirements;
+    private Map<String, Integer> entitiesAsString;
     private Map<String, Integer> rewardsAsString;
 
     public SeedShopOwnerQuest00() {
@@ -25,21 +28,61 @@ public class SeedShopOwnerQuest00
         initRewards();
     }
 
-    public void
+    private void initRequirements() {
+        requirements = new HashMap<>();
 
-    public boolean checkIfRequirementsAreFulfilled() {
+        entitiesAsString = new HashMap<>();
+        entitiesAsString.put(Plant.TAG, 3);
 
+        requirements.put(RequirementType.ENTITY, entitiesAsString);
     }
 
-    private void initRequirements() {
-        requirementsAsString = new HashMap<>();
-        Plant plant = new Plant(0, 0);
-        requirementsAsString.put(Plant.TAG)
-
+    @Override
+    public boolean checkIfMetRequirements() {
+        for (RequirementType requirementType : RequirementType.values()) {
+            if (requirements.containsKey(requirementType)) {
+                Log.e(TAG, "requirementType: " + requirementType);
+                Map<String, Integer> requirementsAsString = requirements.get(requirementType);
+                switch (requirementType) {
+                    case ENTITY:
+                        Set<String> entitiesRequired = requirementsAsString.keySet();
+                        for (String entityAsString : entitiesRequired) {
+                            int requiredNumberOfEntityAsString = requirementsAsString.get(entityAsString);
+                            int currentNumberOfEntityAsString = Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString): " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString));
+                            return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
+                        }
+                        break;
+                    case ITEM:
+                        Set<String> itemsRequired = requirementsAsString.keySet();
+                        for (String itemAsString : itemsRequired) {
+                            int requiredNumberOfItemAsString = requirementsAsString.get(itemAsString);
+                            int currentNumberOfItemAsString = Player.getInstance().getQuestManager().getNumberOfItemAsString(itemAsString);
+                            return (currentNumberOfItemAsString >= requiredNumberOfItemAsString);
+                        }
+                        break;
+                    case TILE:
+                        Set<String> tilesRequired = requirementsAsString.keySet();
+                        for (String tileAsString : tilesRequired) {
+                            int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
+                            int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
+                            return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
+                        }
+                        break;
+                }
+            }
+        }
+        return false;
     }
 
     private void initRewards() {
         rewardsAsString = new HashMap<>();
+        rewardsAsString.put(REWARD_COINS, 420);
+    }
+
+    @Override
+    public Map<String, Integer> dispenseRewards() {
+        return rewardsAsString;
     }
 
     @Override

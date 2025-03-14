@@ -31,6 +31,10 @@ public class Player extends Creature {
         return uniqueInstance;
     }
 
+    public boolean alreadyHaveQuest(String questTAG) {
+        return questManager.alreadyHaveQuest(questTAG);
+    }
+
     @Override
     protected boolean skipEntityCollisionCheck(Entity e) {
         return super.skipEntityCollisionCheck(e) ||

@@ -37,6 +37,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dia
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
@@ -171,54 +172,73 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        // TODO: give quest (vs. check if fulfilled quest's requirements).
-        boolean alreadyHaveQuest =
-                Player.getInstance().getQuestManager().alreadyHaveQuest(seedShopOwnerQuest00);
+        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(SeedShopOwnerQuest00.TAG);
+        TypeWriterTextView.TextCompletionListener textCompletionListener;
+        if (alreadyHaveQuest) {
+            textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                @Override
+                public void onAnimationFinish() {
+                    Log.e(TAG, "alreadyHaveQuest");
+
+                    // TODO: move checking quest completion to somewhere else.
+                    if (seedShopOwnerQuest00.checkIfMetRequirements()) {
+                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        Map<String, Integer> rewards = seedShopOwnerQuest00.dispenseRewards();
+                        for (String rewardAsString : rewards.keySet()) {
+                            if (rewardAsString.equals(Quest.REWARD_COINS)) {
+                                int amountOfCoins = rewards.get(rewardAsString);
+                                game.incrementCurrency(amountOfCoins);
+                            }
+                        }
+                    } else {
+                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                    }
+                }
+            };
+        } else {
+            textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                @Override
+                public void onAnimationFinish() {
+                    Log.e(TAG, "!alreadyHaveQuest");
+
+                    if (seedShopInventory.get(0) instanceof MysterySeed) {
+                        Log.e(TAG, "first item is mysterySeed");
+                        boolean wasQuestAccepted =
+                                Player.getInstance().getQuestManager().acceptQuest(
+                                        seedShopOwnerQuest00
+                                );
+
+                        if (wasQuestAccepted) {
+                            Log.e(TAG, "wasQuestAccepted");
+                            MysterySeed mysterySeed = (MysterySeed) seedShopInventory.get(0);
+                            performTrade(mysterySeed, Player.getInstance());
+                            Log.e(TAG, "mysterySeed GIVEN");
+
+                            seedShopOwnerQuest00.changeToNextState();
+                            Log.e(TAG, Player.getInstance().getQuestManager().getCurrentQuest().getTAG());
+                        } else {
+                            Log.e(TAG, "!wasQuestAccepted");
+                        }
+                    } else {
+                        Log.e(TAG, "first item is NOT mysterySeed... SeedShopOwnerQuest00 NOT accepted");
+                    }
+                }
+            };
+        }
 
         Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
         int stringId = seedShopOwnerQuest00.getDialogueForCurrentState();
-        String message = game.getContext().getResources().getString(stringId);
+        String messageGreeting = game.getContext().getResources().getString(stringId);
+
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                50L, image, message,
+                50L, image, messageGreeting,
                 new TypeWriterDialogFragment.DismissListener() {
                     @Override
                     public void onDismiss() {
                         Log.e(TAG, "onDismiss(): seed_shop_dialogue00");
 
                     }
-                }, new TypeWriterTextView.TextCompletionListener() {
-                    @Override
-                    public void onAnimationFinish() {
-                        Log.e(TAG, "onAnimationFinish(): seed_shop_dialogue00");
-
-                        if (!alreadyHaveQuest) {
-                            Log.e(TAG, "!alreadyHaveQuest");
-                            if (seedShopInventory.get(0) instanceof MysterySeed) {
-                                Log.e(TAG, "first item is mysterySeed");
-                                boolean wasQuestAccepted =
-                                        Player.getInstance().getQuestManager().acceptQuest(
-                                                seedShopOwnerQuest00
-                                        );
-
-                                if (wasQuestAccepted) {
-                                    Log.e(TAG, "wasQuestAccepted");
-                                    MysterySeed mysterySeed = (MysterySeed) seedShopInventory.get(0);
-                                    performTrade(mysterySeed, Player.getInstance());
-                                    Log.e(TAG, "mysterySeed GIVEN");
-
-                                    seedShopOwnerQuest00.changeToNextState();
-                                    Log.e(TAG, Player.getInstance().getQuestManager().getCurrentQuest().getTAG());
-                                } else {
-                                    Log.e(TAG, "!wasQuestAccepted");
-                                }
-                            } else {
-                                Log.e(TAG, "first item is NOT mysterySeed... SeedShopOwnerQuest00 NOT given");
-                            }
-                        } else {
-                            Log.e(TAG, "alreadyHaveQuest");
-                        }
-                    }
-                }
+                }, textCompletionListener
         );
 
         game.getTextboxListener().showTextbox(
