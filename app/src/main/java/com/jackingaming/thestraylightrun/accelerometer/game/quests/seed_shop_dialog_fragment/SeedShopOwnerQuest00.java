@@ -16,7 +16,7 @@ import java.util.Set;
 public class SeedShopOwnerQuest00
         implements Quest {
     public static final String TAG = SeedShopOwnerQuest00.class.getSimpleName();
-    public static final int QUANTITY_REQUIRED = 2;
+    public static final int QUANTITY_REQUIRED = 3;
     public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;

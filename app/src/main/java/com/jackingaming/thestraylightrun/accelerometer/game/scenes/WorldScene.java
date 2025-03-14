@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
@@ -134,6 +135,8 @@ public class WorldScene extends Scene {
     private Bitmap spriteCoin;
     private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
     private List<Entity> entities;
+    private NonPlayableCharacter npcYoungster;
+    private Paint paintText;
 
     private WorldScene() {
     }
@@ -190,6 +193,11 @@ public class WorldScene extends Scene {
 
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();
+
+        paintText = new Paint();
+        paintText.setColor(Color.MAGENTA);
+        paintText.setTextSize(20);
+        paintText.setStyle(Paint.Style.FILL);
     }
 
 //    private boolean isFirstCollide = true;
@@ -516,6 +524,19 @@ public class WorldScene extends Scene {
                         widthSpriteDst, heightSpriteDst);
             }
         }
+
+        // ENTITIES are not on SURFACE_VIEW, they are IMAGE_VIEW(s) in the same FRAME_LAYOUT.
+        // CONVERSATIONS belonging to ENTITY are different.
+        if (npcYoungster.isTalking()) {
+            float xYoungster = -1;
+            float yYoungster = npcYoungster.getYPos() - gameCamera.getyOffset();
+            if (npcYoungster.isTalkLeftSide()) {
+                xYoungster = npcYoungster.getXPos() - gameCamera.getxOffset() - widthSpriteDst;
+            } else {
+                xYoungster = npcYoungster.getXPos() - gameCamera.getxOffset() + widthSpriteDst;
+            }
+            canvas.drawText("blah blah blah...", xYoungster, yYoungster, paintText);
+        }
     }
 
     @Override
@@ -728,7 +749,7 @@ public class WorldScene extends Scene {
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcYoungster = generateNonPlayableCharacter(ID_YOUNGSTER,
+        npcYoungster = generateNonPlayableCharacter(ID_YOUNGSTER,
                 X_INDEX_PORTRAIT_YOUNGSTER, Y_INDEX_PORTRAIT_YOUNGSTER,
                 10,
                 X_SPAWN_INDEX_YOUNGSTER, Y_SPAWN_INDEX_YOUNGSTER,

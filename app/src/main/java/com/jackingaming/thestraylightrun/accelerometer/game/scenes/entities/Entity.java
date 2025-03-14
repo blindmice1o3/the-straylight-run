@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Entity {
+    public static final String TAG = Entity.class.getSimpleName();
+
     public interface MovementListener {
         boolean onMove(int[] futureCorner1, int[] futureCorner2);
     }
@@ -84,12 +87,35 @@ public abstract class Entity {
                 super.onAnimationEnd(animation);
 
                 if (!movementCommands.isEmpty()) {
+                    Log.e(TAG, "onAnimationEnd() isLeftStep: (" + counterTalking + ") " + talkLeftSide);
+                    if (counterTalking % 3 == 0) {
+                        // TODO: triggers line of dialogue.
+                        talking = !talking;
+
+                        if (!talking) {
+                            talkLeftSide = !talkLeftSide;
+                        }
+                    }
+                    counterTalking++;
+
                     indexMovementCommands++;
                     runMovementCommands();
                 }
             }
         });
     }
+
+    public boolean isTalking() {
+        return talking;
+    }
+
+    public boolean isTalkLeftSide() {
+        return talkLeftSide;
+    }
+
+    private int counterTalking = 0;
+    private boolean talking = false;
+    private boolean talkLeftSide = true;
 
     public void increaseMovementSpeed() {
         long quarterOfDefaultMovementDuration = DEFAULT_MOVEMENT_DURATION / 4;
