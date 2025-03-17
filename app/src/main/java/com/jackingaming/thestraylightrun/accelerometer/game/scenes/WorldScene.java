@@ -21,17 +21,13 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveDownCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
@@ -299,106 +295,110 @@ public class WorldScene extends Scene {
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_BUG_CATCH)) {
 //                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
 
-                        pause();
+                        joinParty(collided);
 
-                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
-                        String gameTitle = "Bubble Pop";
-                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
-                        String tag = GameConsoleFragment.TAG;
-                        boolean canceledOnTouchOutside = false;
-                        DialogFragment dialogFragment =
-                                FCVDialogFragment.newInstance(fragment, tag,
-                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
-                                        new FCVDialogFragment.LifecycleListener() {
-                                            @Override
-                                            public void onResume() {
-                                                // Intentionally blank.
-                                            }
-
-                                            @Override
-                                            public void onDismiss() {
-                                                unpause();
-                                            }
-                                        });
-
-                        gameListener.onShowDialogFragment(
-                                dialogFragment, tag
-                        );
+//                        pause();
+//
+//                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+//                        String gameTitle = "Bubble Pop";
+//                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+//                        String tag = GameConsoleFragment.TAG;
+//                        boolean canceledOnTouchOutside = false;
+//                        DialogFragment dialogFragment =
+//                                FCVDialogFragment.newInstance(fragment, tag,
+//                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+//                                        new FCVDialogFragment.LifecycleListener() {
+//                                            @Override
+//                                            public void onResume() {
+//                                                // Intentionally blank.
+//                                            }
+//
+//                                            @Override
+//                                            public void onDismiss() {
+//                                                unpause();
+//                                            }
+//                                        });
+//
+//                        gameListener.onShowDialogFragment(
+//                                dialogFragment, tag
+//                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
-                        pause();
+                        joinParty(collided);
 
-                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
-                        String gameTitle = "Pooh Farmer";
-                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
-                        String tag = GameConsoleFragment.TAG;
-                        boolean canceledOnTouchOutside = false;
-                        DialogFragment dialogFragment =
-                                FCVDialogFragment.newInstance(fragment, tag,
-                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
-                                        new FCVDialogFragment.LifecycleListener() {
-                                            @Override
-                                            public void onResume() {
-                                                // Intentionally blank.
-                                            }
-
-                                            @Override
-                                            public void onDismiss() {
-                                                unpause();
-                                            }
-                                        });
-
-                        gameListener.onShowDialogFragment(
-                                dialogFragment, tag
-                        );
+//                        pause();
+//
+//                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+//                        String gameTitle = "Pooh Farmer";
+//                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+//                        String tag = GameConsoleFragment.TAG;
+//                        boolean canceledOnTouchOutside = false;
+//                        DialogFragment dialogFragment =
+//                                FCVDialogFragment.newInstance(fragment, tag,
+//                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+//                                        new FCVDialogFragment.LifecycleListener() {
+//                                            @Override
+//                                            public void onResume() {
+//                                                // Intentionally blank.
+//                                            }
+//
+//                                            @Override
+//                                            public void onDismiss() {
+//                                                unpause();
+//                                            }
+//                                        });
+//
+//                        gameListener.onShowDialogFragment(
+//                                dialogFragment, tag
+//                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
-                        collided.resetMovementCommands();
-
-                        // first move is towards Player's tile.
-                        MovementCommand movementCommand = null;
-                        switch (player.getDirection()) {
-                            case LEFT:
-                                movementCommand = new MoveRightCommand(collided, handler);
-                                break;
-                            case UP:
-                                movementCommand = new MoveDownCommand(collided, handler);
-                                break;
-                            case RIGHT:
-                                movementCommand = new MoveLeftCommand(collided, handler);
-                                break;
-                            case DOWN:
-                                movementCommand = new MoveUpCommand(collided, handler);
-                                break;
-                        }
-                        collided.appendMovementCommand(movementCommand);
-
-                        ((NonPlayableCharacter) collided).turnStationaryOff();
-
-                        // subsequent moves are same as Player's moves.
-                        player.setPartyMovementListener(new Player.PartyMovementListener() {
-                            @Override
-                            public void onPartyLeaderMove(Direction direction) {
-                                MovementCommand movementCommand = null;
-                                switch (player.getDirection()) {
-                                    case LEFT:
-                                        movementCommand = new MoveLeftCommand(collided, handler);
-                                        break;
-                                    case UP:
-                                        movementCommand = new MoveUpCommand(collided, handler);
-                                        break;
-                                    case RIGHT:
-                                        movementCommand = new MoveRightCommand(collided, handler);
-                                        break;
-                                    case DOWN:
-                                        movementCommand = new MoveDownCommand(collided, handler);
-                                        break;
-                                }
-                                collided.appendMovementCommand(movementCommand);
-                            }
-                        });
+                        joinParty(collided);
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
+                        joinParty(collided);
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
+                        joinParty(collided);
                     }
                 }
             }
         };
+    }
+
+    private void joinParty(Entity newPartyMember) {
+        newPartyMember.resetMovementCommands();
+
+        // wait for other members of the party to move out of the way.
+        // TODO: remove MoveNullCommand.
+        // TODO: this isn't working yet.
+        int sizeOfPartyBeforeNewMember = player.getSizeOfPartyMembers();
+        ((NonPlayableCharacter) newPartyMember).setJoinPartyWaitCounterTarget(sizeOfPartyBeforeNewMember + 2);
+//        int sizeOfPartyBeforeNewMember = player.getSizeOfPartyMembers();
+//        for (int i = 0; i < sizeOfPartyBeforeNewMember; i++) {
+//            newPartyMember.appendMovementCommand(
+//                    new MoveNullCommand(newPartyMember, handler)
+//            );
+//        }
+
+        // first move is towards Player's tile.
+        MovementCommand movementCommand = null;
+        switch (player.getDirection()) {
+            case LEFT:
+                movementCommand = new MoveRightCommand(newPartyMember, handler);
+                break;
+            case UP:
+                movementCommand = new MoveDownCommand(newPartyMember, handler);
+                break;
+            case RIGHT:
+                movementCommand = new MoveLeftCommand(newPartyMember, handler);
+                break;
+            case DOWN:
+                movementCommand = new MoveUpCommand(newPartyMember, handler);
+                break;
+        }
+        newPartyMember.appendMovementCommand(movementCommand);
+
+        // subsequent moves are same as Player's moves (done through listener).
+        player.addPartyMember(((NonPlayableCharacter) newPartyMember));
+
+//        ((NonPlayableCharacter) newPartyMember).turnStationaryOff();
     }
 
     private Entity.MovementListener generateMovementListenerForPlayer() {

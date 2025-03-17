@@ -98,12 +98,19 @@ public abstract class Entity {
                     }
                     counterTalking++;
 
-                    indexMovementCommands++;
+                    if (wasMoveSuccessful) {
+                        indexMovementCommands++;
+
+                        wasMoveSuccessful = false;
+                    }
+
                     runMovementCommands();
                 }
             }
         });
     }
+
+    private boolean wasMoveSuccessful = false;
 
     public boolean isTalking() {
         return talking;
@@ -166,6 +173,30 @@ public abstract class Entity {
         return animationsByDirection.get(direction).getFrame(index);
     }
 
+    private float dummyValue;
+
+    public float getDummyValue() {
+        return dummyValue;
+    }
+
+    public void setDummyValue(float dummyValue) {
+        this.dummyValue = dummyValue;
+    }
+
+    public void moveNull(Handler handler) {
+        wasMoveSuccessful = true;
+
+        animatorMovement.setPropertyName("dummyValue");
+        animatorMovement.setFloatValues(0f, 16f);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                animatorMovement.start();
+            }
+        });
+    }
+
     public void moveLeft(Handler handler) {
         direction = Direction.LEFT;
         String propertyName = "xPos";
@@ -220,6 +251,8 @@ public abstract class Entity {
 
     protected void moveAfterValidation(Handler handler, String propertyName,
                                        float valueStart, float valueEnd) {
+        wasMoveSuccessful = true;
+
         animatorMovement.setPropertyName(propertyName);
         animatorMovement.setFloatValues(valueStart, valueEnd);
 
