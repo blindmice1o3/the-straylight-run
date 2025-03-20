@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class NonPlayableCharacter extends Entity
-        implements Player.PartyMovementListener {
+        implements Player.LeaderListener {
     public static final String TAG = NonPlayableCharacter.class.getSimpleName();
 
     private Random random = new Random();
@@ -84,33 +84,6 @@ public class NonPlayableCharacter extends Entity
             }
 
             runMovementCommands();
-
-//            if (animatorMovement.isRunning()) {
-//                return;
-//            }
-//
-//            if (getMovementCommands().isEmpty()) {
-//                // DIRECTION (changes 20% of the time)
-//                if (random.nextInt(5) < 1) {
-//                    // determine direction
-//                    int directionSpecified = random.nextInt(4);
-//                    if (directionSpecified == 0) {
-//                        direction = Direction.LEFT;
-//                    } else if (directionSpecified == 1) {
-//                        direction = Direction.RIGHT;
-//                    } else if (directionSpecified == 2) {
-//                        direction = Direction.UP;
-//                    } else if (directionSpecified == 3) {
-//                        direction = Direction.DOWN;
-//                    }
-//                } else {
-//                    // do nothing.
-//                }
-//
-//                doMoveBasedOnDirection(handler);
-//            } else {
-//                runMovementCommands();
-//            }
         }
     }
 
@@ -126,24 +99,18 @@ public class NonPlayableCharacter extends Entity
         return stationary;
     }
 
-    private int joinPartyWaitCounter = 0;
-    private int joinPartyWaitCounterTarget = 0;
-
-    public void setJoinPartyWaitCounterTarget(int joinPartyWaitCounterTarget) {
-        this.joinPartyWaitCounterTarget = joinPartyWaitCounterTarget;
+    @Override
+    protected void moveAfterValidation(Handler handler, String propertyName, float valueStart, float valueEnd) {
+        if (leaderListener != null) {
+            leaderListener.onLeaderMove(this, handler);
+        }
+        super.moveAfterValidation(handler, propertyName, valueStart, valueEnd);
     }
 
     @Override
-    public void onPartyLeaderMove(Player player, Handler handler) {
-        joinPartyWaitCounter++;
-        if (joinPartyWaitCounter >= joinPartyWaitCounterTarget) {
-            if (stationary == true) {
-                turnStationaryOff();
-            }
-        }
-
+    public void onLeaderMove(Entity leader, Handler handler) {
         MovementCommand movementCommand = null;
-        switch (player.getDirection()) {
+        switch (leader.getDirection()) {
             case LEFT:
                 movementCommand = new MoveLeftCommand(this, handler);
                 break;

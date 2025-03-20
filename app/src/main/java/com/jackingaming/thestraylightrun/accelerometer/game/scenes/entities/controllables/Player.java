@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Player extends Entity {
-    public interface PartyMovementListener {
-        void onPartyLeaderMove(Player player, Handler handler);
-    }
 
     private List<NonPlayableCharacter> partyMembers;
 
@@ -31,6 +28,13 @@ public class Player extends Entity {
 
         Log.e(TAG, "adding " + newPartyMember.getId() + " to party.");
         partyMembers.add(newPartyMember);
+    }
+
+    public NonPlayableCharacter getLastPartyMember() {
+        int sizePartyMembers = partyMembers.size();
+        return (sizePartyMembers != 0) ?
+                partyMembers.get(sizePartyMembers - 1) :
+                null;
     }
 
     public int getSizeOfPartyMembers() {
@@ -73,8 +77,12 @@ public class Player extends Entity {
 
     @Override
     protected void moveAfterValidation(Handler handler, String propertyName, float valueStart, float valueEnd) {
-        for (NonPlayableCharacter partyMembers : partyMembers) {
-            partyMembers.onPartyLeaderMove(this, handler);
+//        for (NonPlayableCharacter partyMembers : partyMembers) {
+//            partyMembers.onLeaderMove(this, handler);
+//        }
+        // TODO: call immediate-follower's onLeaderMove(this, handler);
+        if (leaderListener != null) {
+            leaderListener.onLeaderMove(this, handler);
         }
         super.moveAfterValidation(handler, propertyName, valueStart, valueEnd);
     }

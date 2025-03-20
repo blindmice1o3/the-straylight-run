@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,16 @@ import java.util.Map;
 
 public abstract class Entity {
     public static final String TAG = Entity.class.getSimpleName();
+
+    public interface LeaderListener {
+        void onLeaderMove(Entity leader, Handler handler);
+    }
+
+    protected LeaderListener leaderListener;
+
+    public void setLeaderListener(LeaderListener leaderListener) {
+        this.leaderListener = leaderListener;
+    }
 
     public interface MovementListener {
         boolean onMove(int[] futureCorner1, int[] futureCorner2);
@@ -171,30 +182,6 @@ public abstract class Entity {
             index = 1;
         }
         return animationsByDirection.get(direction).getFrame(index);
-    }
-
-    private float dummyValue;
-
-    public float getDummyValue() {
-        return dummyValue;
-    }
-
-    public void setDummyValue(float dummyValue) {
-        this.dummyValue = dummyValue;
-    }
-
-    public void moveNull(Handler handler) {
-        wasMoveSuccessful = true;
-
-        animatorMovement.setPropertyName("dummyValue");
-        animatorMovement.setFloatValues(0f, 16f);
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                animatorMovement.start();
-            }
-        });
     }
 
     public void moveLeft(Handler handler) {

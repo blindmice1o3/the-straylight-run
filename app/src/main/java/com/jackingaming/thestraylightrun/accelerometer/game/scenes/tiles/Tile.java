@@ -7,6 +7,8 @@ import android.graphics.Rect;
 public class Tile {
     protected Bitmap image;
     private Rect rectOfImage;
+    private int width;
+    private int height;
 
     public Tile(Bitmap image) {
         this.image = image;

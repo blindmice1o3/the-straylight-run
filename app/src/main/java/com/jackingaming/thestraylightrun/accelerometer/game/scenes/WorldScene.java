@@ -21,14 +21,17 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveDownCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
@@ -131,7 +134,11 @@ public class WorldScene extends Scene {
     private Bitmap spriteCoin;
     private Bitmap spriteTileSolid, spriteTileWalkable, spriteTileBoulder;
     private List<Entity> entities;
+    private NonPlayableCharacter npcJrTrainer;
+    private NonPlayableCharacter npcLass02;
     private NonPlayableCharacter npcYoungster;
+    private NonPlayableCharacter npcLass01;
+    private NonPlayableCharacter npcBugCatcher;
     private Paint paintText;
 
     private WorldScene() {
@@ -293,69 +300,69 @@ public class WorldScene extends Scene {
                                 "RivalLeaderDialogFragment"
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_BUG_CATCH)) {
-//                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+//                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());;
 
-                        joinParty(collided);
+//                        joinParty(collided);
 
-//                        pause();
-//
-//                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
-//                        String gameTitle = "Bubble Pop";
-//                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
-//                        String tag = GameConsoleFragment.TAG;
-//                        boolean canceledOnTouchOutside = false;
-//                        DialogFragment dialogFragment =
-//                                FCVDialogFragment.newInstance(fragment, tag,
-//                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
-//                                        new FCVDialogFragment.LifecycleListener() {
-//                                            @Override
-//                                            public void onResume() {
-//                                                // Intentionally blank.
-//                                            }
-//
-//                                            @Override
-//                                            public void onDismiss() {
-//                                                unpause();
-//                                            }
-//                                        });
-//
-//                        gameListener.onShowDialogFragment(
-//                                dialogFragment, tag
-//                        );
+                        pause();
+
+                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                        String gameTitle = "Bubble Pop";
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        String tag = GameConsoleFragment.TAG;
+                        boolean canceledOnTouchOutside = false;
+                        DialogFragment dialogFragment =
+                                FCVDialogFragment.newInstance(fragment, tag,
+                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                        new FCVDialogFragment.LifecycleListener() {
+                                            @Override
+                                            public void onResume() {
+                                                // Intentionally blank.
+                                            }
+
+                                            @Override
+                                            public void onDismiss() {
+                                                unpause();
+                                            }
+                                        });
+
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
+                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
-                        joinParty(collided);
+//                        joinParty(collided);
 
-//                        pause();
-//
-//                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
-//                        String gameTitle = "Pooh Farmer";
-//                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
-//                        String tag = GameConsoleFragment.TAG;
-//                        boolean canceledOnTouchOutside = false;
-//                        DialogFragment dialogFragment =
-//                                FCVDialogFragment.newInstance(fragment, tag,
-//                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
-//                                        new FCVDialogFragment.LifecycleListener() {
-//                                            @Override
-//                                            public void onResume() {
-//                                                // Intentionally blank.
-//                                            }
-//
-//                                            @Override
-//                                            public void onDismiss() {
-//                                                unpause();
-//                                            }
-//                                        });
-//
-//                        gameListener.onShowDialogFragment(
-//                                dialogFragment, tag
-//                        );
+                        pause();
+
+                        // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                        String gameTitle = "Pooh Farmer";
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        String tag = GameConsoleFragment.TAG;
+                        boolean canceledOnTouchOutside = false;
+                        DialogFragment dialogFragment =
+                                FCVDialogFragment.newInstance(fragment, tag,
+                                        canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                        new FCVDialogFragment.LifecycleListener() {
+                                            @Override
+                                            public void onResume() {
+                                                // Intentionally blank.
+                                            }
+
+                                            @Override
+                                            public void onDismiss() {
+                                                unpause();
+                                            }
+                                        });
+
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
+                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
-                        joinParty(collided);
+//                        joinParty(collided);
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
-                        joinParty(collided);
+//                        joinParty(collided);
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
-                        joinParty(collided);
+//                        joinParty(collided);
                     }
                 }
             }
@@ -365,40 +372,20 @@ public class WorldScene extends Scene {
     private void joinParty(Entity newPartyMember) {
         newPartyMember.resetMovementCommands();
 
-        // wait for other members of the party to move out of the way.
-        // TODO: remove MoveNullCommand.
-        // TODO: this isn't working yet.
-        int sizeOfPartyBeforeNewMember = player.getSizeOfPartyMembers();
-        ((NonPlayableCharacter) newPartyMember).setJoinPartyWaitCounterTarget(sizeOfPartyBeforeNewMember + 2);
-//        int sizeOfPartyBeforeNewMember = player.getSizeOfPartyMembers();
-//        for (int i = 0; i < sizeOfPartyBeforeNewMember; i++) {
-//            newPartyMember.appendMovementCommand(
-//                    new MoveNullCommand(newPartyMember, handler)
-//            );
-//        }
-
-        // first move is towards Player's tile.
+        // first move
         MovementCommand movementCommand = null;
-        switch (player.getDirection()) {
-            case LEFT:
-                movementCommand = new MoveRightCommand(newPartyMember, handler);
-                break;
-            case UP:
-                movementCommand = new MoveDownCommand(newPartyMember, handler);
-                break;
-            case RIGHT:
-                movementCommand = new MoveLeftCommand(newPartyMember, handler);
-                break;
-            case DOWN:
-                movementCommand = new MoveUpCommand(newPartyMember, handler);
-                break;
+        int currentSizeOfParty = player.getSizeOfPartyMembers();
+        if (currentSizeOfParty % 2 == 0) {
+            movementCommand = new MoveLeftCommand(newPartyMember, handler);
+        } else {
+            movementCommand = new MoveRightCommand(newPartyMember, handler);
         }
         newPartyMember.appendMovementCommand(movementCommand);
+        // second move
+        newPartyMember.appendMovementCommand(new MoveUpCommand(newPartyMember, handler));
 
         // subsequent moves are same as Player's moves (done through listener).
         player.addPartyMember(((NonPlayableCharacter) newPartyMember));
-
-//        ((NonPlayableCharacter) newPartyMember).turnStationaryOff();
     }
 
     private Entity.MovementListener generateMovementListenerForPlayer() {
@@ -621,6 +608,54 @@ public class WorldScene extends Scene {
         return entities;
     }
 
+    private void checkForNewPartyMemberToJoin() {
+        int yLastPartyMember = (int) player.getYPos();
+
+        int currentPartySize = player.getSizeOfPartyMembers();
+        Entity entityToJoinParty = null;
+        if (currentPartySize == 0) {
+            int yThresholdBugCatcher = Y_SPAWN_INDEX_BUG_CATCHER * heightSpriteDst;
+            if (yLastPartyMember < yThresholdBugCatcher) {
+                entityToJoinParty = npcBugCatcher;
+                player.setLeaderListener(npcBugCatcher);
+            }
+        } else {
+            NonPlayableCharacter lastPartyMember = player.getLastPartyMember();
+            yLastPartyMember = (int) lastPartyMember.getYPos();
+
+            if (currentPartySize == 1) {
+                int yThresholdLass01 = Y_SPAWN_INDEX_LASS_01 * heightSpriteDst;
+                if (yLastPartyMember < yThresholdLass01) {
+                    entityToJoinParty = npcLass01;
+                    lastPartyMember.setLeaderListener(npcLass01);
+                }
+            } else if (currentPartySize == 2) {
+                int yThresholdYoungster = Y_SPAWN_INDEX_YOUNGSTER * heightSpriteDst;
+                if (yLastPartyMember < yThresholdYoungster) {
+                    entityToJoinParty = npcYoungster;
+                    lastPartyMember.setLeaderListener(npcYoungster);
+                }
+            } else if (currentPartySize == 3) {
+                int yThresholdLass02 = Y_SPAWN_INDEX_LASS_02 * heightSpriteDst;
+                if (yLastPartyMember < yThresholdLass02) {
+                    entityToJoinParty = npcLass02;
+                    lastPartyMember.setLeaderListener(npcLass02);
+                }
+            } else if (currentPartySize == 4) {
+                int yThresholdJrTrainer = Y_SPAWN_INDEX_JR_TRAINER * heightSpriteDst;
+                if (yLastPartyMember < yThresholdJrTrainer) {
+                    entityToJoinParty = npcJrTrainer;
+                    lastPartyMember.setLeaderListener(npcJrTrainer);
+                }
+            }
+        }
+
+        if (entityToJoinParty != null) {
+            joinParty(entityToJoinParty);
+            ((NonPlayableCharacter) entityToJoinParty).turnStationaryOff();
+        }
+    }
+
     private void updateGameEntities(float xDelta, float yDelta) {
         for (Entity e : entities) {
             if (e instanceof Player) {
@@ -628,6 +663,17 @@ public class WorldScene extends Scene {
                 player.updateViaSensorEvent(handler, xDelta, yDelta);
                 validatePosition(player);
                 gameCamera.centerOnEntity(player);
+
+                // limit new party member checks (horizontally)
+                int xCurrent = (int) player.getXPos();
+                if (xCurrent >= (X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst) &&
+                        xCurrent < ((X_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE + 2) * widthSpriteDst)) {
+                    // limit new party member checks (vertically)
+                    int yCurrent = (int) player.getYPos();
+                    if (yCurrent < (Y_SPAWN_INDEX_PLAYER_NUGGET_BRIDGE * widthSpriteDst)) {
+                        checkForNewPartyMemberToJoin();
+                    }
+                }
             } else {
                 e.update(handler);
                 validatePosition(e);
@@ -735,14 +781,14 @@ public class WorldScene extends Scene {
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcJrTrainer = generateNonPlayableCharacter(ID_JR_TRAINER,
+        npcJrTrainer = generateNonPlayableCharacter(ID_JR_TRAINER,
                 X_INDEX_PORTRAIT_JR_TRAINER, Y_INDEX_PORTRAIT_JR_TRAINER,
                 11,
                 X_SPAWN_INDEX_JR_TRAINER, Y_SPAWN_INDEX_JR_TRAINER,
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass02 = generateNonPlayableCharacter(ID_LASS02,
+        npcLass02 = generateNonPlayableCharacter(ID_LASS02,
                 X_INDEX_PORTRAIT_LASS_02, Y_INDEX_PORTRAIT_LASS_02,
                 17,
                 X_SPAWN_INDEX_LASS_02, Y_SPAWN_INDEX_LASS_02,
@@ -756,14 +802,14 @@ public class WorldScene extends Scene {
                 true, LEFT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcLass01 = generateNonPlayableCharacter(ID_LASS01,
+        npcLass01 = generateNonPlayableCharacter(ID_LASS01,
                 X_INDEX_PORTRAIT_LASS_01, Y_INDEX_PORTRAIT_LASS_01,
                 17,
                 X_SPAWN_INDEX_LASS_01, Y_SPAWN_INDEX_LASS_01,
                 true, RIGHT,
                 collisionListenerNPC,
                 movementListenerNPC);
-        NonPlayableCharacter npcBugCatcher = generateNonPlayableCharacter(ID_BUG_CATCH,
+        npcBugCatcher = generateNonPlayableCharacter(ID_BUG_CATCH,
                 X_INDEX_PORTRAIT_BUG_CATCHER, Y_INDEX_PORTRAIT_BUG_CATCHER,
                 10,
                 X_SPAWN_INDEX_BUG_CATCHER, Y_SPAWN_INDEX_BUG_CATCHER,

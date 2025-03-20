@@ -18,6 +18,8 @@ import java.io.InputStreamReader;
  */
 public class TileMapLoader {
     public static final String TAG = TileMapLoader.class.getSimpleName();
+    public static final int WIDTH_TILE = 16;
+    public static final int HEIGHT_TILE = 16;
 
     public static String loadFileAsString(Resources resources, int resId) {
         Log.d(TAG, "loadFileAsString(Resources, int)");
@@ -93,8 +95,8 @@ public class TileMapLoader {
         // BUT ALSO HAVE TO "+ 2" because we are setting the first 2 elements in the
         // "tiles_world_map.txt" file (array indexes [0] and [1]) as width and height values.
         int xOffsetInit = 0;
-        int heightTile = 16;
-        int widthTile = 16;
+        int heightTile = HEIGHT_TILE;
+        int widthTile = WIDTH_TILE;
         int yOffset = 0;
         int xOffset = xOffsetInit;
         for (int y = 0; y < rows; y++) {
