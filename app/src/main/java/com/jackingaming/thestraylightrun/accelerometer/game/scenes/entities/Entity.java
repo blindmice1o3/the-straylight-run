@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MovementCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +81,17 @@ public abstract class Entity {
     protected boolean justCollided;
     protected boolean cantCollide;
 
+    protected int indexDialogue = 0;
+    protected String[] dialogueArray;
+
+    public int getIndexDialogue() {
+        return indexDialogue;
+    }
+
+    public String[] getDialogueArray() {
+        return dialogueArray;
+    }
+
     public Entity(Map<Direction, AnimationDrawable> animationsByDirection,
                   CollisionListener collisionListener, MovementListener movementListener) {
         this.animationsByDirection = animationsByDirection;
@@ -105,6 +115,12 @@ public abstract class Entity {
 
                         if (!talking) {
                             talkLeftSide = !talkLeftSide;
+                            indexDialogue++;
+
+                            if (dialogueArray != null &&
+                                    indexDialogue >= dialogueArray.length) {
+                                indexDialogue = 0;
+                            }
                         }
                     }
                     counterTalking++;

@@ -445,6 +445,8 @@ public class LabScene extends Scene {
         animationDrawableRight.addFrame(
                 new BitmapDrawable(resources, sprites[9][yIndexForSprites]), durationOfFrameInMilli);
 
+        String[] dialogueArray = null;
+
         Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
         animationsByDirection.put(UP, animationDrawableUp);
         animationsByDirection.put(DOWN, animationDrawableDown);
@@ -452,6 +454,7 @@ public class LabScene extends Scene {
         animationsByDirection.put(RIGHT, animationDrawableRight);
         NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
                 spritesCharactersBattle[xIndexForPortrait][yIndexForPortrait],
+                dialogueArray,
                 animationsByDirection,
                 directionFacing,
                 entityCollisionListener,

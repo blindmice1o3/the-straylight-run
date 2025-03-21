@@ -27,13 +27,14 @@ public class NonPlayableCharacter extends Entity
     private Bitmap portrait;
     private boolean stationary = false;
 
-    public NonPlayableCharacter(String id, Bitmap portrait,
+    public NonPlayableCharacter(String id, Bitmap portrait, String[] dialogueArray,
                                 Map<Direction, AnimationDrawable> animationsByDirection, Direction directionFacing,
                                 CollisionListener collisionListener, MovementListener movementListener) {
         super(animationsByDirection, collisionListener, movementListener);
 
         this.id = id;
         this.portrait = portrait;
+        this.dialogueArray = dialogueArray;
         this.direction = directionFacing;
 
         startAnimations();

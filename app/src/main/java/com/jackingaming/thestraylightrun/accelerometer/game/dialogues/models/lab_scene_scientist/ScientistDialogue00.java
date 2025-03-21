@@ -62,7 +62,6 @@ public class ScientistDialogue00
                 dialogFragmentScientistDialogue00,
                 "ScientistDialogue00"
         );
-
     }
 
     private void onAnimationFinishScientistDialogue00(TypeWriterDialogFragment typeWriterDialogFragmentScientistDialogue00,

@@ -82,8 +82,6 @@ public class SeedShopDialogFragment extends DialogFragment {
         seedShopInventory.add(new BugCatchingNet(
                 new BounceEntityCommand(null)
         ));
-
-        seedShopOwnerQuest00 = new SeedShopOwnerQuest00();
     }
 
     public void init(Game game) {
@@ -93,6 +91,9 @@ public class SeedShopDialogFragment extends DialogFragment {
         for (Item item : seedShopInventory) {
             item.init(game);
         }
+
+        String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
+        seedShopOwnerQuest00 = new SeedShopOwnerQuest00(dialogueArray);
     }
 
     private void performTrade(Item itemToTrade, Player player) {
@@ -213,8 +214,7 @@ public class SeedShopDialogFragment extends DialogFragment {
         }
 
         Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
-        int stringId = seedShopOwnerQuest00.getDialogueForCurrentState();
-        String messageGreeting = game.getContext().getResources().getString(stringId);
+        String messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
 
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                 50L, image, messageGreeting,

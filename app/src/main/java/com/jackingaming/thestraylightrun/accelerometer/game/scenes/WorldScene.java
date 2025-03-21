@@ -524,6 +524,19 @@ public class WorldScene extends Scene {
             }
             canvas.drawText("blah blah blah...", xYoungster, yYoungster, paintText);
         }
+        if (npcBugCatcher.isTalking()) {
+            float xBugCatcher = -1;
+            float yBugCatcher = npcBugCatcher.getYPos() - gameCamera.getyOffset();
+            if (npcBugCatcher.isTalkLeftSide()) {
+                xBugCatcher = npcBugCatcher.getXPos() - gameCamera.getxOffset() - widthSpriteDst;
+            } else {
+                xBugCatcher = npcBugCatcher.getXPos() - gameCamera.getxOffset() + widthSpriteDst;
+            }
+
+            int indexDialogue = npcBugCatcher.getIndexDialogue();
+            String messageBugCatcher = npcBugCatcher.getDialogueArray()[indexDialogue];
+            canvas.drawText(messageBugCatcher, xBugCatcher, yBugCatcher, paintText);
+        }
     }
 
     @Override
@@ -894,6 +907,11 @@ public class WorldScene extends Scene {
                     new BitmapDrawable(resources, spriteCoin), durationOfFrameInMilli);
         }
 
+        String[] dialogueArray = null;
+        if (id.equals(WorldScene.ID_BUG_CATCH)) {
+            dialogueArray = resources.getStringArray(R.array.bug_catcher_dialogue_array);
+        }
+
         Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
         animationsByDirection.put(UP, animationDrawableUp);
         animationsByDirection.put(DOWN, animationDrawableDown);
@@ -901,6 +919,7 @@ public class WorldScene extends Scene {
         animationsByDirection.put(RIGHT, animationDrawableRight);
         NonPlayableCharacter nonPlayableCharacter = new NonPlayableCharacter(id,
                 spritesCharactersBattle[xIndexForPortrait][yIndexForPortrait],
+                dialogueArray,
                 animationsByDirection,
                 directionFacing,
                 entityCollisionListener,
@@ -1070,14 +1089,14 @@ public class WorldScene extends Scene {
         stopEntityAnimations();
     }
 
-    private void unpause() {
+    public void unpause() {
         Log.e(TAG, "unpause()");
 
         paused = false;
         startEntityAnimations();
     }
 
-    private void stopEntityAnimations() {
+    public void stopEntityAnimations() {
         for (Entity e : entities) {
             e.stopAnimations();
         }

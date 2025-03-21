@@ -20,13 +20,16 @@ public class SeedShopOwnerQuest00
     public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;
+    private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
     private Map<String, Integer> entitiesAsString;
     private Map<String, Integer> rewardsAsString;
 
-    public SeedShopOwnerQuest00() {
+    public SeedShopOwnerQuest00(String[] dialogueArray) {
         state = State.NOT_STARTED;
+        this.dialogueArray = dialogueArray;
+
         initRequirements();
         initRewards();
     }
@@ -109,16 +112,16 @@ public class SeedShopOwnerQuest00
     }
 
     @Override
-    public int getDialogueForCurrentState() {
+    public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-                return R.string.seed_shop_dialogue00_0;
+                return dialogueArray[0];
             case STARTED:
-                return R.string.seed_shop_dialogue00_1;
+                return dialogueArray[1];
             case COMPLETED:
-                return R.string.seed_shop_dialogue00_2;
+                return dialogueArray[2];
         }
-        return -1;
+        return null;
     }
 
     @Override

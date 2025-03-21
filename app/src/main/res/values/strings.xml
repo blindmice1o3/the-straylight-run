@@ -2,7 +2,17 @@
     <string name="app_name">TheStraylightRun</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="bug_catcher_dialogue_array">
+        <item>I\'m only in this to catch a land eel!</item>
+        <item>Does anyone see my bug catching net?</item>
+        <item>Call me the BEAST MASTER!</item>
+        <item>Will there be pie?</item>
+        <item>There\'s an aroma wafting off our leader...</item>
+    </string-array>
+
     <string name="rival_leader_dialogue00">Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We\'re a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I\'m telling you to join! OK, you need convincing! I\'ll make you an offer you can\'t refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!</string>
+
     <string name="scientist_dialogue00">Hello there! Welcome to the world of JAVA! My name is FOO BAR! People call me the JAVA PROF! This world is inhabited by creatures called OBJECT! For some people, OBJECT are pets. Others use them for fights. Myself... I study OBJECT as a profession. First, what is your name?</string>
     <string name="edittext_name_hint">name</string>
     <string name="scientist_dialogue01_template">Right! So your name is %s!</string>
@@ -11,9 +21,11 @@
     <string name="scientist_dialogue04_template">%s!</string>
     <string name="scientist_dialogue05">Your very own JAVA legend is about to unfold! A world of dreams and adventure with OBJECT awaits! Let\'s go!</string>
 
-    <string name="seed_shop_dialogue00_0">Hello! I was cleaning out my father\'s belongings when I found these mystery seeds. I can\'t keep a cactus alive. You have a green thumb, how about you grow these seeds for me? If you get me 3 mystery products, I\'ll give you some coins! Also, you can keep the shovel, watering can, and mystery seeds!</string>
-    <string name="seed_shop_dialogue00_1">Hello! Please germinate and grow the mystery seeds, then harvest 3 mystery products and place them in the shipping bin.</string>
-    <string name="seed_shop_dialogue00_2">Hello! The mystery products you\'ve harvested were FAR out. Like OUTER-SPACE far. You can probably bring about world peace with what you\'re growing.</string>
+    <string-array name="seed_shop_dialogue_array">
+        <item>Hello! I was cleaning out my father\'s belongings when I found these mystery seeds. I can\'t keep a cactus alive. You have a green thumb, how about you grow these seeds for me? If you get me 3 mystery products, I\'ll give you some coins! Also, you can keep the shovel, watering can, and mystery seeds!</item>
+        <item>Hello! Please germinate and grow the mystery seeds, then harvest 3 mystery products and place them in the shipping bin.</item>
+        <item>Hello! The mystery products you\'ve harvested were FAR out. Like OUTER-SPACE far. You can probably bring about world peace with what you\'re growing.</item>
+    </string-array>
 
     <string name="robot_dialogfragment_off">off</string>
     <string name="robot_dialogfragment_walk">walk</string>
