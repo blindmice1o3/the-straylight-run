@@ -193,6 +193,7 @@ public class WorldScene extends Scene {
 
         initTiles();
         initEntities();
+        initImagesClippit(resources);
 
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();
@@ -977,27 +978,14 @@ public class WorldScene extends Scene {
     }
 
     // TODO: bring in Neuromancer.
-    /*
-    private static void loadWintermute(Resources resources) {
-        //LOAD SPRITESHEET
-        Bitmap imageSource = BitmapFactory.decodeResource(resources, R.drawable.pc_ms_office_clippit);
+    public static Bitmap[][] imagesClippit;
 
-        //CHECK IF IMAGE RESOURCE DID not LOAD PROPERLY
-        if (imageSource == null) {
-            Log.d(MainActivity.DEBUG_TAG, "Assets.loadWintermute(Resources): imageSource == null");
+    private void initImagesClippit(Resources resources) {
+        Bitmap spriteSheet = BitmapFactory.decodeResource(resources, R.drawable.pc_ms_office_clippit);
 
-            Log.d(MainActivity.DEBUG_TAG, "BAILING EARLY!!!!!");
-            return;
-        }
-
-        //IF WE'VE MADE IT THIS FAR, THE IMAGE RESOURCE LOADED AS INTENDED
-        Log.d(MainActivity.DEBUG_TAG, "Assets.loadWintermute(Resources): imageSource != null");
-        Log.d(MainActivity.DEBUG_TAG, "Assets.loadWintermute(Resources): imageSource.getWidth(), imageSource.getHeight() : " + imageSource.getWidth() + ", " + imageSource.getHeight());
-        //UNPACKING THE SPRITESHEET (logic is specific to each spritesheet's layout)
         int column = 22;
         int row = 41;
-
-        wintermute = new Bitmap[row][column];
+        imagesClippit = new Bitmap[row][column];
 
         //TODO: everything in loadWintermute(Resources) was adapted from initItems(Resources) and has
         //not yet been tailored to this spritesheet (e.g. should NOT have margin at all).
@@ -1013,15 +1001,13 @@ public class WorldScene extends Scene {
 
         for (int y = 0; y < row; y++) {
             for (int x = 0; x < column; x++) {
-                wintermute[y][x] = Bitmap.createBitmap(imageSource, xCurrent, yCurrent, tileWidth, tileHeight);
+                imagesClippit[y][x] = Bitmap.createBitmap(spriteSheet, xCurrent, yCurrent, tileWidth, tileHeight);
                 xCurrent += (tileWidth + margin);
             }
             xCurrent = margin;
             yCurrent += (tileHeight + margin);
         }
-        Log.d(MainActivity.DEBUG_TAG, "Assets.loadWintermute(Resources): FINISHED!!!");
     }
-     */
 
     private TypeWriterDialogFragment typeWriterDialogFragmentRivalLeader = null;
 

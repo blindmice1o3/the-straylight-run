@@ -13,6 +13,8 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
@@ -33,6 +35,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -344,6 +348,10 @@ public class SceneFarm extends Scene {
         }
     }
 
+    private TypeWriterDialogFragment typeWriterDialogFragmentClippit;
+    private boolean inDialogueWithClippitState = false;
+    private boolean givenSecondQuest = false;
+
     @Override
     protected void doJustPressedButtonB() {
         super.doJustPressedButtonB();
@@ -351,10 +359,47 @@ public class SceneFarm extends Scene {
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
-        if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
+        if (inDialogueWithClippitState) {
+            inDialogueWithClippitState = false;
+
+            typeWriterDialogFragmentClippit.dismiss();
+            game.getTextboxListener().showStatsDisplayer();
+        } else if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
             ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
 
             game.getTextboxListener().showStatsDisplayer();
+
+            // TODO: check for first quest's completion, show clippit TypeWriterDialogFragment,
+            //  give/start second quest.
+            if (!givenSecondQuest && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
+                Log.e(TAG, "first quest's state == Quest.State.COMPLETED");
+                inDialogueWithClippitState = true;
+                Bitmap clippit = WorldScene.imagesClippit[0][0];
+                String[] dialogueArrayClippit = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+
+                typeWriterDialogFragmentClippit = TypeWriterDialogFragment.newInstance(
+                        50L, clippit, dialogueArrayClippit[0],
+                        new TypeWriterDialogFragment.DismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e(TAG, "SceneFarm.doJustPressedButtonB... onDismiss(): seed_shop_dialogue00");
+
+                            }
+                        }, new TypeWriterTextView.TextCompletionListener() {
+                            @Override
+                            public void onAnimationFinish() {
+                                Log.e(TAG, "SceneFarm.doJustPressedButtonB... onAnimationFinish(): seed_shop_dialogue00");
+
+                                // TODO: give/start second quest.
+                                givenSecondQuest = true;
+                            }
+                        }
+                );
+
+                game.getTextboxListener().showTextbox(
+                        typeWriterDialogFragmentClippit
+                );
+            }
         } else {
             // TODO: check item occupying StatsDisplayerFragment's button holder.
             if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
