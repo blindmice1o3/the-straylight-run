@@ -2,11 +2,18 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_di
 
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
@@ -16,35 +23,48 @@ import java.util.Set;
 public class SeedShopOwnerQuest00
         implements Quest {
     public static final String TAG = SeedShopOwnerQuest00.class.getSimpleName();
+    public static final String SHOVEL = "shovel";
+    public static final String WATERING_CAN = "wateringCan";
+    public static final String MYSTERY_SEEDS = "mysterySeeds";
     public static final int QUANTITY_REQUIRED = 3;
     public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;
+    private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> entitiesAsString;
+    private Map<String, Integer> requirementEntitiesAsString;
+    private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public SeedShopOwnerQuest00(String[] dialogueArray) {
+    public SeedShopOwnerQuest00(Game game, String[] dialogueArray) {
         state = State.NOT_STARTED;
+        this.game = game;
         this.dialogueArray = dialogueArray;
 
         initRequirements();
-        initRewards();
+        initStartingItemsAsString();
+        initRewardsAsString();
     }
 
-    private void initRequirements() {
+    @Override
+    public void initRequirements() {
         requirements = new HashMap<>();
 
-        entitiesAsString = new HashMap<>();
-        entitiesAsString.put(Plant.TAG, QUANTITY_REQUIRED);
+        requirementEntitiesAsString = new HashMap<>();
+        requirementEntitiesAsString.put(Plant.TAG, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.ENTITY, entitiesAsString);
+        requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
     }
 
     @Override
     public boolean checkIfMetRequirements() {
+        if (state == State.COMPLETED) {
+            Log.e(TAG, "checkIfMetRequirements() state == State.COMPLETED returning...");
+            return false;
+        }
+
         for (RequirementType requirementType : RequirementType.values()) {
             if (requirements.containsKey(requirementType)) {
                 Log.e(TAG, "requirementType: " + requirementType);
@@ -81,14 +101,63 @@ public class SeedShopOwnerQuest00
         return false;
     }
 
-    private void initRewards() {
+
+    @Override
+    public void initStartingItemsAsString() {
+        startingItems = new HashMap<>();
+
+        startingItems.put(SHOVEL,
+                new Shovel(
+                        new TillGrowableTileCommand(null)
+                )
+        );
+        startingItems.put(WATERING_CAN,
+                new WateringCan(
+                        new WaterGrowableTileCommand(null)
+                )
+        );
+        startingItems.put(MYSTERY_SEEDS,
+                new MysterySeed(
+                        new SeedGrowableTileCommand(null, MysterySeed.TAG)
+                )
+        );
+
+        for (Item item : startingItems.values()) {
+            item.init(game);
+        }
+    }
+
+    @Override
+    public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
         rewardsAsString.put(REWARD_COINS, 420);
     }
 
     @Override
-    public Map<String, Integer> dispenseRewards() {
-        return rewardsAsString;
+    public void dispenseStartingItems() {
+        for (Item item : startingItems.values()) {
+            Player.getInstance().receiveItem(item);
+            if (item instanceof MysterySeed) {
+                Log.e(TAG, "mysterySeed GIVEN");
+            }
+        }
+
+        attachListener();
+        changeToNextState();
+    }
+
+    @Override
+    public void dispenseRewards() {
+        for (String rewardAsString : rewardsAsString.keySet()) {
+            if (rewardAsString.equals(Quest.REWARD_COINS)) {
+                int amountOfCoins = rewardsAsString.get(rewardAsString);
+
+                Player.getInstance().incrementCurrency(amountOfCoins);
+            }
+        }
+
+        detachListener();
+        changeToNextState();
     }
 
     @Override
@@ -131,36 +200,31 @@ public class SeedShopOwnerQuest00
 
     @Override
     public void attachListener() {
-        Player.getInstance().setPlaceInShippingBinListener(
-                new Creature.PlaceInShippingBinListener() {
-                    @Override
-                    public void sellableAdded(Sellable sellableAdded) {
-                        if (sellableAdded instanceof Plant) {
-                            Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
-                            Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(Plant.TAG));
-                            if (checkIfMetRequirements()) {
-                                Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                                Map<String, Integer> rewards = dispenseRewards();
-                                for (String rewardAsString : rewards.keySet()) {
-                                    if (rewardAsString.equals(Quest.REWARD_COINS)) {
-                                        int amountOfCoins = rewards.get(rewardAsString);
-
-                                        Player.getInstance().incrementCurrency(amountOfCoins);
-                                    }
-                                }
-                                changeToNextState();
-                                detachListener();
-                            } else {
-                                Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                            }
-                        }
+        Creature.PlaceInShippingBinListener placeInShippingBinListener = new Creature.PlaceInShippingBinListener() {
+            @Override
+            public void sellableAdded(Sellable sellableAdded) {
+                if (sellableAdded instanceof Plant) {
+                    Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
+                    Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(Plant.TAG));
+                    if (checkIfMetRequirements()) {
+                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        dispenseRewards();
+                    } else {
+                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                     }
                 }
+            }
+        };
+
+        Player.getInstance().setPlaceInShippingBinListener(
+                placeInShippingBinListener
         );
     }
 
     @Override
     public void detachListener() {
-        Player.getInstance().setPlaceInShippingBinListener(null);
+        Player.getInstance().setPlaceInShippingBinListener(
+                null
+        );
     }
 }

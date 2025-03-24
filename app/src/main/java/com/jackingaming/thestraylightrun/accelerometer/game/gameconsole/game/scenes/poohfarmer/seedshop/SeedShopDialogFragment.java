@@ -25,12 +25,10 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
@@ -60,11 +58,6 @@ public class SeedShopDialogFragment extends DialogFragment {
 
     public SeedShopDialogFragment() {
         seedShopInventory = new ArrayList<Item>();
-        seedShopInventory.add(
-                new MysterySeed(
-                        new SeedGrowableTileCommand(null, MysterySeed.TAG)
-                )
-        );
         seedShopInventory.add(new BugCatchingNet(
                 new BounceEntityCommand(null)
         ));
@@ -93,7 +86,7 @@ public class SeedShopDialogFragment extends DialogFragment {
         }
 
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
-        seedShopOwnerQuest00 = new SeedShopOwnerQuest00(dialogueArray);
+        seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
     }
 
     private void performTrade(Item itemToTrade, Player player) {
@@ -108,9 +101,6 @@ public class SeedShopDialogFragment extends DialogFragment {
             }
         } else {
             Log.d(TAG, getClass().getSimpleName() + ".performTrade(Item, Player) itemToTrade has NEGATIVE price.");
-            player.receiveItem(itemToTrade);
-            seedShopInventory.remove(itemToTrade);
-            itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
         }
     }
 
@@ -172,7 +162,7 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(SeedShopOwnerQuest00.TAG);
+        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getTAG());
         TypeWriterTextView.TextCompletionListener textCompletionListener;
         if (alreadyHaveQuest) {
             textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
@@ -188,26 +178,16 @@ public class SeedShopDialogFragment extends DialogFragment {
                 public void onAnimationFinish() {
                     Log.e(TAG, "!alreadyHaveQuest");
 
-                    if (seedShopInventory.get(0) instanceof MysterySeed) {
-                        Log.e(TAG, "first item is mysterySeed");
-                        boolean wasQuestAccepted =
-                                Player.getInstance().getQuestManager().acceptQuestAndAttachListener(
-                                        seedShopOwnerQuest00
-                                );
+                    boolean wasQuestAccepted =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    seedShopOwnerQuest00
+                            );
 
-                        if (wasQuestAccepted) {
-                            Log.e(TAG, "wasQuestAccepted");
-                            MysterySeed mysterySeed = (MysterySeed) seedShopInventory.get(0);
-                            performTrade(mysterySeed, Player.getInstance());
-                            Log.e(TAG, "mysterySeed GIVEN");
-
-                            seedShopOwnerQuest00.changeToNextState();
-                            Log.e(TAG, Player.getInstance().getQuestManager().getCurrentQuest().getTAG());
-                        } else {
-                            Log.e(TAG, "!wasQuestAccepted");
-                        }
+                    if (wasQuestAccepted) {
+                        Log.e(TAG, "wasQuestAccepted");
+                        seedShopOwnerQuest00.dispenseStartingItems();
                     } else {
-                        Log.e(TAG, "first item is NOT mysterySeed... SeedShopOwnerQuest00 NOT accepted");
+                        Log.e(TAG, "!wasQuestAccepted");
                     }
                 }
             };

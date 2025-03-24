@@ -18,9 +18,17 @@ public interface Quest extends Serializable {
         COMPLETED;
     }
 
+    void initRequirements();
+
     boolean checkIfMetRequirements();
 
-    Map<String, Integer> dispenseRewards();
+    void initStartingItemsAsString();
+
+    void initRewardsAsString();
+
+    void dispenseStartingItems();
+
+    void dispenseRewards();
 
     void changeToNextState();
 

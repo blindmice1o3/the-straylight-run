@@ -24,14 +24,8 @@ public class QuestManager {
         return quests.get(indexCurrent);
     }
 
-    public boolean acceptQuestAndAttachListener(Quest quest) {
-        boolean acceptSuccessful = quests.add(quest);
-
-        if (acceptSuccessful) {
-            quest.attachListener();
-        }
-
-        return acceptSuccessful;
+    public boolean addQuest(Quest quest) {
+        return quests.add(quest);
     }
 
     public boolean alreadyHaveQuest(String questTAG) {

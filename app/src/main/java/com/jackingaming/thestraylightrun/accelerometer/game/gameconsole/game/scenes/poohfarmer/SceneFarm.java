@@ -371,7 +371,7 @@ public class SceneFarm extends Scene {
 
             // TODO: check for first quest's completion, show clippit TypeWriterDialogFragment,
             //  give/start second quest.
-            if (!givenSecondQuest && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
+            if (!givenSecondQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
                 Log.e(TAG, "first quest's state == Quest.State.COMPLETED");
                 inDialogueWithClippitState = true;
                 Bitmap clippit = WorldScene.imagesClippit[0][0];

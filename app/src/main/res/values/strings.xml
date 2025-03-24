@@ -29,10 +29,11 @@
 
     <string-array name="clippit_dialogue_array">
         <item>It looks like you\'re trying to bring about world peace. Would you like some help?</item>
-        <item>Tilling 4,200 GrowableTile with an ordinary shovel will take all day. Fortunately, your shovel is software-upgradeable. It\'s time to work smarter (not harder)!</item>
-        <item>We\'re the first to finish, but now we have to wait for others. Instead of wasting time doing nothing, how about we learn the basics of modifying genes? Then we can splice the gene responsible for THC production into the genome of the world\'s fastest growing organism.</item>
-        <item>Alright! You've created THC-producing-kelp, and you're one step closer to getting the entire world stoned for a week. Let's go on a side quest to deposit the mystery seeds into the world's seed bank.</item>
-        <item>You've been recruited to a team who are on a mission to terraform the moon. It's time to create some moonrocks!</item>
+        <item>Tilling 4,200 GrowableTile with a shovel will take all day. Fortunately, there\'s a rust-bucket robot that is software-upgradeable. It\'s time to work smarter (not harder)!</item>
+        <item>We\'re the first to finish, but now we have to wait for everyone else. Instead of wasting time doing nothing, how about we learn the basics of modifying genes? Then we can splice the gene responsible for THC production into the genome of the world\'s fastest growing organism.</item>
+        <item>Alright! You\'ve created THC-producing-kelp, and you\'re one step closer to getting the entire world stoned for a week. Let\'s go on a side quest to deposit the mystery seeds into the world\'s seed bank.</item>
+        <item>You\'ve been recruited to a team who are on a mission to terraform the moon. It\'s time to create some moonrocks!</item>
+        <item>This is it, the final run. The Panthers are wrecking havoc and keeping law enforcement busy. You got Molly in your ears with Mary as your tracer. Welcome to Straylight.</item>
     </string-array>
 
     <string name="robot_dialogfragment_off">off</string>
