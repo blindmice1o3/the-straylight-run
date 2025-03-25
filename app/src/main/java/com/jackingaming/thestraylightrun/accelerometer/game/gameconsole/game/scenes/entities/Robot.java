@@ -135,6 +135,17 @@ public class Robot extends Creature {
         random = new Random();
     }
 
+    public void showRobotDialogFragment() {
+        game.setPaused(true);
+
+        RobotDialogFragment robotDialogFragment = instantiateRobotDialogFragment();
+
+        robotDialogFragment.show(
+                ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                RobotDialogFragment.TAG
+        );
+    }
+
     @Override
     public void init(Game game) {
         super.init(game);

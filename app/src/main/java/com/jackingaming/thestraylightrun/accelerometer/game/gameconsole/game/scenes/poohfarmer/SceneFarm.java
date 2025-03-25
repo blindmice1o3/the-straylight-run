@@ -10,9 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -36,6 +34,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 
 import java.util.ArrayList;
@@ -68,6 +67,8 @@ public class SceneFarm extends Scene {
 
     private List<GrowableTile> growableTiles;
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+
+    private Quest aIQuest00;
 
     private SceneFarm() {
         super();
@@ -276,6 +277,9 @@ public class SceneFarm extends Scene {
             showSeedShopFragment();
         }
 
+        String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        aIQuest00 = new AIQuest00(game, dialogueArray);
+
         Log.e(TAG, "init() END");
     }
 
@@ -307,20 +311,7 @@ public class SceneFarm extends Scene {
             } else {
                 Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
             }
-        } else if (entityCurrentlyFacing != null &&
-                entityCurrentlyFacing instanceof Robot) {
-            game.setPaused(true);
-
-            RobotDialogFragment robotDialogFragment =
-                    ((Robot) entityCurrentlyFacing).instantiateRobotDialogFragment();
-
-            robotDialogFragment.show(
-                    ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                    RobotDialogFragment.TAG
-            );
-        }
-        // TODO: check item occupying StatsDisplayerFragment's button holder.
-        else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+        } else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
             TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
@@ -350,7 +341,6 @@ public class SceneFarm extends Scene {
 
     private TypeWriterDialogFragment typeWriterDialogFragmentClippit;
     private boolean inDialogueWithClippitState = false;
-    private boolean givenSecondQuest = false;
 
     @Override
     protected void doJustPressedButtonB() {
@@ -371,27 +361,37 @@ public class SceneFarm extends Scene {
 
             // TODO: check for first quest's completion, show clippit TypeWriterDialogFragment,
             //  give/start second quest.
-            if (!givenSecondQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
+            boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getTAG());
+            if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
                 Log.e(TAG, "first quest's state == Quest.State.COMPLETED");
                 inDialogueWithClippitState = true;
                 Bitmap clippit = WorldScene.imagesClippit[0][0];
-                String[] dialogueArrayClippit = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+                String messageClippit = aIQuest00.getDialogueForCurrentState();
 
                 typeWriterDialogFragmentClippit = TypeWriterDialogFragment.newInstance(
-                        50L, clippit, dialogueArrayClippit[0],
+                        50L, clippit, messageClippit,
                         new TypeWriterDialogFragment.DismissListener() {
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "SceneFarm.doJustPressedButtonB... onDismiss(): seed_shop_dialogue00");
-
                             }
                         }, new TypeWriterTextView.TextCompletionListener() {
                             @Override
                             public void onAnimationFinish() {
                                 Log.e(TAG, "SceneFarm.doJustPressedButtonB... onAnimationFinish(): seed_shop_dialogue00");
 
-                                // TODO: give/start second quest.
-                                givenSecondQuest = true;
+                                // give/start second quest.
+                                boolean wasQuestAccepted =
+                                        Player.getInstance().getQuestManager().addQuest(
+                                                aIQuest00
+                                        );
+
+                                if (wasQuestAccepted) {
+                                    Log.e(TAG, "wasQuestAccepted");
+                                    aIQuest00.dispenseStartingItems();
+                                } else {
+                                    Log.e(TAG, "!wasQuestAccepted");
+                                }
                             }
                         }
                 );
@@ -639,6 +639,32 @@ public class SceneFarm extends Scene {
                     tiles[y][x].init(game, x, y, tileSprite);
                 } else {
                     tiles[y][x].init(game, x, y, tileSprite);
+                }
+            }
+        }
+    }
+
+    public void registerStateChangeListenerForAllGrowableTile(GrowableTile.StateChangeListener stateChangeListener) {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableTile) {
+                    ((GrowableTile) tiles[row][column]).setStateChangeListener(
+                            stateChangeListener
+                    );
+                }
+            }
+        }
+    }
+
+    public void unregisterStateChangeListenerForAllGrowableTile() {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableTile) {
+                    ((GrowableTile) tiles[row][column]).setStateChangeListener(
+                            null
+                    );
                 }
             }
         }

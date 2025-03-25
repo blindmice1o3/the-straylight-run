@@ -19,6 +19,16 @@ import java.util.Map;
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
+    public interface StateChangeListener {
+        void changeToTilled();
+    }
+
+    private StateChangeListener stateChangeListener;
+
+    public void setStateChangeListener(StateChangeListener stateChangeListener) {
+        this.stateChangeListener = stateChangeListener;
+    }
+
     public interface EntityListener extends Serializable {
         void addEntityToScene(Entity entityToAdd);
     }
@@ -139,6 +149,12 @@ public class GrowableTile extends Tile {
     public void changeToTilled() {
         state = State.TILLED;
         updateImage();
+
+        if (stateChangeListener != null) {
+            stateChangeListener.changeToTilled();
+        } else {
+            Log.e(TAG, "changeToTilled() stateChangeListener == null");
+        }
     }
 
     public void changeToSeeded(String idSeed) {
