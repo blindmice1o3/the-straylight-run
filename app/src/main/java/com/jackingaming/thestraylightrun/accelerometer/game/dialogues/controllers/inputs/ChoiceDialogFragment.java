@@ -25,6 +25,10 @@ public class ChoiceDialogFragment extends DialogFragment {
         void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment);
 
         void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment);
+
+        void onDismiss(ChoiceDialogFragment choiceDialogFragment);
+
+        void onCancel(ChoiceDialogFragment choiceDialogFragment);
     }
 
     private ChoiceListener listener;
@@ -57,6 +61,7 @@ public class ChoiceDialogFragment extends DialogFragment {
         Log.e(TAG, "onCreateView()");
 
         getDialog().getWindow().setGravity(Gravity.BOTTOM | Gravity.END);
+        getDialog().setCancelable(false);
 
         return inflater.inflate(R.layout.dialogfragment_choice, container, false);
     }
@@ -87,11 +92,15 @@ public class ChoiceDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
         Log.e(TAG, "onDismiss()");
+
+        listener.onDismiss(ChoiceDialogFragment.this);
     }
 
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
         super.onCancel(dialog);
         Log.e(TAG, "onCancel()");
+
+        listener.onCancel(ChoiceDialogFragment.this);
     }
 }

@@ -9,8 +9,11 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
+import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -379,19 +382,61 @@ public class SceneFarm extends Scene {
                             @Override
                             public void onAnimationFinish() {
                                 Log.e(TAG, "SceneFarm.doJustPressedButtonB... onAnimationFinish(): seed_shop_dialogue00");
+                                game.setPaused(true);
 
-                                // give/start second quest.
-                                boolean wasQuestAccepted =
-                                        Player.getInstance().getQuestManager().addQuest(
-                                                aIQuest00
-                                        );
+                                ChoiceDialogFragment choiceDialogFragmentYesOrNo = ChoiceDialogFragment.newInstance(
+                                        new ChoiceDialogFragment.ChoiceListener() {
+                                            @Override
+                                            public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "YES selected");
 
-                                if (wasQuestAccepted) {
-                                    Log.e(TAG, "wasQuestAccepted");
-                                    aIQuest00.dispenseStartingItems();
-                                } else {
-                                    Log.e(TAG, "!wasQuestAccepted");
-                                }
+                                                // TODO:
+                                                // give/start second quest.
+                                                boolean wasQuestAccepted =
+                                                        Player.getInstance().getQuestManager().addQuest(
+                                                                aIQuest00
+                                                        );
+
+                                                if (wasQuestAccepted) {
+                                                    Log.e(TAG, "wasQuestAccepted");
+                                                    aIQuest00.dispenseStartingItems();
+                                                } else {
+                                                    Log.e(TAG, "!wasQuestAccepted");
+                                                }
+
+                                                choiceDialogFragment.dismiss();
+                                            }
+
+                                            @Override
+                                            public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "NO selected");
+
+                                                // TODO:
+
+                                                choiceDialogFragment.dismiss();
+                                            }
+
+                                            @Override
+                                            public void onDismiss(ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "onDismiss(ChoiceDialogFragment)");
+
+                                                typeWriterDialogFragmentClippit.dismiss();
+                                                inDialogueWithClippitState = false;
+                                                game.getTextboxListener().showStatsDisplayer();
+
+                                                game.setPaused(false);
+                                            }
+
+                                            @Override
+                                            public void onCancel(ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "onCancel(ChoiceDialogFragment)");
+                                            }
+                                        });
+
+                                choiceDialogFragmentYesOrNo.show(
+                                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                                        ChoiceDialogFragment.TAG
+                                );
                             }
                         }
                 );

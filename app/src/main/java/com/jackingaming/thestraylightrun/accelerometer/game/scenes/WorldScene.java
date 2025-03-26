@@ -1057,6 +1057,16 @@ public class WorldScene extends Scene {
 
                                                 // TODO:
                                             }
+
+                                            @Override
+                                            public void onDismiss(ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "onDismiss(ChoiceDialogFragment)");
+                                            }
+
+                                            @Override
+                                            public void onCancel(ChoiceDialogFragment choiceDialogFragment) {
+                                                Log.e(TAG, "onCancel(ChoiceDialogFragment)");
+                                            }
                                         });
 
                                 gameListener.onShowDialogFragment(
