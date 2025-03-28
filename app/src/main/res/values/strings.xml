@@ -29,6 +29,7 @@
 
     <string-array name="clippit_dialogue_array">
         <item>It looks like you\'re trying to bring about world peace. Would you like some help?</item>
+        <item>We\'re going to get the entire world stoned for a week! We\'ll need a lot of mystery product. Start by tilling 4,200 GrowableTile.</item>
         <item>Tilling 4,200 GrowableTile with a shovel will take all day. Fortunately, there\'s a rust-bucket robot that is software-upgradeable. It\'s time to work smarter (not harder)!</item>
         <item>We\'re the first to finish, but now we have to wait for everyone else. Instead of wasting time doing nothing, how about we learn the basics of modifying genes? Then we can splice the gene responsible for THC production into the genome of the world\'s fastest growing organism.</item>
         <item>Alright! You\'ve created THC-producing-kelp, and you\'re one step closer to getting the entire world stoned for a week. Let\'s go on a side quest to deposit the mystery seeds into the world\'s seed bank.</item>

@@ -34,7 +34,6 @@ public class ScientistDialogue00
         }
         this.portraitOfSpeaker = portraitOfSpeaker;
 
-
         String messageScientistDialogue00 = resources.getString(R.string.scientist_dialogue00);
         dialogFragmentScientistDialogue00 =
                 TypeWriterDialogFragment.newInstance(50L, portraitOfSpeaker,

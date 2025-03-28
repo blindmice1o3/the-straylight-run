@@ -9,13 +9,12 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 
-import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.DialogueState;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.DialogueStateManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue00;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
@@ -72,6 +71,7 @@ public class SceneFarm extends Scene {
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
 
     private Quest aIQuest00;
+    private DialogueStateManager dialogueStateManager;
 
     private SceneFarm() {
         super();
@@ -283,7 +283,15 @@ public class SceneFarm extends Scene {
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         aIQuest00 = new AIQuest00(game, dialogueArray);
 
+        List<DialogueState> dialogueStates = new ArrayList<>();
+        dialogueStates.add(new AIDialogue00(game, aIQuest00));
+        dialogueStates.add(new AIDialogue01(game, aIQuest00));
+        dialogueStateManager = new DialogueStateManager(dialogueStates);
         Log.e(TAG, "init() END");
+    }
+
+    public void changeToNextDialogueWithAI() {
+        dialogueStateManager.changeToNextState();
     }
 
     @Override
@@ -342,8 +350,24 @@ public class SceneFarm extends Scene {
         }
     }
 
-    private TypeWriterDialogFragment typeWriterDialogFragmentClippit;
     private boolean inDialogueWithClippitState = false;
+
+    public void setInDialogueWithClippitState(boolean inDialogueWithClippitState) {
+        this.inDialogueWithClippitState = inDialogueWithClippitState;
+    }
+
+    public void startDialogueWithAI(Bitmap portraitAI) {
+        inDialogueWithClippitState = true;
+
+        DialogueState currentDialogueState = dialogueStateManager.getCurrentDialogueState();
+
+        if (currentDialogueState != null) {
+            currentDialogueState.showDialogue(game.getContext().getResources(),
+                    null, null, portraitAI);
+        } else {
+            Log.e(TAG, "currentDialogueState == null");
+        }
+    }
 
     @Override
     protected void doJustPressedButtonB() {
@@ -355,7 +379,6 @@ public class SceneFarm extends Scene {
         if (inDialogueWithClippitState) {
             inDialogueWithClippitState = false;
 
-            typeWriterDialogFragmentClippit.dismiss();
             game.getTextboxListener().showStatsDisplayer();
         } else if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
             ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
@@ -367,83 +390,8 @@ public class SceneFarm extends Scene {
             boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getTAG());
             if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
                 Log.e(TAG, "first quest's state == Quest.State.COMPLETED");
-                inDialogueWithClippitState = true;
-                Bitmap clippit = WorldScene.imagesClippit[0][0];
-                String messageClippit = aIQuest00.getDialogueForCurrentState();
-
-                typeWriterDialogFragmentClippit = TypeWriterDialogFragment.newInstance(
-                        50L, clippit, messageClippit,
-                        new TypeWriterDialogFragment.DismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                Log.e(TAG, "SceneFarm.doJustPressedButtonB... onDismiss(): seed_shop_dialogue00");
-                            }
-                        }, new TypeWriterTextView.TextCompletionListener() {
-                            @Override
-                            public void onAnimationFinish() {
-                                Log.e(TAG, "SceneFarm.doJustPressedButtonB... onAnimationFinish(): seed_shop_dialogue00");
-                                game.setPaused(true);
-
-                                ChoiceDialogFragment choiceDialogFragmentYesOrNo = ChoiceDialogFragment.newInstance(
-                                        new ChoiceDialogFragment.ChoiceListener() {
-                                            @Override
-                                            public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "YES selected");
-
-                                                // TODO:
-                                                // give/start second quest.
-                                                boolean wasQuestAccepted =
-                                                        Player.getInstance().getQuestManager().addQuest(
-                                                                aIQuest00
-                                                        );
-
-                                                if (wasQuestAccepted) {
-                                                    Log.e(TAG, "wasQuestAccepted");
-                                                    aIQuest00.dispenseStartingItems();
-                                                } else {
-                                                    Log.e(TAG, "!wasQuestAccepted");
-                                                }
-
-                                                choiceDialogFragment.dismiss();
-                                            }
-
-                                            @Override
-                                            public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "NO selected");
-
-                                                // TODO:
-
-                                                choiceDialogFragment.dismiss();
-                                            }
-
-                                            @Override
-                                            public void onDismiss(ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "onDismiss(ChoiceDialogFragment)");
-
-                                                typeWriterDialogFragmentClippit.dismiss();
-                                                inDialogueWithClippitState = false;
-                                                game.getTextboxListener().showStatsDisplayer();
-
-                                                game.setPaused(false);
-                                            }
-
-                                            @Override
-                                            public void onCancel(ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "onCancel(ChoiceDialogFragment)");
-                                            }
-                                        });
-
-                                choiceDialogFragmentYesOrNo.show(
-                                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                                        ChoiceDialogFragment.TAG
-                                );
-                            }
-                        }
-                );
-
-                game.getTextboxListener().showTextbox(
-                        typeWriterDialogFragmentClippit
-                );
+                Bitmap portraitAI = WorldScene.imagesClippit[0][0];
+                startDialogueWithAI(portraitAI);
             }
         } else {
             // TODO: check item occupying StatsDisplayerFragment's button holder.

@@ -24,6 +24,15 @@ public class QuestManager {
         return quests.get(indexCurrent);
     }
 
+    public Quest getQuestViaTag(String questTAG) {
+        for (Quest quest : quests) {
+            if (quest.getTAG().equals(questTAG)) {
+                return quest;
+            }
+        }
+        return null;
+    }
+
     public boolean addQuest(Quest quest) {
         return quests.add(quest);
     }
