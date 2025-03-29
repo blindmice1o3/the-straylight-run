@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
@@ -486,6 +486,7 @@ public class Robot extends Creature {
                 Log.e(TAG, "onExecuteButtonClick()");
 
                 // TODO:
+                ideDialogFragment.dismiss();
             }
         }, new IDEDialogFragment.DismissListener() {
             @Override

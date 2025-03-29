@@ -1,17 +1,21 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs;
+package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide;
 
 import android.content.DialogInterface;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 
@@ -63,9 +67,6 @@ public class IDEDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.e(TAG, "onCreateView()");
-
-        getDialog().getWindow().setGravity(Gravity.CENTER);
-
         return inflater.inflate(R.layout.dialogfragment_ide, container, false);
     }
 
@@ -74,15 +75,38 @@ public class IDEDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        tvExecute = view.findViewById(R.id.tv_execute);
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.add(R.id.fcv_left, ProjectViewportFragment.newInstance(null, null));
+        ft.add(R.id.fcv_center, MainViewportFragment.newInstance(null, null));
+        ft.add(R.id.fcv_right, StructureViewportFragment.newInstance(null, null));
+        ft.commit();
 
+        //////////////////////////////////////////////////////////////////////
+
+        tvExecute = view.findViewById(R.id.tv_execute);
         tvExecute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 buttonListener.onExecuteButtonClick(view, IDEDialogFragment.this);
-                dismiss();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume()");
+
+        getDialog().setCancelable(false);
+
+        Window window = getDialog().getWindow();
+        Display display = window.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        window.setLayout(width, (height / 2));
+        window.setGravity(Gravity.CENTER);
     }
 
     @Override
