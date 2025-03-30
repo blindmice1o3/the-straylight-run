@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment">
+    tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.center.ClassEditorFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:id="@+id/et_class"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Structure Viewport" />
+        android:gravity="start|top"
+        android:hint="@string/hello_blank_fragment" />
 
 </FrameLayout>
