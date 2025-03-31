@@ -6,9 +6,9 @@
     tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_project_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Project Viewport" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

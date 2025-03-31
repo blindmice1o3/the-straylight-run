@@ -72,8 +72,4 @@ public class ClassEditorFragment extends Fragment {
                 classToEdit.getName()
         );
     }
-
-    public Class getClassToEdit() {
-        return classToEdit;
-    }
 }

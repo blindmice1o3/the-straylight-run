@@ -14,8 +14,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.ClassesDataObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,18 +25,10 @@ import java.util.List;
  */
 public class MainViewportFragment extends Fragment {
     public static final String TAG = MainViewportFragment.class.getSimpleName();
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
     private List<Class> classes;
-    private ClassAdapter classAdapter;
+    private ClassVP2Adapter classVP2Adapter;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
 
@@ -48,16 +40,14 @@ public class MainViewportFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param classesDataObject ClassesDataObject.
      * @return A new instance of fragment MainViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainViewportFragment newInstance(String param1, String param2) {
+    public static MainViewportFragment newInstance(ClassesDataObject classesDataObject) {
         MainViewportFragment fragment = new MainViewportFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_CLASSES_DATA_OBJECT, classesDataObject);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,14 +56,9 @@ public class MainViewportFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            ClassesDataObject classesDataObject = (ClassesDataObject) getArguments().getSerializable(ARG_CLASSES_DATA_OBJECT);
+            classes = classesDataObject.getClasses();
         }
-
-        classes = new ArrayList<>();
-        classes.add(new Class("Main"));
-        classes.add(new Class("Foo"));
-        classes.add(new Class("Bar"));
     }
 
     @Override
@@ -89,10 +74,10 @@ public class MainViewportFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.tab_layout);
 
-        classAdapter = new ClassAdapter(this, classes);
+        classVP2Adapter = new ClassVP2Adapter(this, classes);
         viewPager2 = view.findViewById(R.id.vp2_main_display);
         viewPager2.setUserInputEnabled(false); // prevent horizontal swiping.
-        viewPager2.setAdapter(classAdapter);
+        viewPager2.setAdapter(classVP2Adapter);
 
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override

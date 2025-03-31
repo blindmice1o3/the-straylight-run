@@ -23,6 +23,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IDEDialogFragment extends DialogFragment {
     public static final String TAG = IDEDialogFragment.class.getSimpleName();
@@ -40,6 +42,7 @@ public class IDEDialogFragment extends DialogFragment {
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
+    private List<Class> classes;
     private TextView tvExecute;
 
     public static IDEDialogFragment newInstance(ButtonListener buttonListener,
@@ -63,6 +66,14 @@ public class IDEDialogFragment extends DialogFragment {
             buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
             dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         }
+
+        classes = new ArrayList<>();
+        classes.add(new Class("Main"));
+        classes.add(new Class("Foo"));
+        classes.add(new Class("Bar"));
+        for (int i = 0; i < 100; i++) {
+            classes.add(new Class(i + "_cat"));
+        }
     }
 
     @Nullable
@@ -78,10 +89,12 @@ public class IDEDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
+        ClassesDataObject classesDataObject = new ClassesDataObject(classes);
+
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.fcv_left, ProjectViewportFragment.newInstance(null, null));
-        ft.add(R.id.fcv_center, MainViewportFragment.newInstance(null, null));
-        ft.add(R.id.fcv_right, StructureViewportFragment.newInstance(null, null));
+        ft.add(R.id.fcv_left, ProjectViewportFragment.newInstance(classesDataObject));
+        ft.add(R.id.fcv_center, MainViewportFragment.newInstance(classesDataObject));
+        ft.add(R.id.fcv_right, StructureViewportFragment.newInstance(classesDataObject));
         ft.commit();
 
         //////////////////////////////////////////////////////////////////////

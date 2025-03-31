@@ -8,11 +8,12 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 
 import java.util.List;
 
-public class ClassAdapter extends FragmentStateAdapter {
+public class ClassVP2Adapter extends FragmentStateAdapter {
+    public static final String TAG = ClassVP2Adapter.class.getSimpleName();
 
     private List<Class> classes;
 
-    public ClassAdapter(@NonNull Fragment fragment, List<Class> classes) {
+    public ClassVP2Adapter(@NonNull Fragment fragment, List<Class> classes) {
         super(fragment);
         this.classes = classes;
     }
@@ -20,10 +21,9 @@ public class ClassAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        ClassEditorFragment classEditorFragment =
-                ClassEditorFragment.newInstance(
-                        classes.get(position)
-                );
+        ClassEditorFragment classEditorFragment = ClassEditorFragment.newInstance(
+                classes.get(position)
+        );
         return classEditorFragment;
     }
 
