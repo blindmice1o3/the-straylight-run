@@ -20,6 +20,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
 
 import java.io.Serializable;
@@ -45,6 +48,10 @@ public class IDEDialogFragment extends DialogFragment {
     private List<Class> classes;
     private TextView tvExecute;
 
+    private ProjectViewportFragment projectViewportFragment;
+    private MainViewportFragment mainViewportFragment;
+    private StructureViewportFragment structureViewportFragment;
+
     public static IDEDialogFragment newInstance(ButtonListener buttonListener,
                                                 DismissListener dismissListener) {
         IDEDialogFragment fragment = new IDEDialogFragment();
@@ -68,7 +75,10 @@ public class IDEDialogFragment extends DialogFragment {
         }
 
         classes = new ArrayList<>();
-        classes.add(new Class("Main"));
+        Class classMain = new Class("Main");
+        classMain.addField(new Field("int", "counter"));
+        classMain.addMethod(new Method("void", "main"));
+        classes.add(classMain);
         classes.add(new Class("Foo"));
         classes.add(new Class("Bar"));
         for (int i = 0; i < 100; i++) {
@@ -90,11 +100,24 @@ public class IDEDialogFragment extends DialogFragment {
         Log.e(TAG, "onViewCreated()");
 
         ClassesDataObject classesDataObject = new ClassesDataObject(classes);
+        projectViewportFragment = ProjectViewportFragment.newInstance(classesDataObject);
+        mainViewportFragment = MainViewportFragment.newInstance(classesDataObject);
+        structureViewportFragment = StructureViewportFragment.newInstance(null);
+
+        projectViewportFragment.setGestureListener(new ProjectViewportFragment.GestureListener() {
+            @Override
+            public void onClassClicked(Class classClicked) {
+
+                structureViewportFragment.replaceWithNewClass(
+                        ClassViewerFragment.newInstance(classClicked)
+                );
+            }
+        });
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.fcv_left, ProjectViewportFragment.newInstance(classesDataObject));
-        ft.add(R.id.fcv_center, MainViewportFragment.newInstance(classesDataObject));
-        ft.add(R.id.fcv_right, StructureViewportFragment.newInstance(classesDataObject));
+        ft.add(R.id.fcv_left, projectViewportFragment);
+        ft.add(R.id.fcv_center, mainViewportFragment);
+        ft.add(R.id.fcv_right, structureViewportFragment);
         ft.commit();
 
         //////////////////////////////////////////////////////////////////////

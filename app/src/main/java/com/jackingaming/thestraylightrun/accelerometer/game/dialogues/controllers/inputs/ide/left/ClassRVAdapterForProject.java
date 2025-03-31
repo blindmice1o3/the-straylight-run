@@ -18,8 +18,14 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 
 import java.util.List;
 
-public class ClassRVAdapter extends RecyclerView.Adapter<ClassRVAdapter.ViewHolder> {
-    public static final String TAG = ClassRVAdapter.class.getSimpleName();
+public class ClassRVAdapterForProject extends RecyclerView.Adapter<ClassRVAdapterForProject.ViewHolder> {
+    public static final String TAG = ClassRVAdapterForProject.class.getSimpleName();
+
+    public interface GestureListener {
+        void onSingleTapUp(int position);
+    }
+
+    private GestureListener gestureListener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -45,7 +51,10 @@ public class ClassRVAdapter extends RecyclerView.Adapter<ClassRVAdapter.ViewHold
 
                 @Override
                 public boolean onSingleTapUp(@NonNull MotionEvent motionEvent) {
-//                Log.e(TAG, "onSingleTapUp: " + motionEvent.toString());
+                    Log.e(TAG, "onSingleTapUp: " + motionEvent.toString());
+                    gestureListener.onSingleTapUp(
+                            getAbsoluteAdapterPosition()
+                    );
                     return true;
                 }
 
@@ -105,9 +114,10 @@ public class ClassRVAdapter extends RecyclerView.Adapter<ClassRVAdapter.ViewHold
     private Context context;
     private List<Class> classes;
 
-    public ClassRVAdapter(Context context, List<Class> classes) {
+    public ClassRVAdapterForProject(Context context, List<Class> classes, GestureListener gestureListener) {
         this.context = context;
         this.classes = classes;
+        this.gestureListener = gestureListener;
     }
 
     @NonNull
@@ -115,7 +125,7 @@ public class ClassRVAdapter extends RecyclerView.Adapter<ClassRVAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View classView = inflater.inflate(R.layout.listitem_class, parent, false);
+        View classView = inflater.inflate(R.layout.listitem_class_for_project, parent, false);
         ViewHolder viewHolder = new ViewHolder(classView);
 
         return viewHolder;

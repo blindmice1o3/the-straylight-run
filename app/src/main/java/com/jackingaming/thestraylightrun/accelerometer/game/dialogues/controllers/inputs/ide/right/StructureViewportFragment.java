@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.ClassesDataObject;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,9 +20,10 @@ import java.util.List;
  */
 public class StructureViewportFragment extends Fragment {
     public static final String TAG = StructureViewportFragment.class.getSimpleName();
-    public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
+    public static final String ARG_CLASS = "class";
 
-    private List<Class> classes;
+    private Class classToDisplay;
+    private NoStructureFragment noStructureFragment;
 
     public StructureViewportFragment() {
         // Required empty public constructor
@@ -32,14 +33,14 @@ public class StructureViewportFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param classesDataObject ClassesDataObject.
+     * @param classToDisplay Class.
      * @return A new instance of fragment StructureViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StructureViewportFragment newInstance(ClassesDataObject classesDataObject) {
+    public static StructureViewportFragment newInstance(Class classToDisplay) {
         StructureViewportFragment fragment = new StructureViewportFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CLASSES_DATA_OBJECT, classesDataObject);
+        args.putSerializable(ARG_CLASS, classToDisplay);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,9 +49,10 @@ public class StructureViewportFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            ClassesDataObject classesDataObject = (ClassesDataObject) getArguments().getSerializable(ARG_CLASSES_DATA_OBJECT);
-            classes = classesDataObject.getClasses();
+            classToDisplay = (Class) getArguments().getSerializable(ARG_CLASS);
         }
+
+        noStructureFragment = NoStructureFragment.newInstance(null, null);
     }
 
     @Override
@@ -58,5 +60,21 @@ public class StructureViewportFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_structure_viewport, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.add(R.id.fcv_structure, noStructureFragment);
+        ft.commit();
+    }
+
+    public void replaceWithNewClass(Fragment fragment) {
+        Fragment fragmentNew = (fragment != null) ? fragment : noStructureFragment;
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.replace(R.id.fcv_structure, fragmentNew);
+        ft.commit();
     }
 }

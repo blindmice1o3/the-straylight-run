@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,16 @@ import java.util.List;
 public class ProjectViewportFragment extends Fragment {
     public static final String TAG = ProjectViewportFragment.class.getSimpleName();
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
+
+    public interface GestureListener {
+        void onClassClicked(Class classClicked);
+    }
+
+    private GestureListener gestureListener;
+
+    public void setGestureListener(GestureListener gestureListener) {
+        this.gestureListener = gestureListener;
+    }
 
     private List<Class> classes;
     private RecyclerView recyclerView;
@@ -71,7 +82,15 @@ public class ProjectViewportFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.rv_project_view);
 
-        ClassRVAdapter classRVAdapter = new ClassRVAdapter(getContext(), classes);
+        ClassRVAdapterForProject classRVAdapter = new ClassRVAdapterForProject(getContext(), classes, new ClassRVAdapterForProject.GestureListener() {
+            @Override
+            public void onSingleTapUp(int position) {
+                Log.e(TAG, "projectviewportfragment classrvadapter onSingleTapUp(int)... position: " + position);
+                gestureListener.onClassClicked(
+                        classes.get(position)
+                );
+            }
+        });
         recyclerView.setAdapter(classRVAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
