@@ -23,6 +23,10 @@ public class ClassRVAdapterForProject extends RecyclerView.Adapter<ClassRVAdapte
 
     public interface GestureListener {
         void onSingleTapUp(int position);
+
+        void onDoubleTap(int position);
+
+        void onLongPress(int position);
     }
 
     private GestureListener gestureListener;
@@ -67,6 +71,9 @@ public class ClassRVAdapterForProject extends RecyclerView.Adapter<ClassRVAdapte
                 @Override
                 public void onLongPress(@NonNull MotionEvent motionEvent) {
                     Log.e(TAG, getAdapterPosition() + ". onLongPress: " + motionEvent.toString());
+                    gestureListener.onLongPress(
+                            getAbsoluteAdapterPosition()
+                    );
                 }
 
                 @Override
@@ -85,6 +92,9 @@ public class ClassRVAdapterForProject extends RecyclerView.Adapter<ClassRVAdapte
                 @Override
                 public boolean onDoubleTap(@NonNull MotionEvent motionEvent) {
                     Log.e(TAG, "onDoubleTap: " + motionEvent.toString());
+                    gestureListener.onDoubleTap(
+                            getAbsoluteAdapterPosition()
+                    );
                     return true;
                 }
 

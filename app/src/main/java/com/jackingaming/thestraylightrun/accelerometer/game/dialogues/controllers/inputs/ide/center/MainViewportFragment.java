@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.ClassesDataObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,9 +26,9 @@ import java.util.List;
  */
 public class MainViewportFragment extends Fragment {
     public static final String TAG = MainViewportFragment.class.getSimpleName();
-    public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
+    public static final String ARG_CLASS_MAIN = "classMain";
 
-    private List<Class> classes;
+    private List<Class> classes = new ArrayList<>();
     private ClassVP2Adapter classVP2Adapter;
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
@@ -39,15 +40,16 @@ public class MainViewportFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     * <p>
+     * //     * @param classesDataObject ClassesDataObject.
      *
-     * @param classesDataObject ClassesDataObject.
      * @return A new instance of fragment MainViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainViewportFragment newInstance(ClassesDataObject classesDataObject) {
+    public static MainViewportFragment newInstance(Class classMain) {
         MainViewportFragment fragment = new MainViewportFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_CLASSES_DATA_OBJECT, classesDataObject);
+        args.putSerializable(ARG_CLASS_MAIN, classMain);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +58,8 @@ public class MainViewportFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            ClassesDataObject classesDataObject = (ClassesDataObject) getArguments().getSerializable(ARG_CLASSES_DATA_OBJECT);
-            classes = classesDataObject.getClasses();
+            Class classMain = (Class) getArguments().getSerializable(ARG_CLASS_MAIN);
+            classes.add(classMain);
         }
     }
 
@@ -90,5 +92,31 @@ public class MainViewportFragment extends Fragment {
             }
         });
         tabLayoutMediator.attach();
+    }
+
+    public void renameClass(Class classRenamed) {
+        for (int i = 0; i < classes.size(); i++) {
+            Class classToCheck = classes.get(i);
+
+            if (classToCheck.getName().equals(
+                    classRenamed.getName()
+            )) {
+                classVP2Adapter.renameClass(classRenamed);
+                tabLayout.getTabAt(i).setText(
+                        classRenamed.getName()
+                );
+                return;
+            }
+        }
+    }
+
+    public void addClass(Class classToAdd) {
+        Log.e(TAG, "addClass()");
+        classes.add(classToAdd);
+        int indexClassToAdd = classes.size() - 1;
+        classVP2Adapter.notifyItemInserted(indexClassToAdd);
+        tabLayout.selectTab(
+                tabLayout.getTabAt(indexClassToAdd)
+        );
     }
 }

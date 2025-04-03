@@ -21,13 +21,9 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class IDEDialogFragment extends DialogFragment {
     public static final String TAG = IDEDialogFragment.class.getSimpleName();
@@ -45,7 +41,6 @@ public class IDEDialogFragment extends DialogFragment {
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
-    private List<Class> classes;
     private TextView tvExecute;
 
     private ProjectViewportFragment projectViewportFragment;
@@ -73,17 +68,6 @@ public class IDEDialogFragment extends DialogFragment {
             buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
             dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
         }
-
-        classes = new ArrayList<>();
-        Class classMain = new Class("Main");
-        classMain.addField(new Field("int", "counter"));
-        classMain.addMethod(new Method("void", "main"));
-        classes.add(classMain);
-        classes.add(new Class("Foo"));
-        classes.add(new Class("Bar"));
-        for (int i = 0; i < 100; i++) {
-            classes.add(new Class(i + "_cat"));
-        }
     }
 
     @Nullable
@@ -99,18 +83,31 @@ public class IDEDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        ClassesDataObject classesDataObject = new ClassesDataObject(classes);
-        projectViewportFragment = ProjectViewportFragment.newInstance(classesDataObject);
-        mainViewportFragment = MainViewportFragment.newInstance(classesDataObject);
+        projectViewportFragment = ProjectViewportFragment.newInstance();
+        mainViewportFragment = MainViewportFragment.newInstance(
+                projectViewportFragment.getMainClass()
+        );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
 
-        projectViewportFragment.setGestureListener(new ProjectViewportFragment.GestureListener() {
+        projectViewportFragment.setProjectViewportListener(new ProjectViewportFragment.ProjectViewportListener() {
             @Override
             public void onClassClicked(Class classClicked) {
-
                 structureViewportFragment.replaceWithNewClass(
                         ClassViewerFragment.newInstance(classClicked)
                 );
+            }
+
+            @Override
+            public void onClassRenamed(Class classRenamed) {
+                mainViewportFragment.renameClass(
+                        classRenamed
+                );
+            }
+
+            @Override
+            public void onClassDoubleClicked(Class classDoubleClicked) {
+                Log.e(TAG, "onClassDoubleClicked");
+                mainViewportFragment.addClass(classDoubleClicked);
             }
         });
 

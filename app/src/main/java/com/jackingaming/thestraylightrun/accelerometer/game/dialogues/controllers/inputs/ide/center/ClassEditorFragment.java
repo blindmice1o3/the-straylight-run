@@ -63,6 +63,15 @@ public class ClassEditorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_class_editor, container, false);
     }
 
+    public void renameClass(Class classNew) {
+        classToEdit.setName(
+                classNew.getName()
+        );
+        editText.setHint(
+                classToEdit.getName()
+        );
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
