@@ -11,7 +11,7 @@
         android:id="@+id/tv_package_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="com.megacoolcorp" />
+        android:text="Foo" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_project_view"

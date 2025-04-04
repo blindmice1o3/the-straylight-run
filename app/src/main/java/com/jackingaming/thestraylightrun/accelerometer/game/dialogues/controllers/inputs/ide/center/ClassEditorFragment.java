@@ -12,6 +12,12 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,20 +69,78 @@ public class ClassEditorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_class_editor, container, false);
     }
 
-    public void renameClass(Class classNew) {
-        classToEdit.setName(
-                classNew.getName()
-        );
-        editText.setHint(
-                classToEdit.getName()
-        );
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String xOffset = "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("public class " + classToEdit.getName() + " {\n");
+
+        sb.append("\n");
+        xOffset = "    ";
+        List<Field> fields = classToEdit.getFields();
+        for (Field field : fields) {
+            sb.append(xOffset +
+                    field.getAccessModifier().name().toLowerCase() + " " +
+                    field.getType() + " " +
+                    field.getName() +
+                    ";\n");
+        }
+
+        sb.append("\n");
+        List<Method> methods = classToEdit.getMethods();
+        for (Method method : methods) {
+            String nonAccessModifiers = null;
+            for (ClassComponent.NonAccessModifier nonAccessModifier : method.getNonAccessModifiers()) {
+                if (nonAccessModifiers == null) {
+                    nonAccessModifiers = (nonAccessModifier.name().toLowerCase() + " ");
+                } else {
+                    nonAccessModifiers += (nonAccessModifier.name().toLowerCase() + " ");
+                }
+            }
+            String argumentList = null;
+            for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
+                if (argumentList != null) {
+                    argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                } else {
+                    argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                }
+            }
+
+            sb.append(xOffset +
+                    method.getAccessModifier().name().toLowerCase() + " ");
+            if (nonAccessModifiers != null) {
+                sb.append(nonAccessModifiers + " ");
+            }
+            sb.append(method.getType() + " " +
+                    method.getName() +
+                    " (");
+            if (argumentList != null) {
+                sb.append(argumentList);
+            }
+            sb.append(") {\n");
+            sb.append("\n");
+            sb.append(xOffset + "}\n");
+        }
+
+        sb.append("\n");
+        sb.append("}");
+
         editText = view.findViewById(R.id.et_class);
+        if (sb.length() > 0) {
+            editText.setText(sb.toString());
+        } else {
+            editText.setHint(
+                    classToEdit.getName()
+            );
+        }
+    }
+
+    public void renameClass(Class classNew) {
+        classToEdit.setName(
+                classNew.getName()
+        );
         editText.setHint(
                 classToEdit.getName()
         );

@@ -1,7 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right;
 
+import java.util.List;
+
 public class Field extends ClassComponent {
-    public Field(String type, String name) {
-        super(type, name);
+    public Field(AccessModifier accessModifier, List<NonAccessModifier> nonAccessModifiers, String type, String name) {
+        super(accessModifier, nonAccessModifiers, type, name);
     }
 }

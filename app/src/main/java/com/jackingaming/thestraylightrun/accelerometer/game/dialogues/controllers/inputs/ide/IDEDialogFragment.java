@@ -91,6 +91,13 @@ public class IDEDialogFragment extends DialogFragment {
 
         projectViewportFragment.setProjectViewportListener(new ProjectViewportFragment.ProjectViewportListener() {
             @Override
+            public void onPackageClicked(Package packageClicked) {
+                structureViewportFragment.replaceWithNewClass(
+                        null
+                );
+            }
+
+            @Override
             public void onClassClicked(Class classClicked) {
                 structureViewportFragment.replaceWithNewClass(
                         ClassViewerFragment.newInstance(classClicked)

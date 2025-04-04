@@ -112,11 +112,26 @@ public class MainViewportFragment extends Fragment {
 
     public void addClass(Class classToAdd) {
         Log.e(TAG, "addClass()");
+        for (int i = 0; i < classes.size(); i++) {
+            Class classOpened = classes.get(i);
+
+            if (classOpened.getName().equals(classToAdd.getName())) {
+                Log.e(TAG, "classToAdd already in list of opened classes... open it in vp2");
+
+                tabLayout.selectTab(
+                        tabLayout.getTabAt(i)
+                );
+
+                return;
+            }
+        }
+
         classes.add(classToAdd);
         int indexClassToAdd = classes.size() - 1;
         classVP2Adapter.notifyItemInserted(indexClassToAdd);
         tabLayout.selectTab(
                 tabLayout.getTabAt(indexClassToAdd)
         );
+        Log.e(TAG, "classToAdd was added");
     }
 }

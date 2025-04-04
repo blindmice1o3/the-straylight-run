@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Package;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
@@ -32,6 +35,8 @@ public class ProjectViewportFragment extends Fragment {
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
     public interface ProjectViewportListener {
+        void onPackageClicked(Package packageClicked);
+
         void onClassClicked(Class classClicked);
 
         void onClassRenamed(Class classRenamed);
@@ -45,6 +50,7 @@ public class ProjectViewportFragment extends Fragment {
         this.listener = listener;
     }
 
+    private Package packageMain;
     private List<Class> classes = new ArrayList<>();
     private TextView textView;
     private RecyclerView recyclerView;
@@ -53,9 +59,17 @@ public class ProjectViewportFragment extends Fragment {
     public ProjectViewportFragment() {
         // Required empty public constructor
 
+        packageMain = new Package("com.megacoolcorp");
         Class classMain = new Class("Main");
-        classMain.addField(new Field("int", "counter"));
-        classMain.addMethod(new Method("void", "main"));
+        classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counter"));
+        List<ClassComponent.NonAccessModifier> nonAccessModifiers = new ArrayList<>();
+        nonAccessModifiers.add(ClassComponent.NonAccessModifier.STATIC);
+        List<VariableDeclaration> argumentList = new ArrayList<>();
+        argumentList.add(new VariableDeclaration("String[]", "args"));
+        classMain.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                nonAccessModifiers,
+                "void", "main",
+                argumentList));
         classes.add(classMain);
         classes.add(new Class("Foo"));
         classes.add(new Class("Bar"));
@@ -101,6 +115,9 @@ public class ProjectViewportFragment extends Fragment {
         textView = view.findViewById(R.id.tv_package_name);
         recyclerView = view.findViewById(R.id.rv_project_view);
 
+        textView.setText(
+                packageMain.getName()
+        );
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,6 +126,8 @@ public class ProjectViewportFragment extends Fragment {
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
                 }
+
+                listener.onPackageClicked(packageMain);
             }
         });
         textView.setOnLongClickListener(new View.OnLongClickListener() {
