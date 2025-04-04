@@ -73,6 +73,17 @@ public class ProjectViewportFragment extends Fragment {
         classes.add(classMain);
         classes.add(new Class("Foo"));
         classes.add(new Class("Bar"));
+        Class classRobot = new Class("Robot");
+        classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counterTilledTile"));
+        classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "walkToUntilledTile",
+                null));
+        classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "tillTile",
+                null));
+        classes.add(classRobot);
     }
 
     /**

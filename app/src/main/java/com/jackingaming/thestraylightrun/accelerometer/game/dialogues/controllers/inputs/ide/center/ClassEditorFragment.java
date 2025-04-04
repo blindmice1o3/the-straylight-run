@@ -92,19 +92,23 @@ public class ClassEditorFragment extends Fragment {
         List<Method> methods = classToEdit.getMethods();
         for (Method method : methods) {
             String nonAccessModifiers = null;
-            for (ClassComponent.NonAccessModifier nonAccessModifier : method.getNonAccessModifiers()) {
-                if (nonAccessModifiers == null) {
-                    nonAccessModifiers = (nonAccessModifier.name().toLowerCase() + " ");
-                } else {
-                    nonAccessModifiers += (nonAccessModifier.name().toLowerCase() + " ");
+            if (method.getNonAccessModifiers() != null) {
+                for (ClassComponent.NonAccessModifier nonAccessModifier : method.getNonAccessModifiers()) {
+                    if (nonAccessModifiers == null) {
+                        nonAccessModifiers = (nonAccessModifier.name().toLowerCase() + " ");
+                    } else {
+                        nonAccessModifiers += (nonAccessModifier.name().toLowerCase() + " ");
+                    }
                 }
             }
             String argumentList = null;
-            for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
-                if (argumentList != null) {
-                    argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
-                } else {
-                    argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
+            if (method.getArgumentList() != null) {
+                for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
+                    if (argumentList != null) {
+                        argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                    } else {
+                        argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                    }
                 }
             }
 
@@ -120,7 +124,11 @@ public class ClassEditorFragment extends Fragment {
                 sb.append(argumentList);
             }
             sb.append(") {\n");
-            sb.append("\n");
+            if (method.getName().equals("main")) {
+                sb.append("\n");
+            } else {
+                sb.append(xOffset + xOffset + "...\n");
+            }
             sb.append(xOffset + "}\n");
         }
 

@@ -63,9 +63,10 @@ public class ClassRVAdapterForStructure extends RecyclerView.Adapter<ClassRVAdap
         ClassComponent classComponent = classComponents.get(position);
 
         String typeOfComponent = (classComponent instanceof Field) ? "f" : "m";
-
+        String separatorNameAndReturnType = (classComponent instanceof Field) ? ": " : "(): ";
+        String textToDisplay = typeOfComponent + " - " + classComponent.getName() + separatorNameAndReturnType + classComponent.getType();
         holder.getTvName().setText(
-                typeOfComponent + " - " + classComponent.getName()
+                textToDisplay
         );
     }
 

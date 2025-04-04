@@ -12,7 +12,9 @@ public class Method extends ClassComponent {
     public Method(AccessModifier accessModifier, List<NonAccessModifier> nonAccessModifiers, String returnType, String name, List<VariableDeclaration> argumentList) {
         super(accessModifier, nonAccessModifiers, returnType, name);
         this.argumentList = new ArrayList<>();
-        this.argumentList.addAll(argumentList);
+        if (argumentList != null) {
+            this.argumentList.addAll(argumentList);
+        }
     }
 
     public List<VariableDeclaration> getArgumentList() {
