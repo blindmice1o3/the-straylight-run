@@ -5,14 +5,16 @@
 
     <ImageView
         android:id="@+id/iv_entity_portrait"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:padding="4dp" />
 
     <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
         android:id="@+id/tv_type_writer"
-        android:layout_width="550dp"
+        android:layout_width="0dp"
         android:layout_height="255dp"
+        android:layout_weight="6"
         android:paddingRight="4dp"
         android:text="Hello, TypeWriterTextView" />
 

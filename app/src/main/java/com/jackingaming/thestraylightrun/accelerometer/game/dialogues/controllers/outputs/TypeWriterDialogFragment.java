@@ -3,12 +3,15 @@ package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controlle
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -86,13 +89,6 @@ public class TypeWriterDialogFragment extends DialogFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Log.e(TAG, "onCreateView()");
-
-        if (getDialog() != null) {
-            getDialog().getWindow().setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
-        } else {
-            Log.e(TAG, "getDialog() == null");
-        }
-
         return inflater.inflate(R.layout.dialogfragment_type_writer, container, false);
     }
 
@@ -112,6 +108,19 @@ public class TypeWriterDialogFragment extends DialogFragment
     public void onResume() {
         super.onResume();
         Log.e(TAG, "onResume()");
+
+        if (getDialog() != null) {
+            Window window = getDialog().getWindow();
+            Display display = window.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            window.setLayout(width, (height / 3));
+            window.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        } else {
+            Log.e(TAG, "getDialog() == null");
+        }
 
         tvTypeWriter.displayTextWithAnimation(text);
     }
