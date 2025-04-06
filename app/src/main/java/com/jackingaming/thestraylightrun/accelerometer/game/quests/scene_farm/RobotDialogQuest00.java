@@ -2,34 +2,36 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AIQuest00
+public class RobotDialogQuest00
         implements Quest {
-    public static final String TAG = AIQuest00.class.getSimpleName();
-    public static final String HONEY_POT = "honeyPot";
-    public static final int QUANTITY_REQUIRED = 4200;
+    public static final String TAG = RobotDialogQuest00.class.getSimpleName();
+    public static final String ROBOT_REPROGRAMMER_4000 = "robotReprogrammer4000";
+    public static final int QUANTITY_REQUIRED = 1;
 
     private Quest.State state;
     private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> requirementTilesAsString;
+    private Map<String, Integer> requirementEventsAsString;
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public AIQuest00(Game game, String[] dialogueArray) {
+    public RobotDialogQuest00(Game game, String[] dialogueArray) {
         state = State.NOT_STARTED;
         this.game = game;
         this.dialogueArray = dialogueArray;
@@ -43,10 +45,10 @@ public class AIQuest00
     public void initRequirements() {
         requirements = new HashMap<>();
 
-        requirementTilesAsString = new HashMap<>();
-        requirementTilesAsString.put(GrowableTile.TAG, QUANTITY_REQUIRED);
+        requirementEventsAsString = new HashMap<>();
+        requirementEventsAsString.put(IDEDialogFragment.TAG, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.TILE, requirementTilesAsString);
+        requirements.put(RequirementType.EVENT, requirementEventsAsString);
     }
 
     @Override
@@ -104,7 +106,12 @@ public class AIQuest00
     public void initStartingItemsAsString() {
         startingItems = new HashMap<>();
 
-        startingItems.put(HONEY_POT, new HoneyPot());
+        // TODO: add RobotReprogrammer4000 (has all the functions of the RobotProgrammer200, AND it's software-upgradeable).
+        startingItems.put(ROBOT_REPROGRAMMER_4000,
+                new RobotReprogrammer4000(
+                        new OpenRobotDialogEntityCommand(null)
+                )
+        );
 
         for (Item item : startingItems.values()) {
             item.init(game);
@@ -114,15 +121,15 @@ public class AIQuest00
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 320);
+        rewardsAsString.put(REWARD_COINS, 24);
     }
 
     @Override
     public void dispenseStartingItems() {
         for (Item item : startingItems.values()) {
             Player.getInstance().receiveItem(item);
-            if (item instanceof HoneyPot) {
-                Log.e(TAG, "honeyPot GIVEN");
+            if (item instanceof RobotReprogrammer4000) {
+                Log.e(TAG, "robotReprogrammer4000 GIVEN");
             }
         }
 
@@ -168,9 +175,9 @@ public class AIQuest00
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-                return dialogueArray[0];
-            case STARTED:
                 return dialogueArray[1];
+            case STARTED:
+                return dialogueArray[2];
             case COMPLETED:
                 return dialogueArray[3];
         }
@@ -185,11 +192,11 @@ public class AIQuest00
     @Override
     public void attachListener() {
         if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-            GrowableTile.StateChangeListener stateChangeListener = new GrowableTile.StateChangeListener() {
+            Robot.DialogListener dialogListener = new Robot.DialogListener() {
                 @Override
-                public void changeToTilled() {
-                    Player.getInstance().getQuestManager().addTileAsString(GrowableTile.TAG);
-                    Log.e(TAG, "numberOfTilledTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(GrowableTile.TAG));
+                public void onOpenIDEDialogFragment() {
+                    Player.getInstance().getQuestManager().addEventAsString(IDEDialogFragment.TAG);
+                    Log.e(TAG, "number of times IDEDialogFragment opened: " + Player.getInstance().getQuestManager().getNumberOfEventAsString(IDEDialogFragment.TAG));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                         dispenseRewards();
@@ -199,14 +206,18 @@ public class AIQuest00
                 }
             };
 
-            ((SceneFarm) game.getSceneManager().getCurrentScene()).registerStateChangeListenerForAllGrowableTile(
-                    stateChangeListener
+            ((SceneFarm) game.getSceneManager().getCurrentScene()).getRobot().setDialogListener(
+                    dialogListener
             );
         }
     }
 
     @Override
     public void detachListener() {
-        ((SceneFarm) game.getSceneManager().getCurrentScene()).unregisterStateChangeListenerForAllGrowableTile();
+        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+            ((SceneFarm) game.getSceneManager().getCurrentScene()).getRobot().setDialogListener(
+                    null
+            );
+        }
     }
 }

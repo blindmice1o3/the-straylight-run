@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
@@ -52,6 +52,16 @@ public class Robot extends Creature {
     private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TR = 19;
     private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_BR = 11;
     private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_BR = 20;
+
+    public interface DialogListener {
+        void onOpenIDEDialogFragment();
+    }
+
+    private DialogListener listener;
+
+    public void setDialogListener(DialogListener listener) {
+        this.listener = listener;
+    }
 
     public enum State {OFF, WALK, RUN, TILE_SELECTED;}
 
@@ -494,6 +504,10 @@ public class Robot extends Creature {
                 Log.e(TAG, "onDismiss()");
             }
         });
+
+        if (listener != null) {
+            listener.onOpenIDEDialogFragment();
+        }
 
         ideDialogFragment.show(
                 ((MainActivity) game.getContext()).getSupportFragmentManager(),

@@ -15,6 +15,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.Dia
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.DialogueStateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue00;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue01;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
@@ -37,6 +38,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RobotDialogQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 
 import java.util.ArrayList;
@@ -67,10 +69,12 @@ public class SceneFarm extends Scene {
     private boolean inSeedShopState;
     transient private SeedShopDialogFragment seedShopDialogFragment;
 
+    private Robot robot;
     private List<GrowableTile> growableTiles;
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
 
     private Quest aIQuest00;
+    private Quest robotDialogQuest00;
     private DialogueStateManager dialogueStateManager;
 
     private SceneFarm() {
@@ -282,10 +286,12 @@ public class SceneFarm extends Scene {
 
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         aIQuest00 = new AIQuest00(game, dialogueArray);
+        robotDialogQuest00 = new RobotDialogQuest00(game, dialogueArray);
 
         List<DialogueState> dialogueStates = new ArrayList<>();
         dialogueStates.add(new AIDialogue00(game, aIQuest00));
         dialogueStates.add(new AIDialogue01(game, aIQuest00));
+        dialogueStates.add(new AIDialogue02(game, robotDialogQuest00));
         dialogueStateManager = new DialogueStateManager(dialogueStates);
         Log.e(TAG, "init() END");
     }
@@ -891,10 +897,9 @@ public class SceneFarm extends Scene {
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
-        entities.add(
-                new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
-                        (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT))
-        );
+        robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
+                (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+        entities.add(robot);
 //        entities.add(
 //                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
 //                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
@@ -958,5 +963,9 @@ public class SceneFarm extends Scene {
         List<Item> items = new ArrayList<Item>();
         // TODO: Insert scene specific items here.
         return items;
+    }
+
+    public Robot getRobot() {
+        return robot;
     }
 }

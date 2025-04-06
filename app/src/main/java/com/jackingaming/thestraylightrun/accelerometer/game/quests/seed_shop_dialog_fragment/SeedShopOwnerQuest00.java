@@ -79,6 +79,14 @@ public class SeedShopOwnerQuest00
                             return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
                         }
                         break;
+                    case EVENT:
+                        Set<String> eventsRequired = requirementsAsString.keySet();
+                        for (String eventAsString : eventsRequired) {
+                            int requiredNumberOfEventAsString = requirementsAsString.get(eventAsString);
+                            int currentNumberOfEventAsString = Player.getInstance().getQuestManager().getNumberOfEventAsString(eventAsString);
+                            return (currentNumberOfEventAsString >= requiredNumberOfEventAsString);
+                        }
+                        break;
                     case ITEM:
                         Set<String> itemsRequired = requirementsAsString.keySet();
                         for (String itemAsString : itemsRequired) {

@@ -10,12 +10,14 @@ public class QuestManager {
     private int indexCurrent;
 
     private Map<String, Integer> entitiesAsStringCollected;
+    private Map<String, Integer> eventsAsStringCollected;
     private Map<String, Integer> itemsAsStringCollected;
     private Map<String, Integer> tilesAsStringCollected;
 
     public QuestManager() {
         indexCurrent = 0;
         entitiesAsStringCollected = new HashMap<>();
+        eventsAsStringCollected = new HashMap<>();
         itemsAsStringCollected = new HashMap<>();
         tilesAsStringCollected = new HashMap<>();
     }
@@ -59,6 +61,15 @@ public class QuestManager {
         }
     }
 
+    public void addEventAsString(String eventAsString) {
+        if (eventsAsStringCollected.containsKey(eventAsString)) {
+            int previousValue = eventsAsStringCollected.get(eventAsString);
+            eventsAsStringCollected.put(eventAsString, (previousValue + 1));
+        } else {
+            eventsAsStringCollected.put(eventAsString, 1);
+        }
+    }
+
     public void addItemAsString(String itemAsString) {
         if (itemsAsStringCollected.containsKey(itemAsString)) {
             int previousValue = itemsAsStringCollected.get(itemAsString);
@@ -80,6 +91,14 @@ public class QuestManager {
     public Integer getNumberOfEntityAsString(String entityAsString) {
         if (entitiesAsStringCollected.containsKey(entityAsString)) {
             return entitiesAsStringCollected.get(entityAsString);
+        } else {
+            return 0;
+        }
+    }
+
+    public Integer getNumberOfEventAsString(String eventAsString) {
+        if (eventsAsStringCollected.containsKey(eventAsString)) {
+            return eventsAsStringCollected.get(eventAsString);
         } else {
             return 0;
         }

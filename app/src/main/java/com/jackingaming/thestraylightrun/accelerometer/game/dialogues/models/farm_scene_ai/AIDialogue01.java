@@ -53,11 +53,6 @@ public class AIDialogue01
                             @Override
                             public void onDismiss() {
                                 Log.e(TAG, "onDismiss()");
-
-                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
-                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
-                                }
                             }
                         }, new TypeWriterTextView.TextCompletionListener() {
                             @Override
@@ -75,6 +70,11 @@ public class AIDialogue01
                                     aIQuest00.dispenseStartingItems();
                                 } else {
                                     Log.e(TAG, "!wasQuestAccepted");
+                                }
+
+                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
+                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
                                 }
                             }
                         });

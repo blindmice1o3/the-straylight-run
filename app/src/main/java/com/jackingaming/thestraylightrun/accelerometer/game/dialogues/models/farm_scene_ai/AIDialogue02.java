@@ -9,6 +9,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.DialogueState;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
@@ -25,11 +26,11 @@ public class AIDialogue02
     private TypeWriterDialogFragment dialogFragmentAIDialogue02;
 
     private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
-    private Quest aIQuest00;
+    private Quest robotDialogQuest00;
 
-    public AIDialogue02(com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game, Quest aIQuest00) {
+    public AIDialogue02(com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game, Quest robotDialogQuest00) {
         this.game = game;
-        this.aIQuest00 = aIQuest00;
+        this.robotDialogQuest00 = robotDialogQuest00;
     }
 
     @Override
@@ -56,6 +57,19 @@ public class AIDialogue02
                             @Override
                             public void onAnimationFinish() {
                                 Log.e(TAG, "onAnimationFinish()");
+
+                                // TODO: start/give third quest.
+                                boolean wasQuestAccepted =
+                                        Player.getInstance().getQuestManager().addQuest(
+                                                robotDialogQuest00
+                                        );
+
+                                if (wasQuestAccepted) {
+                                    Log.e(TAG, "wasQuestAccepted");
+                                    robotDialogQuest00.dispenseStartingItems();
+                                } else {
+                                    Log.e(TAG, "!wasQuestAccepted");
+                                }
                             }
                         });
 

@@ -1,13 +1,13 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.quests;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public interface Quest extends Serializable {
     public static final String REWARD_COINS = "coins";
 
     enum RequirementType {
         ENTITY,
+        EVENT,
         ITEM,
         TILE;
     }
