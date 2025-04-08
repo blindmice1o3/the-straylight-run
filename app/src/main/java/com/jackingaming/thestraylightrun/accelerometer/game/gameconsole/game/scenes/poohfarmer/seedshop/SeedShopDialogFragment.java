@@ -197,7 +197,7 @@ public class SeedShopDialogFragment extends DialogFragment {
         String messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
 
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                50L, image, messageGreeting,
+                100L, image, messageGreeting,
                 new TypeWriterDialogFragment.DismissListener() {
                     @Override
                     public void onDismiss() {

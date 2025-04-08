@@ -48,7 +48,7 @@ public class AIDialogue00
         String[] messages = resources.getStringArray(R.array.clippit_dialogue_array);
         String message = messages[0];
         dialogFragmentAIDialogue00 =
-                TypeWriterDialogFragment.newInstance(50L, portraitOfSpeaker,
+                TypeWriterDialogFragment.newInstance(100L, portraitOfSpeaker,
                         message,
                         new TypeWriterDialogFragment.DismissListener() {
                             @Override

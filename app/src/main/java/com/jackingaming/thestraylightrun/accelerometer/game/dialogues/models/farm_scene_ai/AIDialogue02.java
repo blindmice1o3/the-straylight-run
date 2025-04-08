@@ -46,7 +46,7 @@ public class AIDialogue02
         String message = messages[2];
 
         dialogFragmentAIDialogue02 =
-                TypeWriterDialogFragment.newInstance(50L, portraitOfSpeaker,
+                TypeWriterDialogFragment.newInstance(100L, portraitOfSpeaker,
                         message,
                         new TypeWriterDialogFragment.DismissListener() {
                             @Override
