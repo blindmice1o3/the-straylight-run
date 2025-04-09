@@ -27,6 +27,15 @@ public class ParticleExplosionView extends View {
     private Paint paintAxis, paintParticle;
     private Random random;
     private List<Particle> particles;
+    private float progress;
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
 
     public ParticleExplosionView(Context context) {
         super(context);

@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -9,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -16,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -44,6 +48,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Enti
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.npcs.NonPlayableCharacter;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
+import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -261,8 +266,12 @@ public class GameFragment extends Fragment
         });
     }
 
+    private Game game;
+
     @Override
     public void onSurfaceCreated(Game game) {
+        this.game = game;
+
         game.init(soundManager, new Game.GameListener() {
             @Override
             public void onUpdateEntity(Entity e) {
@@ -321,6 +330,19 @@ public class GameFragment extends Fragment
             }
 
             @Override
+            public void instantiateParticleExplosionForPlayer(List<Entity> entitiesToAdd,
+                                                              int widthSpriteDst, int heightSpriteDst) {
+                GameFragment.this.instantiateParticleExplosionViewForPlayer(entitiesToAdd, game,
+                        widthSpriteDst, heightSpriteDst
+                );
+            }
+
+            @Override
+            public void startParticleExplosionViewForPlayer() {
+                GameFragment.this.startParticleExplosionViewForPlayer();
+            }
+
+            @Override
             public void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst) {
                 GameFragment.this.addImageViewOfEntityToFrameLayout(widthSpriteDst, heightSpriteDst);
             }
@@ -336,6 +358,53 @@ public class GameFragment extends Fragment
 //        instantiateImageViewForEntities(entitiesToAdd);
 //        addImageViewOfEntityToFrameLayout(game.getWidthSpriteDst(), game.getHeightSpriteDst());
     }
+
+    private void instantiateParticleExplosionViewForPlayer(List<Entity> entitiesToAdd, Game game,
+                                                           int widthSpriteDst, int heightSpriteDst) {
+        for (Entity e : entitiesToAdd) {
+            if (e instanceof Player) {
+                particleExplosionView = new ParticleExplosionView(getContext());
+                particleExplosionView.setX(
+                        ((Player) e).getXPos() - game.getGameCamera().getxOffset()
+                );
+                particleExplosionView.setY(
+                        ((Player) e).getYPos() - game.getGameCamera().getyOffset()
+                );
+                particleExplosionView.setZ(1f);
+                particleExplosionView.setVisibility(View.INVISIBLE);
+                frameLayout.addView(particleExplosionView, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));
+                frameLayout.invalidate();
+
+                animatorExplosion = ObjectAnimator.ofFloat(particleExplosionView, "progress", 0.0f, 1.0f);
+                animatorExplosion.setInterpolator(new LinearInterpolator());
+                animatorExplosion.setDuration(500L);
+                animatorExplosion.setRepeatCount(ValueAnimator.INFINITE);
+                animatorExplosion.setRepeatMode(ValueAnimator.REVERSE);
+                animatorExplosion.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                        particleExplosionView.updateProgressOfParticles(
+                                particleExplosionView.getProgress()
+                        );
+                    }
+                });
+            }
+        }
+    }
+
+    private void startParticleExplosionViewForPlayer() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                particleExplosionView.setVisibility(View.VISIBLE);
+                animatorExplosion.start();
+            }
+        });
+    }
+
+    private ObjectAnimator animatorExplosion;
+    private ParticleExplosionView particleExplosionView;
 
     private void instantiateImageViewForEntities(List<Entity> entitiesToAdd) {
         for (Entity e : entitiesToAdd) {

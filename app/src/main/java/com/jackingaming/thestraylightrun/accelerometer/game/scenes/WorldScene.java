@@ -360,6 +360,7 @@ public class WorldScene extends Scene {
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
 //                        joinParty(collided);
+                        gameListener.startParticleExplosionViewForPlayer();
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
 //                        joinParty(collided);
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
@@ -574,6 +575,7 @@ public class WorldScene extends Scene {
             @Override
             public void run() {
                 gameListener.instantiateImageViewForEntities(entities);
+                gameListener.instantiateParticleExplosionForPlayer(entities, widthSpriteDst, heightSpriteDst);
                 gameListener.addImageViewOfEntityToFrameLayout(widthSpriteDst, heightSpriteDst);
             }
         });

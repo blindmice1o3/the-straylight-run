@@ -40,6 +40,11 @@ public class Game {
 
         void instantiateImageViewForEntities(List<Entity> entitiesToAdd);
 
+        void instantiateParticleExplosionForPlayer(List<Entity> entitiesToAdd,
+                                                   int widthSpriteDst, int heightSpriteDst);
+
+        void startParticleExplosionViewForPlayer();
+
         void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst);
 
         void removeImageViewOfEntityFromFrameLayout();
