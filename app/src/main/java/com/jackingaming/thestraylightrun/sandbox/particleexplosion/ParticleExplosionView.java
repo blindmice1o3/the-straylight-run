@@ -55,7 +55,7 @@ public class ParticleExplosionView extends View {
     }
 
     // Called in "onMeasure()". Dependent on widthInPixel/heightInPixel being initialized.
-    private void initParticles() {
+    public void initParticles() {
         paintParticle = new Paint();
         paintParticle.setColor(Color.RED);
 

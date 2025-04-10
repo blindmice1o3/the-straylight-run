@@ -199,6 +199,7 @@ public class RobotDialogQuest00
                     Log.e(TAG, "number of times IDEDialogFragment opened: " + Player.getInstance().getQuestManager().getNumberOfEventAsString(IDEDialogFragment.TAG));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        game.getViewportListener().addAndShowParticleExplosionView();
                         dispenseRewards();
                     } else {
                         Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");

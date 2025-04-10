@@ -84,6 +84,8 @@ public class Game {
         void stopBlinkingBorder();
 
         boolean isBlinkingBorderOn();
+
+        void addAndShowParticleExplosionView();
     }
 
     private ViewportListener viewportListener;

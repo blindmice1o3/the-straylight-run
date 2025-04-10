@@ -192,6 +192,7 @@ public class AIQuest00
                     Log.e(TAG, "numberOfTilledTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(GrowableTile.TAG));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        game.getViewportListener().addAndShowParticleExplosionView();
                         dispenseRewards();
                     } else {
                         Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");

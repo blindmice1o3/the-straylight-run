@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -14,22 +16,27 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.MySurfaceView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.ViewportFragment;
+import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionView;
 
 import java.io.Serializable;
 
@@ -46,7 +53,7 @@ public class GameConsoleFragment extends Fragment
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
 
     transient private ObjectAnimator animatorBackgroundColor;
-    transient private FragmentContainerView fcvUsedAsBorderForViewport;
+    transient private FrameLayout frameLayoutUsedAsBorderForViewport;
     private ViewportFragment viewportFragment;
     transient private MySurfaceView mySurfaceView;
     private StatsDisplayerFragment statsDisplayerFragment;
@@ -92,7 +99,7 @@ public class GameConsoleFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        fcvUsedAsBorderForViewport = view.findViewById(R.id.fcv_mysurfaceview);
+        frameLayoutUsedAsBorderForViewport = view.findViewById(R.id.fcv_mysurfaceview);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -108,8 +115,8 @@ public class GameConsoleFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         Log.e(TAG, "onActivityCreated()");
 
-        fcvUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
-        animatorBackgroundColor = ObjectAnimator.ofInt(fcvUsedAsBorderForViewport, "backgroundColor", Color.WHITE, Color.RED);
+        frameLayoutUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
+        animatorBackgroundColor = ObjectAnimator.ofInt(frameLayoutUsedAsBorderForViewport, "backgroundColor", Color.WHITE, Color.RED);
         animatorBackgroundColor.setDuration(400L);
         animatorBackgroundColor.setEvaluator(new ArgbEvaluator());
         animatorBackgroundColor.setRepeatMode(ValueAnimator.REVERSE);
@@ -201,13 +208,94 @@ public class GameConsoleFragment extends Fragment
     public void stopBlinkingBorder() {
         if (animatorBackgroundColor.isRunning()) {
             animatorBackgroundColor.cancel();
-            fcvUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
+            frameLayoutUsedAsBorderForViewport.setBackgroundColor(COLOR_VIEWPORT_BORDER_DEFAULT);
         }
     }
 
     @Override
     public boolean isBlinkingBorderOn() {
         return animatorBackgroundColor.isRunning();
+    }
+
+    private ParticleExplosionView particleExplosionView;
+
+    @Override
+    public void addAndShowParticleExplosionView() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                particleExplosionView = new ParticleExplosionView(getContext());
+                particleExplosionView.initParticles();
+                particleExplosionView.setX(
+                        GameCamera.getInstance().convertInGameXPositionToScreenXPosition(
+                                Player.getInstance().getX()
+                        )
+                );
+                particleExplosionView.setY(
+                        GameCamera.getInstance().convertInGameYPositionToScreenYPosition(
+                                Player.getInstance().getY()
+                        )
+                );
+                particleExplosionView.setZ(1f);
+                particleExplosionView.setVisibility(View.INVISIBLE);
+
+                frameLayoutUsedAsBorderForViewport.addView(particleExplosionView,
+                        new FrameLayout.LayoutParams(
+                                (int) (Tile.WIDTH * GameCamera.getInstance().getWidthPixelToViewportRatio()),
+                                (int) (Tile.HEIGHT * GameCamera.getInstance().getHeightPixelToViewportRatio())
+                        )
+                );
+                frameLayoutUsedAsBorderForViewport.invalidate();
+
+                ObjectAnimator animatorExplosion = ObjectAnimator.ofFloat(particleExplosionView, "progress", 0.0f, 1.0f);
+                animatorExplosion.setInterpolator(new LinearInterpolator());
+                animatorExplosion.setDuration(1000L);
+                animatorExplosion.setRepeatCount(ValueAnimator.INFINITE);
+                animatorExplosion.setRepeatMode(ValueAnimator.REVERSE);
+                animatorExplosion.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                        particleExplosionView.updateProgressOfParticles(
+                                particleExplosionView.getProgress()
+                        );
+                    }
+                });
+
+                startWaitTimer(4200L, new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        Log.e(TAG, "waitTimer's onAnimationEnd()");
+
+                        particleExplosionView.setVisibility(View.INVISIBLE);
+                        frameLayoutUsedAsBorderForViewport.removeView(particleExplosionView);
+                    }
+                });
+
+                particleExplosionView.setVisibility(View.VISIBLE);
+                animatorExplosion.start();
+            }
+        });
+    }
+
+    private void startWaitTimer(long duration, AnimatorListenerAdapter animatorListenerAdapter) {
+        Log.e(TAG, "startWaitTimer()");
+        ObjectAnimator animatorDummyValue = ObjectAnimator.ofFloat(this, "dummyValue", 0f, 1f);
+        animatorDummyValue.setInterpolator(new LinearInterpolator());
+        animatorDummyValue.setDuration(duration);
+        animatorDummyValue.addListener(animatorListenerAdapter);
+        animatorDummyValue.start();
+    }
+
+    private float dummyValue = 0f;
+
+    public float getDummyValue() {
+        return dummyValue;
+    }
+
+    public void setDummyValue(float dummyValue) {
+        this.dummyValue = dummyValue;
     }
 
     private Fragment fragmentReplacingSurfaceView;
