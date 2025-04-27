@@ -25,7 +25,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 
 import java.io.Serializable;
 
-public class IDEDialogFragment extends DialogFragment {
+public class IDEDialogFragment extends DialogFragment
+        implements Serializable {
     public static final String TAG = IDEDialogFragment.class.getSimpleName();
     public static final String ARG_BUTTON_LISTENER = "buttonListener";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
@@ -140,16 +141,18 @@ public class IDEDialogFragment extends DialogFragment {
         super.onResume();
         Log.e(TAG, "onResume()");
 
-        getDialog().setCancelable(false);
+        if (getDialog() != null) {
+            getDialog().setCancelable(false);
 
-        Window window = getDialog().getWindow();
-        Display display = window.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        window.setLayout(width, (height / 2));
-        window.setGravity(Gravity.CENTER);
+            Window window = getDialog().getWindow();
+            Display display = window.getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            window.setLayout(width, (height / 2));
+            window.setGravity(Gravity.CENTER);
+        }
     }
 
     @Override

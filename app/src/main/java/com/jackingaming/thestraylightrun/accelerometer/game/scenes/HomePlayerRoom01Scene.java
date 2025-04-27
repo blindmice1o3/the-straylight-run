@@ -196,6 +196,10 @@ public class HomePlayerRoom01Scene extends Scene {
                         String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
                         if (id.equals(UniqueSolidTile.TELEVISION)) {
                             Log.e(TAG, "unique solid tile: TELEVISION");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.TELEVISION) {
+                                return false;
+                            }
+
                             pause();
 
                             boolean showToolbarOnDismiss = false;
@@ -213,6 +217,10 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                                 @Override
                                                 public void onDismiss() {
+                                                    //////////////////////////////////
+                                                    gameListener.incrementDailyLoop();
+                                                    //////////////////////////////////
+
                                                     unpause();
                                                 }
                                             });

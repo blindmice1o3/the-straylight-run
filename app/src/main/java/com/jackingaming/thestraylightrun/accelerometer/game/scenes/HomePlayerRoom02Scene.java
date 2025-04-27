@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
@@ -185,10 +187,42 @@ public class HomePlayerRoom02Scene extends Scene {
                         String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
                         if (id.equals(UniqueSolidTile.COMPUTER)) {
                             Log.e(TAG, "unique solid tile: COMPUTER");
-                            // TODO:
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.COMPUTER) {
+                                return false;
+                            }
+
+                            pause();
+
+                            DialogFragment dialogFragment = IDEDialogFragment.newInstance(
+                                    new IDEDialogFragment.ButtonListener() {
+                                        @Override
+                                        public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
+                                            Log.e(TAG, "onExecuteButtonClick()");
+
+                                            ideDialogFragment.dismiss();
+                                        }
+                                    }, new IDEDialogFragment.DismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            Log.e(TAG, "onDismiss()");
+
+                                            //////////////////////////////////
+                                            gameListener.incrementDailyLoop();
+                                            //////////////////////////////////
+
+                                            unpause();
+                                        }
+                                    });
+
+                            gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
+
                             return false;
                         } else if (id.equals(UniqueSolidTile.GAME_CONSOLE)) {
                             Log.e(TAG, "unique solid tile: GAME CONSOLE");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.GAME_CONSOLE) {
+                                return false;
+                            }
+
                             pause();
 
                             // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
@@ -207,6 +241,10 @@ public class HomePlayerRoom02Scene extends Scene {
 
                                                 @Override
                                                 public void onDismiss() {
+                                                    //////////////////////////////////
+                                                    gameListener.incrementDailyLoop();
+                                                    //////////////////////////////////
+
                                                     unpause();
                                                 }
                                             });

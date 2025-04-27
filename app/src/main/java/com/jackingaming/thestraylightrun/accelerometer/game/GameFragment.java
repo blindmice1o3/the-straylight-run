@@ -351,6 +351,16 @@ public class GameFragment extends Fragment
             public void removeImageViewOfEntityFromFrameLayout() {
                 GameFragment.this.removeImageViewOfEntityFromFrameLayout();
             }
+
+            @Override
+            public Game.DailyLoop getDailyLoop() {
+                return game.getDailyLoop();
+            }
+
+            @Override
+            public void incrementDailyLoop() {
+                game.incrementDailyLoop();
+            }
         });
 
 //        // TODO: ModelToViewMapper

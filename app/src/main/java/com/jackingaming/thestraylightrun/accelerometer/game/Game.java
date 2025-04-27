@@ -27,6 +27,42 @@ public class Game {
     public static final String TAG = Game.class.getSimpleName();
     public static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
 
+    public enum DailyLoop {
+        TELEVISION,
+//        GROUP_CHAT,
+        GAME_CONSOLE,
+        COMPUTER;
+//        JOURNAL;
+    }
+
+    private DailyLoop dailyLoop = DailyLoop.TELEVISION;
+
+    public DailyLoop getDailyLoop() {
+        return dailyLoop;
+    }
+
+    public void incrementDailyLoop() {
+        switch (dailyLoop) {
+            case TELEVISION:
+                dailyLoop = DailyLoop.GAME_CONSOLE;
+//                dailyLoop = DailyLoop.GROUP_CHAT;
+                break;
+//            case GROUP_CHAT:
+//                dailyLoop = DailyLoop.GAME_CONSOLE;
+//                break;
+            case GAME_CONSOLE:
+                dailyLoop = DailyLoop.COMPUTER;
+                break;
+            case COMPUTER:
+                dailyLoop = DailyLoop.TELEVISION;
+//                dailyLoop = DailyLoop.JOURNAL;
+                break;
+//            case JOURNAL:
+//                dailyLoop = DailyLoop.TELEVISION;
+//                break;
+        }
+    }
+
     public interface GameListener {
         void onUpdateEntity(Entity e);
 
@@ -48,6 +84,10 @@ public class Game {
         void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst);
 
         void removeImageViewOfEntityFromFrameLayout();
+
+        DailyLoop getDailyLoop();
+
+        void incrementDailyLoop();
     }
 
     private SurfaceHolder holder;
