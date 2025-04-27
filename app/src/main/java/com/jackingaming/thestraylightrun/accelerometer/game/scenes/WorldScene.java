@@ -363,6 +363,7 @@ public class WorldScene extends Scene {
                         gameListener.startParticleExplosionViewForPlayer();
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
 //                        joinParty(collided);
+                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
 //                        joinParty(collided);
                     }
