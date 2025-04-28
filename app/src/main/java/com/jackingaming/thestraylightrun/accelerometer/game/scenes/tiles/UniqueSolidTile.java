@@ -19,6 +19,7 @@ public class UniqueSolidTile extends SolidTile {
     private String id;
 
     private Paint paintCircle;
+    private float radiusCirle = 4f;
     private int xCircleNow = -1;
     private int yCircleNow = -1;
     private int widthSpriteDst;
@@ -32,19 +33,17 @@ public class UniqueSolidTile extends SolidTile {
         super(texture);
 
         this.id = id;
-
-
     }
 
     private void initCircle() {
         paintCircle = new Paint();
-        paintCircle.setColor(Color.RED);
+        paintCircle.setColor(Color.GREEN);
         paintCircle.setStyle(Paint.Style.FILL);
 
-        animatorCircleRight = ObjectAnimator.ofInt(this, "xCircleNow", xCircleNow, xCircleNow + widthSpriteDst);
-        animatorCircleDown = ObjectAnimator.ofInt(this, "yCircleNow", yCircleNow, yCircleNow + heightSpriteDst);
-        animatorCircleLeft = ObjectAnimator.ofInt(this, "xCircleNow", xCircleNow + widthSpriteDst, xCircleNow);
-        animatorCircleUp = ObjectAnimator.ofInt(this, "yCircleNow", yCircleNow + heightSpriteDst, yCircleNow);
+        animatorCircleRight = ObjectAnimator.ofInt(this, "xCircleNow", xCircleNow, (int) (xCircleNow + widthSpriteDst - radiusCirle));
+        animatorCircleDown = ObjectAnimator.ofInt(this, "yCircleNow", yCircleNow, (int) (yCircleNow + heightSpriteDst - radiusCirle));
+        animatorCircleLeft = ObjectAnimator.ofInt(this, "xCircleNow", (int) (xCircleNow + widthSpriteDst - radiusCirle), xCircleNow);
+        animatorCircleUp = ObjectAnimator.ofInt(this, "yCircleNow", (int) (yCircleNow + heightSpriteDst - radiusCirle), yCircleNow);
 
         animatorCircleRight.setDuration(1000L);
         animatorCircleDown.setDuration(1000L);
@@ -101,7 +100,7 @@ public class UniqueSolidTile extends SolidTile {
 
             initCircle();
         }
-        canvas.drawCircle(xCircleNow, yCircleNow, 4f, paintCircle);
+        canvas.drawCircle(xCircleNow, yCircleNow, radiusCirle, paintCircle);
     }
 
     public String getId() {
