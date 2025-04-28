@@ -59,6 +59,8 @@ public class HomePlayerRoom01Scene extends Scene {
 
     private List<Entity> entities;
 
+    private UniqueSolidTile tileTelevision;
+
     private HomePlayerRoom01Scene() {
     }
 
@@ -94,6 +96,16 @@ public class HomePlayerRoom01Scene extends Scene {
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
         heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+
+        for (Tile[] row : tiles) {
+            for (Tile column : row) {
+                if (column instanceof UniqueSolidTile) {
+                    if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TELEVISION)) {
+                        tileTelevision = (UniqueSolidTile) column;
+                    }
+                }
+            }
+        }
     }
 
     public void init(Player player, Resources resources, Handler handler, SoundManager soundManager,
@@ -245,6 +257,14 @@ public class HomePlayerRoom01Scene extends Scene {
     public void update(long elapsed) {
         if (paused) {
             return;
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
+            if (!tileTelevision.isAnimationRunning()) {
+                tileTelevision.startCirleAnimation();
+            }
+        } else {
+            tileTelevision.stopCirleAnimation();
         }
 
         // INPUTS

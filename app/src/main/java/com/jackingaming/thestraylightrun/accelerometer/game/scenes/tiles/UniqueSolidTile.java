@@ -49,7 +49,9 @@ public class UniqueSolidTile extends SolidTile {
         animatorCircleDown.setDuration(1000L);
         animatorCircleLeft.setDuration(1000L);
         animatorCircleUp.setDuration(1000L);
+    }
 
+    public void startCirleAnimation() {
         animatorCircleRight.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -88,6 +90,31 @@ public class UniqueSolidTile extends SolidTile {
         });
     }
 
+    public void stopCirleAnimation() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                animatorCircleRight.removeAllListeners();
+                animatorCircleDown.removeAllListeners();
+                animatorCircleLeft.removeAllListeners();
+                animatorCircleUp.removeAllListeners();
+
+                animatorCircleRight.cancel();
+                animatorCircleDown.cancel();
+                animatorCircleLeft.cancel();
+                animatorCircleUp.cancel();
+            }
+        });
+    }
+
+    public boolean isAnimationRunning() {
+        return animatorCircleRight.isRunning() ||
+                animatorCircleDown.isRunning() ||
+                animatorCircleLeft.isRunning() ||
+                animatorCircleUp.isRunning();
+    }
+
     @Override
     public void render(Canvas canvas, int x, int y, int widthSpriteDst, int heightSpriteDst) {
         super.render(canvas, x, y, widthSpriteDst, heightSpriteDst);
@@ -100,7 +127,10 @@ public class UniqueSolidTile extends SolidTile {
 
             initCircle();
         }
-        canvas.drawCircle(xCircleNow, yCircleNow, radiusCirle, paintCircle);
+
+        if (isAnimationRunning()) {
+            canvas.drawCircle(xCircleNow, yCircleNow, radiusCirle, paintCircle);
+        }
     }
 
     public String getId() {

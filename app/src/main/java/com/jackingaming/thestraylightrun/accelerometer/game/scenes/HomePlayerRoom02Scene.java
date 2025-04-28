@@ -59,6 +59,8 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private List<Entity> entities;
 
+    private UniqueSolidTile tileComputer, tileGameConsole;
+
     private HomePlayerRoom02Scene() {
     }
 
@@ -89,6 +91,18 @@ public class HomePlayerRoom02Scene extends Scene {
         heightWorldInTiles = tiles[0].length;
         widthWorldInPixels = widthWorldInTiles * widthSpriteDst;
         heightWorldInPixels = heightWorldInTiles * heightSpriteDst;
+
+        for (Tile[] row : tiles) {
+            for (Tile column : row) {
+                if (column instanceof UniqueSolidTile) {
+                    if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.COMPUTER)) {
+                        tileComputer = (UniqueSolidTile) column;
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.GAME_CONSOLE)) {
+                        tileGameConsole = (UniqueSolidTile) column;
+                    }
+                }
+            }
+        }
     }
 
     public void init(Player player, Resources resources, Handler handler, SoundManager soundManager,
@@ -269,6 +283,21 @@ public class HomePlayerRoom02Scene extends Scene {
     public void update(long elapsed) {
         if (paused) {
             return;
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
+            if (!tileComputer.isAnimationRunning()) {
+                tileComputer.startCirleAnimation();
+            }
+        } else {
+            tileComputer.stopCirleAnimation();
+        }
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
+            if (!tileGameConsole.isAnimationRunning()) {
+                tileGameConsole.startCirleAnimation();
+            }
+        } else {
+            tileGameConsole.stopCirleAnimation();
         }
 
         // INPUTS
