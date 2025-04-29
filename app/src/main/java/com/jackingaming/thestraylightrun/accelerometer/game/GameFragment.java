@@ -153,7 +153,7 @@ public class GameFragment extends Fragment
                 DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);
                 DrawerEndFragment drawerEndFragment = (DrawerEndFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_end);
                 if (drawerStartFragment != null) {
-                    drawerStartFragment.stopTypeWriterTextView();
+                    // TODO:
                 }
 
                 if (drawerEndFragment != null) {
@@ -167,13 +167,7 @@ public class GameFragment extends Fragment
         surfaceView.setListener(this);
 
         if (savedInstanceState == null) {
-            drawerStartFragment = DrawerStartFragment.newInstance(null, null, new DrawerStartFragment.DrawerStartListener() {
-                @Override
-                public void onClickTypeWriterTextView(View view, String tag) {
-                    String message = "DrawerStartFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
-                }
-            });
+            drawerStartFragment = DrawerStartFragment.newInstance(null, null);
             drawerEndFragment = DrawerEndFragment.newInstance(null, null, new DrawerEndFragment.DrawerEndListener() {
                 @Override
                 public void onClickTypeWriterTextView(View view, String tag) {

@@ -9,11 +9,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.GroupChatAdapter;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.Message;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.SlideFromBottomItemAnimator;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,16 +32,10 @@ public class DrawerStartFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_DRAWER_START_LISTENER = "drawerStartListener";
 
-    public interface DrawerStartListener extends Serializable {
-        void onClickTypeWriterTextView(View view, String tag);
-    }
-
-    private DrawerStartListener listener;
-
-    private TypeWriterTextView typeWriterTextView;
-    private String textInitial;
+    private RecyclerView rvDrawerStart;
+    private GroupChatAdapter adapter;
+    private List<Message> messages;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -55,15 +54,13 @@ public class DrawerStartFragment extends Fragment {
      * @return A new instance of fragment DrawerStartFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrawerStartFragment newInstance(String param1, String param2,
-                                                  DrawerStartListener drawerStartListener) {
+    public static DrawerStartFragment newInstance(String param1, String param2) {
         Log.e(TAG, "newInstance()");
         DrawerStartFragment fragment = new DrawerStartFragment();
 
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        args.putSerializable(ARG_DRAWER_START_LISTENER, drawerStartListener);
         fragment.setArguments(args);
 
         return fragment;
@@ -76,15 +73,7 @@ public class DrawerStartFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
-            listener = (DrawerStartListener) getArguments().getSerializable(ARG_DRAWER_START_LISTENER);
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.e(TAG, "onDetach()");
-        listener = null;
     }
 
     @Override
@@ -100,27 +89,14 @@ public class DrawerStartFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_start);
-        textInitial = (String) typeWriterTextView.getText();
+        rvDrawerStart = view.findViewById(R.id.rv_drawer_start);
 
-        typeWriterTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClickTypeWriterTextView(view, DrawerStartFragment.TAG);
-            }
-        });
-        typeWriterTextView.setTextCompletionListener(new TypeWriterTextView.TextCompletionListener() {
-            @Override
-            public void onAnimationFinish() {
-                Log.e(TAG, "onAnimationFinish()");
+        messages = new ArrayList<>();
+        messages.add(new Message("Muly", "meow?"));
 
-                // TODO:
-            }
-        });
-    }
-
-    public void stopTypeWriterTextView() {
-        typeWriterTextView.stopAnimation();
-        typeWriterTextView.setText(textInitial);
+        adapter = new GroupChatAdapter(messages);
+        rvDrawerStart.setAdapter(adapter);
+        rvDrawerStart.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvDrawerStart.setItemAnimator(new SlideFromBottomItemAnimator());
     }
 }
