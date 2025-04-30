@@ -85,6 +85,8 @@ public class GameFragment extends Fragment
 
     private AppBarLayout appBarLayout;
     private DrawerStartFragment drawerStartFragment;
+    private View drawerGrip;
+    private ObjectAnimator animatorDrawerGrip;
     private DrawerEndFragment drawerEndFragment;
     private DrawerTopFragment drawerTopFragment;
     private FrameLayout frameLayout; // displays entities.
@@ -154,6 +156,8 @@ public class GameFragment extends Fragment
                 RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START opened");
+                    drawerGrip.setVisibility(View.INVISIBLE);
+                    animatorDrawerGrip.cancel();
                 } else {
                     Log.e(TAG, "drawer END opened");
                 }
@@ -166,6 +170,8 @@ public class GameFragment extends Fragment
                 RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START closed");
+                    drawerGrip.setVisibility(View.VISIBLE);
+                    animatorDrawerGrip.start();
                 } else {
                     Log.e(TAG, "drawer END closed");
                 }
@@ -185,6 +191,13 @@ public class GameFragment extends Fragment
         frameLayout = view.findViewById(R.id.frame_layout_world);
         surfaceView = view.findViewById(R.id.surface_view_game);
         surfaceView.setListener(this);
+
+        drawerGrip = view.findViewById(R.id.drawer_grip);
+        animatorDrawerGrip = ObjectAnimator.ofFloat(drawerGrip, "alpha", 1f, 0f);
+        animatorDrawerGrip.setDuration(500L);
+        animatorDrawerGrip.setRepeatMode(ValueAnimator.REVERSE);
+        animatorDrawerGrip.setRepeatCount(ValueAnimator.INFINITE);
+        animatorDrawerGrip.start();
 
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);

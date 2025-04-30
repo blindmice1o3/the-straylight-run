@@ -31,4 +31,12 @@
 
     </androidx.drawerlayout.widget.DrawerLayout>
 
+    <View
+        android:id="@+id/drawer_grip"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:background="@drawable/drawer_grip_drawable" />
+
 </FrameLayout>
