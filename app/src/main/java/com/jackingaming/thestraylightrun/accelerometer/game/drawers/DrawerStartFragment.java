@@ -92,7 +92,7 @@ public class DrawerStartFragment extends Fragment {
         rvDrawerStart = view.findViewById(R.id.rv_drawer_start);
 
         messages = new ArrayList<>();
-        messages.add(new Message("Muly", "meow?"));
+        messages.add(new Message("Muly", "meow?", false));
 
         adapter = new GroupChatAdapter(messages);
         rvDrawerStart.setAdapter(adapter);
