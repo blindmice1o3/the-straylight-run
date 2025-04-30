@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.jackingaming.thestraylightrun.R;
@@ -147,8 +148,27 @@ public class GameFragment extends Fragment
         DrawerLayout drawerLayout = view.findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+                RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
+                if (rvDrawerStart != null) {
+                    Log.e(TAG, "drawer START opened");
+                } else {
+                    Log.e(TAG, "drawer END opened");
+                }
+            }
+
+            @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+
+                RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
+                if (rvDrawerStart != null) {
+                    Log.e(TAG, "drawer START closed");
+                } else {
+                    Log.e(TAG, "drawer END closed");
+                }
 
                 DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);
                 DrawerEndFragment drawerEndFragment = (DrawerEndFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_end);
