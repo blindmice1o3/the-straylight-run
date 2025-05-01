@@ -46,4 +46,37 @@
     <string name="robot_dialogfragment_ide">IDE</string>
 
     <string name="ide_dialogfragment_execute">execute</string>
+
+    <string-array name="names_of_sender_dialogue_array_java_loops">
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>Half-Correct</item>
+        <item>NotTrying</item>
+        <item>A-Student</item>
+        <item>HonestStruggler</item>
+        <item>Half-Correct</item>
+        <item>NotTrying</item>
+    </string-array>
+
+    <string-array name="messages_dialogue_array_java_loops">
+        <item>So loops are like checking your plants daily, right? You repeat it, same task, until harvest.</item>
+        <item>Exactly! \'for\' loops are like: \'for 60 days, give them 12 hours of light\'. Precise schedule.</item>
+        <item>Or a \'while\' loop: \'while the soil\'s still damp, don\'t water again.\'</item>
+        <item>I tried looping feeding every day. Accidentally nuked my plants with nutrients.</item>
+        <item>\'do-while\' would be like: \'flush once, then keep flushing while runoff is dark.\' Always flush at least once.</item>
+        <item>Ohhh… that helps. A \'do-while\' always acts before it checks conditions. Got it.</item>
+        <item>Loops are how you automate care. Like a watering schedule but made of code.</item>
+        <item>Can we make a loop that grows weed faster tho?</item>
+    </string-array>
+
+    <string-array name="delay_ms_dialogue_array_java_loops">
+        <item>1000</item>
+        <item>2500</item>
+        <item>4000</item>
+        <item>5500</item>
+        <item>7000</item>
+        <item>8500</item>
+        <item>10000</item>
+        <item>11500</item>
+    </string-array>
 </resources>

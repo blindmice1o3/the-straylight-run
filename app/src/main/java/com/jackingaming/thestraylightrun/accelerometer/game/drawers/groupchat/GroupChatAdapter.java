@@ -24,35 +24,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
 
             tvNameOfSender = itemView.findViewById(R.id.tv_name_of_sender);
             tvMessage = itemView.findViewById(R.id.tv_message);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    counter++;
-
-                    if (counter == 1) {
-                        int indexNewMessage = messages.size();
-                        messages.add(new Message("Mulan", "MEOW?", false));
-                        notifyItemInserted(indexNewMessage);
-                    } else if (counter == 2) {
-                        int indexNewMessage = messages.size();
-                        messages.add(new Message("Muhang", "meow", false));
-                        notifyItemInserted(indexNewMessage);
-                    } else if (counter == 3) {
-                        int indexNewMessage = messages.size();
-                        messages.add(new Message("Mom", "hello", true));
-                        notifyItemInserted(indexNewMessage);
-                    } else if (counter == 4) {
-                        int indexNewMessage = messages.size();
-                        messages.add(new Message("Apsara", "meow", false));
-                        notifyItemInserted(indexNewMessage);
-                    } else if (counter == 5) {
-                        int indexNewMessage = messages.size();
-                        messages.add(new Message("Colin", "silence", false));
-                        notifyItemInserted(indexNewMessage);
-                    }
-                }
-            });
         }
 
         public void bind(Message messageCurrent) {
@@ -66,14 +37,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
             }
 
             tvMessage.setText(message);
-        }
-
-        public TextView getTvNameOfSender() {
-            return tvNameOfSender;
-        }
-
-        public TextView getTvMessage() {
-            return tvMessage;
         }
     }
 
@@ -111,7 +74,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Message messageCurrent = messages.get(position);
-
         holder.bind(messageCurrent);
     }
 

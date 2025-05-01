@@ -158,6 +158,8 @@ public class GameFragment extends Fragment
                     Log.e(TAG, "drawer START opened");
                     drawerGrip.setVisibility(View.INVISIBLE);
                     animatorDrawerGrip.cancel();
+
+                    drawerStartFragment.startMessageQueue();
                 } else {
                     Log.e(TAG, "drawer END opened");
                 }
