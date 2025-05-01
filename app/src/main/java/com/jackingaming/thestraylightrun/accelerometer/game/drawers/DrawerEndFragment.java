@@ -1,3 +1,4 @@
+
 package com.jackingaming.thestraylightrun.accelerometer.game.drawers;
 
 import android.os.Bundle;
@@ -5,13 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 
 import java.io.Serializable;
 
@@ -30,13 +34,15 @@ public class DrawerEndFragment extends Fragment {
     private static final String ARG_DRAWER_END_LISTENER = "drawerEndListener";
 
     public interface DrawerEndListener extends Serializable {
-        void onClickTypeWriterTextView(View view, String tag);
+        void onSubmitJournalEntry(View view, String journalEntry);
     }
 
     private DrawerEndListener listener;
 
-    private TypeWriterTextView typeWriterTextView;
-    private String textInitial;
+    private LinearLayout rightDrawer;
+    private TextView tvJournalPrompt;
+    private EditText etJournalEntry;
+    private Button buttonSubmitJournal;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -100,27 +106,19 @@ public class DrawerEndFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_end);
-        textInitial = (String) typeWriterTextView.getText();
+        rightDrawer = view.findViewById(R.id.right_drawer);
+        tvJournalPrompt = view.findViewById(R.id.tv_journal_prompt);
+        etJournalEntry = view.findViewById(R.id.et_journal_entry);
+        buttonSubmitJournal = view.findViewById(R.id.button_submit_journal);
 
-        typeWriterTextView.setOnClickListener(new View.OnClickListener() {
+        buttonSubmitJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onClickTypeWriterTextView(view, DrawerEndFragment.TAG);
+                String entry = etJournalEntry.getText().toString().trim();
+                if (!entry.isEmpty()) {
+                    listener.onSubmitJournalEntry(view, entry);
+                }
             }
         });
-        typeWriterTextView.setTextCompletionListener(new TypeWriterTextView.TextCompletionListener() {
-            @Override
-            public void onAnimationFinish() {
-                Log.e(TAG, "onAnimationFinish()");
-
-                // TODO:
-            }
-        });
-    }
-
-    public void stopTypeWriterTextView() {
-        typeWriterTextView.stopAnimation();
-        typeWriterTextView.setText(textInitial);
     }
 }

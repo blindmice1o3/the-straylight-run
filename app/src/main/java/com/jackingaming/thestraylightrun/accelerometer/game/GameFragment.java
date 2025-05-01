@@ -22,10 +22,12 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -185,7 +187,7 @@ public class GameFragment extends Fragment
                 }
 
                 if (drawerEndFragment != null) {
-                    drawerEndFragment.stopTypeWriterTextView();
+                    // TODO:
                 }
             }
         });
@@ -205,9 +207,10 @@ public class GameFragment extends Fragment
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);
             drawerEndFragment = DrawerEndFragment.newInstance(null, null, new DrawerEndFragment.DrawerEndListener() {
                 @Override
-                public void onClickTypeWriterTextView(View view, String tag) {
-                    String message = "DrawerEndFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                public void onSubmitJournalEntry(View view, String journalEntry) {
+                    // TODO: Save to local sb, file, or in-memory list.
+                    Toast.makeText(getContext(), "Journal saved!", Toast.LENGTH_SHORT).show();
+                    drawerLayout.closeDrawer(GravityCompat.END);
                 }
             });
             drawerTopFragment = DrawerTopFragment.newInstance(null, null, new DrawerTopFragment.DrawerTopListener() {
