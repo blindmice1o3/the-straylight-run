@@ -87,8 +87,10 @@ public class GameFragment extends Fragment
 
     private AppBarLayout appBarLayout;
     private DrawerStartFragment drawerStartFragment;
-    private View drawerGrip;
-    private ObjectAnimator animatorDrawerGrip;
+    private View drawerGripStart;
+    private View drawerGripEnd;
+    private ObjectAnimator animatorDrawerGripStart;
+    private ObjectAnimator animatorDrawerGripEnd;
     private DrawerEndFragment drawerEndFragment;
     private DrawerTopFragment drawerTopFragment;
     private FrameLayout frameLayout; // displays entities.
@@ -145,6 +147,8 @@ public class GameFragment extends Fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
+    public static final float THRESHOLD_SLIDE_OFFSET = 0.05f;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -152,14 +156,35 @@ public class GameFragment extends Fragment
         DrawerLayout drawerLayout = view.findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+
+                // triggered when opened partially.
+                if (slideOffset >= THRESHOLD_SLIDE_OFFSET) {
+                    RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
+                    if (rvDrawerStart != null) {
+                        Log.e(TAG, "drawer START met THRESHOLD_SLIDE_OFFSET");
+                        drawerGripStart.setVisibility(View.INVISIBLE);
+                        animatorDrawerGripStart.cancel();
+                    } else {
+                        Log.e(TAG, "drawer END met THRESHOLD_SLIDE_OFFSET");
+
+                        drawerGripEnd.setVisibility(View.INVISIBLE);
+                        animatorDrawerGripEnd.cancel();
+                    }
+                } else {
+                    Log.e(TAG, "THRESHOLD_SLIDE_OFFSET not met!!!");
+                }
+            }
+
+            @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
+                // triggered when opened completely.
                 RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START opened");
-                    drawerGrip.setVisibility(View.INVISIBLE);
-                    animatorDrawerGrip.cancel();
 
                     drawerStartFragment.startMessageQueue();
                 } else {
@@ -174,10 +199,12 @@ public class GameFragment extends Fragment
                 RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START closed");
-                    drawerGrip.setVisibility(View.VISIBLE);
-                    animatorDrawerGrip.start();
+                    drawerGripStart.setVisibility(View.VISIBLE);
+                    animatorDrawerGripStart.start();
                 } else {
                     Log.e(TAG, "drawer END closed");
+                    drawerGripEnd.setVisibility(View.VISIBLE);
+                    animatorDrawerGripEnd.start();
                 }
 
                 DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);
@@ -196,12 +223,20 @@ public class GameFragment extends Fragment
         surfaceView = view.findViewById(R.id.surface_view_game);
         surfaceView.setListener(this);
 
-        drawerGrip = view.findViewById(R.id.drawer_grip);
-        animatorDrawerGrip = ObjectAnimator.ofFloat(drawerGrip, "alpha", 1f, 0f);
-        animatorDrawerGrip.setDuration(500L);
-        animatorDrawerGrip.setRepeatMode(ValueAnimator.REVERSE);
-        animatorDrawerGrip.setRepeatCount(ValueAnimator.INFINITE);
-        animatorDrawerGrip.start();
+        drawerGripStart = view.findViewById(R.id.drawer_grip_start);
+        drawerGripEnd = view.findViewById(R.id.drawer_grip_end);
+
+        animatorDrawerGripStart = ObjectAnimator.ofFloat(drawerGripStart, "alpha", 1f, 0f);
+        animatorDrawerGripStart.setDuration(500L);
+        animatorDrawerGripStart.setRepeatMode(ValueAnimator.REVERSE);
+        animatorDrawerGripStart.setRepeatCount(ValueAnimator.INFINITE);
+        animatorDrawerGripStart.start();
+
+        animatorDrawerGripEnd = ObjectAnimator.ofFloat(drawerGripEnd, "alpha", 1f, 0f);
+        animatorDrawerGripEnd.setDuration(500L);
+        animatorDrawerGripEnd.setRepeatMode(ValueAnimator.REVERSE);
+        animatorDrawerGripEnd.setRepeatCount(ValueAnimator.INFINITE);
+        animatorDrawerGripEnd.start();
 
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);

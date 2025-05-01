@@ -32,11 +32,19 @@
     </androidx.drawerlayout.widget.DrawerLayout>
 
     <View
-        android:id="@+id/drawer_grip"
+        android:id="@+id/drawer_grip_start"
         android:layout_width="8dp"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
+        android:layout_gravity="start"
         android:layout_marginStart="0dp"
+        android:background="@drawable/drawer_grip_drawable" />
+
+    <View
+        android:id="@+id/drawer_grip_end"
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:layout_marginEnd="0dp"
         android:background="@drawable/drawer_grip_drawable" />
 
 </FrameLayout>
