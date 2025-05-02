@@ -29,10 +29,10 @@ public class Game {
 
     public enum DailyLoop {
         TELEVISION,
-//        GROUP_CHAT,
+        GROUP_CHAT,
         GAME_CONSOLE,
-        COMPUTER;
-//        JOURNAL;
+        COMPUTER,
+        JOURNAL;
     }
 
     private DailyLoop dailyLoop = DailyLoop.TELEVISION;
@@ -44,22 +44,20 @@ public class Game {
     public void incrementDailyLoop() {
         switch (dailyLoop) {
             case TELEVISION:
-                dailyLoop = DailyLoop.GAME_CONSOLE;
-//                dailyLoop = DailyLoop.GROUP_CHAT;
+                dailyLoop = DailyLoop.GROUP_CHAT;
                 break;
-//            case GROUP_CHAT:
-//                dailyLoop = DailyLoop.GAME_CONSOLE;
-//                break;
+            case GROUP_CHAT:
+                dailyLoop = DailyLoop.GAME_CONSOLE;
+                break;
             case GAME_CONSOLE:
                 dailyLoop = DailyLoop.COMPUTER;
                 break;
             case COMPUTER:
-                dailyLoop = DailyLoop.TELEVISION;
-//                dailyLoop = DailyLoop.JOURNAL;
+                dailyLoop = DailyLoop.JOURNAL;
                 break;
-//            case JOURNAL:
-//                dailyLoop = DailyLoop.TELEVISION;
-//                break;
+            case JOURNAL:
+                dailyLoop = DailyLoop.TELEVISION;
+                break;
         }
     }
 
@@ -88,6 +86,14 @@ public class Game {
         DailyLoop getDailyLoop();
 
         void incrementDailyLoop();
+
+        void highlightGroupChatDrawer();
+
+        void highlightJournalDrawer();
+
+        void unhighlightGroupChatDrawer();
+
+        void unhighlightJournalDrawer();
     }
 
     private SurfaceHolder holder;
@@ -102,6 +108,16 @@ public class Game {
     private Scene sceneCurrent;
 
     private UpdateableSprite ball;
+
+    public void resetGroupChatState() {
+        HomePlayerRoom01Scene.getInstance().setGroupChatDrawerClosed(true);
+        HomePlayerRoom02Scene.getInstance().setGroupChatDrawerClosed(true);
+    }
+
+    public void resetJournalState() {
+        HomePlayerRoom01Scene.getInstance().setJournalDrawerClosed(true);
+        HomePlayerRoom02Scene.getInstance().setJournalDrawerClosed(true);
+    }
 
     public Game(SurfaceHolder holder, Resources resources, Handler handler,
                 int widthSurfaceView, int heightSurfaceView) {

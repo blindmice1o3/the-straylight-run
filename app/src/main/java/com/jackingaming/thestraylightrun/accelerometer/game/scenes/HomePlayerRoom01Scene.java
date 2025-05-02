@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.fragment.app.DialogFragment;
@@ -253,18 +254,89 @@ public class HomePlayerRoom01Scene extends Scene {
         };
     }
 
+    void highlightGroupChatDrawer() {
+        if (isGroupChatDrawerClosed) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isGroupChatDrawerClosed = false;
+                    gameListener.highlightGroupChatDrawer();
+                }
+            });
+        }
+    }
+
+    void highlightTelevisionTile() {
+        if (!tileTelevision.isAnimationRunning()) {
+            tileTelevision.startCirleAnimation();
+        }
+    }
+
+    void highlightJournalDrawer() {
+        if (isJournalDrawerClosed) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isJournalDrawerClosed = false;
+                    gameListener.highlightJournalDrawer();
+                }
+            });
+        }
+    }
+
+    void unhighlightGroupChatDrawer() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.unhighlightGroupChatDrawer();
+            }
+        });
+    }
+
+    void unhighlightTelevisionTile() {
+        if (tileTelevision.isAnimationRunning()) {
+            tileTelevision.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightJournalDrawer() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.unhighlightJournalDrawer();
+            }
+        });
+    }
+
+    private boolean isGroupChatDrawerClosed = true;
+    private boolean isJournalDrawerClosed = true;
+
     @Override
     public void update(long elapsed) {
         if (paused) {
             return;
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
-            if (!tileTelevision.isAnimationRunning()) {
-                tileTelevision.startCirleAnimation();
-            }
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
+            highlightGroupChatDrawer();
         } else {
-            tileTelevision.stopCirleAnimation();
+            unhighlightGroupChatDrawer();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
+            highlightTelevisionTile();
+        } else {
+            unhighlightTelevisionTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
+            highlightJournalDrawer();
+        } else {
+            unhighlightJournalDrawer();
         }
 
         // INPUTS
@@ -437,5 +509,13 @@ public class HomePlayerRoom01Scene extends Scene {
         for (Entity e : entities) {
             e.startAnimations();
         }
+    }
+
+    public void setGroupChatDrawerClosed(boolean groupChatDrawerClosed) {
+        isGroupChatDrawerClosed = groupChatDrawerClosed;
+    }
+
+    public void setJournalDrawerClosed(boolean journalDrawerClosed) {
+        isJournalDrawerClosed = journalDrawerClosed;
     }
 }

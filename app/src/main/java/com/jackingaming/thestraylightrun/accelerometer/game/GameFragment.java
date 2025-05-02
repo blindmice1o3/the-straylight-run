@@ -147,6 +147,27 @@ public class GameFragment extends Fragment
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
+    void highlightGroupChatDrawer() {
+        Log.e(TAG, "highlightGroupChatDrawer");
+        drawerGripStart.setVisibility(View.VISIBLE);
+        animatorDrawerGripStart.start();
+    }
+
+    void highlightJournalDrawer() {
+        drawerGripEnd.setVisibility(View.VISIBLE);
+        animatorDrawerGripEnd.start();
+    }
+
+    void unhighlightGroupChatDrawer() {
+        drawerGripStart.setVisibility(View.INVISIBLE);
+        animatorDrawerGripStart.cancel();
+    }
+
+    void unhighlightJournalDrawer() {
+        drawerGripEnd.setVisibility(View.INVISIBLE);
+        animatorDrawerGripEnd.cancel();
+    }
+
     public static final float THRESHOLD_SLIDE_OFFSET = 0.05f;
 
     @Override
@@ -164,13 +185,12 @@ public class GameFragment extends Fragment
                     RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                     if (rvDrawerStart != null) {
                         Log.e(TAG, "drawer START met THRESHOLD_SLIDE_OFFSET");
-                        drawerGripStart.setVisibility(View.INVISIBLE);
-                        animatorDrawerGripStart.cancel();
+
+                        unhighlightGroupChatDrawer();
                     } else {
                         Log.e(TAG, "drawer END met THRESHOLD_SLIDE_OFFSET");
 
-                        drawerGripEnd.setVisibility(View.INVISIBLE);
-                        animatorDrawerGripEnd.cancel();
+                        unhighlightJournalDrawer();
                     }
                 } else {
                     Log.e(TAG, "THRESHOLD_SLIDE_OFFSET not met!!!");
@@ -199,12 +219,22 @@ public class GameFragment extends Fragment
                 RecyclerView rvDrawerStart = drawerView.findViewById(R.id.rv_drawer_start);
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START closed");
-                    drawerGripStart.setVisibility(View.VISIBLE);
-                    animatorDrawerGripStart.start();
+
+                    //////////////////////////////////
+                    if (game.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
+                        game.resetGroupChatState();
+                        game.incrementDailyLoop();
+                    }
+                    //////////////////////////////////
                 } else {
                     Log.e(TAG, "drawer END closed");
-                    drawerGripEnd.setVisibility(View.VISIBLE);
-                    animatorDrawerGripEnd.start();
+
+                    //////////////////////////////////
+                    if (game.getDailyLoop() == Game.DailyLoop.JOURNAL) {
+                        game.resetJournalState();
+                        game.incrementDailyLoop();
+                    }
+                    //////////////////////////////////
                 }
 
                 DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);
@@ -226,17 +256,18 @@ public class GameFragment extends Fragment
         drawerGripStart = view.findViewById(R.id.drawer_grip_start);
         drawerGripEnd = view.findViewById(R.id.drawer_grip_end);
 
+        drawerGripStart.setVisibility(View.INVISIBLE);
+        drawerGripEnd.setVisibility(View.INVISIBLE);
+
         animatorDrawerGripStart = ObjectAnimator.ofFloat(drawerGripStart, "alpha", 1f, 0f);
         animatorDrawerGripStart.setDuration(500L);
         animatorDrawerGripStart.setRepeatMode(ValueAnimator.REVERSE);
         animatorDrawerGripStart.setRepeatCount(ValueAnimator.INFINITE);
-        animatorDrawerGripStart.start();
 
         animatorDrawerGripEnd = ObjectAnimator.ofFloat(drawerGripEnd, "alpha", 1f, 0f);
         animatorDrawerGripEnd.setDuration(500L);
         animatorDrawerGripEnd.setRepeatMode(ValueAnimator.REVERSE);
         animatorDrawerGripEnd.setRepeatCount(ValueAnimator.INFINITE);
-        animatorDrawerGripEnd.start();
 
         if (savedInstanceState == null) {
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);
@@ -334,12 +365,13 @@ public class GameFragment extends Fragment
     }
 
     private Game game;
+    private Game.GameListener gameListener;
 
     @Override
     public void onSurfaceCreated(Game game) {
         this.game = game;
 
-        game.init(soundManager, new Game.GameListener() {
+        gameListener = new Game.GameListener() {
             @Override
             public void onUpdateEntity(Entity e) {
                 ImageView ivEntity = imageViewViaEntity.get(e);
@@ -428,7 +460,29 @@ public class GameFragment extends Fragment
             public void incrementDailyLoop() {
                 game.incrementDailyLoop();
             }
-        });
+
+            @Override
+            public void highlightGroupChatDrawer() {
+                GameFragment.this.highlightGroupChatDrawer();
+            }
+
+            @Override
+            public void highlightJournalDrawer() {
+                GameFragment.this.highlightJournalDrawer();
+            }
+
+            @Override
+            public void unhighlightGroupChatDrawer() {
+                GameFragment.this.unhighlightGroupChatDrawer();
+            }
+
+            @Override
+            public void unhighlightJournalDrawer() {
+                GameFragment.this.unhighlightJournalDrawer();
+            }
+        };
+
+        game.init(soundManager, gameListener);
 
 //        // TODO: ModelToViewMapper
 //        List<Entity> entitiesToAdd = game.getSceneCurrent().getEntities();

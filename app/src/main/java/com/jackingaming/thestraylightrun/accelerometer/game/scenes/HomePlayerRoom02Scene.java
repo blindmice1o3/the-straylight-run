@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -279,25 +280,107 @@ public class HomePlayerRoom02Scene extends Scene {
         };
     }
 
+    void highlightGameConsoleTile() {
+        if (!tileGameConsole.isAnimationRunning()) {
+            tileGameConsole.startCirleAnimation();
+        }
+    }
+
+    void highlightComputerTile() {
+        if (!tileComputer.isAnimationRunning()) {
+            tileComputer.startCirleAnimation();
+        }
+    }
+
+    void highlightGroupChatDrawer() {
+        if (isGroupChatDrawerClosed) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isGroupChatDrawerClosed = false;
+                    gameListener.highlightGroupChatDrawer();
+                }
+            });
+        }
+    }
+
+    void highlightJournalDrawer() {
+        if (isJournalDrawerClosed) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    isJournalDrawerClosed = false;
+                    gameListener.highlightJournalDrawer();
+                }
+            });
+        }
+    }
+
+    void unhighlightGameConsoleTile() {
+        if (tileGameConsole.isAnimationRunning()) {
+            tileGameConsole.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightComputerTile() {
+        if (tileComputer.isAnimationRunning()) {
+            tileComputer.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightGroupChatDrawer() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.unhighlightGroupChatDrawer();
+            }
+        });
+    }
+
+    void unhighlightJournalDrawer() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                gameListener.unhighlightJournalDrawer();
+            }
+        });
+    }
+
+    private boolean isGroupChatDrawerClosed = true;
+    private boolean isJournalDrawerClosed = true;
+
     @Override
     public void update(long elapsed) {
         if (paused) {
             return;
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
-            if (!tileComputer.isAnimationRunning()) {
-                tileComputer.startCirleAnimation();
-            }
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
+            highlightGroupChatDrawer();
         } else {
-            tileComputer.stopCirleAnimation();
+            unhighlightGroupChatDrawer();
         }
+
         if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
-            if (!tileGameConsole.isAnimationRunning()) {
-                tileGameConsole.startCirleAnimation();
-            }
+            highlightGameConsoleTile();
         } else {
-            tileGameConsole.stopCirleAnimation();
+            unhighlightGameConsoleTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
+            highlightComputerTile();
+        } else {
+            unhighlightComputerTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
+            highlightJournalDrawer();
+        } else {
+            unhighlightJournalDrawer();
         }
 
         // INPUTS
@@ -470,5 +553,13 @@ public class HomePlayerRoom02Scene extends Scene {
         for (Entity e : entities) {
             e.startAnimations();
         }
+    }
+
+    public void setGroupChatDrawerClosed(boolean groupChatDrawerClosed) {
+        isGroupChatDrawerClosed = groupChatDrawerClosed;
+    }
+
+    public void setJournalDrawerClosed(boolean journalDrawerClosed) {
+        isJournalDrawerClosed = journalDrawerClosed;
     }
 }
