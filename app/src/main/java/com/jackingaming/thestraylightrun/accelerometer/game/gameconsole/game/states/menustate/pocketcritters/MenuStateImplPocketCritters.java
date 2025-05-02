@@ -12,6 +12,7 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuStateImpl;
 
 import java.util.concurrent.ExecutionException;
@@ -82,6 +83,9 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
             switch (selectedMenuItem) {
                 case CRITTER_DEX:
                     Log.d(TAG, getClass().getSimpleName() + ".interpretInput() a-button-justPressed CRITTER_DEX");
+                    //////////////////////////////////
+                    Player.getInstance().toggleForm();
+                    //////////////////////////////////
                     game.getStateManager().toggleMenuState();
                     break;
                 case BELT_LIST:

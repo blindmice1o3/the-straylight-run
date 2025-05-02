@@ -19,8 +19,27 @@ public class Player extends Creature {
 
     private Player(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
-        form = new PoohForm();
+//        form = new PoohForm();
+        form = new MotherForm(MotherForm.DAUGHTER);
         questManager = new QuestManager();
+    }
+
+    private int indexOfForm = -1;
+
+    public void toggleForm() {
+        indexOfForm++;
+        if (indexOfForm > 2) {
+            indexOfForm = 0;
+        }
+
+        if (indexOfForm == 0) {
+            form = new PoohForm();
+        } else if (indexOfForm == 1) {
+            form = new MotherForm(MotherForm.MOTHER);
+        } else if (indexOfForm == 2) {
+            form = new MotherForm(MotherForm.DAUGHTER);
+        }
+        form.init(game);
     }
 
     public static Player getInstance() {

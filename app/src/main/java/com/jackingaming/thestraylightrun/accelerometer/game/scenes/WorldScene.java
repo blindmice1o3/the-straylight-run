@@ -1113,7 +1113,7 @@ public class WorldScene extends Scene {
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    static class SpriteInitializer {
+    public static class SpriteInitializer {
         //  Battle
         private static final int WIDTH_SPRITE_SHEET_ACTUAL_BATTLE = 520;
         private static final int HEIGHT_SPRITE_SHEET_ACTUAL_BATTLE = 888;
