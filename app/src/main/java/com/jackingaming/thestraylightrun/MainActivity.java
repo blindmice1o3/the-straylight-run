@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
-import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
+import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
 import com.jackingaming.thestraylightrun.sandbox.SandboxFragment;
 import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.options_item_next_week_tonight:
                 boolean showToolbarOnDismiss = true;
                 replaceFragmentInContainerUsingCardFlipAnimations(
-                        NextWeekTonightFragment.newInstance(showToolbarOnDismiss)
+                        NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss)
                 );
                 return true;
             case R.id.options_item_game_controller:

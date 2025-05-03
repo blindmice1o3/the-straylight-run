@@ -4,18 +4,16 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 
@@ -79,6 +77,7 @@ public class VideoViewFragment extends Fragment {
         Log.i(TAG, "onViewCreated()");
 
         videoView = view.findViewById(R.id.video_view);
+        videoView.setZOrderMediaOverlay(true);
     }
 
     @Override

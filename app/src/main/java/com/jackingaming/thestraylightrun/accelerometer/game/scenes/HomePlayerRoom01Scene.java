@@ -22,7 +22,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMap
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
-import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightFragment;
+import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -216,8 +216,8 @@ public class HomePlayerRoom01Scene extends Scene {
                             pause();
 
                             boolean showToolbarOnDismiss = false;
-                            Fragment fragment = NextWeekTonightFragment.newInstance(showToolbarOnDismiss);
-                            String tag = NextWeekTonightFragment.TAG;
+                            Fragment fragment = NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
+                            String tag = NextWeekTonightEpisodesGeneratorFragment.TAG;
                             boolean canceledOnTouchOutside = true;
                             DialogFragment dialogFragment =
                                     FCVDialogFragment.newInstance(fragment, tag,
