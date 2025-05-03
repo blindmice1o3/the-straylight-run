@@ -104,8 +104,18 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         }
         String logoRepeated100Times = sb.toString();
         List<String> rowsOfLogoRepeated100Times = new ArrayList();
+        int counter = 0;
         for (int i = 0; i < 100; i++) {
-            rowsOfLogoRepeated100Times.add(logoRepeated100Times);
+            counter++;
+            if (counter > 4) {
+                counter = 1;
+            }
+
+            if (counter == 1 || counter == 2) {
+                rowsOfLogoRepeated100Times.add(logoRepeated100Times);
+            } else {
+                rowsOfLogoRepeated100Times.add("    " + logoRepeated100Times);
+            }
         }
         AnimatedTextViewAdapter adapter = new AnimatedTextViewAdapter(rowsOfLogoRepeated100Times);
 
