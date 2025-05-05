@@ -219,7 +219,7 @@ public class HomePlayerRoom02Scene extends Scene {
                                         public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
                                             Log.e(TAG, "onExecuteButtonClick()");
 
-                                            ideDialogFragment.openConsoleViewportFragment();
+//                                            ideDialogFragment.openConsoleViewportFragment();
                                         }
                                     }, new IDEDialogFragment.DismissListener() {
                                         @Override

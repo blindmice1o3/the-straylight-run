@@ -149,6 +149,8 @@ public class IDEDialogFragment extends DialogFragment
         tvExecute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                openConsoleViewportFragment();
+
                 buttonListener.onExecuteButtonClick(view, IDEDialogFragment.this);
             }
         });

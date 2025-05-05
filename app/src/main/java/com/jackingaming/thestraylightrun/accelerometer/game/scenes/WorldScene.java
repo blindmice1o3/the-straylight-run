@@ -28,6 +28,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
@@ -360,12 +361,36 @@ public class WorldScene extends Scene {
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
 //                        joinParty(collided);
-                        gameListener.startParticleExplosionViewForPlayer();
+
+                        pause();
+
+                        DialogFragment dialogFragment = IDEDialogFragment.newInstance(
+                                new IDEDialogFragment.ButtonListener() {
+                                    @Override
+                                    public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
+                                        ideDialogFragment.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
+                                        Log.e(TAG, "onExecuteButtonClick()");
+                                    }
+                                }, new IDEDialogFragment.DismissListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        Log.e(TAG, "onDismiss()");
+
+                                        unpause();
+                                    }
+                                });
+
+                        gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
 //                        joinParty(collided);
                         gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
 //                        joinParty(collided);
+                        gameListener.startParticleExplosionViewForPlayer();
                     }
                 }
             }

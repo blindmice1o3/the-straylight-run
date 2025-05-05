@@ -32,6 +32,7 @@ import java.util.List;
  */
 public class ProjectViewportFragment extends Fragment {
     public static final String TAG = ProjectViewportFragment.class.getSimpleName();
+    public static final String CLASS_NAME_MAIN = "Main";
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
     public interface ProjectViewportListener {
@@ -60,7 +61,7 @@ public class ProjectViewportFragment extends Fragment {
         // Required empty public constructor
 
         packageMain = new Package("com.megacoolcorp");
-        Class classMain = new Class("Main");
+        Class classMain = new Class(CLASS_NAME_MAIN);
         classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counter"));
         List<ClassComponent.NonAccessModifier> nonAccessModifiers = new ArrayList<>();
         nonAccessModifiers.add(ClassComponent.NonAccessModifier.STATIC);
@@ -84,6 +85,15 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "tillTile",
                 null));
         classes.add(classRobot);
+    }
+
+    public Class getClassMain() {
+        for (Class myClass : classes) {
+            if (myClass.getName().equals(CLASS_NAME_MAIN)) {
+                return myClass;
+            }
+        }
+        return null;
     }
 
     /**

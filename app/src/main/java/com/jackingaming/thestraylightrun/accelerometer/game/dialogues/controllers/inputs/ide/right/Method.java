@@ -8,6 +8,7 @@ import java.util.List;
 public class Method extends ClassComponent {
 
     private List<VariableDeclaration> argumentList;
+    private String body;
 
     public Method(AccessModifier accessModifier, List<NonAccessModifier> nonAccessModifiers, String returnType, String name, List<VariableDeclaration> argumentList) {
         super(accessModifier, nonAccessModifiers, returnType, name);
