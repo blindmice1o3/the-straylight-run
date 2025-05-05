@@ -370,11 +370,6 @@ public class WorldScene extends Scene {
                                     public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
                                         ideDialogFragment.dismiss();
                                     }
-
-                                    @Override
-                                    public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
-                                        Log.e(TAG, "onExecuteButtonClick()");
-                                    }
                                 }, new IDEDialogFragment.DismissListener() {
                                     @Override
                                     public void onDismiss() {

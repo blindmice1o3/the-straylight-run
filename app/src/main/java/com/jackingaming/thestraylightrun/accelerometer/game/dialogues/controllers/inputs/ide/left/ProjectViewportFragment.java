@@ -33,6 +33,7 @@ import java.util.List;
 public class ProjectViewportFragment extends Fragment {
     public static final String TAG = ProjectViewportFragment.class.getSimpleName();
     public static final String CLASS_NAME_MAIN = "Main";
+    public static final String METHOD_NAME_MAIN = "main";
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
     public interface ProjectViewportListener {
@@ -67,23 +68,29 @@ public class ProjectViewportFragment extends Fragment {
         nonAccessModifiers.add(ClassComponent.NonAccessModifier.STATIC);
         List<VariableDeclaration> argumentList = new ArrayList<>();
         argumentList.add(new VariableDeclaration("String[]", "args"));
+        String bodyMainMethod = "if (hope.exist()) {\n    mother.keepTrying();\n}";
         classMain.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 nonAccessModifiers,
-                "void", "main",
-                argumentList));
+                "void", METHOD_NAME_MAIN,
+                argumentList,
+                bodyMainMethod));
         classes.add(classMain);
         classes.add(new Class("Foo"));
         classes.add(new Class("Bar"));
         Class classRobot = new Class("Robot");
         classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counterTilledTile"));
+        String bodyWalkToUntilledTile = "...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "walkToUntilledTile",
-                null));
+                null,
+                bodyWalkToUntilledTile));
+        String bodyTillTile = "...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "tillTile",
-                null));
+                null,
+                bodyTillTile));
         classes.add(classRobot);
     }
 

@@ -28,6 +28,8 @@ public class ConsoleViewportFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TextView tvConsole;
+
     public ConsoleViewportFragment() {
         // Required empty public constructor
     }
@@ -70,8 +72,12 @@ public class ConsoleViewportFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tvConsole = view.findViewById(R.id.tv_console);
+        tvConsole = view.findViewById(R.id.tv_console);
         String textFiller = getString(R.string.ide_dialogfragment_console);
         tvConsole.setText(textFiller);
+    }
+
+    public void displayToConsole(String textToDisplay) {
+        tvConsole.setText(textToDisplay);
     }
 }

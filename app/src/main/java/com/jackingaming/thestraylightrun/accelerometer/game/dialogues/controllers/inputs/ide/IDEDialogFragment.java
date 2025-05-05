@@ -23,6 +23,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
 
 import java.io.Serializable;
@@ -35,8 +36,6 @@ public class IDEDialogFragment extends DialogFragment
 
     public interface ButtonListener extends Serializable {
         void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment);
-
-        void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment);
     }
 
     public interface DismissListener extends Serializable {
@@ -149,9 +148,23 @@ public class IDEDialogFragment extends DialogFragment
         tvExecute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openConsoleViewportFragment();
+                Class classMain = projectViewportFragment.getClassMain();
 
-                buttonListener.onExecuteButtonClick(view, IDEDialogFragment.this);
+                Method methodMain = null;
+                for (Method method : classMain.getMethods()) {
+                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                        methodMain = method;
+                        break;
+                    }
+                }
+
+                consoleViewportFragment.displayToConsole(
+                        methodMain.getBody()
+                );
+
+                //////////////////////////////
+                openConsoleViewportFragment();
+                //////////////////////////////
             }
         });
     }

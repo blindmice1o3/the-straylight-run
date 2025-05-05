@@ -214,13 +214,6 @@ public class HomePlayerRoom02Scene extends Scene {
                                         public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
                                             ideDialogFragment.dismiss();
                                         }
-
-                                        @Override
-                                        public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
-                                            Log.e(TAG, "onExecuteButtonClick()");
-
-//                                            ideDialogFragment.openConsoleViewportFragment();
-                                        }
                                     }, new IDEDialogFragment.DismissListener() {
                                         @Override
                                         public void onDismiss() {
