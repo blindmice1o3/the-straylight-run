@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
@@ -73,9 +74,11 @@ public class ClassEditorFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // TODO: Change to opening-TextView.
         String xOffset = "";
         StringBuilder sb = new StringBuilder();
         sb.append("public class " + classToEdit.getName() + " {\n");
+        // TODO: opening-TextView ends here.
 
         sb.append("\n");
         xOffset = "    ";
@@ -124,7 +127,7 @@ public class ClassEditorFragment extends Fragment {
                 sb.append(argumentList);
             }
             sb.append(") {\n");
-            if (method.getName().equals("main")) {
+            if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
                 sb.append("\n");
             } else {
                 sb.append(xOffset + xOffset + "...\n");

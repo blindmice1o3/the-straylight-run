@@ -31,8 +31,10 @@ public class Game {
         TELEVISION,
         GROUP_CHAT,
         GAME_CONSOLE,
+        NOTES,
         COMPUTER,
-        JOURNAL;
+        JOURNAL,
+        SLEEP_SAVE;
     }
 
     private DailyLoop dailyLoop = DailyLoop.TELEVISION;
@@ -50,12 +52,18 @@ public class Game {
                 dailyLoop = DailyLoop.GAME_CONSOLE;
                 break;
             case GAME_CONSOLE:
+                dailyLoop = DailyLoop.NOTES;
+                break;
+            case NOTES:
                 dailyLoop = DailyLoop.COMPUTER;
                 break;
             case COMPUTER:
                 dailyLoop = DailyLoop.JOURNAL;
                 break;
             case JOURNAL:
+                dailyLoop = DailyLoop.SLEEP_SAVE;
+                break;
+            case SLEEP_SAVE:
                 dailyLoop = DailyLoop.TELEVISION;
                 break;
         }

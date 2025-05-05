@@ -351,7 +351,10 @@ public class WorldScene extends Scene {
                                 dialogFragment, tag
                         );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
-//                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());;
+//                        joinParty(collided);
+                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
+                        //                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());;
 
 //                        joinParty(collided);
 
@@ -380,9 +383,6 @@ public class WorldScene extends Scene {
                         gameListener.onShowDialogFragment(
                                 dialogFragment, tag
                         );
-                    } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
-//                        joinParty(collided);
-                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_JR_TRAINER)) {
 //                        joinParty(collided);
                         gameListener.startParticleExplosionViewForPlayer();

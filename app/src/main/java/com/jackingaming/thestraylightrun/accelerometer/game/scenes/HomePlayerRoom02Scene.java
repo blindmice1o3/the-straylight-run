@@ -18,6 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.notes.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
@@ -60,7 +61,8 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private List<Entity> entities;
 
-    private UniqueSolidTile tileComputer, tileGameConsole;
+    private UniqueSolidTile tileComputer, tileGameConsole,
+            tileTableLeft, tileTableRight, tileBedTop, tileBedBottom;
 
     private HomePlayerRoom02Scene() {
     }
@@ -100,6 +102,18 @@ public class HomePlayerRoom02Scene extends Scene {
                         tileComputer = (UniqueSolidTile) column;
                     } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.GAME_CONSOLE)) {
                         tileGameConsole = (UniqueSolidTile) column;
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TABLE)) {
+                        if (tileTableLeft == null) {
+                            tileTableLeft = (UniqueSolidTile) column;
+                        } else {
+                            tileTableRight = (UniqueSolidTile) column;
+                        }
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.BED)) {
+                        if (tileBedTop == null) {
+                            tileBedTop = (UniqueSolidTile) column;
+                        } else {
+                            tileBedBottom = (UniqueSolidTile) column;
+                        }
                     }
                 }
             }
@@ -267,6 +281,50 @@ public class HomePlayerRoom02Scene extends Scene {
                             );
 
                             return false;
+                        } else if (id.equals(UniqueSolidTile.TABLE)) {
+                            Log.e(TAG, "unique solid tile: TABLE");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES) {
+                                return false;
+                            }
+
+                            pause();
+
+                            Fragment fragment = NotesViewerFragment.newInstance(null, null);
+                            String tag = NotesViewerFragment.TAG;
+                            boolean canceledOnTouchOutside = false;
+                            DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+                                    canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                    new FCVDialogFragment.LifecycleListener() {
+                                        @Override
+                                        public void onResume() {
+                                            // Intentionally blank.
+                                        }
+
+                                        @Override
+                                        public void onDismiss() {
+                                            //////////////////////////////////
+                                            gameListener.incrementDailyLoop();
+                                            //////////////////////////////////
+
+                                            unpause();
+                                        }
+                                    });
+
+                            gameListener.onShowDialogFragment(
+                                    dialogFragment, tag
+                            );
+
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.BED)) {
+                            Log.e(TAG, "unique solid tile: BED");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.SLEEP_SAVE) {
+                                return false;
+                            }
+
+                            //////////////////////////////////
+                            gameListener.incrementDailyLoop();
+                            //////////////////////////////////
+                            return false;
                         }
                     } else {
                         Log.e(TAG, "tile is NOT UniqueSolidTile");
@@ -276,6 +334,24 @@ public class HomePlayerRoom02Scene extends Scene {
                 return (isWalkableCorner1 && isWalkableCorner2);
             }
         };
+    }
+
+    void highlightTableTile() {
+        if (!tileTableLeft.isAnimationRunning()) {
+            tileTableLeft.startCirleAnimation();
+        }
+        if (!tileTableRight.isAnimationRunning()) {
+            tileTableRight.startCirleAnimation();
+        }
+    }
+
+    void highlightBedTile() {
+        if (!tileBedTop.isAnimationRunning()) {
+            tileBedTop.startCirleAnimation();
+        }
+        if (!tileBedBottom.isAnimationRunning()) {
+            tileBedBottom.startCirleAnimation();
+        }
     }
 
     void highlightGameConsoleTile() {
@@ -313,6 +389,24 @@ public class HomePlayerRoom02Scene extends Scene {
                     gameListener.highlightJournalDrawer();
                 }
             });
+        }
+    }
+
+    void unhighlightTableTile() {
+        if (tileTableLeft.isAnimationRunning()) {
+            tileTableLeft.stopCirleAnimation();
+        }
+        if (tileTableRight.isAnimationRunning()) {
+            tileTableRight.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightBedTile() {
+        if (tileBedTop.isAnimationRunning()) {
+            tileBedTop.stopCirleAnimation();
+        }
+        if (tileBedBottom.isAnimationRunning()) {
+            tileBedBottom.stopCirleAnimation();
         }
     }
 
@@ -369,6 +463,12 @@ public class HomePlayerRoom02Scene extends Scene {
             unhighlightGameConsoleTile();
         }
 
+        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES) {
+            highlightTableTile();
+        } else {
+            unhighlightTableTile();
+        }
+
         if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
             highlightComputerTile();
         } else {
@@ -379,6 +479,12 @@ public class HomePlayerRoom02Scene extends Scene {
             highlightJournalDrawer();
         } else {
             unhighlightJournalDrawer();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
+            highlightBedTile();
+        } else {
+            unhighlightBedTile();
         }
 
         // INPUTS

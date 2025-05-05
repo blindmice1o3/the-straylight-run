@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.center.ClassEditorFragment">
+    tools:context=".accelerometer.game.notes.NotesViewerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <!-- TODO: change to vertical LinearLayout that accepts (TextView+EditText+TextView). -->
-    <EditText
-        android:id="@+id/et_class"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start|top"
-        android:hint="@string/hello_blank_fragment" />
+        android:text="Hello, notes" />
 
 </FrameLayout>

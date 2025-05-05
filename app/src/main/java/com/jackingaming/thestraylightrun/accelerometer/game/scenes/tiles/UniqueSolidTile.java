@@ -15,6 +15,8 @@ public class UniqueSolidTile extends SolidTile {
     public static final String COMPUTER = "computer";
     public static final String GAME_CONSOLE = "game console";
     public static final String TELEVISION = "television";
+    public static final String TABLE = "table";
+    public static final String BED = "bed";
 
     private String id;
 

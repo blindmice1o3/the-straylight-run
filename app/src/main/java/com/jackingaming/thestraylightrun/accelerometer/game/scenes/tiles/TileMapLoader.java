@@ -117,6 +117,14 @@ public class TileMapLoader {
                 else if (tokens[((y * columns) + x) + 2].equals("5")) {
                     tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.GAME_CONSOLE, spriteTile);
                 }
+                // UniqueSolidTile (table)
+                else if (tokens[((y * columns) + x) + 2].equals("6")) {
+                    tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.TABLE, spriteTile);
+                }
+                // UniqueSolidTile (bed)
+                else if (tokens[((y * columns) + x) + 2].equals("7")) {
+                    tiles[x][y] = new UniqueSolidTile(UniqueSolidTile.BED, spriteTile);
+                }
                 // SolidTile
                 else if (tokens[((y * columns) + x) + 2].equals("1") ||
                         tokens[((y * columns) + x) + 2].equals("9")) {
