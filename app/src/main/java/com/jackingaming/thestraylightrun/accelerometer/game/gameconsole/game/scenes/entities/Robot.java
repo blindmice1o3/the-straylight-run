@@ -492,11 +492,15 @@ public class Robot extends Creature {
     private void showIDEDialogFragment(RobotDialogFragment robotDialogFragment) {
         IDEDialogFragment ideDialogFragment = IDEDialogFragment.newInstance(new IDEDialogFragment.ButtonListener() {
             @Override
+            public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
+                ideDialogFragment.dismiss();
+            }
+
+            @Override
             public void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment) {
                 Log.e(TAG, "onExecuteButtonClick()");
 
-                // TODO:
-                ideDialogFragment.dismiss();
+                ideDialogFragment.openConsoleViewportFragment();
             }
         }, new IDEDialogFragment.DismissListener() {
             @Override

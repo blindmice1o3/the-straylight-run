@@ -15,9 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.bottom.ConsoleViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
@@ -32,6 +34,8 @@ public class IDEDialogFragment extends DialogFragment
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
 
     public interface ButtonListener extends Serializable {
+        void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment);
+
         void onExecuteButtonClick(View view, IDEDialogFragment ideDialogFragment);
     }
 
@@ -42,11 +46,14 @@ public class IDEDialogFragment extends DialogFragment
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
+    private TextView tvClose;
     private TextView tvExecute;
 
     private ProjectViewportFragment projectViewportFragment;
     private MainViewportFragment mainViewportFragment;
     private StructureViewportFragment structureViewportFragment;
+    private FragmentContainerView fcvBottom;
+    private ConsoleViewportFragment consoleViewportFragment;
 
     public static IDEDialogFragment newInstance(ButtonListener buttonListener,
                                                 DismissListener dismissListener) {
@@ -89,6 +96,8 @@ public class IDEDialogFragment extends DialogFragment
                 projectViewportFragment.getMainClass()
         );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
+        consoleViewportFragment = ConsoleViewportFragment.newInstance(null, null);
+        fcvBottom = view.findViewById(R.id.fcv_bottom);
 
         projectViewportFragment.setProjectViewportListener(new ProjectViewportFragment.ProjectViewportListener() {
             @Override
@@ -123,9 +132,18 @@ public class IDEDialogFragment extends DialogFragment
         ft.add(R.id.fcv_left, projectViewportFragment);
         ft.add(R.id.fcv_center, mainViewportFragment);
         ft.add(R.id.fcv_right, structureViewportFragment);
+        ft.add(R.id.fcv_bottom, consoleViewportFragment);
         ft.commit();
 
         //////////////////////////////////////////////////////////////////////
+
+        tvClose = view.findViewById(R.id.tv_close);
+        tvClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener.onCloseButtonClicked(view, IDEDialogFragment.this);
+            }
+        });
 
         tvExecute = view.findViewById(R.id.tv_execute);
         tvExecute.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +170,24 @@ public class IDEDialogFragment extends DialogFragment
             int height = size.y;
             window.setLayout(width, (height / 2));
             window.setGravity(Gravity.CENTER);
+
+            TextView tvConsole = getView().findViewById(R.id.tv_console);
+            tvConsole.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    closeConsoleViewportFragment();
+                }
+            });
+            closeConsoleViewportFragment();
         }
+    }
+
+    private void closeConsoleViewportFragment() {
+        fcvBottom.setVisibility(View.GONE);
+    }
+
+    public void openConsoleViewportFragment() {
+        fcvBottom.setVisibility(View.VISIBLE);
     }
 
     @Override
