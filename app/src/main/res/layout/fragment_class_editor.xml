@@ -7,11 +7,28 @@
 
     <!-- TODO: Update blank fragment layout -->
     <!-- TODO: change to vertical LinearLayout that accepts (TextView+EditText+TextView). -->
-    <EditText
-        android:id="@+id/et_class"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start|top"
-        android:hint="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_class_opening"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/et_class"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="start|top"
+            android:hint="@string/hello_blank_fragment" />
+
+        <TextView
+            android:id="@+id/tv_class_closing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </FrameLayout>

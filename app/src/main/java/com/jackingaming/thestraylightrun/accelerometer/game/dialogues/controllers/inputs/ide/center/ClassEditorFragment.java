@@ -1,10 +1,16 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +32,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class ClassEditorFragment extends Fragment {
+    public static final String TAG = ClassEditorFragment.class.getSimpleName();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,6 +82,31 @@ public class ClassEditorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // TODO: Change to opening-TextView.
+        TextView tvClassOpening = view.findViewById(R.id.tv_class_opening);
+
+        Spannable keyWord = new SpannableString("public class");
+        keyWord.setSpan(new ForegroundColorSpan(Color.BLUE), 0, keyWord.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        Spannable nameClass = new SpannableString(classToEdit.getName());
+        nameClass.setSpan(new ForegroundColorSpan(Color.GREEN), 0, nameClass.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        Spannable bracketCurlyOpen = new SpannableString("{");
+        bracketCurlyOpen.setSpan(new ForegroundColorSpan(Color.BLUE), 0, bracketCurlyOpen.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        tvClassOpening.setText(keyWord);
+        tvClassOpening.append(" ");
+        tvClassOpening.append(nameClass);
+        tvClassOpening.append(" ");
+        tvClassOpening.append(bracketCurlyOpen);
+
+        /////////////////////////////////////////
+
+        TextView tvClassClosing = view.findViewById(R.id.tv_class_closing);
+
+        Spannable bracketCurlyClose = new SpannableString("}");
+        bracketCurlyClose.setSpan(new ForegroundColorSpan(Color.BLUE), 0, bracketCurlyClose.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvClassClosing.setText(bracketCurlyClose);
+
         String xOffset = "";
         StringBuilder sb = new StringBuilder();
         sb.append("public class " + classToEdit.getName() + " {\n");
