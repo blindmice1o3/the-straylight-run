@@ -6,8 +6,8 @@
     tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.center.ClassEditorFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <!-- TODO: change to vertical LinearLayout that accepts (TextView+EditText+TextView). -->
     <LinearLayout
+        android:id="@+id/ll_class"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -17,18 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/et_class"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="start|top"
-            android:hint="@string/hello_blank_fragment" />
-
-        <TextView
-            android:id="@+id/tv_class_closing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </FrameLayout>

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,13 +19,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +34,8 @@ public class ClassEditorFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private Class classToEdit;
+    private LinearLayout linearLayoutClass;
+    private LinearLayout.LayoutParams layoutParams;
     private EditText editText;
 
     public ClassEditorFragment() {
@@ -67,6 +63,12 @@ public class ClassEditorFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classToEdit = (Class) getArguments().getSerializable(ARG_CLASS);
+
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            foregroundColorSpanBlue = new ForegroundColorSpan(Color.BLUE);
+            foregroundColorSpanGreen = new ForegroundColorSpan(Color.GREEN);
+            foregroundColorSpanCyan = new ForegroundColorSpan(Color.CYAN);
         }
     }
 
@@ -77,107 +79,128 @@ public class ClassEditorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_class_editor, container, false);
     }
 
+    private ForegroundColorSpan foregroundColorSpanBlue;
+    private ForegroundColorSpan foregroundColorSpanGreen;
+    private ForegroundColorSpan foregroundColorSpanCyan;
+
+    private SpannableString convertToColoredSpannableString(String textToColor, int color) {
+        SpannableString spannableString = new SpannableString(textToColor);
+        if (color == Color.BLUE) {
+            spannableString.setSpan(foregroundColorSpanBlue, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (color == Color.GREEN) {
+            spannableString.setSpan(foregroundColorSpanGreen, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (color == Color.CYAN) {
+            spannableString.setSpan(foregroundColorSpanCyan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannableString;
+    }
+
+    private void addTextViewWithSpecifiedTextToLinearLayout(String textLineOfCode, int color) {
+        TextView textView = new TextView(getContext());
+        textView.setLayoutParams(layoutParams);
+        textView.setText(textLineOfCode);
+        textView.setTextColor(color);
+
+        linearLayoutClass.addView(textView);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // TODO: Change to opening-TextView.
+        linearLayoutClass = view.findViewById(R.id.ll_class);
+
         TextView tvClassOpening = view.findViewById(R.id.tv_class_opening);
 
-        Spannable keyWord = new SpannableString("public class");
-        keyWord.setSpan(new ForegroundColorSpan(Color.BLUE), 0, keyWord.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        Spannable nameClass = new SpannableString(classToEdit.getName());
-        nameClass.setSpan(new ForegroundColorSpan(Color.GREEN), 0, nameClass.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        Spannable bracketCurlyOpen = new SpannableString("{");
-        bracketCurlyOpen.setSpan(new ForegroundColorSpan(Color.BLUE), 0, bracketCurlyOpen.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Spannable keyWord = convertToColoredSpannableString(
+                "public class", Color.BLUE);
+        Spannable nameClass = convertToColoredSpannableString(
+                classToEdit.getName(), Color.GREEN);
+        Spannable bracketCurlyOpen = convertToColoredSpannableString(
+                "{", Color.BLUE);
 
         tvClassOpening.setText(keyWord);
         tvClassOpening.append(" ");
         tvClassOpening.append(nameClass);
         tvClassOpening.append(" ");
         tvClassOpening.append(bracketCurlyOpen);
-
         /////////////////////////////////////////
+        String xOffset = "    ";
+        addTextViewWithSpecifiedTextToLinearLayout(xOffset + "clippit says hello!", Color.RED);
+        /////////////////////////////////////////
+        // tvClassClosing
+        addTextViewWithSpecifiedTextToLinearLayout("}", Color.BLUE);
 
-        TextView tvClassClosing = view.findViewById(R.id.tv_class_closing);
-
-        Spannable bracketCurlyClose = new SpannableString("}");
-        bracketCurlyClose.setSpan(new ForegroundColorSpan(Color.BLUE), 0, bracketCurlyClose.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tvClassClosing.setText(bracketCurlyClose);
-
-        String xOffset = "";
-        StringBuilder sb = new StringBuilder();
-        sb.append("public class " + classToEdit.getName() + " {\n");
-        // TODO: opening-TextView ends here.
-
-        sb.append("\n");
-        xOffset = "    ";
-        List<Field> fields = classToEdit.getFields();
-        for (Field field : fields) {
-            sb.append(xOffset +
-                    field.getAccessModifier().name().toLowerCase() + " " +
-                    field.getType() + " " +
-                    field.getName() +
-                    ";\n");
-        }
-
-        sb.append("\n");
-        List<Method> methods = classToEdit.getMethods();
-        for (Method method : methods) {
-            String nonAccessModifiers = null;
-            if (method.getNonAccessModifiers() != null) {
-                for (ClassComponent.NonAccessModifier nonAccessModifier : method.getNonAccessModifiers()) {
-                    if (nonAccessModifiers == null) {
-                        nonAccessModifiers = (nonAccessModifier.name().toLowerCase() + " ");
-                    } else {
-                        nonAccessModifiers += (nonAccessModifier.name().toLowerCase() + " ");
-                    }
-                }
-            }
-            String argumentList = null;
-            if (method.getArgumentList() != null) {
-                for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
-                    if (argumentList != null) {
-                        argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
-                    } else {
-                        argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
-                    }
-                }
-            }
-
-            sb.append(xOffset +
-                    method.getAccessModifier().name().toLowerCase() + " ");
-            if (nonAccessModifiers != null) {
-                sb.append(nonAccessModifiers + " ");
-            }
-            sb.append(method.getType() + " " +
-                    method.getName() +
-                    " (");
-            if (argumentList != null) {
-                sb.append(argumentList);
-            }
-            sb.append(") {\n");
-            if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
-                sb.append("\n");
-            } else {
-                sb.append(xOffset + xOffset + "...\n");
-            }
-            sb.append(xOffset + "}\n");
-        }
-
-        sb.append("\n");
-        sb.append("}");
-
-        editText = view.findViewById(R.id.et_class);
-        if (sb.length() > 0) {
-            editText.setText(sb.toString());
-        } else {
-            editText.setHint(
-                    classToEdit.getName()
-            );
-        }
+//        String xOffset = "";
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("public class " + classToEdit.getName() + " {\n");
+//
+//        sb.append("\n");
+//        xOffset = "    ";
+//        List<Field> fields = classToEdit.getFields();
+//        for (Field field : fields) {
+//            sb.append(xOffset +
+//                    field.getAccessModifier().name().toLowerCase() + " " +
+//                    field.getType() + " " +
+//                    field.getName() +
+//                    ";\n");
+//        }
+//
+//        sb.append("\n");
+//        List<Method> methods = classToEdit.getMethods();
+//        for (Method method : methods) {
+//            String nonAccessModifiers = null;
+//            if (method.getNonAccessModifiers() != null) {
+//                for (ClassComponent.NonAccessModifier nonAccessModifier : method.getNonAccessModifiers()) {
+//                    if (nonAccessModifiers == null) {
+//                        nonAccessModifiers = (nonAccessModifier.name().toLowerCase() + " ");
+//                    } else {
+//                        nonAccessModifiers += (nonAccessModifier.name().toLowerCase() + " ");
+//                    }
+//                }
+//            }
+//            String argumentList = null;
+//            if (method.getArgumentList() != null) {
+//                for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
+//                    if (argumentList != null) {
+//                        argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
+//                    } else {
+//                        argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
+//                    }
+//                }
+//            }
+//
+//            sb.append(xOffset +
+//                    method.getAccessModifier().name().toLowerCase() + " ");
+//            if (nonAccessModifiers != null) {
+//                sb.append(nonAccessModifiers + " ");
+//            }
+//            sb.append(method.getType() + " " +
+//                    method.getName() +
+//                    " (");
+//            if (argumentList != null) {
+//                sb.append(argumentList);
+//            }
+//            sb.append(") {\n");
+//            if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+//                sb.append("\n");
+//            } else {
+//                sb.append(xOffset + xOffset + "...\n");
+//            }
+//            sb.append(xOffset + "}\n");
+//        }
+//
+//        sb.append("\n");
+//        sb.append("}");
+//
+//        editText = view.findViewById(R.id.et_class);
+//        if (sb.length() > 0) {
+//            editText.setText(sb.toString());
+//        } else {
+//            editText.setHint(
+//                    classToEdit.getName()
+//            );
+//        }
     }
 
     public void renameClass(Class classNew) {
