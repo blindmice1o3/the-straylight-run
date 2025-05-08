@@ -5,7 +5,7 @@ import java.util.List;
 public class Field extends ClassComponent {
     private Object value;
 
-    public Field(AccessModifier accessModifier, List<NonAccessModifier> nonAccessModifiers, String type, String name) {
+    public Field(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String type, String name) {
         super(accessModifier, nonAccessModifiers, type, name);
     }
 }

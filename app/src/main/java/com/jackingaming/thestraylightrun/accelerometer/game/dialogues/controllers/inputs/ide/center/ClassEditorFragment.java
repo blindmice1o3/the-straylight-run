@@ -6,10 +6,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +19,14 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +44,6 @@ public class ClassEditorFragment extends Fragment {
     private Class classToEdit;
     private LinearLayout linearLayoutClass;
     private LinearLayout.LayoutParams layoutParams;
-    private EditText editText;
 
     public ClassEditorFragment() {
         // Required empty public constructor
@@ -66,9 +73,12 @@ public class ClassEditorFragment extends Fragment {
 
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+            foregroundColorSpanBlack = new ForegroundColorSpan(Color.BLACK);
             foregroundColorSpanBlue = new ForegroundColorSpan(Color.BLUE);
             foregroundColorSpanGreen = new ForegroundColorSpan(Color.GREEN);
             foregroundColorSpanCyan = new ForegroundColorSpan(Color.CYAN);
+            foregroundColorSpanGray = new ForegroundColorSpan(Color.GRAY);
+            foregroundColorSpanRed = new ForegroundColorSpan(Color.RED);
         }
     }
 
@@ -79,27 +89,84 @@ public class ClassEditorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_class_editor, container, false);
     }
 
+    private ForegroundColorSpan foregroundColorSpanBlack;
     private ForegroundColorSpan foregroundColorSpanBlue;
     private ForegroundColorSpan foregroundColorSpanGreen;
     private ForegroundColorSpan foregroundColorSpanCyan;
+    private ForegroundColorSpan foregroundColorSpanGray;
+    private ForegroundColorSpan foregroundColorSpanRed;
 
     private SpannableString convertToColoredSpannableString(String textToColor, int color) {
         SpannableString spannableString = new SpannableString(textToColor);
-        if (color == Color.BLUE) {
+        if (color == Color.BLACK) {
+            spannableString.setSpan(foregroundColorSpanBlack, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (color == Color.BLUE) {
             spannableString.setSpan(foregroundColorSpanBlue, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         } else if (color == Color.GREEN) {
             spannableString.setSpan(foregroundColorSpanGreen, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         } else if (color == Color.CYAN) {
             spannableString.setSpan(foregroundColorSpanCyan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (color == Color.GRAY) {
+            spannableString.setSpan(foregroundColorSpanGray, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        } else if (color == Color.RED) {
+            spannableString.setSpan(foregroundColorSpanRed, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannableString;
     }
 
-    private void addTextViewWithSpecifiedTextToLinearLayout(String textLineOfCode, int color) {
+    private void addTextViewAsClassOrMethodClosingToLinearLayout(int indentationLevel) {
+        Spannable bracketCurlyClose = convertToColoredSpannableString(
+                "}", Color.BLACK);
+
+        TextView textViewClassOrMethodClosing = new TextView(getContext());
+        textViewClassOrMethodClosing.setLayoutParams(layoutParams);
+        for (int indent = 0; indent < indentationLevel; indent++) {
+            textViewClassOrMethodClosing.append("    ");
+        }
+
+        textViewClassOrMethodClosing.append(bracketCurlyClose);
+
+        linearLayoutClass.addView(textViewClassOrMethodClosing);
+    }
+
+    private void addTextViewAsClassOrMethodOpeningToLinearLayout(List<Spannable> spannables, int indentationLevel) {
+        TextView textViewClassOrMethodOpening = new TextView(getContext());
+        textViewClassOrMethodOpening.setLayoutParams(layoutParams);
+        for (int indent = 0; indent < indentationLevel; indent++) {
+            textViewClassOrMethodOpening.append("    ");
+        }
+
+        for (int i = 0; i < spannables.size(); i++) {
+            textViewClassOrMethodOpening.append(spannables.get(i));
+            textViewClassOrMethodOpening.append(" ");
+        }
+
+        linearLayoutClass.addView(textViewClassOrMethodOpening);
+    }
+
+    private void addTextViewAsFieldToLinearLayout(List<Spannable> spannables, int indentationLevel) {
+        TextView textViewField = new TextView(getContext());
+        textViewField.setLayoutParams(layoutParams);
+        for (int indent = 0; indent < indentationLevel; indent++) {
+            textViewField.append("    ");
+        }
+
+        for (int i = 0; i < spannables.size(); i++) {
+            textViewField.append(spannables.get(i));
+
+            if (i != spannables.size() - 1) {
+                textViewField.append(" ");
+            } else {
+                textViewField.append(";");
+            }
+        }
+
+        linearLayoutClass.addView(textViewField);
+    }
+
+    private void addTextViewAsBlankLineToLinearLayout() {
         TextView textView = new TextView(getContext());
         textView.setLayoutParams(layoutParams);
-        textView.setText(textLineOfCode);
-        textView.setTextColor(color);
 
         linearLayoutClass.addView(textView);
     }
@@ -110,26 +177,135 @@ public class ClassEditorFragment extends Fragment {
 
         linearLayoutClass = view.findViewById(R.id.ll_class);
 
-        TextView tvClassOpening = view.findViewById(R.id.tv_class_opening);
-
+        // NOTE: this approach to adding color to a line of code has
+        // a caveat... CONSECUTIVE-SAME-COLOR will NOT work when
+        // adding elements to the list.
+        ///////////CLASS-OPENING///////////////////
         Spannable keyWord = convertToColoredSpannableString(
                 "public class", Color.BLUE);
         Spannable nameClass = convertToColoredSpannableString(
                 classToEdit.getName(), Color.GREEN);
         Spannable bracketCurlyOpen = convertToColoredSpannableString(
-                "{", Color.BLUE);
+                "{", Color.BLACK);
 
-        tvClassOpening.setText(keyWord);
-        tvClassOpening.append(" ");
-        tvClassOpening.append(nameClass);
-        tvClassOpening.append(" ");
-        tvClassOpening.append(bracketCurlyOpen);
+        List<Spannable> spannablesClassOpening = new ArrayList<>();
+        spannablesClassOpening.add(keyWord);
+        spannablesClassOpening.add(nameClass);
+        spannablesClassOpening.add(bracketCurlyOpen);
+
+        addTextViewAsClassOrMethodOpeningToLinearLayout(
+                spannablesClassOpening, 0);
+        addTextViewAsBlankLineToLinearLayout();
         /////////////////////////////////////////
-        String xOffset = "    ";
-        addTextViewWithSpecifiedTextToLinearLayout(xOffset + "clippit says hello!", Color.RED);
+
+        //////////FIELDS/////////////////////////
+        List<Field> fields = classToEdit.getFields();
+        for (Field field : fields) {
+            String accessModifier = field.getAccessModifier().name().toLowerCase();
+            String type = field.getType();
+            Spannable spannableAccessModifierAndType = convertToColoredSpannableString(
+                    accessModifier + " " + type, Color.BLUE);
+
+            String name = field.getName();
+            Spannable spannableName = convertToColoredSpannableString(
+                    name, Color.GREEN);
+
+            List<Spannable> spannablesField = new ArrayList<>();
+            spannablesField.add(spannableAccessModifierAndType);
+            spannablesField.add(spannableName);
+
+            addTextViewAsFieldToLinearLayout(
+                    spannablesField, 1);
+            addTextViewAsBlankLineToLinearLayout();
+        }
         /////////////////////////////////////////
-        // tvClassClosing
-        addTextViewWithSpecifiedTextToLinearLayout("}", Color.BLUE);
+
+        /////////METHODS/////////////////////////
+        List<Method> methods = classToEdit.getMethods();
+        for (Method method : methods) {
+            String nonAccessModifiers = null;
+            if (method.getClassInterfaceAndObjectRelateds() != null) {
+                for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : method.getClassInterfaceAndObjectRelateds()) {
+                    if (nonAccessModifiers == null) {
+                        Log.e(TAG, "nonAccessModifiers NULL");
+                        nonAccessModifiers = nonAccessModifier.name().toLowerCase();
+                    } else {
+                        Log.e(TAG, "nonAccessModifiers not NULL");
+                        nonAccessModifiers += nonAccessModifier.name().toLowerCase();
+                    }
+                }
+            }
+
+            String argumentList = null;
+            if (method.getArgumentList() != null) {
+                for (VariableDeclaration variableDeclaration : method.getArgumentList()) {
+                    if (argumentList != null) {
+                        Log.e(TAG, "argumentList not NULL");
+                        argumentList += ", " + (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                    } else {
+                        Log.e(TAG, "argumentList NULL");
+                        argumentList = (variableDeclaration.getType() + " " + variableDeclaration.getName());
+                    }
+                }
+            }
+
+            List<Spannable> spannablesMethod = new ArrayList<>();
+            if (nonAccessModifiers != null) {
+                spannablesMethod.add(convertToColoredSpannableString(
+                        method.getAccessModifier().name().toLowerCase() + " " + nonAccessModifiers + " " + method.getType(),
+                        Color.BLUE));
+            } else {
+                spannablesMethod.add(convertToColoredSpannableString(
+                        method.getAccessModifier().name().toLowerCase() + " " + method.getType(),
+                        Color.BLUE));
+            }
+
+            spannablesMethod.add(convertToColoredSpannableString(
+                    method.getName(), Color.GREEN
+            ));
+            spannablesMethod.add(convertToColoredSpannableString(
+                    "(", Color.BLACK
+            ));
+
+            if (argumentList != null) {
+                spannablesMethod.add(convertToColoredSpannableString(
+                        argumentList, Color.GRAY
+                ));
+            }
+
+            spannablesMethod.add(convertToColoredSpannableString(
+                    ") {", Color.BLACK
+            ));
+            addTextViewAsClassOrMethodOpeningToLinearLayout(
+                    spannablesMethod, 1);
+            addTextViewAsBlankLineToLinearLayout();
+
+            if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                addTextViewAsBlankLineToLinearLayout();
+            } else {
+                List<Spannable> spannablesMain = new ArrayList<>();
+                spannablesMain.add(new SpannableString("..."));
+                addTextViewAsClassOrMethodOpeningToLinearLayout(
+                        spannablesMain, 2);
+            }
+
+            addTextViewAsClassOrMethodClosingToLinearLayout(1);
+            addTextViewAsBlankLineToLinearLayout();
+        }
+        /////////////////////////////////////////
+
+        ////////CLIPPIT-MESSAGE//////////////////
+        Spannable spannableClippitMessage = convertToColoredSpannableString(
+                "clippit says hello!", Color.CYAN);
+        List<Spannable> spannablesClippitMessage = new ArrayList<>();
+        spannablesClippitMessage.add(spannableClippitMessage);
+        addTextViewAsClassOrMethodOpeningToLinearLayout(spannablesClippitMessage, 1);
+        /////////////////////////////////////////
+
+        ////////CLASS-CLOSING////////////////////
+        addTextViewAsBlankLineToLinearLayout();
+        addTextViewAsClassOrMethodClosingToLinearLayout(0);
+        /////////////////////////////////////////
 
 //        String xOffset = "";
 //        StringBuilder sb = new StringBuilder();
@@ -192,23 +368,11 @@ public class ClassEditorFragment extends Fragment {
 //
 //        sb.append("\n");
 //        sb.append("}");
-//
-//        editText = view.findViewById(R.id.et_class);
-//        if (sb.length() > 0) {
-//            editText.setText(sb.toString());
-//        } else {
-//            editText.setHint(
-//                    classToEdit.getName()
-//            );
-//        }
     }
 
     public void renameClass(Class classNew) {
         classToEdit.setName(
                 classNew.getName()
-        );
-        editText.setHint(
-                classToEdit.getName()
         );
     }
 }

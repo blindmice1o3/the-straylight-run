@@ -64,8 +64,8 @@ public class ProjectViewportFragment extends Fragment {
         packageMain = new Package("com.megacoolcorp");
         Class classMain = new Class(CLASS_NAME_MAIN);
         classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counter"));
-        List<ClassComponent.NonAccessModifier> nonAccessModifiers = new ArrayList<>();
-        nonAccessModifiers.add(ClassComponent.NonAccessModifier.STATIC);
+        List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiers = new ArrayList<>();
+        nonAccessModifiers.add(ClassComponent.ClassInterfaceAndObjectRelated.STATIC);
         List<VariableDeclaration> argumentList = new ArrayList<>();
         argumentList.add(new VariableDeclaration("String[]", "args"));
         String bodyMainMethod = "if (hope.exist()) {\n    mother.keepTrying();\n}";
