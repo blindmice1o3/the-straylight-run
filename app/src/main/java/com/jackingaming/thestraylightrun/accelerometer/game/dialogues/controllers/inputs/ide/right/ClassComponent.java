@@ -8,7 +8,7 @@ import java.util.Map;
 public class ClassComponent {
     // [reserved words] categorized by functionality
     public enum DataType {
-        BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT;
+        BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, VOID;
     }
 
     public enum ControlFlow {

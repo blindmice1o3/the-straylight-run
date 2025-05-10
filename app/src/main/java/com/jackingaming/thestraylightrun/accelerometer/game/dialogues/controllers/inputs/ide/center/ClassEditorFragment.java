@@ -221,7 +221,7 @@ public class ClassEditorFragment extends Fragment {
                                     // update StructureViewportFragment.
                                     for (Field fieldFromClass : classToEdit.getFields()) {
                                         if (fieldFromClass.getName().equals(field.getName())) {
-                                            adapter.changeFieldReturnType(classToEdit, fieldFromClass, itemSelectedAsString);
+                                            adapter.changeFieldType(classToEdit, fieldFromClass, itemSelectedAsString);
                                             break;
                                         }
                                     }
@@ -325,6 +325,58 @@ public class ClassEditorFragment extends Fragment {
             tvReturnType.setText(spannableReturnType);
             tvReturnType.append(" ");
             llChild.addView(tvReturnType);
+
+            tvReturnType.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                        Log.e(TAG, "changing return type for main() is NOT allowed!!!");
+                        return;
+                    }
+
+                    String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
+                    int indexDefault = -1;
+                    for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
+                        dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
+
+                        if (returnType.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
+                            Log.e(TAG, "returnType: " + returnType);
+                            indexDefault = i;
+                            Log.e(TAG, "indexDefault: " + indexDefault);
+                        }
+                    }
+
+                    SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
+                            dataTypeAsString,
+                            indexDefault,
+                            new SpinnerDialogFragment.ItemSelectionListener() {
+                                @Override
+                                public void onDismiss() {
+                                    // TODO:
+                                }
+
+                                @Override
+                                public void onItemSelected(int indexSelected) {
+                                    String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
+
+                                    // update self.
+                                    Spannable spannableName = convertToColoredSpannableString(
+                                            itemSelectedAsString, Color.RED);
+                                    tvReturnType.setText(spannableName);
+
+                                    // update StructureViewportFragment.
+                                    for (Method methodFromClass : classToEdit.getMethods()) {
+                                        if (methodFromClass.getName().equals(method.getName())) {
+                                            adapter.changeMethodReturnType(classToEdit, methodFromClass, itemSelectedAsString);
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+
+                    spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
+                }
+            });
 
             String nameMethod = method.getName();
             Spannable spannableNameMethod = convertToColoredSpannableString(

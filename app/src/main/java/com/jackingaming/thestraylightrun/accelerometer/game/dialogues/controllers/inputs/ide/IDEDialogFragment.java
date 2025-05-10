@@ -134,11 +134,20 @@ public class IDEDialogFragment extends DialogFragment
 
         mainViewportFragment.setListener(new MainViewportFragment.MainViewportListener() {
             @Override
-            public void changeFieldReturnType(Class classWithFieldToEdit, Field fieldToEdit, String returnTypeAsString) {
-                fieldToEdit.setType(returnTypeAsString);
+            public void changeFieldType(Class classWithFieldToEdit, Field fieldToEdit, String typeAsString) {
+                fieldToEdit.setType(typeAsString);
 
                 structureViewportFragment.replaceWithNewClass(
                         ClassViewerFragment.newInstance(classWithFieldToEdit)
+                );
+            }
+
+            @Override
+            public void changeMethodReturnType(Class classWithMethodToEdit, Method methodToEdit, String typeAsString) {
+                methodToEdit.setType(typeAsString);
+
+                structureViewportFragment.replaceWithNewClass(
+                        ClassViewerFragment.newInstance(classWithMethodToEdit)
                 );
             }
 
