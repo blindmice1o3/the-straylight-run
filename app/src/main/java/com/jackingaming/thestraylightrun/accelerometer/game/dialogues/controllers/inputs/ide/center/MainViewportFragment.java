@@ -15,7 +15,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,16 @@ import java.util.List;
 public class MainViewportFragment extends Fragment {
     public static final String TAG = MainViewportFragment.class.getSimpleName();
     public static final String ARG_CLASS_MAIN = "classMain";
+
+    public interface MainViewportListener extends Serializable {
+        void onFieldRenamed(Class classWithFieldToEdit, Field fieldToEdit, String nameNew);
+    }
+
+    private MainViewportListener listener;
+
+    public void setListener(MainViewportListener listener) {
+        this.listener = listener;
+    }
 
     private List<Class> classes = new ArrayList<>();
     private ClassVP2Adapter classVP2Adapter;
@@ -92,6 +104,10 @@ public class MainViewportFragment extends Fragment {
             }
         });
         tabLayoutMediator.attach();
+    }
+
+    public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
+        listener.onFieldRenamed(classWithFieldToEdit, fieldToEdit, nameNew);
     }
 
     public void renameClass(Class classRenamed) {

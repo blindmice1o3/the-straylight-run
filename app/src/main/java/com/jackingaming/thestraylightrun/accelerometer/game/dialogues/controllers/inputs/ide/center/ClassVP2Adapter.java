@@ -5,19 +5,24 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClassVP2Adapter extends FragmentStateAdapter {
+public class ClassVP2Adapter extends FragmentStateAdapter
+        implements Serializable {
     public static final String TAG = ClassVP2Adapter.class.getSimpleName();
 
+    private Fragment fragment;
     private List<Class> classes;
     private Map<Class, Fragment> fragmentsByClass;
 
     public ClassVP2Adapter(@NonNull Fragment fragment, List<Class> classes) {
         super(fragment);
+        this.fragment = fragment;
         this.classes = classes;
         fragmentsByClass = new HashMap<>();
     }
@@ -26,10 +31,14 @@ public class ClassVP2Adapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         ClassEditorFragment classEditorFragment = ClassEditorFragment.newInstance(
-                classes.get(position)
+                this, classes.get(position)
         );
         fragmentsByClass.put(classes.get(position), classEditorFragment);
         return classEditorFragment;
+    }
+
+    public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
+        ((MainViewportFragment) fragment).renameField(classWithFieldToEdit, fieldToEdit, nameNew);
     }
 
     public void renameClass(Class classRenamed) {

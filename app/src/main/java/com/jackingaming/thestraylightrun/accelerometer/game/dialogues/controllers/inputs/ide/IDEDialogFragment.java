@@ -23,6 +23,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
 
@@ -115,8 +116,12 @@ public class IDEDialogFragment extends DialogFragment
 
             @Override
             public void onClassRenamed(Class classRenamed) {
+                // update MainViewportFragment and StructureViewportFragment.
                 mainViewportFragment.renameClass(
                         classRenamed
+                );
+                structureViewportFragment.replaceWithNewClass(
+                        ClassViewerFragment.newInstance(classRenamed)
                 );
             }
 
@@ -124,6 +129,22 @@ public class IDEDialogFragment extends DialogFragment
             public void onClassDoubleClicked(Class classDoubleClicked) {
                 Log.e(TAG, "onClassDoubleClicked");
                 mainViewportFragment.addClass(classDoubleClicked);
+            }
+        });
+
+        mainViewportFragment.setListener(new MainViewportFragment.MainViewportListener() {
+            @Override
+            public void onFieldRenamed(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
+                for (Field field : classWithFieldToEdit.getFields()) {
+                    if (field.getName().equals(fieldToEdit.getName())) {
+                        field.setName(nameNew);
+
+                        structureViewportFragment.replaceWithNewClass(
+                                ClassViewerFragment.newInstance(classWithFieldToEdit)
+                        );
+                        break;
+                    }
+                }
             }
         });
 
