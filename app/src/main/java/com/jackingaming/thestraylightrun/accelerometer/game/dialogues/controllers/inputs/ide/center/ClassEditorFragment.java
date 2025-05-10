@@ -206,8 +206,7 @@ public class ClassEditorFragment extends Fragment {
                                     name, Color.GREEN);
                             tvNameField.setText(spannableName);
 
-                            // TODO: update StructureViewportFragment
-                            // update MainViewportFragment and StructureViewportFragment.
+                            // update StructureViewportFragment.
                             for (Field field : classToEdit.getFields()) {
                                 if (field.getName().equals(nameField)) {
                                     adapter.renameField(classToEdit, field, name);
@@ -284,6 +283,34 @@ public class ClassEditorFragment extends Fragment {
             TextView tvNameMethod = new TextView(getContext());
             tvNameMethod.setLayoutParams(layoutParams);
             tvNameMethod.setText(spannableNameMethod);
+            tvNameMethod.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                        @Override
+                        public void onDismiss() {
+                            // TODO:
+                        }
+
+                        @Override
+                        public void onEnterKeyPressed(String name) {
+                            // update self.
+                            Spannable spannableName = convertToColoredSpannableString(
+                                    name, Color.GREEN);
+                            tvNameMethod.setText(spannableName);
+
+                            // update StructureViewportFragment.
+                            for (Method methodOfClass : classToEdit.getMethods()) {
+                                if (methodOfClass.getName().equals(nameMethod)) {
+                                    adapter.renameMethod(classToEdit, methodOfClass, name);
+                                }
+                            }
+                        }
+                    });
+
+                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                }
+            });
             llChild.addView(tvNameMethod);
 
             String parenthesisOpen = "(";

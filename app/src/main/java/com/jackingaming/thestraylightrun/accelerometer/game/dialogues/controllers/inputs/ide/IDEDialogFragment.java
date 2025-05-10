@@ -135,16 +135,20 @@ public class IDEDialogFragment extends DialogFragment
         mainViewportFragment.setListener(new MainViewportFragment.MainViewportListener() {
             @Override
             public void onFieldRenamed(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
-                for (Field field : classWithFieldToEdit.getFields()) {
-                    if (field.getName().equals(fieldToEdit.getName())) {
-                        field.setName(nameNew);
+                fieldToEdit.setName(nameNew);
 
-                        structureViewportFragment.replaceWithNewClass(
-                                ClassViewerFragment.newInstance(classWithFieldToEdit)
-                        );
-                        break;
-                    }
-                }
+                structureViewportFragment.replaceWithNewClass(
+                        ClassViewerFragment.newInstance(classWithFieldToEdit)
+                );
+            }
+
+            @Override
+            public void onMethodRenamed(Class classWithMethodToEdit, Method methodToEdit, String nameNew) {
+                methodToEdit.setName(nameNew);
+
+                structureViewportFragment.replaceWithNewClass(
+                        ClassViewerFragment.newInstance(classWithMethodToEdit)
+                );
             }
         });
 

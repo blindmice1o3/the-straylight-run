@@ -6,6 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -39,6 +40,10 @@ public class ClassVP2Adapter extends FragmentStateAdapter
 
     public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
         ((MainViewportFragment) fragment).renameField(classWithFieldToEdit, fieldToEdit, nameNew);
+    }
+
+    public void renameMethod(Class classWithMethodToEdit, Method methodToEdit, String name) {
+        ((MainViewportFragment) fragment).renameMethod(classWithMethodToEdit, methodToEdit, name);
     }
 
     public void renameClass(Class classRenamed) {

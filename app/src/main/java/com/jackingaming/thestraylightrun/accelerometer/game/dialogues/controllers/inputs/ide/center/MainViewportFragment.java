@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +33,8 @@ public class MainViewportFragment extends Fragment {
 
     public interface MainViewportListener extends Serializable {
         void onFieldRenamed(Class classWithFieldToEdit, Field fieldToEdit, String nameNew);
+
+        void onMethodRenamed(Class classWithMethodToEdit, Method methodToEdit, String nameNew);
     }
 
     private MainViewportListener listener;
@@ -108,6 +111,10 @@ public class MainViewportFragment extends Fragment {
 
     public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
         listener.onFieldRenamed(classWithFieldToEdit, fieldToEdit, nameNew);
+    }
+
+    public void renameMethod(Class classWithMethodToEdit, Method methodToEdit, String nameNew) {
+        listener.onMethodRenamed(classWithMethodToEdit, methodToEdit, nameNew);
     }
 
     public void renameClass(Class classRenamed) {
