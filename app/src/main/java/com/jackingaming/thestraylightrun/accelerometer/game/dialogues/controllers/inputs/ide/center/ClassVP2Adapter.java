@@ -38,6 +38,10 @@ public class ClassVP2Adapter extends FragmentStateAdapter
         return classEditorFragment;
     }
 
+    public void changeFieldReturnType(Class classWithFieldToEdit, Field fieldToEdit, String returnTypeAsString) {
+        ((MainViewportFragment) fragment).changeFieldReturnType(classWithFieldToEdit, fieldToEdit, returnTypeAsString);
+    }
+
     public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {
         ((MainViewportFragment) fragment).renameField(classWithFieldToEdit, fieldToEdit, nameNew);
     }

@@ -32,6 +32,8 @@ public class MainViewportFragment extends Fragment {
     public static final String ARG_CLASS_MAIN = "classMain";
 
     public interface MainViewportListener extends Serializable {
+        void changeFieldReturnType(Class classWithFieldToEdit, Field fieldToEdit, String returnTypeAsString);
+
         void onFieldRenamed(Class classWithFieldToEdit, Field fieldToEdit, String nameNew);
 
         void onMethodRenamed(Class classWithMethodToEdit, Method methodToEdit, String nameNew);
@@ -107,6 +109,10 @@ public class MainViewportFragment extends Fragment {
             }
         });
         tabLayoutMediator.attach();
+    }
+
+    public void changeFieldReturnType(Class classWithFieldToEdit, Field fieldToEdit, String returnTypeAsString) {
+        listener.changeFieldReturnType(classWithFieldToEdit, fieldToEdit, returnTypeAsString);
     }
 
     public void renameField(Class classWithFieldToEdit, Field fieldToEdit, String nameNew) {

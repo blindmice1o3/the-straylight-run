@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.SpinnerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
@@ -183,6 +184,53 @@ public class ClassEditorFragment extends Fragment {
             tvType.setLayoutParams(layoutParams);
             tvType.setText(spannableType);
             tvType.append(" ");
+
+            tvType.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
+                    int indexDefault = -1;
+                    for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
+                        dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
+
+                        if (type.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
+                            Log.e(TAG, "type: " + type);
+                            indexDefault = i;
+                            Log.e(TAG, "indexDefault: " + indexDefault);
+                        }
+                    }
+
+                    SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
+                            dataTypeAsString,
+                            indexDefault,
+                            new SpinnerDialogFragment.ItemSelectionListener() {
+                                @Override
+                                public void onDismiss() {
+                                    // TODO:
+                                }
+
+                                @Override
+                                public void onItemSelected(int indexSelected) {
+                                    String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
+
+                                    // update self.
+                                    Spannable spannableName = convertToColoredSpannableString(
+                                            itemSelectedAsString, Color.RED);
+                                    tvType.setText(spannableName);
+
+                                    // update StructureViewportFragment.
+                                    for (Field fieldFromClass : classToEdit.getFields()) {
+                                        if (fieldFromClass.getName().equals(field.getName())) {
+                                            adapter.changeFieldReturnType(classToEdit, fieldFromClass, itemSelectedAsString);
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+
+                    spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
+                }
+            });
 
             String nameField = field.getName();
             Spannable spannableNameField = convertToColoredSpannableString(
