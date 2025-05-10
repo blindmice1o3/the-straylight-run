@@ -6,6 +6,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -286,6 +288,11 @@ public class ClassEditorFragment extends Fragment {
             tvNameMethod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                        Log.e(TAG, "renaming main() is NOT allowed!!!");
+                        return;
+                    }
+
                     EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
                         @Override
                         public void onDismiss() {
@@ -361,15 +368,81 @@ public class ClassEditorFragment extends Fragment {
 
             linearLayoutParent.addView(llChild);
 
-
             if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
-                addTextViewAsBlankLineToLinearLayout();
+                List<String> lines = new ArrayList<>();
+                int indexLastNewLine = 0;
+                for (int i = 0; i < method.getBody().length(); i++) {
+                    if (method.getBody().substring(i, i + 1).equals("\n")) {
+                        lines.add(
+                                method.getBody().substring(indexLastNewLine, i + 1)
+                        );
+
+                        indexLastNewLine = i + 1;
+                    } else if (i == method.getBody().length() - 1) {
+                        lines.add(
+                                method.getBody().substring(indexLastNewLine, method.getBody().length())
+                        );
+                    }
+                }
+
+                StringBuilder sb = new StringBuilder();
+                for (String line : lines) {
+                    Log.e(TAG, "line: " + line);
+                    sb.append("        " + line);
+                }
+
+                TextView tvMethodBody = new TextView(getContext());
+                tvMethodBody.setLayoutParams(layoutParams);
+                tvMethodBody.setText(sb.toString());
+                linearLayoutParent.addView(tvMethodBody);
+
+                tvMethodBody.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                            @Override
+                            public void onDismiss() {
+                                // TODO:
+                            }
+
+                            @Override
+                            public void onEnterKeyPressed(String name) {
+                                // param name should actually be bodyMethodNew.
+                                method.setBody(name);
+                                tvMethodBody.setText("        " + name);
+                            }
+                        });
+
+                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                    }
+                });
             } else {
                 String ellipsisWithTwoIndents = "        ...";
                 TextView tvEllipsisWithTwoIndents = new TextView(getContext());
                 tvEllipsisWithTwoIndents.setLayoutParams(layoutParams);
                 tvEllipsisWithTwoIndents.setText(ellipsisWithTwoIndents);
                 linearLayoutParent.addView(tvEllipsisWithTwoIndents);
+
+                tvEllipsisWithTwoIndents.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                            @Override
+                            public void onDismiss() {
+                                // TODO:
+                            }
+
+                            @Override
+                            public void onEnterKeyPressed(String name) {
+                                // param name should actually be bodyMethodNew.
+                                method.setBody(name);
+                                tvEllipsisWithTwoIndents.setText("        " + name);
+                            }
+                        });
+
+                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                    }
+                });
             }
 
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
@@ -379,6 +452,7 @@ public class ClassEditorFragment extends Fragment {
 
             addTextViewAsBlankLineToLinearLayout();
         }
+
     }
 
     private void initLinesOfClassClosing() {
