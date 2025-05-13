@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_notes_viewer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".accelerometer.game.notes.NotesViewerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--
+    <ScrollView
+        android:id="@+id/sv_zoom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello, notes" />
+        android:layout_height="wrap_content">
 
+
+        <ImageView
+            android:id="@+id/iv_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:scrollbars="vertical"
+            android:src="@drawable/harvest_moon_natsume" />
+    </ScrollView>
+    -->
 </FrameLayout>
