@@ -3,6 +3,19 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string-array name="hummingbird_mother">
+        <item>if (hope.exist()) {</item>
+        <item>    mother.keepTrying();</item>
+        <item>}</item>
+    </string-array>
+
+    <string-array name="message_of_a_khmer_rouge_survivor">
+        <item>\“Don\'t forget us. And don\'t let it happen again — to anyone.\”</item>
+        <item>\“They tried to erase us. But I remembered the names. I remembered the taste of my mother\'s soup. I remembered the stories my sister whispered when we were scared. I remembered how to grow food when there was none.\”</item>
+        <item>\“Even when we had nothing, we had each other. And if you still have someone, hold them close. Feed them. Forgive them. Teach them.\”</item>
+        <item>\“Build a world where no child has to survive like we did. A world where kindness is not a weakness, but the only power worth having.\”</item>
+    </string-array>
+
     <string-array name="bug_catcher_dialogue_array">
         <item>I\'m only in this to catch a land eel!</item>
         <item>Does anyone see my bug catching net?</item>

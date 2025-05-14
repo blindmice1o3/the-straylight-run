@@ -643,6 +643,32 @@ public class SceneFarm extends Scene {
         }
     }
 
+    public void registerWaterChangeListenerForAllGrowableTile(GrowableTile.WaterChangeListener waterChangeListener) {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableTile) {
+                    ((GrowableTile) tiles[row][column]).setWaterChangeListener(
+                            waterChangeListener
+                    );
+                }
+            }
+        }
+    }
+
+    public void unregisterWaterChangeListenerForAllGrowableTile() {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableTile) {
+                    ((GrowableTile) tiles[row][column]).setWaterChangeListener(
+                            null
+                    );
+                }
+            }
+        }
+    }
+
     public void registerStateChangeListenerForAllGrowableTile(GrowableTile.StateChangeListener stateChangeListener) {
         Tile[][] tiles = tileManager.getTiles();
         for (int row = 0; row < tiles.length; row++) {

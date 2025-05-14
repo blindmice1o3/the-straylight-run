@@ -19,6 +19,16 @@ import java.util.Map;
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
+    public interface WaterChangeListener {
+        void changeToWatered();
+    }
+
+    private WaterChangeListener waterChangeListener;
+
+    public void setWaterChangeListener(WaterChangeListener waterChangeListener) {
+        this.waterChangeListener = waterChangeListener;
+    }
+
     public interface StateChangeListener {
         void changeToTilled();
     }
@@ -130,6 +140,12 @@ public class GrowableTile extends Tile {
     public void changeToWatered() {
         watered = true;
         updateImage();
+
+        if (waterChangeListener != null) {
+            waterChangeListener.changeToWatered();
+        } else {
+            Log.e(TAG, "changeToWatered() waterChangeListener == null");
+        }
     }
 
     public void changeToUnwatered() {
@@ -171,6 +187,10 @@ public class GrowableTile extends Tile {
 
     public State getState() {
         return state;
+    }
+
+    public boolean isWatered() {
+        return watered;
     }
 
     public Entity getEntity() {

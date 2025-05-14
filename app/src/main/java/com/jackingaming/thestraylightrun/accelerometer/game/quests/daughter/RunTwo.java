@@ -3,19 +3,20 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RunOne
+public class RunTwo
         implements Quest {
-    public static final String TAG = RunOne.class.getSimpleName();
-    public static final String ENTITY_REQUIREMENT_AS_STRING = Plant.TAG;
+    public static final String TAG = RunTwo.class.getSimpleName();
+    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTile";
     public static final int QUANTITY_REQUIRED = 3;
 
     private Quest.State state;
@@ -23,11 +24,11 @@ public class RunOne
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> requirementEntitiesAsString;
+    private Map<String, Integer> requirementTilesAsString;
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunOne(Game game, String[] dialogueArray) {
+    public RunTwo(Game game, String[] dialogueArray) {
         state = State.NOT_STARTED;
         this.game = game;
         this.dialogueArray = dialogueArray;
@@ -41,10 +42,10 @@ public class RunOne
     public void initRequirements() {
         requirements = new HashMap<>();
 
-        requirementEntitiesAsString = new HashMap<>();
-        requirementEntitiesAsString.put(ENTITY_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
+        requirementTilesAsString = new HashMap<>();
+        requirementTilesAsString.put(TILE_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
+        requirements.put(RequirementType.TILE, requirementTilesAsString);
     }
 
     @Override
@@ -64,7 +65,6 @@ public class RunOne
                         for (String entityAsString : entitiesRequired) {
                             int requiredNumberOfEntityAsString = requirementsAsString.get(entityAsString);
                             int currentNumberOfEntityAsString = Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString);
-                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString): " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString));
                             return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
                         }
                         break;
@@ -89,6 +89,7 @@ public class RunOne
                         for (String tileAsString : tilesRequired) {
                             int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
                             int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString): " + Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString));
                             return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
                         }
                         break;
@@ -126,7 +127,7 @@ public class RunOne
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 420);
+        rewardsAsString.put(REWARD_COINS, 4200);
     }
 
     @Override
@@ -193,11 +194,31 @@ public class RunOne
 
     @Override
     public void attachListener() {
-        // TODO:
+        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+            GrowableTile.WaterChangeListener waterChangeListener = new GrowableTile.WaterChangeListener() {
+                @Override
+                public void changeToWatered() {
+                    Player.getInstance().getQuestManager().addTileAsString(
+                            TILE_REQUIREMENT_AS_STRING);
+                    Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
+                    if (checkIfMetRequirements()) {
+                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        game.getViewportListener().addAndShowParticleExplosionView();
+                        dispenseRewards();
+                    } else {
+                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                    }
+                }
+            };
+
+            ((SceneFarm) game.getSceneManager().getCurrentScene()).registerWaterChangeListenerForAllGrowableTile(
+                    waterChangeListener
+            );
+        }
     }
 
     @Override
     public void detachListener() {
-        // TODO:
+        ((SceneFarm) game.getSceneManager().getCurrentScene()).unregisterWaterChangeListenerForAllGrowableTile();
     }
 }

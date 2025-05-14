@@ -20,6 +20,7 @@ public class RobotDialogQuest00
         implements Quest {
     public static final String TAG = RobotDialogQuest00.class.getSimpleName();
     public static final String ROBOT_REPROGRAMMER_4000 = "robotReprogrammer4000";
+    public static final String EVENT_REQUIREMENT_AS_STRING = IDEDialogFragment.TAG;
     public static final int QUANTITY_REQUIRED = 1;
 
     private Quest.State state;
@@ -46,7 +47,7 @@ public class RobotDialogQuest00
         requirements = new HashMap<>();
 
         requirementEventsAsString = new HashMap<>();
-        requirementEventsAsString.put(IDEDialogFragment.TAG, QUANTITY_REQUIRED);
+        requirementEventsAsString.put(EVENT_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
         requirements.put(RequirementType.EVENT, requirementEventsAsString);
     }
@@ -76,6 +77,7 @@ public class RobotDialogQuest00
                         for (String eventAsString : eventsRequired) {
                             int requiredNumberOfEventAsString = requirementsAsString.get(eventAsString);
                             int currentNumberOfEventAsString = Player.getInstance().getQuestManager().getNumberOfEventAsString(eventAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEventAsString(eventAsString): " + Player.getInstance().getQuestManager().getNumberOfEventAsString(eventAsString));
                             return (currentNumberOfEventAsString >= requiredNumberOfEventAsString);
                         }
                         break;
@@ -92,7 +94,6 @@ public class RobotDialogQuest00
                         for (String tileAsString : tilesRequired) {
                             int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
                             int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
-                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString): " + Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString));
                             return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
                         }
                         break;
@@ -195,8 +196,9 @@ public class RobotDialogQuest00
             Robot.DialogListener dialogListener = new Robot.DialogListener() {
                 @Override
                 public void onOpenIDEDialogFragment() {
-                    Player.getInstance().getQuestManager().addEventAsString(IDEDialogFragment.TAG);
-                    Log.e(TAG, "number of times IDEDialogFragment opened: " + Player.getInstance().getQuestManager().getNumberOfEventAsString(IDEDialogFragment.TAG));
+                    Player.getInstance().getQuestManager().addEventAsString(
+                            EVENT_REQUIREMENT_AS_STRING);
+                    Log.e(TAG, "number of times IDEDialogFragment opened: " + Player.getInstance().getQuestManager().getNumberOfEventAsString(EVENT_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                         game.getViewportListener().addAndShowParticleExplosionView();

@@ -26,6 +26,7 @@ public class SeedShopOwnerQuest00
     public static final String SHOVEL = "shovel";
     public static final String WATERING_CAN = "wateringCan";
     public static final String MYSTERY_SEEDS = "mysterySeeds";
+    public static final String ENTITY_REQUIREMENT_AS_STRING = Plant.TAG;
     public static final int QUANTITY_REQUIRED = 3;
     public static final int QUANTITY_UNDEFINED = -1;
 
@@ -53,7 +54,7 @@ public class SeedShopOwnerQuest00
         requirements = new HashMap<>();
 
         requirementEntitiesAsString = new HashMap<>();
-        requirementEntitiesAsString.put(Plant.TAG, QUANTITY_REQUIRED);
+        requirementEntitiesAsString.put(ENTITY_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
         requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
     }
@@ -212,8 +213,9 @@ public class SeedShopOwnerQuest00
             @Override
             public void sellableAdded(Sellable sellableAdded) {
                 if (sellableAdded instanceof Plant) {
-                    Player.getInstance().getQuestManager().addEntityAsString(Plant.TAG);
-                    Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(Plant.TAG));
+                    Player.getInstance().getQuestManager().addEntityAsString(
+                            ENTITY_REQUIREMENT_AS_STRING);
+                    Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                         game.getViewportListener().addAndShowParticleExplosionView();

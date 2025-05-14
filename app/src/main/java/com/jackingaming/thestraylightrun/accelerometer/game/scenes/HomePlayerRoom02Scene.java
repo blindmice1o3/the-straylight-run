@@ -293,7 +293,7 @@ public class HomePlayerRoom02Scene extends Scene {
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
-                                    canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                    canceledOnTouchOutside, 1.0f, 0.7f,
                                     new FCVDialogFragment.LifecycleListener() {
                                         @Override
                                         public void onResume() {

@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
 
 import java.util.ArrayList;
@@ -87,7 +88,12 @@ public class SeedShopDialogFragment extends DialogFragment {
 
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
         seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
+
+        String[] dialogueArrayRunTwo = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        runTwo = new RunTwo(game, dialogueArrayRunTwo);
     }
+
+    private RunTwo runTwo;
 
     private void performTrade(Item itemToTrade, Player player) {
         float priceOfItemToTrade = itemToTrade.getPrice();
@@ -188,6 +194,20 @@ public class SeedShopDialogFragment extends DialogFragment {
                         seedShopOwnerQuest00.dispenseStartingItems();
                     } else {
                         Log.e(TAG, "!wasQuestAccepted");
+                    }
+
+                    //////////////////////////////////////////////////////////
+
+                    boolean wasQuestAcceptedRunTwo =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    runTwo
+                            );
+
+                    if (wasQuestAcceptedRunTwo) {
+                        Log.e(TAG, "wasQuestAcceptedRunTwo");
+                        runTwo.dispenseStartingItems();
+                    } else {
+                        Log.e(TAG, "!wasQuestAcceptedRunTwo");
                     }
                 }
             };

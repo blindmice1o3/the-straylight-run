@@ -18,6 +18,7 @@ public class AIQuest00
         implements Quest {
     public static final String TAG = AIQuest00.class.getSimpleName();
     public static final String HONEY_POT = "honeyPot";
+    public static final String TILE_REQUIREMENT_AS_STRING = GrowableTile.State.TILLED.toString();
     public static final int QUANTITY_REQUIRED = 4200;
 
     private Quest.State state;
@@ -44,7 +45,7 @@ public class AIQuest00
         requirements = new HashMap<>();
 
         requirementTilesAsString = new HashMap<>();
-        requirementTilesAsString.put(GrowableTile.TAG, QUANTITY_REQUIRED);
+        requirementTilesAsString.put(TILE_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
         requirements.put(RequirementType.TILE, requirementTilesAsString);
     }
@@ -188,8 +189,9 @@ public class AIQuest00
             GrowableTile.StateChangeListener stateChangeListener = new GrowableTile.StateChangeListener() {
                 @Override
                 public void changeToTilled() {
-                    Player.getInstance().getQuestManager().addTileAsString(GrowableTile.TAG);
-                    Log.e(TAG, "numberOfTilledTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(GrowableTile.TAG));
+                    Player.getInstance().getQuestManager().addTileAsString(
+                            TILE_REQUIREMENT_AS_STRING);
+                    Log.e(TAG, "numberOfTilledTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                         game.getViewportListener().addAndShowParticleExplosionView();
