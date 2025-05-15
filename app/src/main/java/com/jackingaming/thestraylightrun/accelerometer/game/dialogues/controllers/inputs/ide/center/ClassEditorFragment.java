@@ -129,6 +129,21 @@ public class ClassEditorFragment extends Fragment {
     }
 
     private void initLinesOfClassOpening() {
+        // COMMENT
+        if (classToEdit.getComment() != null) {
+            LinearLayout llComment = new LinearLayout(getContext());
+            llComment.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            llComment.setOrientation(LinearLayout.HORIZONTAL);
+            String comment = classToEdit.getComment();
+            Spannable spannableComment = convertToColoredSpannableString(
+                    comment, Color.GRAY);
+            TextView tvComment = new TextView(getContext());
+            tvComment.setLayoutParams(layoutParams);
+            tvComment.setText(spannableComment);
+            llComment.addView(tvComment);
+            linearLayoutParent.addView(llComment);
+        }
+
         LinearLayout llChild = new LinearLayout(getContext());
         llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         llChild.setOrientation(LinearLayout.HORIZONTAL);
@@ -159,8 +174,6 @@ public class ClassEditorFragment extends Fragment {
         llChild.addView(tvBracketCurlyOpen);
 
         linearLayoutParent.addView(llChild);
-
-        addTextViewAsBlankLineToLinearLayout();
     }
 
     private void initLinesOfFields() {
@@ -174,7 +187,7 @@ public class ClassEditorFragment extends Fragment {
             tvIndent.setText("    ");
             llChild.addView(tvIndent);
 
-            // do NOT show AcessModifier.DEFAULT.
+            // do NOT show AccessModifier.DEFAULT.
             String accessModifier = field.getAccessModifier().name().toLowerCase();
             if (!accessModifier.equals(
                     ClassComponent.AccessModifier.DEFAULT.name().toLowerCase())) {
@@ -293,7 +306,6 @@ public class ClassEditorFragment extends Fragment {
             });
             llChild.addView(tvNameField);
 
-            // TODO: implement differentiation between value == null and value != null.
             TextView tvPostFixNameField = new TextView(getContext());
             tvPostFixNameField.setLayoutParams(layoutParams);
             if (field.getValue() == null) {
@@ -321,14 +333,40 @@ public class ClassEditorFragment extends Fragment {
             }
             llChild.addView(tvPostFixNameField);
 
-            linearLayoutParent.addView(llChild);
+            if (field.getComment() != null) {
+                String comment = field.getComment();
+                Spannable spannableComment = convertToColoredSpannableString(
+                        comment, Color.GRAY
+                );
+                TextView tvComment = new TextView(getContext());
+                tvComment.setLayoutParams(layoutParams);
+                tvComment.setText(spannableComment);
+                llChild.addView(tvComment);
+            }
 
-            addTextViewAsBlankLineToLinearLayout();
+            linearLayoutParent.addView(llChild);
         }
     }
 
     private void initLinesOfConstructors() {
         for (Constructor constructor : classToEdit.getConstructors()) {
+            addTextViewAsBlankLineToLinearLayout();
+
+            // COMMENT
+            if (constructor.getComment() != null) {
+                LinearLayout llConstructor = new LinearLayout(getContext());
+                llConstructor.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llConstructor.setOrientation(LinearLayout.HORIZONTAL);
+                String comment = "    " + constructor.getComment();
+                Spannable spannableComment = convertToColoredSpannableString(
+                        comment, Color.GRAY);
+                TextView tvComment = new TextView(getContext());
+                tvComment.setLayoutParams(layoutParams);
+                tvComment.setText(spannableComment);
+                llConstructor.addView(tvComment);
+                linearLayoutParent.addView(llConstructor);
+            }
+
             LinearLayout llChild = new LinearLayout(getContext());
             llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             llChild.setOrientation(LinearLayout.HORIZONTAL);
@@ -432,13 +470,28 @@ public class ClassEditorFragment extends Fragment {
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText("    }");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
-
-            addTextViewAsBlankLineToLinearLayout();
         }
     }
 
     private void initLinesOfMethods() {
         for (Method method : classToEdit.getMethods()) {
+            addTextViewAsBlankLineToLinearLayout();
+
+            // COMMENT
+            if (method.getComment() != null) {
+                LinearLayout llComment = new LinearLayout(getContext());
+                llComment.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llComment.setOrientation(LinearLayout.HORIZONTAL);
+                String comment = "    " + method.getComment();
+                Spannable spannableComment = convertToColoredSpannableString(
+                        comment, Color.GRAY);
+                TextView tvComment = new TextView(getContext());
+                tvComment.setLayoutParams(layoutParams);
+                tvComment.setText(spannableComment);
+                llComment.addView(tvComment);
+                linearLayoutParent.addView(llComment);
+            }
+
             LinearLayout llChild = new LinearLayout(getContext());
             llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             llChild.setOrientation(LinearLayout.HORIZONTAL);
@@ -682,8 +735,6 @@ public class ClassEditorFragment extends Fragment {
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText("    }");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
-
-            addTextViewAsBlankLineToLinearLayout();
         }
     }
 
@@ -710,13 +761,14 @@ public class ClassEditorFragment extends Fragment {
         // FIELDS
         initLinesOfFields();
 
-        // TODO: CONSTRUCTORS
+        // CONSTRUCTORS
         initLinesOfConstructors();
 
         // METHODS
         initLinesOfMethods();
 
         // CLIPPIT-MESSAGE
+        addTextViewAsBlankLineToLinearLayout();
         Spannable spannableClippitMessage = convertToColoredSpannableString(
                 "    clippit says hello!", Color.CYAN);
         TextView tvClippitMessage = new TextView(getContext());

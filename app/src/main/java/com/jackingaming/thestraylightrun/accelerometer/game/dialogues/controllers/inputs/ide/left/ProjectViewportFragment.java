@@ -61,10 +61,10 @@ public class ProjectViewportFragment extends Fragment {
 
     private Class initClassMain() {
         Class classMain = new Class(ClassComponent.AccessModifier.PUBLIC,
-                CLASS_NAME_MAIN);
+                CLASS_NAME_MAIN, null);
         classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
-                "int", "counter", null));
+                "int", "counter", null, null));
         List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersStatic = new ArrayList<>();
         nonAccessModifiersStatic.add(
                 ClassComponent.ClassInterfaceAndObjectRelated.STATIC
@@ -84,18 +84,19 @@ public class ProjectViewportFragment extends Fragment {
                 nonAccessModifiersStatic,
                 "void", METHOD_NAME_MAIN,
                 argumentListMain,
-                bodyMain));
+                bodyMain,
+                null));
         return classMain;
     }
 
     private Class initClassFoo() {
         return new Class(ClassComponent.AccessModifier.PUBLIC,
-                "Foo");
+                "Foo", null);
     }
 
     private Class initClassBar() {
         return new Class(ClassComponent.AccessModifier.PUBLIC,
-                "Bar");
+                "Bar", null);
     }
 
     private Class initClassGrowTentSystem() {
@@ -110,27 +111,27 @@ public class ProjectViewportFragment extends Fragment {
                 "            plants[i] = new Plant(\"Plant_\" + (i + 1));\n" +
                 "        }";
         Class classGrowTentSystem = new Class(ClassComponent.AccessModifier.PUBLIC,
-                "GrowTentSystem");
+                "GrowTentSystem", null);
         classGrowTentSystem.addConstructor(new Constructor(
                 ClassComponent.AccessModifier.PUBLIC,
-                argumentListGrowTentSystem, bodyGrowTentSystem));
+                argumentListGrowTentSystem, bodyGrowTentSystem, null));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "lightOn", null));
+                "boolean", "lightOn", null, null));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "int", "hour", null));
+                "int", "hour", null, null));
         List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersFinal = new ArrayList<>();
         nonAccessModifiersFinal.add(ClassComponent.ClassInterfaceAndObjectRelated.FINAL);
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 nonAccessModifiersFinal,
-                "int", "LIGHT_START", "6"));
+                "int", "LIGHT_START", "6", "  // 6 AM"));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 nonAccessModifiersFinal,
-                "int", "LIGHT_END", "18"));
+                "int", "LIGHT_END", "18", "   // 6 PM"));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "Plant[]", "plants", null));
+                "Plant[]", "plants", null, null));
         String bodyUpdateLights = "        if (hour >= LIGHT_START && hour < LIGHT_END) {\n" +
                 "            lightOn = true;\n" +
                 "        } else {\n" +
@@ -140,7 +141,8 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "void", "updateLights",
                 null,
-                bodyUpdateLights));
+                bodyUpdateLights,
+                null));
         String bodySimulateHour = "        updateLights();\n" +
                 "        for (Plant p : plants) {\n" +
                 "            p.dryOut();\n" +
@@ -153,7 +155,8 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "void", "simulateHour",
                 null,
-                bodySimulateHour));
+                bodySimulateHour,
+                null));
         String bodyDebugStatus = "        System.out.println(\"HOUR: \" + hour + \" | LIGHT ON: \" + lightOn);\n" +
                 "        for (Plant p : plants) {\n" +
                 "            p.printStatus();\n" +
@@ -162,27 +165,28 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "void", "debugStatus",
                 null,
-                bodyDebugStatus));
+                bodyDebugStatus,
+                null));
         return classGrowTentSystem;
     }
 
     private Class initClassPlant() {
         Class classPlant = new Class(ClassComponent.AccessModifier.PUBLIC,
-                "Plant");
+                "Plant", null);
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "String", "name", null));
+                "String", "name", null, null));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "double", "moisture", null));
+                "double", "moisture", null, " // 0.0 to 1.0"));
         List<VariableDeclaration> argumentListPlant = new ArrayList<>();
         argumentListPlant.add(
                 new VariableDeclaration("String", "name")
         );
         String bodyPlant = "        this.name = name;\n" +
-                "        this.moisture = 0.6;";
+                "        this.moisture = 0.6; // starts healthy";
         classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
-                argumentListPlant, bodyPlant));
+                argumentListPlant, bodyPlant, null));
         String bodyDryOut = "        moisture -= 0.05;\n" +
                 "        if (moisture < 0.0) {\n" +
                 "            moisture = 0.0;\n" +
@@ -191,13 +195,15 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "void", "dryOut",
                 null,
-                bodyDryOut));
+                bodyDryOut,
+                null));
         String bodyNeedsWater = "        return moisture < 0.3;";
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "boolean", "needsWater",
                 null,
-                bodyNeedsWater));
+                bodyNeedsWater,
+                null));
         String bodyWater = "        moisture += 0.4;\n" +
                 "        if (moisture > 1.0) {\n" +
                 "            moisture = 1.0;\n" +
@@ -206,34 +212,38 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "void", "water",
                 null,
-                bodyWater));
+                bodyWater,
+                null));
         String bodyPrintStatus = "        System.out.println(name + \" - Moisture: \" + moisture);";
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "printStatus",
                 null,
-                bodyPrintStatus));
+                bodyPrintStatus,
+                null));
         return classPlant;
     }
 
     private Class initClassRobot() {
         Class classRobot = new Class(ClassComponent.AccessModifier.PUBLIC,
-                "Robot");
+                "Robot", null);
         classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
-                "int", "counterTilledTile", null));
+                "int", "counterTilledTile", null, null));
         String bodyWalkToUntilledTile = "...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "walkToUntilledTile",
                 null,
-                bodyWalkToUntilledTile));
+                bodyWalkToUntilledTile,
+                null));
         String bodyTillTile = "...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "tillTile",
                 null,
-                bodyTillTile));
+                bodyTillTile,
+                null));
         return classRobot;
     }
 
@@ -329,7 +339,7 @@ public class ProjectViewportFragment extends Fragment {
             @Override
             public boolean onLongClick(View view) {
                 addClass(new Class(ClassComponent.AccessModifier.PUBLIC,
-                        "DEFAULT"));
+                        "DEFAULT", null));
                 return true;
             }
         });

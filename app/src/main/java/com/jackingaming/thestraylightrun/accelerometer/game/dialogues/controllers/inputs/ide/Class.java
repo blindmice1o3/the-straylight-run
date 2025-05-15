@@ -13,13 +13,15 @@ public class Class
         implements Serializable {
     private ClassComponent.AccessModifier accessModifier;
     private String name;
+    private String comment;
     private List<Constructor> constructors;
     private List<Field> fields;
     private List<Method> methods;
 
-    public Class(ClassComponent.AccessModifier accessModifier, String name) {
+    public Class(ClassComponent.AccessModifier accessModifier, String name, String comment) {
         this.accessModifier = accessModifier;
         this.name = name;
+        this.comment = comment;
         constructors = new ArrayList<>();
         fields = new ArrayList<>();
         methods = new ArrayList<>();
@@ -53,6 +55,10 @@ public class Class
 
     public String getName() {
         return name;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public List<Constructor> getConstructors() {

@@ -10,8 +10,8 @@ public class Constructor extends ClassComponent {
     private List<VariableDeclaration> argumentList;
     private String body;
 
-    public Constructor(AccessModifier accessModifier, List<VariableDeclaration> argumentList, String body) {
-        super(accessModifier, null, null, null);
+    public Constructor(AccessModifier accessModifier, List<VariableDeclaration> argumentList, String body, String comment) {
+        super(accessModifier, null, null, null, comment);
         this.argumentList = new ArrayList<>();
         if (argumentList != null) {
             this.argumentList.addAll(argumentList);

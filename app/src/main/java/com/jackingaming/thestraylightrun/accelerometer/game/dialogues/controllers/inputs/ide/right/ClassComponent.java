@@ -104,14 +104,16 @@ public class ClassComponent {
     private List<ClassInterfaceAndObjectRelated> classInterfaceAndObjectRelateds;
     private String type;
     private String name;
+    private String comment;
 
     public ClassComponent(AccessModifier accessModifier,
                           List<ClassInterfaceAndObjectRelated> classInterfaceAndObjectRelateds,
-                          String type, String name) {
+                          String type, String name, String comment) {
         this.accessModifier = accessModifier;
         this.classInterfaceAndObjectRelateds = classInterfaceAndObjectRelateds;
         this.type = type;
         this.name = name;
+        this.comment = comment;
     }
 
     public AccessModifier getAccessModifier() {
@@ -136,5 +138,9 @@ public class ClassComponent {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getComment() {
+        return comment;
     }
 }
