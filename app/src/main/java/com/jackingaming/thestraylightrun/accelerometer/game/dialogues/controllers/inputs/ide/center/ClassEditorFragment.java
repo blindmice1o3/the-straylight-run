@@ -448,6 +448,7 @@ public class ClassEditorFragment extends Fragment {
             tvIndent.setText("    ");
             llChild.addView(tvIndent);
 
+            // ACCESS-MODIFIERS
             String accessModifier = method.getAccessModifier().name().toLowerCase();
             Spannable spannableAccessModifier = convertToColoredSpannableString(
                     accessModifier, Color.BLUE);
@@ -457,6 +458,7 @@ public class ClassEditorFragment extends Fragment {
             tvAccessModifier.append(" ");
             llChild.addView(tvAccessModifier);
 
+            // NON-ACCESS-MODIFIERS
             if (method.getClassInterfaceAndObjectRelateds() != null) {
                 for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : method.getClassInterfaceAndObjectRelateds()) {
                     String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
@@ -471,10 +473,10 @@ public class ClassEditorFragment extends Fragment {
                 }
             }
 
+            // RETURN-TYPE
             String returnType = method.getType();
             Spannable spannableReturnType = convertToColoredSpannableString(
                     returnType, Color.RED);
-
             TextView tvReturnType = new TextView(getContext());
             tvReturnType.setLayoutParams(layoutParams);
             tvReturnType.setText(spannableReturnType);
@@ -533,6 +535,7 @@ public class ClassEditorFragment extends Fragment {
                 }
             });
 
+            // NAME
             String nameMethod = method.getName();
             Spannable spannableNameMethod = convertToColoredSpannableString(
                     nameMethod, Color.GREEN);
@@ -574,12 +577,14 @@ public class ClassEditorFragment extends Fragment {
             });
             llChild.addView(tvNameMethod);
 
+            // SEPARATOR OF NAME AND ARGUMENT-LIST
             String parenthesisOpen = "(";
             TextView tvParenthesisOpen = new TextView(getContext());
             tvParenthesisOpen.setLayoutParams(layoutParams);
             tvParenthesisOpen.setText(parenthesisOpen);
             llChild.addView(tvParenthesisOpen);
 
+            // ARGUMENT-LIST
             if (method.getArgumentList() != null) {
                 List<VariableDeclaration> argumentList = method.getArgumentList();
                 for (int i = 0; i < argumentList.size(); i++) {
@@ -614,6 +619,7 @@ public class ClassEditorFragment extends Fragment {
                 }
             }
 
+            // SEPARATOR OF ARGUMENT-LIST AND BODY
             String parenthesisClose = ") {";
             TextView tvParenthesisClose = new TextView(getContext());
             tvParenthesisClose.setLayoutParams(layoutParams);
@@ -622,83 +628,56 @@ public class ClassEditorFragment extends Fragment {
 
             linearLayoutParent.addView(llChild);
 
-            if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
-                List<String> lines = new ArrayList<>();
-                int indexLastNewLine = 0;
-                for (int i = 0; i < method.getBody().length(); i++) {
-                    if (method.getBody().substring(i, i + 1).equals("\n")) {
-                        lines.add(
-                                method.getBody().substring(indexLastNewLine, i + 1)
-                        );
+            // BODY
+            List<String> lines = new ArrayList<>();
+            int indexLastNewLine = 0;
+            for (int i = 0; i < method.getBody().length(); i++) {
+                if (method.getBody().substring(i, i + 1).equals("\n")) {
+                    lines.add(
+                            method.getBody().substring(indexLastNewLine, i + 1)
+                    );
 
-                        indexLastNewLine = i + 1;
-                    } else if (i == method.getBody().length() - 1) {
-                        lines.add(
-                                method.getBody().substring(indexLastNewLine, method.getBody().length())
-                        );
-                    }
+                    indexLastNewLine = i + 1;
+                } else if (i == method.getBody().length() - 1) {
+                    lines.add(
+                            method.getBody().substring(indexLastNewLine, method.getBody().length())
+                    );
                 }
-
-                StringBuilder sb = new StringBuilder();
-                for (String line : lines) {
-                    Log.e(TAG, "line: " + line);
-                    sb.append("        " + line);
-                }
-
-                TextView tvMethodBody = new TextView(getContext());
-                tvMethodBody.setLayoutParams(layoutParams);
-                tvMethodBody.setText(sb.toString());
-                linearLayoutParent.addView(tvMethodBody);
-
-                tvMethodBody.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-                            @Override
-                            public void onDismiss() {
-                                // TODO:
-                            }
-
-                            @Override
-                            public void onEnterKeyPressed(String name) {
-                                // param name should actually be bodyMethodNew.
-                                method.setBody(name);
-                                tvMethodBody.setText("        " + name);
-                            }
-                        });
-
-                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
-                    }
-                });
-            } else {
-                String ellipsisWithTwoIndents = "        ...";
-                TextView tvEllipsisWithTwoIndents = new TextView(getContext());
-                tvEllipsisWithTwoIndents.setLayoutParams(layoutParams);
-                tvEllipsisWithTwoIndents.setText(ellipsisWithTwoIndents);
-                linearLayoutParent.addView(tvEllipsisWithTwoIndents);
-
-                tvEllipsisWithTwoIndents.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-                            @Override
-                            public void onDismiss() {
-                                // TODO:
-                            }
-
-                            @Override
-                            public void onEnterKeyPressed(String name) {
-                                // param name should actually be bodyMethodNew.
-                                method.setBody(name);
-                                tvEllipsisWithTwoIndents.setText("        " + name);
-                            }
-                        });
-
-                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
-                    }
-                });
             }
 
+            StringBuilder sb = new StringBuilder();
+            for (String line : lines) {
+                Log.e(TAG, "line: " + line);
+                sb.append("        " + line);
+            }
+
+            TextView tvMethodBody = new TextView(getContext());
+            tvMethodBody.setLayoutParams(layoutParams);
+            tvMethodBody.setText(sb.toString());
+            linearLayoutParent.addView(tvMethodBody);
+
+            tvMethodBody.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                        @Override
+                        public void onDismiss() {
+                            // TODO:
+                        }
+
+                        @Override
+                        public void onEnterKeyPressed(String name) {
+                            // param name should actually be bodyMethodNew.
+                            method.setBody(name);
+                            tvMethodBody.setText("        " + name);
+                        }
+                    });
+
+                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                }
+            });
+
+            // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText("    }");
