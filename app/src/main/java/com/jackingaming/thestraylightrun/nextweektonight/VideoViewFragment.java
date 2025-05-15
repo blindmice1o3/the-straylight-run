@@ -20,13 +20,10 @@ import com.jackingaming.thestraylightrun.R;
 public class VideoViewFragment extends Fragment {
     public static final String TAG = VideoViewFragment.class.getSimpleName();
     private static final String POSITION_CURRENT = "position_current";
-    private static final String VIDEO_SAMPLE = "vid_20230603_145112";
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_RESOURCE_ID_VIDEO = "resourceIdVideo";
 
-    private String mParam1;
-    private String mParam2;
+    private String resourceIdVideo;
 
     private VideoView videoView;
     private int positionCurrent;
@@ -35,12 +32,16 @@ public class VideoViewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static VideoViewFragment newInstance(String param1, String param2) {
+    public static VideoViewFragment newInstance(String resourceIdVideo) {
         VideoViewFragment fragment = new VideoViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_RESOURCE_ID_VIDEO, resourceIdVideo);
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static VideoViewFragment newInstance(String arg1, String arg2) {
+        VideoViewFragment fragment = new VideoViewFragment();
         return fragment;
     }
 
@@ -50,8 +51,7 @@ public class VideoViewFragment extends Fragment {
         Log.i(TAG, "onCreate()");
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            resourceIdVideo = getArguments().getString(ARG_RESOURCE_ID_VIDEO);
         }
 
         if (savedInstanceState != null) {
@@ -85,7 +85,7 @@ public class VideoViewFragment extends Fragment {
         super.onStart();
         Log.i(TAG, "onStart()");
 
-        initializePlayer();
+        initializePlayer(resourceIdVideo);
     }
 
     @Override
@@ -128,10 +128,10 @@ public class VideoViewFragment extends Fragment {
                 "/raw/" + nameMedia);
     }
 
-    private void initializePlayer() {
+    private void initializePlayer(String nameMedia) {
         Log.i(TAG, "initializePlayer()");
 
-        Uri videoUri = getMedia((VIDEO_SAMPLE));
+        Uri videoUri = (nameMedia != null) ? getMedia(nameMedia) : getMedia("pxl_20250429_193429506");
         videoView.setVideoURI(videoUri);
 
         if (positionCurrent > 0) {

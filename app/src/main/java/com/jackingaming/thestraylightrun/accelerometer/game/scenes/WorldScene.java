@@ -33,7 +33,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.notes.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
@@ -354,29 +353,29 @@ public class WorldScene extends Scene {
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_YOUNGSTER)) {
 //                        joinParty(collided);
 
-//                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
+                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());
 
-                        Fragment fragment = NotesViewerFragment.newInstance(null, null);
-                        String tag = NotesViewerFragment.TAG;
-                        boolean canceledOnTouchOutside = false;
-                        DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
-                                canceledOnTouchOutside, 1.0f, 0.7f,
-                                new FCVDialogFragment.LifecycleListener() {
-                                    @Override
-                                    public void onResume() {
-                                        // Intentionally blank.
-                                    }
-
-                                    @Override
-                                    public void onDismiss() {
-                                        // Intentionally blank.
-                                    }
-                                });
-
-
-                        gameListener.onShowDialogFragment(
-                                dialogFragment, tag
-                        );
+//                        Fragment fragment = NotesViewerFragment.newInstance(null, null);
+//                        String tag = NotesViewerFragment.TAG;
+//                        boolean canceledOnTouchOutside = false;
+//                        DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+//                                canceledOnTouchOutside, 1.0f, 0.7f,
+//                                new FCVDialogFragment.LifecycleListener() {
+//                                    @Override
+//                                    public void onResume() {
+//                                        // Intentionally blank.
+//                                    }
+//
+//                                    @Override
+//                                    public void onDismiss() {
+//                                        // Intentionally blank.
+//                                    }
+//                                });
+//
+//
+//                        gameListener.onShowDialogFragment(
+//                                dialogFragment, tag
+//                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS02)) {
                         //                        gameListener.onChangeScene(HomePlayerRoom01Scene.getInstance());;
 

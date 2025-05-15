@@ -1,34 +1,41 @@
 package com.jackingaming.thestraylightrun.nextweektonight;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 
 public class ImageViewFragment extends Fragment {
     public static final String TAG = ImageViewFragment.class.getSimpleName();
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_RESOURCE_ID_IMAGE = "resourceIdImage";
 
-    private String mParam1;
-    private String mParam2;
+    private int resourceIdImage = -1;
+
+    private ImageView imageView;
 
     public ImageViewFragment() {
         // Required empty public constructor
     }
 
-    public static ImageViewFragment newInstance(String param1, String param2) {
+    public static ImageViewFragment newInstance(int resourceIdImage) {
         ImageViewFragment fragment = new ImageViewFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_RESOURCE_ID_IMAGE, resourceIdImage);
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ImageViewFragment newInstance(String arg1, String arg2) {
+        ImageViewFragment fragment = new ImageViewFragment();
         return fragment;
     }
 
@@ -36,8 +43,7 @@ public class ImageViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            resourceIdImage = getArguments().getInt(ARG_RESOURCE_ID_IMAGE);
         }
     }
 
@@ -45,5 +51,18 @@ public class ImageViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_image_view, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        imageView = view.findViewById(R.id.image_view);
+
+        int resourceIdToUse = (resourceIdImage != -1) ?
+                resourceIdImage :
+                R.drawable.harvest_moon_natsume;
+        Drawable drawable = getResources().getDrawable(resourceIdToUse);
+        imageView.setImageDrawable(drawable);
     }
 }

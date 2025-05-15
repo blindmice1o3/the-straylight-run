@@ -33,11 +33,15 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     public static final String TAG = NextWeekTonightEpisodesGeneratorFragment.class.getSimpleName();
     public static final String ARG_SHOW_TOOLBAR_ON_DISMISS = "showToolbarOnDismiss";
     private static final String VIDEO_SAMPLE = "pxl_20250429_193429506";
+    private static final String RESOURCE_ID_VIDEO = "vid_20230603_145112";
+    private static final int RESOURCE_ID_DRAWABLE = R.drawable.corgi_crusade_editted;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private boolean showToolbarOnDismiss;
+    private List resourceIDs;
+    private int indexResourceIDs;
 
     private FrameLayout frameLayoutParent;
     private RecyclerView recyclerView;
@@ -72,6 +76,18 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 
         if (getArguments() != null) {
             showToolbarOnDismiss = getArguments().getBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS);
+
+            resourceIDs = new ArrayList();
+            resourceIDs.add(VIDEO_SAMPLE);
+            resourceIDs.add(RESOURCE_ID_DRAWABLE);
+            resourceIDs.add(VIDEO_SAMPLE);
+            resourceIDs.add(RESOURCE_ID_DRAWABLE);
+            resourceIDs.add(VIDEO_SAMPLE);
+            resourceIDs.add(RESOURCE_ID_DRAWABLE);
+            resourceIDs.add(VIDEO_SAMPLE);
+            resourceIDs.add(RESOURCE_ID_DRAWABLE);
+
+            indexResourceIDs = 0;
         }
     }
 
@@ -90,8 +106,20 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VideoViewFragment videoViewFragment = VideoViewFragment.newInstance(null, null);
-                replaceFragmentInContainer(videoViewFragment);
+                indexResourceIDs++;
+                if (indexResourceIDs > resourceIDs.size() - 1) {
+                    indexResourceIDs = 0;
+                }
+
+                if (resourceIDs.get(indexResourceIDs) instanceof String) {
+                    String resourceIdVideo = (String) resourceIDs.get(indexResourceIDs);
+                    VideoViewFragment videoViewFragment = VideoViewFragment.newInstance(resourceIdVideo);
+                    replaceFragmentInContainer(videoViewFragment);
+                } else {
+                    int resourceIdImage = (int) (resourceIDs.get(indexResourceIDs));
+                    ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(resourceIdImage);
+                    replaceFragmentInContainer(imageViewFragment);
+                }
             }
         });
 
@@ -125,7 +153,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 
         if (getChildFragmentManager().findFragmentById(R.id.fcv_presentation_box) == null) {
             Log.i(TAG, "NO fragment in presentation box");
-            ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(null, null);
+            ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(-1);
             replaceFragmentInContainer(imageViewFragment);
         } else {
             Log.i(TAG, "YES fragment in presentation box");
@@ -208,7 +236,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     private void initializePlayer() {
         Log.i(TAG, "initializePlayer()");
 
-        Uri videoUri = getMedia((VIDEO_SAMPLE));
+        Uri videoUri = getMedia(VIDEO_SAMPLE);
         videoViewHost.setVideoURI(videoUri);
         // Skipping to 1 shows the first frame of the video.
         videoViewHost.seekTo(1);
