@@ -19,6 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Package;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Constructor;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
@@ -62,25 +63,46 @@ public class ProjectViewportFragment extends Fragment {
         // Required empty public constructor
 
         packageMain = new Package("com.megacoolcorp");
-        Class classMain = new Class(CLASS_NAME_MAIN);
+        Class classMain = new Class(ClassComponent.AccessModifier.PUBLIC,
+                CLASS_NAME_MAIN);
         classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
                 "int", "counter", null));
         List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersStatic = new ArrayList<>();
-        nonAccessModifiersStatic.add(ClassComponent.ClassInterfaceAndObjectRelated.STATIC);
-        List<VariableDeclaration> argumentList = new ArrayList<>();
-        argumentList.add(new VariableDeclaration("String[]", "args"));
-        String bodyMainMethod = "if (hope.exist()) {\n    mother.keepTrying();\n}";
+        nonAccessModifiersStatic.add(
+                ClassComponent.ClassInterfaceAndObjectRelated.STATIC
+        );
+        List<VariableDeclaration> argumentListMain = new ArrayList<>();
+        argumentListMain.add(
+                new VariableDeclaration("String[]", "args")
+        );
+        String bodyMain = "if (hope.exist()) {\n    mother.keepTrying();\n}";
         classMain.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 nonAccessModifiersStatic,
                 "void", METHOD_NAME_MAIN,
-                argumentList,
-                bodyMainMethod));
+                argumentListMain,
+                bodyMain));
         classes.add(classMain);
-        classes.add(new Class("Foo"));
-        classes.add(new Class("Bar"));
+        classes.add(new Class(ClassComponent.AccessModifier.PUBLIC,
+                "Foo"));
+        classes.add(new Class(ClassComponent.AccessModifier.PUBLIC,
+                "Bar"));
         // TODO: add class GrowTentSystem.
-        Class classGrowTentSystem = new Class("GrowTentSystem");
+        List<VariableDeclaration> argumentListGrowTentSystem = new ArrayList<>();
+        argumentListGrowTentSystem.add(
+                new VariableDeclaration("int", "plantCount")
+        );
+        String bodyGrowTentSystem = "        lightOn = false;\n" +
+                "        hour = 0;\n" +
+                "        plants = new Plant[plantCount];\n" +
+                "        for (int i = 0; i < plantCount; i++) {\n" +
+                "            plants[i] = new Plant(\"Plant_\" + (i + 1));\n" +
+                "        }";
+        Class classGrowTentSystem = new Class(ClassComponent.AccessModifier.PUBLIC,
+                "GrowTentSystem");
+        classGrowTentSystem.addConstructor(new Constructor(
+                ClassComponent.AccessModifier.PUBLIC,
+                argumentListGrowTentSystem, bodyGrowTentSystem));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "boolean", "lightOn", null));
@@ -117,7 +139,8 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 bodyDebugStatus));
         classes.add(classGrowTentSystem);
-        Class classRobot = new Class("Robot");
+        Class classRobot = new Class(ClassComponent.AccessModifier.PUBLIC,
+                "Robot");
         classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
                 "int", "counterTilledTile", null));
@@ -203,7 +226,8 @@ public class ProjectViewportFragment extends Fragment {
         textView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                addClass(new Class("DEFAULT"));
+                addClass(new Class(ClassComponent.AccessModifier.PUBLIC,
+                        "DEFAULT"));
                 return true;
             }
         });
@@ -237,7 +261,7 @@ public class ProjectViewportFragment extends Fragment {
 
                     @Override
                     public void onEnterKeyPressed(String name) {
-                        classes.get(position).setName(
+                        classes.get(position).updateName(
                                 name
                         );
 
