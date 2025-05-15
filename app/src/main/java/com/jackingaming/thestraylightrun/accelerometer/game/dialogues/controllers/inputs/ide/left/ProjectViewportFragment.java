@@ -63,22 +63,64 @@ public class ProjectViewportFragment extends Fragment {
 
         packageMain = new Package("com.megacoolcorp");
         Class classMain = new Class(CLASS_NAME_MAIN);
-        classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counter"));
-        List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiers = new ArrayList<>();
-        nonAccessModifiers.add(ClassComponent.ClassInterfaceAndObjectRelated.STATIC);
+        classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
+                null,
+                "int", "counter", null));
+        List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersStatic = new ArrayList<>();
+        nonAccessModifiersStatic.add(ClassComponent.ClassInterfaceAndObjectRelated.STATIC);
         List<VariableDeclaration> argumentList = new ArrayList<>();
         argumentList.add(new VariableDeclaration("String[]", "args"));
         String bodyMainMethod = "if (hope.exist()) {\n    mother.keepTrying();\n}";
         classMain.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                nonAccessModifiers,
+                nonAccessModifiersStatic,
                 "void", METHOD_NAME_MAIN,
                 argumentList,
                 bodyMainMethod));
         classes.add(classMain);
         classes.add(new Class("Foo"));
         classes.add(new Class("Bar"));
+        // TODO: add class GrowTentSystem.
+        Class classGrowTentSystem = new Class("GrowTentSystem");
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "lightOn", null));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "hour", null));
+        List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersFinal = new ArrayList<>();
+        nonAccessModifiersFinal.add(ClassComponent.ClassInterfaceAndObjectRelated.FINAL);
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                nonAccessModifiersFinal,
+                "int", "LIGHT_START", "6"));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                nonAccessModifiersFinal,
+                "int", "LIGHT_END", "18"));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "Plant[]", "plants", null));
+        String bodyUpdateLights = "...";
+        classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "updateLights",
+                null,
+                bodyUpdateLights));
+        String bodySimulateHour = "...";
+        classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "simulateHour",
+                null,
+                bodySimulateHour));
+        String bodyDebugStatus = "...";
+        classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "debugStatus",
+                null,
+                bodyDebugStatus));
+        classes.add(classGrowTentSystem);
         Class classRobot = new Class("Robot");
-        classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE, null, "int", "counterTilledTile"));
+        classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
+                null,
+                "int", "counterTilledTile", null));
         String bodyWalkToUntilledTile = "...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,

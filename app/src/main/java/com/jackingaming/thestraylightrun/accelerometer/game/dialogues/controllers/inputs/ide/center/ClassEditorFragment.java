@@ -160,22 +160,42 @@ public class ClassEditorFragment extends Fragment {
     }
 
     private void initLinesOfFields(List<Field> fields) {
-        LinearLayout llChild = new LinearLayout(getContext());
-        llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        llChild.setOrientation(LinearLayout.HORIZONTAL);
-
-        TextView tvIndent = new TextView(getContext());
-        tvIndent.setLayoutParams(layoutParams);
-        tvIndent.setText("    ");
-
         for (Field field : fields) {
+            LinearLayout llChild = new LinearLayout(getContext());
+            llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            llChild.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView tvIndent = new TextView(getContext());
+            tvIndent.setLayoutParams(layoutParams);
+            tvIndent.setText("    ");
+            llChild.addView(tvIndent);
+
+            // do NOT show AcessModifier.DEFAULT.
             String accessModifier = field.getAccessModifier().name().toLowerCase();
-            Spannable spannableAccessModifier = convertToColoredSpannableString(
-                    accessModifier, Color.BLUE);
-            TextView tvAccessModifier = new TextView(getContext());
-            tvAccessModifier.setLayoutParams(layoutParams);
-            tvAccessModifier.setText(spannableAccessModifier);
-            tvAccessModifier.append(" ");
+            if (!accessModifier.equals(
+                    ClassComponent.AccessModifier.DEFAULT.name().toLowerCase())) {
+                Spannable spannableAccessModifier = convertToColoredSpannableString(
+                        accessModifier, Color.BLUE);
+                TextView tvAccessModifier = new TextView(getContext());
+                tvAccessModifier.setLayoutParams(layoutParams);
+                tvAccessModifier.setText(spannableAccessModifier);
+                tvAccessModifier.append(" ");
+                llChild.addView(tvAccessModifier);
+            }
+
+            if (field.getClassInterfaceAndObjectRelateds() != null) {
+                for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : field.getClassInterfaceAndObjectRelateds()) {
+                    String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
+                    Spannable spannableNonAccessModifiers = convertToColoredSpannableString(
+                            nonAccessModifiers, Color.BLUE);
+
+                    TextView tvNonAccessModifiers = new TextView(getContext());
+                    tvNonAccessModifiers.setLayoutParams(layoutParams);
+                    tvNonAccessModifiers.setText(spannableNonAccessModifiers);
+                    tvNonAccessModifiers.append(" ");
+                    llChild.addView(tvNonAccessModifiers);
+                }
+            }
 
             String type = field.getType();
             Spannable spannableType = convertToColoredSpannableString(
@@ -184,7 +204,6 @@ public class ClassEditorFragment extends Fragment {
             tvType.setLayoutParams(layoutParams);
             tvType.setText(spannableType);
             tvType.append(" ");
-
             tvType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -231,6 +250,7 @@ public class ClassEditorFragment extends Fragment {
                     spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
                 }
             });
+            llChild.addView(tvType);
 
             String nameField = field.getName();
             Spannable spannableNameField = convertToColoredSpannableString(
@@ -238,8 +258,6 @@ public class ClassEditorFragment extends Fragment {
             TextView tvNameField = new TextView(getContext());
             tvNameField.setLayoutParams(layoutParams);
             tvNameField.setText(spannableNameField);
-            tvNameField.append(";");
-
             tvNameField.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -269,11 +287,35 @@ public class ClassEditorFragment extends Fragment {
                     editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
                 }
             });
-
-            llChild.addView(tvIndent);
-            llChild.addView(tvAccessModifier);
-            llChild.addView(tvType);
             llChild.addView(tvNameField);
+
+            // TODO: implement differentiation between value == null and value != null.
+            TextView tvPostFixNameField = new TextView(getContext());
+            tvPostFixNameField.setLayoutParams(layoutParams);
+            if (field.getValue() == null) {
+                String postFixNameField = ";";
+                Spannable spannablePostFixNameField = convertToColoredSpannableString(
+                        postFixNameField, Color.BLACK
+                );
+                tvPostFixNameField.setText(spannablePostFixNameField);
+            } else {
+                String postFixNameFieldWithValueOpening = " = ";
+                String postFixNameFieldWithValueMiddle = field.getValue();
+                String postFixNameFieldWithValueClosing = ";";
+                Spannable spannableOpening = convertToColoredSpannableString(
+                        postFixNameFieldWithValueOpening, Color.BLACK
+                );
+                Spannable spannableMiddle = convertToColoredSpannableString(
+                        postFixNameFieldWithValueMiddle, Color.CYAN
+                );
+                Spannable spannableClosing = convertToColoredSpannableString(
+                        postFixNameFieldWithValueClosing, Color.BLACK
+                );
+                tvPostFixNameField.setText(spannableOpening);
+                tvPostFixNameField.append(spannableMiddle);
+                tvPostFixNameField.append(spannableClosing);
+            }
+            llChild.addView(tvPostFixNameField);
 
             linearLayoutParent.addView(llChild);
 

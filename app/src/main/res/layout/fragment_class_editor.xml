@@ -6,10 +6,15 @@
     tools:context=".accelerometer.game.dialogues.controllers.inputs.ide.center.ClassEditorFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/ll_class"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_class"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </FrameLayout>

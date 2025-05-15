@@ -3,9 +3,14 @@ package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controlle
 import java.util.List;
 
 public class Field extends ClassComponent {
-    private Object value;
+    private String value;
 
-    public Field(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String type, String name) {
+    public Field(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String type, String name, String value) {
         super(accessModifier, nonAccessModifiers, type, name);
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }
