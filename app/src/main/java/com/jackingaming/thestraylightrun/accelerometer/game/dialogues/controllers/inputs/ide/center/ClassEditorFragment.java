@@ -28,7 +28,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -659,31 +661,69 @@ public class ClassEditorFragment extends Fragment {
             linearLayoutParent.addView(llChild);
 
             // BODY
-            TextView tvMethodBody = new TextView(getContext());
-            tvMethodBody.setLayoutParams(layoutParams);
-            tvMethodBody.setText(method.getBody());
-            linearLayoutParent.addView(tvMethodBody);
-
-            tvMethodBody.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-                        @Override
-                        public void onDismiss() {
-                            // TODO:
-                        }
-
-                        @Override
-                        public void onEnterKeyPressed(String name) {
-                            // param name should actually be bodyMethodNew.
-                            method.setBody(name);
-                            tvMethodBody.setText("        " + name);
-                        }
-                    });
-
-                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+            String bodyMethod = method.getBody();
+            String[] bodyMethodSplitedByNewLine = bodyMethod.split("\\n");
+            Map<String, Integer> indentByLine = new HashMap<>();
+            int indent = 0;
+            for (String line : bodyMethodSplitedByNewLine) {
+                if (line.length() >= 12 && line.substring(8, 12).equals("    ") && line.substring(4, 8).equals("    ") && line.substring(0, 4).equals("    ")) {
+                    indent = 3;
+                } else if (line.length() >= 8 && line.substring(4, 8).equals("    ") && line.substring(0, 4).equals("    ")) {
+                    indent = 2;
+                } else if (line.length() >= 4 && line.substring(0, 4).equals("    ")) {
+                    indent = 1;
                 }
-            });
+                line = line.trim();
+                Log.e(TAG, line);
+                indentByLine.put(line, indent);
+            }
+
+            for (String line : bodyMethodSplitedByNewLine) {
+                TextView tvLine = new TextView(getContext());
+                tvLine.setLayoutParams(layoutParams);
+                if (indentByLine.containsKey(line) &&
+                        indentByLine.get(line) == 3) {
+                    tvLine.setPadding(48, 0, 0, 0);
+                } else if (indentByLine.containsKey(line) &&
+                        indentByLine.get(line) == 2) {
+                    tvLine.setPadding(32, 0, 0, 0);
+                } else if (indentByLine.containsKey(line) &&
+                        indentByLine.get(line) == 1) {
+                    tvLine.setPadding(16, 0, 0, 0);
+                }
+                tvLine.setText(line);
+
+                linearLayoutParent.addView(tvLine);
+            }
+
+
+            ///////////////////////////////////////
+
+//            TextView tvMethodBody = new TextView(getContext());
+//            tvMethodBody.setLayoutParams(layoutParams);
+//            tvMethodBody.setText(method.getBody());
+//            linearLayoutParent.addView(tvMethodBody);
+//
+//            tvMethodBody.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+//                        @Override
+//                        public void onDismiss() {
+//                            // TODO:
+//                        }
+//
+//                        @Override
+//                        public void onEnterKeyPressed(String name) {
+//                            // param name should actually be bodyMethodNew.
+//                            method.setBody(name);
+//                            tvMethodBody.setText("        " + name);
+//                        }
+//                    });
+//
+//                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+//                }
+//            });
 
             // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());

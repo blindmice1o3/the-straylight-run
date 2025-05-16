@@ -230,14 +230,14 @@ public class ProjectViewportFragment extends Fragment {
         classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
                 "int", "counterTilledTile", null, null));
-        String bodyWalkToUntilledTile = "...";
+        String bodyWalkToUntilledTile = "        ...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "walkToUntilledTile",
                 null,
                 bodyWalkToUntilledTile,
                 null));
-        String bodyTillTile = "...";
+        String bodyTillTile = "        ...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "tillTile",
