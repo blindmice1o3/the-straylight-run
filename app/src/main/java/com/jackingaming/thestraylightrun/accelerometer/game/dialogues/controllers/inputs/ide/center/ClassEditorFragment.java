@@ -28,7 +28,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -439,31 +438,9 @@ public class ClassEditorFragment extends Fragment {
 
             linearLayoutParent.addView(llChild);
 
-            List<String> lines = new ArrayList<>();
-            int indexLastNewLine = 0;
-            for (int i = 0; i < constructor.getBody().length(); i++) {
-                if (constructor.getBody().substring(i, i + 1).equals("\n")) {
-                    lines.add(
-                            constructor.getBody().substring(indexLastNewLine, i + 1)
-                    );
-
-                    indexLastNewLine = i + 1;
-                } else if (i == constructor.getBody().length() - 1) {
-                    lines.add(
-                            constructor.getBody().substring(indexLastNewLine, constructor.getBody().length())
-                    );
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (String line : lines) {
-                Log.e(TAG, "line: " + line);
-                sb.append("        " + line);
-            }
-
             TextView tvConstructorBody = new TextView(getContext());
             tvConstructorBody.setLayoutParams(layoutParams);
-            tvConstructorBody.setText(sb.toString());
+            tvConstructorBody.setText(constructor.getBody());
             linearLayoutParent.addView(tvConstructorBody);
 
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
@@ -682,31 +659,9 @@ public class ClassEditorFragment extends Fragment {
             linearLayoutParent.addView(llChild);
 
             // BODY
-            List<String> lines = new ArrayList<>();
-            int indexLastNewLine = 0;
-            for (int i = 0; i < method.getBody().length(); i++) {
-                if (method.getBody().substring(i, i + 1).equals("\n")) {
-                    lines.add(
-                            method.getBody().substring(indexLastNewLine, i + 1)
-                    );
-
-                    indexLastNewLine = i + 1;
-                } else if (i == method.getBody().length() - 1) {
-                    lines.add(
-                            method.getBody().substring(indexLastNewLine, method.getBody().length())
-                    );
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (String line : lines) {
-                Log.e(TAG, "line: " + line);
-                sb.append("        " + line);
-            }
-
             TextView tvMethodBody = new TextView(getContext());
             tvMethodBody.setLayoutParams(layoutParams);
-            tvMethodBody.setText(sb.toString());
+            tvMethodBody.setText(method.getBody());
             linearLayoutParent.addView(tvMethodBody);
 
             tvMethodBody.setOnClickListener(new View.OnClickListener() {
