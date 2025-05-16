@@ -308,14 +308,22 @@ public class SceneFarm extends Scene {
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
 
-        if (player.hasCarryable() && player.getCarryable() instanceof Sellable &&
-                entityCurrentlyFacing == null) {
-            Log.e(TAG, "has carryable and carryable is Sellable and entityFacing is null");
+        if (player.hasCarryable() && entityCurrentlyFacing == null) {
+            Log.e(TAG, "has carryable and entityFacing is null");
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
             if (tileCurrentlyFacing instanceof ShippingBinTile) {
                 Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
-                player.placeInShippingBin();
+                if (player.getCarryable() instanceof Sellable) {
+                    Log.e(TAG, "carryable is Sellable");
+                    player.placeInShippingBin();
+                }
             } else if (tileCurrentlyFacing.isWalkable()) {
+                Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
+                if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).changeToWalk();
+                }
+
                 player.placeDown();
             }
         } else if (entityCurrentlyFacing != null &&
@@ -331,18 +339,22 @@ public class SceneFarm extends Scene {
             }
         } else if (entityCurrentlyFacing != null &&
                 entityCurrentlyFacing instanceof AimlessWalker) {
+            ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+
+            player.pickUp(entityCurrentlyFacing);
+
             // TODO: toggle AimlessWalker's state.
-            switch (((AimlessWalker) entityCurrentlyFacing).getState()) {
-                case OFF:
-                    ((AimlessWalker) entityCurrentlyFacing).changeToWalk();
-                    break;
-                case WALK:
-                    ((AimlessWalker) entityCurrentlyFacing).changeToRun();
-                    break;
-                case RUN:
-                    ((AimlessWalker) entityCurrentlyFacing).changeToOff();
-                    break;
-            }
+//            switch (((AimlessWalker) entityCurrentlyFacing).getState()) {
+//                case OFF:
+//                    ((AimlessWalker) entityCurrentlyFacing).changeToWalk();
+//                    break;
+//                case WALK:
+//                    ((AimlessWalker) entityCurrentlyFacing).changeToRun();
+//                    break;
+//                case RUN:
+//                    ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+//                    break;
+//            }
         } else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
             TileCommand tileCommand = tileCommandOwner.getTileCommand();

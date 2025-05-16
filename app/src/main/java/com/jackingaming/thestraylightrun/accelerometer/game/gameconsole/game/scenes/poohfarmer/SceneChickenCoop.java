@@ -10,11 +10,14 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,6 +76,39 @@ public class SceneChickenCoop extends Scene {
             Player.getInstance().setY(yLastKnown);
         }
         GameCamera.getInstance().update(0L);
+    }
+
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+        if (player.hasCarryable() && entityCurrentlyFacing == null) {
+            Log.e(TAG, "has carryable and entityFacing is null");
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
+            if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                if (player.getCarryable() instanceof Sellable) {
+                    Log.e(TAG, "carryable is Sellable");
+                    player.placeInShippingBin();
+                }
+            } else if (tileCurrentlyFacing.isWalkable()) {
+                Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
+                if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).changeToWalk();
+                }
+
+                player.placeDown();
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof AimlessWalker) {
+            ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+
+            player.pickUp(entityCurrentlyFacing);
+        }
     }
 
     private Tile[][] createAndInitTilesForChickenCoop(Game game) {

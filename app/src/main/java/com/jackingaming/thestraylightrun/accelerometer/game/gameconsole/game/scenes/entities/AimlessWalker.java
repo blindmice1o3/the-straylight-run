@@ -212,18 +212,29 @@ public class AimlessWalker extends Creature {
 
     }
 
+    @Override
+    public boolean isCarryable() {
+        return true;
+    }
+
     public void changeToOff() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                movementAnimator.cancel();
+            }
+        });
         state = State.OFF;
     }
 
     public void changeToWalk() {
-        state = State.WALK;
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
+        state = State.WALK;
     }
 
     public void changeToRun() {
-        state = State.RUN;
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
+        state = State.RUN;
     }
 
     public State getState() {
