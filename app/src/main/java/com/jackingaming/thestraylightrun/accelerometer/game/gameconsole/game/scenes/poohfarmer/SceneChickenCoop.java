@@ -181,6 +181,7 @@ public class SceneChickenCoop extends Scene {
     private List<Entity> createEntitiesForChickenCoop() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
+
         return entities;
     }
 

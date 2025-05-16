@@ -21,6 +21,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
@@ -327,6 +328,20 @@ public class SceneFarm extends Scene {
                 ((GrowableTile) tileFacing).changeToUntilled();
             } else {
                 Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof AimlessWalker) {
+            // TODO: toggle AimlessWalker's state.
+            switch (((AimlessWalker) entityCurrentlyFacing).getState()) {
+                case OFF:
+                    ((AimlessWalker) entityCurrentlyFacing).changeToWalk();
+                    break;
+                case WALK:
+                    ((AimlessWalker) entityCurrentlyFacing).changeToRun();
+                    break;
+                case RUN:
+                    ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+                    break;
             }
         } else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
@@ -920,12 +935,17 @@ public class SceneFarm extends Scene {
         return transferPoints;
     }
 
+    private AimlessWalker aimlessWalker;
+
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+        aimlessWalker = new AimlessWalker(((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
         entities.add(robot);
+        entities.add(aimlessWalker);
 //        entities.add(
 //                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
 //                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
