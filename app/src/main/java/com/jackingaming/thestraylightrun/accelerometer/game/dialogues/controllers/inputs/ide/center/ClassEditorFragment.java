@@ -28,9 +28,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,11 +39,8 @@ public class ClassEditorFragment extends Fragment {
     public static final String TAG = ClassEditorFragment.class.getSimpleName();
     public static final int DEFAULT_INDENT_SIZE = 48;
     public static final String DEFAULT_INDENT = "    ";
-    public static final String IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES = "//todo:";
-    public static final String IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO = "//todo";
     public static final String IDENTIFIER_COMMENT_SINGLE_LINE = "//";
-    public static final String IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES = "todo:";
-    public static final String IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO = "todo";
+    public static final String IDENTIFIER_COMMENT_TODO = "todo";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -694,87 +689,98 @@ public class ClassEditorFragment extends Fragment {
             /////////////////////////////////
 
             String[] bodyMethodSplitedByNewLine = bodyMethod.split("\\n");
-            Map<String, Integer> indentByLine = new HashMap<>();
-            for (String line : bodyMethodSplitedByNewLine) {
-                //////////////////RECURSION////////////////////////////
-                int numberOfIndents = checkLineForNumberOfIndents(line);
-                ////////////////////////////////////////////////////////
-                Log.e(TAG, "numberOfIndents: " + numberOfIndents);
+            for (int i = 0; i < bodyMethodSplitedByNewLine.length; i++) {
+                String line = bodyMethodSplitedByNewLine[i];
 
-                line = line.trim();
-                indentByLine.put(line, numberOfIndents);
-            }
+                LinearLayout llLine = new LinearLayout(getContext());
+                llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llLine.setOrientation(LinearLayout.HORIZONTAL);
 
-            for (String line : bodyMethodSplitedByNewLine) {
-                TextView tvLine = new TextView(getContext());
-                tvLine.setLayoutParams(layoutParams);
-
-                // INDENTS
-                if (indentByLine.containsKey(line)) {
-                    int paddingLeft = 0;
-                    for (int i = 0; i < indentByLine.get(line); i++) {
-                        paddingLeft += DEFAULT_INDENT_SIZE;
+                boolean hasComment = false;
+                int indexComment = -1;
+                for (int j = 0; j < line.length(); j++) {
+                    // scan line for single line comment (prevents index out of bounds).
+                    if (j + IDENTIFIER_COMMENT_SINGLE_LINE.length() - 1 < line.length()) {
+                        // FOUND COMMENT
+                        if (line.substring(j, j + IDENTIFIER_COMMENT_SINGLE_LINE.length()).equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
+                            hasComment = true;
+                            indexComment = j;
+                            break;
+                        }
                     }
-                    tvLine.setPadding(paddingLeft, 0, 0, 0);
                 }
 
-                line.trim();
-                String[] words = line.split("\\s+");
-                // COMMENT
-                if (words.length > 0) {
-                    String firstWordAsLowerCase = words[0].toLowerCase();
-                    if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES)) {
-                        Log.e(TAG, "firstWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES);
-                    } else if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO)) {
-                        Log.e(TAG, "firstWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO);
-                    } else if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
-                        if (words.length > 1) {
-                            String secondWordAsLowerCase = words[1].toLowerCase();
-                            if (secondWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES)) {
-                                Log.e(TAG, "secondWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES);
-                            } else if (secondWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO)) {
-                                Log.e(TAG, "secondWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO);
-                            } else {
-                                Log.e(TAG, "COMMENT-SINGLE-LINE");
+                boolean hasTODO = false;
+                int indexTODO = -1;
+                if (hasComment) {
+                    for (int k = indexComment; k < line.length(); k++) {
+                        // scan line for TO-DO (prevents index out of bounds).
+                        if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
+                            // FOUND TO-DO
+                            if (line.substring(k, k + IDENTIFIER_COMMENT_TODO.length()).toLowerCase().equals(IDENTIFIER_COMMENT_TODO)) {
+                                hasTODO = true;
+                                indexTODO = k;
+                                break;
                             }
                         }
                     }
                 }
 
-                /////////////////////
-                tvLine.setText(line);
-                /////////////////////
-                linearLayoutParent.addView(tvLine);
+                if (hasTODO) {
+                    TextView tvLineAfterTODO = new TextView(getContext());
+                    tvLineAfterTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterTODO = convertToColoredSpannableString(
+                            line.substring(indexTODO), Color.GREEN
+                    );
+                    tvLineAfterTODO.setText(spannableLineAfterTODO);
+
+                    TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
+                    tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
+                            line.substring(indexComment, indexTODO), Color.GRAY
+                    );
+                    tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
+
+                    TextView tvLineBeforeComment = new TextView(getContext());
+                    tvLineBeforeComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                            line.substring(0, indexComment), Color.BLACK
+                    );
+                    tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                    llLine.addView(tvLineBeforeComment);
+                    llLine.addView(tvLineAfterCommentBeforeTODO);
+                    llLine.addView(tvLineAfterTODO);
+                } else if (hasComment) {
+                    TextView tvLineAfterComment = new TextView(getContext());
+                    tvLineAfterComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterComment = convertToColoredSpannableString(
+                            line.substring(indexComment), Color.GRAY
+                    );
+                    tvLineAfterComment.setText(spannableLineAfterComment);
+
+                    TextView tvLineBeforeComment = new TextView(getContext());
+                    tvLineBeforeComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                            line.substring(0, indexComment), Color.BLACK
+                    );
+                    tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                    llLine.addView(tvLineBeforeComment);
+                    llLine.addView(tvLineAfterComment);
+                } else {
+                    TextView tvLine = new TextView(getContext());
+                    tvLine.setLayoutParams(layoutParams);
+                    Spannable spannableLine = convertToColoredSpannableString(
+                            line, Color.BLACK
+                    );
+                    tvLine.setText(spannableLine);
+
+                    llLine.addView(tvLine);
+                }
+
+                linearLayoutParent.addView(llLine);
             }
-
-
-            ///////////////////////////////////////
-
-//            TextView tvMethodBody = new TextView(getContext());
-//            tvMethodBody.setLayoutParams(layoutParams);
-//            tvMethodBody.setText(method.getBody());
-//            linearLayoutParent.addView(tvMethodBody);
-//
-//            tvMethodBody.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-//                        @Override
-//                        public void onDismiss() {
-//                            // TODO:
-//                        }
-//
-//                        @Override
-//                        public void onEnterKeyPressed(String name) {
-//                            // param name should actually be bodyMethodNew.
-//                            method.setBody(name);
-//                            tvMethodBody.setText("        " + name);
-//                        }
-//                    });
-//
-//                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
-//                }
-//            });
 
             // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
@@ -782,7 +788,6 @@ public class ClassEditorFragment extends Fragment {
             tvCurlyBracketCloseWithIndent.setText("    }");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
         }
-
     }
 
     // !!!!!RECURSIVE!!!!!

@@ -132,11 +132,12 @@ public class ProjectViewportFragment extends Fragment {
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "Plant[]", "plants", null, null));
-        String bodyUpdateLights = "        if (hour >= LIGHT_START && hour < LIGHT_END) {\n" +
+        String bodyUpdateLights = "    //\n" +
+                "        if (hour >=// LIGHT_START toDO && hour < LIGHT_END) {\n" +
                 "//TODO:            lightOn = true;\n" +
                 "        } else {\n" +
                 "            lightOn = false;\n" +
-                "        }";
+                "        }//";
 //        String bodyUpdateLights = "        if (hour >= LIGHT_START && hour < LIGHT_END) {\n" +
 //                "            lightOn = true;\n" +
 //                "        } else {\n" +
