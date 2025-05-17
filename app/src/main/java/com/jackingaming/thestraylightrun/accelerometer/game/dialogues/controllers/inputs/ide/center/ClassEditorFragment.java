@@ -41,6 +41,11 @@ public class ClassEditorFragment extends Fragment {
     public static final String TAG = ClassEditorFragment.class.getSimpleName();
     public static final int DEFAULT_INDENT_SIZE = 48;
     public static final String DEFAULT_INDENT = "    ";
+    public static final String IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES = "//todo:";
+    public static final String IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO = "//todo";
+    public static final String IDENTIFIER_COMMENT_SINGLE_LINE = "//";
+    public static final String IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES = "todo:";
+    public static final String IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO = "todo";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -664,24 +669,47 @@ public class ClassEditorFragment extends Fragment {
 
             // BODY
             String bodyMethod = method.getBody();
+
+            /////////////////////////////////
+            int counterOpenBracketCurly = 0;
+            int counterCloseBracketCurly = 0;
+            int counterOpenBracketRound = 0;
+            int counterCloseBracketRound = 0;
+            for (int i = 0; i < bodyMethod.length() - 1; i++) {
+                String currentChar = bodyMethod.substring(i, i + 1);
+                if (currentChar.equals("{")) {
+                    counterOpenBracketCurly++;
+                } else if (currentChar.equals("}")) {
+                    counterCloseBracketCurly++;
+                } else if (currentChar.equals("(")) {
+                    counterOpenBracketRound++;
+                } else if (currentChar.equals(")")) {
+                    counterCloseBracketRound++;
+                }
+            }
+            Log.e(TAG, "counterOpenBracketCurly: " + counterOpenBracketCurly);
+            Log.e(TAG, "counterCloseBracketCurly: " + counterCloseBracketCurly);
+            Log.e(TAG, "counterOpenBracketRound: " + counterOpenBracketRound);
+            Log.e(TAG, "counterCloseBracketRound: " + counterCloseBracketRound);
+            /////////////////////////////////
+
             String[] bodyMethodSplitedByNewLine = bodyMethod.split("\\n");
             Map<String, Integer> indentByLine = new HashMap<>();
             for (String line : bodyMethodSplitedByNewLine) {
-                Log.e(TAG, line);
-
                 //////////////////RECURSION////////////////////////////
                 int numberOfIndents = checkLineForNumberOfIndents(line);
                 ////////////////////////////////////////////////////////
                 Log.e(TAG, "numberOfIndents: " + numberOfIndents);
 
                 line = line.trim();
-                Log.e(TAG, line);
                 indentByLine.put(line, numberOfIndents);
             }
 
             for (String line : bodyMethodSplitedByNewLine) {
                 TextView tvLine = new TextView(getContext());
                 tvLine.setLayoutParams(layoutParams);
+
+                // INDENTS
                 if (indentByLine.containsKey(line)) {
                     int paddingLeft = 0;
                     for (int i = 0; i < indentByLine.get(line); i++) {
@@ -689,8 +717,33 @@ public class ClassEditorFragment extends Fragment {
                     }
                     tvLine.setPadding(paddingLeft, 0, 0, 0);
                 }
-                tvLine.setText(line);
 
+                line.trim();
+                String[] words = line.split("\\s+");
+                // COMMENT
+                if (words.length > 0) {
+                    String firstWordAsLowerCase = words[0].toLowerCase();
+                    if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES)) {
+                        Log.e(TAG, "firstWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_YES);
+                    } else if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO)) {
+                        Log.e(TAG, "firstWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_ALL_AS_ONE_COLON_NO);
+                    } else if (firstWordAsLowerCase.equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
+                        if (words.length > 1) {
+                            String secondWordAsLowerCase = words[1].toLowerCase();
+                            if (secondWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES)) {
+                                Log.e(TAG, "secondWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_YES);
+                            } else if (secondWordAsLowerCase.equals(IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO)) {
+                                Log.e(TAG, "secondWordAsLowerCase: " + IDENTIFIER_COMMENT_TODO_TWO_PART_COLON_NO);
+                            } else {
+                                Log.e(TAG, "COMMENT-SINGLE-LINE");
+                            }
+                        }
+                    }
+                }
+
+                /////////////////////
+                tvLine.setText(line);
+                /////////////////////
                 linearLayoutParent.addView(tvLine);
             }
 
@@ -729,6 +782,7 @@ public class ClassEditorFragment extends Fragment {
             tvCurlyBracketCloseWithIndent.setText("    }");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
         }
+
     }
 
     // !!!!!RECURSIVE!!!!!

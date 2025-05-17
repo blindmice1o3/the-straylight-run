@@ -133,24 +133,37 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "Plant[]", "plants", null, null));
         String bodyUpdateLights = "        if (hour >= LIGHT_START && hour < LIGHT_END) {\n" +
-                "            lightOn = true;\n" +
+                "//TODO:            lightOn = true;\n" +
                 "        } else {\n" +
                 "            lightOn = false;\n" +
                 "        }";
+//        String bodyUpdateLights = "        if (hour >= LIGHT_START && hour < LIGHT_END) {\n" +
+//                "            lightOn = true;\n" +
+//                "        } else {\n" +
+//                "            lightOn = false;\n" +
+//                "        }";
         classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "updateLights",
                 null,
                 bodyUpdateLights,
                 null));
-        String bodySimulateHour = "        updateLights();\n" +
-                "        for (Plant p : plants) {\n" +
+        String bodySimulateHour = "// TODO:        updateLights();\n" +
+                "//        for (Plant p : plants) {\n" +
                 "            p.dryOut();\n" +
                 "            if (p.needsWater()) {\n" +
-                "                p.water();\n" +
+                "//TODO :                p.water();\n" +
                 "            }\n" +
                 "        }\n" +
                 "        hour = (hour + 1) % 24;";
+//        String bodySimulateHour = "        updateLights();\n" +
+//                "        for (Plant p : plants) {\n" +
+//                "            p.dryOut();\n" +
+//                "            if (p.needsWater()) {\n" +
+//                "                p.water();\n" +
+//                "            }\n" +
+//                "        }\n" +
+//                "        hour = (hour + 1) % 24;";
         classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "simulateHour",
