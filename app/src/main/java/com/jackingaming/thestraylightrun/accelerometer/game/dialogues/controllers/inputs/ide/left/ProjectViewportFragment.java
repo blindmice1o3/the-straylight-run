@@ -193,6 +193,9 @@ public class ProjectViewportFragment extends Fragment {
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "double", "moisture", null, " // 0.0 to 1.0"));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isFlowering", "false", " // all instances start non-flowering"));
         List<VariableDeclaration> argumentListPlant = new ArrayList<>();
         argumentListPlant.add(
                 new VariableDeclaration("String", "name")
@@ -201,6 +204,20 @@ public class ProjectViewportFragment extends Fragment {
                 "        this.moisture = 0.6; // starts healthy";
         classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListPlant, bodyPlant, null));
+        String bodyUpdateGrowth = "    // TODO: If light is correct and pests are not present, start flowering";
+        List<VariableDeclaration> argumentListUpdateGrowth = new ArrayList<>();
+        argumentListUpdateGrowth.add(
+                new VariableDeclaration("boolean", "lightCycleCorrect")
+        );
+        argumentListUpdateGrowth.add(
+                new VariableDeclaration("boolean", "pestsPresent")
+        );
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "updateGrowth",
+                argumentListUpdateGrowth,
+                bodyUpdateGrowth,
+                null));
         String bodyDryOut = "        moisture -= 0.05;\n" +
                 "        if (moisture < 0.0) {\n" +
                 "            moisture = 0.0;\n" +

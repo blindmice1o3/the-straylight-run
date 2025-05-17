@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -10,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -454,6 +458,7 @@ public class ClassEditorFragment extends Fragment {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initLinesOfMethods() {
         for (Method method : classToEdit.getMethods()) {
             addTextViewAsBlankLineToLinearLayout();
@@ -470,7 +475,15 @@ public class ClassEditorFragment extends Fragment {
                 tvComment.setLayoutParams(layoutParams);
                 tvComment.setText(spannableComment);
                 llComment.addView(tvComment);
-                linearLayoutParent.addView(llComment);
+
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.addView(llComment);
+                linearLayoutParent.addView(
+                        scroll
+                );
             }
 
             LinearLayout llChild = new LinearLayout(getContext());
@@ -660,7 +673,14 @@ public class ClassEditorFragment extends Fragment {
             tvParenthesisClose.setText(parenthesisClose);
             llChild.addView(tvParenthesisClose);
 
-            linearLayoutParent.addView(llChild);
+            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+            scroll.setBackgroundColor(android.R.color.transparent);
+            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            scroll.setHorizontalScrollBarEnabled(false);
+            scroll.addView(llChild);
+            linearLayoutParent.addView(
+                    scroll
+            );
 
             // BODY
             String bodyMethod = method.getBody();
@@ -734,6 +754,36 @@ public class ClassEditorFragment extends Fragment {
                     );
                     tvLineAfterTODO.setText(spannableLineAfterTODO);
 
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                    if (method.getName().equals("updateGrowth")) {
+                        tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                int indexOfTvTODO = ((LinearLayout) view.getParent()).indexOfChild(view);
+                                view.setVisibility(View.GONE);
+
+                                String answer = "   if (lightCycleCorrect && !pestsPresent) { isFlowering = true; }";
+                                TextView tvAnswer = new TextView(getContext());
+                                tvAnswer.setLayoutParams(layoutParams);
+                                Spannable spannableAnswer = convertToColoredSpannableString(
+                                        answer, Color.RED
+                                );
+                                tvAnswer.setText(spannableAnswer);
+
+                                llLine.addView(tvAnswer, indexOfTvTODO);
+
+                                AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+                                anim.setDuration(1000);
+                                anim.setRepeatCount(Animation.INFINITE);
+                                anim.setRepeatMode(Animation.REVERSE);
+                                tvAnswer.startAnimation(anim);
+
+                                return true;
+                            }
+                        });
+                    }
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
                     TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
                     tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
                     Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
@@ -779,14 +829,18 @@ public class ClassEditorFragment extends Fragment {
                     llLine.addView(tvLine);
                 }
 
-                linearLayoutParent.addView(llLine);
+                linearLayoutParent.addView(
+                        llLine
+                );
             }
 
             // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText("    }");
-            linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
+            linearLayoutParent.addView(
+                    tvCurlyBracketCloseWithIndent
+            );
         }
     }
 
