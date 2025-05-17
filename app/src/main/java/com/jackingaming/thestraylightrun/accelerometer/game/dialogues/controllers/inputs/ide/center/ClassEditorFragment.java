@@ -39,6 +39,8 @@ import java.util.Map;
  */
 public class ClassEditorFragment extends Fragment {
     public static final String TAG = ClassEditorFragment.class.getSimpleName();
+    public static final int DEFAULT_INDENT_SIZE = 48;
+    public static final String DEFAULT_INDENT = "    ";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -185,7 +187,7 @@ public class ClassEditorFragment extends Fragment {
 
             TextView tvIndent = new TextView(getContext());
             tvIndent.setLayoutParams(layoutParams);
-            tvIndent.setText("    ");
+            tvIndent.setText(DEFAULT_INDENT);
             llChild.addView(tvIndent);
 
             // do NOT show AccessModifier.DEFAULT.
@@ -358,7 +360,7 @@ public class ClassEditorFragment extends Fragment {
                 LinearLayout llConstructor = new LinearLayout(getContext());
                 llConstructor.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 llConstructor.setOrientation(LinearLayout.HORIZONTAL);
-                String comment = "    " + constructor.getComment();
+                String comment = DEFAULT_INDENT + constructor.getComment();
                 Spannable spannableComment = convertToColoredSpannableString(
                         comment, Color.GRAY);
                 TextView tvComment = new TextView(getContext());
@@ -374,7 +376,7 @@ public class ClassEditorFragment extends Fragment {
 
             TextView tvIndent = new TextView(getContext());
             tvIndent.setLayoutParams(layoutParams);
-            tvIndent.setText("    ");
+            tvIndent.setText(DEFAULT_INDENT);
             llChild.addView(tvIndent);
 
             String accessModifier = constructor.getAccessModifier().name().toLowerCase();
@@ -447,7 +449,7 @@ public class ClassEditorFragment extends Fragment {
 
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
-            tvCurlyBracketCloseWithIndent.setText("    }");
+            tvCurlyBracketCloseWithIndent.setText(DEFAULT_INDENT + "}");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
         }
     }
@@ -461,7 +463,7 @@ public class ClassEditorFragment extends Fragment {
                 LinearLayout llComment = new LinearLayout(getContext());
                 llComment.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 llComment.setOrientation(LinearLayout.HORIZONTAL);
-                String comment = "    " + method.getComment();
+                String comment = DEFAULT_INDENT + method.getComment();
                 Spannable spannableComment = convertToColoredSpannableString(
                         comment, Color.GRAY);
                 TextView tvComment = new TextView(getContext());
@@ -477,7 +479,7 @@ public class ClassEditorFragment extends Fragment {
 
             TextView tvIndent = new TextView(getContext());
             tvIndent.setLayoutParams(layoutParams);
-            tvIndent.setText("    ");
+            tvIndent.setText(DEFAULT_INDENT);
             llChild.addView(tvIndent);
 
             // ACCESS-MODIFIERS
@@ -664,32 +666,28 @@ public class ClassEditorFragment extends Fragment {
             String bodyMethod = method.getBody();
             String[] bodyMethodSplitedByNewLine = bodyMethod.split("\\n");
             Map<String, Integer> indentByLine = new HashMap<>();
-            int indent = 0;
             for (String line : bodyMethodSplitedByNewLine) {
-                if (line.length() >= 12 && line.substring(8, 12).equals("    ") && line.substring(4, 8).equals("    ") && line.substring(0, 4).equals("    ")) {
-                    indent = 3;
-                } else if (line.length() >= 8 && line.substring(4, 8).equals("    ") && line.substring(0, 4).equals("    ")) {
-                    indent = 2;
-                } else if (line.length() >= 4 && line.substring(0, 4).equals("    ")) {
-                    indent = 1;
-                }
+                Log.e(TAG, line);
+
+                //////////////////RECURSION////////////////////////////
+                int numberOfIndents = checkLineForNumberOfIndents(line);
+                ////////////////////////////////////////////////////////
+                Log.e(TAG, "numberOfIndents: " + numberOfIndents);
+
                 line = line.trim();
                 Log.e(TAG, line);
-                indentByLine.put(line, indent);
+                indentByLine.put(line, numberOfIndents);
             }
 
             for (String line : bodyMethodSplitedByNewLine) {
                 TextView tvLine = new TextView(getContext());
                 tvLine.setLayoutParams(layoutParams);
-                if (indentByLine.containsKey(line) &&
-                        indentByLine.get(line) == 3) {
-                    tvLine.setPadding(48, 0, 0, 0);
-                } else if (indentByLine.containsKey(line) &&
-                        indentByLine.get(line) == 2) {
-                    tvLine.setPadding(32, 0, 0, 0);
-                } else if (indentByLine.containsKey(line) &&
-                        indentByLine.get(line) == 1) {
-                    tvLine.setPadding(16, 0, 0, 0);
+                if (indentByLine.containsKey(line)) {
+                    int paddingLeft = 0;
+                    for (int i = 0; i < indentByLine.get(line); i++) {
+                        paddingLeft += DEFAULT_INDENT_SIZE;
+                    }
+                    tvLine.setPadding(paddingLeft, 0, 0, 0);
                 }
                 tvLine.setText(line);
 
@@ -730,6 +728,20 @@ public class ClassEditorFragment extends Fragment {
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText("    }");
             linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
+        }
+    }
+
+    // !!!!!RECURSIVE!!!!!
+    private int checkLineForNumberOfIndents(String line) {
+        if (line.length() >= 4) {
+            if (line.substring(0, 4).equals(DEFAULT_INDENT)) {
+                String lineWithoutFrontIndent = line.substring(4);
+                return 1 + checkLineForNumberOfIndents(lineWithoutFrontIndent);
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
         }
     }
 

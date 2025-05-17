@@ -23,7 +23,7 @@
         android:background="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/fcv_right"
-        app:layout_constraintHorizontal_weight="3"
+        app:layout_constraintHorizontal_weight="4"
         app:layout_constraintStart_toEndOf="@id/fcv_left"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
