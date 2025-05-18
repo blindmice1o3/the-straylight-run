@@ -186,7 +186,7 @@ public class ProjectViewportFragment extends Fragment {
 
     private Class initClassPlant() {
         Class classPlant = new Class(ClassComponent.AccessModifier.PUBLIC,
-                "Plant", null);
+                "Plant_testing_long_class_nammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme", " // Testing class's comment.. long linnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnne");
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "String", "name", null, null));
@@ -206,7 +206,7 @@ public class ProjectViewportFragment extends Fragment {
         argumentListPlant.add(
                 new VariableDeclaration("String", "name")
         );
-        String bodyPlant = "        this.name = name;\n" +
+        String bodyPlant = "        this.name = name; // Testing long linnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnne\n" +
                 "        this.isFlowering = false; // Initialize to false\n" +
                 "        this.isHealthy = true;       // Assume healthy on creation\n" +
                 "        this.isReady = false;        // Harvest status begins as false";

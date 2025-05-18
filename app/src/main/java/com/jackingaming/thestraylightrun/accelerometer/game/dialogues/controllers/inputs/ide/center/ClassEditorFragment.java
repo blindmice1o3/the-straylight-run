@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.HorizontalScrollView;
@@ -41,7 +42,6 @@ import java.util.List;
  */
 public class ClassEditorFragment extends Fragment {
     public static final String TAG = ClassEditorFragment.class.getSimpleName();
-    public static final int DEFAULT_INDENT_SIZE = 48;
     public static final String DEFAULT_INDENT = "    ";
     public static final String IDENTIFIER_COMMENT_SINGLE_LINE = "//";
     public static final String IDENTIFIER_COMMENT_TODO = "todo";
@@ -135,20 +135,25 @@ public class ClassEditorFragment extends Fragment {
         linearLayoutParent.addView(textView);
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initLinesOfClassOpening() {
         // COMMENT
         if (classToEdit.getComment() != null) {
-            LinearLayout llComment = new LinearLayout(getContext());
-            llComment.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            llComment.setOrientation(LinearLayout.HORIZONTAL);
             String comment = classToEdit.getComment();
             Spannable spannableComment = convertToColoredSpannableString(
                     comment, Color.GRAY);
             TextView tvComment = new TextView(getContext());
             tvComment.setLayoutParams(layoutParams);
             tvComment.setText(spannableComment);
-            llComment.addView(tvComment);
-            linearLayoutParent.addView(llComment);
+
+            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+            scroll.setBackgroundColor(android.R.color.transparent);
+            scroll.setHorizontalScrollBarEnabled(false);
+            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            scroll.addView(tvComment);
+            linearLayoutParent.addView(
+                    scroll
+            );
         }
 
         LinearLayout llChild = new LinearLayout(getContext());
@@ -180,7 +185,14 @@ public class ClassEditorFragment extends Fragment {
         tvBracketCurlyOpen.setText(bracketCurlyOpen);
         llChild.addView(tvBracketCurlyOpen);
 
-        linearLayoutParent.addView(llChild);
+        HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+        scroll.setBackgroundColor(android.R.color.transparent);
+        scroll.setHorizontalScrollBarEnabled(false);
+        scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        scroll.addView(llChild);
+        linearLayoutParent.addView(
+                scroll
+        );
     }
 
     @SuppressLint("ResourceAsColor")
@@ -363,23 +375,28 @@ public class ClassEditorFragment extends Fragment {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initLinesOfConstructors() {
         for (Constructor constructor : classToEdit.getConstructors()) {
             addTextViewAsBlankLineToLinearLayout();
 
             // COMMENT
             if (constructor.getComment() != null) {
-                LinearLayout llConstructor = new LinearLayout(getContext());
-                llConstructor.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                llConstructor.setOrientation(LinearLayout.HORIZONTAL);
                 String comment = DEFAULT_INDENT + constructor.getComment();
                 Spannable spannableComment = convertToColoredSpannableString(
                         comment, Color.GRAY);
                 TextView tvComment = new TextView(getContext());
                 tvComment.setLayoutParams(layoutParams);
                 tvComment.setText(spannableComment);
-                llConstructor.addView(tvComment);
-                linearLayoutParent.addView(llConstructor);
+
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.addView(tvComment);
+                linearLayoutParent.addView(
+                        scroll
+                );
             }
 
             LinearLayout llChild = new LinearLayout(getContext());
@@ -452,12 +469,26 @@ public class ClassEditorFragment extends Fragment {
             tvParenthesisClose.setText(parenthesisClose);
             llChild.addView(tvParenthesisClose);
 
-            linearLayoutParent.addView(llChild);
+            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+            scroll.setBackgroundColor(android.R.color.transparent);
+            scroll.setHorizontalScrollBarEnabled(false);
+            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            scroll.addView(llChild);
+            linearLayoutParent.addView(
+                    scroll
+            );
 
             TextView tvConstructorBody = new TextView(getContext());
             tvConstructorBody.setLayoutParams(layoutParams);
             tvConstructorBody.setText(constructor.getBody());
-            linearLayoutParent.addView(tvConstructorBody);
+            HorizontalScrollView scrollConstructorBody = new HorizontalScrollView(getContext());
+            scrollConstructorBody.setBackgroundColor(android.R.color.transparent);
+            scrollConstructorBody.setHorizontalScrollBarEnabled(false);
+            scrollConstructorBody.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            scrollConstructorBody.addView(tvConstructorBody);
+            linearLayoutParent.addView(
+                    scrollConstructorBody
+            );
 
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
@@ -473,22 +504,18 @@ public class ClassEditorFragment extends Fragment {
 
             // COMMENT
             if (method.getComment() != null) {
-                LinearLayout llComment = new LinearLayout(getContext());
-                llComment.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                llComment.setOrientation(LinearLayout.HORIZONTAL);
                 String comment = DEFAULT_INDENT + method.getComment();
                 Spannable spannableComment = convertToColoredSpannableString(
                         comment, Color.GRAY);
                 TextView tvComment = new TextView(getContext());
                 tvComment.setLayoutParams(layoutParams);
                 tvComment.setText(spannableComment);
-                llComment.addView(tvComment);
 
                 HorizontalScrollView scroll = new HorizontalScrollView(getContext());
                 scroll.setBackgroundColor(android.R.color.transparent);
                 scroll.setHorizontalScrollBarEnabled(false);
                 scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                scroll.addView(llComment);
+                scroll.addView(tvComment);
                 linearLayoutParent.addView(
                         scroll
                 );
@@ -764,31 +791,40 @@ public class ClassEditorFragment extends Fragment {
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                     if (method.getName().equals("updateGrowth")) {
                         tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
+                            private boolean isFirstTime = true;
+
                             @Override
                             public boolean onLongClick(View view) {
-                                int indexToInsert = linearLayoutParent.indexOfChild(
-                                        (LinearLayout) view.getParent()
-                                ) + 1;
+                                if (isFirstTime) {
+                                    isFirstTime = false;
 
-                                String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
-                                        DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
-                                        DEFAULT_INDENT + DEFAULT_INDENT + "}";
-                                TextView tvAnswer = new TextView(getContext());
-                                tvAnswer.setLayoutParams(layoutParams);
-                                Spannable spannableAnswer = convertToColoredSpannableString(
-                                        answer, Color.BLACK
-                                );
-                                tvAnswer.setText(spannableAnswer);
+                                    int indexToInsert = linearLayoutParent.indexOfChild(
+                                            (LinearLayout) view.getParent()
+                                    ) + 1;
 
-                                linearLayoutParent.addView(tvAnswer, indexToInsert);
+                                    String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
+                                            DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
+                                            DEFAULT_INDENT + DEFAULT_INDENT + "}";
+                                    TextView tvAnswer = new TextView(getContext());
+                                    tvAnswer.setLayoutParams(layoutParams);
+                                    Spannable spannableAnswer = convertToColoredSpannableString(
+                                            answer, Color.BLUE
+                                    );
+                                    tvAnswer.setText(spannableAnswer);
 
-                                AlphaAnimation anim = new AlphaAnimation(1.0f, 0.6f);
-                                anim.setDuration(2000L);
-                                anim.setRepeatMode(Animation.REVERSE);
-                                anim.setRepeatCount(Animation.INFINITE);
-                                tvAnswer.startAnimation(anim);
+                                    linearLayoutParent.addView(tvAnswer, indexToInsert);
 
-                                return true;
+                                    AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
+                                    anim.setDuration(1500L);
+                                    anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                                    anim.setRepeatMode(Animation.REVERSE);
+                                    anim.setRepeatCount(Animation.INFINITE);
+                                    tvAnswer.startAnimation(anim);
+
+                                    return true;
+                                }
+
+                                return false;
                             }
                         });
                     }
