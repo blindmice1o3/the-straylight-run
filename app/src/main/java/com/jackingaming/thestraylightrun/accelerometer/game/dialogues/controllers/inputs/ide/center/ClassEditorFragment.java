@@ -183,6 +183,7 @@ public class ClassEditorFragment extends Fragment {
         linearLayoutParent.addView(llChild);
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initLinesOfFields() {
         for (Field field : classToEdit.getFields()) {
             LinearLayout llChild = new LinearLayout(getContext());
@@ -351,7 +352,14 @@ public class ClassEditorFragment extends Fragment {
                 llChild.addView(tvComment);
             }
 
-            linearLayoutParent.addView(llChild);
+            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+            scroll.setBackgroundColor(android.R.color.transparent);
+            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            scroll.setHorizontalScrollBarEnabled(false);
+            scroll.addView(llChild);
+            linearLayoutParent.addView(
+                    scroll
+            );
         }
     }
 
@@ -750,8 +758,7 @@ public class ClassEditorFragment extends Fragment {
                     TextView tvLineAfterTODO = new TextView(getContext());
                     tvLineAfterTODO.setLayoutParams(layoutParams);
                     Spannable spannableLineAfterTODO = convertToColoredSpannableString(
-                            line.substring(indexTODO), Color.GREEN
-                    );
+                            line.substring(indexTODO), Color.CYAN);
                     tvLineAfterTODO.setText(spannableLineAfterTODO);
 
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -759,23 +766,26 @@ public class ClassEditorFragment extends Fragment {
                         tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View view) {
-                                int indexOfTvTODO = ((LinearLayout) view.getParent()).indexOfChild(view);
-                                view.setVisibility(View.GONE);
+                                int indexToInsert = linearLayoutParent.indexOfChild(
+                                        (LinearLayout) view.getParent()
+                                ) + 1;
 
-                                String answer = "   if (lightCycleCorrect && !pestsPresent) { isFlowering = true; }";
+                                String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
+                                        DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
+                                        DEFAULT_INDENT + DEFAULT_INDENT + "}";
                                 TextView tvAnswer = new TextView(getContext());
                                 tvAnswer.setLayoutParams(layoutParams);
                                 Spannable spannableAnswer = convertToColoredSpannableString(
-                                        answer, Color.RED
+                                        answer, Color.BLACK
                                 );
                                 tvAnswer.setText(spannableAnswer);
 
-                                llLine.addView(tvAnswer, indexOfTvTODO);
+                                linearLayoutParent.addView(tvAnswer, indexToInsert);
 
-                                AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
-                                anim.setDuration(1000);
-                                anim.setRepeatCount(Animation.INFINITE);
+                                AlphaAnimation anim = new AlphaAnimation(1.0f, 0.6f);
+                                anim.setDuration(2000L);
                                 anim.setRepeatMode(Animation.REVERSE);
+                                anim.setRepeatCount(Animation.INFINITE);
                                 tvAnswer.startAnimation(anim);
 
                                 return true;

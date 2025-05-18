@@ -195,13 +195,21 @@ public class ProjectViewportFragment extends Fragment {
                 "double", "moisture", null, " // 0.0 to 1.0"));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isFlowering", "false", " // all instances start non-flowering"));
+                "boolean", "isFlowering", null, " // Track if the plant has begun flowering phase"));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isHealthy", null, " // Monitor plant health"));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isReady", null, " // Determine if the plant is ready to harvest"));
         List<VariableDeclaration> argumentListPlant = new ArrayList<>();
         argumentListPlant.add(
                 new VariableDeclaration("String", "name")
         );
         String bodyPlant = "        this.name = name;\n" +
-                "        this.moisture = 0.6; // starts healthy";
+                "        this.isFlowering = false; // Initialize to false\n" +
+                "        this.isHealthy = true;       // Assume healthy on creation\n" +
+                "        this.isReady = false;        // Harvest status begins as false";
         classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListPlant, bodyPlant, null));
         String bodyUpdateGrowth = "    // TODO: If light is correct and pests are not present, start flowering";
