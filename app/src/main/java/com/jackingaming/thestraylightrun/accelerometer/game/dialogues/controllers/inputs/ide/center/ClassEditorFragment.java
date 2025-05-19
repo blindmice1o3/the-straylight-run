@@ -482,22 +482,131 @@ public class ClassEditorFragment extends Fragment {
                     scroll
             );
 
-            TextView tvConstructorBody = new TextView(getContext());
-            tvConstructorBody.setLayoutParams(layoutParams);
-            tvConstructorBody.setText(constructor.getBody());
-            HorizontalScrollView scrollConstructorBody = new HorizontalScrollView(getContext());
-            scrollConstructorBody.setBackgroundColor(android.R.color.transparent);
-            scrollConstructorBody.setHorizontalScrollBarEnabled(false);
-            scrollConstructorBody.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            scrollConstructorBody.addView(tvConstructorBody);
-            linearLayoutParent.addView(
-                    scrollConstructorBody
-            );
+            // BODY
+            String bodyConstructor = constructor.getBody();
+            String[] bodyConstructorSplitByNewLine = bodyConstructor.split("\\n");
+            for (int i = 0; i < bodyConstructorSplitByNewLine.length; i++) {
+                String line = bodyConstructorSplitByNewLine[i];
 
+                LinearLayout llLine = new LinearLayout(getContext());
+                llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llLine.setOrientation(LinearLayout.HORIZONTAL);
+
+                boolean hasComment = false;
+                int indexComment = -1;
+                for (int j = 0; j < line.length(); j++) {
+                    // scan line for single line comment (prevents index out of bounds).
+                    if (j + IDENTIFIER_COMMENT_SINGLE_LINE.length() - 1 < line.length()) {
+                        // FOUND COMMENT
+                        if (line.substring(j, j + IDENTIFIER_COMMENT_SINGLE_LINE.length()).equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
+                            hasComment = true;
+                            indexComment = j;
+                            break;
+                        }
+                    }
+                }
+
+                int indexTODO = -1;
+                if (hasComment) {
+                    for (int k = indexComment; k < line.length(); k++) {
+                        // scan line for TO-DO (prevents index out of bounds).
+                        if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
+                            // FOUND TO-DO
+                            if (line.substring(k, k + IDENTIFIER_COMMENT_TODO.length()).toLowerCase().equals(IDENTIFIER_COMMENT_TODO)) {
+                                indexTODO = k;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (indexTODO > -1) {
+                    TextView tvLineAfterTODO = new TextView(getContext());
+                    tvLineAfterTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterTODO = convertToColoredSpannableString(
+                            line.substring(indexTODO), Color.CYAN);
+                    tvLineAfterTODO.setText(spannableLineAfterTODO);
+
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                    if (constructor.getName() == "GrowTentSystem") {
+                        if (constructor.getArgumentList().size() == 0) {
+                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 0 argument");
+                            String answer = "        ANSWER 0 (TESTING)!!!";
+                            tvLineAfterTODO.setOnLongClickListener(
+                                    generateOnLongClickListener(answer)
+                            );
+                        } else if (constructor.getArgumentList().size() == 1) {
+                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 1 argument");
+                            String answer = "        ANSWER 1 (TESTING)!!!";
+                            tvLineAfterTODO.setOnLongClickListener(
+                                    generateOnLongClickListener(answer)
+                            );
+                        }
+                    }
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+                    TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
+                    tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
+                            line.substring(indexComment, indexTODO), Color.GRAY
+                    );
+                    tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
+
+                    TextView tvLineBeforeComment = new TextView(getContext());
+                    tvLineBeforeComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                            line.substring(0, indexComment), Color.BLACK
+                    );
+                    tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                    llLine.addView(tvLineBeforeComment);
+                    llLine.addView(tvLineAfterCommentBeforeTODO);
+                    llLine.addView(tvLineAfterTODO);
+                } else if (hasComment) {
+                    TextView tvLineAfterComment = new TextView(getContext());
+                    tvLineAfterComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterComment = convertToColoredSpannableString(
+                            line.substring(indexComment), Color.GRAY
+                    );
+                    tvLineAfterComment.setText(spannableLineAfterComment);
+
+                    TextView tvLineBeforeComment = new TextView(getContext());
+                    tvLineBeforeComment.setLayoutParams(layoutParams);
+                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                            line.substring(0, indexComment), Color.BLACK
+                    );
+                    tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                    llLine.addView(tvLineBeforeComment);
+                    llLine.addView(tvLineAfterComment);
+                } else {
+                    TextView tvLine = new TextView(getContext());
+                    tvLine.setLayoutParams(layoutParams);
+                    Spannable spannableLine = convertToColoredSpannableString(
+                            line, Color.BLACK
+                    );
+                    tvLine.setText(spannableLine);
+
+                    llLine.addView(tvLine);
+                }
+
+                HorizontalScrollView scrollLine = new HorizontalScrollView(getContext());
+                scrollLine.setBackgroundColor(android.R.color.transparent);
+                scrollLine.setHorizontalScrollBarEnabled(false);
+                scrollLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scrollLine.addView(llLine);
+                linearLayoutParent.addView(
+                        scrollLine
+                );
+            }
+
+            // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
             tvCurlyBracketCloseWithIndent.setText(DEFAULT_INDENT + "}");
-            linearLayoutParent.addView(tvCurlyBracketCloseWithIndent);
+            linearLayoutParent.addView(
+                    tvCurlyBracketCloseWithIndent
+            );
         }
     }
 
@@ -747,9 +856,9 @@ public class ClassEditorFragment extends Fragment {
             Log.e(TAG, "counterCloseBracketRound: " + counterCloseBracketRound);
             /////////////////////////////////
 
-            String[] bodyMethodSplitedByNewLine = bodyMethod.split("\\n");
-            for (int i = 0; i < bodyMethodSplitedByNewLine.length; i++) {
-                String line = bodyMethodSplitedByNewLine[i];
+            String[] bodyMethodSplitByNewLine = bodyMethod.split("\\n");
+            for (int i = 0; i < bodyMethodSplitByNewLine.length; i++) {
+                String line = bodyMethodSplitByNewLine[i];
 
                 LinearLayout llLine = new LinearLayout(getContext());
                 llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -873,15 +982,20 @@ public class ClassEditorFragment extends Fragment {
                     llLine.addView(tvLine);
                 }
 
+                HorizontalScrollView scrollLine = new HorizontalScrollView(getContext());
+                scrollLine.setBackgroundColor(android.R.color.transparent);
+                scrollLine.setHorizontalScrollBarEnabled(false);
+                scrollLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scrollLine.addView(llLine);
                 linearLayoutParent.addView(
-                        llLine
+                        scrollLine
                 );
             }
 
             // CLOSING
             TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
             tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
-            tvCurlyBracketCloseWithIndent.setText("    }");
+            tvCurlyBracketCloseWithIndent.setText(DEFAULT_INDENT + "}");
             linearLayoutParent.addView(
                     tvCurlyBracketCloseWithIndent
             );
@@ -892,13 +1006,14 @@ public class ClassEditorFragment extends Fragment {
         return new View.OnLongClickListener() {
             private boolean isFirstTime = true;
 
+            @SuppressLint("ResourceAsColor")
             @Override
             public boolean onLongClick(View view) {
                 if (isFirstTime) {
                     isFirstTime = false;
 
                     int indexToInsert = linearLayoutParent.indexOfChild(
-                            (LinearLayout) view.getParent()
+                            (HorizontalScrollView) view.getParent().getParent()
                     ) + 1;
 
                     TextView tvAnswer = new TextView(getContext());
@@ -908,7 +1023,14 @@ public class ClassEditorFragment extends Fragment {
                     );
                     tvAnswer.setText(spannableAnswer);
 
-                    linearLayoutParent.addView(tvAnswer, indexToInsert);
+                    HorizontalScrollView scrollAnswer = new HorizontalScrollView(getContext());
+                    scrollAnswer.setBackgroundColor(android.R.color.transparent);
+                    scrollAnswer.setHorizontalScrollBarEnabled(false);
+                    scrollAnswer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    scrollAnswer.addView(tvAnswer);
+                    linearLayoutParent.addView(
+                            scrollAnswer, indexToInsert
+                    );
 
                     AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
                     anim.setDuration(1500L);
@@ -922,20 +1044,6 @@ public class ClassEditorFragment extends Fragment {
                 return false;
             }
         };
-    }
-
-    // !!!!!RECURSIVE!!!!!
-    private int checkLineForNumberOfIndents(String line) {
-        if (line.length() >= 4) {
-            if (line.substring(0, 4).equals(DEFAULT_INDENT)) {
-                String lineWithoutFrontIndent = line.substring(4);
-                return 1 + checkLineForNumberOfIndents(lineWithoutFrontIndent);
-            } else {
-                return 0;
-            }
-        } else {
-            return 0;
-        }
     }
 
     private void initLinesOfClassClosing() {

@@ -144,11 +144,22 @@ public class ProjectViewportFragment extends Fragment {
                 "            plants[i] = new Plant(\"Plant_\" + (i + 1));\n" +
                 "        }\n" +
                 "\n" +
-                "        lightOn = false;\n" +
+                "        //TODOlightOn = false;\n" +
                 "        hour = 0;";
         classGrowTentSystem.addConstructor(new Constructor(
                 ClassComponent.AccessModifier.PUBLIC,
                 argumentListGrowTentSystem, bodyGrowTentSystem, null));
+
+        String bodyGrowTentSystemWithList = "        this.plants = List.of(\n" +
+                "            new Plant(\"Blue Dream\", true, true),\n" +
+                "            new Plant(\"Northern Lights\", trueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee, true),\n" +
+                "            new Plant(\"OG Kush\", true, true)\n" +
+                "        );//todoclassics";
+        classGrowTentSystem.addConstructor(new Constructor(
+                ClassComponent.AccessModifier.PUBLIC,
+                null,
+                bodyGrowTentSystemWithList,
+                null));
 
         // METHODS
         String bodyRunDailyCycle = "        // Only if tent is zipped should light be counted as \"correct\"\n" +
@@ -199,7 +210,7 @@ public class ProjectViewportFragment extends Fragment {
 //                "        hour = (hour + 1) % 24;";
         classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "simulateHour",
+                "void", "simulateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeHour",
                 null,
                 bodySimulateHour,
                 null));
