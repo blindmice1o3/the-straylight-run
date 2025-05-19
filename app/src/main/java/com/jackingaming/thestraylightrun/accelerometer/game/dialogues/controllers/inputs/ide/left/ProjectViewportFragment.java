@@ -100,27 +100,10 @@ public class ProjectViewportFragment extends Fragment {
     }
 
     private Class initClassGrowTentSystem() {
-        List<VariableDeclaration> argumentListGrowTentSystem = new ArrayList<>();
-        argumentListGrowTentSystem.add(
-                new VariableDeclaration("int", "plantCount")
-        );
-        String bodyGrowTentSystem = "        lightOn = false;\n" +
-                "        hour = 0;\n" +
-                "        plants = new Plant[plantCount];\n" +
-                "        for (int i = 0; i < plantCount; i++) {\n" +
-                "            plants[i] = new Plant(\"Plant_\" + (i + 1));\n" +
-                "        }";
         Class classGrowTentSystem = new Class(ClassComponent.AccessModifier.PUBLIC,
                 "GrowTentSystem", null);
-        classGrowTentSystem.addConstructor(new Constructor(
-                ClassComponent.AccessModifier.PUBLIC,
-                argumentListGrowTentSystem, bodyGrowTentSystem, null));
-        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "lightOn", null, null));
-        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "int", "hour", null, null));
+
+        // FIELDS
         List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersFinal = new ArrayList<>();
         nonAccessModifiersFinal.add(ClassComponent.ClassInterfaceAndObjectRelated.FINAL);
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
@@ -131,7 +114,56 @@ public class ProjectViewportFragment extends Fragment {
                 "int", "LIGHT_END", "18", "   // 6 PM"));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "Plant[]", "plants", null, null));
+                "boolean", "lightOn", null, null,
+                true));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "hour", null, null));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "List<Plant>", "plants", null, null,
+                true));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isTentZipped", "false", null,
+                true));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isLightCycleCorrect", "false", null));
+        classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "pestsDetected", "false", null));
+
+        // CONSTRUCTORS
+        List<VariableDeclaration> argumentListGrowTentSystem = new ArrayList<>();
+        argumentListGrowTentSystem.add(
+                new VariableDeclaration("int", "plantCount")
+        );
+        String bodyGrowTentSystem = "        plants = new Plant[plantCount];\n" +
+                "        for (int i = 0; i < plantCount; i++) {\n" +
+                "            plants[i] = new Plant(\"Plant_\" + (i + 1));\n" +
+                "        }\n" +
+                "\n" +
+                "        lightOn = false;\n" +
+                "        hour = 0;";
+        classGrowTentSystem.addConstructor(new Constructor(
+                ClassComponent.AccessModifier.PUBLIC,
+                argumentListGrowTentSystem, bodyGrowTentSystem, null));
+
+        // METHODS
+        String bodyRunDailyCycle = "        // Only if tent is zipped should light be counted as \"correct\"\n" +
+                "        // TODO: Set isLightCycleCorrect based on isTentZipped\n" +
+                "\n" +
+                "        // Loop through plants and update their growth\n" +
+                "        // TODO: Loop through each plant and call updateGrowth()\n" +
+                "\n" +
+                "        // TODO: Count how many plants are ready for harvest and print result";
+        classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "runDailyCycle",
+                null,
+                bodyRunDailyCycle,
+                null));
         String bodyUpdateLights = "    //\n" +
                 "        if (hour >=// LIGHT_START toDO && hour < LIGHT_END) {\n" +
                 "//TODO:            lightOn = true;\n" +

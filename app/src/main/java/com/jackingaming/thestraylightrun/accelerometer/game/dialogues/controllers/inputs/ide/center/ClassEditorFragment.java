@@ -198,6 +198,10 @@ public class ClassEditorFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void initLinesOfFields() {
         for (Field field : classToEdit.getFields()) {
+            if (field.isHasBlankLineAbove()) {
+                addTextViewAsBlankLineToLinearLayout();
+            }
+
             LinearLayout llChild = new LinearLayout(getContext());
             llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             llChild.setOrientation(LinearLayout.HORIZONTAL);
@@ -765,7 +769,6 @@ public class ClassEditorFragment extends Fragment {
                     }
                 }
 
-                boolean hasTODO = false;
                 int indexTODO = -1;
                 if (hasComment) {
                     for (int k = indexComment; k < line.length(); k++) {
@@ -773,7 +776,6 @@ public class ClassEditorFragment extends Fragment {
                         if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
                             // FOUND TO-DO
                             if (line.substring(k, k + IDENTIFIER_COMMENT_TODO.length()).toLowerCase().equals(IDENTIFIER_COMMENT_TODO)) {
-                                hasTODO = true;
                                 indexTODO = k;
                                 break;
                             }
@@ -781,7 +783,7 @@ public class ClassEditorFragment extends Fragment {
                     }
                 }
 
-                if (hasTODO) {
+                if (indexTODO > -1) {
                     TextView tvLineAfterTODO = new TextView(getContext());
                     tvLineAfterTODO.setLayoutParams(layoutParams);
                     Spannable spannableLineAfterTODO = convertToColoredSpannableString(
@@ -789,7 +791,124 @@ public class ClassEditorFragment extends Fragment {
                     tvLineAfterTODO.setText(spannableLineAfterTODO);
 
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                    if (method.getName().equals("updateGrowth")) {
+                    if (method.getName().equals("runDailyCycle")) {
+
+                        if (i == 1) {
+                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
+                                private boolean isFirstTime = true;
+
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    if (isFirstTime) {
+                                        isFirstTime = false;
+
+                                        int indexToInsert = linearLayoutParent.indexOfChild(
+                                                (LinearLayout) view.getParent()
+                                        ) + 1;
+
+                                        String answer = "        isLightCycleCorrect = isTentZipped;";
+                                        TextView tvAnswer = new TextView(getContext());
+                                        tvAnswer.setLayoutParams(layoutParams);
+                                        Spannable spannableAnswer = convertToColoredSpannableString(
+                                                answer, Color.BLUE
+                                        );
+                                        tvAnswer.setText(spannableAnswer);
+
+                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
+
+                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
+                                        anim.setDuration(1500L);
+                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                                        anim.setRepeatMode(Animation.REVERSE);
+                                        anim.setRepeatCount(Animation.INFINITE);
+                                        tvAnswer.startAnimation(anim);
+
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            });
+                        } else if (i == 4) {
+                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
+                                private boolean isFirstTime = true;
+
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    if (isFirstTime) {
+                                        isFirstTime = false;
+
+                                        int indexToInsert = linearLayoutParent.indexOfChild(
+                                                (LinearLayout) view.getParent()
+                                        ) + 1;
+
+                                        String answer = "        for (Plant p : plants) {\n" +
+                                                "            p.updateGrowth(isLightCycleCorrect, pestsDetected);\n" +
+                                                "        }";
+                                        TextView tvAnswer = new TextView(getContext());
+                                        tvAnswer.setLayoutParams(layoutParams);
+                                        Spannable spannableAnswer = convertToColoredSpannableString(
+                                                answer, Color.BLUE
+                                        );
+                                        tvAnswer.setText(spannableAnswer);
+
+                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
+
+                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
+                                        anim.setDuration(1500L);
+                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                                        anim.setRepeatMode(Animation.REVERSE);
+                                        anim.setRepeatCount(Animation.INFINITE);
+                                        tvAnswer.startAnimation(anim);
+
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            });
+                        } else if (i == 6) {
+                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
+                                private boolean isFirstTime = true;
+
+                                @Override
+                                public boolean onLongClick(View view) {
+                                    if (isFirstTime) {
+                                        isFirstTime = false;
+
+                                        int indexToInsert = linearLayoutParent.indexOfChild(
+                                                (LinearLayout) view.getParent()
+                                        ) + 1;
+
+                                        String answer = "        int readyCount = 0;\n" +
+                                                "        for (Plant p : plants) {\n" +
+                                                "            if (p.isReadyForHarvest()) {\n" +
+                                                "                readyCount++;\n" +
+                                                "            }\n" +
+                                                "        }\n" +
+                                                "\n" +
+                                                "        System.out.println(\"Ready plants: \" + readyCount);";
+                                        TextView tvAnswer = new TextView(getContext());
+                                        tvAnswer.setLayoutParams(layoutParams);
+                                        Spannable spannableAnswer = convertToColoredSpannableString(
+                                                answer, Color.BLUE
+                                        );
+                                        tvAnswer.setText(spannableAnswer);
+
+                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
+
+                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
+                                        anim.setDuration(1500L);
+                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                                        anim.setRepeatMode(Animation.REVERSE);
+                                        anim.setRepeatCount(Animation.INFINITE);
+                                        tvAnswer.startAnimation(anim);
+
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            });
+                        }
+                    } else if (method.getName().equals("updateGrowth")) {
                         tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
                             private boolean isFirstTime = true;
 
