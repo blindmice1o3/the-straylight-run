@@ -794,158 +794,37 @@ public class ClassEditorFragment extends Fragment {
                     if (method.getName().equals("runDailyCycle")) {
 
                         if (i == 1) {
-                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
-                                private boolean isFirstTime = true;
-
-                                @Override
-                                public boolean onLongClick(View view) {
-                                    if (isFirstTime) {
-                                        isFirstTime = false;
-
-                                        int indexToInsert = linearLayoutParent.indexOfChild(
-                                                (LinearLayout) view.getParent()
-                                        ) + 1;
-
-                                        String answer = "        isLightCycleCorrect = isTentZipped;";
-                                        TextView tvAnswer = new TextView(getContext());
-                                        tvAnswer.setLayoutParams(layoutParams);
-                                        Spannable spannableAnswer = convertToColoredSpannableString(
-                                                answer, Color.BLUE
-                                        );
-                                        tvAnswer.setText(spannableAnswer);
-
-                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
-
-                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
-                                        anim.setDuration(1500L);
-                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                                        anim.setRepeatMode(Animation.REVERSE);
-                                        anim.setRepeatCount(Animation.INFINITE);
-                                        tvAnswer.startAnimation(anim);
-
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            });
+                            String answer = "        isLightCycleCorrect = isTentZipped;";
+                            tvLineAfterTODO.setOnLongClickListener(
+                                    generateOnLongClickListener(answer)
+                            );
                         } else if (i == 4) {
-                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
-                                private boolean isFirstTime = true;
-
-                                @Override
-                                public boolean onLongClick(View view) {
-                                    if (isFirstTime) {
-                                        isFirstTime = false;
-
-                                        int indexToInsert = linearLayoutParent.indexOfChild(
-                                                (LinearLayout) view.getParent()
-                                        ) + 1;
-
-                                        String answer = "        for (Plant p : plants) {\n" +
-                                                "            p.updateGrowth(isLightCycleCorrect, pestsDetected);\n" +
-                                                "        }";
-                                        TextView tvAnswer = new TextView(getContext());
-                                        tvAnswer.setLayoutParams(layoutParams);
-                                        Spannable spannableAnswer = convertToColoredSpannableString(
-                                                answer, Color.BLUE
-                                        );
-                                        tvAnswer.setText(spannableAnswer);
-
-                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
-
-                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
-                                        anim.setDuration(1500L);
-                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                                        anim.setRepeatMode(Animation.REVERSE);
-                                        anim.setRepeatCount(Animation.INFINITE);
-                                        tvAnswer.startAnimation(anim);
-
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            });
+                            String answer = "        for (Plant p : plants) {\n" +
+                                    "            p.updateGrowth(isLightCycleCorrect, pestsDetected);\n" +
+                                    "        }";
+                            tvLineAfterTODO.setOnLongClickListener(
+                                    generateOnLongClickListener(answer)
+                            );
                         } else if (i == 6) {
-                            tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
-                                private boolean isFirstTime = true;
-
-                                @Override
-                                public boolean onLongClick(View view) {
-                                    if (isFirstTime) {
-                                        isFirstTime = false;
-
-                                        int indexToInsert = linearLayoutParent.indexOfChild(
-                                                (LinearLayout) view.getParent()
-                                        ) + 1;
-
-                                        String answer = "        int readyCount = 0;\n" +
-                                                "        for (Plant p : plants) {\n" +
-                                                "            if (p.isReadyForHarvest()) {\n" +
-                                                "                readyCount++;\n" +
-                                                "            }\n" +
-                                                "        }\n" +
-                                                "\n" +
-                                                "        System.out.println(\"Ready plants: \" + readyCount);";
-                                        TextView tvAnswer = new TextView(getContext());
-                                        tvAnswer.setLayoutParams(layoutParams);
-                                        Spannable spannableAnswer = convertToColoredSpannableString(
-                                                answer, Color.BLUE
-                                        );
-                                        tvAnswer.setText(spannableAnswer);
-
-                                        linearLayoutParent.addView(tvAnswer, indexToInsert);
-
-                                        AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
-                                        anim.setDuration(1500L);
-                                        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                                        anim.setRepeatMode(Animation.REVERSE);
-                                        anim.setRepeatCount(Animation.INFINITE);
-                                        tvAnswer.startAnimation(anim);
-
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            });
+                            String answer = "        int readyCount = 0;\n" +
+                                    "        for (Plant p : plants) {\n" +
+                                    "            if (p.isReadyForHarvest()) {\n" +
+                                    "                readyCount++;\n" +
+                                    "            }\n" +
+                                    "        }\n" +
+                                    "\n" +
+                                    "        System.out.println(\"Ready plants: \" + readyCount);";
+                            tvLineAfterTODO.setOnLongClickListener(
+                                    generateOnLongClickListener(answer)
+                            );
                         }
                     } else if (method.getName().equals("updateGrowth")) {
-                        tvLineAfterTODO.setOnLongClickListener(new View.OnLongClickListener() {
-                            private boolean isFirstTime = true;
-
-                            @Override
-                            public boolean onLongClick(View view) {
-                                if (isFirstTime) {
-                                    isFirstTime = false;
-
-                                    int indexToInsert = linearLayoutParent.indexOfChild(
-                                            (LinearLayout) view.getParent()
-                                    ) + 1;
-
-                                    String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
-                                            DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
-                                            DEFAULT_INDENT + DEFAULT_INDENT + "}";
-                                    TextView tvAnswer = new TextView(getContext());
-                                    tvAnswer.setLayoutParams(layoutParams);
-                                    Spannable spannableAnswer = convertToColoredSpannableString(
-                                            answer, Color.BLUE
-                                    );
-                                    tvAnswer.setText(spannableAnswer);
-
-                                    linearLayoutParent.addView(tvAnswer, indexToInsert);
-
-                                    AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
-                                    anim.setDuration(1500L);
-                                    anim.setInterpolator(new AccelerateDecelerateInterpolator());
-                                    anim.setRepeatMode(Animation.REVERSE);
-                                    anim.setRepeatCount(Animation.INFINITE);
-                                    tvAnswer.startAnimation(anim);
-
-                                    return true;
-                                }
-
-                                return false;
-                            }
-                        });
+                        String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
+                                DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
+                                DEFAULT_INDENT + DEFAULT_INDENT + "}";
+                        tvLineAfterTODO.setOnLongClickListener(
+                                generateOnLongClickListener(answer)
+                        );
                     }
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -1007,6 +886,42 @@ public class ClassEditorFragment extends Fragment {
                     tvCurlyBracketCloseWithIndent
             );
         }
+    }
+
+    private View.OnLongClickListener generateOnLongClickListener(String answer) {
+        return new View.OnLongClickListener() {
+            private boolean isFirstTime = true;
+
+            @Override
+            public boolean onLongClick(View view) {
+                if (isFirstTime) {
+                    isFirstTime = false;
+
+                    int indexToInsert = linearLayoutParent.indexOfChild(
+                            (LinearLayout) view.getParent()
+                    ) + 1;
+
+                    TextView tvAnswer = new TextView(getContext());
+                    tvAnswer.setLayoutParams(layoutParams);
+                    Spannable spannableAnswer = convertToColoredSpannableString(
+                            answer, Color.BLUE
+                    );
+                    tvAnswer.setText(spannableAnswer);
+
+                    linearLayoutParent.addView(tvAnswer, indexToInsert);
+
+                    AlphaAnimation anim = new AlphaAnimation(1.0f, 0.33f);
+                    anim.setDuration(1500L);
+                    anim.setInterpolator(new AccelerateDecelerateInterpolator());
+                    anim.setRepeatMode(Animation.REVERSE);
+                    anim.setRepeatCount(Animation.INFINITE);
+                    tvAnswer.startAnimation(anim);
+
+                    return true;
+                }
+                return false;
+            }
+        };
     }
 
     // !!!!!RECURSIVE!!!!!
