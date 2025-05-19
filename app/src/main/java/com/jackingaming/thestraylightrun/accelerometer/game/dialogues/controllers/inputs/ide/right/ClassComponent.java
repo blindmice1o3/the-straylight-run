@@ -105,15 +105,20 @@ public class ClassComponent {
     private String type;
     private String name;
     private String comment;
+    private String todo;
+    private boolean hasBlankLineAbove;
 
     public ClassComponent(AccessModifier accessModifier,
                           List<ClassInterfaceAndObjectRelated> classInterfaceAndObjectRelateds,
-                          String type, String name, String comment) {
+                          String type, String name, String comment, String todo,
+                          boolean hasBlankLineAbove) {
         this.accessModifier = accessModifier;
         this.classInterfaceAndObjectRelateds = classInterfaceAndObjectRelateds;
         this.type = type;
         this.name = name;
         this.comment = comment;
+        this.todo = todo;
+        this.hasBlankLineAbove = hasBlankLineAbove;
     }
 
     public AccessModifier getAccessModifier() {
@@ -142,5 +147,13 @@ public class ClassComponent {
 
     public String getComment() {
         return comment;
+    }
+
+    public String getTodo() {
+        return todo;
+    }
+
+    public boolean isHasBlankLineAbove() {
+        return hasBlankLineAbove;
     }
 }

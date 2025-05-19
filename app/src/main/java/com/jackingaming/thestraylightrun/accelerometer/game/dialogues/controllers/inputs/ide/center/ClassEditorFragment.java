@@ -202,180 +202,258 @@ public class ClassEditorFragment extends Fragment {
                 addTextViewAsBlankLineToLinearLayout();
             }
 
-            LinearLayout llChild = new LinearLayout(getContext());
-            llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            llChild.setOrientation(LinearLayout.HORIZONTAL);
+            // WAY TO ADD TO-DO INSIDE CLASS'S BODY.
+            if (field.getTodo() != null) {
+                // TO-DO
+                String todo = DEFAULT_INDENT + field.getTodo();
+                Spannable spannableTodo = convertToColoredSpannableString(
+                        todo, Color.CYAN);
+                TextView tvTodo = new TextView(getContext());
+                tvTodo.setLayoutParams(layoutParams);
+                tvTodo.setText(spannableTodo);
 
-            TextView tvIndent = new TextView(getContext());
-            tvIndent.setLayoutParams(layoutParams);
-            tvIndent.setText(DEFAULT_INDENT);
-            llChild.addView(tvIndent);
-
-            // do NOT show AccessModifier.DEFAULT.
-            String accessModifier = field.getAccessModifier().name().toLowerCase();
-            if (!accessModifier.equals(
-                    ClassComponent.AccessModifier.DEFAULT.name().toLowerCase())) {
-                Spannable spannableAccessModifier = convertToColoredSpannableString(
-                        accessModifier, Color.BLUE);
-                TextView tvAccessModifier = new TextView(getContext());
-                tvAccessModifier.setLayoutParams(layoutParams);
-                tvAccessModifier.setText(spannableAccessModifier);
-                tvAccessModifier.append(" ");
-                llChild.addView(tvAccessModifier);
-            }
-
-            if (field.getClassInterfaceAndObjectRelateds() != null) {
-                for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : field.getClassInterfaceAndObjectRelateds()) {
-                    String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
-                    Spannable spannableNonAccessModifiers = convertToColoredSpannableString(
-                            nonAccessModifiers, Color.BLUE);
-
-                    TextView tvNonAccessModifiers = new TextView(getContext());
-                    tvNonAccessModifiers.setLayoutParams(layoutParams);
-                    tvNonAccessModifiers.setText(spannableNonAccessModifiers);
-                    tvNonAccessModifiers.append(" ");
-                    llChild.addView(tvNonAccessModifiers);
-                }
-            }
-
-            String type = field.getType();
-            Spannable spannableType = convertToColoredSpannableString(
-                    type, Color.RED);
-            TextView tvType = new TextView(getContext());
-            tvType.setLayoutParams(layoutParams);
-            tvType.setText(spannableType);
-            tvType.append(" ");
-            tvType.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
-                    int indexDefault = -1;
-                    for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
-                        dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
-
-                        if (type.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
-                            Log.e(TAG, "type: " + type);
-                            indexDefault = i;
-                            Log.e(TAG, "indexDefault: " + indexDefault);
-                        }
+                if (field.getName().equals("isFlowering")) {
+                    String answer = "    boolean isFlowering;";
+                    if (field.getInLineComment() != null) {
+                        answer += field.getInLineComment();
                     }
 
-                    SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
-                            dataTypeAsString,
-                            indexDefault,
-                            new SpinnerDialogFragment.ItemSelectionListener() {
-                                @Override
-                                public void onDismiss() {
-                                    // TODO:
-                                }
+                    tvTodo.setOnLongClickListener(
+                            generateOnLongClickListenerToInsertDirectlyBeneath(
+                                    answer, false
+                            )
+                    );
 
-                                @Override
-                                public void onItemSelected(int indexSelected) {
-                                    String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
 
-                                    // update self.
-                                    Spannable spannableName = convertToColoredSpannableString(
-                                            itemSelectedAsString, Color.RED);
-                                    tvType.setText(spannableName);
+                } else if (field.getName().equals("isHealthy")) {
+                    String answer = "    boolean isHealthy;";
+                    if (field.getInLineComment() != null) {
+                        answer += field.getInLineComment();
+                    }
 
-                                    // update StructureViewportFragment.
-                                    for (Field fieldFromClass : classToEdit.getFields()) {
-                                        if (fieldFromClass.getName().equals(field.getName())) {
-                                            adapter.changeFieldType(classToEdit, fieldFromClass, itemSelectedAsString);
-                                            break;
-                                        }
-                                    }
-                                }
-                            });
+                    tvTodo.setOnLongClickListener(
+                            generateOnLongClickListenerToInsertDirectlyBeneath(
+                                    answer, false
+                            )
+                    );
+                } else if (field.getName().equals("vegDays")) {
+                    String answer = "    int vegDays; ";
+                    if (field.getInLineComment() != null) {
+                        answer += field.getInLineComment();
+                    }
 
-                    spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
+                    tvTodo.setOnLongClickListener(
+                            generateOnLongClickListenerToInsertDirectlyBeneath(
+                                    answer, false
+                            )
+                    );
                 }
-            });
-            llChild.addView(tvType);
 
-            String nameField = field.getName();
-            Spannable spannableNameField = convertToColoredSpannableString(
-                    nameField, Color.GREEN);
-            TextView tvNameField = new TextView(getContext());
-            tvNameField.setLayoutParams(layoutParams);
-            tvNameField.setText(spannableNameField);
-            tvNameField.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-                        @Override
-                        public void onDismiss() {
-                            // TODO:
-                        }
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.addView(tvTodo);
+                linearLayoutParent.addView(
+                        scroll
+                );
+            } else {
+                // COMMENT
+                if (field.getComment() != null) {
+                    String comment = field.getComment();
+                    Spannable spannableComment = convertToColoredSpannableString(
+                            comment, Color.GRAY);
+                    TextView tvComment = new TextView(getContext());
+                    tvComment.setLayoutParams(layoutParams);
+                    tvComment.setText(spannableComment);
 
-                        @Override
-                        public void onEnterKeyPressed(String name) {
-                            // update self.
-                            Spannable spannableName = convertToColoredSpannableString(
-                                    name, Color.GREEN);
-                            tvNameField.setText(spannableName);
+                    HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                    scroll.setBackgroundColor(android.R.color.transparent);
+                    scroll.setHorizontalScrollBarEnabled(false);
+                    scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    scroll.addView(tvComment);
+                    linearLayoutParent.addView(
+                            scroll
+                    );
+                }
 
-                            // update StructureViewportFragment.
-                            for (Field field : classToEdit.getFields()) {
-                                if (field.getName().equals(nameField)) {
-                                    adapter.renameField(classToEdit, field, name);
-                                    break;
-                                }
+                LinearLayout llChild = new LinearLayout(getContext());
+                llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llChild.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView tvIndent = new TextView(getContext());
+                tvIndent.setLayoutParams(layoutParams);
+                tvIndent.setText(DEFAULT_INDENT);
+                llChild.addView(tvIndent);
+
+                // do NOT show AccessModifier.DEFAULT.
+                String accessModifier = field.getAccessModifier().name().toLowerCase();
+                if (!accessModifier.equals(
+                        ClassComponent.AccessModifier.DEFAULT.name().toLowerCase())) {
+                    Spannable spannableAccessModifier = convertToColoredSpannableString(
+                            accessModifier, Color.BLUE);
+                    TextView tvAccessModifier = new TextView(getContext());
+                    tvAccessModifier.setLayoutParams(layoutParams);
+                    tvAccessModifier.setText(spannableAccessModifier);
+                    tvAccessModifier.append(" ");
+                    llChild.addView(tvAccessModifier);
+                }
+
+                if (field.getClassInterfaceAndObjectRelateds() != null) {
+                    for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : field.getClassInterfaceAndObjectRelateds()) {
+                        String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
+                        Spannable spannableNonAccessModifiers = convertToColoredSpannableString(
+                                nonAccessModifiers, Color.BLUE);
+
+                        TextView tvNonAccessModifiers = new TextView(getContext());
+                        tvNonAccessModifiers.setLayoutParams(layoutParams);
+                        tvNonAccessModifiers.setText(spannableNonAccessModifiers);
+                        tvNonAccessModifiers.append(" ");
+                        llChild.addView(tvNonAccessModifiers);
+                    }
+                }
+
+                String type = field.getType();
+                Spannable spannableType = convertToColoredSpannableString(
+                        type, Color.RED);
+                TextView tvType = new TextView(getContext());
+                tvType.setLayoutParams(layoutParams);
+                tvType.setText(spannableType);
+                tvType.append(" ");
+                tvType.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
+                        int indexDefault = -1;
+                        for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
+                            dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
+
+                            if (type.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
+                                Log.e(TAG, "type: " + type);
+                                indexDefault = i;
+                                Log.e(TAG, "indexDefault: " + indexDefault);
                             }
                         }
-                    });
 
-                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                        SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
+                                dataTypeAsString,
+                                indexDefault,
+                                new SpinnerDialogFragment.ItemSelectionListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        // TODO:
+                                    }
+
+                                    @Override
+                                    public void onItemSelected(int indexSelected) {
+                                        String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
+
+                                        // update self.
+                                        Spannable spannableName = convertToColoredSpannableString(
+                                                itemSelectedAsString, Color.RED);
+                                        tvType.setText(spannableName);
+
+                                        // update StructureViewportFragment.
+                                        for (Field fieldFromClass : classToEdit.getFields()) {
+                                            if (fieldFromClass.getName().equals(field.getName())) {
+                                                adapter.changeFieldType(classToEdit, fieldFromClass, itemSelectedAsString);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+
+                        spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
+                    }
+                });
+                llChild.addView(tvType);
+
+                String nameField = field.getName();
+                Spannable spannableNameField = convertToColoredSpannableString(
+                        nameField, Color.GREEN);
+                TextView tvNameField = new TextView(getContext());
+                tvNameField.setLayoutParams(layoutParams);
+                tvNameField.setText(spannableNameField);
+                tvNameField.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                            @Override
+                            public void onDismiss() {
+                                // TODO:
+                            }
+
+                            @Override
+                            public void onEnterKeyPressed(String name) {
+                                // update self.
+                                Spannable spannableName = convertToColoredSpannableString(
+                                        name, Color.GREEN);
+                                tvNameField.setText(spannableName);
+
+                                // update StructureViewportFragment.
+                                for (Field field : classToEdit.getFields()) {
+                                    if (field.getName().equals(nameField)) {
+                                        adapter.renameField(classToEdit, field, name);
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+
+                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                    }
+                });
+                llChild.addView(tvNameField);
+
+                TextView tvPostFixNameField = new TextView(getContext());
+                tvPostFixNameField.setLayoutParams(layoutParams);
+                if (field.getValue() == null) {
+                    String postFixNameField = ";";
+                    Spannable spannablePostFixNameField = convertToColoredSpannableString(
+                            postFixNameField, Color.BLACK
+                    );
+                    tvPostFixNameField.setText(spannablePostFixNameField);
+                } else {
+                    String postFixNameFieldWithValueOpening = " = ";
+                    String postFixNameFieldWithValueMiddle = field.getValue();
+                    String postFixNameFieldWithValueClosing = ";";
+                    Spannable spannableOpening = convertToColoredSpannableString(
+                            postFixNameFieldWithValueOpening, Color.BLACK
+                    );
+                    Spannable spannableMiddle = convertToColoredSpannableString(
+                            postFixNameFieldWithValueMiddle, Color.CYAN
+                    );
+                    Spannable spannableClosing = convertToColoredSpannableString(
+                            postFixNameFieldWithValueClosing, Color.BLACK
+                    );
+                    tvPostFixNameField.setText(spannableOpening);
+                    tvPostFixNameField.append(spannableMiddle);
+                    tvPostFixNameField.append(spannableClosing);
                 }
-            });
-            llChild.addView(tvNameField);
+                llChild.addView(tvPostFixNameField);
 
-            TextView tvPostFixNameField = new TextView(getContext());
-            tvPostFixNameField.setLayoutParams(layoutParams);
-            if (field.getValue() == null) {
-                String postFixNameField = ";";
-                Spannable spannablePostFixNameField = convertToColoredSpannableString(
-                        postFixNameField, Color.BLACK
-                );
-                tvPostFixNameField.setText(spannablePostFixNameField);
-            } else {
-                String postFixNameFieldWithValueOpening = " = ";
-                String postFixNameFieldWithValueMiddle = field.getValue();
-                String postFixNameFieldWithValueClosing = ";";
-                Spannable spannableOpening = convertToColoredSpannableString(
-                        postFixNameFieldWithValueOpening, Color.BLACK
-                );
-                Spannable spannableMiddle = convertToColoredSpannableString(
-                        postFixNameFieldWithValueMiddle, Color.CYAN
-                );
-                Spannable spannableClosing = convertToColoredSpannableString(
-                        postFixNameFieldWithValueClosing, Color.BLACK
-                );
-                tvPostFixNameField.setText(spannableOpening);
-                tvPostFixNameField.append(spannableMiddle);
-                tvPostFixNameField.append(spannableClosing);
-            }
-            llChild.addView(tvPostFixNameField);
+                if (field.getInLineComment() != null) {
+                    String comment = field.getInLineComment();
+                    Spannable spannableComment = convertToColoredSpannableString(
+                            comment, Color.GRAY
+                    );
+                    TextView tvComment = new TextView(getContext());
+                    tvComment.setLayoutParams(layoutParams);
+                    tvComment.setText(spannableComment);
+                    llChild.addView(tvComment);
+                }
 
-            if (field.getComment() != null) {
-                String comment = field.getComment();
-                Spannable spannableComment = convertToColoredSpannableString(
-                        comment, Color.GRAY
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.addView(llChild);
+                linearLayoutParent.addView(
+                        scroll
                 );
-                TextView tvComment = new TextView(getContext());
-                tvComment.setLayoutParams(layoutParams);
-                tvComment.setText(spannableComment);
-                llChild.addView(tvComment);
             }
 
-            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
-            scroll.setBackgroundColor(android.R.color.transparent);
-            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            scroll.setHorizontalScrollBarEnabled(false);
-            scroll.addView(llChild);
-            linearLayoutParent.addView(
-                    scroll
-            );
+
         }
     }
 
@@ -533,13 +611,13 @@ public class ClassEditorFragment extends Fragment {
                             Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 0 argument");
                             String answer = "        ANSWER 0 (TESTING)!!!";
                             tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListener(answer)
+                                    generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                             );
                         } else if (constructor.getArgumentList().size() == 1) {
                             Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 1 argument");
                             String answer = "        ANSWER 1 (TESTING)!!!";
                             tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListener(answer)
+                                    generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                             );
                         }
                     }
@@ -613,396 +691,437 @@ public class ClassEditorFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void initLinesOfMethods() {
         for (Method method : classToEdit.getMethods()) {
-            addTextViewAsBlankLineToLinearLayout();
+            if (method.isHasBlankLineAbove()) {
+                addTextViewAsBlankLineToLinearLayout();
+            }
 
-            // COMMENT
-            if (method.getComment() != null) {
-                String comment = DEFAULT_INDENT + method.getComment();
-                Spannable spannableComment = convertToColoredSpannableString(
-                        comment, Color.GRAY);
-                TextView tvComment = new TextView(getContext());
-                tvComment.setLayoutParams(layoutParams);
-                tvComment.setText(spannableComment);
+            // WAY TO ADD TO-DO INSIDE CLASS'S BODY.
+            if (method.getName().equals("isReadyForHarvest")) {
+                // TO-DO
+                if (method.getTodo() != null) {
+                    String todo = DEFAULT_INDENT + method.getTodo();
+                    Spannable spannableTodo = convertToColoredSpannableString(
+                            todo, Color.CYAN);
+                    TextView tvTodo = new TextView(getContext());
+                    tvTodo.setLayoutParams(layoutParams);
+                    tvTodo.setText(spannableTodo);
+
+                    tvTodo.setOnLongClickListener(
+                            generateOnLongClickListenerToInsertDirectlyBeneath(
+                                    "    public boolean isReadyForHarvest() {\n" +
+                                            "        return isFlowering && isHealthy && vegDays >= 21;\n" +
+                                            "    }", false
+                            )
+                    );
+
+                    HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                    scroll.setBackgroundColor(android.R.color.transparent);
+                    scroll.setHorizontalScrollBarEnabled(false);
+                    scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    scroll.addView(tvTodo);
+                    linearLayoutParent.addView(
+                            scroll
+                    );
+                }
+            } else {
+                // COMMENT
+                if (method.getComment() != null) {
+                    String comment = DEFAULT_INDENT + method.getComment();
+                    Spannable spannableComment = convertToColoredSpannableString(
+                            comment, Color.GRAY);
+                    TextView tvComment = new TextView(getContext());
+                    tvComment.setLayoutParams(layoutParams);
+                    tvComment.setText(spannableComment);
+
+                    HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                    scroll.setBackgroundColor(android.R.color.transparent);
+                    scroll.setHorizontalScrollBarEnabled(false);
+                    scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    scroll.addView(tvComment);
+                    linearLayoutParent.addView(
+                            scroll
+                    );
+                }
+
+                LinearLayout llChild = new LinearLayout(getContext());
+                llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                llChild.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView tvIndent = new TextView(getContext());
+                tvIndent.setLayoutParams(layoutParams);
+                tvIndent.setText(DEFAULT_INDENT);
+                llChild.addView(tvIndent);
+
+                // ACCESS-MODIFIERS
+                String accessModifier = method.getAccessModifier().name().toLowerCase();
+                Spannable spannableAccessModifier = convertToColoredSpannableString(
+                        accessModifier, Color.BLUE);
+                TextView tvAccessModifier = new TextView(getContext());
+                tvAccessModifier.setLayoutParams(layoutParams);
+                tvAccessModifier.setText(spannableAccessModifier);
+                tvAccessModifier.append(" ");
+                llChild.addView(tvAccessModifier);
+
+                // NON-ACCESS-MODIFIERS
+                if (method.getClassInterfaceAndObjectRelateds() != null) {
+                    for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : method.getClassInterfaceAndObjectRelateds()) {
+                        String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
+                        Spannable spannableNonAccessModifiers = convertToColoredSpannableString(
+                                nonAccessModifiers, Color.BLUE);
+
+                        TextView tvNonAccessModifiers = new TextView(getContext());
+                        tvNonAccessModifiers.setLayoutParams(layoutParams);
+                        tvNonAccessModifiers.setText(spannableNonAccessModifiers);
+                        tvNonAccessModifiers.append(" ");
+                        llChild.addView(tvNonAccessModifiers);
+                    }
+                }
+
+                // RETURN-TYPE
+                String returnType = method.getType();
+                Spannable spannableReturnType = convertToColoredSpannableString(
+                        returnType, Color.RED);
+                TextView tvReturnType = new TextView(getContext());
+                tvReturnType.setLayoutParams(layoutParams);
+                tvReturnType.setText(spannableReturnType);
+                tvReturnType.append(" ");
+                llChild.addView(tvReturnType);
+
+                tvReturnType.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                            Log.e(TAG, "changing return type for main() is NOT allowed!!!");
+                            return;
+                        }
+
+                        String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
+                        int indexDefault = -1;
+                        for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
+                            dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
+
+                            if (returnType.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
+                                Log.e(TAG, "returnType: " + returnType);
+                                indexDefault = i;
+                                Log.e(TAG, "indexDefault: " + indexDefault);
+                            }
+                        }
+
+                        SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
+                                dataTypeAsString,
+                                indexDefault,
+                                new SpinnerDialogFragment.ItemSelectionListener() {
+                                    @Override
+                                    public void onDismiss() {
+                                        // TODO:
+                                    }
+
+                                    @Override
+                                    public void onItemSelected(int indexSelected) {
+                                        String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
+
+                                        // update self.
+                                        Spannable spannableName = convertToColoredSpannableString(
+                                                itemSelectedAsString, Color.RED);
+                                        tvReturnType.setText(spannableName);
+
+                                        // update StructureViewportFragment.
+                                        for (Method methodFromClass : classToEdit.getMethods()) {
+                                            if (methodFromClass.getName().equals(method.getName())) {
+                                                adapter.changeMethodReturnType(classToEdit, methodFromClass, itemSelectedAsString);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                });
+
+                        spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
+                    }
+                });
+
+                // NAME
+                String nameMethod = method.getName();
+                Spannable spannableNameMethod = convertToColoredSpannableString(
+                        nameMethod, Color.GREEN);
+                TextView tvNameMethod = new TextView(getContext());
+                tvNameMethod.setLayoutParams(layoutParams);
+                tvNameMethod.setText(spannableNameMethod);
+                tvNameMethod.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                            Log.e(TAG, "renaming main() is NOT allowed!!!");
+                            return;
+                        }
+
+                        EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
+                            @Override
+                            public void onDismiss() {
+                                // TODO:
+                            }
+
+                            @Override
+                            public void onEnterKeyPressed(String name) {
+                                // update self.
+                                Spannable spannableName = convertToColoredSpannableString(
+                                        name, Color.GREEN);
+                                tvNameMethod.setText(spannableName);
+
+                                // update StructureViewportFragment.
+                                for (Method methodOfClass : classToEdit.getMethods()) {
+                                    if (methodOfClass.getName().equals(nameMethod)) {
+                                        adapter.renameMethod(classToEdit, methodOfClass, name);
+                                    }
+                                }
+                            }
+                        });
+
+                        editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
+                    }
+                });
+                llChild.addView(tvNameMethod);
+
+                // SEPARATOR OF NAME AND ARGUMENT-LIST
+                String parenthesisOpen = "(";
+                TextView tvParenthesisOpen = new TextView(getContext());
+                tvParenthesisOpen.setLayoutParams(layoutParams);
+                tvParenthesisOpen.setText(parenthesisOpen);
+                llChild.addView(tvParenthesisOpen);
+
+                // ARGUMENT-LIST
+                if (method.getArgumentList() != null) {
+                    List<VariableDeclaration> argumentList = method.getArgumentList();
+                    for (int i = 0; i < argumentList.size(); i++) {
+                        VariableDeclaration variableDeclaration = argumentList.get(i);
+
+                        String type = variableDeclaration.getType();
+                        Spannable spannableType = convertToColoredSpannableString(
+                                type, Color.RED);
+
+                        TextView tvType = new TextView(getContext());
+                        tvType.setLayoutParams(layoutParams);
+                        tvType.setText(spannableType);
+                        tvType.append(" ");
+                        llChild.addView(tvType);
+
+                        String name = variableDeclaration.getName();
+                        Spannable spannableName = convertToColoredSpannableString(
+                                name, Color.CYAN);
+
+                        TextView tvName = new TextView(getContext());
+                        tvName.setLayoutParams(layoutParams);
+                        tvName.setText(spannableName);
+                        llChild.addView(tvName);
+
+                        if (i < argumentList.size() - 1) {
+                            String commaAndSpace = ", ";
+                            TextView tvCommaAndSpace = new TextView(getContext());
+                            tvCommaAndSpace.setLayoutParams(layoutParams);
+                            tvCommaAndSpace.setText(commaAndSpace);
+                            llChild.addView(tvCommaAndSpace);
+                        }
+                    }
+                }
+
+                // SEPARATOR OF ARGUMENT-LIST AND BODY
+                String parenthesisClose = ") {";
+                TextView tvParenthesisClose = new TextView(getContext());
+                tvParenthesisClose.setLayoutParams(layoutParams);
+                tvParenthesisClose.setText(parenthesisClose);
+                llChild.addView(tvParenthesisClose);
 
                 HorizontalScrollView scroll = new HorizontalScrollView(getContext());
                 scroll.setBackgroundColor(android.R.color.transparent);
-                scroll.setHorizontalScrollBarEnabled(false);
                 scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                scroll.addView(tvComment);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.addView(llChild);
                 linearLayoutParent.addView(
                         scroll
                 );
-            }
 
-            LinearLayout llChild = new LinearLayout(getContext());
-            llChild.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            llChild.setOrientation(LinearLayout.HORIZONTAL);
+                // BODY
+                String bodyMethod = method.getBody();
 
-            TextView tvIndent = new TextView(getContext());
-            tvIndent.setLayoutParams(layoutParams);
-            tvIndent.setText(DEFAULT_INDENT);
-            llChild.addView(tvIndent);
-
-            // ACCESS-MODIFIERS
-            String accessModifier = method.getAccessModifier().name().toLowerCase();
-            Spannable spannableAccessModifier = convertToColoredSpannableString(
-                    accessModifier, Color.BLUE);
-            TextView tvAccessModifier = new TextView(getContext());
-            tvAccessModifier.setLayoutParams(layoutParams);
-            tvAccessModifier.setText(spannableAccessModifier);
-            tvAccessModifier.append(" ");
-            llChild.addView(tvAccessModifier);
-
-            // NON-ACCESS-MODIFIERS
-            if (method.getClassInterfaceAndObjectRelateds() != null) {
-                for (ClassComponent.ClassInterfaceAndObjectRelated nonAccessModifier : method.getClassInterfaceAndObjectRelateds()) {
-                    String nonAccessModifiers = nonAccessModifier.name().toLowerCase();
-                    Spannable spannableNonAccessModifiers = convertToColoredSpannableString(
-                            nonAccessModifiers, Color.BLUE);
-
-                    TextView tvNonAccessModifiers = new TextView(getContext());
-                    tvNonAccessModifiers.setLayoutParams(layoutParams);
-                    tvNonAccessModifiers.setText(spannableNonAccessModifiers);
-                    tvNonAccessModifiers.append(" ");
-                    llChild.addView(tvNonAccessModifiers);
-                }
-            }
-
-            // RETURN-TYPE
-            String returnType = method.getType();
-            Spannable spannableReturnType = convertToColoredSpannableString(
-                    returnType, Color.RED);
-            TextView tvReturnType = new TextView(getContext());
-            tvReturnType.setLayoutParams(layoutParams);
-            tvReturnType.setText(spannableReturnType);
-            tvReturnType.append(" ");
-            llChild.addView(tvReturnType);
-
-            tvReturnType.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
-                        Log.e(TAG, "changing return type for main() is NOT allowed!!!");
-                        return;
-                    }
-
-                    String[] dataTypeAsString = new String[ClassComponent.DataType.values().length];
-                    int indexDefault = -1;
-                    for (int i = 0; i < ClassComponent.DataType.values().length; i++) {
-                        dataTypeAsString[i] = ClassComponent.DataType.values()[i].toString();
-
-                        if (returnType.equals(ClassComponent.DataType.values()[i].toString().toLowerCase())) {
-                            Log.e(TAG, "returnType: " + returnType);
-                            indexDefault = i;
-                            Log.e(TAG, "indexDefault: " + indexDefault);
-                        }
-                    }
-
-                    SpinnerDialogFragment spinnerDialogFragment = SpinnerDialogFragment.newInstance(
-                            dataTypeAsString,
-                            indexDefault,
-                            new SpinnerDialogFragment.ItemSelectionListener() {
-                                @Override
-                                public void onDismiss() {
-                                    // TODO:
-                                }
-
-                                @Override
-                                public void onItemSelected(int indexSelected) {
-                                    String itemSelectedAsString = dataTypeAsString[indexSelected].toLowerCase() + " ";
-
-                                    // update self.
-                                    Spannable spannableName = convertToColoredSpannableString(
-                                            itemSelectedAsString, Color.RED);
-                                    tvReturnType.setText(spannableName);
-
-                                    // update StructureViewportFragment.
-                                    for (Method methodFromClass : classToEdit.getMethods()) {
-                                        if (methodFromClass.getName().equals(method.getName())) {
-                                            adapter.changeMethodReturnType(classToEdit, methodFromClass, itemSelectedAsString);
-                                            break;
-                                        }
-                                    }
-                                }
-                            });
-
-                    spinnerDialogFragment.show(getChildFragmentManager(), SpinnerDialogFragment.TAG);
-                }
-            });
-
-            // NAME
-            String nameMethod = method.getName();
-            Spannable spannableNameMethod = convertToColoredSpannableString(
-                    nameMethod, Color.GREEN);
-            TextView tvNameMethod = new TextView(getContext());
-            tvNameMethod.setLayoutParams(layoutParams);
-            tvNameMethod.setText(spannableNameMethod);
-            tvNameMethod.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
-                        Log.e(TAG, "renaming main() is NOT allowed!!!");
-                        return;
-                    }
-
-                    EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
-                        @Override
-                        public void onDismiss() {
-                            // TODO:
-                        }
-
-                        @Override
-                        public void onEnterKeyPressed(String name) {
-                            // update self.
-                            Spannable spannableName = convertToColoredSpannableString(
-                                    name, Color.GREEN);
-                            tvNameMethod.setText(spannableName);
-
-                            // update StructureViewportFragment.
-                            for (Method methodOfClass : classToEdit.getMethods()) {
-                                if (methodOfClass.getName().equals(nameMethod)) {
-                                    adapter.renameMethod(classToEdit, methodOfClass, name);
-                                }
-                            }
-                        }
-                    });
-
-                    editTextDialogFragment.show(getChildFragmentManager(), EditTextDialogFragment.TAG);
-                }
-            });
-            llChild.addView(tvNameMethod);
-
-            // SEPARATOR OF NAME AND ARGUMENT-LIST
-            String parenthesisOpen = "(";
-            TextView tvParenthesisOpen = new TextView(getContext());
-            tvParenthesisOpen.setLayoutParams(layoutParams);
-            tvParenthesisOpen.setText(parenthesisOpen);
-            llChild.addView(tvParenthesisOpen);
-
-            // ARGUMENT-LIST
-            if (method.getArgumentList() != null) {
-                List<VariableDeclaration> argumentList = method.getArgumentList();
-                for (int i = 0; i < argumentList.size(); i++) {
-                    VariableDeclaration variableDeclaration = argumentList.get(i);
-
-                    String type = variableDeclaration.getType();
-                    Spannable spannableType = convertToColoredSpannableString(
-                            type, Color.RED);
-
-                    TextView tvType = new TextView(getContext());
-                    tvType.setLayoutParams(layoutParams);
-                    tvType.setText(spannableType);
-                    tvType.append(" ");
-                    llChild.addView(tvType);
-
-                    String name = variableDeclaration.getName();
-                    Spannable spannableName = convertToColoredSpannableString(
-                            name, Color.CYAN);
-
-                    TextView tvName = new TextView(getContext());
-                    tvName.setLayoutParams(layoutParams);
-                    tvName.setText(spannableName);
-                    llChild.addView(tvName);
-
-                    if (i < argumentList.size() - 1) {
-                        String commaAndSpace = ", ";
-                        TextView tvCommaAndSpace = new TextView(getContext());
-                        tvCommaAndSpace.setLayoutParams(layoutParams);
-                        tvCommaAndSpace.setText(commaAndSpace);
-                        llChild.addView(tvCommaAndSpace);
+                /////////////////////////////////
+                int counterOpenBracketCurly = 0;
+                int counterCloseBracketCurly = 0;
+                int counterOpenBracketRound = 0;
+                int counterCloseBracketRound = 0;
+                for (int i = 0; i < bodyMethod.length() - 1; i++) {
+                    String currentChar = bodyMethod.substring(i, i + 1);
+                    if (currentChar.equals("{")) {
+                        counterOpenBracketCurly++;
+                    } else if (currentChar.equals("}")) {
+                        counterCloseBracketCurly++;
+                    } else if (currentChar.equals("(")) {
+                        counterOpenBracketRound++;
+                    } else if (currentChar.equals(")")) {
+                        counterCloseBracketRound++;
                     }
                 }
-            }
+                Log.e(TAG, "counterOpenBracketCurly: " + counterOpenBracketCurly);
+                Log.e(TAG, "counterCloseBracketCurly: " + counterCloseBracketCurly);
+                Log.e(TAG, "counterOpenBracketRound: " + counterOpenBracketRound);
+                Log.e(TAG, "counterCloseBracketRound: " + counterCloseBracketRound);
+                /////////////////////////////////
 
-            // SEPARATOR OF ARGUMENT-LIST AND BODY
-            String parenthesisClose = ") {";
-            TextView tvParenthesisClose = new TextView(getContext());
-            tvParenthesisClose.setLayoutParams(layoutParams);
-            tvParenthesisClose.setText(parenthesisClose);
-            llChild.addView(tvParenthesisClose);
+                String[] bodyMethodSplitByNewLine = bodyMethod.split("\\n");
+                for (int i = 0; i < bodyMethodSplitByNewLine.length; i++) {
+                    String line = bodyMethodSplitByNewLine[i];
 
-            HorizontalScrollView scroll = new HorizontalScrollView(getContext());
-            scroll.setBackgroundColor(android.R.color.transparent);
-            scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            scroll.setHorizontalScrollBarEnabled(false);
-            scroll.addView(llChild);
-            linearLayoutParent.addView(
-                    scroll
-            );
+                    LinearLayout llLine = new LinearLayout(getContext());
+                    llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    llLine.setOrientation(LinearLayout.HORIZONTAL);
 
-            // BODY
-            String bodyMethod = method.getBody();
-
-            /////////////////////////////////
-            int counterOpenBracketCurly = 0;
-            int counterCloseBracketCurly = 0;
-            int counterOpenBracketRound = 0;
-            int counterCloseBracketRound = 0;
-            for (int i = 0; i < bodyMethod.length() - 1; i++) {
-                String currentChar = bodyMethod.substring(i, i + 1);
-                if (currentChar.equals("{")) {
-                    counterOpenBracketCurly++;
-                } else if (currentChar.equals("}")) {
-                    counterCloseBracketCurly++;
-                } else if (currentChar.equals("(")) {
-                    counterOpenBracketRound++;
-                } else if (currentChar.equals(")")) {
-                    counterCloseBracketRound++;
-                }
-            }
-            Log.e(TAG, "counterOpenBracketCurly: " + counterOpenBracketCurly);
-            Log.e(TAG, "counterCloseBracketCurly: " + counterCloseBracketCurly);
-            Log.e(TAG, "counterOpenBracketRound: " + counterOpenBracketRound);
-            Log.e(TAG, "counterCloseBracketRound: " + counterCloseBracketRound);
-            /////////////////////////////////
-
-            String[] bodyMethodSplitByNewLine = bodyMethod.split("\\n");
-            for (int i = 0; i < bodyMethodSplitByNewLine.length; i++) {
-                String line = bodyMethodSplitByNewLine[i];
-
-                LinearLayout llLine = new LinearLayout(getContext());
-                llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                llLine.setOrientation(LinearLayout.HORIZONTAL);
-
-                boolean hasComment = false;
-                int indexComment = -1;
-                for (int j = 0; j < line.length(); j++) {
-                    // scan line for single line comment (prevents index out of bounds).
-                    if (j + IDENTIFIER_COMMENT_SINGLE_LINE.length() - 1 < line.length()) {
-                        // FOUND COMMENT
-                        if (line.substring(j, j + IDENTIFIER_COMMENT_SINGLE_LINE.length()).equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
-                            hasComment = true;
-                            indexComment = j;
-                            break;
-                        }
-                    }
-                }
-
-                int indexTODO = -1;
-                if (hasComment) {
-                    for (int k = indexComment; k < line.length(); k++) {
-                        // scan line for TO-DO (prevents index out of bounds).
-                        if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
-                            // FOUND TO-DO
-                            if (line.substring(k, k + IDENTIFIER_COMMENT_TODO.length()).toLowerCase().equals(IDENTIFIER_COMMENT_TODO)) {
-                                indexTODO = k;
+                    boolean hasComment = false;
+                    int indexComment = -1;
+                    for (int j = 0; j < line.length(); j++) {
+                        // scan line for single line comment (prevents index out of bounds).
+                        if (j + IDENTIFIER_COMMENT_SINGLE_LINE.length() - 1 < line.length()) {
+                            // FOUND COMMENT
+                            if (line.substring(j, j + IDENTIFIER_COMMENT_SINGLE_LINE.length()).equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
+                                hasComment = true;
+                                indexComment = j;
                                 break;
                             }
                         }
                     }
-                }
 
-                if (indexTODO > -1) {
-                    TextView tvLineAfterTODO = new TextView(getContext());
-                    tvLineAfterTODO.setLayoutParams(layoutParams);
-                    Spannable spannableLineAfterTODO = convertToColoredSpannableString(
-                            line.substring(indexTODO), Color.CYAN);
-                    tvLineAfterTODO.setText(spannableLineAfterTODO);
-
-                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                    if (method.getName().equals("runDailyCycle")) {
-
-                        if (i == 1) {
-                            String answer = "        isLightCycleCorrect = isTentZipped;";
-                            tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListener(answer)
-                            );
-                        } else if (i == 4) {
-                            String answer = "        for (Plant p : plants) {\n" +
-                                    "            p.updateGrowth(isLightCycleCorrect, pestsDetected);\n" +
-                                    "        }";
-                            tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListener(answer)
-                            );
-                        } else if (i == 6) {
-                            String answer = "        int readyCount = 0;\n" +
-                                    "        for (Plant p : plants) {\n" +
-                                    "            if (p.isReadyForHarvest()) {\n" +
-                                    "                readyCount++;\n" +
-                                    "            }\n" +
-                                    "        }\n" +
-                                    "\n" +
-                                    "        System.out.println(\"Ready plants: \" + readyCount);";
-                            tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListener(answer)
-                            );
+                    int indexTODO = -1;
+                    if (hasComment) {
+                        for (int k = indexComment; k < line.length(); k++) {
+                            // scan line for TO-DO (prevents index out of bounds).
+                            if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
+                                // FOUND TO-DO
+                                if (line.substring(k, k + IDENTIFIER_COMMENT_TODO.length()).toLowerCase().equals(IDENTIFIER_COMMENT_TODO)) {
+                                    indexTODO = k;
+                                    break;
+                                }
+                            }
                         }
-                    } else if (method.getName().equals("updateGrowth")) {
-                        String answer = DEFAULT_INDENT + DEFAULT_INDENT + "if (lightCycleCorrect && !pestsPresent) {\n" +
-                                DEFAULT_INDENT + DEFAULT_INDENT + DEFAULT_INDENT + "isFlowering = true;\n" +
-                                DEFAULT_INDENT + DEFAULT_INDENT + "}";
-                        tvLineAfterTODO.setOnLongClickListener(
-                                generateOnLongClickListener(answer)
-                        );
                     }
-                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-                    TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
-                    tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
-                    Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
-                            line.substring(indexComment, indexTODO), Color.GRAY
+                    if (indexTODO > -1) {
+                        TextView tvLineAfterTODO = new TextView(getContext());
+                        tvLineAfterTODO.setLayoutParams(layoutParams);
+                        Spannable spannableLineAfterTODO = convertToColoredSpannableString(
+                                line.substring(indexTODO), Color.CYAN);
+                        tvLineAfterTODO.setText(spannableLineAfterTODO);
+
+                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                        if (method.getName().equals("runDailyCycle")) {
+
+                            String answer = null;
+                            if (i == 1) {
+                                answer = "        isLightCycleCorrect = isTentZipped;";
+                            } else if (i == 4) {
+                                answer = "        for (Plant p : plants) {\n" +
+                                        "            p.updateGrowth(isLightCycleCorrect, pestsDetected);\n" +
+                                        "        }";
+                            } else if (i == 6) {
+                                answer = "        int readyCount = 0;\n" +
+                                        "        for (Plant p : plants) {\n" +
+                                        "            if (p.isReadyForHarvest()) {\n" +
+                                        "                readyCount++;\n" +
+                                        "            }\n" +
+                                        "        }\n" +
+                                        "\n" +
+                                        "        System.out.println(\"Ready plants: \" + readyCount);";
+                            }
+
+                            if (answer != null) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            }
+                        } else if (method.getName().equals("updateGrowth")) {
+
+                            String answer = null;
+                            if (i == 1) {
+                                answer = "        if (lightIsCorrect && !hasPests) {\n" +
+                                        "            vegDays++;\n" +
+                                        "        }";
+                            } else if (i == 3) {
+                                answer = "        if (vegDays >= 14 && isHealthy) {\n" +
+                                        "            isFlowering = true;\n" +
+                                        "        }";
+                            }
+
+                            if (answer != null) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            }
+                        }
+                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+                        TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
+                        tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
+                        Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
+                                line.substring(indexComment, indexTODO), Color.GRAY
+                        );
+                        tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
+
+                        TextView tvLineBeforeComment = new TextView(getContext());
+                        tvLineBeforeComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                                line.substring(0, indexComment), Color.BLACK
+                        );
+                        tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                        llLine.addView(tvLineBeforeComment);
+                        llLine.addView(tvLineAfterCommentBeforeTODO);
+                        llLine.addView(tvLineAfterTODO);
+                    } else if (hasComment) {
+                        TextView tvLineAfterComment = new TextView(getContext());
+                        tvLineAfterComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineAfterComment = convertToColoredSpannableString(
+                                line.substring(indexComment), Color.GRAY
+                        );
+                        tvLineAfterComment.setText(spannableLineAfterComment);
+
+                        TextView tvLineBeforeComment = new TextView(getContext());
+                        tvLineBeforeComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                                line.substring(0, indexComment), Color.BLACK
+                        );
+                        tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                        llLine.addView(tvLineBeforeComment);
+                        llLine.addView(tvLineAfterComment);
+                    } else {
+                        TextView tvLine = new TextView(getContext());
+                        tvLine.setLayoutParams(layoutParams);
+                        Spannable spannableLine = convertToColoredSpannableString(
+                                line, Color.BLACK
+                        );
+                        tvLine.setText(spannableLine);
+
+                        llLine.addView(tvLine);
+                    }
+
+                    HorizontalScrollView scrollLine = new HorizontalScrollView(getContext());
+                    scrollLine.setBackgroundColor(android.R.color.transparent);
+                    scrollLine.setHorizontalScrollBarEnabled(false);
+                    scrollLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                    scrollLine.addView(llLine);
+                    linearLayoutParent.addView(
+                            scrollLine
                     );
-                    tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
-
-                    TextView tvLineBeforeComment = new TextView(getContext());
-                    tvLineBeforeComment.setLayoutParams(layoutParams);
-                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
-                            line.substring(0, indexComment), Color.BLACK
-                    );
-                    tvLineBeforeComment.setText(spannableLineBeforeComment);
-
-                    llLine.addView(tvLineBeforeComment);
-                    llLine.addView(tvLineAfterCommentBeforeTODO);
-                    llLine.addView(tvLineAfterTODO);
-                } else if (hasComment) {
-                    TextView tvLineAfterComment = new TextView(getContext());
-                    tvLineAfterComment.setLayoutParams(layoutParams);
-                    Spannable spannableLineAfterComment = convertToColoredSpannableString(
-                            line.substring(indexComment), Color.GRAY
-                    );
-                    tvLineAfterComment.setText(spannableLineAfterComment);
-
-                    TextView tvLineBeforeComment = new TextView(getContext());
-                    tvLineBeforeComment.setLayoutParams(layoutParams);
-                    Spannable spannableLineBeforeComment = convertToColoredSpannableString(
-                            line.substring(0, indexComment), Color.BLACK
-                    );
-                    tvLineBeforeComment.setText(spannableLineBeforeComment);
-
-                    llLine.addView(tvLineBeforeComment);
-                    llLine.addView(tvLineAfterComment);
-                } else {
-                    TextView tvLine = new TextView(getContext());
-                    tvLine.setLayoutParams(layoutParams);
-                    Spannable spannableLine = convertToColoredSpannableString(
-                            line, Color.BLACK
-                    );
-                    tvLine.setText(spannableLine);
-
-                    llLine.addView(tvLine);
                 }
 
-                HorizontalScrollView scrollLine = new HorizontalScrollView(getContext());
-                scrollLine.setBackgroundColor(android.R.color.transparent);
-                scrollLine.setHorizontalScrollBarEnabled(false);
-                scrollLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                scrollLine.addView(llLine);
+                // CLOSING
+                TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
+                tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
+                tvCurlyBracketCloseWithIndent.setText(DEFAULT_INDENT + "}");
                 linearLayoutParent.addView(
-                        scrollLine
+                        tvCurlyBracketCloseWithIndent
                 );
             }
-
-            // CLOSING
-            TextView tvCurlyBracketCloseWithIndent = new TextView(getContext());
-            tvCurlyBracketCloseWithIndent.setLayoutParams(layoutParams);
-            tvCurlyBracketCloseWithIndent.setText(DEFAULT_INDENT + "}");
-            linearLayoutParent.addView(
-                    tvCurlyBracketCloseWithIndent
-            );
         }
     }
 
-    private View.OnLongClickListener generateOnLongClickListener(String answer) {
+    private View.OnLongClickListener generateOnLongClickListenerToInsertDirectlyBeneath(String answer, boolean isInsideMethodBody) {
         return new View.OnLongClickListener() {
             private boolean isFirstTime = true;
 
@@ -1012,9 +1131,19 @@ public class ClassEditorFragment extends Fragment {
                 if (isFirstTime) {
                     isFirstTime = false;
 
-                    int indexToInsert = linearLayoutParent.indexOfChild(
-                            (HorizontalScrollView) view.getParent().getParent()
-                    ) + 1;
+                    int indexToInsert = -1;
+                    if (isInsideMethodBody) {
+                        Log.e(TAG, "generateOnLongClickListenerToInsertDirectlyBeneath() INSIDE METHOD BODY!!!!");
+                        indexToInsert = linearLayoutParent.indexOfChild(
+                                (HorizontalScrollView) view.getParent().getParent()
+                        ) + 1;
+                    } else {
+                        Log.e(TAG, "generateOnLongClickListenerToInsertDirectlyBeneath() NOT INSIDE METHOD BODY!!!!");
+                        Log.e(TAG, "(e.g. invisible method with a TODO to reveal the method as the answer)");
+                        indexToInsert = linearLayoutParent.indexOfChild(
+                                (HorizontalScrollView) view.getParent()
+                        ) + 1;
+                    }
 
                     TextView tvAnswer = new TextView(getContext());
                     tvAnswer.setLayoutParams(layoutParams);

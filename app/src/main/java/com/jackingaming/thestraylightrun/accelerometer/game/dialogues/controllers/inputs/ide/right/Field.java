@@ -4,23 +4,23 @@ import java.util.List;
 
 public class Field extends ClassComponent {
     private String value;
-    private boolean hasBlankLineAbove;
+    private String inLineComment;
 
-    public Field(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String type, String name, String value, String comment) {
-        super(accessModifier, nonAccessModifiers, type, name, comment);
+    public Field(AccessModifier accessModifier,
+                 List<ClassInterfaceAndObjectRelated> nonAccessModifiers,
+                 String type, String name, String value,
+                 String comment, String todo, String inLineComment,
+                 boolean hasBlankLineAbove) {
+        super(accessModifier, nonAccessModifiers, type, name, comment, todo, hasBlankLineAbove);
         this.value = value;
-    }
-
-    public Field(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String type, String name, String value, String comment, boolean hasBlankLineAbove) {
-        this(accessModifier, nonAccessModifiers, type, name, value, comment);
-        this.hasBlankLineAbove = hasBlankLineAbove;
+        this.inLineComment = inLineComment;
     }
 
     public String getValue() {
         return value;
     }
 
-    public boolean isHasBlankLineAbove() {
-        return hasBlankLineAbove;
+    public String getInLineComment() {
+        return inLineComment;
     }
 }

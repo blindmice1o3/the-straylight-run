@@ -10,8 +10,12 @@ public class Method extends ClassComponent {
     private List<VariableDeclaration> argumentList;
     private String body;
 
-    public Method(AccessModifier accessModifier, List<ClassInterfaceAndObjectRelated> nonAccessModifiers, String returnType, String name, List<VariableDeclaration> argumentList, String body, String comment) {
-        super(accessModifier, nonAccessModifiers, returnType, name, comment);
+    public Method(AccessModifier accessModifier,
+                  List<ClassInterfaceAndObjectRelated> nonAccessModifiers,
+                  String returnType, String name, List<VariableDeclaration> argumentList,
+                  String body,
+                  String comment, String todo, boolean hasBlankLineAbove) {
+        super(accessModifier, nonAccessModifiers, returnType, name, comment, todo, hasBlankLineAbove);
         this.argumentList = new ArrayList<>();
         if (argumentList != null) {
             this.argumentList.addAll(argumentList);
@@ -25,9 +29,5 @@ public class Method extends ClassComponent {
 
     public String getBody() {
         return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 }

@@ -64,7 +64,9 @@ public class ProjectViewportFragment extends Fragment {
                 CLASS_NAME_MAIN, null);
         classMain.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
-                "int", "counter", null, null));
+                "int", "counter", null,
+                null, null, null,
+                false));
         List<ClassComponent.ClassInterfaceAndObjectRelated> nonAccessModifiersStatic = new ArrayList<>();
         nonAccessModifiersStatic.add(
                 ClassComponent.ClassInterfaceAndObjectRelated.STATIC
@@ -85,7 +87,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", METHOD_NAME_MAIN,
                 argumentListMain,
                 bodyMain,
-                null));
+                null, null, true));
         return classMain;
     }
 
@@ -108,31 +110,36 @@ public class ProjectViewportFragment extends Fragment {
         nonAccessModifiersFinal.add(ClassComponent.ClassInterfaceAndObjectRelated.FINAL);
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 nonAccessModifiersFinal,
-                "int", "LIGHT_START", "6", "  // 6 AM"));
+                "int", "LIGHT_START", "6",
+                null, null, "  // 6 AM", false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 nonAccessModifiersFinal,
-                "int", "LIGHT_END", "18", "   // 6 PM"));
+                "int", "LIGHT_END", "18",
+                null, null, "   // 6 PM", false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "lightOn", null, null,
-                true));
+                "boolean", "lightOn", null,
+                null, null, null, false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "int", "hour", null, null));
+                "int", "hour", null,
+                null, null, null, false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "List<Plant>", "plants", null, null,
-                true));
+                "List<Plant>", "plants", null,
+                null, null, null, false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isTentZipped", "false", null,
-                true));
+                "boolean", "isTentZipped", "false",
+                null, null, null, false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isLightCycleCorrect", "false", null));
+                "boolean", "isLightCycleCorrect", "false",
+                null, null, null, false));
         classGrowTentSystem.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "pestsDetected", "false", null));
+                "boolean", "pestsDetected", "false",
+                null, null, null, false));
 
         // CONSTRUCTORS
         List<VariableDeclaration> argumentListGrowTentSystem = new ArrayList<>();
@@ -148,7 +155,8 @@ public class ProjectViewportFragment extends Fragment {
                 "        hour = 0;";
         classGrowTentSystem.addConstructor(new Constructor(
                 ClassComponent.AccessModifier.PUBLIC,
-                argumentListGrowTentSystem, bodyGrowTentSystem, null));
+                argumentListGrowTentSystem, bodyGrowTentSystem,
+                null, null, true));
 
         String bodyGrowTentSystemWithList = "        this.plants = List.of(\n" +
                 "            new Plant(\"Blue Dream\", true, true),\n" +
@@ -159,7 +167,7 @@ public class ProjectViewportFragment extends Fragment {
                 ClassComponent.AccessModifier.PUBLIC,
                 null,
                 bodyGrowTentSystemWithList,
-                null));
+                null, null, true));
 
         // METHODS
         String bodyRunDailyCycle = "        // Only if tent is zipped should light be counted as \"correct\"\n" +
@@ -174,7 +182,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "runDailyCycle",
                 null,
                 bodyRunDailyCycle,
-                null));
+                null, null, true));
         String bodyUpdateLights = "    //\n" +
                 "        if (hour >=// LIGHT_START toDO && hour < LIGHT_END) {\n" +
                 "//TODO:            lightOn = true;\n" +
@@ -191,7 +199,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "updateLights",
                 null,
                 bodyUpdateLights,
-                null));
+                null, null, true));
         String bodySimulateHour = "// TODO:        updateLights();\n" +
                 "//        for (Plant p : plants) {\n" +
                 "            p.dryOut();\n" +
@@ -213,7 +221,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "simulateeeeeeeeeeeeeeeeeeeeeeeeeeeeeeHour",
                 null,
                 bodySimulateHour,
-                null));
+                null, null, true));
         String bodyDebugStatus = "        System.out.println(\"HOUR: \" + hour + \" | LIGHT ON: \" + lightOn);\n" +
                 "        for (Plant p : plants) {\n" +
                 "            p.printStatus();\n" +
@@ -223,7 +231,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "debugStatus",
                 null,
                 bodyDebugStatus,
-                null));
+                null, null, true));
         return classGrowTentSystem;
     }
 
@@ -232,19 +240,30 @@ public class ProjectViewportFragment extends Fragment {
                 "Plant_testing_long_class_nammmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmme", " // Testing class's comment.. long linnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnne");
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "String", "name", null, null));
+                "String", "name", null,
+                null, null, null, false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "double", "moisture", null, " // 0.0 to 1.0"));
+                "double", "moisture", null,
+                null, null, " // 0.0 to 1.0", false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isFlowering", null, " // Track if the plant has begun flowering phase"));
+                "boolean", "isFlowering", null,
+                "    // This plant will be grown inside a controlled teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeent.",
+                "// TODO: Declare a boolean to track if the plant is flowering",
+                null, false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isHealthy", null, " // Monitor plant health"));
+                "boolean", "isHealthy", null,
+                null,
+                "// TODO: Declare a boolean to track if the plant is healthy",
+                " // Monitor plant health", false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isReady", null, " // Determine if the plant is ready to harvest"));
+                "int", "vegDays", null,
+                null,
+                "// TODO: Declare an int for number of days in veg stage",
+                null, false));
         List<VariableDeclaration> argumentListPlant = new ArrayList<>();
         argumentListPlant.add(
                 new VariableDeclaration("String", "name")
@@ -254,8 +273,12 @@ public class ProjectViewportFragment extends Fragment {
                 "        this.isHealthy = true;       // Assume healthy on creation\n" +
                 "        this.isReady = false;        // Harvest status begins as false";
         classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
-                argumentListPlant, bodyPlant, null));
-        String bodyUpdateGrowth = "    // TODO: If light is correct and pests are not present, start flowering";
+                argumentListPlant, bodyPlant,
+                null, null, true));
+        String bodyUpdateGrowth = "        // Only grow if there's enough light and no pests.\n" +
+                "        // TODO: If light is correct and no pests, increase days in veg\n" +
+                "\n" +
+                "        // TODO: If days in veg is >= 14 and plant is healthy, set flowering to true";
         List<VariableDeclaration> argumentListUpdateGrowth = new ArrayList<>();
         argumentListUpdateGrowth.add(
                 new VariableDeclaration("boolean", "lightCycleCorrect")
@@ -268,7 +291,15 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "updateGrowth",
                 argumentListUpdateGrowth,
                 bodyUpdateGrowth,
-                null));
+                null, null, true));
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "boolean", "isReadyForHarvest",
+                null,
+                null,
+                null,
+                "// TODO: Count how many plants are ready for harvest and print result",
+                true));
         String bodyDryOut = "        moisture -= 0.05;\n" +
                 "        if (moisture < 0.0) {\n" +
                 "            moisture = 0.0;\n" +
@@ -278,14 +309,14 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "dryOut",
                 null,
                 bodyDryOut,
-                null));
+                null, null, true));
         String bodyNeedsWater = "        return moisture < 0.3;";
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "boolean", "needsWater",
                 null,
                 bodyNeedsWater,
-                null));
+                null, null, true));
         String bodyWater = "        moisture += 0.4;\n" +
                 "        if (moisture > 1.0) {\n" +
                 "            moisture = 1.0;\n" +
@@ -295,14 +326,14 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "water",
                 null,
                 bodyWater,
-                null));
+                null, null, true));
         String bodyPrintStatus = "        System.out.println(name + \" - Moisture: \" + moisture);";
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "printStatus",
                 null,
                 bodyPrintStatus,
-                null));
+                null, null, true));
         return classPlant;
     }
 
@@ -311,21 +342,22 @@ public class ProjectViewportFragment extends Fragment {
                 "Robot", null);
         classRobot.addField(new Field(ClassComponent.AccessModifier.PRIVATE,
                 null,
-                "int", "counterTilledTile", null, null));
+                "int", "counterTilledTile", null,
+                null, null, null, false));
         String bodyWalkToUntilledTile = "        ...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "walkToUntilledTile",
                 null,
                 bodyWalkToUntilledTile,
-                null));
+                null, null, true));
         String bodyTillTile = "        ...";
         classRobot.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "tillTile",
                 null,
                 bodyTillTile,
-                null));
+                null, null, true));
         return classRobot;
     }
 
