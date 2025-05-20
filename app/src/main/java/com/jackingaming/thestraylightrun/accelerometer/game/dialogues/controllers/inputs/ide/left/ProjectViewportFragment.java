@@ -298,7 +298,7 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 null,
                 null,
-                "// TODO: Count how many plants are ready for harvest and print result",
+                "// TODO: Write a method that returns true if flowering, healthy, vegDays >= 21)",
                 true));
         String bodyDryOut = "        moisture -= 0.05;\n" +
                 "        if (moisture < 0.0) {\n" +
