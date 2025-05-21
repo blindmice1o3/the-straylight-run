@@ -239,7 +239,7 @@ public class HomePlayerRoom02Scene extends Scene {
 
                                             unpause();
                                         }
-                                    });
+                                    }, IDEDialogFragment.Mode.KEYBOARD_TRAINER);
 
                             gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
 

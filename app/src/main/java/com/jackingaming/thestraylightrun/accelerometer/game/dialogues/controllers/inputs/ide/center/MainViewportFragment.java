@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
@@ -30,6 +31,7 @@ import java.util.List;
 public class MainViewportFragment extends Fragment {
     public static final String TAG = MainViewportFragment.class.getSimpleName();
     public static final String ARG_CLASS_MAIN = "classMain";
+    public static final String ARG_MODE = "mode";
 
     public interface MainViewportListener extends Serializable {
         void changeFieldType(Class classWithFieldToEdit, Field fieldToEdit, String typeAsString);
@@ -52,6 +54,8 @@ public class MainViewportFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
 
+    private IDEDialogFragment.Mode mode;
+
     public MainViewportFragment() {
         // Required empty public constructor
     }
@@ -65,10 +69,11 @@ public class MainViewportFragment extends Fragment {
      * @return A new instance of fragment MainViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainViewportFragment newInstance(Class classMain) {
+    public static MainViewportFragment newInstance(Class classMain, IDEDialogFragment.Mode mode) {
         MainViewportFragment fragment = new MainViewportFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_MAIN, classMain);
+        args.putSerializable(ARG_MODE, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,6 +84,7 @@ public class MainViewportFragment extends Fragment {
         if (getArguments() != null) {
             Class classMain = (Class) getArguments().getSerializable(ARG_CLASS_MAIN);
             classes.add(classMain);
+            mode = (IDEDialogFragment.Mode) getArguments().getSerializable(ARG_MODE);
         }
     }
 
@@ -95,7 +101,7 @@ public class MainViewportFragment extends Fragment {
 
         tabLayout = view.findViewById(R.id.tab_layout);
 
-        classVP2Adapter = new ClassVP2Adapter(this, classes);
+        classVP2Adapter = new ClassVP2Adapter(this, classes, mode);
         viewPager2 = view.findViewById(R.id.vp2_main_display);
         viewPager2.setUserInputEnabled(false); // prevent horizontal swiping.
         viewPager2.setAdapter(classVP2Adapter);

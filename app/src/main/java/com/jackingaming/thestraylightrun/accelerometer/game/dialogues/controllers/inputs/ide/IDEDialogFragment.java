@@ -34,6 +34,7 @@ public class IDEDialogFragment extends DialogFragment
     public static final String TAG = IDEDialogFragment.class.getSimpleName();
     public static final String ARG_BUTTON_LISTENER = "buttonListener";
     public static final String ARG_DISMISS_LISTENER = "dismissListener";
+    public static final String ARG_MODE = "mode";
 
     public interface ButtonListener extends Serializable {
         void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment);
@@ -46,6 +47,10 @@ public class IDEDialogFragment extends DialogFragment
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
+    public enum Mode {LONG_PRESS_REVEALS, KEYBOARD_TRAINER;}
+
+    private Mode mode;
+
     private TextView tvClose;
     private TextView tvExecute;
 
@@ -56,12 +61,14 @@ public class IDEDialogFragment extends DialogFragment
     private ConsoleViewportFragment consoleViewportFragment;
 
     public static IDEDialogFragment newInstance(ButtonListener buttonListener,
-                                                DismissListener dismissListener) {
+                                                DismissListener dismissListener,
+                                                Mode mode) {
         IDEDialogFragment fragment = new IDEDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_BUTTON_LISTENER, buttonListener);
         args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
+        args.putSerializable(ARG_MODE, mode);
         fragment.setArguments(args);
 
         return fragment;
@@ -75,6 +82,7 @@ public class IDEDialogFragment extends DialogFragment
         if (getArguments() != null) {
             buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
             dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
+            mode = (Mode) getArguments().getSerializable(ARG_MODE);
         }
     }
 
@@ -93,7 +101,7 @@ public class IDEDialogFragment extends DialogFragment
 
         projectViewportFragment = ProjectViewportFragment.newInstance();
         mainViewportFragment = MainViewportFragment.newInstance(
-                projectViewportFragment.getMainClass()
+                projectViewportFragment.getMainClass(), mode
         );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
         consoleViewportFragment = ConsoleViewportFragment.newInstance(null, null);

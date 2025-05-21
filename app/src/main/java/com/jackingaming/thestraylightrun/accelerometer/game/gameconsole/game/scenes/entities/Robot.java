@@ -500,7 +500,7 @@ public class Robot extends Creature {
             public void onDismiss() {
                 Log.e(TAG, "onDismiss()");
             }
-        });
+        }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS);
 
         if (listener != null) {
             listener.onOpenIDEDialogFragment();

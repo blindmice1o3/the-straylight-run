@@ -26,12 +26,14 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.SpinnerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Constructor;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypingPracticeView;
 
 import java.util.List;
 
@@ -50,12 +52,14 @@ public class ClassEditorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLASS_VP2_ADAPTER = "classVP2Adapter";
     private static final String ARG_CLASS = "class";
+    private static final String ARG_MODE = "mode";
 
     // TODO: Rename and change types of parameters
     private ClassVP2Adapter adapter;
     private Class classToEdit;
     private LinearLayout linearLayoutParent;
     private LinearLayout.LayoutParams layoutParams;
+    private IDEDialogFragment.Mode mode;
 
     public ClassEditorFragment() {
         // Required empty public constructor
@@ -69,11 +73,12 @@ public class ClassEditorFragment extends Fragment {
      * @return A new instance of fragment ClassEditorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit) {
+    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit, IDEDialogFragment.Mode mode) {
         ClassEditorFragment fragment = new ClassEditorFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_VP2_ADAPTER, adapter);
         args.putSerializable(ARG_CLASS, classToEdit);
+        args.putSerializable(ARG_MODE, mode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,6 +89,7 @@ public class ClassEditorFragment extends Fragment {
         if (getArguments() != null) {
             adapter = (ClassVP2Adapter) getArguments().getSerializable(ARG_CLASS_VP2_ADAPTER);
             classToEdit = (Class) getArguments().getSerializable(ARG_CLASS);
+            mode = (IDEDialogFragment.Mode) getArguments().getSerializable(ARG_MODE);
 
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -223,8 +229,6 @@ public class ClassEditorFragment extends Fragment {
                                     answer, false
                             )
                     );
-
-
                 } else if (field.getName().equals("isHealthy")) {
                     String answer = "    boolean isHealthy;";
                     if (field.getInLineComment() != null) {
@@ -249,13 +253,8 @@ public class ClassEditorFragment extends Fragment {
                     );
                 }
 
-                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
-                scroll.setBackgroundColor(android.R.color.transparent);
-                scroll.setHorizontalScrollBarEnabled(false);
-                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                scroll.addView(tvTodo);
                 linearLayoutParent.addView(
-                        scroll
+                        tvTodo
                 );
             } else {
                 // COMMENT
@@ -941,7 +940,6 @@ public class ClassEditorFragment extends Fragment {
 
                 // BODY
                 String bodyMethod = method.getBody();
-
                 /////////////////////////////////
                 int counterOpenBracketCurly = 0;
                 int counterCloseBracketCurly = 0;
@@ -967,6 +965,7 @@ public class ClassEditorFragment extends Fragment {
 
                 String[] bodyMethodSplitByNewLine = bodyMethod.split("\\n");
                 for (int i = 0; i < bodyMethodSplitByNewLine.length; i++) {
+                    TypingPracticeView typingView = null;
                     String line = bodyMethodSplitByNewLine[i];
 
                     LinearLayout llLine = new LinearLayout(getContext());
@@ -1002,13 +1001,32 @@ public class ClassEditorFragment extends Fragment {
                     }
 
                     if (indexTODO > -1) {
+                        // BEFORE COMMENT (exclusive)
+                        TextView tvLineBeforeComment = new TextView(getContext());
+                        tvLineBeforeComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                                line.substring(0, indexComment), Color.BLACK
+                        );
+                        tvLineBeforeComment.setText(spannableLineBeforeComment);
+                        llLine.addView(tvLineBeforeComment);
+
+                        // AFTER COMMENT (inclusive), BEFORE TO-DO (exclusive)
+                        TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
+                        tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
+                        Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
+                                line.substring(indexComment, indexTODO), Color.GRAY
+                        );
+                        tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
+                        llLine.addView(tvLineAfterCommentBeforeTODO);
+
+                        // AFTER TO-DO (inclusive
                         TextView tvLineAfterTODO = new TextView(getContext());
                         tvLineAfterTODO.setLayoutParams(layoutParams);
                         Spannable spannableLineAfterTODO = convertToColoredSpannableString(
                                 line.substring(indexTODO), Color.CYAN);
                         tvLineAfterTODO.setText(spannableLineAfterTODO);
+                        // ... [llLine.addView(tvLineAfterTODO);] will go after the following processing.
 
-                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                         if (method.getName().equals("runDailyCycle")) {
 
                             String answer = null;
@@ -1030,9 +1048,14 @@ public class ClassEditorFragment extends Fragment {
                             }
 
                             if (answer != null) {
-                                tvLineAfterTODO.setOnLongClickListener(
-                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                );
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
                             }
                         } else if (method.getName().equals("updateGrowth")) {
 
@@ -1048,29 +1071,16 @@ public class ClassEditorFragment extends Fragment {
                             }
 
                             if (answer != null) {
-                                tvLineAfterTODO.setOnLongClickListener(
-                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                );
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
                             }
                         }
-                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-                        TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
-                        tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
-                        Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
-                                line.substring(indexComment, indexTODO), Color.GRAY
-                        );
-                        tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
-
-                        TextView tvLineBeforeComment = new TextView(getContext());
-                        tvLineBeforeComment.setLayoutParams(layoutParams);
-                        Spannable spannableLineBeforeComment = convertToColoredSpannableString(
-                                line.substring(0, indexComment), Color.BLACK
-                        );
-                        tvLineBeforeComment.setText(spannableLineBeforeComment);
-
-                        llLine.addView(tvLineBeforeComment);
-                        llLine.addView(tvLineAfterCommentBeforeTODO);
                         llLine.addView(tvLineAfterTODO);
                     } else if (hasComment) {
                         TextView tvLineAfterComment = new TextView(getContext());
@@ -1108,6 +1118,11 @@ public class ClassEditorFragment extends Fragment {
                     linearLayoutParent.addView(
                             scrollLine
                     );
+
+                    if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                            typingView != null) {
+                        linearLayoutParent.addView(typingView);
+                    }
                 }
 
                 // CLOSING
