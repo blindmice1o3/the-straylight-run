@@ -211,6 +211,7 @@ public class ClassEditorFragment extends Fragment {
             // WAY TO ADD TO-DO INSIDE CLASS'S BODY.
             if (field.getTodo() != null) {
                 // TO-DO
+                TypingPracticeView typingView = null;
                 String todo = DEFAULT_INDENT + field.getTodo();
                 Spannable spannableTodo = convertToColoredSpannableString(
                         todo, Color.CYAN);
@@ -219,43 +220,70 @@ public class ClassEditorFragment extends Fragment {
                 tvTodo.setText(spannableTodo);
 
                 if (field.getName().equals("isFlowering")) {
+                    typingView = new TypingPracticeView(getContext());
                     String answer = "    boolean isFlowering;";
                     if (field.getInLineComment() != null) {
                         answer += field.getInLineComment();
                     }
 
-                    tvTodo.setOnLongClickListener(
-                            generateOnLongClickListenerToInsertDirectlyBeneath(
-                                    answer, false
-                            )
-                    );
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 } else if (field.getName().equals("isHealthy")) {
+                    typingView = new TypingPracticeView(getContext());
                     String answer = "    boolean isHealthy;";
                     if (field.getInLineComment() != null) {
                         answer += field.getInLineComment();
                     }
 
-                    tvTodo.setOnLongClickListener(
-                            generateOnLongClickListenerToInsertDirectlyBeneath(
-                                    answer, false
-                            )
-                    );
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 } else if (field.getName().equals("vegDays")) {
+                    typingView = new TypingPracticeView(getContext());
                     String answer = "    int vegDays; ";
                     if (field.getInLineComment() != null) {
                         answer += field.getInLineComment();
                     }
 
-                    tvTodo.setOnLongClickListener(
-                            generateOnLongClickListenerToInsertDirectlyBeneath(
-                                    answer, false
-                            )
-                    );
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 }
 
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.addView(tvTodo);
                 linearLayoutParent.addView(
-                        tvTodo
+                        scroll
                 );
+
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                        typingView != null) {
+                    linearLayoutParent.addView(typingView);
+                }
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             } else {
                 // COMMENT
                 if (field.getComment() != null) {
@@ -459,7 +487,9 @@ public class ClassEditorFragment extends Fragment {
     @SuppressLint("ResourceAsColor")
     private void initLinesOfConstructors() {
         for (Constructor constructor : classToEdit.getConstructors()) {
-            addTextViewAsBlankLineToLinearLayout();
+            if (constructor.isHasBlankLineAbove()) {
+                addTextViewAsBlankLineToLinearLayout();
+            }
 
             // COMMENT
             if (constructor.getComment() != null) {
@@ -563,6 +593,7 @@ public class ClassEditorFragment extends Fragment {
             String bodyConstructor = constructor.getBody();
             String[] bodyConstructorSplitByNewLine = bodyConstructor.split("\\n");
             for (int i = 0; i < bodyConstructorSplitByNewLine.length; i++) {
+                TypingPracticeView typingView = null;
                 String line = bodyConstructorSplitByNewLine[i];
 
                 LinearLayout llLine = new LinearLayout(getContext());
@@ -598,46 +629,56 @@ public class ClassEditorFragment extends Fragment {
                 }
 
                 if (indexTODO > -1) {
-                    TextView tvLineAfterTODO = new TextView(getContext());
-                    tvLineAfterTODO.setLayoutParams(layoutParams);
-                    Spannable spannableLineAfterTODO = convertToColoredSpannableString(
-                            line.substring(indexTODO), Color.CYAN);
-                    tvLineAfterTODO.setText(spannableLineAfterTODO);
-
-                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                    if (constructor.getName() == "GrowTentSystem") {
-                        if (constructor.getArgumentList().size() == 0) {
-                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 0 argument");
-                            String answer = "        ANSWER 0 (TESTING)!!!";
-                            tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                            );
-                        } else if (constructor.getArgumentList().size() == 1) {
-                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 1 argument");
-                            String answer = "        ANSWER 1 (TESTING)!!!";
-                            tvLineAfterTODO.setOnLongClickListener(
-                                    generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                            );
-                        }
-                    }
-                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-                    TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
-                    tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
-                    Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
-                            line.substring(indexComment, indexTODO), Color.GRAY
-                    );
-                    tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
-
+                    // BEFORE COMMENT (exclusive)
                     TextView tvLineBeforeComment = new TextView(getContext());
                     tvLineBeforeComment.setLayoutParams(layoutParams);
                     Spannable spannableLineBeforeComment = convertToColoredSpannableString(
                             line.substring(0, indexComment), Color.BLACK
                     );
                     tvLineBeforeComment.setText(spannableLineBeforeComment);
-
                     llLine.addView(tvLineBeforeComment);
+
+                    // AFTER COMMENT (inclusive), BEFORE TO-DO (exclusive)
+                    TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
+                    tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
+                            line.substring(indexComment, indexTODO), Color.GRAY
+                    );
+                    tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
                     llLine.addView(tvLineAfterCommentBeforeTODO);
+
+                    // AFTER TO-DO (inclusive)
+                    TextView tvLineAfterTODO = new TextView(getContext());
+                    tvLineAfterTODO.setLayoutParams(layoutParams);
+                    Spannable spannableLineAfterTODO = convertToColoredSpannableString(
+                            line.substring(indexTODO), Color.CYAN);
+                    tvLineAfterTODO.setText(spannableLineAfterTODO);
+                    // ... [llLine.addView(tvLineAfterTODO);] will go after the following processing.
+
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                    if (constructor.getName() == "GrowTentSystem") {
+
+                        String answer = null;
+                        if (constructor.getArgumentList().size() == 0) {
+                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 0 argument");
+                            answer = "        ANSWER 0 (TESTING)!!!";
+                        } else if (constructor.getArgumentList().size() == 1) {
+                            Log.e(TAG, "TODO found in GrowTentSystem CONSTRUCTOR with 1 argument");
+                            answer = "        ANSWER 1 (TESTING)!!!";
+                        }
+
+                        if (answer != null) {
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
+                    }
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                     llLine.addView(tvLineAfterTODO);
                 } else if (hasComment) {
                     TextView tvLineAfterComment = new TextView(getContext());
@@ -675,6 +716,13 @@ public class ClassEditorFragment extends Fragment {
                 linearLayoutParent.addView(
                         scrollLine
                 );
+
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                        typingView != null) {
+                    linearLayoutParent.addView(typingView);
+                }
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             }
 
             // CLOSING
@@ -695,33 +743,48 @@ public class ClassEditorFragment extends Fragment {
             }
 
             // WAY TO ADD TO-DO INSIDE CLASS'S BODY.
-            if (method.getName().equals("isReadyForHarvest")) {
+            if (method.getTodo() != null) {
                 // TO-DO
-                if (method.getTodo() != null) {
-                    String todo = DEFAULT_INDENT + method.getTodo();
-                    Spannable spannableTodo = convertToColoredSpannableString(
-                            todo, Color.CYAN);
-                    TextView tvTodo = new TextView(getContext());
-                    tvTodo.setLayoutParams(layoutParams);
-                    tvTodo.setText(spannableTodo);
+                TypingPracticeView typingView = null;
+                String todo = DEFAULT_INDENT + method.getTodo();
+                Spannable spannableTodo = convertToColoredSpannableString(
+                        todo, Color.CYAN);
+                TextView tvTodo = new TextView(getContext());
+                tvTodo.setLayoutParams(layoutParams);
+                tvTodo.setText(spannableTodo);
 
-                    tvTodo.setOnLongClickListener(
-                            generateOnLongClickListenerToInsertDirectlyBeneath(
-                                    "    public boolean isReadyForHarvest() {\n" +
-                                            "        return isFlowering && isHealthy && vegDays >= 21;\n" +
-                                            "    }", false
-                            )
-                    );
+                if (method.getName().equals("isReadyForHarvest")) {
+                    typingView = new TypingPracticeView(getContext());
+                    String answer = "    public boolean isReadyForHarvest() {\n" +
+                            "        return isFlowering && isHealthy && vegDays >= 21;\n" +
+                            "    }";
 
-                    HorizontalScrollView scroll = new HorizontalScrollView(getContext());
-                    scroll.setBackgroundColor(android.R.color.transparent);
-                    scroll.setHorizontalScrollBarEnabled(false);
-                    scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                    scroll.addView(tvTodo);
-                    linearLayoutParent.addView(
-                            scroll
-                    );
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 }
+
+                HorizontalScrollView scroll = new HorizontalScrollView(getContext());
+                scroll.setBackgroundColor(android.R.color.transparent);
+                scroll.setHorizontalScrollBarEnabled(false);
+                scroll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                scroll.addView(tvTodo);
+                linearLayoutParent.addView(
+                        scroll
+                );
+
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                        typingView != null) {
+                    linearLayoutParent.addView(typingView);
+                }
+                // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             } else {
                 // COMMENT
                 if (method.getComment() != null) {
@@ -1019,7 +1082,7 @@ public class ClassEditorFragment extends Fragment {
                         tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
                         llLine.addView(tvLineAfterCommentBeforeTODO);
 
-                        // AFTER TO-DO (inclusive
+                        // AFTER TO-DO (inclusive)
                         TextView tvLineAfterTODO = new TextView(getContext());
                         tvLineAfterTODO.setLayoutParams(layoutParams);
                         Spannable spannableLineAfterTODO = convertToColoredSpannableString(
@@ -1027,6 +1090,7 @@ public class ClassEditorFragment extends Fragment {
                         tvLineAfterTODO.setText(spannableLineAfterTODO);
                         // ... [llLine.addView(tvLineAfterTODO);] will go after the following processing.
 
+                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                         if (method.getName().equals("runDailyCycle")) {
 
                             String answer = null;
@@ -1081,6 +1145,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
+                        // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                         llLine.addView(tvLineAfterTODO);
                     } else if (hasComment) {
                         TextView tvLineAfterComment = new TextView(getContext());
@@ -1119,10 +1184,12 @@ public class ClassEditorFragment extends Fragment {
                             scrollLine
                     );
 
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                     if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
                             typingView != null) {
                         linearLayoutParent.addView(typingView);
                     }
+                    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 }
 
                 // CLOSING

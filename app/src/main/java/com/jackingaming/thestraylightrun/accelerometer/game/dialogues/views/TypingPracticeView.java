@@ -2,7 +2,6 @@ package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.InputType;
@@ -48,13 +47,13 @@ public class TypingPracticeView extends LinearLayout {
 
         tvCode = new TextView(context);
         tvCode.setTextSize(16);
-        tvCode.setTypeface(Typeface.MONOSPACE);
         tvCode.setMovementMethod(new ScrollingMovementMethod());
         addView(tvCode, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         etInput = new EditText(context);
         etInput.setBackgroundColor(Color.BLUE);
         etInput.setTextColor(Color.CYAN);
+//        etInput.setTypeface(Typeface.MONOSPACE);
         etInput.setCursorVisible(false);
         etInput.setMaxLines(10);
         etInput.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -153,11 +152,11 @@ public class TypingPracticeView extends LinearLayout {
         )) {
             finished = true;
 
-            tvCode.setBackgroundColor(Color.RED);
-            tvCode.setTextColor(Color.YELLOW);
+            tvCode.setBackgroundColor(Color.YELLOW);
+            tvCode.setTextColor(Color.GREEN);
 
-            etInput.setBackgroundColor(Color.BLUE);
-            etInput.setTextColor(Color.YELLOW);
+            etInput.setBackgroundColor(Color.YELLOW);
+            etInput.setTextColor(Color.CYAN);
         }
     }
 
