@@ -203,7 +203,7 @@ public class IDEDialogFragment extends DialogFragment
 
                 Method methodMain = null;
                 for (Method method : classMain.getMethods()) {
-                    if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                    if (method.getName().equals(ProjectViewportFragment.NAME_METHOD_MAIN)) {
                         methodMain = method;
                         break;
                     }

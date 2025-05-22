@@ -852,7 +852,7 @@ public class ClassEditorFragment extends Fragment {
                 tvReturnType.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                        if (method.getName().equals(ProjectViewportFragment.NAME_METHOD_MAIN)) {
                             Log.e(TAG, "changing return type for main() is NOT allowed!!!");
                             return;
                         }
@@ -911,7 +911,7 @@ public class ClassEditorFragment extends Fragment {
                 tvNameMethod.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (method.getName().equals(ProjectViewportFragment.METHOD_NAME_MAIN)) {
+                        if (method.getName().equals(ProjectViewportFragment.NAME_METHOD_MAIN)) {
                             Log.e(TAG, "renaming main() is NOT allowed!!!");
                             return;
                         }
