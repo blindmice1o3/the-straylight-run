@@ -760,6 +760,16 @@ public class ClassEditorFragment extends Fragment {
                     answer = "    public boolean isReadyForHarvest() {\n" +
                             "        return isFlowering && isHealthy && vegDays >= 21;\n" +
                             "    }";
+
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 }
                 // run 4 (class Equipment)
                 else if (method.getName().equals("isFunctional")) {
@@ -767,16 +777,16 @@ public class ClassEditorFragment extends Fragment {
                     answer = "    public boolean isFunctional() {\n" +
                             "        return isPowered && isCalibrated;\n" +
                             "    }";
-                }
 
-                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                    tvTodo.setOnLongClickListener(
-                            generateOnLongClickListenerToInsertDirectlyBeneath(
-                                    answer, false
-                            )
-                    );
-                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                    typingView.setCode(answer);
+                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                        tvTodo.setOnLongClickListener(
+                                generateOnLongClickListenerToInsertDirectlyBeneath(
+                                        answer, false
+                                )
+                        );
+                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                        typingView.setCode(answer);
+                    }
                 }
 
                 HorizontalScrollView scroll = new HorizontalScrollView(getContext());
@@ -1178,6 +1188,93 @@ public class ClassEditorFragment extends Fragment {
                                         "            System.out.println(\"Diagnostics passed. Ready to grow!\");\n" +
                                         "        }";
                             }
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class Plant (run 3)
+                        else if (method.getName().equals("needsWater")) {
+
+                            String answer = "        return moistureLevel < 40 && !isDiseased;";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class Plant (run 3)
+                        else if (method.getName().equals("isUnhealthy")) {
+
+                            String answer = "        return hasPests || isDiseased;";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class GrowableTile (run 3)
+                        else if (method.getName().equals("waterPlant")) {
+
+                            String answer = "        if (plant != null && plant.needsWater()) {\n" +
+                                    "            plant.moistureLevel += 30;\n" +
+                                    "        }";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class GrowableTile (run 3)
+                        else if (method.getName().equals("inspectPlant")) {
+
+                            String answer = "        if (plant != null && plant.isUnhealthy()) {\n" +
+                                    "            System.out.println(\"Alert: Unhealthy plant found!\");\n" +
+                                    "        }";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class Robot (run 3)
+                        else if (method.getName().equals("maintainGarden")) {
+
+                            String answer = "        for (GrowableTile tile : garden) {\n" +
+                                    "            tile.inspectPlant();\n" +
+                                    "            tile.waterPlant();\n" +
+                                    "        }";
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
