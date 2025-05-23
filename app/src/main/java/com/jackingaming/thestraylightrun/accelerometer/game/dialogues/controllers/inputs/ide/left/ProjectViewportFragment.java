@@ -43,6 +43,9 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_PLANT_OUTDOOR = "Plant (outdoor)";
     public static final String NAME_CLASS_GROWABLE_TILE_OUTDOOR = "GrowableTile (outdoor)";
     public static final String NAME_CLASS_ROBOT_OUTDOOR = "Robot (outdoor)";
+    public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
+    public static final String NAME_CLASS_GROWABLE_TILE_RUN2 = "GrowableTileRun2";
+    public static final String NAME_CLASS_PLANT_RUN2 = "PlantRun2";
     public static final String NAME_METHOD_MAIN = "main";
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
@@ -457,6 +460,119 @@ public class ProjectViewportFragment extends Fragment {
         return classRobotOutdoor;
     }
 
+    public Class initClassRobotRun2() {
+        Class classRobotRun2 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_ROBOT_RUN2, null);
+
+        // FIELDS
+        // Intentionally blank.
+
+        // CONSTRUCTORS
+        // Intentionally blank.
+
+        // METHODS
+        List<VariableDeclaration> argumentListTill = new ArrayList<>();
+        argumentListTill.add(
+                new VariableDeclaration("GrowableTile", "tile")
+        );
+        String bodyTill = "        // TODO: Set tile's isTilled to true";
+        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "till",
+                argumentListTill,
+                bodyTill,
+                null,
+                null,
+                false));
+        List<VariableDeclaration> argumentListWater = new ArrayList<>();
+        argumentListWater.add(
+                new VariableDeclaration("GrowableTile", "tile")
+        );
+        String bodyWater = "        // TODO: Set tile's isWatered to true";
+        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "water",
+                argumentListWater,
+                bodyWater,
+                null,
+                null,
+                true));
+        List<VariableDeclaration> argumentListSeed = new ArrayList<>();
+        argumentListSeed.add(
+                new VariableDeclaration("GrowableTile", "tile")
+        );
+        argumentListSeed.add(
+                new VariableDeclaration("String ", "seedType")
+        );
+        String bodySeed = "        // TODO: Create a new Plant and assign it to the tile (only do this if tile is tilled and not already seeded)";
+        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "seed",
+                argumentListSeed,
+                bodySeed,
+                null,
+                null,
+                true));
+
+        return classRobotRun2;
+    }
+
+    public Class initClassGrowableTileRun2() {
+        Class classGrowableTileRun2 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_GROWABLE_TILE_RUN2, null);
+
+        // FIELDS
+        classGrowableTileRun2.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isTilled", "false",
+                null, null, null, false));
+        classGrowableTileRun2.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isWatered ", "false",
+                null, null, null, false));
+        classGrowableTileRun2.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "Plant", "plant", "null",
+                null, null, null, false));
+
+        // CONSTRUCTORS
+        // Intentionally blank.
+
+        // METHODS
+        // Intentionally blank.
+
+        return classGrowableTileRun2;
+    }
+
+    public Class initClassPlantRun2() {
+        Class classPlantRun2 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_PLANT_RUN2, null);
+
+        // FIELDS
+        classPlantRun2.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "type", null,
+                null, null, null, false));
+        classPlantRun2.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "hydrationLevel", null,
+                null, null, null, false));
+
+        // CONSTRUCTORS
+        List<VariableDeclaration> argumentListPlantRun2 = new ArrayList<>();
+        argumentListPlantRun2.add(
+                new VariableDeclaration("String", "type")
+        );
+        String bodyPlantRun2 = "        // TODO: Set this.type to the provided type\n" +
+                "        // TODO: Initialize hydrationLevel to 1";
+        classPlantRun2.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
+                argumentListPlantRun2,
+                bodyPlantRun2,
+                null, null, true));
+
+        return classPlantRun2;
+    }
+
     public ProjectViewportFragment() {
         // Required empty public constructor
 
@@ -490,6 +606,15 @@ public class ProjectViewportFragment extends Fragment {
         );
         classes.add(
                 initClassRobotOutdoor()
+        );
+        classes.add(
+                initClassRobotRun2()
+        );
+        classes.add(
+                initClassGrowableTileRun2()
+        );
+        classes.add(
+                initClassPlantRun2()
         );
     }
 

@@ -678,6 +678,31 @@ public class ClassEditorFragment extends Fragment {
                             }
                         }
                     }
+                    // class PlantRun2
+                    else if (constructor.getName().equals("PlantRun2")) {
+
+                        Log.e(TAG, "line: " + line);
+                        String answer = null;
+                        String lastChar = line.substring(
+                                line.length() - 1
+                        );
+                        if (lastChar.equals("e")) {
+                            answer = "        this.type = type;";
+                        } else if (lastChar.equals("1")) {
+                            answer = "        this.hydrationLevel = 1;";
+                        }
+
+                        if (answer != null) {
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
+                    }
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                     llLine.addView(tvLineAfterTODO);
                 } else if (hasComment) {
@@ -1142,7 +1167,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class Plant (run 5)
+                        // class PlantIndoor (run 5)
                         else if (method.getName().equals("updateGrowth")) {
 
                             String answer = null;
@@ -1200,7 +1225,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class Plant (run 3)
+                        // class PlantOutdoor (run 3)
                         else if (method.getName().equals("needsWater")) {
 
                             String answer = "        return moistureLevel < 40 && !isDiseased;";
@@ -1216,7 +1241,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class Plant (run 3)
+                        // class PlantOutdoor (run 3)
                         else if (method.getName().equals("isUnhealthy")) {
 
                             String answer = "        return hasPests || isDiseased;";
@@ -1232,7 +1257,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class GrowableTile (run 3)
+                        // class GrowableTileOutdoor (run 3)
                         else if (method.getName().equals("waterPlant")) {
 
                             String answer = "        if (plant != null && plant.needsWater()) {\n" +
@@ -1250,7 +1275,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class GrowableTile (run 3)
+                        // class GrowableTileOutdoor (run 3)
                         else if (method.getName().equals("inspectPlant")) {
 
                             String answer = "        if (plant != null && plant.isUnhealthy()) {\n" +
@@ -1268,12 +1293,62 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class Robot (run 3)
+                        // class RobotOutdoor (run 3)
                         else if (method.getName().equals("maintainGarden")) {
 
                             String answer = "        for (GrowableTile tile : garden) {\n" +
                                     "            tile.inspectPlant();\n" +
                                     "            tile.waterPlant();\n" +
+                                    "        }";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class RobotRun2
+                        else if (method.getName().equals("till")) {
+
+                            String answer = "        tile.isTilled = true;";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class RobotRun2
+                        else if (method.getName().equals("water")) {
+
+                            String answer = "        tile.isWatered = true;";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class RobotRun2
+                        else if (method.getName().equals("seed")) {
+
+                            String answer = "        if (tile.isTilled && tile.plant == null) {\n" +
+                                    "            tile.plant = new Plant(seedType);\n" +
                                     "        }";
 
                             if (answer != null) {
