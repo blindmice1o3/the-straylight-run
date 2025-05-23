@@ -746,6 +746,7 @@ public class ClassEditorFragment extends Fragment {
             if (method.getTodo() != null) {
                 // TO-DO
                 TypingPracticeView typingView = null;
+                String answer = null;
                 String todo = DEFAULT_INDENT + method.getTodo();
                 Spannable spannableTodo = convertToColoredSpannableString(
                         todo, Color.CYAN);
@@ -753,21 +754,29 @@ public class ClassEditorFragment extends Fragment {
                 tvTodo.setLayoutParams(layoutParams);
                 tvTodo.setText(spannableTodo);
 
+                // run 5 (class Plant)
                 if (method.getName().equals("isReadyForHarvest")) {
                     typingView = new TypingPracticeView(getContext());
-                    String answer = "    public boolean isReadyForHarvest() {\n" +
+                    answer = "    public boolean isReadyForHarvest() {\n" +
                             "        return isFlowering && isHealthy && vegDays >= 21;\n" +
                             "    }";
+                }
+                // run 4 (class Equipment)
+                else if (method.getName().equals("isFunctional")) {
+                    typingView = new TypingPracticeView(getContext());
+                    answer = "    public boolean isFunctional() {\n" +
+                            "        return isPowered && isCalibrated;\n" +
+                            "    }";
+                }
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                        tvTodo.setOnLongClickListener(
-                                generateOnLongClickListenerToInsertDirectlyBeneath(
-                                        answer, false
-                                )
-                        );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                        typingView.setCode(answer);
-                    }
+                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    tvTodo.setOnLongClickListener(
+                            generateOnLongClickListenerToInsertDirectlyBeneath(
+                                    answer, false
+                            )
+                    );
+                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    typingView.setCode(answer);
                 }
 
                 HorizontalScrollView scroll = new HorizontalScrollView(getContext());
@@ -1091,6 +1100,7 @@ public class ClassEditorFragment extends Fragment {
                         // ... [llLine.addView(tvLineAfterTODO);] will go after the following processing.
 
                         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                        // class GrowTentSystem (run 5)
                         if (method.getName().equals("runDailyCycle")) {
 
                             String answer = null;
@@ -1121,7 +1131,9 @@ public class ClassEditorFragment extends Fragment {
                                     typingView.setCode(answer);
                                 }
                             }
-                        } else if (method.getName().equals("updateGrowth")) {
+                        }
+                        // class Plant (run 5)
+                        else if (method.getName().equals("updateGrowth")) {
 
                             String answer = null;
                             if (i == 1) {
@@ -1131,6 +1143,39 @@ public class ClassEditorFragment extends Fragment {
                             } else if (i == 3) {
                                 answer = "        if (vegDays >= 14 && isHealthy) {\n" +
                                         "            isFlowering = true;\n" +
+                                        "        }";
+                            }
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class GrowTentSystem (run 4)
+                        else if (method.getName().equals("performDiagnostics")) {
+
+                            String answer = null;
+                            if (i == 3) {
+                                answer = "        for (Equipment e : equipmentList) {\n" +
+                                        "            if (e.name.contains(\"Light\") && e.isPowered) {\n" +
+                                        "                allLightsOff = false;\n" +
+                                        "            }\n" +
+                                        "\n" +
+                                        "            if (e.isFunctional()) {\n" +
+                                        "                functionalCount++;\n" +
+                                        "            }\n" +
+                                        "        }";
+                            } else if (i == 5) {
+                                answer = "        if (functionalCount < 3 || allLightsOff) {\n" +
+                                        "            System.out.println(\"Warning: System not ready. Functional: \" + functionalCount + \", All lights off: \" + allLightsOff);\n" +
+                                        "        } else {\n" +
+                                        "            System.out.println(\"Diagnostics passed. Ready to grow!\");\n" +
                                         "        }";
                             }
 

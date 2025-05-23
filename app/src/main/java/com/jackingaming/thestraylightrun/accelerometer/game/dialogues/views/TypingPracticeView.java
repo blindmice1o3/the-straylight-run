@@ -12,9 +12,11 @@ import android.text.method.ScrollingMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,7 +58,12 @@ public class TypingPracticeView extends LinearLayout {
 //        etInput.setTypeface(Typeface.MONOSPACE);
         etInput.setCursorVisible(false);
         etInput.setMaxLines(10);
-        etInput.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        etInput.setGravity(Gravity.TOP | Gravity.START);
+        etInput.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        etInput.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        etInput.setOverScrollMode(OVER_SCROLL_ALWAYS);
+        etInput.setSingleLine(false); // Allow multiple lines
+        etInput.setHorizontallyScrolling(false);
         addView(etInput, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // Input logic
@@ -147,8 +154,10 @@ public class TypingPracticeView extends LinearLayout {
     }
 
     private void checkForWinner() {
+        String targetCodeWithoutNewlines = targetCode.replace("\n", "");
+
         if (etInput.getText().toString().equals(
-                targetCode
+                targetCodeWithoutNewlines
         )) {
             finished = true;
 
