@@ -138,13 +138,15 @@ public class TypingPracticeView extends LinearLayout {
 
             if (typedChar != null) {
                 if (typedChar == targetChar) {
-                    builder.setSpan(new ForegroundColorSpan(Color.GREEN), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.setSpan(new BackgroundColorSpan(Color.GREEN), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.setSpan(new ForegroundColorSpan(Color.WHITE), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
-                    builder.setSpan(new ForegroundColorSpan(Color.RED), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.setSpan(new BackgroundColorSpan(Color.RED), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    builder.setSpan(new ForegroundColorSpan(Color.WHITE), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } else if (i == currentIndex && showCursor) {
-                builder.setSpan(new BackgroundColorSpan(Color.BLUE), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                builder.setSpan(new ForegroundColorSpan(Color.YELLOW), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new BackgroundColorSpan(Color.YELLOW), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new ForegroundColorSpan(Color.GREEN), start, start + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
 
@@ -154,9 +156,10 @@ public class TypingPracticeView extends LinearLayout {
     }
 
     private void checkForWinner() {
-        String targetCodeWithoutNewlines = targetCode.replace("\n", "");
+        String targetCodeWithoutNewlines = targetCode.replace("\n", " ");
+        String codeFromEditText = etInput.getText().toString();
 
-        if (etInput.getText().toString().equals(
+        if (codeFromEditText.equals(
                 targetCodeWithoutNewlines
         )) {
             finished = true;
