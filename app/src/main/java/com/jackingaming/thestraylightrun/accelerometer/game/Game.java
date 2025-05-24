@@ -29,9 +29,9 @@ public class Game {
 
     public enum DailyLoop {
         TELEVISION,
+        NOTES,
         GROUP_CHAT,
         GAME_CONSOLE,
-        NOTES,
         COMPUTER,
         JOURNAL,
         SLEEP_SAVE;
@@ -46,15 +46,15 @@ public class Game {
     public void incrementDailyLoop() {
         switch (dailyLoop) {
             case TELEVISION:
+                dailyLoop = DailyLoop.NOTES;
+                break;
+            case NOTES:
                 dailyLoop = DailyLoop.GROUP_CHAT;
                 break;
             case GROUP_CHAT:
                 dailyLoop = DailyLoop.GAME_CONSOLE;
                 break;
             case GAME_CONSOLE:
-                dailyLoop = DailyLoop.NOTES;
-                break;
-            case NOTES:
                 dailyLoop = DailyLoop.COMPUTER;
                 break;
             case COMPUTER:
