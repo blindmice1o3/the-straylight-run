@@ -30,6 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class SceneFarm extends Scene {
     public static final String TAG = SceneFarm.class.getSimpleName();
@@ -131,6 +133,57 @@ public class SceneFarm extends Scene {
         uniqueInstance = sceneFarm;
     }
 
+    private Random random = new Random();
+
+    private int counterMilkInstantiation = 0;
+
+    private void addMilkToRandomTile() {
+        counterMilkInstantiation++;
+        Log.e(TAG, "counterMilkInstantiation: " + counterMilkInstantiation);
+
+        int xIndex = -1;
+        int yIndex = -1;
+        boolean lookingForUnoccupiedWalkableTile = true;
+        while (lookingForUnoccupiedWalkableTile) {
+            xIndex = random.nextInt(
+                    (tileManager.getWidthScene() / Tile.WIDTH)
+            );
+            yIndex = random.nextInt(
+                    (tileManager.getHeightScene() / Tile.HEIGHT)
+            );
+            Tile tileRandom = tileManager.getTiles()[yIndex][xIndex];
+            if (tileRandom.isWalkable()) {
+                if (tileRandom instanceof GrowableTile) {
+                    if (((GrowableTile) tileRandom).getEntity() == null) {
+                        // unoccupied.
+                        // TODO: load Item.
+                        Item itemToAdd = new Milk();
+                        itemToAdd.init(game);
+                        itemToAdd.setPosition(
+                                (xIndex * Tile.WIDTH),
+                                (yIndex * Tile.HEIGHT)
+                        );
+                        itemManager.addItem(itemToAdd);
+                        lookingForUnoccupiedWalkableTile = false;
+                    } else {
+                        // Occupied.
+                    }
+                } else {
+                    // walkable
+                    // TODO: load Item.
+                    Item itemToAdd = new Milk();
+                    itemToAdd.init(game);
+                    itemToAdd.setPosition(
+                            (xIndex * Tile.WIDTH),
+                            (yIndex * Tile.HEIGHT)
+                    );
+                    itemManager.addItem(itemToAdd);
+                    lookingForUnoccupiedWalkableTile = false;
+                }
+            }
+        }
+    }
+
     public void reload(Game game) {
         this.game = game;
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
@@ -192,6 +245,14 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "init()");
 
         this.game = game;
+        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+            @Override
+            public void executeTimedEvent() {
+                for (int i = 0; i < 30; i++) {
+                    addMilkToRandomTile();
+                }
+            }
+        }, 7, 0, false);
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
@@ -307,6 +368,14 @@ public class SceneFarm extends Scene {
 
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+
+        if (itemCurrentlyFacing != null) {
+            Log.e(TAG, "itemCurrentlyFacing != null");
+            player.respondToItemCollisionViaClick(
+                    player.getItemCurrentlyFacing()
+            );
+        }
 
         if (player.hasCarryable() && entityCurrentlyFacing == null) {
             Log.e(TAG, "has carryable and entityFacing is null");

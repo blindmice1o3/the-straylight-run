@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
@@ -425,6 +426,67 @@ public abstract class Creature extends Entity {
         }
 
         return tempEntityReturner;
+    }
+
+    public Item getItemCurrentlyFacing() {
+        Log.e(TAG, "getItemCurrentlyFacing()");
+
+        Item tempItemReturner = null;
+
+        int creatureCenterX = (int) (x + (width / 2));
+        int creatureCenterY = (int) (y + (height / 2));
+
+        Rect itemCollisionBox = new Rect();
+        switch (direction) {
+            case DOWN:
+                itemCollisionBox.left = (creatureCenterX - (Tile.WIDTH / 4));
+                itemCollisionBox.top = (creatureCenterY + (Tile.HEIGHT / 2) + ((int) (0.3) * Tile.HEIGHT));
+                itemCollisionBox.right = (creatureCenterX - (Tile.WIDTH / 4)) +
+                        (Tile.WIDTH / 2);
+                itemCollisionBox.bottom = (creatureCenterY + (Tile.HEIGHT / 2) + ((int) (0.3) * Tile.HEIGHT)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case UP:
+                itemCollisionBox.left = (creatureCenterX - (Tile.WIDTH / 4));
+                itemCollisionBox.top = (creatureCenterY - ((int) (1.4) * Tile.HEIGHT));
+                itemCollisionBox.right = (creatureCenterX - (Tile.WIDTH / 4)) +
+                        (Tile.WIDTH / 2);
+                itemCollisionBox.bottom = (creatureCenterY - ((int) (1.4) * Tile.HEIGHT)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case LEFT:
+                itemCollisionBox.left = (creatureCenterX - ((int) (1.4) * Tile.WIDTH));
+                itemCollisionBox.top = (creatureCenterY - (Tile.HEIGHT / 4));
+                itemCollisionBox.right = (creatureCenterX - ((int) (1.4) * Tile.WIDTH)) +
+                        (Tile.WIDTH / 2);
+                itemCollisionBox.bottom = (creatureCenterY - (Tile.HEIGHT / 4)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            case RIGHT:
+                itemCollisionBox.left = (creatureCenterX + (Tile.WIDTH / 2) + ((int) (0.3) * Tile.WIDTH));
+                itemCollisionBox.top = (creatureCenterY - (Tile.HEIGHT / 4));
+                itemCollisionBox.right = (creatureCenterX + (Tile.WIDTH / 2) + ((int) (0.3) * Tile.WIDTH)) +
+                        (Tile.WIDTH / 2);
+                itemCollisionBox.bottom = (creatureCenterY - (Tile.HEIGHT / 4)) +
+                        (Tile.HEIGHT / 2);
+                break;
+            default:
+                break;
+        }
+
+        for (Item i : game.getSceneManager().getCurrentScene().getItemManager().getItems()) {
+            if (itemCollisionBox.intersect(i.getCollisionBounds(0, 0))) {
+                tempItemReturner = i;
+            }
+        }
+
+        if (tempItemReturner != null) {
+            Log.e(TAG, "item: " + tempItemReturner.toString());
+        } else {
+            Log.e(TAG, "item is null");
+        }
+
+        return tempItemReturner;
     }
 
     public Tile checkTileCurrentlyFacing() {

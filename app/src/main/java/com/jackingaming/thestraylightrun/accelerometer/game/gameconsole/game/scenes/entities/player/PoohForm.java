@@ -52,7 +52,6 @@ public class PoohForm
         // TODO: placeholder for AttackCooldown
 
 
-
         // USER_INPUT (determine values of [offset-of-next-step]... potential movement)
         interpretInput();
 
