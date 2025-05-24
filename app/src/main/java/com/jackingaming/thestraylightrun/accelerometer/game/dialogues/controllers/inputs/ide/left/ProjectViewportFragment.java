@@ -46,6 +46,8 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
     public static final String NAME_CLASS_GROWABLE_TILE_RUN2 = "GrowableTileRun2";
     public static final String NAME_CLASS_PLANT_RUN2 = "PlantRun2";
+    public static final String NAME_CLASS_ROBOT_RUN1 = "RobotRun1";
+    public static final String NAME_CLASS_GROWABLE_TILE_RUN1 = "GrowableTileRun1";
     public static final String NAME_METHOD_MAIN = "main";
     public static final String ARG_CLASSES_DATA_OBJECT = "classesDataObject";
 
@@ -573,6 +575,89 @@ public class ProjectViewportFragment extends Fragment {
         return classPlantRun2;
     }
 
+    public Class initClassRobotRun1() {
+        Class classRobotRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_ROBOT_RUN1, null);
+
+        // FIELDS
+        // Intentionally blank.
+
+        // CONSTRUCTORS
+        // Intentionally blank.
+
+        // METHODS
+        List<VariableDeclaration> argumentListWalkTo = new ArrayList<>();
+        argumentListWalkTo.add(
+                new VariableDeclaration("GrowableTile", "tile")
+        );
+        String bodyWalkTo = "        // TODO: Print the tile's coordinates\n" +
+                "        // TODO: If tile has rock, print \"Obstacle detected\"";
+        classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "walkTo",
+                argumentListWalkTo,
+                bodyWalkTo,
+                null,
+                null,
+                false));
+        List<VariableDeclaration> argumentListClearRock = new ArrayList<>();
+        argumentListClearRock.add(
+                new VariableDeclaration("GrowableTile", "tile")
+        );
+        String bodyClearRock = "        // TODO: Set tile.hasRock to false\n" +
+                "        // TODO: Print \"Rock removed\"";
+        classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "clearRock",
+                argumentListClearRock,
+                bodyClearRock,
+                null,
+                null,
+                true));
+
+        return classRobotRun1;
+    }
+
+    public Class initClassGrowableTileRun1() {
+        Class classGrowableTileRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_GROWABLE_TILE_RUN1, null);
+
+        // FIELDS
+        classGrowableTileRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "x", null,
+                null, null, null, false));
+        classGrowableTileRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "y ", null,
+                null, null, null, false));
+        classGrowableTileRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "hasRock", null,
+                null, null, null, false));
+
+        // CONSTRUCTORS
+        List<VariableDeclaration> argumentListGrowableTileRun1 = new ArrayList<>();
+        argumentListGrowableTileRun1.add(new VariableDeclaration(
+                "int", "x"
+        ));
+        argumentListGrowableTileRun1.add(new VariableDeclaration(
+                "int", "y"
+        ));
+        argumentListGrowableTileRun1.add(new VariableDeclaration(
+                "boolean", "hasRock"
+        ));
+        String bodyGrowableTileRun1 = "        // TODO: Assign constructor parameters to fields";
+        classGrowableTileRun1.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
+                argumentListGrowableTileRun1, bodyGrowableTileRun1,
+                null, null, true));
+
+        // METHODS
+        // Intentionally blank.
+
+        return classGrowableTileRun1;
+    }
+
     public ProjectViewportFragment() {
         // Required empty public constructor
 
@@ -615,6 +700,12 @@ public class ProjectViewportFragment extends Fragment {
         );
         classes.add(
                 initClassPlantRun2()
+        );
+        classes.add(
+                initClassRobotRun1()
+        );
+        classes.add(
+                initClassGrowableTileRun1()
         );
     }
 

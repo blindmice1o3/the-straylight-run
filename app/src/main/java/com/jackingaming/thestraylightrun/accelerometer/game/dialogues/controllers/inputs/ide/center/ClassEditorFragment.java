@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center;
 
+import static com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment.NAME_CLASS_GROWABLE_TILE_RUN1;
+
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -703,6 +705,24 @@ public class ClassEditorFragment extends Fragment {
                             }
                         }
                     }
+                    // class GrowableTile1
+                    else if (constructor.getName().equals(NAME_CLASS_GROWABLE_TILE_RUN1)) {
+
+                        String answer = "        this.x = x;\n" +
+                                "        this.y = y;\n" +
+                                "        this.hasRock = hasRock;";
+
+                        if (answer != null) {
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
+                    }
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                     llLine.addView(tvLineAfterTODO);
                 } else if (hasComment) {
@@ -1350,6 +1370,50 @@ public class ClassEditorFragment extends Fragment {
                             String answer = "        if (tile.isTilled && tile.plant == null) {\n" +
                                     "            tile.plant = new Plant(seedType);\n" +
                                     "        }";
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class RobotRun1
+                        else if (method.getName().equals("walkTo")) {
+
+                            String answer = null;
+                            if (i == 0) {
+                                answer = "        System.out.println(\"Walking to (\" + tile.x + \", \" + tile.y + \")\");";
+                            } else if (i == 1) {
+                                answer = "        if (tile.hasRock) {\n" +
+                                        "            System.out.println(\"Obstacle detected\");\n" +
+                                        "        }";
+                            }
+
+                            if (answer != null) {
+                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                    tvLineAfterTODO.setOnLongClickListener(
+                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                    );
+                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                    typingView = new TypingPracticeView(getContext());
+                                    typingView.setCode(answer);
+                                }
+                            }
+                        }
+                        // class RobotRun1
+                        else if (method.getName().equals("clearRock")) {
+
+                            String answer = null;
+                            if (i == 0) {
+                                answer = "        tile.hasRock = false;";
+                            } else if (i == 1) {
+                                answer = "        System.out.println(\"Rock removed\");";
+                            }
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
