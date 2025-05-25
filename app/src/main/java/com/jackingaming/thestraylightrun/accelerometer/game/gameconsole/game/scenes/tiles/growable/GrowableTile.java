@@ -51,8 +51,8 @@ public class GrowableTile extends Tile {
     private State state;
     private String idSeed;
     private Entity entity;
-    transient private Map<State, Bitmap> imageUnwateredViaState;
-    transient private Map<State, Bitmap> imageWateredViaState;
+    transient protected Map<State, Bitmap> imageUnwateredViaState;
+    transient protected Map<State, Bitmap> imageWateredViaState;
 
     public GrowableTile(String id, EntityListener entityListener) {
         super(id);
@@ -109,7 +109,7 @@ public class GrowableTile extends Tile {
         }
     }
 
-    private void initImageMaps(Resources resources) {
+    protected void initImageMaps(Resources resources) {
         Bitmap spriteSheetCropsAndItems = BitmapFactory.decodeResource(resources, R.drawable.gbc_hm_crops_and_items);
         Bitmap unwateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 7, 19, 16, 16);
         Bitmap unwateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 7, 106, 16, 16);

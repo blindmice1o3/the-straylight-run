@@ -10,11 +10,21 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,12 +39,32 @@ public class SceneHothouse extends Scene {
 
     private static SceneHothouse uniqueInstance;
 
+    private List<GrowableTile> growableTiles;
+    private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+
     private SceneHothouse() {
         super();
         List<Entity> entitiesForHothouse = createEntitiesForHothouse();
         entityManager.loadEntities(entitiesForHothouse);
         List<Item> itemsForHothouse = createItemsForHothouse();
         itemManager.loadItems(itemsForHothouse);
+
+        growableTiles = new ArrayList<>();
+
+        shippingBinIncomeListener = new ShippingBinTile.IncomeListener() {
+            @Override
+            public void incrementCurrency(float amountToIncrement) {
+                game.incrementCurrency(amountToIncrement);
+            }
+        };
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        for (GrowableTile growableTile : growableTiles) {
+            growableTile.startNewDay();
+        }
     }
 
     public static SceneHothouse getInstance() {
@@ -56,8 +86,114 @@ public class SceneHothouse extends Scene {
         tileManager.loadTransferPoints(transferPointsForHothouse); // transferPoints are transient and should be reloaded everytime.
         tileManager.init(game); // updates tileManager's reference to the new game.
 
+        for (int y = 0; y < tilesForHothouse.length; y++) {
+            for (int x = 0; x < tilesForHothouse[y].length; x++) {
+                Tile tile = tilesForHothouse[y][x];
+                if (tile instanceof GrowableTile) {
+                    growableTiles.add(((GrowableTile) tile));
+                }
+            }
+        }
+        Log.e(TAG, "growableTiles.size() is " + growableTiles.size());
+
         entityManager.init(game);
         itemManager.init(game);
+    }
+
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Tile tileCurrenlyFacing = player.checkTileCurrentlyFacing();
+        Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+
+        // TODO:
+        if (player.hasCarryable() && entityCurrentlyFacing == null) {
+            Log.e(TAG, "has carryable and entityFacing is null");
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
+            if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                if (player.getCarryable() instanceof Sellable) {
+                    Log.e(TAG, "carryable is Sellable");
+                    player.placeInShippingBin();
+                }
+            } else if (tileCurrentlyFacing.isWalkable()) {
+                Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
+                if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).changeToWalk();
+                }
+
+                player.placeDown();
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof Plant &&
+                ((Plant) entityCurrentlyFacing).isHarvestable()) {
+            player.pickUp(entityCurrentlyFacing);
+
+            Tile tileFacing = player.checkTileCurrentlyFacing();
+            if (tileFacing instanceof GrowableTile) {
+                ((GrowableTile) tileFacing).changeToUntilled();
+            } else {
+                Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+            }
+        } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof AimlessWalker) {
+            ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+
+            player.pickUp(entityCurrentlyFacing);
+        }
+        // check item occupying StatsDisplayerFragment's button holder.
+        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+            tileCommand.setTile(tileCurrentlyFacing);
+            tileCommand.execute();
+        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+            if (entityCurrentlyFacing != null) {
+                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                entityCommand.setEntity(entityCurrentlyFacing);
+                entityCommand.execute();
+            }
+        }
+    }
+
+    @Override
+    protected void doJustPressedButtonB() {
+        super.doJustPressedButtonB();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+        // TODO:
+
+        // check item occupying StatsDisplayerFragment's button holder.
+        if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+            tileCommand.setTile(tileCurrentlyFacing);
+            tileCommand.execute();
+        } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+            if (entityCurrentlyFacing != null) {
+                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                entityCommand.setEntity(entityCurrentlyFacing);
+                entityCommand.execute();
+            }
+        }
     }
 
     @Override
@@ -107,29 +243,47 @@ public class SceneHothouse extends Scene {
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //GrowableTableTile
+                //GrowableIndoorTile
                 else if (tile.getId().equals("p")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    hothouse[y][x] = new GrowableIndoorTile(GrowableIndoorTile.TAG, new GrowableTile.EntityListener() {
+                        @Override
+                        public void addEntityToScene(Entity entityToAdd) {
+                            entityManager.addEntity(entityToAdd);
+                        }
+                    });
+                    hothouse[y][x].init(game, x, y, tileSprite);
+                    hothouse[y][x].setWalkable(false);
                 }
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.TOP_LEFT,
+                            shippingBinIncomeListener);
+                    hothouse[y][x].init(game, x, y, tileSprite);
+                    hothouse[y][x].setWalkable(false);
                 } else if (tile.getId().equals("d")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.TOP_RIGHT,
+                            shippingBinIncomeListener);
+                    hothouse[y][x].init(game, x, y, tileSprite);
+                    hothouse[y][x].setWalkable(false);
                 } else if (tile.getId().equals("e")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.BOTTOM_LEFT,
+                            shippingBinIncomeListener);
+                    hothouse[y][x].init(game, x, y, tileSprite);
+                    hothouse[y][x].setWalkable(false);
                 } else if (tile.getId().equals("f")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.BOTTOM_RIGHT,
+                            shippingBinIncomeListener);
+                    hothouse[y][x].init(game, x, y, tileSprite);
+                    hothouse[y][x].setWalkable(false);
                 }
                 //default
                 else {

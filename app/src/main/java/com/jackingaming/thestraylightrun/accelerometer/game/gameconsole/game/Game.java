@@ -30,16 +30,21 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.ada
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.SceneManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
@@ -168,6 +173,16 @@ public class Game {
 
         backpack = new ArrayList<Item>();
         backpack.add(
+                new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                )
+        );
+        backpack.add(
+                new Shovel(
+                        new TillGrowableTileCommand(null)
+                )
+        );
+        backpack.add(
                 new BugCatchingNet(
                         new BounceEntityCommand(null)
                 )
@@ -199,7 +214,7 @@ public class Game {
 //        SceneChickenCoop.getInstance().startNewDay();
 //        SceneCowBarn.getInstance().startNewDay();
 //        SceneSheepPen.getInstance().startNewDay();
-//        SceneHothouse.getInstance().startNewDay();
+        SceneHothouse.getInstance().startNewDay();
     }
 
     public void addItemToBackpack(Item item) {

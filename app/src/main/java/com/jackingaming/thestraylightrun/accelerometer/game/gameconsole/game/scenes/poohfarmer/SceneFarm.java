@@ -424,7 +424,9 @@ public class SceneFarm extends Scene {
 //                    ((AimlessWalker) entityCurrentlyFacing).changeToOff();
 //                    break;
 //            }
-        } else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+        }
+        // check item occupying StatsDisplayerFragment's button holder.
+        else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
             TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
@@ -441,7 +443,9 @@ public class SceneFarm extends Scene {
                 entityCommand.setEntity(entityCurrentlyFacing);
                 entityCommand.execute();
             }
-        } else if (!player.hasCarryable() &&
+        }
+        // !!! note: this should be last, other-wise there are side-effects !!!
+        else if (!player.hasCarryable() &&
                 entityCurrentlyFacing == null) {
             Log.e(TAG, "no carryable and entityFacing is null");
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
@@ -496,7 +500,7 @@ public class SceneFarm extends Scene {
                 startDialogueWithAI(portraitAI);
             }
         } else {
-            // TODO: check item occupying StatsDisplayerFragment's button holder.
+            // check item occupying StatsDisplayerFragment's button holder.
             if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
                 TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
                 TileCommand tileCommand = tileCommandOwner.getTileCommand();
