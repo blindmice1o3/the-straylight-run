@@ -8,7 +8,7 @@ public class GrowingPot extends Item
         implements TileCommandOwner {
     public static final String TAG = GrowingPot.class.getSimpleName();
 
-    private static final String NAME_DEFAULT = "Shovel";
+    private static final String NAME_DEFAULT = "GrowingPot";
     private static final float PRICE_DEFAULT = -1f;
 
     private TileCommand tileCommand;

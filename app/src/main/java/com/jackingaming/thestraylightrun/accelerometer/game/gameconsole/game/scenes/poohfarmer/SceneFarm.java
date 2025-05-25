@@ -21,6 +21,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
@@ -29,6 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
@@ -135,11 +137,11 @@ public class SceneFarm extends Scene {
 
     private Random random = new Random();
 
-    private int counterMilkInstantiation = 0;
+    private int counterGrowingPotInstantiation = 0;
 
-    private void addMilkToRandomTile() {
-        counterMilkInstantiation++;
-        Log.e(TAG, "counterMilkInstantiation: " + counterMilkInstantiation);
+    private void addGrowingPotToRandomTile() {
+        counterGrowingPotInstantiation++;
+        Log.e(TAG, "counterGrowingPotInstantiation: " + counterGrowingPotInstantiation);
 
         int xIndex = -1;
         int yIndex = -1;
@@ -157,7 +159,9 @@ public class SceneFarm extends Scene {
                     if (((GrowableTile) tileRandom).getEntity() == null) {
                         // unoccupied.
                         // TODO: load Item.
-                        Item itemToAdd = new Milk();
+                        Item itemToAdd = new GrowingPot(
+                                new TillGrowableIndoorTileCommand(null)
+                        );
                         itemToAdd.init(game);
                         itemToAdd.setPosition(
                                 (xIndex * Tile.WIDTH),
@@ -248,8 +252,8 @@ public class SceneFarm extends Scene {
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
-                for (int i = 0; i < 30; i++) {
-                    addMilkToRandomTile();
+                for (int i = 0; i < 6; i++) {
+                    addGrowingPotToRandomTile();
                 }
             }
         }, 7, 0, false);
