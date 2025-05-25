@@ -62,6 +62,7 @@ public class RobotDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate()");
 
         if (getArguments() != null) {
             buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);

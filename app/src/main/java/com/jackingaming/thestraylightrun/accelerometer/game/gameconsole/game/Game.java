@@ -29,6 +29,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputMan
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.adapters.ItemRecyclerViewAdapter;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.SceneManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenPlantDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
@@ -39,6 +40,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.PlantInspectioner200;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
@@ -190,6 +192,11 @@ public class Game {
         backpack.add(
                 new RobotReprogrammer4000(
                         new OpenRobotDialogEntityCommand(null)
+                )
+        );
+        backpack.add(
+                new PlantInspectioner200(
+                        new OpenPlantDialogEntityCommand(null)
                 )
         );
         backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<Item>();

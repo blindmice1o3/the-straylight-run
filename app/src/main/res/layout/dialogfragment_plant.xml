@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_need_watering"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="need watering: " />
+
+    <TextView
+        android:id="@+id/tv_health"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="health: " />
+
+    <TextView
+        android:id="@+id/tv_age_in_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="days: " />
+
+    <TextView
+        android:id="@+id/tv_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="color: " />
+</LinearLayout>

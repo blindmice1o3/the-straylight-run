@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 
@@ -30,6 +31,12 @@ public class WaterGrowableTileCommand
                     growableTile.getState() == GrowableTile.State.OCCUPIED) {
                 Log.e(TAG, "growableTile.changeToWatered()");
                 growableTile.changeToWatered();
+
+                if (growableTile.getState() == GrowableTile.State.OCCUPIED &&
+                        growableTile.getEntity() instanceof Plant) {
+                    ((Plant) growableTile.getEntity()).setNeedWatering(false);
+                }
+
                 return true;
             }
         }

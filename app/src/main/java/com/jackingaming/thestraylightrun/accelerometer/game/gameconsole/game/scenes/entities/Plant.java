@@ -7,7 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.PlantDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.CooldownTimer;
@@ -46,6 +48,9 @@ public class Plant extends Entity
     private boolean isShowingBorder = false;
     private CooldownTimer damageReceivedCooldownTimer;
 
+    private boolean isNeedWateringInitialized;
+    private boolean needWatering;
+
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
 
@@ -61,6 +66,39 @@ public class Plant extends Entity
 
         damageReceivedCooldownTimer = new CooldownTimer();
         damageReceivedCooldownTimer.setCooldownTarget(3000L);
+    }
+
+    public void initNeedWatering() {
+        if (!isNeedWateringInitialized) {
+            isNeedWateringInitialized = true;
+            if (Math.random() > 0.333333) {
+                needWatering = true;
+            }
+        } else {
+            Log.e(TAG, "initNeedWatering() isNeedWateringInitialized: " + isNeedWateringInitialized);
+        }
+    }
+
+    public void showPlantDialogFragment() {
+        Log.e(TAG, "showPlantDialogFragment()");
+        game.setPaused(true);
+
+        initNeedWatering();
+
+        PlantDialogFragment plantDialogFragment = PlantDialogFragment.newInstance(
+                this, new PlantDialogFragment.DismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        Log.e(TAG, "onDismiss()");
+                        game.setPaused(false);
+                    }
+                }
+        );
+
+        plantDialogFragment.show(
+                ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                PlantDialogFragment.TAG
+        );
     }
 
     @Override
@@ -208,5 +246,21 @@ public class Plant extends Entity
 
     public int getHealth() {
         return health;
+    }
+
+    public int getAgeInDays() {
+        return ageInDays;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public boolean isNeedWatering() {
+        return needWatering;
+    }
+
+    public void setNeedWatering(boolean needWatering) {
+        this.needWatering = needWatering;
     }
 }
