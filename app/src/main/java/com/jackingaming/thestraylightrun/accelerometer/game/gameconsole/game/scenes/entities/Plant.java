@@ -48,10 +48,8 @@ public class Plant extends Entity
     private boolean isShowingBorder = false;
     private CooldownTimer damageReceivedCooldownTimer;
 
-    private boolean isWaterLevelInitialized;
-    private boolean needWatering;
-    private boolean overWatered;
-    private int waterLevel = 50;
+    private boolean isDiseasedStatusInitialized;
+    private boolean isDiseased;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -70,36 +68,14 @@ public class Plant extends Entity
         damageReceivedCooldownTimer.setCooldownTarget(3000L);
     }
 
-    public void increaseWaterLevel() {
-        waterLevel++;
-
-        updateWaterLevel(waterLevel);
-    }
-
-    private void updateWaterLevel(int waterLevelNew) {
-        waterLevel = waterLevelNew;
-
-        if (waterLevel < 2) {
-            needWatering = true;
-        } else {
-            needWatering = false;
-
-            if (waterLevel > 3) {
-                overWatered = true;
-            }
-        }
-    }
-
-    public void initWaterLevel() {
-        if (!isWaterLevelInitialized) {
-            isWaterLevelInitialized = true;
+    public void initDiseasedStatus() {
+        if (!isDiseasedStatusInitialized) {
+            isDiseasedStatusInitialized = true;
             if (Math.random() > 0.333333) {
-                updateWaterLevel(1);
-            } else {
-                updateWaterLevel(2);
+                isDiseased = true;
             }
         } else {
-            Log.e(TAG, "initNeedWatering() isNeedWateringInitialized: " + isWaterLevelInitialized);
+            Log.e(TAG, "initDiseasedStatus() isDiseasedStatusInitialized: " + isDiseasedStatusInitialized);
         }
     }
 
@@ -107,7 +83,7 @@ public class Plant extends Entity
         Log.e(TAG, "showPlantDialogFragment()");
         game.setPaused(true);
 
-        initWaterLevel();
+        initDiseasedStatus();
 
         PlantDialogFragment plantDialogFragment = PlantDialogFragment.newInstance(
                 this, new PlantDialogFragment.DismissListener() {
@@ -280,19 +256,7 @@ public class Plant extends Entity
         return color;
     }
 
-    public boolean isNeedWatering() {
-        return needWatering;
-    }
-
-    public void setNeedWatering(boolean needWatering) {
-        this.needWatering = needWatering;
-    }
-
-    public boolean isOverWatered() {
-        return overWatered;
-    }
-
-    public int getWaterLevel() {
-        return waterLevel;
+    public boolean isDiseased() {
+        return isDiseased;
     }
 }

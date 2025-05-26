@@ -5,10 +5,10 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_water_level"
+        android:id="@+id/tv_disease_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="water level: " />
+        android:text="is diseased: " />
 
     <TextView
         android:id="@+id/tv_health"

@@ -31,7 +31,7 @@ public class PlantDialogFragment extends DialogFragment {
     private Plant plant;
     private DismissListener dismissListener;
 
-    private TextView tvNeedWatering, tvHealth, tvAgeInDays, tvColor;
+    private TextView tvDiseaseStatus, tvHealth, tvAgeInDays, tvColor;
 
     public static PlantDialogFragment newInstance(Plant plant, DismissListener dismissListener) {
         PlantDialogFragment fragment = new PlantDialogFragment();
@@ -71,16 +71,12 @@ public class PlantDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        tvNeedWatering = view.findViewById(R.id.tv_water_level);
-        tvNeedWatering.append(
-                plant.getWaterLevel() + ", isOverWatered: " + plant.isOverWatered() + ", isNeedWatering: " + plant.isNeedWatering()
+        tvDiseaseStatus = view.findViewById(R.id.tv_disease_status);
+        tvDiseaseStatus.append(
+                Boolean.toString(plant.isDiseased())
         );
-        if (plant.isOverWatered()) {
-            tvNeedWatering.setBackgroundColor(Color.RED);
-        } else if (plant.isNeedWatering()) {
-            tvNeedWatering.setBackgroundColor(Color.CYAN);
-        } else {
-            tvNeedWatering.setBackgroundColor(Color.WHITE);
+        if (plant.isDiseased()) {
+            tvDiseaseStatus.setBackgroundColor(Color.RED);
         }
 
         tvHealth = view.findViewById(R.id.tv_health);
