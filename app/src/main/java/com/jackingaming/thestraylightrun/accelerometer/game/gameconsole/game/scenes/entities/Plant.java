@@ -48,8 +48,10 @@ public class Plant extends Entity
     private boolean isShowingBorder = false;
     private CooldownTimer damageReceivedCooldownTimer;
 
-    private boolean isNeedWateringInitialized;
+    private boolean isWaterLevelInitialized;
     private boolean needWatering;
+    private boolean overWatered;
+    private int waterLevel = 50;
 
     public Plant(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
@@ -68,14 +70,36 @@ public class Plant extends Entity
         damageReceivedCooldownTimer.setCooldownTarget(3000L);
     }
 
-    public void initNeedWatering() {
-        if (!isNeedWateringInitialized) {
-            isNeedWateringInitialized = true;
+    public void increaseWaterLevel() {
+        waterLevel++;
+
+        updateWaterLevel(waterLevel);
+    }
+
+    private void updateWaterLevel(int waterLevelNew) {
+        waterLevel = waterLevelNew;
+
+        if (waterLevel < 2) {
+            needWatering = true;
+        } else {
+            needWatering = false;
+
+            if (waterLevel > 3) {
+                overWatered = true;
+            }
+        }
+    }
+
+    public void initWaterLevel() {
+        if (!isWaterLevelInitialized) {
+            isWaterLevelInitialized = true;
             if (Math.random() > 0.333333) {
-                needWatering = true;
+                updateWaterLevel(1);
+            } else {
+                updateWaterLevel(2);
             }
         } else {
-            Log.e(TAG, "initNeedWatering() isNeedWateringInitialized: " + isNeedWateringInitialized);
+            Log.e(TAG, "initNeedWatering() isNeedWateringInitialized: " + isWaterLevelInitialized);
         }
     }
 
@@ -83,7 +107,7 @@ public class Plant extends Entity
         Log.e(TAG, "showPlantDialogFragment()");
         game.setPaused(true);
 
-        initNeedWatering();
+        initWaterLevel();
 
         PlantDialogFragment plantDialogFragment = PlantDialogFragment.newInstance(
                 this, new PlantDialogFragment.DismissListener() {
@@ -262,5 +286,13 @@ public class Plant extends Entity
 
     public void setNeedWatering(boolean needWatering) {
         this.needWatering = needWatering;
+    }
+
+    public boolean isOverWatered() {
+        return overWatered;
+    }
+
+    public int getWaterLevel() {
+        return waterLevel;
     }
 }

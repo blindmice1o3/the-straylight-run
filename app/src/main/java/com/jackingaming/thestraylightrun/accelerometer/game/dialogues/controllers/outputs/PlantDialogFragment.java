@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -70,10 +71,17 @@ public class PlantDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        tvNeedWatering = view.findViewById(R.id.tv_need_watering);
+        tvNeedWatering = view.findViewById(R.id.tv_water_level);
         tvNeedWatering.append(
-                Boolean.toString(plant.isNeedWatering())
+                plant.getWaterLevel() + ", isOverWatered: " + plant.isOverWatered() + ", isNeedWatering: " + plant.isNeedWatering()
         );
+        if (plant.isOverWatered()) {
+            tvNeedWatering.setBackgroundColor(Color.RED);
+        } else if (plant.isNeedWatering()) {
+            tvNeedWatering.setBackgroundColor(Color.CYAN);
+        } else {
+            tvNeedWatering.setBackgroundColor(Color.WHITE);
+        }
 
         tvHealth = view.findViewById(R.id.tv_health);
         tvHealth.append(

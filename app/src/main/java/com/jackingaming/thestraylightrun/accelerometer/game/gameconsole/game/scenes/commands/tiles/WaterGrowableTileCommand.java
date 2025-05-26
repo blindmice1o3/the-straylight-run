@@ -34,7 +34,7 @@ public class WaterGrowableTileCommand
 
                 if (growableTile.getState() == GrowableTile.State.OCCUPIED &&
                         growableTile.getEntity() instanceof Plant) {
-                    ((Plant) growableTile.getEntity()).setNeedWatering(false);
+                    ((Plant) growableTile.getEntity()).increaseWaterLevel();
                 }
 
                 return true;
