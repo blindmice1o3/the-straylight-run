@@ -326,6 +326,9 @@ public class SceneFarm extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
+        aimlessWalker.pickUp(milkToBeCarriedByAimlessWalker);
+        aimlessWalker.changeToWalk();
+
         // Age the [plant] so it's almost harvestable
         // (has to be done after Entity.init(), which sets ageInDays to 0).
         if (tileInitializedForHarvesting1 instanceof GrowableTile) {
@@ -394,6 +397,7 @@ public class SceneFarm extends Scene {
             } else if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).placeDown();
                     ((AimlessWalker) player.getCarryable()).changeToWalk();
                 }
 
@@ -415,19 +419,6 @@ public class SceneFarm extends Scene {
             ((AimlessWalker) entityCurrentlyFacing).changeToOff();
 
             player.pickUp(entityCurrentlyFacing);
-
-            // TODO: toggle AimlessWalker's state.
-//            switch (((AimlessWalker) entityCurrentlyFacing).getState()) {
-//                case OFF:
-//                    ((AimlessWalker) entityCurrentlyFacing).changeToWalk();
-//                    break;
-//                case WALK:
-//                    ((AimlessWalker) entityCurrentlyFacing).changeToRun();
-//                    break;
-//                case RUN:
-//                    ((AimlessWalker) entityCurrentlyFacing).changeToOff();
-//                    break;
-//            }
         }
         // check item occupying StatsDisplayerFragment's button holder.
         else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
@@ -1031,7 +1022,8 @@ public class SceneFarm extends Scene {
         // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker = new AimlessWalker(((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+        aimlessWalker = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
         entities.add(robot);
         entities.add(aimlessWalker);
@@ -1094,9 +1086,17 @@ public class SceneFarm extends Scene {
         });
     }
 
+    private Milk milkToBeCarriedByAimlessWalker;
+
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
         // TODO: Insert scene specific items here.
+        milkToBeCarriedByAimlessWalker = new Milk();
+        milkToBeCarriedByAimlessWalker.setPosition(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT)
+        );
+        items.add(milkToBeCarriedByAimlessWalker);
         return items;
     }
 

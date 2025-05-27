@@ -109,6 +109,13 @@ public class SceneHothouse extends Scene {
         Tile tileCurrenlyFacing = player.checkTileCurrentlyFacing();
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
 
+        if (itemCurrentlyFacing != null) {
+            Log.e(TAG, "itemCurrentlyFacing != null");
+            player.respondToItemCollisionViaClick(
+                    player.getItemCurrentlyFacing()
+            );
+        }
+
         // TODO:
         if (player.hasCarryable() && entityCurrentlyFacing == null) {
             Log.e(TAG, "has carryable and entityFacing is null");
@@ -123,6 +130,7 @@ public class SceneHothouse extends Scene {
             } else if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).placeDown();
                     ((AimlessWalker) player.getCarryable()).changeToWalk();
                 }
 

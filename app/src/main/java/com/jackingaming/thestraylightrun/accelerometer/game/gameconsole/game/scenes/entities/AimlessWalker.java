@@ -1,10 +1,13 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.animation.LinearInterpolator;
+
+import androidx.annotation.NonNull;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.AimlessWalkerAnimationManager;
@@ -48,6 +51,17 @@ public class AimlessWalker extends Creature {
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
+        movementAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(@NonNull ValueAnimator valueAnimator) {
+                if (carryable != null) {
+                    // CARRYABLE
+                    if (carryable != null) {
+                        moveCarryable();
+                    }
+                }
+            }
+        });
     }
 
     @Override

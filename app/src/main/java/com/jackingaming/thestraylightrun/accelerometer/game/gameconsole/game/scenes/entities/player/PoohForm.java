@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.PoohAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -65,7 +66,16 @@ public class PoohForm
         determineNextImage();
 
         // CARRYABLE
-        player.moveCarryable();
+        if (player.hasCarryable()) {
+            player.moveCarryable();
+
+            if (player.getCarryable() instanceof Creature) {
+                Creature creatureBeingCarried = ((Creature) player.getCarryable());
+                if (creatureBeingCarried.hasCarryable()) {
+                    creatureBeingCarried.moveCarryable();
+                }
+            }
+        }
     }
 
     @Override

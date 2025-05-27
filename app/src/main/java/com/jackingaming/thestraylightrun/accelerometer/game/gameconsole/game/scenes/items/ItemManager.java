@@ -38,8 +38,8 @@ public class ItemManager
         }
     }
 
-    public void addItem(Item item) {
-        items.add(item);
+    public boolean addItem(Item item) {
+        return items.add(item);
     }
 
     public void removeItem(Item item) {

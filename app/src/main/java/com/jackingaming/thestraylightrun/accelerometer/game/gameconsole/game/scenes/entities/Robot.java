@@ -229,7 +229,9 @@ public class Robot extends Creature {
         determineNextImage();
 
         // CARRYABLE
-        moveCarryable();
+        if (carryable != null) {
+            moveCarryable();
+        }
     }
 
     private String propertyName = null;

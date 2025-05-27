@@ -7,12 +7,13 @@ import android.graphics.Rect;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Carryable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.io.Serializable;
 
 public abstract class Item
-        implements Serializable {
+        implements Carryable, Serializable {
     transient protected Game game;
 
     protected float x;
@@ -67,6 +68,30 @@ public abstract class Item
                 (int) (y + bounds.top + yOffset),
                 (int) (x + bounds.left + xOffset) + bounds.right,
                 (int) (y + bounds.top + yOffset) + bounds.bottom);
+    }
+
+    @Override
+    public boolean isCarryable() {
+        return true;
+    }
+
+    @Override
+    public void becomeCarried() {
+        // Intentionally blank.
+        game.getSceneManager().getCurrentScene().getItemManager().removeItem(this);
+    }
+
+    @Override
+    public boolean becomeNotCarried(Tile tileToLandOn) {
+        x = tileToLandOn.getxIndex() * Tile.WIDTH;
+        y = tileToLandOn.getyIndex() * Tile.HEIGHT;
+        return game.getSceneManager().getCurrentScene().getItemManager().addItem(this);
+    }
+
+    @Override
+    public void moveWithCarrier(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 
     public void setWidth(int width) {
