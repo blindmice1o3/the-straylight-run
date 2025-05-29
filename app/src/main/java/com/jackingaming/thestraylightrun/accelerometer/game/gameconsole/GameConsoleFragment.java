@@ -6,7 +6,6 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +28,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
@@ -355,13 +356,17 @@ public class GameConsoleFragment extends Fragment
             @Override
             public void run() {
                 if (game.getItemStoredInButtonHolderA() != null) {
-                    statsDisplayerFragment.setImageForButtonHolderA(
-                            game.getItemStoredInButtonHolderA().getImage()
+                    statsDisplayerFragment.setImageAndQuantityForButtonHolderA(
+                            game.findItemStackableViaItem(
+                                    game.getItemStoredInButtonHolderA()
+                            )
                     );
                 }
                 if (game.getItemStoredInButtonHolderB() != null) {
-                    statsDisplayerFragment.setImageForButtonHolderB(
-                            game.getItemStoredInButtonHolderB().getImage()
+                    statsDisplayerFragment.setImageaAndQuantityForButtonHolderB(
+                            game.findItemStackableViaItem(
+                                    game.getItemStoredInButtonHolderB()
+                            )
                     );
                 }
             }
@@ -390,23 +395,36 @@ public class GameConsoleFragment extends Fragment
     }
 
     @Override
-    public void onButtonHolderAChange(Bitmap image) {
+    public void onButtonHolderAChange(Item itemA) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setImageForButtonHolderA(image);
+            statsDisplayerFragment.setImageAndQuantityForButtonHolderA(
+                    game.findItemStackableViaItem(
+                            itemA
+                    )
+            );
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
         }
     }
 
     @Override
-    public void onButtonHolderBChange(Bitmap image) {
+    public void onButtonHolderBChange(Item itemB) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setImageForButtonHolderB(image);
+            statsDisplayerFragment.setImageaAndQuantityForButtonHolderB(
+                    game.findItemStackableViaItem(
+                            itemB
+                    )
+            );
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
         }
+    }
+
+    @Override
+    public void onRefreshQuantityInButtonHolderAAndB(ItemStackable stackableA, ItemStackable stackableB) {
+        statsDisplayerFragment.refreshTvQuantityInButtonHolderAAndB(stackableA, stackableB);
     }
 
     @Override

@@ -17,6 +17,17 @@
         android:layout_marginBottom="12dp"
         app:srcCompat="@drawable/btn_star_on_normal_holo_light" />
 
+    <TextView
+        android:id="@+id/tv_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/white"
+        android:textColor="@color/blue" />
+
     <!-- border -->
     <View
         android:layout_width="match_parent"

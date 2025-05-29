@@ -5,6 +5,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.buttonholder.ButtonHolderFragment;
 
 import java.io.Serializable;
@@ -105,6 +108,16 @@ public class StatsDisplayerFragment extends Fragment
         return inflater.inflate(R.layout.fragment_stats_displayer, container, false);
     }
 
+    private TextView tvQuantityA, tvQuantityB;
+
+    public void setTvQuantityA(int quantity) {
+        tvQuantityA.setText(Integer.toString(quantity));
+    }
+
+    public void setTvQuantityB(int quantity) {
+        tvQuantityB.setText(Integer.toString(quantity));
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -124,7 +137,8 @@ public class StatsDisplayerFragment extends Fragment
                 buttonHolderClickListener.onButtonHolderClicked(ButtonHolder.B);
             }
         });
-
+        tvQuantityA = view.findViewById(R.id.buttonholderfragment_a_stats_displayer_fragment).findViewById(R.id.tv_quantity);
+        tvQuantityB = view.findViewById(R.id.buttonholderfragment_b_stats_displayer_fragment).findViewById(R.id.tv_quantity);
 
         initImageHoneyPot(getResources());
         ImageView imageViewCurrencyIcon = view.findViewById(R.id.imageview_currency_stats_displayer_fragment);
@@ -200,12 +214,39 @@ public class StatsDisplayerFragment extends Fragment
         textViewTime.setText(inGameClockTime + "\n" + calendarText);
     }
 
-    public void setImageForButtonHolderA(Bitmap image) {
-        imageViewButtonHolderA.setImageBitmap(image);
+    public void refreshTvQuantityInButtonHolderAAndB(ItemStackable stackableA, ItemStackable stackableB) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                tvQuantityA.setText(
+                        Integer.toString(stackableA.getQuantity())
+                );
+                tvQuantityB.setText(
+                        Integer.toString(stackableB.getQuantity())
+                );
+            }
+        });
     }
 
-    public void setImageForButtonHolderB(Bitmap image) {
-        imageViewButtonHolderB.setImageBitmap(image);
+    public void setImageAndQuantityForButtonHolderA(ItemStackable itemStackableStoredInButtonHolderA) {
+        imageViewButtonHolderA.setImageBitmap(
+                itemStackableStoredInButtonHolderA.getItem().getImage()
+        );
+
+        tvQuantityA.setText(
+                Integer.toString(itemStackableStoredInButtonHolderA.getQuantity())
+        );
+    }
+
+    public void setImageaAndQuantityForButtonHolderB(ItemStackable itemStackableStoredInButtonHolderB) {
+        imageViewButtonHolderB.setImageBitmap(
+                itemStackableStoredInButtonHolderB.getItem().getImage()
+        );
+
+        tvQuantityB.setText(
+                Integer.toString(itemStackableStoredInButtonHolderB.getQuantity())
+        );
     }
 
 }

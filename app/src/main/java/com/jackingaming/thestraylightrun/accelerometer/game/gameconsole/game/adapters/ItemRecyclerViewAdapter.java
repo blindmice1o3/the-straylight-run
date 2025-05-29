@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
 
 import java.util.List;
 
@@ -32,14 +33,14 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     }
 
     private Context context;
-    private List<Item> backpack;
+    private List<ItemStackable> backpack;
 
-    public ItemRecyclerViewAdapter(Context context, List<Item> backpack) {
+    public ItemRecyclerViewAdapter(Context context, List<ItemStackable> backpack) {
         this.context = context;
         this.backpack = backpack;
     }
 
-    public void setBackpack(List<Item> backpack) {
+    public void setBackpack(List<ItemStackable> backpack) {
         this.backpack = backpack;
     }
 
@@ -56,14 +57,20 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-        Bitmap image = backpack.get(position).getImage();
+        ItemStackable stackable = backpack.get(position);
+        Item item = stackable.getItem();
+        Bitmap image = item.getImage();
         if (image != null) {
             Log.d(TAG, getClass().getSimpleName() + " image of item from backpack is not null");
-            holder.imageView.setImageBitmap(image);
+            holder.ivImage.setImageBitmap(image);
         }
 
-        String name = backpack.get(position).getName();
-        holder.textView.setText(name);
+        String name = item.getName();
+        holder.tvName.setText(name);
+
+        holder.tvQuantity.setText(
+                Integer.toString(stackable.getQuantity())
+        );
     }
 
     @Override
@@ -73,14 +80,19 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
     class ItemViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
-        public ImageView imageView;
-        public TextView textView;
+        public ImageView ivImage;
+        public TextView tvName;
+        public TextView tvQuantity;
 
         public ItemViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.imageview_adapter_recyclerview_item_in_backpack);
-            textView = (TextView) view.findViewById(R.id.textview_adapter_recyclerview_item_in_backpack);
-            textView.setBackground(ContextCompat.getDrawable(context, R.drawable.background_color_by_state));
+            ivImage = view.findViewById(R.id.iv_adapter_recyclerview_item_in_backpack_image);
+
+            tvName = view.findViewById(R.id.tv_adapter_recyclerview_item_in_backpack_name);
+            tvName.setBackground(ContextCompat.getDrawable(context, R.drawable.background_color_by_state));
+
+            tvQuantity = view.findViewById(R.id.tv_adapter_recyclerview_item_in_backpack_quantity);
+
             view.setOnClickListener(this);
         }
 

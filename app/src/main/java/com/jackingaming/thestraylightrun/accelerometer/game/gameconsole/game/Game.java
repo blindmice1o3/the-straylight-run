@@ -42,6 +42,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.PlantInspectioner200;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Scissors;
@@ -126,9 +127,11 @@ public class Game {
 
         void onTimeChange(String inGameClockTime, String calendarText);
 
-        void onButtonHolderAChange(Bitmap image);
+        void onButtonHolderAChange(Item itemA);
 
-        void onButtonHolderBChange(Bitmap image);
+        void onButtonHolderBChange(Item itemB);
+
+        void onRefreshQuantityInButtonHolderAAndB(ItemStackable stackableA, ItemStackable stackableB);
     }
 
     private StatsChangeListener statsChangeListener;
@@ -155,8 +158,8 @@ public class Game {
      */
     private float currency;
 
-    private List<Item> backpack;
-    private List<Item> backpackWithoutItemsDisplayingInButtonHolders;
+    private List<ItemStackable> backpack;
+    private List<ItemStackable> backpackWithoutItemsDisplayingInButtonHolders;
     private ItemRecyclerViewAdapter itemRecyclerViewAdapter;
     private Dialog backpackDialog;
 
@@ -176,48 +179,6 @@ public class Game {
         stateManager = new StateManager();
 
         currency = 100f;
-
-        backpack = new ArrayList<Item>();
-        backpack.add(
-                new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                )
-        );
-        backpack.add(
-                new Shovel(
-                        new TillGrowableTileCommand(null)
-                )
-        );
-        backpack.add(
-                new WateringCan(
-                        new WaterGrowableTileCommand(null)
-                )
-        );
-        backpack.add(
-                new BugCatchingNet(
-                        new BounceEntityCommand(null)
-                )
-        );
-        backpack.add(
-                new RobotReprogrammer4000(
-                        new OpenRobotDialogEntityCommand(null)
-                )
-        );
-        backpack.add(
-                new PlantInspectioner200(
-                        new OpenPlantDialogEntityCommand(null)
-                )
-        );
-        backpack.add(
-                new Scissors(
-                        new RemoveEntityCommand(this, null)
-                )
-        );
-        backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<Item>();
-
-        itemStoredInButtonHolderA = null;
-        itemStoredInButtonHolderB = null;
-        buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.A;
 
         paused = false;
         inBackpackDialogState = false;
@@ -239,7 +200,21 @@ public class Game {
     }
 
     public void addItemToBackpack(Item item) {
-        backpack.add(item);
+        for (ItemStackable stackable : backpack) {
+            if (stackable.getItem().getName().equals(item.getName())) {
+                stackable.increment();
+                statsChangeListener.onRefreshQuantityInButtonHolderAAndB(
+                        findItemStackableViaItem(
+                                itemStoredInButtonHolderA
+                        ),
+                        findItemStackableViaItem(
+                                itemStoredInButtonHolderB
+                        )
+                );
+                return;
+            }
+        }
+        backpack.add(new ItemStackable(item, 1));
     }
 
     public void init(Context context, InputManager inputManager, SurfaceHolder holder, int widthViewport, int heightViewport) {
@@ -254,8 +229,53 @@ public class Game {
         sceneManager.init(this);
         stateManager.init(this);
 
-        for (Item item : backpack) {
-            item.init(this);
+
+        backpack = new ArrayList<ItemStackable>();
+        Item growingPot = new GrowingPot(
+                new TillGrowableIndoorTileCommand(null)
+        );
+        growingPot.init(this);
+        Item shovel = new Shovel(
+                new TillGrowableTileCommand(null)
+        );
+        shovel.init(this);
+        Item wateringCan = new WateringCan(
+                new WaterGrowableTileCommand(null)
+        );
+        wateringCan.init(this);
+        Item bugCatchingNet = new BugCatchingNet(
+                new BounceEntityCommand(null)
+        );
+        bugCatchingNet.init(this);
+        Item robotReprogrammer4000 = new RobotReprogrammer4000(
+                new OpenRobotDialogEntityCommand(null)
+        );
+        robotReprogrammer4000.init(this);
+        Item plantInspectioner200 = new PlantInspectioner200(
+                new OpenPlantDialogEntityCommand(null)
+        );
+        plantInspectioner200.init(this);
+        Item scissors = new Scissors(
+                new RemoveEntityCommand(this, null)
+        );
+        scissors.init(this);
+
+        addItemToBackpack(growingPot);
+        addItemToBackpack(shovel);
+        addItemToBackpack(wateringCan);
+        addItemToBackpack(bugCatchingNet);
+        addItemToBackpack(robotReprogrammer4000);
+        addItemToBackpack(plantInspectioner200);
+        addItemToBackpack(scissors);
+
+        backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<ItemStackable>();
+
+        itemStoredInButtonHolderA = null;
+        itemStoredInButtonHolderB = null;
+        buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.A;
+        //////////////////////////////////////////////
+        for (ItemStackable stackable : backpack) {
+            stackable.getItem().init(this);
         }
 
         createBackpackDialog();
@@ -278,19 +298,19 @@ public class Game {
             public void onItemClick(View view, int position) {
                 Toast.makeText(contextFinal, "Game.createBackpackDialog() ItemRecyclerViewAdapter.ItemClickListener.onItemClick(View view, int position): " + backpack.get(position), Toast.LENGTH_SHORT).show();
 
-                Item item = backpackWithoutItemsDisplayingInButtonHolders.get(position);
+                Item item = backpackWithoutItemsDisplayingInButtonHolders.get(position).getItem();
                 Log.d(TAG, "Game.createBackpackDialog() item: " + item.getName());
                 switch (buttonHolderCurrentlySelected) {
                     case A:
                         Log.d(TAG, "Game.createBackpackDialog() itemClickListener.onItemClick() case A!!!");
                         itemStoredInButtonHolderA = item;
-                        statsChangeListener.onButtonHolderAChange(item.getImage());
+                        statsChangeListener.onButtonHolderAChange(item);
                         backpackDialog.dismiss();
                         break;
                     case B:
                         Log.d(TAG, "Game.createBackpackDialog() itemClickListener.onItemClick() case B!!!");
                         itemStoredInButtonHolderB = item;
-                        statsChangeListener.onButtonHolderBChange(item.getImage());
+                        statsChangeListener.onButtonHolderBChange(item);
                         backpackDialog.dismiss();
                         break;
                 }
@@ -461,30 +481,32 @@ public class Game {
 //            }
 
 
-            backpack = (List<Item>) os.readObject();
-            for (Item item : backpack) {
-                item.init(this);
+            backpack = (List<ItemStackable>) os.readObject();
+            for (ItemStackable stackable : backpack) {
+                stackable.getItem().init(this);
             }
             boolean hasItemInButtonHolderA = os.readBoolean();
             Log.e(TAG, "hasItemInButtonHolderA: " + hasItemInButtonHolderA);
             if (hasItemInButtonHolderA) {
                 itemStoredInButtonHolderA = (Item) os.readObject();
                 itemStoredInButtonHolderA.init(this);
-                statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA.getImage());
+                statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA);
             } else {
                 itemStoredInButtonHolderA = null;
                 Bitmap imageDefault = BitmapFactory.decodeResource(context.getResources(), StatsDisplayerFragment.IMAGE_DEFAULT);
-                statsChangeListener.onButtonHolderAChange(imageDefault);
+                statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA);
             }
             boolean hasItemInButtonHolderB = os.readBoolean();
             if (hasItemInButtonHolderB) {
                 itemStoredInButtonHolderB = (Item) os.readObject();
                 itemStoredInButtonHolderB.init(this);
-                statsChangeListener.onButtonHolderBChange(itemStoredInButtonHolderB.getImage());
+                statsChangeListener.onButtonHolderBChange(
+                        itemStoredInButtonHolderB
+                );
             } else {
                 itemStoredInButtonHolderB = null;
                 Bitmap imageDefault = BitmapFactory.decodeResource(context.getResources(), StatsDisplayerFragment.IMAGE_DEFAULT);
-                statsChangeListener.onButtonHolderBChange(imageDefault);
+                statsChangeListener.onButtonHolderBChange(itemStoredInButtonHolderB);
             }
             int ordinalValueOfButtonHolderCurrentlySelected = os.readInt();
             buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.values()[ordinalValueOfButtonHolderCurrentlySelected];
@@ -606,10 +628,22 @@ public class Game {
         backpackWithoutItemsDisplayingInButtonHolders.clear();
         backpackWithoutItemsDisplayingInButtonHolders.addAll(backpack);
         if (itemStoredInButtonHolderA != null) {
-            backpackWithoutItemsDisplayingInButtonHolders.remove(itemStoredInButtonHolderA);
+            for (int i = 0; i < backpackWithoutItemsDisplayingInButtonHolders.size(); i++) {
+                ItemStackable stackable = backpackWithoutItemsDisplayingInButtonHolders.get(i);
+                if (stackable.getItem().getName().equals(itemStoredInButtonHolderA.getName())) {
+                    backpackWithoutItemsDisplayingInButtonHolders.remove(i);
+                    break;
+                }
+            }
         }
         if (itemStoredInButtonHolderB != null) {
-            backpackWithoutItemsDisplayingInButtonHolders.remove(itemStoredInButtonHolderB);
+            for (int i = 0; i < backpackWithoutItemsDisplayingInButtonHolders.size(); i++) {
+                ItemStackable stackable = backpackWithoutItemsDisplayingInButtonHolders.get(i);
+                if (stackable.getItem().getName().equals(itemStoredInButtonHolderB.getName())) {
+                    backpackWithoutItemsDisplayingInButtonHolders.remove(i);
+                    break;
+                }
+            }
         }
         itemRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -752,5 +786,14 @@ public class Game {
 
     public Item getItemStoredInButtonHolderB() {
         return itemStoredInButtonHolderB;
+    }
+
+    public ItemStackable findItemStackableViaItem(Item item) {
+        for (ItemStackable stackable : backpack) {
+            if (stackable.getItem().getName().equals(item.getName())) {
+                return stackable;
+            }
+        }
+        return null;
     }
 }
