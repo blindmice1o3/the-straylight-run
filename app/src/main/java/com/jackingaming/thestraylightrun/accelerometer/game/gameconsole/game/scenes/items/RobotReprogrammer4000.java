@@ -30,7 +30,7 @@ public class RobotReprogrammer4000 extends Item
     @Override
     void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
-        image = Bitmap.createBitmap(spriteSheet, 52, 103, 16, 16);
+        image = Bitmap.createBitmap(spriteSheet, 137, 103, 16, 16);
     }
 
     @Override

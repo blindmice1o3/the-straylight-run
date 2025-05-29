@@ -30,6 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemParts;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
@@ -326,8 +327,14 @@ public class SceneFarm extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        aimlessWalker.pickUp(milkToBeCarriedByAimlessWalker);
-        aimlessWalker.changeToWalk();
+        aimlessWalker1.pickUp(growSystemParts1);
+        aimlessWalker2.pickUp(growSystemParts2);
+        aimlessWalker3.pickUp(growSystemParts3);
+        aimlessWalker4.pickUp(growSystemParts4);
+        aimlessWalker1.changeToWalk();
+        aimlessWalker2.changeToWalk();
+        aimlessWalker3.changeToWalk();
+        aimlessWalker4.changeToWalk();
 
         // Age the [plant] so it's almost harvestable
         // (has to be done after Entity.init(), which sets ageInDays to 0).
@@ -397,7 +404,6 @@ public class SceneFarm extends Scene {
             } else if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
-                    ((AimlessWalker) player.getCarryable()).placeDown();
                     ((AimlessWalker) player.getCarryable()).changeToWalk();
                 }
 
@@ -1015,18 +1021,30 @@ public class SceneFarm extends Scene {
         return transferPoints;
     }
 
-    private AimlessWalker aimlessWalker;
+    private AimlessWalker aimlessWalker1, aimlessWalker2, aimlessWalker3, aimlessWalker4;
 
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker = new AimlessWalker(
+        aimlessWalker1 = new AimlessWalker(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+        aimlessWalker2 = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+        aimlessWalker3 = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+        aimlessWalker4 = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
         entities.add(robot);
-        entities.add(aimlessWalker);
+        entities.add(aimlessWalker1);
+        entities.add(aimlessWalker2);
+        entities.add(aimlessWalker3);
+        entities.add(aimlessWalker4);
 //        entities.add(
 //                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
 //                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
@@ -1086,17 +1104,26 @@ public class SceneFarm extends Scene {
         });
     }
 
+    private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4;
     private Milk milkToBeCarriedByAimlessWalker;
 
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
         // TODO: Insert scene specific items here.
+        growSystemParts1 = new GrowSystemParts(1);
+        growSystemParts2 = new GrowSystemParts(2);
+        growSystemParts3 = new GrowSystemParts(3);
+        growSystemParts4 = new GrowSystemParts(4);
         milkToBeCarriedByAimlessWalker = new Milk();
         milkToBeCarriedByAimlessWalker.setPosition(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT)
         );
         items.add(milkToBeCarriedByAimlessWalker);
+        items.add(growSystemParts1);
+        items.add(growSystemParts2);
+        items.add(growSystemParts3);
+        items.add(growSystemParts4);
         return items;
     }
 
