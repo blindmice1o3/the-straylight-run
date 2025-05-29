@@ -219,12 +219,26 @@ public class StatsDisplayerFragment extends Fragment
         handler.post(new Runnable() {
             @Override
             public void run() {
-                tvQuantityA.setText(
-                        Integer.toString(stackableA.getQuantity())
-                );
-                tvQuantityB.setText(
-                        Integer.toString(stackableB.getQuantity())
-                );
+                if (stackableA != null) {
+                    tvQuantityA.setText(
+                            Integer.toString(stackableA.getQuantity())
+                    );
+                } else {
+                    imageViewButtonHolderA.setImageDrawable(
+                            getResources().getDrawable(IMAGE_DEFAULT)
+                    );
+                    tvQuantityA.setText("");
+                }
+                if (stackableB != null) {
+                    tvQuantityB.setText(
+                            Integer.toString(stackableB.getQuantity())
+                    );
+                } else {
+                    imageViewButtonHolderB.setImageDrawable(
+                            getResources().getDrawable(IMAGE_DEFAULT)
+                    );
+                    tvQuantityB.setText("");
+                }
             }
         });
     }

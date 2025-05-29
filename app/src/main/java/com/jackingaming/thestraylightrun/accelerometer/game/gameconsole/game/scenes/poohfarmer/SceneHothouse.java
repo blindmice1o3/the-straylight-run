@@ -161,7 +161,14 @@ public class SceneHothouse extends Scene {
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
             Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
             tileCommand.setTile(tileCurrentlyFacing);
-            tileCommand.execute();
+            boolean wasSuccessful = tileCommand.execute();
+
+            // decrement quantity.
+            if (wasSuccessful) {
+                game.removeItemFromBackpack(
+                        game.getItemStoredInButtonHolderA()
+                );
+            }
         } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
             if (entityCurrentlyFacing != null) {
                 EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
@@ -191,7 +198,14 @@ public class SceneHothouse extends Scene {
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
             Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
             tileCommand.setTile(tileCurrentlyFacing);
-            tileCommand.execute();
+            boolean wasSuccessful = tileCommand.execute();
+
+            // decrement quantity.
+            if (wasSuccessful) {
+                game.removeItemFromBackpack(
+                        game.getItemStoredInButtonHolderB()
+                );
+            }
         } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
             if (entityCurrentlyFacing != null) {
                 EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();

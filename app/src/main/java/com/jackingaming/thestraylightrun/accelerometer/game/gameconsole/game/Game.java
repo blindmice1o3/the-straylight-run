@@ -217,6 +217,35 @@ public class Game {
         backpack.add(new ItemStackable(item, 1));
     }
 
+    public void removeItemFromBackpack(Item item) {
+        for (int i = 0; i < backpack.size(); i++) {
+            ItemStackable stackable = backpack.get(i);
+
+            if (stackable.getItem().getName().equals(item.getName())) {
+                stackable.decrement();
+
+                if (stackable.getQuantity() == 0) {
+                    if (item == itemStoredInButtonHolderA) {
+                        itemStoredInButtonHolderA = null;
+                    } else if (item == itemStoredInButtonHolderB) {
+                        itemStoredInButtonHolderB = null;
+                    }
+
+                    backpack.remove(i);
+                }
+
+                statsChangeListener.onRefreshQuantityInButtonHolderAAndB(
+                        findItemStackableViaItem(
+                                itemStoredInButtonHolderA
+                        ),
+                        findItemStackableViaItem(
+                                itemStoredInButtonHolderB
+                        )
+                );
+            }
+        }
+    }
+
     public void init(Context context, InputManager inputManager, SurfaceHolder holder, int widthViewport, int heightViewport) {
         this.context = context;
         this.inputManager = inputManager;
@@ -789,6 +818,10 @@ public class Game {
     }
 
     public ItemStackable findItemStackableViaItem(Item item) {
+        if (item == null) {
+            return null;
+        }
+
         for (ItemStackable stackable : backpack) {
             if (stackable.getItem().getName().equals(item.getName())) {
                 return stackable;
