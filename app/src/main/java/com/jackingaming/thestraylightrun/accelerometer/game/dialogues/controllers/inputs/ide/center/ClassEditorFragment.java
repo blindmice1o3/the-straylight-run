@@ -1,7 +1,5 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center;
 
-import static com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment.NAME_CLASS_GROWABLE_TILE_RUN1;
-
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -680,37 +678,20 @@ public class ClassEditorFragment extends Fragment {
                             }
                         }
                     }
-                    // class PlantRun2
-                    else if (constructor.getName().equals("PlantRun2")) {
+                    // class SeedRun1
+                    else if (constructor.getName().equals(
+                            ProjectViewportFragment.NAME_CLASS_SEED_RUN1
+                    )) {
 
                         Log.e(TAG, "line: " + line);
                         String answer = null;
                         String lastChar = line.substring(
                                 line.length() - 1
                         );
-                        if (lastChar.equals("e")) {
+//                        if (lastChar.equals("e")) {
+                        if (i == 1) {
                             answer = "        this.type = type;";
-                        } else if (lastChar.equals("1")) {
-                            answer = "        this.hydrationLevel = 1;";
                         }
-
-                        if (answer != null) {
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                tvLineAfterTODO.setOnLongClickListener(
-                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                typingView = new TypingPracticeView(getContext());
-                                typingView.setCode(answer);
-                            }
-                        }
-                    }
-                    // class GrowableTile1
-                    else if (constructor.getName().equals(NAME_CLASS_GROWABLE_TILE_RUN1)) {
-
-                        String answer = "        this.x = x;\n" +
-                                "        this.y = y;\n" +
-                                "        this.hasRock = hasRock;";
 
                         if (answer != null) {
                             if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -799,7 +780,7 @@ public class ClassEditorFragment extends Fragment {
                 tvTodo.setLayoutParams(layoutParams);
                 tvTodo.setText(spannableTodo);
 
-                // run 5 (class Plant)
+                // run 2 (class Plant)
                 if (method.getName().equals("isReadyForHarvest")) {
                     typingView = new TypingPracticeView(getContext());
                     answer = "    public boolean isReadyForHarvest() {\n" +
@@ -1187,31 +1168,6 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class PlantIndoor (run 5)
-                        else if (method.getName().equals("updateGrowth")) {
-
-                            String answer = null;
-                            if (i == 1) {
-                                answer = "        if (lightIsCorrect && !hasPests) {\n" +
-                                        "            vegDays++;\n" +
-                                        "        }";
-                            } else if (i == 3) {
-                                answer = "        if (vegDays >= 14 && isHealthy) {\n" +
-                                        "            isFlowering = true;\n" +
-                                        "        }";
-                            }
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
                         // class GrowTentSystem (run 4)
                         else if (method.getName().equals("performDiagnostics")) {
 
@@ -1245,81 +1201,19 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class PlantOutdoor (run 3)
-                        else if (method.getName().equals("needsWater")) {
+                        // class PlantRun2
+                        else if (method.getName().equals("updateGrowth")) {
 
-                            String answer = "        return moistureLevel < 40 && !isDiseased;";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
+                            String answer = null;
+                            if (i == 1) {
+                                answer = "        if (lightIsCorrect && !hasPests) {\n" +
+                                        "            vegDays++;\n" +
+                                        "        }";
+                            } else if (i == 3) {
+                                answer = "        if (vegDays >= 14 && isHealthy) {\n" +
+                                        "            isFlowering = true;\n" +
+                                        "        }";
                             }
-                        }
-                        // class PlantOutdoor (run 3)
-                        else if (method.getName().equals("isUnhealthy")) {
-
-                            String answer = "        return hasPests || isDiseased;";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
-                        // class GrowableTileOutdoor (run 3)
-                        else if (method.getName().equals("waterPlant")) {
-
-                            String answer = "        if (plant != null && plant.needsWater()) {\n" +
-                                    "            plant.moistureLevel += 30;\n" +
-                                    "        }";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
-                        // class GrowableTileOutdoor (run 3)
-                        else if (method.getName().equals("inspectPlant")) {
-
-                            String answer = "        if (plant != null && plant.isUnhealthy()) {\n" +
-                                    "            System.out.println(\"Alert: Unhealthy plant found!\");\n" +
-                                    "        }";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
-                        // class RobotOutdoor (run 3)
-                        else if (method.getName().equals("maintainGarden")) {
-
-                            String answer = "        for (GrowableTile tile : garden) {\n" +
-                                    "            tile.inspectPlant();\n" +
-                                    "            tile.waterPlant();\n" +
-                                    "        }";
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -1335,7 +1229,7 @@ public class ClassEditorFragment extends Fragment {
                         // class RobotRun2
                         else if (method.getName().equals("till")) {
 
-                            String answer = "        tile.isTilled = true;";
+                            String answer = "        tile.till();";
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -1351,7 +1245,7 @@ public class ClassEditorFragment extends Fragment {
                         // class RobotRun2
                         else if (method.getName().equals("water")) {
 
-                            String answer = "        tile.isWatered = true;";
+                            String answer = "        tile.water();";
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -1366,54 +1260,12 @@ public class ClassEditorFragment extends Fragment {
                         }
                         // class RobotRun2
                         else if (method.getName().equals("seed")) {
-
-                            String answer = "        if (tile.isTilled && tile.plant == null) {\n" +
-                                    "            tile.plant = new Plant(seedType);\n" +
-                                    "        }";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
-                        // class RobotRun1
-                        else if (method.getName().equals("walkTo")) {
-
-                            String answer = null;
-                            if (i == 0) {
-                                answer = "        System.out.println(\"Walking to (\" + tile.x + \", \" + tile.y + \")\");";
-                            } else if (i == 1) {
-                                answer = "        if (tile.hasRock) {\n" +
-                                        "            System.out.println(\"Obstacle detected\");\n" +
-                                        "        }";
-                            }
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
-                            }
-                        }
-                        // class RobotRun1
-                        else if (method.getName().equals("clearRock")) {
-
-                            String answer = null;
-                            if (i == 0) {
-                                answer = "        tile.hasRock = false;";
-                            } else if (i == 1) {
-                                answer = "        System.out.println(\"Rock removed\");";
-                            }
+                            // TODO: should actually call tile.plantSeed().
+                            // TODO: change GrowableTileRun2.plantSeed()
+                            //  to incorporate this RobotRun2.seed(GrowableTile, String).
+                            // TODO: scrape Plant (outdoor)
+                            //  keep Plant class and change its constructor to accept Seed instead of String.
+                            String answer = "        tile.seed(seed);";
 
                             if (answer != null) {
                                 if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
