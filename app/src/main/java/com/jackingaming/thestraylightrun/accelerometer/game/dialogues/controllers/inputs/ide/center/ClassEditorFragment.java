@@ -1201,6 +1201,21 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
+                        // class RobotRun3
+                        else if (method.getName().equals("checkForDisease")) {
+
+                            String answer = "        if (!plant.isHealthy()) {\n" +
+                                    "            cull(plant);\n" +
+                                    "        }";
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
                         // class PlantRun2
                         else if (method.getName().equals("updateGrowth")) {
 
@@ -1230,52 +1245,39 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("till")) {
 
                             String answer = "        tile.till();";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
                             }
                         }
                         // class RobotRun2
                         else if (method.getName().equals("water")) {
 
                             String answer = "        tile.water();";
-
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
                             }
                         }
                         // class RobotRun2
                         else if (method.getName().equals("seed")) {
-                            // TODO: should actually call tile.plantSeed().
-                            // TODO: change GrowableTileRun2.plantSeed()
-                            //  to incorporate this RobotRun2.seed(GrowableTile, String).
-                            // TODO: scrape Plant (outdoor)
-                            //  keep Plant class and change its constructor to accept Seed instead of String.
-                            String answer = "        tile.seed(seed);";
 
-                            if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
-                                    tvLineAfterTODO.setOnLongClickListener(
-                                            generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
-                                    );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
-                                    typingView = new TypingPracticeView(getContext());
-                                    typingView.setCode(answer);
-                                }
+                            String answer = "        tile.seed(seed);";
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
                             }
                         }
                         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

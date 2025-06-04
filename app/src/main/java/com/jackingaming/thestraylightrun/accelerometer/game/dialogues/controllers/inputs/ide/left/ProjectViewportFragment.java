@@ -39,6 +39,7 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_GROW_TENT_SYSTEM_RUN5 = "GrowTentSystemRun5";
     public static final String NAME_CLASS_GROW_TENT_SYSTEM_RUN4 = "GrowTentSystemRun4";
     public static final String NAME_CLASS_EQUIPMENT_RUN4 = "EquipmentRun4";
+    public static final String NAME_CLASS_ROBOT_RUN3 = "RobotRun3";
     public static final String NAME_CLASS_PLANT_RUN2 = "PlantRun2";
     public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
     public static final String NAME_CLASS_GROWABLE_TILE_RUN1 = "GrowableTileRun1";
@@ -80,6 +81,7 @@ public class ProjectViewportFragment extends Fragment {
         argumentListMain.add(
                 new VariableDeclaration("String[]", "args")
         );
+        // TODO: new bodyMain per run.
         String bodyMain = "        GrowTentSystem tent = new GrowTentSystem();\n" +
                 "        tent.runDailyCycle();";
         classMain.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
@@ -253,6 +255,52 @@ public class ProjectViewportFragment extends Fragment {
         return classEquipment;
     }
 
+    public Class initClassRobotRun3() {
+        Class classRobotRun3 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_ROBOT_RUN3, null);
+
+        // FIELDS
+        // Intentionally blank.
+
+        // CONSTRUCTORS
+        // Intentionally blank.
+
+        // METHODS
+        String bodyWalkToSeededTile = "        ...";
+        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "walkToSeededTile",
+                null,
+                bodyWalkToSeededTile,
+                null, null, true));
+        List<VariableDeclaration> argumentListCheckForDisease = new ArrayList<>();
+        argumentListCheckForDisease.add(
+                new VariableDeclaration("Plant", "plant")
+        );
+        String bodyCheckForDisease = "        // TODO: Inspect plant's health, cull if not healthy.";
+        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "checkForDisease",
+                argumentListCheckForDisease,
+                bodyCheckForDisease,
+                null, null, true));
+        List<VariableDeclaration> argumentListWater = new ArrayList<>();
+        argumentListWater.add(
+                new VariableDeclaration("GrowableTile", "growableTile")
+        );
+        String bodyWater = "        growableTile.water();";
+        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "water",
+                argumentListWater,
+                bodyWater,
+                null,
+                null,
+                true));
+
+        return classRobotRun3;
+    }
+
     private Class initClassPlantRun2() {
         Class classPlant = new Class(ClassComponent.AccessModifier.PUBLIC,
                 NAME_CLASS_PLANT_RUN2, null);
@@ -360,19 +408,6 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 null,
                 false));
-        List<VariableDeclaration> argumentListWater = new ArrayList<>();
-        argumentListWater.add(
-                new VariableDeclaration("GrowableTile", "growableTile")
-        );
-        String bodyWater = "        growableTile.water();";
-        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "water",
-                argumentListWater,
-                bodyWater,
-                null,
-                null,
-                true));
         List<VariableDeclaration> argumentListSeed = new ArrayList<>();
         argumentListSeed.add(
                 new VariableDeclaration("GrowableTile", "growableTile")
@@ -386,6 +421,19 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "seed",
                 argumentListSeed,
                 bodySeed,
+                null,
+                null,
+                true));
+        List<VariableDeclaration> argumentListWater = new ArrayList<>();
+        argumentListWater.add(
+                new VariableDeclaration("GrowableTile", "growableTile")
+        );
+        String bodyWater = "        growableTile.water();";
+        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "water",
+                argumentListWater,
+                bodyWater,
                 null,
                 null,
                 true));
@@ -521,7 +569,9 @@ public class ProjectViewportFragment extends Fragment {
         classes.add(
                 initClassEquipmentRun4()
         );
-        // TODO: run 3 (have robot check for isDiseased... and maybe hasPests).
+        classes.add(
+                initClassRobotRun3()
+        );
         classes.add(
                 initClassPlantRun2()
         );

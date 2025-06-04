@@ -37,8 +37,6 @@ public class ClassVP2Adapter extends FragmentStateAdapter
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        // TODO: use mode to decide between ClassEditorFragment (LONG_PRESS_REVEALS)
-        //  and a currently undefined class.
         Fragment fragmentToUse = ClassEditorFragment.newInstance(
                 this, classes.get(position), mode
         );

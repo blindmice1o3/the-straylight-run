@@ -106,8 +106,6 @@ public class RobotDialogQuest00
     @Override
     public void initStartingItemsAsString() {
         startingItems = new HashMap<>();
-
-        // TODO: add RobotReprogrammer4000 (has all the functions of the RobotProgrammer200, AND it's software-upgradeable).
         startingItems.put(ROBOT_REPROGRAMMER_4000,
                 new RobotReprogrammer4000(
                         new OpenRobotDialogEntityCommand(null)
