@@ -1069,11 +1069,6 @@ public class SceneFarm extends Scene {
         entities.add(aimlessWalker2);
         entities.add(aimlessWalker3);
         entities.add(aimlessWalker4);
-//        entities.add(
-//                new CollidingOrbit((X_INDEX_SPAWN_COLLIDING_ORBIT * Tile.WIDTH),
-//                        (Y_INDEX_SPAWN_COLLIDING_ORBIT * Tile.HEIGHT),
-//                        Player.getInstance())
-//        );
         return entities;
     }
 

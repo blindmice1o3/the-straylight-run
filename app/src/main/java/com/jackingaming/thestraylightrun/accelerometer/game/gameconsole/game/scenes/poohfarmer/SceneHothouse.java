@@ -34,6 +34,16 @@ import java.util.Map;
 public class SceneHothouse extends Scene {
     public static final String TAG = SceneHothouse.class.getSimpleName();
 
+    public interface LootListener {
+        void onLootDropped();
+    }
+
+    private LootListener lootListener;
+
+    public void setLootListener(LootListener lootListener) {
+        this.lootListener = lootListener;
+    }
+
     public static final int X_SPAWN_INDEX_DEFAULT = 5;
     public static final int Y_SPAWN_INDEX_DEFAULT = 12;
 
@@ -130,7 +140,12 @@ public class SceneHothouse extends Scene {
             } else if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
-                    ((AimlessWalker) player.getCarryable()).placeDown();
+                    ////////////////////////////////////////////////////
+                    if (lootListener != null) {
+                        ((AimlessWalker) player.getCarryable()).placeDown();
+                        lootListener.onLootDropped();
+                    }
+                    ////////////////////////////////////////////////////
                     ((AimlessWalker) player.getCarryable()).changeToWalk();
                 }
 

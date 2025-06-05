@@ -29,8 +29,6 @@ public class AimlessWalker extends Creature {
     private State state;
     private Random random;
 
-    //TODO: Attempting to make a walking/running/standing-still
-    // cow and chicken.
     public AimlessWalker(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
 

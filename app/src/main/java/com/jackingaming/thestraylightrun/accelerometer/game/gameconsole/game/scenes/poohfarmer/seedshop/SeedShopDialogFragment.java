@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFour;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
@@ -95,10 +96,14 @@ public class SeedShopDialogFragment extends DialogFragment {
 
         String[] dialogueArrayRunThree = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         runThree = new RunThree(game, dialogueArrayRunThree);
+
+        String[] dialogueArrayRunFour = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        runFour = new RunFour(game, dialogueArrayRunFour);
     }
 
     private RunTwo runTwo;
     private RunThree runThree;
+    private RunFour runFour;
 
     private void performTrade(Item itemToTrade, Player player) {
         float priceOfItemToTrade = itemToTrade.getPrice();
@@ -228,6 +233,21 @@ public class SeedShopDialogFragment extends DialogFragment {
                     } else {
                         Log.e(TAG, "!wasQuestAcceptedRunThree");
                     }
+
+                    //////////////////////////////////////////////////////////
+
+                    boolean wasQuestAcceptedRunFour =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    runFour
+                            );
+
+                    if (wasQuestAcceptedRunFour) {
+                        Log.e(TAG, "wasQuestAcceptedRunFour");
+                        runFour.dispenseStartingItems();
+                    } else {
+                        Log.e(TAG, "!wasQuestAcceptedRunFour");
+                    }
+
                 }
             };
         }
