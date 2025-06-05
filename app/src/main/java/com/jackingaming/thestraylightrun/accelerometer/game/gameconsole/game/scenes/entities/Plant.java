@@ -48,7 +48,7 @@ public class Plant extends Entity
     private boolean isShowingBorder = false;
     private CooldownTimer damageReceivedCooldownTimer;
 
-    private boolean isDiseasedStatusInitialized;
+    public static int numberOfDiseasedPlant = 0;
     private boolean isDiseased;
 
     public Plant(int xSpawn, int ySpawn) {
@@ -66,24 +66,18 @@ public class Plant extends Entity
 
         damageReceivedCooldownTimer = new CooldownTimer();
         damageReceivedCooldownTimer.setCooldownTarget(3000L);
-    }
 
-    public void initDiseasedStatus() {
-        if (!isDiseasedStatusInitialized) {
-            isDiseasedStatusInitialized = true;
-            if (Math.random() > 0.333333) {
-                isDiseased = true;
-            }
-        } else {
-            Log.e(TAG, "initDiseasedStatus() isDiseasedStatusInitialized: " + isDiseasedStatusInitialized);
+        // initialize diseased status
+        numberRandom = random.nextInt(100);
+        if (numberRandom < 33) {
+            isDiseased = true;
+            numberOfDiseasedPlant++;
         }
     }
 
     public void showPlantDialogFragment() {
         Log.e(TAG, "showPlantDialogFragment()");
         game.setPaused(true);
-
-        initDiseasedStatus();
 
         PlantDialogFragment plantDialogFragment = PlantDialogFragment.newInstance(
                 this, new PlantDialogFragment.DismissListener() {

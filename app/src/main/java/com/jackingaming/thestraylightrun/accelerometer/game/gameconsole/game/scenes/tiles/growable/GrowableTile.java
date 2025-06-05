@@ -20,7 +20,7 @@ public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
     public interface WaterChangeListener {
-        void changeToWatered();
+        void changeToWateredOccupied();
     }
 
     private WaterChangeListener waterChangeListener;
@@ -141,8 +141,8 @@ public class GrowableTile extends Tile {
         watered = true;
         updateImage();
 
-        if (waterChangeListener != null) {
-            waterChangeListener.changeToWatered();
+        if (waterChangeListener != null && state == State.OCCUPIED) {
+            waterChangeListener.changeToWateredOccupied();
         } else {
             Log.e(TAG, "changeToWatered() waterChangeListener == null");
         }

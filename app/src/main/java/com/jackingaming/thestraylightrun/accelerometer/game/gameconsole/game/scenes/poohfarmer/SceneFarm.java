@@ -313,6 +313,20 @@ public class SceneFarm extends Scene {
             ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(MysterySeed.TAG);
             ((GrowableTile) tileInitializedForHarvesting3).germinateSeed();
         }
+        // Fix bug (having a QUANTITY_REQUIRED of 0) for
+        // quest RunThree (its listener is never called).
+        if (Plant.numberOfDiseasedPlant == 0) {
+            int xIndex = 14;
+            while (Plant.numberOfDiseasedPlant == 0) {
+                Tile tileInitializingForHarvestingBugFix = tilesForFarm[17][xIndex];
+                if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
+                    ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(MysterySeed.TAG);
+                    ((GrowableTile) tileInitializingForHarvestingBugFix).germinateSeed();
+                }
+                xIndex++;
+            }
+        }
+
 
         for (int y = 0; y < tilesForFarm.length; y++) {
             for (int x = 0; x < tilesForFarm[y].length; x++) {
@@ -347,6 +361,16 @@ public class SceneFarm extends Scene {
                 plant1.incrementAgeInDays();
                 plant2.incrementAgeInDays();
                 plant3.incrementAgeInDays();
+            }
+
+            int xIndexBugFix = 14;
+            while (tilesForFarm[17][xIndexBugFix] instanceof GrowableTile &&
+                    ((GrowableTile) tilesForFarm[17][xIndexBugFix]).getEntity() != null) {
+                Plant plantBugFix = (Plant) ((GrowableTile) tilesForFarm[17][xIndexBugFix]).getEntity();
+                for (int i = 0; i < 6; i++) {
+                    plantBugFix.incrementAgeInDays();
+                }
+                xIndexBugFix++;
             }
         }
 

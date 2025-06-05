@@ -162,6 +162,7 @@ public class Game {
     private List<ItemStackable> backpackWithoutItemsDisplayingInButtonHolders;
     private ItemRecyclerViewAdapter itemRecyclerViewAdapter;
     private Dialog backpackDialog;
+    private Item scissors;
 
     private Item itemStoredInButtonHolderA;
     private Item itemStoredInButtonHolderB;
@@ -284,7 +285,7 @@ public class Game {
                 new OpenPlantDialogEntityCommand(null)
         );
         plantInspectioner200.init(this);
-        Item scissors = new Scissors(
+        scissors = new Scissors(
                 new RemoveEntityCommand(this, null)
         );
         scissors.init(this);
@@ -828,5 +829,9 @@ public class Game {
             }
         }
         return null;
+    }
+
+    public Item getScissors() {
+        return scissors;
     }
 }

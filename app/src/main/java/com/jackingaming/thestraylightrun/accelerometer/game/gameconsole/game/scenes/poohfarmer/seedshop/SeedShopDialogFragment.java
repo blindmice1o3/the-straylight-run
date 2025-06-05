@@ -31,6 +31,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
 
@@ -91,9 +92,13 @@ public class SeedShopDialogFragment extends DialogFragment {
 
         String[] dialogueArrayRunTwo = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         runTwo = new RunTwo(game, dialogueArrayRunTwo);
+
+        String[] dialogueArrayRunThree = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        runThree = new RunThree(game, dialogueArrayRunThree);
     }
 
     private RunTwo runTwo;
+    private RunThree runThree;
 
     private void performTrade(Item itemToTrade, Player player) {
         float priceOfItemToTrade = itemToTrade.getPrice();
@@ -208,6 +213,20 @@ public class SeedShopDialogFragment extends DialogFragment {
                         runTwo.dispenseStartingItems();
                     } else {
                         Log.e(TAG, "!wasQuestAcceptedRunTwo");
+                    }
+
+                    //////////////////////////////////////////////////////////
+
+                    boolean wasQuestAcceptedRunThree =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    runThree
+                            );
+
+                    if (wasQuestAcceptedRunThree) {
+                        Log.e(TAG, "wasQuestAcceptedRunThree");
+                        runThree.dispenseStartingItems();
+                    } else {
+                        Log.e(TAG, "!wasQuestAcceptedRunThree");
                     }
                 }
             };

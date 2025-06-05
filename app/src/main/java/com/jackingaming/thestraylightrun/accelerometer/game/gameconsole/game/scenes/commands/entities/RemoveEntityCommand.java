@@ -11,6 +11,16 @@ public class RemoveEntityCommand
         implements EntityCommand {
     public static final String TAG = RemoveEntityCommand.class.getSimpleName();
 
+    public interface EntityListener {
+        void removeDiseasedPlantEntityFromScene();
+    }
+
+    private EntityListener entityListener;
+
+    public void setEntityListener(EntityListener entityListener) {
+        this.entityListener = entityListener;
+    }
+
     private Game game;
     private Entity entity;
 
@@ -33,6 +43,10 @@ public class RemoveEntityCommand
                 SceneFarm sceneFarm = (SceneFarm) game.getSceneManager().getCurrentScene();
                 boolean wasRemoved = sceneFarm.getEntityManager().removeEntity(entity);
                 Log.e(TAG, entity.getClass().getSimpleName() + " wasRemoved: " + wasRemoved);
+                if (wasRemoved && ((Plant) entity).isDiseased()) {
+                    Log.e(TAG, "((Plant) entity).isDiseased()");
+                    entityListener.removeDiseasedPlantEntityFromScene();
+                }
             }
         }
         Log.e(TAG, "entity is NOT Plant... entity's class: " + entity.getClass().getSimpleName());

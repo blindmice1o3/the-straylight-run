@@ -3,32 +3,34 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.RemoveEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RunTwo
+public class RunThree
         implements Quest {
-    public static final String TAG = RunTwo.class.getSimpleName();
-    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTile";
-    public static final int QUANTITY_REQUIRED = 3;
+    public static final String TAG = RunThree.class.getSimpleName();
+    public static final String ENTITY_REQUIREMENT_AS_STRING = "cullPlant";
+    public static final int QUANTITY_REQUIRED = Plant.numberOfDiseasedPlant;
 
     private Quest.State state;
     private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> requirementTilesAsString;
+    private Map<String, Integer> requirementEntitiesAsString;
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunTwo(Game game, String[] dialogueArray) {
+    public RunThree(Game game, String[] dialogueArray) {
         state = State.NOT_STARTED;
         this.game = game;
         this.dialogueArray = dialogueArray;
@@ -42,10 +44,10 @@ public class RunTwo
     public void initRequirements() {
         requirements = new HashMap<>();
 
-        requirementTilesAsString = new HashMap<>();
-        requirementTilesAsString.put(TILE_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
+        requirementEntitiesAsString = new HashMap<>();
+        requirementEntitiesAsString.put(ENTITY_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.TILE, requirementTilesAsString);
+        requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
     }
 
     @Override
@@ -65,6 +67,7 @@ public class RunTwo
                         for (String entityAsString : entitiesRequired) {
                             int requiredNumberOfEntityAsString = requirementsAsString.get(entityAsString);
                             int currentNumberOfEntityAsString = Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString): " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString));
                             return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
                         }
                         break;
@@ -89,7 +92,6 @@ public class RunTwo
                         for (String tileAsString : tilesRequired) {
                             int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
                             int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
-                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString): " + Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString));
                             return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
                         }
                         break;
@@ -127,7 +129,7 @@ public class RunTwo
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 4200);
+        rewardsAsString.put(REWARD_COINS, 42000);
     }
 
     @Override
@@ -194,31 +196,29 @@ public class RunTwo
 
     @Override
     public void attachListener() {
-        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-            GrowableTile.WaterChangeListener waterChangeListener = new GrowableTile.WaterChangeListener() {
-                @Override
-                public void changeToWateredOccupied() {
-                    Player.getInstance().getQuestManager().addTileAsString(
-                            TILE_REQUIREMENT_AS_STRING);
-                    Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
-                    if (checkIfMetRequirements()) {
-                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        game.getViewportListener().addAndShowParticleExplosionView();
-                        dispenseRewards();
-                    } else {
-                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                    }
+        RemoveEntityCommand.EntityListener entityListener = new RemoveEntityCommand.EntityListener() {
+            @Override
+            public void removeDiseasedPlantEntityFromScene() {
+                Player.getInstance().getQuestManager().addEntityAsString(
+                        ENTITY_REQUIREMENT_AS_STRING);
+                Log.e(TAG, "number of times diseased plants culled: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
+                if (checkIfMetRequirements()) {
+                    Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                    game.getViewportListener().addAndShowParticleExplosionView();
+                    dispenseRewards();
+                } else {
+                    Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                 }
-            };
+            }
+        };
 
-            ((SceneFarm) game.getSceneManager().getCurrentScene()).registerWaterChangeListenerForAllGrowableTile(
-                    waterChangeListener
-            );
-        }
+        EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
+        ((RemoveEntityCommand) entityCommand).setEntityListener(entityListener);
     }
 
     @Override
     public void detachListener() {
-        ((SceneFarm) game.getSceneManager().getCurrentScene()).unregisterWaterChangeListenerForAllGrowableTile();
+        EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
+        ((RemoveEntityCommand) entityCommand).setEntityListener(null);
     }
 }
