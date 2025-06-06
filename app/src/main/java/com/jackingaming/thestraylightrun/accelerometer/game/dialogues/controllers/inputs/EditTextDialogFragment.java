@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controlle
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -28,6 +29,8 @@ import java.io.Serializable;
 public class EditTextDialogFragment extends DialogFragment {
     public static final String TAG = EditTextDialogFragment.class.getSimpleName();
     public static final String ARG_ENTER_LISTENER = "enterListener";
+    public static final String ARG_HINT = "hint";
+    public static final String ARG_ARE_LINES_LIMITED = "areLinesLimited";
 
     public interface EnterListener extends Serializable {
         void onDismiss();
@@ -36,6 +39,8 @@ public class EditTextDialogFragment extends DialogFragment {
     }
 
     private EnterListener listener;
+    private String hint;
+    private Boolean areLinesLimited;
 
     private EditText editText;
     private Button buttonDone;
@@ -50,12 +55,26 @@ public class EditTextDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    public static EditTextDialogFragment newInstance(EnterListener listener, String hint, boolean areLinesLimited) {
+        EditTextDialogFragment fragment = new EditTextDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ENTER_LISTENER, listener);
+        args.putString(ARG_HINT, hint);
+        args.putBoolean(ARG_ARE_LINES_LIMITED, areLinesLimited);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
             listener = (EnterListener) getArguments().getSerializable(ARG_ENTER_LISTENER);
+            hint = getArguments().getString(ARG_HINT);
+            areLinesLimited = getArguments().getBoolean(ARG_ARE_LINES_LIMITED);
         }
     }
 
@@ -73,6 +92,15 @@ public class EditTextDialogFragment extends DialogFragment {
 
         editText = view.findViewById(R.id.et_name);
         buttonDone = view.findViewById(R.id.button_done);
+
+        if (hint != null) {
+            editText.setHint(hint);
+
+            if (!areLinesLimited) {
+                editText.setMaxLines(Integer.MAX_VALUE);
+                editText.setFilters(new InputFilter[]{});
+            }
+        }
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

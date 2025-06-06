@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -32,6 +33,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFour;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
@@ -42,12 +44,25 @@ import java.util.List;
 public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
 
+    public interface SeedListener {
+        void onAssignedNameAndDescription();
+    }
+
+    private SeedListener seedListener;
+
+    public void setSeedListener(SeedListener seedListener) {
+        this.seedListener = seedListener;
+    }
+
     private Game game;
     private Bitmap seedShopBackgroundTop;
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
     private Quest seedShopOwnerQuest00;
+
+    private String seedName;
+    private String seedDescription;
 
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
@@ -91,6 +106,9 @@ public class SeedShopDialogFragment extends DialogFragment {
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
         seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
 
+        String[] dialogueArrayRunOne = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        runOne = new RunOne(game, dialogueArrayRunOne);
+
         String[] dialogueArrayRunTwo = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         runTwo = new RunTwo(game, dialogueArrayRunTwo);
 
@@ -101,6 +119,7 @@ public class SeedShopDialogFragment extends DialogFragment {
         runFour = new RunFour(game, dialogueArrayRunFour);
     }
 
+    private RunOne runOne;
     private RunTwo runTwo;
     private RunThree runThree;
     private RunFour runFour;
@@ -248,11 +267,65 @@ public class SeedShopDialogFragment extends DialogFragment {
                         Log.e(TAG, "!wasQuestAcceptedRunFour");
                     }
 
+                    //////////////////////////////////////////////////////////
+
+                    boolean wasQuestAcceptedRunOne =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    runOne
+                            );
+
+                    if (wasQuestAcceptedRunOne) {
+                        Log.e(TAG, "wasQuestAcceptedRunOne");
+                        runOne.dispenseStartingItems();
+                    } else {
+                        Log.e(TAG, "!wasQuestAcceptedRunOne");
+                    }
+
+                    EditTextDialogFragment dialogFragmentRunOneName = EditTextDialogFragment.newInstance(
+                            new EditTextDialogFragment.EnterListener() {
+                                @Override
+                                public void onDismiss() {
+                                    Log.e(TAG, "onDismiss()");
+                                }
+
+                                @Override
+                                public void onEnterKeyPressed(String name) {
+                                    Log.e(TAG, "onEnterKeyPressed()");
+
+                                    seedName = name;
+
+                                    EditTextDialogFragment dialogFragmentRunOneDescription = EditTextDialogFragment.newInstance(
+                                            new EditTextDialogFragment.EnterListener() {
+                                                @Override
+                                                public void onDismiss() {
+                                                    Log.e(TAG, "onDismiss()");
+                                                }
+
+                                                @Override
+                                                public void onEnterKeyPressed(String name) {
+                                                    Log.e(TAG, "onEnterKeyPressed()");
+
+                                                    seedDescription = name;
+
+                                                    seedListener.onAssignedNameAndDescription();
+                                                }
+                                            },
+                                            "seed description",
+                                            false
+                                    );
+                                    dialogFragmentRunOneDescription.show(getChildFragmentManager(), TAG);
+                                }
+                            },
+                            "seed name",
+                            false
+                    );
+                    dialogFragmentRunOneName.show(getChildFragmentManager(), TAG);
                 }
             };
         }
 
         Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
+        // TODO: switch to runOne.getDialogueForCurrentState().
         String messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
 
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
@@ -293,5 +366,13 @@ public class SeedShopDialogFragment extends DialogFragment {
 
     public List<Item> getSeedShopInventory() {
         return seedShopInventory;
+    }
+
+    public String getSeedName() {
+        return seedName;
+    }
+
+    public String getSeedDescription() {
+        return seedDescription;
     }
 }

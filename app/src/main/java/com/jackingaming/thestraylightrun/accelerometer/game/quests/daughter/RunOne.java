@@ -6,6 +6,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
@@ -16,7 +18,7 @@ public class RunOne
         implements Quest {
     public static final String TAG = RunOne.class.getSimpleName();
     public static final String ENTITY_REQUIREMENT_AS_STRING = Plant.TAG;
-    public static final int QUANTITY_REQUIRED = 3;
+    public static final int QUANTITY_REQUIRED = 1;
 
     private Quest.State state;
     private Game game;
@@ -193,11 +195,33 @@ public class RunOne
 
     @Override
     public void attachListener() {
-        // TODO:
+        SeedShopDialogFragment.SeedListener seedListener = new SeedShopDialogFragment.SeedListener() {
+            @Override
+            public void onAssignedNameAndDescription() {
+                Player.getInstance().getQuestManager().addEntityAsString(
+                        ENTITY_REQUIREMENT_AS_STRING);
+                Log.e(TAG, "number of named seeds: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
+
+                String seedName = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedName();
+                String seedDescription = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedDescription();
+                Log.e(TAG, "seedName: " + seedName);
+                Log.e(TAG, "seedDescription: " + seedDescription);
+
+                if (checkIfMetRequirements()) {
+                    Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                    game.getViewportListener().addAndShowParticleExplosionView();
+                    dispenseRewards();
+                } else {
+                    Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                }
+            }
+        };
+
+        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(seedListener);
     }
 
     @Override
     public void detachListener() {
-        // TODO:
+        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(null);
     }
 }
