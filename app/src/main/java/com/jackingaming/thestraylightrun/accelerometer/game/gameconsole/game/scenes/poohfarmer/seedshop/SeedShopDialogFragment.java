@@ -31,7 +31,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFive;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFour;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
@@ -117,12 +119,16 @@ public class SeedShopDialogFragment extends DialogFragment {
 
         String[] dialogueArrayRunFour = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
         runFour = new RunFour(game, dialogueArrayRunFour);
+
+        String[] dialogueArrayRunFive = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
+        runFive = new RunFive(game, dialogueArrayRunFive);
     }
 
     private RunOne runOne;
     private RunTwo runTwo;
     private RunThree runThree;
     private RunFour runFour;
+    private RunFive runFive;
 
     private void performTrade(Item itemToTrade, Player player) {
         float priceOfItemToTrade = itemToTrade.getPrice();
@@ -320,6 +326,24 @@ public class SeedShopDialogFragment extends DialogFragment {
                             false
                     );
                     dialogFragmentRunOneName.show(getChildFragmentManager(), TAG);
+
+                    //////////////////////////////////////////////////////////
+
+                    SceneHothouse.getInstance().init(game);
+
+                    boolean wasQuestAcceptedRunFive =
+                            Player.getInstance().getQuestManager().addQuest(
+                                    runFive
+                            );
+
+                    if (wasQuestAcceptedRunFive) {
+                        Log.e(TAG, "wasQuestAcceptedRunFive");
+                        runFive.dispenseStartingItems();
+                    } else {
+                        Log.e(TAG, "!wasQuestAcceptedRunFive");
+                    }
+
+                    //////////////////////////////////////////////////////////
                 }
             };
         }

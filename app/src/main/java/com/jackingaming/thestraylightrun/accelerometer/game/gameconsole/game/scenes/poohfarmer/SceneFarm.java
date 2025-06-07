@@ -768,12 +768,12 @@ public class SceneFarm extends Scene {
         }
     }
 
-    public void registerWaterChangeListenerForAllGrowableTile(GrowableTile.WaterChangeListener waterChangeListener) {
+    public void registerWaterChangeListenerForAllGrowableTile(GrowableTile.OutdoorWaterChangeListener waterChangeListener) {
         Tile[][] tiles = tileManager.getTiles();
         for (int row = 0; row < tiles.length; row++) {
             for (int column = 0; column < tiles[0].length; column++) {
                 if (tiles[row][column] instanceof GrowableTile) {
-                    ((GrowableTile) tiles[row][column]).setWaterChangeListener(
+                    ((GrowableTile) tiles[row][column]).setOutdoorWaterChangeListener(
                             waterChangeListener
                     );
                 }
@@ -786,7 +786,7 @@ public class SceneFarm extends Scene {
         for (int row = 0; row < tiles.length; row++) {
             for (int column = 0; column < tiles[0].length; column++) {
                 if (tiles[row][column] instanceof GrowableTile) {
-                    ((GrowableTile) tiles[row][column]).setWaterChangeListener(
+                    ((GrowableTile) tiles[row][column]).setOutdoorWaterChangeListener(
                             null
                     );
                 }

@@ -18,6 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
@@ -179,7 +180,8 @@ public class SceneHothouse extends Scene {
             boolean wasSuccessful = tileCommand.execute();
 
             // decrement quantity.
-            if (wasSuccessful) {
+            if (wasSuccessful &&
+                    game.getItemStoredInButtonHolderA() instanceof GrowingPot) {
                 game.removeItemFromBackpack(
                         game.getItemStoredInButtonHolderA()
                 );
@@ -216,7 +218,8 @@ public class SceneHothouse extends Scene {
             boolean wasSuccessful = tileCommand.execute();
 
             // decrement quantity.
-            if (wasSuccessful) {
+            if (wasSuccessful &&
+                    game.getItemStoredInButtonHolderB() instanceof GrowingPot) {
                 game.removeItemFromBackpack(
                         game.getItemStoredInButtonHolderB()
                 );
@@ -246,6 +249,32 @@ public class SceneHothouse extends Scene {
             Player.getInstance().setY(yLastKnown);
         }
         GameCamera.getInstance().update(0L);
+    }
+
+    public void registerWaterChangeListenerForAllGrowableTile(GrowableIndoorTile.IndoorWaterChangeListener waterChangeListener) {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableIndoorTile) {
+                    ((GrowableIndoorTile) tiles[row][column]).setIndoorWaterChangeListener(
+                            waterChangeListener
+                    );
+                }
+            }
+        }
+    }
+
+    public void unregisterWaterChangeListenerForAllGrowableTile() {
+        Tile[][] tiles = tileManager.getTiles();
+        for (int row = 0; row < tiles.length; row++) {
+            for (int column = 0; column < tiles[0].length; column++) {
+                if (tiles[row][column] instanceof GrowableIndoorTile) {
+                    ((GrowableIndoorTile) tiles[row][column]).setIndoorWaterChangeListener(
+                            null
+                    );
+                }
+            }
+        }
     }
 
     private Tile[][] createAndInitTilesForHothouse(Game game) {

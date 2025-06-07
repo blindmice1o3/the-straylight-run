@@ -19,14 +19,14 @@ import java.util.Map;
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
-    public interface WaterChangeListener {
-        void changeToWateredOccupied();
+    public interface OutdoorWaterChangeListener {
+        void changeToWateredSeeded();
     }
 
-    private WaterChangeListener waterChangeListener;
+    private OutdoorWaterChangeListener outdoorWaterChangeListener;
 
-    public void setWaterChangeListener(WaterChangeListener waterChangeListener) {
-        this.waterChangeListener = waterChangeListener;
+    public void setOutdoorWaterChangeListener(OutdoorWaterChangeListener outdoorWaterChangeListener) {
+        this.outdoorWaterChangeListener = outdoorWaterChangeListener;
     }
 
     public interface StateChangeListener {
@@ -47,10 +47,10 @@ public class GrowableTile extends Tile {
 
     public enum State {UNTILLED, TILLED, SEEDED, OCCUPIED;}
 
-    private boolean watered;
-    private State state;
-    private String idSeed;
-    private Entity entity;
+    protected boolean watered;
+    protected State state;
+    protected String idSeed;
+    protected Entity entity;
     transient protected Map<State, Bitmap> imageUnwateredViaState;
     transient protected Map<State, Bitmap> imageWateredViaState;
 
@@ -129,7 +129,7 @@ public class GrowableTile extends Tile {
         imageWateredViaState.put(State.OCCUPIED, wateredTilled);
     }
 
-    private void updateImage() {
+    protected void updateImage() {
         if (watered) {
             image = imageWateredViaState.get(state);
         } else {
@@ -141,8 +141,8 @@ public class GrowableTile extends Tile {
         watered = true;
         updateImage();
 
-        if (waterChangeListener != null && state == State.OCCUPIED) {
-            waterChangeListener.changeToWateredOccupied();
+        if (outdoorWaterChangeListener != null && state == State.SEEDED) {
+            outdoorWaterChangeListener.changeToWateredSeeded();
         } else {
             Log.e(TAG, "changeToWatered() waterChangeListener == null");
         }

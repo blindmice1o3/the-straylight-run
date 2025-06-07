@@ -12,6 +12,16 @@ import java.util.HashMap;
 public class GrowableIndoorTile extends GrowableTile {
     public static final String TAG = GrowableIndoorTile.class.getSimpleName();
 
+    public interface IndoorWaterChangeListener {
+        void changeToWateredSeeded();
+    }
+
+    private IndoorWaterChangeListener indoorWaterChangeListener;
+
+    public void setIndoorWaterChangeListener(IndoorWaterChangeListener indoorWaterChangeListener) {
+        this.indoorWaterChangeListener = indoorWaterChangeListener;
+    }
+
     public GrowableIndoorTile(String id, EntityListener entityListener) {
         super(id, entityListener);
     }
@@ -73,5 +83,17 @@ public class GrowableIndoorTile extends GrowableTile {
         imageWateredViaState.put(State.TILLED, wateredTilled);
         imageWateredViaState.put(State.SEEDED, wateredSeeded);
         imageWateredViaState.put(State.OCCUPIED, wateredTilled);
+    }
+
+    @Override
+    public void changeToWatered() {
+        watered = true;
+        updateImage();
+
+        if (indoorWaterChangeListener != null && state == State.SEEDED) {
+            indoorWaterChangeListener.changeToWateredSeeded();
+        } else {
+            Log.e(TAG, "changeToWatered() waterChangeListener == null");
+        }
     }
 }
