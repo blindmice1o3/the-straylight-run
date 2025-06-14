@@ -44,6 +44,8 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
     public static final String NAME_CLASS_GROWABLE_TILE_RUN1 = "GrowableTileRun1";
     public static final String NAME_CLASS_SEED_RUN1 = "SeedRun1";
+    public static final String NAME_CLASS_CHICKEN_RUN1 = "ChickenRun1";
+    public static final String NAME_CLASS_COW_RUN1 = "CowRun1";
     public static final String NAME_METHOD_MAIN = "main";
 
     public interface ProjectViewportListener {
@@ -547,6 +549,60 @@ public class ProjectViewportFragment extends Fragment {
         return classSeedRun1;
     }
 
+    public Class initClassChickenRun1() {
+        Class classChickenRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_CHICKEN_RUN1, null);
+
+        // FIELDS
+        classChickenRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "ageInDays", null,
+                null, null, null, false));
+        classChickenRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isHungry", null,
+                null, null, null, false));
+
+        // CONSTRUCTORS
+        // intentionally blank.
+
+        // METHODS
+        String bodyCluck = "        System.out.println(\"cluck cluck\");";
+        classChickenRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "cluck",
+                null, bodyCluck, null, null, true));
+
+        return classChickenRun1;
+    }
+
+    public Class initClassCowRun1() {
+        Class classCowRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_COW_RUN1, null);
+
+        // FIELDS
+        classCowRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "name", null,
+                null, null, null, false));
+        classCowRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "isHungry", null,
+                null, null, null, false));
+
+        // CONSTRUCTORS
+        // intentionally blank.
+
+        // METHODS
+        String bodyWalk = "        System.out.println(\"mooooove\");";
+        classCowRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "walk",
+                null, bodyWalk, null, null, true));
+
+        return classCowRun1;
+    }
+
     public ProjectViewportFragment() {
         // Required empty public constructor
 
@@ -583,6 +639,12 @@ public class ProjectViewportFragment extends Fragment {
         );
         classes.add(
                 initClassSeedRun1()
+        );
+        classes.add(
+                initClassChickenRun1()
+        );
+        classes.add(
+                initClassCowRun1()
         );
     }
 
