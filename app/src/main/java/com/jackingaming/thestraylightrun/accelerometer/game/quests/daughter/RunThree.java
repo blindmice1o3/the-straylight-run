@@ -5,7 +5,9 @@ import android.util.Log;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.RemoveEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -18,8 +20,10 @@ import java.util.Set;
 public class RunThree
         implements Quest {
     public static final String TAG = RunThree.class.getSimpleName();
-    public static final String ENTITY_REQUIREMENT_AS_STRING = "cullPlant";
-    public static final int QUANTITY_REQUIRED = Plant.numberOfDiseasedPlant;
+    public static final String CULL_ENTITY_REQUIREMENT_AS_STRING = "cullPlant";
+    public static final int CULL_QUANTITY_REQUIRED = Plant.numberOfDiseasedPlant;
+    public static final String HARVEST_ENTITY_REQUIREMENT_AS_STRING = "harvestPlant";
+    public static final int HARVEST_QUANTITY_REQUIRED = 10;
 
     private Quest.State state;
     private Game game;
@@ -45,7 +49,8 @@ public class RunThree
         requirements = new HashMap<>();
 
         requirementEntitiesAsString = new HashMap<>();
-        requirementEntitiesAsString.put(ENTITY_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
+        requirementEntitiesAsString.put(CULL_ENTITY_REQUIREMENT_AS_STRING, CULL_QUANTITY_REQUIRED);
+        requirementEntitiesAsString.put(HARVEST_ENTITY_REQUIREMENT_AS_STRING, HARVEST_QUANTITY_REQUIRED);
 
         requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
     }
@@ -64,11 +69,23 @@ public class RunThree
                 switch (requirementType) {
                     case ENTITY:
                         Set<String> entitiesRequired = requirementsAsString.keySet();
+                        int counterEntitiesRequired = 0;
                         for (String entityAsString : entitiesRequired) {
                             int requiredNumberOfEntityAsString = requirementsAsString.get(entityAsString);
                             int currentNumberOfEntityAsString = Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString);
                             Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString): " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString));
-                            return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
+
+                            boolean isMetRequirements = currentNumberOfEntityAsString >= requiredNumberOfEntityAsString;
+
+                            if (isMetRequirements) {
+                                counterEntitiesRequired++;
+                            }
+                        }
+
+                        Log.e(TAG, "counterEntitiesRequired: " + counterEntitiesRequired);
+                        Log.e(TAG, "entitiesRequired.size(): " + entitiesRequired.size());
+                        if (counterEntitiesRequired == entitiesRequired.size()) {
+                            return true;
                         }
                         break;
                     case EVENT:
@@ -200,8 +217,8 @@ public class RunThree
             @Override
             public void removeDiseasedPlantEntityFromScene() {
                 Player.getInstance().getQuestManager().addEntityAsString(
-                        ENTITY_REQUIREMENT_AS_STRING);
-                Log.e(TAG, "number of times diseased plants culled: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
+                        CULL_ENTITY_REQUIREMENT_AS_STRING);
+                Log.e(TAG, "number of times diseased plants culled: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(CULL_ENTITY_REQUIREMENT_AS_STRING));
                 if (checkIfMetRequirements()) {
                     Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                     game.getViewportListener().addAndShowParticleExplosionView();
@@ -214,11 +231,35 @@ public class RunThree
 
         EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
         ((RemoveEntityCommand) entityCommand).setEntityListener(entityListener);
+
+        ////////////////////////////////////////////////////////////////////
+        Creature.PlaceInShippingBinListener placeInShippingBinListener = new Creature.PlaceInShippingBinListener() {
+            @Override
+            public void sellableAdded(Sellable sellableAdded) {
+                if (sellableAdded instanceof Plant) {
+                    Player.getInstance().getQuestManager().addEntityAsString(
+                            HARVEST_ENTITY_REQUIREMENT_AS_STRING
+                    );
+                    Log.e(TAG, "number of plants harvested: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(HARVEST_ENTITY_REQUIREMENT_AS_STRING));
+                    if (checkIfMetRequirements()) {
+                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                        game.getViewportListener().addAndShowParticleExplosionView();
+                        dispenseRewards();
+                    } else {
+                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                    }
+                }
+            }
+        };
+
+        Player.getInstance().setPlaceInShippingBinListener(placeInShippingBinListener);
     }
 
     @Override
     public void detachListener() {
         EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
         ((RemoveEntityCommand) entityCommand).setEntityListener(null);
+
+        Player.getInstance().setPlaceInShippingBinListener(null);
     }
 }

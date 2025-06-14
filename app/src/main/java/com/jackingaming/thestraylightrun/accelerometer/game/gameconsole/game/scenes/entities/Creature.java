@@ -362,6 +362,8 @@ public abstract class Creature extends Entity {
                 ((Creature) carryable).draw(canvas, paintLightingColorFilter);
             } else if (carryable instanceof Item) {
                 ((Item) carryable).draw(canvas, paintLightingColorFilter);
+            } else if (carryable instanceof Entity) {
+                ((Entity) carryable).draw(canvas, paintLightingColorFilter);
             }
         }
     }

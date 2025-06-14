@@ -42,6 +42,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RobotDialogQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
@@ -393,7 +394,46 @@ public class SceneFarm extends Scene {
         dialogueStates.add(new AIDialogue01(game, aIQuest00));
         dialogueStates.add(new AIDialogue02(game, robotDialogQuest00));
         dialogueStateManager = new DialogueStateManager(dialogueStates);
+
+        ///////////////////
+        setupForRunThree();
+        ///////////////////
         Log.e(TAG, "init() END");
+    }
+
+    private static final int NUMBER_OF_MYSTERY_PRODUCT_TO_HARVEST = RunThree.HARVEST_QUANTITY_REQUIRED;
+    private int numberOfMysteryProductReady = 0;
+
+    public void setupForRunThree() {
+        while (numberOfMysteryProductReady < NUMBER_OF_MYSTERY_PRODUCT_TO_HARVEST) {
+            Tile[][] tiles = tileManager.getTiles();
+            Log.e(TAG, "tiles.length: " + tiles.length);
+            Log.e(TAG, "tiles[0].length: " + tiles[0].length);
+
+            int yIndexRandom = (int) (Math.random() * tiles.length);
+            int xIndexRandom = (int) (Math.random() * tiles[0].length);
+            Log.e(TAG, "yIndexRandom: " + yIndexRandom);
+            Log.e(TAG, "xIndexRandom: " + xIndexRandom);
+            if (tiles[yIndexRandom][xIndexRandom] instanceof GrowableTile) {
+                GrowableTile growableTileRandom = (GrowableTile) tiles[yIndexRandom][xIndexRandom];
+
+                if (growableTileRandom.getState() == GrowableTile.State.UNTILLED) {
+                    growableTileRandom.changeToTilled();
+                }
+
+                if (growableTileRandom.getState() == GrowableTile.State.TILLED) {
+                    growableTileRandom.changeToSeeded(MysterySeed.TAG);
+                    growableTileRandom.germinateSeed();
+
+                    Plant plant = (Plant) growableTileRandom.getEntity();
+                    for (int i = 0; i < 7; i++) {
+                        plant.incrementAgeInDays();
+                    }
+
+                    numberOfMysteryProductReady++;
+                }
+            }
+        }
     }
 
     public void changeToNextDialogueWithAI() {
@@ -1145,7 +1185,6 @@ public class SceneFarm extends Scene {
         items.add(growSystemParts4);
         return items;
     }
-
 
 
     public Robot getRobot() {
