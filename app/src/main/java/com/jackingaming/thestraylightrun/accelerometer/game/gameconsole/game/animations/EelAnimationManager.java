@@ -103,53 +103,72 @@ public class EelAnimationManager
 
     public void init(Game game) {
         if (framesPatrolLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_evo_search_for_eden_chapter1_creatures);
-            framesPatrolLeft = new Bitmap[4];
-            framesPatrolLeft[0] = Bitmap.createBitmap(spriteSheet, 554, 70, 32, 16);
-            framesPatrolLeft[1] = Bitmap.createBitmap(spriteSheet, 587, 70, 32, 16);
-            framesPatrolLeft[2] = Bitmap.createBitmap(spriteSheet, 620, 70, 32, 16);
-            framesPatrolLeft[3] = Bitmap.createBitmap(spriteSheet, 654, 70, 32, 16);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            framesPatrolLeft = new Bitmap[3];
+            framesPatrolLeft[0] = Animation.flipImageHorizontally(
+                    Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218)
+            );
+            framesPatrolLeft[1] = Animation.flipImageHorizontally(
+                    Bitmap.createBitmap(spriteSheet, 371, 448, 311, 208)
+            );
+            framesPatrolLeft[2] = Animation.flipImageHorizontally(
+                    Bitmap.createBitmap(spriteSheet, 682, 460, 341, 195)
+            );
         }
         animationPatrolLeft = new Animation(framesPatrolLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolRight == null) {
-            framesPatrolRight = Animation.flipImageArrayHorizontally(framesPatrolLeft);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            framesPatrolRight = new Bitmap[3];
+            framesPatrolRight[0] = Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218);
+            framesPatrolRight[1] = Bitmap.createBitmap(spriteSheet, 371, 448, 311, 208);
+            framesPatrolRight[2] = Bitmap.createBitmap(spriteSheet, 682, 460, 341, 195);
         }
         animationPatrolRight = new Animation(framesPatrolRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolRightTurnToLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_evo_search_for_eden_chapter1_creatures);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
             framesPatrolRightTurnToLeft = new Bitmap[1];
-            framesPatrolRightTurnToLeft[0] = Bitmap.createBitmap(spriteSheet, 687, 70, 28, 16);
+            framesPatrolRightTurnToLeft[0] = Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218);
         }
         animationPatrolRightTurnToLeft = new Animation(framesPatrolRightTurnToLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolLeftTurnToRight == null) {
-            framesPatrolLeftTurnToRight = Animation.flipImageArrayHorizontally(framesPatrolRightTurnToLeft);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            framesPatrolLeftTurnToRight = new Bitmap[1];
+            framesPatrolLeftTurnToRight[0] = Animation.flipImageHorizontally(
+                    Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218)
+            );
         }
         animationPatrolLeftTurnToRight = new Animation(framesPatrolLeftTurnToRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesAttackLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_evo_search_for_eden_chapter1_creatures);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
             framesAttackLeft = new Bitmap[1];
-            framesAttackLeft[0] = Bitmap.createBitmap(spriteSheet, 716, 62, 16, 32);
+            framesAttackLeft[0] = Animation.flipImageHorizontally(
+                    Bitmap.createBitmap(spriteSheet, 0, 349, 474, 366)
+            );
         }
         animationAttackLeft = new Animation(framesAttackLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesAttackRight == null) {
-            framesAttackRight = Animation.flipImageArrayHorizontally(framesAttackLeft);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            framesAttackRight = new Bitmap[1];
+            framesAttackRight[0] = Bitmap.createBitmap(spriteSheet, 0, 349, 474, 366);
         }
         animationAttackRight = new Animation(framesAttackRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesHurtLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_evo_search_for_eden_chapter1_creatures);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
             framesHurtLeft = new Bitmap[1];
-            framesHurtLeft[0] = Bitmap.createBitmap(spriteSheet, 732, 69, 32, 16);
+            framesHurtLeft[0] = Bitmap.createBitmap(spriteSheet, 1066, 303, 365, 434);
         }
         animationHurtLeft = new Animation(framesHurtLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesHurtRight == null) {
-            framesHurtRight = Animation.flipImageArrayHorizontally(framesHurtLeft);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            framesHurtRight = new Bitmap[1];
+            framesHurtRight[0] = Bitmap.createBitmap(spriteSheet, 1066, 303, 365, 434);
         }
         animationHurtRight = new Animation(framesHurtRight, ANIMATION_SPEED_DEFAULT);
     }
