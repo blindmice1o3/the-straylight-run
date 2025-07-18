@@ -28,15 +28,19 @@ public class GrowSystemParts extends Item {
 
     @Override
     void initImage() {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_grow_system_parts);
         if (id == 1) {
-            image = Bitmap.createBitmap(spriteSheet, 35, 103, 16, 16);
+            image = Bitmap.createBitmap(spriteSheet, 76, 67, 250, 383);
         } else if (id == 2) {
-            image = Bitmap.createBitmap(spriteSheet, 52, 103, 16, 16);
+            image = Bitmap.createBitmap(spriteSheet, 424, 67, 198, 383);
         } else if (id == 3) {
-            image = Bitmap.createBitmap(spriteSheet, 69, 103, 16, 16);
+            image = Bitmap.createBitmap(spriteSheet, 684, 89, 303, 423);
         } else if (id == 4) {
-            image = Bitmap.createBitmap(spriteSheet, 86, 103, 16, 16);
+            image = Bitmap.createBitmap(spriteSheet, 53, 562, 264, 341);
+        } else if (id == 5) {
+            image = Bitmap.createBitmap(spriteSheet, 365, 540, 300, 407);
+        } else if (id == 6) {
+            image = Bitmap.createBitmap(spriteSheet, 729, 512, 258, 413);
         }
     }
 }

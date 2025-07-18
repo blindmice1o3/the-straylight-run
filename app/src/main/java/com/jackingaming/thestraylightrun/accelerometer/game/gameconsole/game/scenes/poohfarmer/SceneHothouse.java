@@ -141,9 +141,9 @@ public class SceneHothouse extends Scene {
             } else if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
+                    ((AimlessWalker) player.getCarryable()).placeDown();
                     ////////////////////////////////////////////////////
                     if (lootListener != null) {
-                        ((AimlessWalker) player.getCarryable()).placeDown();
                         lootListener.onLootDropped();
                     }
                     ////////////////////////////////////////////////////

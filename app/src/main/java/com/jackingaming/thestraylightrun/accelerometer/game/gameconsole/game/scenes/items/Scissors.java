@@ -29,8 +29,8 @@ public class Scissors extends Item
 
     @Override
     void initImage() {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
-        image = Bitmap.createBitmap(spriteSheet, 69, 69, 16, 16);
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
+        image = Bitmap.createBitmap(spriteSheet, 393, 669, 250, 262);
     }
 
     @Override

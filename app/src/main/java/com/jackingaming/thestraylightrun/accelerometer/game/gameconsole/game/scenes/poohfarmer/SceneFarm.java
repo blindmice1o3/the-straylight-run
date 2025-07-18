@@ -346,10 +346,14 @@ public class SceneFarm extends Scene {
         aimlessWalker2.pickUp(growSystemParts2);
         aimlessWalker3.pickUp(growSystemParts3);
         aimlessWalker4.pickUp(growSystemParts4);
+        aimlessWalker5.pickUp(growSystemParts5);
+        aimlessWalker6.pickUp(growSystemParts6);
         aimlessWalker1.changeToWalk();
         aimlessWalker2.changeToWalk();
         aimlessWalker3.changeToWalk();
         aimlessWalker4.changeToWalk();
+        aimlessWalker5.changeToWalk();
+        aimlessWalker6.changeToWalk();
 
         // Age the [plant] so it's almost harvestable
         // (has to be done after Entity.init(), which sets ageInDays to 0).
@@ -1085,7 +1089,7 @@ public class SceneFarm extends Scene {
         return transferPoints;
     }
 
-    private AimlessWalker aimlessWalker1, aimlessWalker2, aimlessWalker3, aimlessWalker4;
+    private AimlessWalker aimlessWalker1, aimlessWalker2, aimlessWalker3, aimlessWalker4, aimlessWalker5, aimlessWalker6;
 
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
@@ -1104,11 +1108,19 @@ public class SceneFarm extends Scene {
         aimlessWalker4 = new AimlessWalker(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
+        aimlessWalker5 = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+        aimlessWalker6 = new AimlessWalker(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
         entities.add(robot);
         entities.add(aimlessWalker1);
         entities.add(aimlessWalker2);
         entities.add(aimlessWalker3);
         entities.add(aimlessWalker4);
+        entities.add(aimlessWalker5);
+        entities.add(aimlessWalker6);
         return entities;
     }
 
@@ -1163,7 +1175,7 @@ public class SceneFarm extends Scene {
         });
     }
 
-    private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4;
+    private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4, growSystemParts5, growSystemParts6;
     private Milk milkToBeCarriedByAimlessWalker;
 
     private List<Item> createItemsForFarm() {
@@ -1173,6 +1185,8 @@ public class SceneFarm extends Scene {
         growSystemParts2 = new GrowSystemParts(2);
         growSystemParts3 = new GrowSystemParts(3);
         growSystemParts4 = new GrowSystemParts(4);
+        growSystemParts5 = new GrowSystemParts(5);
+        growSystemParts6 = new GrowSystemParts(6);
         milkToBeCarriedByAimlessWalker = new Milk();
         milkToBeCarriedByAimlessWalker.setPosition(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
@@ -1183,6 +1197,8 @@ public class SceneFarm extends Scene {
         items.add(growSystemParts2);
         items.add(growSystemParts3);
         items.add(growSystemParts4);
+        items.add(growSystemParts5);
+        items.add(growSystemParts6);
         return items;
     }
 

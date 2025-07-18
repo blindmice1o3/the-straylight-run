@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -142,7 +143,7 @@ public class GameConsoleFragment extends Fragment
             gameTitle = bundle.getString(ARG_GAME_TITLE);
             Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState) gameTitle selected is: " + gameTitle);
             //////////////////////////////////////////
-
+            Assets.init(getResources());
             game = new Game(gameTitle);
         }
 

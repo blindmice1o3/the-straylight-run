@@ -2,10 +2,9 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
@@ -110,23 +109,17 @@ public class GrowableTile extends Tile {
     }
 
     protected void initImageMaps(Resources resources) {
-        Bitmap spriteSheetCropsAndItems = BitmapFactory.decodeResource(resources, R.drawable.gbc_hm_crops_and_items);
-        Bitmap unwateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 7, 19, 16, 16);
-        Bitmap unwateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 7, 106, 16, 16);
-        Bitmap wateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 24, 19, 16, 16);
-        Bitmap wateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 24, 106, 16, 16);
-
         imageUnwateredViaState = new HashMap<>();
         imageUnwateredViaState.put(State.UNTILLED, image);
-        imageUnwateredViaState.put(State.TILLED, unwateredTilled);
-        imageUnwateredViaState.put(State.SEEDED, unwateredSeeded);
-        imageUnwateredViaState.put(State.OCCUPIED, unwateredTilled);
+        imageUnwateredViaState.put(State.TILLED, Assets.unwateredTilled);
+        imageUnwateredViaState.put(State.SEEDED, Assets.unwateredSeeded);
+        imageUnwateredViaState.put(State.OCCUPIED, Assets.unwateredTilled);
 
         imageWateredViaState = new HashMap<>();
         imageWateredViaState.put(State.UNTILLED, image);
-        imageWateredViaState.put(State.TILLED, wateredTilled);
-        imageWateredViaState.put(State.SEEDED, wateredSeeded);
-        imageWateredViaState.put(State.OCCUPIED, wateredTilled);
+        imageWateredViaState.put(State.TILLED, Assets.wateredTilled);
+        imageWateredViaState.put(State.SEEDED, Assets.wateredSeeded);
+        imageWateredViaState.put(State.OCCUPIED, Assets.wateredTilled);
     }
 
     protected void updateImage() {

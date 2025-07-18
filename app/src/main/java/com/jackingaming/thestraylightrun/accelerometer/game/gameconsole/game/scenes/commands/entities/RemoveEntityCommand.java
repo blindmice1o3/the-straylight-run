@@ -45,7 +45,9 @@ public class RemoveEntityCommand
                 Log.e(TAG, entity.getClass().getSimpleName() + " wasRemoved: " + wasRemoved);
                 if (wasRemoved && ((Plant) entity).isDiseased()) {
                     Log.e(TAG, "((Plant) entity).isDiseased()");
-                    entityListener.removeDiseasedPlantEntityFromScene();
+                    if (entityListener != null) {
+                        entityListener.removeDiseasedPlantEntityFromScene();
+                    }
                 }
             }
         }
