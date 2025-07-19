@@ -30,7 +30,8 @@ public class WateringCan extends Item
     @Override
     void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
-        image = Bitmap.createBitmap(spriteSheet, 60, 379, 277, 240);
+        image = Bitmap.createBitmap(spriteSheet, 61, 381, 274, 236);
+//        image = Bitmap.createBitmap(spriteSheet, 60, 379, 277, 240);
     }
 
     @Override

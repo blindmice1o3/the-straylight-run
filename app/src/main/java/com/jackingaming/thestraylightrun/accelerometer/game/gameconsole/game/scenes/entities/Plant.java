@@ -14,6 +14,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.composeables.CooldownTimer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.util.Random;
 
@@ -227,7 +229,13 @@ public class Plant extends Entity
     public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         if (image != null) {
             Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
-            Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
+
+            Rect rectOnScreen = null;
+            if (game.getSceneManager().getCurrentScene() instanceof SceneHothouse) {
+                rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, -(Tile.HEIGHT / 2)));
+            } else {
+                rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
+            }
 
             // BORDER
             if (isShowingBorder) {

@@ -40,6 +40,8 @@ public class GrowableIndoorTile extends GrowableTile {
             spriteSheetPlantsHothouseHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_hothouse_plants2);
         }
 
+        Bitmap spriteSheetItemsAndTiles = BitmapFactory.decodeResource(resources, R.drawable.items_and_tiles);
+
         //CROP SPRITE
         switch (state) {
             case UNTILLED:
@@ -48,17 +50,27 @@ public class GrowableIndoorTile extends GrowableTile {
             case TILLED:
             case OCCUPIED:
                 if (isWatered) {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 120, 120, 16, 16);
+                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1354, 375, 242, 241);
                 } else {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 24, 56, 16, 16);
+                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1352, 680, 242, 239);
                 }
+//                if (isWatered) {
+//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 120, 120, 16, 16);
+//                } else {
+//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 24, 56, 16, 16);
+//                }
                 break;
             case SEEDED:
                 if (isWatered) {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 8, 120, 16, 16);
+                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1047, 376, 242, 241);
                 } else {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 56, 120, 16, 16);
+                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1045, 681, 242, 238);
                 }
+//                if (isWatered) {
+//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 8, 120, 16, 16);
+//                } else {
+//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 56, 120, 16, 16);
+//                }
                 break;
         }
 

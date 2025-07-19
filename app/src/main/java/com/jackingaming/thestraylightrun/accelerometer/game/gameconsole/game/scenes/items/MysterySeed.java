@@ -32,7 +32,8 @@ public class MysterySeed extends Item
     @Override
     void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
-        image = Bitmap.createBitmap(spriteSheet, 715, 360, 246, 278);
+        image = Bitmap.createBitmap(spriteSheet, 717, 363, 242, 272);
+//        image = Bitmap.createBitmap(spriteSheet, 715, 360, 246, 278);
     }
 
     @Override

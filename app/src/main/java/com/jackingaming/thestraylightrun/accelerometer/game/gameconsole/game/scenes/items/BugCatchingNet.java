@@ -30,7 +30,8 @@ public class BugCatchingNet extends Item
     @Override
     void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
-        image = Bitmap.createBitmap(spriteSheet, 93, 669, 244, 261);
+        image = Bitmap.createBitmap(spriteSheet, 96, 671, 238, 257);
+//        image = Bitmap.createBitmap(spriteSheet, 93, 669, 244, 261);
     }
 
     @Override

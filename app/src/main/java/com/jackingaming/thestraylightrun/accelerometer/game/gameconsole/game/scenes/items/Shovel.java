@@ -30,7 +30,8 @@ public class Shovel extends Item
     @Override
     void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
-        image = Bitmap.createBitmap(spriteSheet, 393, 361, 249, 258);
+        image = Bitmap.createBitmap(spriteSheet, 395, 363, 245, 254);
+//        image = Bitmap.createBitmap(spriteSheet, 393, 361, 249, 258);
     }
 
     @Override
