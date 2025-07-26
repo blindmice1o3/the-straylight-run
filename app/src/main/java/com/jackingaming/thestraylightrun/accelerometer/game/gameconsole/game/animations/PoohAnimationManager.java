@@ -80,36 +80,39 @@ public class PoohAnimationManager
     }
 
     public void init(Game game) {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
+        Bitmap spriteSheetDippyUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_up);
+        Bitmap[] poohUp = new Bitmap[4];
+        poohUp[0] = Bitmap.createBitmap(spriteSheetDippyUp, 57, 392, 145, 285);
+        poohUp[1] = Bitmap.createBitmap(spriteSheetDippyUp, 290, 392, 145, 285);
+        poohUp[2] = Bitmap.createBitmap(spriteSheetDippyUp, 524, 392, 155, 285);
+        poohUp[3] = Bitmap.createBitmap(spriteSheetDippyUp, 769, 392, 145, 285);
 
-        poohDefaultUp = Bitmap.createBitmap(spriteSheet, 314, 1063, 20, 36);
-        poohDefaultDown = Bitmap.createBitmap(spriteSheet, 178, 1061, 20, 38);
-        poohDefaultLeft = Bitmap.createBitmap(spriteSheet, 111, 1062, 17, 37);
-        poohDefaultRight = Bitmap.createBitmap(spriteSheet, 247, 1062, 17, 37);
-        poohDefaultUpLeft = Bitmap.createBitmap(spriteSheet, 349, 1064, 17, 35);
-        poohDefaultUpRight = Bitmap.createBitmap(spriteSheet, 281, 1064, 17, 35);
-        poohDefaultDownLeft = Bitmap.createBitmap(spriteSheet, 145, 1060, 17, 39);
-        poohDefaultDownRight = Bitmap.createBitmap(spriteSheet, 213, 1060, 17, 39);
+//        Bitmap[] poohUp = new Bitmap[11];
+//        poohUp[0] = Bitmap.createBitmap(spriteSheet, 21, 1163, 27, 39);
+//        poohUp[1] = Bitmap.createBitmap(spriteSheet, 62, 1164, 27, 38);
+//        poohUp[2] = Bitmap.createBitmap(spriteSheet, 102, 1163, 28, 39);
+//        poohUp[3] = Bitmap.createBitmap(spriteSheet, 142, 1162, 28, 40);
+//        poohUp[4] = Bitmap.createBitmap(spriteSheet, 184, 1162, 26, 40);
+//        poohUp[5] = Bitmap.createBitmap(spriteSheet, 229, 1162, 24, 40);
+//        poohUp[6] = Bitmap.createBitmap(spriteSheet, 269, 1164, 26, 38);
+//        poohUp[7] = Bitmap.createBitmap(spriteSheet, 311, 1164, 26, 38);
+//        poohUp[8] = Bitmap.createBitmap(spriteSheet, 348, 1163, 28, 39);
+//        poohUp[9] = Bitmap.createBitmap(spriteSheet, 392, 1163, 27, 39);
+//        poohUp[10] = Bitmap.createBitmap(spriteSheet, 430, 1162, 26, 40);
 
-        Bitmap[] poohUp = new Bitmap[11];
-        poohUp[0] = Bitmap.createBitmap(spriteSheet, 21, 1163, 27, 39);
-        poohUp[1] = Bitmap.createBitmap(spriteSheet, 62, 1164, 27, 38);
-        poohUp[2] = Bitmap.createBitmap(spriteSheet, 102, 1163, 28, 39);
-        poohUp[3] = Bitmap.createBitmap(spriteSheet, 142, 1162, 28, 40);
-        poohUp[4] = Bitmap.createBitmap(spriteSheet, 184, 1162, 26, 40);
-        poohUp[5] = Bitmap.createBitmap(spriteSheet, 229, 1162, 24, 40);
-        poohUp[6] = Bitmap.createBitmap(spriteSheet, 269, 1164, 26, 38);
-        poohUp[7] = Bitmap.createBitmap(spriteSheet, 311, 1164, 26, 38);
-        poohUp[8] = Bitmap.createBitmap(spriteSheet, 348, 1163, 28, 39);
-        poohUp[9] = Bitmap.createBitmap(spriteSheet, 392, 1163, 27, 39);
-        poohUp[10] = Bitmap.createBitmap(spriteSheet, 430, 1162, 26, 40);
+        Bitmap spriteSheetDippyDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_down);
+        Bitmap[] poohDown = new Bitmap[4];
+        poohDown[0] = Bitmap.createBitmap(spriteSheetDippyDown, 48, 337, 200, 340);
+        poohDown[1] = Bitmap.createBitmap(spriteSheetDippyDown, 294, 337, 200, 340);
+        poohDown[2] = Bitmap.createBitmap(spriteSheetDippyDown, 536, 337, 200, 340);
+        poohDown[3] = Bitmap.createBitmap(spriteSheetDippyDown, 764, 337, 205, 340);
 
-        Bitmap spriteSheetMuhangDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.muhang_down);
-        Bitmap[] poohDown = new Bitmap[3];
-        poohDown[0] = Bitmap.createBitmap(spriteSheetMuhangDown, 40, 316, 268, 417);
-        poohDown[1] = Bitmap.createBitmap(spriteSheetMuhangDown, 386, 297, 256, 436);
-        poohDown[2] = Bitmap.createBitmap(spriteSheetMuhangDown, 716, 299, 264, 434);
-
+//        Bitmap spriteSheetMuhangDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.muhang_down);
+//        Bitmap[] poohDown = new Bitmap[3];
+//        poohDown[0] = Bitmap.createBitmap(spriteSheetMuhangDown, 40, 316, 268, 417);
+//        poohDown[1] = Bitmap.createBitmap(spriteSheetMuhangDown, 386, 297, 256, 436);
+//        poohDown[2] = Bitmap.createBitmap(spriteSheetMuhangDown, 716, 299, 264, 434);
+//
 //        Bitmap[] poohDown = new Bitmap[11];
 //        poohDown[0] = Bitmap.createBitmap(spriteSheet, 17, 1114, 26, 36);
 //        poohDown[1] = Bitmap.createBitmap(spriteSheet, 58, 1113, 26, 37);
@@ -123,31 +126,58 @@ public class PoohAnimationManager
 //        poohDown[9] = Bitmap.createBitmap(spriteSheet, 393, 1115, 26, 35);
 //        poohDown[10] = Bitmap.createBitmap(spriteSheet, 434, 1116, 26, 34);
 
-        Bitmap[] poohLeft = new Bitmap[11];
-        poohLeft[0] = Bitmap.createBitmap(spriteSheet, 20, 1268, 24, 34);
-        poohLeft[1] = Bitmap.createBitmap(spriteSheet, 64, 1268, 19, 34);
-        poohLeft[2] = Bitmap.createBitmap(spriteSheet, 107, 1266, 19, 36);
-        poohLeft[3] = Bitmap.createBitmap(spriteSheet, 146, 1265, 22, 37);
-        poohLeft[4] = Bitmap.createBitmap(spriteSheet, 184, 1266, 23, 36);
-        poohLeft[5] = Bitmap.createBitmap(spriteSheet, 227, 1269, 25, 33);
-        poohLeft[6] = Bitmap.createBitmap(spriteSheet, 269, 1266, 19, 36);
-        poohLeft[7] = Bitmap.createBitmap(spriteSheet, 309, 1265, 19, 37);
-        poohLeft[8] = Bitmap.createBitmap(spriteSheet, 354, 1264, 19, 38);
-        poohLeft[9] = Bitmap.createBitmap(spriteSheet, 395, 1265, 21, 37);
-        poohLeft[10] = Bitmap.createBitmap(spriteSheet, 433, 1267, 24, 35);
+        Bitmap spriteSheetDippyRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_right);
+        Bitmap[] poohRight = new Bitmap[4];
+        poohRight[0] = Bitmap.createBitmap(spriteSheetDippyRight, 35, 397, 250, 190);
+        poohRight[1] = Bitmap.createBitmap(spriteSheetDippyRight, 290, 397, 227, 190);
+        poohRight[2] = Bitmap.createBitmap(spriteSheetDippyRight, 518, 397, 232, 190);
+        poohRight[3] = Bitmap.createBitmap(spriteSheetDippyRight, 751, 397, 235, 190);
 
-        Bitmap[] poohRight = new Bitmap[11];
-        poohRight[0] = Bitmap.createBitmap(spriteSheet, 20, 1217, 24, 34);
-        poohRight[1] = Bitmap.createBitmap(spriteSheet, 64, 1217, 19, 34);
-        poohRight[2] = Bitmap.createBitmap(spriteSheet, 107, 1215, 19, 36);
-        poohRight[3] = Bitmap.createBitmap(spriteSheet, 146, 1214, 22, 37);
-        poohRight[4] = Bitmap.createBitmap(spriteSheet, 184, 1215, 23, 36);
-        poohRight[5] = Bitmap.createBitmap(spriteSheet, 227, 1218, 25, 33);
-        poohRight[6] = Bitmap.createBitmap(spriteSheet, 269, 1215, 19, 36);
-        poohRight[7] = Bitmap.createBitmap(spriteSheet, 309, 1214, 19, 37);
-        poohRight[8] = Bitmap.createBitmap(spriteSheet, 354, 1213, 19, 38);
-        poohRight[9] = Bitmap.createBitmap(spriteSheet, 395, 1214, 21, 37);
-        poohRight[10] = Bitmap.createBitmap(spriteSheet, 433, 1216, 24, 35);
+//        Bitmap[] poohRight = new Bitmap[11];
+//        poohRight[0] = Bitmap.createBitmap(spriteSheet, 20, 1217, 24, 34);
+//        poohRight[1] = Bitmap.createBitmap(spriteSheet, 64, 1217, 19, 34);
+//        poohRight[2] = Bitmap.createBitmap(spriteSheet, 107, 1215, 19, 36);
+//        poohRight[3] = Bitmap.createBitmap(spriteSheet, 146, 1214, 22, 37);
+//        poohRight[4] = Bitmap.createBitmap(spriteSheet, 184, 1215, 23, 36);
+//        poohRight[5] = Bitmap.createBitmap(spriteSheet, 227, 1218, 25, 33);
+//        poohRight[6] = Bitmap.createBitmap(spriteSheet, 269, 1215, 19, 36);
+//        poohRight[7] = Bitmap.createBitmap(spriteSheet, 309, 1214, 19, 37);
+//        poohRight[8] = Bitmap.createBitmap(spriteSheet, 354, 1213, 19, 38);
+//        poohRight[9] = Bitmap.createBitmap(spriteSheet, 395, 1214, 21, 37);
+//        poohRight[10] = Bitmap.createBitmap(spriteSheet, 433, 1216, 24, 35);
+
+        Bitmap[] poohLeft = new Bitmap[4];
+        poohLeft[0] = Animation.flipImageHorizontally(poohRight[0]);
+        poohLeft[1] = Animation.flipImageHorizontally(poohRight[1]);
+        poohLeft[2] = Animation.flipImageHorizontally(poohRight[2]);
+        poohLeft[3] = Animation.flipImageHorizontally(poohRight[3]);
+
+//        Bitmap[] poohLeft = new Bitmap[11];
+//        poohLeft[0] = Bitmap.createBitmap(spriteSheet, 20, 1268, 24, 34);
+//        poohLeft[1] = Bitmap.createBitmap(spriteSheet, 64, 1268, 19, 34);
+//        poohLeft[2] = Bitmap.createBitmap(spriteSheet, 107, 1266, 19, 36);
+//        poohLeft[3] = Bitmap.createBitmap(spriteSheet, 146, 1265, 22, 37);
+//        poohLeft[4] = Bitmap.createBitmap(spriteSheet, 184, 1266, 23, 36);
+//        poohLeft[5] = Bitmap.createBitmap(spriteSheet, 227, 1269, 25, 33);
+//        poohLeft[6] = Bitmap.createBitmap(spriteSheet, 269, 1266, 19, 36);
+//        poohLeft[7] = Bitmap.createBitmap(spriteSheet, 309, 1265, 19, 37);
+//        poohLeft[8] = Bitmap.createBitmap(spriteSheet, 354, 1264, 19, 38);
+//        poohLeft[9] = Bitmap.createBitmap(spriteSheet, 395, 1265, 21, 37);
+//        poohLeft[10] = Bitmap.createBitmap(spriteSheet, 433, 1267, 24, 35);
+
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
+        poohDefaultUp = poohUp[0];
+        poohDefaultDown = poohDown[0];
+        poohDefaultLeft = poohLeft[0];
+        poohDefaultRight = poohRight[0];
+//        poohDefaultUp = Bitmap.createBitmap(spriteSheet, 314, 1063, 20, 36);
+//        poohDefaultDown = Bitmap.createBitmap(spriteSheet, 178, 1061, 20, 38);
+//        poohDefaultLeft = Bitmap.createBitmap(spriteSheet, 111, 1062, 17, 37);
+//        poohDefaultRight = Bitmap.createBitmap(spriteSheet, 247, 1062, 17, 37);
+        poohDefaultUpLeft = Bitmap.createBitmap(spriteSheet, 349, 1064, 17, 35);
+        poohDefaultUpRight = Bitmap.createBitmap(spriteSheet, 281, 1064, 17, 35);
+        poohDefaultDownLeft = Bitmap.createBitmap(spriteSheet, 145, 1060, 17, 39);
+        poohDefaultDownRight = Bitmap.createBitmap(spriteSheet, 213, 1060, 17, 39);
 
         Bitmap[] poohUpLeft = new Bitmap[11];
         poohUpLeft[0] = Bitmap.createBitmap(spriteSheet, 20, 1493, 22, 36);
