@@ -120,12 +120,14 @@ public class SceneChickenCoop extends Scene {
 
         // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in chickenCoop.
+        int tileWidth = 64;
+        int tileHeight = 64;
         for (int y = 0; y < chickenCoop.length; y++) {
             for (int x = 0; x < chickenCoop[0].length; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * tileWidth;
+                int yInPixel = y * tileHeight;
+                int widthInPixel = tileWidth;
+                int heightInPixel = tileHeight;
 
                 Tile tile = chickenCoop[y][x];
                 //GenericWalkableTile
@@ -196,21 +198,22 @@ public class SceneChickenCoop extends Scene {
     private Bitmap cropImageChickenCoop(Resources resources) {
         Log.d(TAG, "SceneChickenCoop.cropImageChickenCoop(Resources resources)");
 
-        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
-        Bitmap chickenCoopEmpty = null;
-
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        chickenCoopEmpty = Bitmap.createBitmap(indoorsFarmHM2, 78, 603, 240, 256);
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        Log.d(TAG, "Bitmap chickenCoopEmpty's (width, height): " + chickenCoopEmpty.getWidth() + ", " + chickenCoopEmpty.getHeight());
+        Bitmap chickenCoopEmpty = BitmapFactory.decodeResource(resources, R.drawable.scene_chicken_coop);
+//        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
+//        Bitmap chickenCoopEmpty = null;
+//
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        chickenCoopEmpty = Bitmap.createBitmap(indoorsFarmHM2, 78, 603, 240, 256);
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        Log.d(TAG, "Bitmap chickenCoopEmpty's (width, height): " + chickenCoopEmpty.getWidth() + ", " + chickenCoopEmpty.getHeight());
 
         return chickenCoopEmpty;
     }
 
     private Map<String, Rect> createTransferPointsForChickenCoop() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (13 * Tile.HEIGHT),
-                (6 * Tile.WIDTH) + (3 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (15 * Tile.HEIGHT),
+                (6 * Tile.WIDTH) + (4 * Tile.WIDTH), (15 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 

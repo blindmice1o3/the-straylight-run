@@ -82,12 +82,14 @@ public class SceneCowBarn extends Scene {
 
         // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in cowBarn.
+        int tileWidth = 64;
+        int tileHeight = 64;
         for (int y = 0; y < cowBarn.length; y++) {
             for (int x = 0; x < cowBarn[0].length; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * tileWidth;
+                int yInPixel = y * tileHeight;
+                int widthInPixel = tileWidth;
+                int heightInPixel = tileHeight;
 
                 Tile tile = cowBarn[y][x];
                 //GenericWalkableTile
@@ -97,6 +99,42 @@ public class SceneCowBarn extends Scene {
                 }
                 //GenericSolidTile
                 else if (tile.getId().equals("1")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                }
+                //SignPostTile
+                else if (tile.getId().equals("a")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                }
+                //FodderStashTile
+                else if (tile.getId().equals("h")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                }
+                //FeedingStallTile
+                else if (tile.getId().equals("i")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                }
+                //ShippingBinTile
+                else if (tile.getId().equals("c")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                } else if (tile.getId().equals("d")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                } else if (tile.getId().equals("e")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                } else if (tile.getId().equals("f")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
@@ -116,21 +154,22 @@ public class SceneCowBarn extends Scene {
     private Bitmap cropImageCowBarn(Resources resources) {
         Log.d(TAG, "SceneCowBarn.cropImageCowBarn(Resources resources)");
 
-        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
-        Bitmap cowBarnEmpty = null;
-
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        cowBarnEmpty = Bitmap.createBitmap(indoorsFarmHM2, 8, 304, 240, 256);
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        Log.d(TAG, "Bitmap cowBarnEmpty's (width, height): " + cowBarnEmpty.getWidth() + ", " + cowBarnEmpty.getHeight());
+        Bitmap cowBarnEmpty = BitmapFactory.decodeResource(resources, R.drawable.scene_cow_barn);
+//        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
+//        Bitmap cowBarnEmpty = null;
+//
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        cowBarnEmpty = Bitmap.createBitmap(indoorsFarmHM2, 8, 304, 240, 256);
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        Log.d(TAG, "Bitmap cowBarnEmpty's (width, height): " + cowBarnEmpty.getWidth() + ", " + cowBarnEmpty.getHeight());
 
         return cowBarnEmpty;
     }
 
     private Map<String, Rect> createTransferPointsForCowBarn() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (13 * Tile.HEIGHT),
-                (6 * Tile.WIDTH) + (3 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (15 * Tile.HEIGHT),
+                (6 * Tile.WIDTH) + (4 * Tile.WIDTH), (15 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 
