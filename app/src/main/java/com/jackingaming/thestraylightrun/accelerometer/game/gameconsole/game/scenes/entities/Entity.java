@@ -70,13 +70,80 @@ public abstract class Entity
         return false;
     }
 
-    public boolean checkTransferPointCollision(float xOffset, float yOffset) {
+    public boolean checkTransferPointCollision(Creature.Direction directionFacing,
+                                               float xOffset, float yOffset) {
         for (String key : game.getSceneManager().getCurrentScene().getTileManager().getTransferPointsKeySet()) {
             Rect transferPointBounds = game.getSceneManager().getCurrentScene().getTileManager().getTransferPointBounds(key);
 
-            if (transferPointBounds.intersect(getCollisionBounds(xOffset, yOffset))) {
-                respondToTransferPointCollision(key);
-                return true;
+            int xNextStep = (int) (x + xOffset);
+            int yNextStep = (int) (y + yOffset);
+            switch (directionFacing) {
+                case UP:
+                    int xCenterUp = xNextStep + (width / 2);
+                    int yQuarterForwardUp = yNextStep - (height / 4);
+                    if (transferPointBounds.contains(xCenterUp, yQuarterForwardUp)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case DOWN:
+                    int xCenterDown = xNextStep + (width / 2);
+                    int yQuarterForwardDown = yNextStep + height + (height / 4);
+                    if (transferPointBounds.contains(xCenterDown, yQuarterForwardDown)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case LEFT:
+                    int xQuarterForwardLeft = xNextStep - (width / 4);
+                    int yCenterLeft = yNextStep + (height / 2);
+                    if (transferPointBounds.contains(xQuarterForwardLeft, yCenterLeft)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case RIGHT:
+                    int xQuarterForwardRight = xNextStep + width + (width / 4);
+                    int yCenterRight = yNextStep + (height / 2);
+                    if (transferPointBounds.contains(xQuarterForwardRight, yCenterRight)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case CENTER:
+                    break;
+                case UP_LEFT:
+                    int xQuarterForwardUpLeft = xNextStep - (width / 4);
+                    int yQuarterForwardUpLeft = yNextStep - (height / 4);
+                    if (transferPointBounds.contains(xQuarterForwardUpLeft, yQuarterForwardUpLeft)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case UP_RIGHT:
+                    int xQuarterForwardUpRight = xNextStep + width + (width / 4);
+                    int yQuarterForwardUpRight = yNextStep - (height / 4);
+                    if (transferPointBounds.contains(xQuarterForwardUpRight, yQuarterForwardUpRight)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case DOWN_LEFT:
+                    int xQuarterForwardDownLeft = xNextStep - (width / 4);
+                    int yQuarterForwardDownLeft = yNextStep + height + (height / 4);
+                    if (transferPointBounds.contains(xQuarterForwardDownLeft, yQuarterForwardDownLeft)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
+                case DOWN_RIGHT:
+                    int xQuarterForwardDownRight = xNextStep + width + (width / 4);
+                    int yQuarterForwardDownRight = yNextStep + height + (height / 4);
+                    if (transferPointBounds.contains(xQuarterForwardDownRight, yQuarterForwardDownRight)) {
+                        respondToTransferPointCollision(key);
+                        return true;
+                    }
+                    break;
             }
         }
         return false;

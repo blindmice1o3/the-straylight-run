@@ -59,7 +59,7 @@ public class SceneFarm extends Scene {
     private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
-    private static final int Y_INDEX_SPAWN_ROBOT = 4;
+    private static final int Y_INDEX_SPAWN_ROBOT = 5;
     private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
     private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;
@@ -319,6 +319,11 @@ public class SceneFarm extends Scene {
         if (Plant.numberOfDiseasedPlant == 0) {
             int xIndex = 14;
             while (Plant.numberOfDiseasedPlant == 0) {
+                if (xIndex > tilesForFarm[17].length - 1) {
+                    Log.e(TAG, "xIndex > tilesForFarm[17].length!!!");
+                    break;
+                }
+
                 Tile tileInitializingForHarvestingBugFix = tilesForFarm[17][xIndex];
                 if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
                     ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(MysterySeed.TAG);
@@ -865,8 +870,8 @@ public class SceneFarm extends Scene {
     }
 
     private Tile[][] createAndInitTiles(Game game) {
-        //rgbTileMapFarm is an image where each pixel represents a tile.
-        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
+        //rgbTileMapMyFarm is an image where each pixel represents a tile.
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_my_farm);
         int columns = rgbTileMapFarm.getWidth();            //Always need.
         int rows = rgbTileMapFarm.getHeight();              //Always need.
 
@@ -874,16 +879,19 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        imageFarm = cropImageFarm(
-                game.getContext().getResources(),
-                game.getTimeManager().getSeason());
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_aligned_doors);
+//        imageFarm = cropImageFarm(
+//                game.getContext().getResources(),
+//                game.getTimeManager().getSeason());
         //DEFINE EACH ELEMENT.
+        int tileWidth = 64;
+        int tileHeight = 64;
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * tileWidth;
+                int yInPixel = y * tileHeight;
+                int widthInPixel = tileWidth;
+                int heightInPixel = tileHeight;
                 Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                 int pixel = rgbTileMapFarm.getPixel(x, y);
@@ -1072,20 +1080,19 @@ public class SceneFarm extends Scene {
 
     private Map<String, Rect> createTransferPointsForFarm() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("HOUSE_LEVEL_01", new Rect((12 * Tile.WIDTH), (15 * Tile.HEIGHT),
-                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (15 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("HOTHOUSE", new Rect((17 * Tile.WIDTH), (15 * Tile.HEIGHT),
-                (17 * Tile.WIDTH) + (1 * Tile.WIDTH), (15 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOUSE_LEVEL_01", new Rect((6 * Tile.WIDTH), (4 * Tile.HEIGHT),
+                (6 * Tile.WIDTH) + (1 * Tile.WIDTH), (4 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOTHOUSE", new Rect((12 * Tile.WIDTH), (10 * Tile.HEIGHT),
+                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (10 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+//        transferPoints.put("SHEEP_PEN", new Rect((21 * Tile.WIDTH), (7 * Tile.HEIGHT),
+//                (21 * Tile.WIDTH) + (1 * Tile.WIDTH), (7 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("CHICKEN_COOP", new Rect((11 * Tile.WIDTH), (13 * Tile.HEIGHT),
+                (11 * Tile.WIDTH) + (1 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("COW_BARN", new Rect((7 * Tile.WIDTH), (14 * Tile.HEIGHT),
+                (7 * Tile.WIDTH) + (1 * Tile.WIDTH), (14 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
 
-        transferPoints.put("SHEEP_PEN", new Rect((21 * Tile.WIDTH), (7 * Tile.HEIGHT),
-                (21 * Tile.WIDTH) + (1 * Tile.WIDTH), (7 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("CHICKEN_COOP", new Rect((18 * Tile.WIDTH), (5 * Tile.HEIGHT),
-                (18 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("COW_BARN", new Rect((10 * Tile.WIDTH), (4 * Tile.HEIGHT),
-                (10 * Tile.WIDTH) + (1 * Tile.WIDTH), (4 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-
-        transferPoints.put("SEEDS_SHOP", new Rect((5 * Tile.WIDTH), (11 * Tile.HEIGHT),
-                (5 * Tile.WIDTH) + (1 * Tile.WIDTH), (11 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("SEEDS_SHOP", new Rect((12 * Tile.WIDTH), (5 * Tile.HEIGHT),
+                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 

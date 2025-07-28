@@ -90,10 +90,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, 0f) &&
                             !checkItemCollision(xMove, 0f, false)) {
 
-                        if (checkTransferPointCollision(xMove, 0f)) {
+                        if (checkTransferPointCollision(direction, xMove, 0f)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -114,10 +113,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, 0f) &&
                             !checkItemCollision(xMove, 0f, false)) {
 
-                        if (checkTransferPointCollision(xMove, 0f)) {
+                        if (checkTransferPointCollision(direction, xMove, 0f)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -138,10 +136,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(0f, yMove) &&
                             !checkItemCollision(0f, yMove, false)) {
 
-                        if (checkTransferPointCollision(0f, yMove)) {
+                        if (checkTransferPointCollision(direction, 0f, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -162,10 +159,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(0f, yMove) &&
                             !checkItemCollision(0f, yMove, false)) {
 
-                        if (checkTransferPointCollision(0f, yMove)) {
+                        if (checkTransferPointCollision(direction, 0f, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -190,10 +186,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, yMove) &&
                             !checkItemCollision(xMove, yMove, false)) {
 
-                        if (checkTransferPointCollision(xMove, yMove)) {
+                        if (checkTransferPointCollision(direction, xMove, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -215,10 +210,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, yMove) &&
                             !checkItemCollision(xMove, yMove, false)) {
 
-                        if (checkTransferPointCollision(xMove, yMove)) {
+                        if (checkTransferPointCollision(direction, xMove, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -240,10 +234,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, yMove) &&
                             !checkItemCollision(xMove, yMove, false)) {
 
-                        if (checkTransferPointCollision(xMove, yMove)) {
+                        if (checkTransferPointCollision(direction, xMove, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
@@ -265,10 +258,9 @@ public abstract class Creature extends Entity {
                     if (!checkEntityCollision(xMove, yMove) &&
                             !checkItemCollision(xMove, yMove, false)) {
 
-                        if (checkTransferPointCollision(xMove, yMove)) {
+                        if (checkTransferPointCollision(direction, xMove, yMove)) {
                             return true; // Entity.respondToTransferPointCollision(String key) was triggered.
                         }
-
                         /////////////////////
                         return performMove();
                         /////////////////////
