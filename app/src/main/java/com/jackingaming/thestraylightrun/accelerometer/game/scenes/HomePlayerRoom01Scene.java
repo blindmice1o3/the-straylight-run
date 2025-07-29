@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -14,7 +15,10 @@ import androidx.fragment.app.Fragment;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.notes.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
@@ -30,8 +34,10 @@ import java.util.List;
 public class HomePlayerRoom01Scene extends Scene {
     public static final String TAG = HomePlayerRoom01Scene.class.getSimpleName();
 
-    private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_home_player_01;
-    private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
+    private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_house_player;
+    private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.scene_house_player;
+    //    private static final int RES_ID_TILE_COLLISION_SOURCE = R.raw.tiles_home_player_01;
+//    private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
     private static final int X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 6;
     private static final int Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 1;
     private static final int X_SPAWN_INDEX_PLAYER_WORLD = 2;
@@ -60,7 +66,8 @@ public class HomePlayerRoom01Scene extends Scene {
 
     private List<Entity> entities;
 
-    private UniqueSolidTile tileTelevision;
+    private UniqueSolidTile tileTelevision, tileComputer, tileGameConsole,
+            tileTableLeft, tileTableRight, tileBedTop, tileBedBottom;
 
     private HomePlayerRoom01Scene() {
     }
@@ -76,22 +83,23 @@ public class HomePlayerRoom01Scene extends Scene {
         // [IMAGES]
         Bitmap bitmapIndoorsHomeAndRoom = BitmapFactory.decodeResource(resources,
                 RES_ID_TILE_COLLISION_BACKGROUND);
-        Bitmap bitmapHomePlayerRoom01 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 160, 16, 128, 128);
+        Bitmap bitmapHomePlayerRoom01 = bitmapIndoorsHomeAndRoom;
+//        Bitmap bitmapHomePlayerRoom01 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 160, 16, 128, 128);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
 
         // [TILES]
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom01);
-        // transfer point: world
-        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
-        tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
-                tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
-        );
-        // transfer point: home player room02
-        tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02];
-        tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02] = new TransferPointTile(
-                tileBeforeBecomingTransferPoint.getImage(), HomePlayerRoom02Scene.TAG
-        );
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom01, true);
+//        // transfer point: world
+//        Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
+//        tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(
+//                tileBeforeBecomingTransferPoint.getImage(), WorldScene.TAG
+//        );
+//        // transfer point: home player room02
+//        tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02];
+//        tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02] = new TransferPointTile(
+//                tileBeforeBecomingTransferPoint.getImage(), HomePlayerRoom02Scene.TAG
+//        );
 
         widthWorldInTiles = tiles.length;
         heightWorldInTiles = tiles[0].length;
@@ -103,6 +111,22 @@ public class HomePlayerRoom01Scene extends Scene {
                 if (column instanceof UniqueSolidTile) {
                     if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TELEVISION)) {
                         tileTelevision = (UniqueSolidTile) column;
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.COMPUTER)) {
+                        tileComputer = (UniqueSolidTile) column;
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.GAME_CONSOLE)) {
+                        tileGameConsole = (UniqueSolidTile) column;
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TABLE)) {
+                        if (tileTableLeft == null) {
+                            tileTableLeft = (UniqueSolidTile) column;
+                        } else {
+                            tileTableRight = (UniqueSolidTile) column;
+                        }
+                    } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.BED)) {
+                        if (tileBedTop == null) {
+                            tileBedTop = (UniqueSolidTile) column;
+                        } else {
+                            tileBedBottom = (UniqueSolidTile) column;
+                        }
                     }
                 }
             }
@@ -180,23 +204,23 @@ public class HomePlayerRoom01Scene extends Scene {
 
                 // BOTH WALKABLE
                 if (isWalkableCorner1 && isWalkableCorner2) {
-                    if (tiles[xIndex1][yIndex1] instanceof TransferPointTile &&
-                            tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
-                        if (canUseTransferPoint) {
-                            String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
-                            if (idSceneDestination.equals(HomePlayerRoom02Scene.TAG)) {
-                                Log.e(TAG, "transfer point: HomePlayerRoom02Scene");
-                                gameListener.onChangeScene(HomePlayerRoom02Scene.getInstance());
-                                return true;
-                            } else if (idSceneDestination.equals(WorldScene.TAG)) {
-                                Log.e(TAG, "transfer point: WorldScene");
-                                gameListener.onChangeScene(WorldScene.getInstance());
-                                return true;
-                            }
-                        }
-                    } else {
-                        Log.e(TAG, "tile is NOT TransferPointTile");
-                    }
+//                    if (tiles[xIndex1][yIndex1] instanceof TransferPointTile &&
+//                            tiles[xIndex2][yIndex2] instanceof TransferPointTile) {
+//                        if (canUseTransferPoint) {
+//                            String idSceneDestination = ((TransferPointTile) tiles[xIndex1][yIndex1]).getIdSceneDestination();
+//                            if (idSceneDestination.equals(HomePlayerRoom02Scene.TAG)) {
+//                                Log.e(TAG, "transfer point: HomePlayerRoom02Scene");
+//                                gameListener.onChangeScene(HomePlayerRoom02Scene.getInstance());
+//                                return true;
+//                            } else if (idSceneDestination.equals(WorldScene.TAG)) {
+//                                Log.e(TAG, "transfer point: WorldScene");
+//                                gameListener.onChangeScene(WorldScene.getInstance());
+//                                return true;
+//                            }
+//                        }
+//                    } else {
+//                        Log.e(TAG, "tile is NOT TransferPointTile");
+//                    }
                 }
                 // BOTH SOLID
                 else if (!isWalkableCorner1 && !isWalkableCorner2 &&
@@ -242,6 +266,117 @@ public class HomePlayerRoom01Scene extends Scene {
                                     dialogFragment, tag
                             );
 
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.COMPUTER)) {
+                            Log.e(TAG, "unique solid tile: COMPUTER");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.COMPUTER) {
+                                return false;
+                            }
+
+                            pause();
+
+                            DialogFragment dialogFragment = IDEDialogFragment.newInstance(
+                                    new IDEDialogFragment.ButtonListener() {
+                                        @Override
+                                        public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
+                                            ideDialogFragment.dismiss();
+                                        }
+                                    }, new IDEDialogFragment.DismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            Log.e(TAG, "onDismiss()");
+
+                                            //////////////////////////////////
+                                            gameListener.incrementDailyLoop();
+                                            //////////////////////////////////
+
+                                            unpause();
+                                        }
+                                    }, IDEDialogFragment.Mode.KEYBOARD_TRAINER);
+
+                            gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
+
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.GAME_CONSOLE)) {
+                            Log.e(TAG, "unique solid tile: GAME CONSOLE");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.GAME_CONSOLE) {
+                                return false;
+                            }
+
+                            pause();
+
+                            // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
+                            String gameTitle = "Pooh Farmer";
+                            Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                            String tag = GameConsoleFragment.TAG;
+                            boolean canceledOnTouchOutside = false;
+                            DialogFragment dialogFragment =
+                                    FCVDialogFragment.newInstance(fragment, tag,
+                                            canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
+                                            new FCVDialogFragment.LifecycleListener() {
+                                                @Override
+                                                public void onResume() {
+                                                    // Intentionally blank.
+                                                }
+
+                                                @Override
+                                                public void onDismiss() {
+                                                    //////////////////////////////////
+                                                    gameListener.incrementDailyLoop();
+                                                    //////////////////////////////////
+
+                                                    unpause();
+                                                }
+                                            });
+
+                            gameListener.onShowDialogFragment(
+                                    dialogFragment, tag
+                            );
+
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.TABLE)) {
+                            Log.e(TAG, "unique solid tile: TABLE");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES) {
+                                return false;
+                            }
+
+                            pause();
+
+                            Fragment fragment = NotesViewerFragment.newInstance(null, null);
+                            String tag = NotesViewerFragment.TAG;
+                            boolean canceledOnTouchOutside = false;
+                            DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+                                    canceledOnTouchOutside, 1.0f, 0.7f,
+                                    new FCVDialogFragment.LifecycleListener() {
+                                        @Override
+                                        public void onResume() {
+                                            // Intentionally blank.
+                                        }
+
+                                        @Override
+                                        public void onDismiss() {
+                                            //////////////////////////////////
+                                            gameListener.incrementDailyLoop();
+                                            //////////////////////////////////
+
+                                            unpause();
+                                        }
+                                    });
+
+                            gameListener.onShowDialogFragment(
+                                    dialogFragment, tag
+                            );
+
+                            return false;
+                        } else if (id.equals(UniqueSolidTile.BED)) {
+                            Log.e(TAG, "unique solid tile: BED");
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.SLEEP_SAVE) {
+                                return false;
+                            }
+
+                            //////////////////////////////////
+                            gameListener.incrementDailyLoop();
+                            //////////////////////////////////
                             return false;
                         }
                     } else {

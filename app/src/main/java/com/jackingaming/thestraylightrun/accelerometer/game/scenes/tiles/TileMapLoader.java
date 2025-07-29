@@ -72,8 +72,8 @@ public class TileMapLoader {
      * <p>
      * To split on any amount of white space, use "\\s+" as the argument to "split()".
      */
-    public static Tile[][] convertStringToTileIDs(String stringOfTiles, Bitmap fullWorldMap) {
-        Log.d(TAG, "convertStringToTileIDs(String)");
+    public static Tile[][] convertStringToTileIDs(String stringOfTiles, Bitmap fullWorldMap, boolean is64x64) {
+        Log.d(TAG, "convertStringToTileIDs(String, Bitmap, boolean)");
 
         String[] tokens = stringOfTiles.split("\\s+");
 
@@ -97,6 +97,12 @@ public class TileMapLoader {
         int xOffsetInit = 0;
         int heightTile = HEIGHT_TILE;
         int widthTile = WIDTH_TILE;
+        if (is64x64) {
+            heightTile = 64;
+            widthTile = 64;
+        }
+        Log.e(TAG, "heightTile, widthTile: " + heightTile + ", " + widthTile);
+        Log.e(TAG, "columns, rows: " + columns + ", " + rows);
         int yOffset = 0;
         int xOffset = xOffsetInit;
         for (int y = 0; y < rows; y++) {

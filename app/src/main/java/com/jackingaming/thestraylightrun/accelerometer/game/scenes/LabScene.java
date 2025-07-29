@@ -92,7 +92,7 @@ public class LabScene extends Scene {
                 RES_ID_TILE_COLLISION_SOURCE);
 
         // [TILES]
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapLab);
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapLab, false);
         // transfer point: world
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD];
         tiles[X_TRANSFER_POINT_INDEX_WORLD][Y_TRANSFER_POINT_INDEX_WORLD] = new TransferPointTile(

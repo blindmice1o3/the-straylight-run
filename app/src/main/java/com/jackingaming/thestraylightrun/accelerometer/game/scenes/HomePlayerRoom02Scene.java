@@ -76,14 +76,15 @@ public class HomePlayerRoom02Scene extends Scene {
 
     private void initTiles() {
         // [IMAGES]
-        Bitmap bitmapIndoorsHomeAndRoom = BitmapFactory.decodeResource(resources,
-                RES_ID_TILE_COLLISION_BACKGROUND);
-        Bitmap bitmapHomePlayerRoom02 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 16, 16, 128, 128);
+//        Bitmap bitmapIndoorsHomeAndRoom = BitmapFactory.decodeResource(resources,
+//                RES_ID_TILE_COLLISION_BACKGROUND);
+        Bitmap bitmapHomePlayerRoom02 = BitmapFactory.decodeResource(resources, R.drawable.scene_house_player);
+//        Bitmap bitmapHomePlayerRoom02 = Bitmap.createBitmap(bitmapIndoorsHomeAndRoom, 16, 16, 128, 128);
         String stringOfTilesIDs = TileMapLoader.loadFileAsString(resources,
                 RES_ID_TILE_COLLISION_SOURCE);
 
         // [TILES]
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom02);
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, bitmapHomePlayerRoom02, false);
         // transfer point: home player room01
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01];
         tiles[X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01][Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM01] = new TransferPointTile(

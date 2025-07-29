@@ -160,7 +160,7 @@ public class WorldScene extends Scene {
                 RES_ID_TILE_COLLISION_SOURCE);
 
         // [TILES]
-        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap);
+        tiles = TileMapLoader.convertStringToTileIDs(stringOfTilesIDs, fullWorldMap, false);
         // transfer point: lab prof java
         Tile tileBeforeBecomingTransferPoint = tiles[X_TRANSFER_POINT_INDEX_LAB_PROF_JAVA][Y_TRANSFER_POINT_INDEX_LAB_PROF_JAVA];
         tiles[X_TRANSFER_POINT_INDEX_LAB_PROF_JAVA][Y_TRANSFER_POINT_INDEX_LAB_PROF_JAVA] = new TransferPointTile(
