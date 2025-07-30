@@ -80,74 +80,116 @@ public class RobotAnimationManager
     }
 
     public void init(Game game) {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_chrono_trigger_r_series);
+//        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_chrono_trigger_r_series);
+//
+//        //crop all non-pink sprites////////////////////////////////////////////////////
+//        Bitmap[][] robotRSeries = new Bitmap[22][11];
+//
+//        int widthSprite = 32;
+//        int heightSprite = 32;
+//        int offsetHorizontal = 8;
+//        int offsetVertical = 8;
+//        for (int row = 0; row < robotRSeries.length; row++) {
+//            for (int column = 0; column < robotRSeries[row].length; column++) {
+//                int xStart = column * (widthSprite + offsetHorizontal);
+//                int yStart = row * (heightSprite + offsetVertical);
+//                robotRSeries[row][column] = Bitmap.createBitmap(spriteSheet, xStart, yStart,
+//                        widthSprite, heightSprite);
+//            }
+//        }
+//        ///////////////////////////////////////////////////////////////////////////////
+//
+//        //group sprites by animationWalk category//////////////////////////////////////////
+//        Bitmap[] walkDown = new Bitmap[5];
+//        Bitmap[] walkLeft = new Bitmap[5];
+//        Bitmap[] walkUp = new Bitmap[5];
+//        Bitmap[] walkRight = new Bitmap[5];
+//        Bitmap[] runDown = new Bitmap[5];
+//        Bitmap[] runLeft = new Bitmap[5];
+//        Bitmap[] runUp = new Bitmap[5];
+//        Bitmap[] runRight = new Bitmap[5];
+//        int xIndexStart = 3;
+//        int yIndexStart = 17;
+//        for (int xIndex = xIndexStart; xIndex < robotRSeries[0].length; xIndex++) {
+//            for (int yIndex = yIndexStart; yIndex < robotRSeries.length; yIndex++) {
+//                //walkDown
+//                if (xIndex == 3) {
+//                    walkDown[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //walkLeft
+//                else if (xIndex == 4) {
+//                    walkLeft[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //walkUp
+//                else if (xIndex == 5) {
+//                    walkUp[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //walkRight
+//                else if (xIndex == 6) {
+//                    walkRight[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //runDown
+//                else if (xIndex == 7) {
+//                    runDown[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //runLeft
+//                else if (xIndex == 8) {
+//                    runLeft[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //runUp
+//                else if (xIndex == 9) {
+//                    runUp[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//                //runRight
+//                else if (xIndex == 10) {
+//                    runRight[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
+//                }
+//            }
+//        }
 
-        //crop all non-pink sprites////////////////////////////////////////////////////
-        Bitmap[][] robotRSeries = new Bitmap[22][11];
-
-        int widthSprite = 32;
-        int heightSprite = 32;
-        int offsetHorizontal = 8;
-        int offsetVertical = 8;
-        for (int row = 0; row < robotRSeries.length; row++) {
-            for (int column = 0; column < robotRSeries[row].length; column++) {
-                int xStart = column * (widthSprite + offsetHorizontal);
-                int yStart = row * (heightSprite + offsetVertical);
-                robotRSeries[row][column] = Bitmap.createBitmap(spriteSheet, xStart, yStart,
-                        widthSprite, heightSprite);
-            }
-        }
         ///////////////////////////////////////////////////////////////////////////////
+        Bitmap spriteSheetRobotDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_robot_down_redo_eyes);
+        Bitmap spriteSheetRobotUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_robot_up);
+        Bitmap spriteSheetRobotRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_robot_right);
+        Bitmap spriteSheetRobotOff = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_robot_off);
+        Bitmap[] walkDown = new Bitmap[3];
+        Bitmap[] walkLeft = new Bitmap[2];
+        Bitmap[] walkUp = new Bitmap[3];
+        Bitmap[] walkRight = new Bitmap[2];
+        Bitmap[] runDown = new Bitmap[3];
+        Bitmap[] runLeft = new Bitmap[2];
+        Bitmap[] runUp = new Bitmap[3];
+        Bitmap[] runRight = new Bitmap[2];
 
-        //group sprites by animationWalk category//////////////////////////////////////////
-        Bitmap[] walkDown = new Bitmap[5];
-        Bitmap[] walkLeft = new Bitmap[5];
-        Bitmap[] walkUp = new Bitmap[5];
-        Bitmap[] walkRight = new Bitmap[5];
-        Bitmap[] runDown = new Bitmap[5];
-        Bitmap[] runLeft = new Bitmap[5];
-        Bitmap[] runUp = new Bitmap[5];
-        Bitmap[] runRight = new Bitmap[5];
-        int xIndexStart = 3;
-        int yIndexStart = 17;
-        for (int xIndex = xIndexStart; xIndex < robotRSeries[0].length; xIndex++) {
-            for (int yIndex = yIndexStart; yIndex < robotRSeries.length; yIndex++) {
-                //walkDown
-                if (xIndex == 3) {
-                    walkDown[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //walkLeft
-                else if (xIndex == 4) {
-                    walkLeft[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //walkUp
-                else if (xIndex == 5) {
-                    walkUp[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //walkRight
-                else if (xIndex == 6) {
-                    walkRight[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //runDown
-                else if (xIndex == 7) {
-                    runDown[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //runLeft
-                else if (xIndex == 8) {
-                    runLeft[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //runUp
-                else if (xIndex == 9) {
-                    runUp[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-                //runRight
-                else if (xIndex == 10) {
-                    runRight[yIndex - yIndexStart] = robotRSeries[yIndex][xIndex];
-                }
-            }
+        walkDown[0] = Bitmap.createBitmap(spriteSheetRobotDown, 22, 214, 392, 613);
+        walkDown[1] = Bitmap.createBitmap(spriteSheetRobotDown, 472, 211, 470, 614);
+        walkDown[2] = Bitmap.createBitmap(spriteSheetRobotDown, 969, 213, 416, 613);
+
+        walkUp[0] = Bitmap.createBitmap(spriteSheetRobotUp, 0, 173, 413, 670);
+        walkUp[1] = Bitmap.createBitmap(spriteSheetRobotUp, 470, 173, 416, 672);
+        walkUp[2] = Bitmap.createBitmap(spriteSheetRobotUp, 962, 173, 430, 670);
+
+        walkRight[0] = Bitmap.createBitmap(spriteSheetRobotRight, 210, 256, 452, 622);
+        walkRight[1] = Bitmap.createBitmap(spriteSheetRobotRight, 910, 256, 378, 621);
+
+        walkLeft[0] = Animation.flipImageHorizontally(walkRight[0]);
+        walkLeft[1] = Animation.flipImageHorizontally(walkRight[1]);
+
+        for (int indexDown = 0; indexDown < walkDown.length; indexDown++) {
+            runDown[indexDown] = walkDown[indexDown];
         }
 
-        ///////////////////////////////////////////////////////////////////////////////
+        for (int indexUp = 0; indexUp < walkUp.length; indexUp++) {
+            runUp[indexUp] = walkUp[indexUp];
+        }
+
+        for (int indexRight = 0; indexRight < walkRight.length; indexRight++) {
+            runRight[indexRight] = walkRight[indexRight];
+        }
+
+        for (int indexLeft = 0; indexLeft < walkLeft.length; indexLeft++) {
+            runLeft[indexLeft] = walkLeft[indexLeft];
+        }
 
         Animation walkDownAnimation = new Animation(walkDown, speed);
         Animation walkLeftAnimation = new Animation(walkLeft, speed);
@@ -171,6 +213,7 @@ public class RobotAnimationManager
         runAnimations.put(Creature.Direction.UP, runUpAnimation);
         runAnimations.put(Creature.Direction.RIGHT, runRightAnimation);
 
-        stateOff = robotRSeries[6][1];
+//        stateOff = robotRSeries[6][1];
+        stateOff = Bitmap.createBitmap(spriteSheetRobotOff, 116, 379, 802, 830);
     }
 }
