@@ -40,7 +40,8 @@ public class Plant extends Entity
     private int ageInDays;
     private boolean harvestable;
     transient private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
-    transient private Bitmap imageHarvestableGreen, imageHarvestedGreen, imageHarvestablePurple;
+    transient private Bitmap imageHarvestableGreen,
+            imageHarvestedGreen, imageHarvestedPurple;
     transient private Bitmap imageHarvestable;
     private Color color;
     private float price;
@@ -104,7 +105,7 @@ public class Plant extends Entity
         if (color == Color.GREEN) {
             imageHarvestable = imageHarvestedGreen;
         } else if (color == Color.PURPLE) {
-            imageHarvestable = imageHarvestablePurple;
+            imageHarvestable = imageHarvestedPurple;
         }
         updateImageBasedOnAgeInDays();
     }
@@ -112,33 +113,28 @@ public class Plant extends Entity
     @Override
     public void init(Game game) {
         super.init(game);
-        Bitmap spriteSheetMysteryPlant = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_mystery_plant);
+        Bitmap spriteSheetMysteryPlantGreen = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_mystery_plant);
         Bitmap spriteSheetItemsEntitiesCarryableAndBubbled = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_entities_carryable_and_bubbled);
+        Bitmap spriteSheetMysteryProductPurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_mystery_product_purple);
 
-        imageBracket01 = Bitmap.createBitmap(spriteSheetMysteryPlant, 29, 195, 162, 612);
-        imageBracket02 = Bitmap.createBitmap(spriteSheetMysteryPlant, 247, 195, 191, 612);
-        imageBracket03 = Bitmap.createBitmap(spriteSheetMysteryPlant, 511, 195, 278, 612);
-        imageBracket04 = Bitmap.createBitmap(spriteSheetMysteryPlant, 825, 195, 300, 612);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetMysteryPlantGreen, 29, 195, 162, 612);
+        imageBracket02 = Bitmap.createBitmap(spriteSheetMysteryPlantGreen, 247, 195, 191, 612);
+        imageBracket03 = Bitmap.createBitmap(spriteSheetMysteryPlantGreen, 511, 195, 278, 612);
+        imageBracket04 = Bitmap.createBitmap(spriteSheetMysteryPlantGreen, 825, 195, 300, 612);
+        imageHarvestableGreen = Bitmap.createBitmap(spriteSheetMysteryPlantGreen, 1160, 195, 310, 612);
 
-        imageHarvestableGreen = Bitmap.createBitmap(spriteSheetMysteryPlant, 1160, 195, 310, 612);
         imageHarvestedGreen = Bitmap.createBitmap(spriteSheetItemsEntitiesCarryableAndBubbled, 78, 94, 192, 237);
-        imageHarvestablePurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.purple2174);
+        imageHarvestedPurple = Bitmap.createBitmap(spriteSheetMysteryProductPurple, 283, 180, 499, 675);
 
-        switch (color) {
-            case GREEN:
-                imageHarvestable = imageHarvestableGreen;
-                price = PRICE_GREEN;
-                break;
-            case PURPLE:
-                imageHarvestable = imageHarvestablePurple;
-                price = PRICE_PURPLE;
-                break;
-            default:
-                Log.e(TAG, "color not defined.");
-                break;
-        }
+        imageHarvestable = imageHarvestableGreen;
 
         updateImageBasedOnAgeInDays();
+
+        if (color == Color.GREEN) {
+            price = PRICE_GREEN;
+        } else if (color == Color.PURPLE) {
+            price = PRICE_PURPLE;
+        }
 
         paintBorder = new Paint();
         paintBorder.setAntiAlias(true);
