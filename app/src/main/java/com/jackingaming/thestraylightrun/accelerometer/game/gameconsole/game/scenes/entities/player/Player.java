@@ -35,9 +35,9 @@ public class Player extends Creature {
         if (indexOfForm == 0) {
             form = new PoohForm();
         } else if (indexOfForm == 1) {
-            form = new MotherForm(MotherForm.DAUGHTER);
+            form = new MotherForm(MotherForm.Type.DAUGHTER);
         } else if (indexOfForm == 2) {
-            form = new MotherForm(MotherForm.MOTHER);
+            form = new MotherForm(MotherForm.Type.MOTHER);
         }
         form.init(game);
     }

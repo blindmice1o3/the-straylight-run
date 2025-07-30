@@ -31,14 +31,16 @@ public class MotherForm
         this.movementListener = movementListener;
     }
 
+    public enum Type {MOTHER, DAUGHTER;}
+
     transient private Game game;
 
     private Player player;
-    private int motherOrDaughter;
+    private Type type;
     private MotherAnimationManager motherAnimationManager;
 
-    public MotherForm(int motherOrDaughter) {
-        this.motherOrDaughter = motherOrDaughter;
+    public MotherForm(Type type) {
+        this.type = type;
         motherAnimationManager = new MotherAnimationManager();
     }
 
@@ -47,13 +49,7 @@ public class MotherForm
         this.game = game;
         player = Player.getInstance();
 
-        int yIndexForSprites = -1;
-        if (motherOrDaughter == 1) {
-            yIndexForSprites = Y_INDEX_FOR_SPRITES_MOTHER;
-        } else {
-            yIndexForSprites = Y_INDEX_FOR_SPRITES_DAUGHTER;
-        }
-        motherAnimationManager.init(game, yIndexForSprites);
+        motherAnimationManager.init(game, type);
     }
 
     @Override

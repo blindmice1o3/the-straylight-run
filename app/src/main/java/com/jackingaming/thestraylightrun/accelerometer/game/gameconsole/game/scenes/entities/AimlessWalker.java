@@ -21,7 +21,7 @@ public class AimlessWalker extends Creature {
     private static final long DEFAULT_MOVEMENT_DURATION = 1000L;
     private static final long RUNNING_MOVEMENT_DURATION = 500L;
 
-    public enum Type { CHICK, CHICKEN, CALF, COW; }
+    public enum Type {CHICK, CHICKEN, SHEEP, COW;}
 
     public enum State {OFF, WALK, RUN;}
 
@@ -31,11 +31,13 @@ public class AimlessWalker extends Creature {
     private State state;
     private Random random;
 
-    public AimlessWalker(int xSpawn, int ySpawn) {
+    public AimlessWalker(Type type, int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
 
         direction = Direction.DOWN;
-        aimlessWalkerAnimationManager = new AimlessWalkerAnimationManager(Type.CHICKEN);
+        ///////////////////////////////////////////////////////////////////////////
+        aimlessWalkerAnimationManager = new AimlessWalkerAnimationManager(type);
+        ///////////////////////////////////////////////////////////////////////////
 
         state = State.OFF;
         random = new Random();

@@ -52,24 +52,30 @@ public class AimlessWalkerAnimationManager
 
     private void initWalkAnimationsForChick(Game game) {
         ////////////////////////////////////////////////////////////////////////////////////////////
-        Bitmap spriteSheetChick = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_hm_chicken);
+        Bitmap spriteSheetChickDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_chick_down);
+        Bitmap spriteSheetChickUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_chick_up);
+        Bitmap spriteSheetChickRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_chick_right);
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        Bitmap[] walkUpChick = new Bitmap[2];
-        walkUpChick[0] = Bitmap.createBitmap(spriteSheetChick, 300, 0, 12, 16);
-        walkUpChick[1] = Bitmap.createBitmap(spriteSheetChick, 300, 30, 12, 16);
+        Bitmap[] walkUpChick = new Bitmap[3];
+        walkUpChick[0] = Bitmap.createBitmap(spriteSheetChickUp, 197, 325, 294, 376);
+        walkUpChick[1] = Bitmap.createBitmap(spriteSheetChickUp, 623, 325, 289, 377);
+        walkUpChick[2] = Bitmap.createBitmap(spriteSheetChickUp, 1048, 325, 291, 375);
 
         Bitmap[] walkDownChick = new Bitmap[2];
-        walkDownChick[0] = Bitmap.createBitmap(spriteSheetChick, 270, 0, 16, 16);
-        walkDownChick[1] = Bitmap.createBitmap(spriteSheetChick, 270, 30, 16, 16);
+        walkDownChick[0] = Bitmap.createBitmap(spriteSheetChickDown, 177, 343, 299, 356);
+        walkDownChick[1] = Bitmap.createBitmap(spriteSheetChickDown, 625, 342, 284, 358);
 
-        Bitmap[] walkLeftChick = new Bitmap[2];
-        walkLeftChick[0] = Bitmap.createBitmap(spriteSheetChick, 240, 0, 16, 16);
-        walkLeftChick[1] = Bitmap.createBitmap(spriteSheetChick, 240, 30, 16, 16);
+        Bitmap[] walkRightChick = new Bitmap[3];
+        walkRightChick[0] = Bitmap.createBitmap(spriteSheetChickRight, 152, 352, 373, 362);
+        walkRightChick[1] = Bitmap.createBitmap(spriteSheetChickRight, 596, 352, 364, 362);
+        walkRightChick[2] = Bitmap.createBitmap(spriteSheetChickRight, 1058, 352, 369, 371);
 
-        Bitmap[] walkRightChick = new Bitmap[2];
-        walkRightChick[0] = Animation.flipImageHorizontally(walkLeftChick[0]);
-        walkRightChick[1] = Animation.flipImageHorizontally(walkLeftChick[1]);
+        Bitmap[] walkLeftChick = new Bitmap[3];
+        walkLeftChick[0] = Animation.flipImageHorizontally(walkRightChick[0]);
+        walkLeftChick[1] = Animation.flipImageHorizontally(walkRightChick[1]);
+        walkLeftChick[2] = Animation.flipImageHorizontally(walkRightChick[2]);
+
 
         walkAnimations.put(Creature.Direction.UP, new Animation(walkUpChick, speed));
         walkAnimations.put(Creature.Direction.DOWN, new Animation(walkDownChick, speed));
@@ -79,33 +85,62 @@ public class AimlessWalkerAnimationManager
 
     private void initWalkAnimationsForChicken(Game game) {
         ////////////////////////////////////////////////////////////////////////////////////////////
-        Bitmap spriteSheetChicken = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.snes_hm_creatures);
+        Bitmap spriteSheetChickenDownAndUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_chicken_down_and_up);
+        Bitmap spriteSheetChickenRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_chicken_right);
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        Bitmap[] walkUpChicken = new Bitmap[3];
-        walkUpChicken[0] = Bitmap.createBitmap(spriteSheetChicken, 147, 144, 16, 16);
-        walkUpChicken[1] = Bitmap.createBitmap(spriteSheetChicken, 172, 145, 16, 16);
-        walkUpChicken[2] = Bitmap.createBitmap(spriteSheetChicken, 195, 144, 16, 16);
+        Bitmap[] walkUpChicken = new Bitmap[1];
+        walkUpChicken[0] = Bitmap.createBitmap(spriteSheetChickenDownAndUp, 565, 271, 396, 545);
 
-        Bitmap[] walkDownChicken = new Bitmap[3];
-        walkDownChicken[0] = Bitmap.createBitmap(spriteSheetChicken, 147, 207, 16, 16);
-        walkDownChicken[1] = Bitmap.createBitmap(spriteSheetChicken, 171, 208, 16, 16);
-        walkDownChicken[2] = Bitmap.createBitmap(spriteSheetChicken, 195, 207, 16, 16);
+        Bitmap[] walkDownChicken = new Bitmap[2];
+        walkDownChicken[0] = Bitmap.createBitmap(spriteSheetChickenDownAndUp, 84, 273, 395, 537);
+        walkDownChicken[1] = Bitmap.createBitmap(spriteSheetChickenDownAndUp, 1060, 270, 415, 543);
 
-        Bitmap[] walkLeftChicken = new Bitmap[3];
-        walkLeftChicken[0] = Bitmap.createBitmap(spriteSheetChicken, 147, 239, 16, 16);
-        walkLeftChicken[1] = Bitmap.createBitmap(spriteSheetChicken, 171, 240, 16, 16);
-        walkLeftChicken[2] = Bitmap.createBitmap(spriteSheetChicken, 195, 239, 16, 16);
+        Bitmap[] walkRightChicken = new Bitmap[2];
+        walkRightChicken[0] = Bitmap.createBitmap(spriteSheetChickenRight, 176, 353, 342, 398);
+        walkRightChicken[1] = Bitmap.createBitmap(spriteSheetChickenRight, 585, 353, 349, 400);
 
-        Bitmap[] walkRightChicken = new Bitmap[3];
-        walkRightChicken[0] = Bitmap.createBitmap(spriteSheetChicken, 147, 175, 16, 16);
-        walkRightChicken[1] = Bitmap.createBitmap(spriteSheetChicken, 171, 176, 16, 16);
-        walkRightChicken[2] = Bitmap.createBitmap(spriteSheetChicken, 195, 175, 16, 16);
+        Bitmap[] walkLeftChicken = new Bitmap[2];
+        walkLeftChicken[0] = Animation.flipImageHorizontally(walkRightChicken[0]);
+        walkLeftChicken[1] = Animation.flipImageHorizontally(walkRightChicken[1]);
 
         walkAnimations.put(Creature.Direction.UP, new Animation(walkUpChicken, speed));
         walkAnimations.put(Creature.Direction.DOWN, new Animation(walkDownChicken, speed));
         walkAnimations.put(Creature.Direction.LEFT, new Animation(walkLeftChicken, speed));
         walkAnimations.put(Creature.Direction.RIGHT, new Animation(walkRightChicken, speed));
+    }
+
+    private void initWalkAnimationsForCow(Game game) {
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        Bitmap spriteSheetCowDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_cow_down);
+        Bitmap spriteSheetCowUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_cow_up);
+        Bitmap spriteSheetCowRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_cow_right);
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        Bitmap[] walkUpCow = new Bitmap[3];
+        walkUpCow[0] = Bitmap.createBitmap(spriteSheetCowUp, 176, 315, 250, 438);
+        walkUpCow[1] = Bitmap.createBitmap(spriteSheetCowUp, 636, 312, 258, 441);
+        walkUpCow[2] = Bitmap.createBitmap(spriteSheetCowUp, 1100, 315, 258, 441);
+
+        Bitmap[] walkDownCow = new Bitmap[3];
+        walkDownCow[0] = Bitmap.createBitmap(spriteSheetCowDown, 128, 290, 320, 454);
+        walkDownCow[1] = Bitmap.createBitmap(spriteSheetCowDown, 603, 286, 324, 456);
+        walkDownCow[2] = Bitmap.createBitmap(spriteSheetCowDown, 1073, 288, 320, 451);
+
+        Bitmap[] walkRightCow = new Bitmap[3];
+        walkRightCow[0] = Bitmap.createBitmap(spriteSheetCowRight, 71, 374, 430, 323);
+        walkRightCow[1] = Bitmap.createBitmap(spriteSheetCowRight, 561, 375, 453, 327);
+        walkRightCow[2] = Bitmap.createBitmap(spriteSheetCowRight, 1055, 369, 404, 332);
+
+        Bitmap[] walkLeftCow = new Bitmap[3];
+        walkLeftCow[0] = Animation.flipImageHorizontally(walkRightCow[0]);
+        walkLeftCow[1] = Animation.flipImageHorizontally(walkRightCow[1]);
+        walkLeftCow[2] = Animation.flipImageHorizontally(walkRightCow[2]);
+
+        walkAnimations.put(Creature.Direction.UP, new Animation(walkUpCow, speed));
+        walkAnimations.put(Creature.Direction.DOWN, new Animation(walkDownCow, speed));
+        walkAnimations.put(Creature.Direction.LEFT, new Animation(walkLeftCow, speed));
+        walkAnimations.put(Creature.Direction.RIGHT, new Animation(walkRightCow, speed));
     }
 
     public void init(Game game) {
@@ -118,9 +153,11 @@ public class AimlessWalkerAnimationManager
             case CHICKEN:
                 initWalkAnimationsForChicken(game);
                 break;
-            case CALF:
+            case SHEEP:
+                // TODO:
                 break;
             case COW:
+                initWalkAnimationsForCow(game);
                 break;
             default:
                 break;

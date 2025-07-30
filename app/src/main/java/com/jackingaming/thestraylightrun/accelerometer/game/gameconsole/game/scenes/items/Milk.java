@@ -21,7 +21,7 @@ public class Milk extends Item {
 
     @Override
     void initImage() {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
-        image = Bitmap.createBitmap(spriteSheet, 1, 18, 16, 16);
+        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_entities_carryable_and_bubbled);
+        image = Bitmap.createBitmap(spriteSheet, 562, 426, 133, 274);
     }
 }

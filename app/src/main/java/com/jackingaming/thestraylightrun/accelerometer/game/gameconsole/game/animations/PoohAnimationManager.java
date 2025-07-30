@@ -82,7 +82,7 @@ public class PoohAnimationManager
     public void init(Game game) {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
 
-        Bitmap spriteSheetDippyUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_up);
+        Bitmap spriteSheetDippyUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_dippy_up);
         Bitmap[] dippyUp = new Bitmap[4];
         dippyUp[0] = Bitmap.createBitmap(spriteSheetDippyUp, 57, 392, 145, 285);
         dippyUp[1] = Bitmap.createBitmap(spriteSheetDippyUp, 290, 392, 145, 285);
@@ -102,7 +102,7 @@ public class PoohAnimationManager
 //        poohUp[9] = Bitmap.createBitmap(spriteSheet, 392, 1163, 27, 39);
 //        poohUp[10] = Bitmap.createBitmap(spriteSheet, 430, 1162, 26, 40);
 
-        Bitmap spriteSheetDippyDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_down);
+        Bitmap spriteSheetDippyDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_dippy_down);
         Bitmap[] dippyDown = new Bitmap[4];
         dippyDown[0] = Bitmap.createBitmap(spriteSheetDippyDown, 48, 337, 200, 340);
         dippyDown[1] = Bitmap.createBitmap(spriteSheetDippyDown, 294, 337, 200, 340);
@@ -128,7 +128,7 @@ public class PoohAnimationManager
 //        poohDown[9] = Bitmap.createBitmap(spriteSheet, 393, 1115, 26, 35);
 //        poohDown[10] = Bitmap.createBitmap(spriteSheet, 434, 1116, 26, 34);
 
-        Bitmap spriteSheetDippyRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_right);
+        Bitmap spriteSheetDippyRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_dippy_right);
         Bitmap[] dippyRight = new Bitmap[4];
         dippyRight[0] = Bitmap.createBitmap(spriteSheetDippyRight, 35, 397, 250, 190);
         dippyRight[1] = Bitmap.createBitmap(spriteSheetDippyRight, 290, 397, 227, 190);
@@ -169,7 +169,7 @@ public class PoohAnimationManager
 
         ////////////////////////////////////////////////////////////////////
 
-        Bitmap spriteSheetDippyUpRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_up_right);
+        Bitmap spriteSheetDippyUpRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_dippy_up_right);
         Bitmap[] dippyUpRight = new Bitmap[4];
         dippyUpRight[0] = Bitmap.createBitmap(spriteSheetDippyUpRight, 260, 63, 227, 257);
         dippyUpRight[1] = Bitmap.createBitmap(spriteSheetDippyUpRight, 0, 400, 260, 260);
@@ -208,7 +208,7 @@ public class PoohAnimationManager
 //        poohUpLeft[9] = Bitmap.createBitmap(spriteSheet, 393, 1492, 24, 37);
 //        poohUpLeft[10] = Bitmap.createBitmap(spriteSheet, 430, 1494, 26, 35);
 
-        Bitmap spriteSheetDippyDownRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dippy_down_right);
+        Bitmap spriteSheetDippyDownRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_dippy_down_right);
         Bitmap[] dippyDownRight = new Bitmap[4];
         dippyDownRight[0] = Bitmap.createBitmap(spriteSheetDippyDownRight, 176, 12, 324, 300);
         dippyDownRight[1] = Bitmap.createBitmap(spriteSheetDippyDownRight, 0, 365, 286, 315);

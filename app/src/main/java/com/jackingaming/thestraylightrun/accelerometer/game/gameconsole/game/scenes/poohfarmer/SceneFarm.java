@@ -1103,22 +1103,22 @@ public class SceneFarm extends Scene {
         // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker1 = new AimlessWalker(
+        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker2 = new AimlessWalker(
+        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
                 ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker3 = new AimlessWalker(
+        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker4 = new AimlessWalker(
+        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.COW,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
-        aimlessWalker5 = new AimlessWalker(
+        aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
-        aimlessWalker6 = new AimlessWalker(
+        aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.CHICK,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
         entities.add(robot);

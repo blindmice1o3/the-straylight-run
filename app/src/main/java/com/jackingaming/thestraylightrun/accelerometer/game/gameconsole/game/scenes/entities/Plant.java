@@ -40,7 +40,7 @@ public class Plant extends Entity
     private int ageInDays;
     private boolean harvestable;
     transient private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
-    transient private Bitmap imageHarvestableGreen, imageHarvestablePurple;
+    transient private Bitmap imageHarvestableGreen, imageHarvestedGreen, imageHarvestablePurple;
     transient private Bitmap imageHarvestable;
     private Color color;
     private float price;
@@ -98,15 +98,30 @@ public class Plant extends Entity
     }
 
     @Override
+    public void becomeCarried() {
+        super.becomeCarried();
+
+        if (color == Color.GREEN) {
+            imageHarvestable = imageHarvestedGreen;
+        } else if (color == Color.PURPLE) {
+            imageHarvestable = imageHarvestablePurple;
+        }
+        updateImageBasedOnAgeInDays();
+    }
+
+    @Override
     public void init(Game game) {
         super.init(game);
+        Bitmap spriteSheetMysteryPlant = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_mystery_plant);
+        Bitmap spriteSheetItemsEntitiesCarryableAndBubbled = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_entities_carryable_and_bubbled);
 
-        imageBracket01 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green249);
-        imageBracket02 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green256);
-        imageBracket03 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green266);
-        imageBracket04 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green280);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetMysteryPlant, 29, 195, 162, 612);
+        imageBracket02 = Bitmap.createBitmap(spriteSheetMysteryPlant, 247, 195, 191, 612);
+        imageBracket03 = Bitmap.createBitmap(spriteSheetMysteryPlant, 511, 195, 278, 612);
+        imageBracket04 = Bitmap.createBitmap(spriteSheetMysteryPlant, 825, 195, 300, 612);
 
-        imageHarvestableGreen = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.green2174);
+        imageHarvestableGreen = Bitmap.createBitmap(spriteSheetMysteryPlant, 1160, 195, 310, 612);
+        imageHarvestedGreen = Bitmap.createBitmap(spriteSheetItemsEntitiesCarryableAndBubbled, 78, 94, 192, 237);
         imageHarvestablePurple = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.purple2174);
 
         switch (color) {

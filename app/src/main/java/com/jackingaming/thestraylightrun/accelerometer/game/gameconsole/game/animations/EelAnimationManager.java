@@ -103,7 +103,7 @@ public class EelAnimationManager
 
     public void init(Game game) {
         if (framesPatrolLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_right);
             framesPatrolLeft = new Bitmap[3];
             framesPatrolLeft[0] = Animation.flipImageHorizontally(
                     Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218)
@@ -118,7 +118,7 @@ public class EelAnimationManager
         animationPatrolLeft = new Animation(framesPatrolLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolRight == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_right);
             framesPatrolRight = new Bitmap[3];
             framesPatrolRight[0] = Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218);
             framesPatrolRight[1] = Bitmap.createBitmap(spriteSheet, 371, 448, 311, 208);
@@ -127,14 +127,14 @@ public class EelAnimationManager
         animationPatrolRight = new Animation(framesPatrolRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolRightTurnToLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_right);
             framesPatrolRightTurnToLeft = new Bitmap[1];
             framesPatrolRightTurnToLeft[0] = Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218);
         }
         animationPatrolRightTurnToLeft = new Animation(framesPatrolRightTurnToLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesPatrolLeftTurnToRight == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_right);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_right);
             framesPatrolLeftTurnToRight = new Bitmap[1];
             framesPatrolLeftTurnToRight[0] = Animation.flipImageHorizontally(
                     Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218)
@@ -143,7 +143,7 @@ public class EelAnimationManager
         animationPatrolLeftTurnToRight = new Animation(framesPatrolLeftTurnToRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesAttackLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_attack);
             framesAttackLeft = new Bitmap[1];
             framesAttackLeft[0] = Animation.flipImageHorizontally(
                     Bitmap.createBitmap(spriteSheet, 0, 349, 474, 366)
@@ -152,21 +152,21 @@ public class EelAnimationManager
         animationAttackLeft = new Animation(framesAttackLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesAttackRight == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_attack);
             framesAttackRight = new Bitmap[1];
             framesAttackRight[0] = Bitmap.createBitmap(spriteSheet, 0, 349, 474, 366);
         }
         animationAttackRight = new Animation(framesAttackRight, ANIMATION_SPEED_DEFAULT);
 
         if (framesHurtLeft == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_attack);
             framesHurtLeft = new Bitmap[1];
             framesHurtLeft[0] = Bitmap.createBitmap(spriteSheet, 1066, 303, 365, 434);
         }
         animationHurtLeft = new Animation(framesHurtLeft, ANIMATION_SPEED_DEFAULT);
 
         if (framesHurtRight == null) {
-            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.caterpillar_attack);
+            Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_attack);
             framesHurtRight = new Bitmap[1];
             framesHurtRight[0] = Bitmap.createBitmap(spriteSheet, 1066, 303, 365, 434);
         }
