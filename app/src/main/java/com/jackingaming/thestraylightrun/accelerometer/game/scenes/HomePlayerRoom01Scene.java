@@ -65,6 +65,12 @@ public class HomePlayerRoom01Scene extends Scene {
 
     private List<Entity> entities;
 
+    // TODO: change to arrays.
+    private List<UniqueSolidTile> tilesTelevision = new ArrayList<>();
+    private List<UniqueSolidTile> tilesTables = new ArrayList<>();
+    private List<UniqueSolidTile> tilesGameConsole = new ArrayList<>();
+    private List<UniqueSolidTile> tilesComputer = new ArrayList<>();
+    private List<UniqueSolidTile> tilesBed = new ArrayList<>();
     private UniqueSolidTile tileTelevision, tileComputer, tileGameConsole,
             tileTableLeft, tileTableRight, tileBedTop, tileBedBottom;
 
@@ -109,23 +115,28 @@ public class HomePlayerRoom01Scene extends Scene {
             for (Tile column : row) {
                 if (column instanceof UniqueSolidTile) {
                     if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TELEVISION)) {
-                        tileTelevision = (UniqueSolidTile) column;
+                        tilesTelevision.add((UniqueSolidTile) column);
+//                        tileTelevision = (UniqueSolidTile) column;
                     } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.COMPUTER)) {
-                        tileComputer = (UniqueSolidTile) column;
+                        tilesComputer.add((UniqueSolidTile) column);
+//                        tileComputer = (UniqueSolidTile) column;
                     } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.GAME_CONSOLE)) {
-                        tileGameConsole = (UniqueSolidTile) column;
+                        tilesGameConsole.add((UniqueSolidTile) column);
+//                        tileGameConsole = (UniqueSolidTile) column;
                     } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TABLE)) {
-                        if (tileTableLeft == null) {
-                            tileTableLeft = (UniqueSolidTile) column;
-                        } else {
-                            tileTableRight = (UniqueSolidTile) column;
-                        }
+                        tilesTables.add((UniqueSolidTile) column);
+//                        if (tileTableLeft == null) {
+//                            tileTableLeft = (UniqueSolidTile) column;
+//                        } else {
+//                            tileTableRight = (UniqueSolidTile) column;
+//                        }
                     } else if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.BED)) {
-                        if (tileBedTop == null) {
-                            tileBedTop = (UniqueSolidTile) column;
-                        } else {
-                            tileBedBottom = (UniqueSolidTile) column;
-                        }
+                        tilesBed.add((UniqueSolidTile) column);
+//                        if (tileBedTop == null) {
+//                            tileBedTop = (UniqueSolidTile) column;
+//                        } else {
+//                            tileBedBottom = (UniqueSolidTile) column;
+//                        }
                     }
                 }
             }
@@ -389,18 +400,28 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     void highlightTelevisionTile() {
-        if (!tileTelevision.isAnimationRunning()) {
-            tileTelevision.startCirleAnimation();
+        if (!tilesTelevision.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileTelevision : tilesTelevision) {
+                tileTelevision.startCirleAnimation();
+            }
         }
+//        if (!tileTelevision.isAnimationRunning()) {
+//            tileTelevision.startCirleAnimation();
+//        }
     }
 
     void highlightTableTile() {
-        if (!tileTableLeft.isAnimationRunning()) {
-            tileTableLeft.startCirleAnimation();
+        if (!tilesTables.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileTable : tilesTables) {
+                tileTable.startCirleAnimation();
+            }
         }
-        if (!tileTableRight.isAnimationRunning()) {
-            tileTableRight.startCirleAnimation();
-        }
+//        if (!tileTableLeft.isAnimationRunning()) {
+//            tileTableLeft.startCirleAnimation();
+//        }
+//        if (!tileTableRight.isAnimationRunning()) {
+//            tileTableRight.startCirleAnimation();
+//        }
     }
 
     void highlightGroupChatDrawer() {
@@ -417,15 +438,25 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     void highlightGameConsoleTile() {
-        if (!tileGameConsole.isAnimationRunning()) {
-            tileGameConsole.startCirleAnimation();
+        if (!tilesGameConsole.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileGameConsole : tilesGameConsole) {
+                tileGameConsole.startCirleAnimation();
+            }
         }
+//        if (!tileGameConsole.isAnimationRunning()) {
+//            tileGameConsole.startCirleAnimation();
+//        }
     }
 
     void highlightComputerTile() {
-        if (!tileComputer.isAnimationRunning()) {
-            tileComputer.startCirleAnimation();
+        if (!tilesComputer.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileComputer : tilesComputer) {
+                tileComputer.startCirleAnimation();
+            }
         }
+//        if (!tileComputer.isAnimationRunning()) {
+//            tileComputer.startCirleAnimation();
+//        }
     }
 
     void highlightJournalDrawer() {
@@ -442,27 +473,42 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     void highlightBedTile() {
-        if (!tileBedTop.isAnimationRunning()) {
-            tileBedTop.startCirleAnimation();
+        if (!tilesBed.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileBed : tilesBed) {
+                tileBed.startCirleAnimation();
+            }
         }
-        if (!tileBedBottom.isAnimationRunning()) {
-            tileBedBottom.startCirleAnimation();
-        }
+//        if (!tileBedTop.isAnimationRunning()) {
+//            tileBedTop.startCirleAnimation();
+//        }
+//        if (!tileBedBottom.isAnimationRunning()) {
+//            tileBedBottom.startCirleAnimation();
+//        }
     }
 
     void unhighlightTelevisionTile() {
-        if (tileTelevision.isAnimationRunning()) {
-            tileTelevision.stopCirleAnimation();
+        if (tilesTelevision.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileTelevision : tilesTelevision) {
+                tileTelevision.stopCirleAnimation();
+            }
         }
+//        if (tileTelevision.isAnimationRunning()) {
+//            tileTelevision.stopCirleAnimation();
+//        }
     }
 
     void unhighlightTableTile() {
-        if (tileTableLeft.isAnimationRunning()) {
-            tileTableLeft.stopCirleAnimation();
+        if (tilesTables.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileTable : tilesTables) {
+                tileTable.stopCirleAnimation();
+            }
         }
-        if (tileTableRight.isAnimationRunning()) {
-            tileTableRight.stopCirleAnimation();
-        }
+//        if (tileTableLeft.isAnimationRunning()) {
+//            tileTableLeft.stopCirleAnimation();
+//        }
+//        if (tileTableRight.isAnimationRunning()) {
+//            tileTableRight.stopCirleAnimation();
+//        }
     }
 
     void unhighlightGroupChatDrawer() {
@@ -476,15 +522,25 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     void unhighlightGameConsoleTile() {
-        if (tileGameConsole.isAnimationRunning()) {
-            tileGameConsole.stopCirleAnimation();
+        if (tilesGameConsole.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileGameConsole : tilesGameConsole) {
+                tileGameConsole.stopCirleAnimation();
+            }
         }
+//        if (tileGameConsole.isAnimationRunning()) {
+//            tileGameConsole.stopCirleAnimation();
+//        }
     }
 
     void unhighlightComputerTile() {
-        if (tileComputer.isAnimationRunning()) {
-            tileComputer.stopCirleAnimation();
+        if (tilesComputer.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileComputer : tilesComputer) {
+                tileComputer.stopCirleAnimation();
+            }
         }
+//        if (tileComputer.isAnimationRunning()) {
+//            tileComputer.stopCirleAnimation();
+//        }
     }
 
     void unhighlightJournalDrawer() {
@@ -498,12 +554,17 @@ public class HomePlayerRoom01Scene extends Scene {
     }
 
     void unhighlightBedTile() {
-        if (tileBedTop.isAnimationRunning()) {
-            tileBedTop.stopCirleAnimation();
+        if (tilesBed.get(0).isAnimationRunning()) {
+            for (UniqueSolidTile tileBed : tilesBed) {
+                tileBed.stopCirleAnimation();
+            }
         }
-        if (tileBedBottom.isAnimationRunning()) {
-            tileBedBottom.stopCirleAnimation();
-        }
+//        if (tileBedTop.isAnimationRunning()) {
+//            tileBedTop.stopCirleAnimation();
+//        }
+//        if (tileBedBottom.isAnimationRunning()) {
+//            tileBedBottom.stopCirleAnimation();
+//        }
     }
 
     private boolean isGroupChatDrawerClosed = true;
