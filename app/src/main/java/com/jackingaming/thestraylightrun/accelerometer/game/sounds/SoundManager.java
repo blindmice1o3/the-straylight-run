@@ -22,7 +22,8 @@ public class SoundManager {
             loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
 
     public SoundManager(Context context) {
-        mediaPlayer = MediaPlayer.create(context, R.raw.corporate_ukulele);
+//        mediaPlayer = MediaPlayer.create(context, R.raw.corporate_ukulele);
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_breathe_of_dippy);
         mediaPlayer.setLooping(true);
 
         soundPool = new SoundPool(

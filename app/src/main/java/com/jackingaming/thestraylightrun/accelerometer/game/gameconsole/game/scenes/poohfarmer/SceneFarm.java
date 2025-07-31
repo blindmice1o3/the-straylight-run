@@ -29,6 +29,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemParts;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
@@ -59,7 +60,7 @@ public class SceneFarm extends Scene {
     private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
-    private static final int Y_INDEX_SPAWN_ROBOT = 5;
+    private static final int Y_INDEX_SPAWN_ROBOT = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
     private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;
@@ -1048,22 +1049,23 @@ public class SceneFarm extends Scene {
     public static Bitmap cropImageShippingBinTile(Resources resources, ShippingBinTile.Quadrant quadrant) {
         Log.d(TAG, "SceneFarm.cropImageShippingBinTile(Resources, ShippingBinTile.Quadrant)");
 
-        Bitmap customTilesSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.custom_hm_tile_sprites_sheet);
+        Bitmap customTilesSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.shipping_bin128x128);
+//        Bitmap customTilesSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.custom_hm_tile_sprites_sheet);
         Bitmap shippingBinTile = null;
 
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         switch (quadrant) {
             case TOP_LEFT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 112, 16, 16);
+                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 0, 64, 64);
                 break;
             case TOP_RIGHT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 16, 112, 16, 16);
+                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 64, 0, 64, 64);
                 break;
             case BOTTOM_LEFT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 128, 16, 16);
+                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 64, 64, 64);
                 break;
             case BOTTOM_RIGHT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 16, 128, 16, 16);
+                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 64, 64, 64, 64);
                 break;
         }
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1183,7 +1185,8 @@ public class SceneFarm extends Scene {
     }
 
     private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4, growSystemParts5, growSystemParts6;
-    private Milk milkToBeCarriedByAimlessWalker;
+    private Milk milkOnGround;
+    private Egg eggOnGround;
 
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
@@ -1194,12 +1197,18 @@ public class SceneFarm extends Scene {
         growSystemParts4 = new GrowSystemParts(4);
         growSystemParts5 = new GrowSystemParts(5);
         growSystemParts6 = new GrowSystemParts(6);
-        milkToBeCarriedByAimlessWalker = new Milk();
-        milkToBeCarriedByAimlessWalker.setPosition(
+        milkOnGround = new Milk();
+        milkOnGround.setPosition(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT)
         );
-        items.add(milkToBeCarriedByAimlessWalker);
+        eggOnGround = new Egg();
+        eggOnGround.setPosition(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT)
+        );
+        items.add(eggOnGround);
+        items.add(milkOnGround);
         items.add(growSystemParts1);
         items.add(growSystemParts2);
         items.add(growSystemParts3);
