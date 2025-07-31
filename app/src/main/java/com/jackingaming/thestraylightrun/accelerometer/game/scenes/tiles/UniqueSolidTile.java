@@ -111,6 +111,13 @@ public class UniqueSolidTile extends SolidTile {
     }
 
     public boolean isAnimationRunning() {
+        if (animatorCircleRight == null ||
+                animatorCircleDown == null ||
+                animatorCircleLeft == null ||
+                animatorCircleUp == null) {
+            return false;
+        }
+
         return animatorCircleRight.isRunning() ||
                 animatorCircleDown.isRunning() ||
                 animatorCircleLeft.isRunning() ||

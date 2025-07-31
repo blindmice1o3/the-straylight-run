@@ -23,7 +23,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Enti
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TransferPointTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
@@ -389,6 +388,21 @@ public class HomePlayerRoom01Scene extends Scene {
         };
     }
 
+    void highlightTelevisionTile() {
+        if (!tileTelevision.isAnimationRunning()) {
+            tileTelevision.startCirleAnimation();
+        }
+    }
+
+    void highlightTableTile() {
+        if (!tileTableLeft.isAnimationRunning()) {
+            tileTableLeft.startCirleAnimation();
+        }
+        if (!tileTableRight.isAnimationRunning()) {
+            tileTableRight.startCirleAnimation();
+        }
+    }
+
     void highlightGroupChatDrawer() {
         if (isGroupChatDrawerClosed) {
             Handler handler = new Handler(Looper.getMainLooper());
@@ -402,9 +416,15 @@ public class HomePlayerRoom01Scene extends Scene {
         }
     }
 
-    void highlightTelevisionTile() {
-        if (!tileTelevision.isAnimationRunning()) {
-            tileTelevision.startCirleAnimation();
+    void highlightGameConsoleTile() {
+        if (!tileGameConsole.isAnimationRunning()) {
+            tileGameConsole.startCirleAnimation();
+        }
+    }
+
+    void highlightComputerTile() {
+        if (!tileComputer.isAnimationRunning()) {
+            tileComputer.startCirleAnimation();
         }
     }
 
@@ -421,6 +441,30 @@ public class HomePlayerRoom01Scene extends Scene {
         }
     }
 
+    void highlightBedTile() {
+        if (!tileBedTop.isAnimationRunning()) {
+            tileBedTop.startCirleAnimation();
+        }
+        if (!tileBedBottom.isAnimationRunning()) {
+            tileBedBottom.startCirleAnimation();
+        }
+    }
+
+    void unhighlightTelevisionTile() {
+        if (tileTelevision.isAnimationRunning()) {
+            tileTelevision.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightTableTile() {
+        if (tileTableLeft.isAnimationRunning()) {
+            tileTableLeft.stopCirleAnimation();
+        }
+        if (tileTableRight.isAnimationRunning()) {
+            tileTableRight.stopCirleAnimation();
+        }
+    }
+
     void unhighlightGroupChatDrawer() {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -431,9 +475,15 @@ public class HomePlayerRoom01Scene extends Scene {
         });
     }
 
-    void unhighlightTelevisionTile() {
-        if (tileTelevision.isAnimationRunning()) {
-            tileTelevision.stopCirleAnimation();
+    void unhighlightGameConsoleTile() {
+        if (tileGameConsole.isAnimationRunning()) {
+            tileGameConsole.stopCirleAnimation();
+        }
+    }
+
+    void unhighlightComputerTile() {
+        if (tileComputer.isAnimationRunning()) {
+            tileComputer.stopCirleAnimation();
         }
     }
 
@@ -447,6 +497,15 @@ public class HomePlayerRoom01Scene extends Scene {
         });
     }
 
+    void unhighlightBedTile() {
+        if (tileBedTop.isAnimationRunning()) {
+            tileBedTop.stopCirleAnimation();
+        }
+        if (tileBedBottom.isAnimationRunning()) {
+            tileBedBottom.stopCirleAnimation();
+        }
+    }
+
     private boolean isGroupChatDrawerClosed = true;
     private boolean isJournalDrawerClosed = true;
 
@@ -456,22 +515,48 @@ public class HomePlayerRoom01Scene extends Scene {
             return;
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
-            highlightGroupChatDrawer();
-        } else {
-            unhighlightGroupChatDrawer();
-        }
-
+        // TODO: hyperinefficient approach,
+        //  but fast way to see if it works (must re-do [later]).
         if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
             highlightTelevisionTile();
         } else {
             unhighlightTelevisionTile();
         }
 
+        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES) {
+            highlightTableTile();
+        } else {
+            unhighlightTableTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
+            highlightGroupChatDrawer();
+        } else {
+            unhighlightGroupChatDrawer();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
+            highlightGameConsoleTile();
+        } else {
+            unhighlightGameConsoleTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
+            highlightComputerTile();
+        } else {
+            unhighlightComputerTile();
+        }
+
         if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
             highlightJournalDrawer();
         } else {
             unhighlightJournalDrawer();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
+            highlightBedTile();
+        } else {
+            unhighlightBedTile();
         }
 
         // INPUTS
