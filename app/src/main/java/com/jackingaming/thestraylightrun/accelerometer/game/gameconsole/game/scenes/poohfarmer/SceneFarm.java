@@ -32,6 +32,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemParts;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -459,13 +460,47 @@ public class SceneFarm extends Scene {
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
 
+        // ITEM CHECK
         if (itemCurrentlyFacing != null) {
             Log.e(TAG, "itemCurrentlyFacing != null");
-            player.respondToItemCollisionViaClick(
-                    player.getItemCurrentlyFacing()
-            );
+
+            // There an item in front of player.
+            if (itemCurrentlyFacing instanceof Fodder) {
+                if (!player.hasCarryable()) {
+                    // pick up itemCurrentlyFacing
+                    player.pickUp(itemCurrentlyFacing);
+                } else {
+                    Log.e(TAG, "player.hasCarryable()");
+                }
+            }
+            // The item in front of player will receive
+            // default response (putting item into backpack).
+            else {
+                Log.e(TAG, "itemCurrentlyFacing NOT instanceof Fodder");
+
+                // put itemCurrentlyFacing into backpack
+                player.respondToItemCollisionViaClick(
+                        itemCurrentlyFacing
+                );
+            }
+
+            return;
+        }
+        // itemCurrentlyFacing == null
+        else {
+            if (player.hasCarryable()) {
+                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
+                if (entityCurrentlyFacing == null &&
+                        tileCurrentlyFacing.isWalkable()) {
+                    player.placeDown();
+                }
+
+                return;
+            }
         }
 
+        // ENTITY CHECK (no item in front of player)
         if (player.hasCarryable() && entityCurrentlyFacing == null) {
             Log.e(TAG, "has carryable and entityFacing is null");
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
@@ -518,16 +553,6 @@ public class SceneFarm extends Scene {
                 Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
                 entityCommand.setEntity(entityCurrentlyFacing);
                 entityCommand.execute();
-            }
-        }
-        // !!! note: this should be last, other-wise there are side-effects !!!
-        else if (!player.hasCarryable() &&
-                entityCurrentlyFacing == null) {
-            Log.e(TAG, "no carryable and entityFacing is null");
-            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-            if (tileCurrentlyFacing instanceof ShippingBinTile) {
-                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
-                ShippingBinTile.sellStash();
             }
         }
     }
@@ -1149,6 +1174,7 @@ public class SceneFarm extends Scene {
     private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4, growSystemParts5, growSystemParts6;
     private Milk milkOnGround;
     private Egg eggOnGround;
+    private Fodder fodderOnGround;
 
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
@@ -1169,8 +1195,14 @@ public class SceneFarm extends Scene {
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT)
         );
+        fodderOnGround = new Fodder();
+        fodderOnGround.setPosition(
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT)
+        );
         items.add(eggOnGround);
         items.add(milkOnGround);
+        items.add(fodderOnGround);
         items.add(growSystemParts1);
         items.add(growSystemParts2);
         items.add(growSystemParts3);

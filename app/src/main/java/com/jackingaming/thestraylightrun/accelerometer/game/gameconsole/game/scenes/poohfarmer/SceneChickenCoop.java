@@ -12,13 +12,20 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Ass
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.util.ArrayList;
@@ -95,7 +102,49 @@ public class SceneChickenCoop extends Scene {
 
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
 
+        // ITEM CHECK
+        if (itemCurrentlyFacing != null) {
+            Log.e(TAG, "itemCurrentlyFacing != null");
+
+            // There an item in front of player.
+            if (itemCurrentlyFacing instanceof Fodder) {
+                if (!player.hasCarryable()) {
+                    // pick up itemCurrentlyFacing
+                    player.pickUp(itemCurrentlyFacing);
+                } else {
+                    Log.e(TAG, "player.hasCarryable()");
+                }
+            }
+            // The item in front of player will receive
+            // default response (putting item into backpack).
+            else {
+                Log.e(TAG, "itemCurrentlyFacing NOT instanceof Fodder");
+
+                // put itemCurrentlyFacing into backpack
+                player.respondToItemCollisionViaClick(
+                        itemCurrentlyFacing
+                );
+            }
+
+            return;
+        }
+        // itemCurrentlyFacing == null
+        else {
+            if (player.hasCarryable()) {
+                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
+                if (entityCurrentlyFacing == null &&
+                        tileCurrentlyFacing.isWalkable()) {
+                    player.placeDown();
+                }
+
+                return;
+            }
+        }
+
+        // ENTITY CHECK (no item in front of player)
         if (player.hasCarryable() && entityCurrentlyFacing == null) {
             Log.e(TAG, "has carryable and entityFacing is null");
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
@@ -115,10 +164,40 @@ public class SceneChickenCoop extends Scene {
                 player.placeDown();
             }
         } else if (entityCurrentlyFacing != null &&
+                entityCurrentlyFacing instanceof Plant &&
+                ((Plant) entityCurrentlyFacing).isHarvestable()) {
+            player.pickUp(entityCurrentlyFacing);
+
+            Tile tileFacing = player.checkTileCurrentlyFacing();
+            if (tileFacing instanceof GrowableTile) {
+                ((GrowableTile) tileFacing).changeToUntilled();
+            } else {
+                Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+            }
+        } else if (entityCurrentlyFacing != null &&
                 entityCurrentlyFacing instanceof AimlessWalker) {
             ((AimlessWalker) entityCurrentlyFacing).changeToOff();
 
             player.pickUp(entityCurrentlyFacing);
+        }
+        // check item occupying StatsDisplayerFragment's button holder.
+        else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+            Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+            tileCommand.setTile(tileCurrentlyFacing);
+            tileCommand.execute();
+        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+            if (entityCurrentlyFacing != null) {
+                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                entityCommand.setEntity(entityCurrentlyFacing);
+                entityCommand.execute();
+            }
         }
     }
 
