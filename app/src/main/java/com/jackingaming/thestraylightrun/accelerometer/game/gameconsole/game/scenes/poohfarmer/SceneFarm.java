@@ -16,6 +16,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.Dia
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue00;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue01;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.farm_scene_ai.AIDialogue02;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
@@ -673,8 +674,7 @@ public class SceneFarm extends Scene {
 
                 if (tile instanceof ShippingBinTile) {
                     if (x == xIndexShippingBinQ1 && y == yIndexShippingBinQ1) {
-                        Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
-                                ShippingBinTile.Quadrant.TOP_LEFT);
+                        Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
                         tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
                         canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -682,8 +682,7 @@ public class SceneFarm extends Scene {
 
                         tileSprite = tileSpriteAndShippingBinQ1;
                     } else if (x == xIndexShippingBinQ2 && y == yIndexShippingBinQ2) {
-                        Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
-                                ShippingBinTile.Quadrant.TOP_RIGHT);
+                        Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
                         tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
                         canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -691,8 +690,7 @@ public class SceneFarm extends Scene {
 
                         tileSprite = tileSpriteAndShippingBinQ2;
                     } else if (x == xIndexShippingBinQ3 && y == yIndexShippingBinQ3) {
-                        Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
-                                ShippingBinTile.Quadrant.BOTTOM_LEFT);
+                        Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
                         tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
                         canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -700,8 +698,7 @@ public class SceneFarm extends Scene {
 
                         tileSprite = tileSpriteAndShippingBinQ3;
                     } else if (x == xIndexShippingBinQ4 && y == yIndexShippingBinQ4) {
-                        Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
-                                ShippingBinTile.Quadrant.BOTTOM_RIGHT);
+                        Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
                         tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
                         canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -763,8 +760,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ1 = x;
                     yIndexShippingBinQ1 = y;
 
-                    Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.TOP_LEFT);
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
                     tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -775,8 +771,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ2 = x;
                     yIndexShippingBinQ2 = y;
 
-                    Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.TOP_RIGHT);
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
                     tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -787,8 +782,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ3 = x;
                     yIndexShippingBinQ3 = y;
 
-                    Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.BOTTOM_LEFT);
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
                     tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -799,8 +793,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ4 = x;
                     yIndexShippingBinQ4 = y;
 
-                    Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.BOTTOM_RIGHT);
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
                     tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -899,13 +892,16 @@ public class SceneFarm extends Scene {
                 int red = Color.red(pixel);
                 int green = Color.green(pixel);
                 int blue = Color.blue(pixel);
+                //(SOLID tile)
                 if (pixel == Color.BLACK) {
                     Tile tile = new Tile("black");
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new GenericSolidTile(gameCartridge, x, y);
-                } else if (pixel == Color.WHITE) {
+                }
+                //GrowableTile
+                else if (pixel == Color.WHITE) {
 //                    Tile tile = new Tile("white");
                     Tile tile = new GrowableTile(GrowableTile.TAG, new GrowableTile.EntityListener() {
                         @Override
@@ -917,25 +913,28 @@ public class SceneFarm extends Scene {
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new GrowableGroundTile(gameCartridge, x, y);
                     //tiles[y][x] = new GenericWalkableTile(gameCartridge, x, y);
-                } else if (pixel == Color.RED) {
+                }
+                //(SignPostTile)
+                else if (pixel == Color.RED) {
                     Tile tile = new Tile("red");
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new SignPostTile(gameCartridge, x, y);
-                } else if (pixel == Color.GREEN) {
+                }
+                //(TransferPointTile)
+                else if (pixel == Color.GREEN) {
                     Tile tile = new Tile("green");
                     tile.init(game, x, y, tileSprite);
                     tiles[y][x] = tile;
 //                    tiles[y][x] = new TransferPointTile(gameCartridge, x, y);
                 }
-                //SHIPPING_BIN_TILE
+                //(SHIPPING_BIN_TILE)
                 else if ((red == 255) && (green == 255) && (blue == 1)) {
                     xIndexShippingBinQ1 = x;
                     yIndexShippingBinQ1 = y;
 
-                    Bitmap shippingBinQ1 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.TOP_LEFT);
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
                     tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -951,8 +950,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ2 = x;
                     yIndexShippingBinQ2 = y;
 
-                    Bitmap shippingBinQ2 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.TOP_RIGHT);
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
                     tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -968,8 +966,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ3 = x;
                     yIndexShippingBinQ3 = y;
 
-                    Bitmap shippingBinQ3 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.BOTTOM_LEFT);
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
                     tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -985,8 +982,7 @@ public class SceneFarm extends Scene {
                     xIndexShippingBinQ4 = x;
                     yIndexShippingBinQ4 = y;
 
-                    Bitmap shippingBinQ4 = cropImageShippingBinTile(game.getContext().getResources(),
-                            ShippingBinTile.Quadrant.BOTTOM_RIGHT);
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
                     tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
@@ -1046,40 +1042,6 @@ public class SceneFarm extends Scene {
         return croppedImageFarm;
     }
 
-    public static Bitmap cropImageShippingBinTile(Resources resources, ShippingBinTile.Quadrant quadrant) {
-        Log.d(TAG, "SceneFarm.cropImageShippingBinTile(Resources, ShippingBinTile.Quadrant)");
-
-        Bitmap customTilesSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.shipping_bin128x128);
-//        Bitmap customTilesSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.custom_hm_tile_sprites_sheet);
-        Bitmap shippingBinTile = null;
-
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        switch (quadrant) {
-            case TOP_LEFT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 0, 64, 64);
-                break;
-            case TOP_RIGHT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 64, 0, 64, 64);
-                break;
-            case BOTTOM_LEFT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 0, 64, 64, 64);
-                break;
-            case BOTTOM_RIGHT:
-                shippingBinTile = Bitmap.createBitmap(customTilesSpriteSheet, 64, 64, 64, 64);
-                break;
-        }
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        Log.d(TAG, "shippingBinTile: " + shippingBinTile.getWidth() + ", " + shippingBinTile.getHeight());
-
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        //May be redundant because local variable.
-        customTilesSpriteSheet = null;
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        Log.d(TAG, "SceneFarm.cropImageShippingBinTile(Resources, ShippingBinTile.Quadrant)... customTilesSpriteSheet is null? " + customTilesSpriteSheet);
-
-        return shippingBinTile;
-    }
-
     private Map<String, Rect> createTransferPointsForFarm() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
         transferPoints.put("HOUSE_LEVEL_01", new Rect((6 * Tile.WIDTH), (4 * Tile.HEIGHT),
@@ -1114,13 +1076,13 @@ public class SceneFarm extends Scene {
         aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.COW,
+        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
-        aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+        aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
-        aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.CHICK,
+        aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
         entities.add(robot);

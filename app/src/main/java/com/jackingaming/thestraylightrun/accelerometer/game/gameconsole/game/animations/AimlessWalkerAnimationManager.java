@@ -110,6 +110,39 @@ public class AimlessWalkerAnimationManager
         walkAnimations.put(Creature.Direction.RIGHT, new Animation(walkRightChicken, speed));
     }
 
+    private void initWalkAnimationsForSheep(Game game) {
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        Bitmap spriteSheetSheepDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_sheep_down_adjusted_legs);
+        Bitmap spriteSheetSheepUp = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_sheep_up);
+        Bitmap spriteSheetSheepRight = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_sheep_right);
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        Bitmap[] walkUpSheep = new Bitmap[3];
+        walkUpSheep[0] = Bitmap.createBitmap(spriteSheetSheepUp, 144, 262, 379, 503);
+        walkUpSheep[1] = Bitmap.createBitmap(spriteSheetSheepUp, 570, 262, 388, 503);
+        walkUpSheep[2] = Bitmap.createBitmap(spriteSheetSheepUp, 1006, 262, 374, 503);
+
+        Bitmap[] walkDownSheep = new Bitmap[3];
+        walkDownSheep[0] = Bitmap.createBitmap(spriteSheetSheepDown, 143, 284, 376, 454);
+        walkDownSheep[1] = Bitmap.createBitmap(spriteSheetSheepDown, 587, 284, 376, 454);
+        walkDownSheep[2] = Bitmap.createBitmap(spriteSheetSheepDown, 1005, 284, 386, 454);
+
+        Bitmap[] walkRightSheep = new Bitmap[3];
+        walkRightSheep[0] = Bitmap.createBitmap(spriteSheetSheepRight, 47, 342, 502, 349);
+        walkRightSheep[1] = Bitmap.createBitmap(spriteSheetSheepRight, 558, 342, 462, 349);
+        walkRightSheep[2] = Bitmap.createBitmap(spriteSheetSheepRight, 1045, 342, 447, 349);
+
+        Bitmap[] walkLeftSheep = new Bitmap[3];
+        walkLeftSheep[0] = Animation.flipImageHorizontally(walkRightSheep[0]);
+        walkLeftSheep[1] = Animation.flipImageHorizontally(walkRightSheep[1]);
+        walkLeftSheep[2] = Animation.flipImageHorizontally(walkRightSheep[2]);
+
+        walkAnimations.put(Creature.Direction.UP, new Animation(walkUpSheep, speed));
+        walkAnimations.put(Creature.Direction.DOWN, new Animation(walkDownSheep, speed));
+        walkAnimations.put(Creature.Direction.LEFT, new Animation(walkLeftSheep, speed));
+        walkAnimations.put(Creature.Direction.RIGHT, new Animation(walkRightSheep, speed));
+    }
+
     private void initWalkAnimationsForCow(Game game) {
         ////////////////////////////////////////////////////////////////////////////////////////////
         Bitmap spriteSheetCowDown = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_cow_down);
@@ -154,7 +187,7 @@ public class AimlessWalkerAnimationManager
                 initWalkAnimationsForChicken(game);
                 break;
             case SHEEP:
-                // TODO:
+                initWalkAnimationsForSheep(game);
                 break;
             case COW:
                 initWalkAnimationsForCow(game);

@@ -3,10 +3,12 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
@@ -32,12 +34,21 @@ public class SceneCowBarn extends Scene {
 
     private static SceneCowBarn uniqueInstance;
 
+    private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+
     private SceneCowBarn() {
         super();
         List<Entity> entitiesForCowBarn = createEntitiesForCowBarn();
         entityManager.loadEntities(entitiesForCowBarn);
         List<Item> itemsForCowBarn = createItemsForCowBarn();
         itemManager.loadItems(itemsForCowBarn);
+
+        shippingBinIncomeListener = new ShippingBinTile.IncomeListener() {
+            @Override
+            public void incrementCurrency(float amountToIncrement) {
+                game.incrementCurrency(amountToIncrement);
+            }
+        };
     }
 
     public static SceneCowBarn getInstance() {
@@ -128,30 +139,36 @@ public class SceneCowBarn extends Scene {
                 int heightInPixel = tileHeight;
 
                 Tile tile = cowBarn[y][x];
-                //GenericWalkableTile
+                //(GenericWalkableTile)
                 if (tile.getId().equals("0")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                 }
-                //GenericSolidTile
+                //(GenericSolidTile)
                 else if (tile.getId().equals("1")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //SignPostTile
+                //(SignPostTile)
                 else if (tile.getId().equals("a")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //FodderStashTile
+                //(CabbageFermenterTile)
+                else if (tile.getId().equals("g")) {
+                    Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                    tile.init(game, x, y, tileSprite);
+                    tile.setWalkable(false);
+                }
+                //(FodderStashTile)
                 else if (tile.getId().equals("h")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //FeedingStallTile
+                //(FeedingStallTile)
                 else if (tile.getId().equals("i")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
@@ -159,21 +176,65 @@ public class SceneCowBarn extends Scene {
                 }
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Bitmap tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                    Tile shippingBinTileTopLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.TOP_LEFT,
+                            shippingBinIncomeListener);
+                    shippingBinTileTopLeft.init(game, x, y, tileSpriteAndShippingBinQ1);
+                    shippingBinTileTopLeft.setWalkable(false);
+                    cowBarn[y][x] = shippingBinTileTopLeft;
                 } else if (tile.getId().equals("d")) {
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Bitmap tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                    Tile shippingBinTileTopRight = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.TOP_RIGHT,
+                            shippingBinIncomeListener);
+                    shippingBinTileTopRight.init(game, x, y, tileSpriteAndShippingBinQ2);
+                    shippingBinTileTopRight.setWalkable(false);
+                    cowBarn[y][x] = shippingBinTileTopRight;
                 } else if (tile.getId().equals("e")) {
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Bitmap tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                    Tile shippingBinTileBottomLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.BOTTOM_LEFT,
+                            shippingBinIncomeListener);
+                    shippingBinTileBottomLeft.init(game, x, y, tileSpriteAndShippingBinQ3);
+                    shippingBinTileBottomLeft.setWalkable(false);
+                    cowBarn[y][x] = shippingBinTileBottomLeft;
                 } else if (tile.getId().equals("f")) {
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Bitmap tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                    Tile shippingBinTileBottomRight = new ShippingBinTile(ShippingBinTile.TAG,
+                            ShippingBinTile.Quadrant.BOTTOM_RIGHT,
+                            shippingBinIncomeListener);
+                    shippingBinTileBottomRight.init(game, x, y, tileSpriteAndShippingBinQ4);
+                    shippingBinTileBottomRight.setWalkable(false);
+                    cowBarn[y][x] = shippingBinTileBottomRight;
                 }
                 //default
                 else {
