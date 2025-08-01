@@ -26,6 +26,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.util.ArrayList;
@@ -101,8 +103,41 @@ public class SceneCowBarn extends Scene {
         super.doJustPressedButtonA();
 
         Player player = Player.getInstance();
-        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+
+        // TILE CHECK
+        if (tileCurrentlyFacing instanceof FodderStashTile) {
+            if (!player.hasCarryable()) {
+                Fodder fodderToBeCarried = ((FodderStashTile) tileCurrentlyFacing).generateFodder();
+                if (fodderToBeCarried != null) {
+                    fodderToBeCarried.init(game);
+
+                    player.pickUp(fodderToBeCarried);
+                } else {
+                    Log.e(TAG, "fodderToBeCarried == null");
+                }
+            } else {
+                Log.e(TAG, "player.hasCarryable()");
+            }
+        } else if (tileCurrentlyFacing instanceof FeedingStallTile) {
+            if (player.hasCarryable()) {
+                if (player.getCarryable() instanceof Fodder) {
+                    if (!((FeedingStallTile) tileCurrentlyFacing).isOccupied()) {
+                        ((FeedingStallTile) tileCurrentlyFacing).acceptFodder(
+                                (Fodder) (player.getCarryable())
+                        );
+
+                        player.removeCarryable();
+                    }
+                } else {
+                    Log.e(TAG, "player.getCarryable() NOT instanceof Fodder");
+                }
+            } else {
+                Log.e(TAG, "NOT player.hasCarryable()");
+            }
+        }
 
         // ITEM CHECK
         if (itemCurrentlyFacing != null) {
@@ -133,8 +168,6 @@ public class SceneCowBarn extends Scene {
         // itemCurrentlyFacing == null
         else {
             if (player.hasCarryable()) {
-                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-
                 if (entityCurrentlyFacing == null &&
                         tileCurrentlyFacing.isWalkable()) {
                     player.placeDown();
@@ -147,7 +180,6 @@ public class SceneCowBarn extends Scene {
         // ENTITY CHECK (no item in front of player)
         if (player.hasCarryable() && entityCurrentlyFacing == null) {
             Log.e(TAG, "has carryable and entityFacing is null");
-            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
             if (tileCurrentlyFacing instanceof ShippingBinTile) {
                 Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
@@ -185,7 +217,6 @@ public class SceneCowBarn extends Scene {
             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
             TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
             Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
             tileCommand.setTile(tileCurrentlyFacing);
             tileCommand.execute();
@@ -241,17 +272,25 @@ public class SceneCowBarn extends Scene {
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //(FodderStashTile)
+                //FodderStashTile
                 else if (tile.getId().equals("h")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Tile tileFodderStash = new FodderStashTile(FodderStashTile.TAG);
+                    tileFodderStash.init(game, x, y, tileSprite);
+                    tileFodderStash.setWalkable(false);
+
+                    cowBarn[y][x] = tileFodderStash;
                 }
-                //(FeedingStallTile)
+                //FeedingStallTile
                 else if (tile.getId().equals("i")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    Tile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
+                    tileFeedingStall.init(game, x, y, tileSprite);
+                    tileFeedingStall.setWalkable(false);
+
+                    cowBarn[y][x] = tileFeedingStall;
                 }
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {

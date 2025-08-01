@@ -281,6 +281,10 @@ public abstract class Creature extends Entity {
         return carryable;
     }
 
+    public void removeCarryable() {
+        carryable = null;
+    }
+
     public void moveCarryable() {
         if (carryable != null) {
             float xCarryable = x + (Tile.WIDTH / 2);
