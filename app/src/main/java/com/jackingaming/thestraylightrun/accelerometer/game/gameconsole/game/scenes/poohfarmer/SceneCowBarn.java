@@ -22,6 +22,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
@@ -44,6 +45,7 @@ public class SceneCowBarn extends Scene {
     private static SceneCowBarn uniqueInstance;
 
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+    private List<FeedingStallTile> feedingStallTiles;
 
     private SceneCowBarn() {
         super();
@@ -58,6 +60,8 @@ public class SceneCowBarn extends Scene {
                 game.incrementCurrency(amountToIncrement);
             }
         };
+
+        feedingStallTiles = new ArrayList<>();
     }
 
     public static SceneCowBarn getInstance() {
@@ -65,6 +69,74 @@ public class SceneCowBarn extends Scene {
             uniqueInstance = new SceneCowBarn();
         }
         return uniqueInstance;
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        int numberOfFodderInFeedingStall = 0;
+        for (FeedingStallTile feedingStallTile : feedingStallTiles) {
+            if (feedingStallTile.isOccupied()) {
+                numberOfFodderInFeedingStall++;
+            }
+
+            ///////////////////////////////
+            feedingStallTile.startNewDay();
+            ///////////////////////////////
+        }
+
+        int numberOfCowInCowBarn = 0;
+        for (Entity entityInCowBarn : entityManager.getEntities()) {
+            if (entityInCowBarn instanceof AimlessWalker) {
+                if (((AimlessWalker) entityInCowBarn).getType() == AimlessWalker.Type.COW) {
+                    numberOfCowInCowBarn++;
+                }
+            }
+        }
+
+        Log.e(TAG, "numberOfCowInCowBarn: " + numberOfCowInCowBarn);
+        Log.e(TAG, "numberOfFodderInFeedingStall: " + numberOfFodderInFeedingStall);
+
+        // limited by cow
+        if (numberOfFodderInFeedingStall >= numberOfCowInCowBarn) {
+            for (int i = 0; i < numberOfCowInCowBarn; i++) {
+                generateMilkToRandomWalkableTile();
+            }
+        }
+        // limited by fodder
+        else {
+            for (int i = 0; i < numberOfFodderInFeedingStall; i++) {
+                generateMilkToRandomWalkableTile();
+            }
+        }
+    }
+
+    private void generateMilkToRandomWalkableTile() {
+        Milk milk = new Milk();
+        milk.init(game);
+
+        Tile[][] tiles = tileManager.getTiles();
+        boolean lookingForRandomWalkableTile = true;
+
+        while (lookingForRandomWalkableTile) {
+            int xRandom = (int) (Math.random() * tiles[0].length);
+            int yRandom = (int) (Math.random() * tiles.length);
+
+            Log.e(TAG, "xRandom: " + xRandom);
+            Log.e(TAG, "yRandom: " + yRandom);
+
+            if (tiles[yRandom][xRandom].isWalkable()) {
+                milk.setPosition(
+                        (xRandom * Tile.WIDTH),
+                        (yRandom * Tile.HEIGHT)
+                );
+                itemManager.addItem(milk);
+
+                ///////////////////////////////
+                lookingForRandomWalkableTile = false;
+                ///////////////////////////////
+            }
+        }
     }
 
     @Override
@@ -81,6 +153,9 @@ public class SceneCowBarn extends Scene {
 
         entityManager.init(game);
         itemManager.init(game);
+
+        aimlessWalker1.changeToWalk();
+        aimlessWalker2.changeToWalk();
     }
 
     @Override
@@ -286,11 +361,13 @@ public class SceneCowBarn extends Scene {
                 else if (tile.getId().equals("i")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
-                    Tile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
+                    FeedingStallTile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
                     tileFeedingStall.init(game, x, y, tileSprite);
                     tileFeedingStall.setWalkable(false);
 
                     cowBarn[y][x] = tileFeedingStall;
+
+                    feedingStallTiles.add(tileFeedingStall);
                 }
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {
@@ -388,9 +465,21 @@ public class SceneCowBarn extends Scene {
         return transferPoints;
     }
 
+    private AimlessWalker aimlessWalker1, aimlessWalker2;
+
     private List<Entity> createEntitiesForCowBarn() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
+        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
+                (3 * Tile.WIDTH),
+                (6 * Tile.HEIGHT));
+        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.COW,
+                (4 * Tile.WIDTH),
+                (6 * Tile.HEIGHT));
+
+        entities.add(aimlessWalker1);
+        entities.add(aimlessWalker2);
+
         return entities;
     }
 

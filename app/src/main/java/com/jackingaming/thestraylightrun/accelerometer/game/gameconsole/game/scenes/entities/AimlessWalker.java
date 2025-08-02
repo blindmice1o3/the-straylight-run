@@ -28,6 +28,7 @@ public class AimlessWalker extends Creature {
     private AimlessWalkerAnimationManager aimlessWalkerAnimationManager;
     transient private ObjectAnimator movementAnimator;
 
+    private Type type;
     private State state;
     private Random random;
 
@@ -39,6 +40,7 @@ public class AimlessWalker extends Creature {
         aimlessWalkerAnimationManager = new AimlessWalkerAnimationManager(type);
         ///////////////////////////////////////////////////////////////////////////
 
+        this.type = type;
         state = State.OFF;
         random = new Random();
     }
@@ -500,4 +502,9 @@ public class AimlessWalker extends Creature {
 //            }
 //        }
 //    }
+
+
+    public Type getType() {
+        return type;
+    }
 }

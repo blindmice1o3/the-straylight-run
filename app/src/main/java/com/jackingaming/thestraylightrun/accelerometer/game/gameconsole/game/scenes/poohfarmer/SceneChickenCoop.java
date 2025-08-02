@@ -19,6 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -40,10 +41,13 @@ public class SceneChickenCoop extends Scene {
 
     public static final int X_SPAWN_INDEX_DEFAULT = 7;
     public static final int Y_SPAWN_INDEX_DEFAULT = 12;
+    private static final int TILE_WIDTH = 64;
+    private static final int TILE_HEIGHT = 64;
 
     private static SceneChickenCoop uniqueInstance;
 
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+    private List<FeedingStallTile> feedingStallTiles;
 
     private SceneChickenCoop() {
         super();
@@ -58,6 +62,8 @@ public class SceneChickenCoop extends Scene {
                 game.incrementCurrency(amountToIncrement);
             }
         };
+
+        feedingStallTiles = new ArrayList<>();
     }
 
     public static SceneChickenCoop getInstance() {
@@ -65,6 +71,74 @@ public class SceneChickenCoop extends Scene {
             uniqueInstance = new SceneChickenCoop();
         }
         return uniqueInstance;
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        int numberOfFodderInFeedingStall = 0;
+        for (FeedingStallTile feedingStallTile : feedingStallTiles) {
+            if (feedingStallTile.isOccupied()) {
+                numberOfFodderInFeedingStall++;
+            }
+
+            ///////////////////////////////
+            feedingStallTile.startNewDay();
+            ///////////////////////////////
+        }
+
+        int numberOfChickenInChickenCoop = 0;
+        for (Entity entityInChickenCoop : entityManager.getEntities()) {
+            if (entityInChickenCoop instanceof AimlessWalker) {
+                if (((AimlessWalker) entityInChickenCoop).getType() == AimlessWalker.Type.CHICKEN) {
+                    numberOfChickenInChickenCoop++;
+                }
+            }
+        }
+
+        Log.e(TAG, "numberOfChickenInChickenCoop: " + numberOfChickenInChickenCoop);
+        Log.e(TAG, "numberOfFodderInFeedingStall: " + numberOfFodderInFeedingStall);
+
+        // limited by chicken
+        if (numberOfFodderInFeedingStall >= numberOfChickenInChickenCoop) {
+            for (int i = 0; i < numberOfChickenInChickenCoop; i++) {
+                generateEggToRandomWalkableTile();
+            }
+        }
+        // limited by fodder
+        else {
+            for (int i = 0; i < numberOfFodderInFeedingStall; i++) {
+                generateEggToRandomWalkableTile();
+            }
+        }
+    }
+
+    private void generateEggToRandomWalkableTile() {
+        Egg egg = new Egg();
+        egg.init(game);
+
+        Tile[][] tiles = tileManager.getTiles();
+        boolean lookingForRandomWalkableTile = true;
+
+        while (lookingForRandomWalkableTile) {
+            int xRandom = (int) (Math.random() * tiles[0].length);
+            int yRandom = (int) (Math.random() * tiles.length);
+
+            Log.e(TAG, "xRandom: " + xRandom);
+            Log.e(TAG, "yRandom: " + yRandom);
+
+            if (tiles[yRandom][xRandom].isWalkable()) {
+                egg.setPosition(
+                        (xRandom * Tile.WIDTH),
+                        (yRandom * Tile.HEIGHT)
+                );
+                itemManager.addItem(egg);
+
+                ///////////////////////////////
+                lookingForRandomWalkableTile = false;
+                ///////////////////////////////
+            }
+        }
     }
 
     @Override
@@ -81,6 +155,9 @@ public class SceneChickenCoop extends Scene {
 
         entityManager.init(game);
         itemManager.init(game);
+
+        aimlessWalker1.changeToWalk();
+        aimlessWalker2.changeToWalk();
     }
 
     @Override
@@ -240,14 +317,12 @@ public class SceneChickenCoop extends Scene {
 
         // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in chickenCoop.
-        int tileWidth = 64;
-        int tileHeight = 64;
         for (int y = 0; y < chickenCoop.length; y++) {
             for (int x = 0; x < chickenCoop[0].length; x++) {
-                int xInPixel = x * tileWidth;
-                int yInPixel = y * tileHeight;
-                int widthInPixel = tileWidth;
-                int heightInPixel = tileHeight;
+                int xInPixel = x * TILE_WIDTH;
+                int yInPixel = y * TILE_HEIGHT;
+                int widthInPixel = TILE_WIDTH;
+                int heightInPixel = TILE_HEIGHT;
 
                 Tile tile = chickenCoop[y][x];
                 //(GenericWalkableTile)
@@ -287,11 +362,13 @@ public class SceneChickenCoop extends Scene {
                 else if (tile.getId().equals("i")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
-                    Tile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
+                    FeedingStallTile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
                     tileFeedingStall.init(game, x, y, tileSprite);
                     tileFeedingStall.setWalkable(false);
 
                     chickenCoop[y][x] = tileFeedingStall;
+
+                    feedingStallTiles.add(tileFeedingStall);
                 }
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {
@@ -389,9 +466,20 @@ public class SceneChickenCoop extends Scene {
         return transferPoints;
     }
 
+    private AimlessWalker aimlessWalker1, aimlessWalker2;
+
     private List<Entity> createEntitiesForChickenCoop() {
         List<Entity> entities = new ArrayList<Entity>();
         // TODO: Insert scene specific entities here.
+        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                (3 * Tile.WIDTH),
+                (6 * Tile.HEIGHT));
+        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                (4 * Tile.WIDTH),
+                (6 * Tile.HEIGHT));
+
+        entities.add(aimlessWalker1);
+        entities.add(aimlessWalker2);
 
         return entities;
     }

@@ -52,6 +52,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneChickenCoop;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneCowBarn;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
@@ -196,8 +198,8 @@ public class Game {
         // TODO: implement startNewDay().
         SceneFarm.getInstance().startNewDay();
 //        SceneFarm.getInstance().startNewDay(); //SEED_SHOP
-//        SceneChickenCoop.getInstance().startNewDay();
-//        SceneCowBarn.getInstance().startNewDay();
+        SceneChickenCoop.getInstance().startNewDay();
+        SceneCowBarn.getInstance().startNewDay();
 //        SceneSheepPen.getInstance().startNewDay();
         SceneHothouse.getInstance().startNewDay();
     }

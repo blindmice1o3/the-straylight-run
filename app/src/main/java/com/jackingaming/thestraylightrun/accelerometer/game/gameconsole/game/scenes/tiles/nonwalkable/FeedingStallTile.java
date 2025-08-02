@@ -3,6 +3,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
@@ -16,6 +17,13 @@ public class FeedingStallTile extends Tile {
 
     public FeedingStallTile(String id) {
         super(id);
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        occupied = false;
+        image = imageDefaultBackground;
     }
 
     @Override
