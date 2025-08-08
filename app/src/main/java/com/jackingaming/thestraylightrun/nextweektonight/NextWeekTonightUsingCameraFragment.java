@@ -162,7 +162,7 @@ public class NextWeekTonightUsingCameraFragment extends Fragment
 
         if (getChildFragmentManager().findFragmentById(R.id.fcv_presentation_box) == null) {
             Log.i(TAG, "NO fragment in presentation box");
-            ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(null, null);
+            ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(-1);
             replaceFragmentInContainer(imageViewFragment);
         } else {
             Log.i(TAG, "YES fragment in presentation box");

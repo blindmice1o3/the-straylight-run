@@ -34,11 +34,6 @@ public class ImageViewFragment extends Fragment {
         return fragment;
     }
 
-    public static ImageViewFragment newInstance(String arg1, String arg2) {
-        ImageViewFragment fragment = new ImageViewFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

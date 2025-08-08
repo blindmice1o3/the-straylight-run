@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -77,9 +78,15 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         if (getArguments() != null) {
             showToolbarOnDismiss = getArguments().getBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS);
 
+            List listForNestedImageViewsFragment = new ArrayList();
+            listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_1of3);
+            listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_2of3);
+            listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_3of3);
+
             resourceIDs = new ArrayList();
             resourceIDs.add(VIDEO_SAMPLE);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
+            resourceIDs.add(listForNestedImageViewsFragment);
             resourceIDs.add(VIDEO_SAMPLE);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
             resourceIDs.add(VIDEO_SAMPLE);
@@ -98,20 +105,98 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         return inflater.inflate(R.layout.fragment_next_week_tonight_episodes_generator, container, false);
     }
 
+    private int indexList;
+    private ImageView imageViewSceneFarm, imageViewRobot, imageViewJavaReservedWords;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
+        fcvPresentationBox = view.findViewById(R.id.fcv_presentation_box);
+
         frameLayoutParent = view.findViewById(R.id.framelayout_parent);
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ///////////////////
                 indexResourceIDs++;
+                ///////////////////
+
                 if (indexResourceIDs > resourceIDs.size() - 1) {
                     indexResourceIDs = 0;
                 }
 
-                if (resourceIDs.get(indexResourceIDs) instanceof String) {
+                if (resourceIDs.get(indexResourceIDs) instanceof List) {
+                    Log.e(TAG, "LIST FOUND!!!!!");
+
+                    List listOfResources = (List) resourceIDs.get(indexResourceIDs);
+                    if (indexList == 0) {
+                        fcvPresentationBox.setVisibility(View.INVISIBLE);
+                        ///////////////////
+                        indexResourceIDs--;
+                        ///////////////////
+
+                        imageViewSceneFarm = new ImageView(getContext());
+                        imageViewSceneFarm.setScaleType(ImageView.ScaleType.FIT_XY);
+                        imageViewSceneFarm.setImageResource(
+                                (int) listOfResources.get(indexList)
+                        );
+                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                320, // Width
+                                480  // Height
+                        );
+                        layoutParams.setMargins(64, 128, 0, 0);
+                        frameLayoutParent.addView(imageViewSceneFarm, layoutParams);
+
+                        indexList++;
+                    } else if (indexList == 1) {
+                        ///////////////////
+                        indexResourceIDs--;
+                        ///////////////////
+
+                        imageViewRobot = new ImageView(getContext());
+                        imageViewRobot.setScaleType(ImageView.ScaleType.FIT_XY);
+                        imageViewRobot.setImageResource(
+                                (int) listOfResources.get(indexList)
+                        );
+                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                320, // Width
+                                320  // Height
+                        );
+                        layoutParams.setMargins(128, 192, 0, 0);
+                        frameLayoutParent.addView(imageViewRobot, layoutParams);
+
+                        indexList++;
+                    } else if (indexList == listOfResources.size() - 1) {
+                        ///////////////////
+                        indexResourceIDs--;
+                        ///////////////////
+
+                        imageViewJavaReservedWords = new ImageView(getContext());
+                        imageViewJavaReservedWords.setScaleType(ImageView.ScaleType.FIT_XY);
+                        imageViewJavaReservedWords.setImageResource(
+                                (int) listOfResources.get(indexList)
+                        );
+                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                480, // Width
+                                320  // Height
+                        );
+                        layoutParams.setMargins(96, 256, 0, 0);
+                        frameLayoutParent.addView(imageViewJavaReservedWords, layoutParams);
+
+                        indexList++;
+                    } else {
+                        Log.e(TAG, "ELSE clause");
+
+                        indexList = 0;
+
+                        frameLayoutParent.removeView(imageViewSceneFarm);
+                        frameLayoutParent.removeView(imageViewRobot);
+                        frameLayoutParent.removeView(imageViewJavaReservedWords);
+
+                        fcvPresentationBox.setVisibility(View.VISIBLE);
+                    }
+                } else if (resourceIDs.get(indexResourceIDs) instanceof String) {
                     String resourceIdVideo = (String) resourceIDs.get(indexResourceIDs);
                     VideoViewFragment videoViewFragment = VideoViewFragment.newInstance(resourceIdVideo);
                     replaceFragmentInContainer(videoViewFragment);
@@ -120,6 +205,8 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
                     ImageViewFragment imageViewFragment = ImageViewFragment.newInstance(resourceIdImage);
                     replaceFragmentInContainer(imageViewFragment);
                 }
+
+                Log.e(TAG, "indexResourcesIDs: " + indexResourceIDs);
             }
         });
 
