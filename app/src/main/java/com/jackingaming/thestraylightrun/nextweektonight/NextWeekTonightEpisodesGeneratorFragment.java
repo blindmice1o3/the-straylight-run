@@ -78,6 +78,11 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         if (getArguments() != null) {
             showToolbarOnDismiss = getArguments().getBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS);
 
+            imageViewNotePrimitiveTypesPt1 = new ImageView(getContext());
+            imageViewNotePrimitiveTypesPt1.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageViewNotePrimitiveTypesPt1.setImageResource(R.drawable.notes_02);
+            ImageWithSlideAnimation imageWithSlideAnimation = new ImageWithSlideAnimation(imageViewNotePrimitiveTypesPt1);
+
             List listForNestedImageViewsFragment = new ArrayList();
             listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_1of3);
             listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_2of3);
@@ -85,6 +90,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 
             resourceIDs = new ArrayList();
             resourceIDs.add(VIDEO_SAMPLE);
+            resourceIDs.add(imageWithSlideAnimation);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
             resourceIDs.add(listForNestedImageViewsFragment);
             resourceIDs.add(VIDEO_SAMPLE);
@@ -106,7 +112,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     }
 
     private int indexList;
-    private ImageView imageViewSceneFarm, imageViewRobot, imageViewJavaReservedWords;
+    private ImageView imageViewNotePrimitiveTypesPt1, imageViewSceneFarm, imageViewRobot, imageViewJavaReservedWords;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -126,7 +132,19 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
                     indexResourceIDs = 0;
                 }
 
-                if (resourceIDs.get(indexResourceIDs) instanceof List) {
+                if (resourceIDs.get(indexResourceIDs) instanceof ImageWithSlideAnimation) {
+                    Log.e(TAG, "ImageWithSlideAnimation FOUND!!!!!");
+                    ImageWithSlideAnimation imageWithSlideAnimation = (ImageWithSlideAnimation) resourceIDs.get(indexResourceIDs);
+
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            542, // Width
+                            720  // Height
+                    );
+                    layoutParams.setMargins(64, 128, 0, 64);
+                    frameLayoutParent.addView(imageViewNotePrimitiveTypesPt1, layoutParams);
+
+                    imageWithSlideAnimation.startAnimator();
+                } else if (resourceIDs.get(indexResourceIDs) instanceof List) {
                     Log.e(TAG, "LIST FOUND!!!!!");
 
                     List listOfResources = (List) resourceIDs.get(indexResourceIDs);
