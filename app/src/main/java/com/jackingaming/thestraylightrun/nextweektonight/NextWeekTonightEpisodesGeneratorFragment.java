@@ -78,10 +78,10 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         if (getArguments() != null) {
             showToolbarOnDismiss = getArguments().getBoolean(ARG_SHOW_TOOLBAR_ON_DISMISS);
 
-            imageViewNotePrimitiveTypesPt1 = new ImageView(getContext());
-            imageViewNotePrimitiveTypesPt1.setScaleType(ImageView.ScaleType.FIT_XY);
-            imageViewNotePrimitiveTypesPt1.setImageResource(R.drawable.notes_02);
-            ImageWithSlideAnimation imageWithSlideAnimation = new ImageWithSlideAnimation(imageViewNotePrimitiveTypesPt1);
+//            imageViewNotePrimitiveTypesPt1 = new ImageView(getContext());
+//            imageViewNotePrimitiveTypesPt1.setScaleType(ImageView.ScaleType.FIT_XY);
+//            imageViewNotePrimitiveTypesPt1.setImageResource(R.drawable.notes_02);
+//            ImageWithSlideAnimation imageWithSlideAnimation = new ImageWithSlideAnimation(imageViewNotePrimitiveTypesPt1);
 
             List listForNestedImageViewsFragment = new ArrayList();
             listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_1of3);
@@ -90,7 +90,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 
             resourceIDs = new ArrayList();
             resourceIDs.add(VIDEO_SAMPLE);
-            resourceIDs.add(imageWithSlideAnimation);
+//            resourceIDs.add(imageWithSlideAnimation);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
             resourceIDs.add(listForNestedImageViewsFragment);
             resourceIDs.add(VIDEO_SAMPLE);
