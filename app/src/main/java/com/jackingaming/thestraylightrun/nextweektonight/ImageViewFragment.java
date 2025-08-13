@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.nextweektonight;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;

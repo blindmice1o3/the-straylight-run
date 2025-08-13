@@ -84,14 +84,11 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //            ImageWithSlideAnimation imageWithSlideAnimation = new ImageWithSlideAnimation(imageViewNotePrimitiveTypesPt1);
 
             List listForNestedImageViewsFragment = new ArrayList();
-            listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_1of3);
             listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_2of3);
             listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_slide1_3of3);
+            listForNestedImageViewsFragment.add(R.drawable.nwt_run_one_road_map);
 
             resourceIDs = new ArrayList();
-            resourceIDs.add(VIDEO_SAMPLE);
-//            resourceIDs.add(imageWithSlideAnimation);
-            resourceIDs.add(RESOURCE_ID_DRAWABLE);
             resourceIDs.add(listForNestedImageViewsFragment);
             resourceIDs.add(VIDEO_SAMPLE);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
@@ -100,7 +97,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
             resourceIDs.add(VIDEO_SAMPLE);
             resourceIDs.add(RESOURCE_ID_DRAWABLE);
 
-            indexResourceIDs = 0;
+            indexResourceIDs = -1;
         }
     }
 
@@ -112,7 +109,9 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     }
 
     private int indexList;
-    private ImageView imageViewNotePrimitiveTypesPt1, imageViewSceneFarm, imageViewRobot, imageViewJavaReservedWords;
+    private ImageView imageViewNotePrimitiveTypesPt1, imageViewRoadMap,
+            imageViewTerraformFarmPlanet, imageViewSceneFarm, imageViewRobot,
+            imageViewJavaReservedWords;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -148,71 +147,73 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
                     Log.e(TAG, "LIST FOUND!!!!!");
 
                     List listOfResources = (List) resourceIDs.get(indexResourceIDs);
-                    if (indexList == 0) {
-                        fcvPresentationBox.setVisibility(View.INVISIBLE);
-                        ///////////////////
-                        indexResourceIDs--;
-                        ///////////////////
+                    if (listOfResources.size() == 3) {
+                        if (indexList == 0) {
+                            ///////////////////
+                            indexResourceIDs--;
+                            ///////////////////
 
-                        imageViewSceneFarm = new ImageView(getContext());
-                        imageViewSceneFarm.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageViewSceneFarm.setImageResource(
-                                (int) listOfResources.get(indexList)
-                        );
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                                320, // Width
-                                480  // Height
-                        );
-                        layoutParams.setMargins(64, 128, 0, 0);
-                        frameLayoutParent.addView(imageViewSceneFarm, layoutParams);
+                            imageViewRobot = new ImageView(getContext());
+                            imageViewRobot.setScaleType(ImageView.ScaleType.FIT_XY);
+                            imageViewRobot.setImageResource(
+                                    (int) listOfResources.get(indexList)
+                            );
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                    480, // Width
+                                    480  // Height
+                            );
+                            layoutParams.setMargins(544, 32, 0, 0);
+                            frameLayoutParent.addView(imageViewRobot, layoutParams);
 
-                        indexList++;
-                    } else if (indexList == 1) {
-                        ///////////////////
-                        indexResourceIDs--;
-                        ///////////////////
+                            indexList++;
+                        } else if (indexList == 1) {
+                            ///////////////////
+                            indexResourceIDs--;
+                            ///////////////////
 
-                        imageViewRobot = new ImageView(getContext());
-                        imageViewRobot.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageViewRobot.setImageResource(
-                                (int) listOfResources.get(indexList)
-                        );
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                                320, // Width
-                                320  // Height
-                        );
-                        layoutParams.setMargins(128, 192, 0, 0);
-                        frameLayoutParent.addView(imageViewRobot, layoutParams);
+                            imageViewJavaReservedWords = new ImageView(getContext());
+                            imageViewJavaReservedWords.setScaleType(ImageView.ScaleType.FIT_XY);
+                            imageViewJavaReservedWords.setImageResource(
+                                    (int) listOfResources.get(indexList)
+                            );
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                    640, // Width
+                                    480  // Height
+                            );
+                            layoutParams.setMargins(80, 80, 0, 0);
+                            frameLayoutParent.addView(imageViewJavaReservedWords, layoutParams);
 
-                        indexList++;
-                    } else if (indexList == listOfResources.size() - 1) {
-                        ///////////////////
-                        indexResourceIDs--;
-                        ///////////////////
+                            indexList++;
+                        } else if (indexList == 2) {
+                            ///////////////////
+                            indexResourceIDs--;
+                            ///////////////////
 
-                        imageViewJavaReservedWords = new ImageView(getContext());
-                        imageViewJavaReservedWords.setScaleType(ImageView.ScaleType.FIT_XY);
-                        imageViewJavaReservedWords.setImageResource(
-                                (int) listOfResources.get(indexList)
-                        );
-                        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                                480, // Width
-                                320  // Height
-                        );
-                        layoutParams.setMargins(96, 256, 0, 0);
-                        frameLayoutParent.addView(imageViewJavaReservedWords, layoutParams);
+                            imageViewRoadMap = new ImageView(getContext());
+                            imageViewRoadMap.setScaleType(ImageView.ScaleType.FIT_XY);
+                            imageViewRoadMap.setImageResource(
+                                    (int) listOfResources.get(indexList)
+                            );
+                            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                                    963, // Width
+                                    466  // Height
+                            );
+                            layoutParams.setMargins(32, 528, 0, 0);
+                            frameLayoutParent.addView(imageViewRoadMap, layoutParams);
 
-                        indexList++;
-                    } else {
-                        Log.e(TAG, "ELSE clause");
+                            indexList++;
+                        } else {
+                            Log.e(TAG, "ELSE clause");
 
-                        indexList = 0;
+                            indexList = 0;
 
-                        frameLayoutParent.removeView(imageViewSceneFarm);
-                        frameLayoutParent.removeView(imageViewRobot);
-                        frameLayoutParent.removeView(imageViewJavaReservedWords);
+                            frameLayoutParent.removeView(imageViewTerraformFarmPlanet);
+                            frameLayoutParent.removeView(imageViewRobot);
+                            frameLayoutParent.removeView(imageViewJavaReservedWords);
+                            frameLayoutParent.removeView(imageViewRoadMap);
 
-                        fcvPresentationBox.setVisibility(View.VISIBLE);
+                            fcvPresentationBox.setVisibility(View.VISIBLE);
+                        }
                     }
                 } else if (resourceIDs.get(indexResourceIDs) instanceof String) {
                     String resourceIdVideo = (String) resourceIDs.get(indexResourceIDs);
@@ -263,6 +264,18 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         } else {
             Log.i(TAG, "YES fragment in presentation box");
         }
+
+        fcvPresentationBox.setVisibility(View.INVISIBLE);
+
+        imageViewTerraformFarmPlanet = new ImageView(getContext());
+        imageViewTerraformFarmPlanet.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageViewTerraformFarmPlanet.setImageResource(R.drawable.nwt_run_one_slide_0);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                480, // Width
+                480  // Height
+        );
+        layoutParams.setMargins(32, 32, 0, 0);
+        frameLayoutParent.addView(imageViewTerraformFarmPlanet, layoutParams);
     }
 
     private void replaceFragmentInContainer(Fragment fragment) {
