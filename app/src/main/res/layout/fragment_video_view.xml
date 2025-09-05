@@ -6,14 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".nextweektonight.VideoViewFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_animated_textview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_next_week_tonight_recyclerview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <VideoView
         android:id="@+id/video_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
+        android:layout_margin="32dp"
         android:text="Hello, VideoViewFragment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="4:3"
+        app:layout_constraintDimensionRatio="20:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

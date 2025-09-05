@@ -1,6 +1,5 @@
 package com.jackingaming.thestraylightrun.nextweektonight;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,23 +7,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VideoViewFragment extends Fragment {
     public static final String TAG = VideoViewFragment.class.getSimpleName();
     private static final String POSITION_CURRENT = "position_current";
 
     private static final String ARG_RESOURCE_ID_VIDEO = "resourceIdVideo";
+    private static final String ARG_ON_COMPLETION_LISTENER_DTO = "onCompletionListenerDTO";
 
     private String resourceIdVideo;
+    private OnCompletionListenerDTO onCompletionListenerDTO;
 
+    private RecyclerView recyclerViewMarquee;
     private VideoView videoView;
     private int positionCurrent;
 
@@ -32,15 +38,17 @@ public class VideoViewFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static VideoViewFragment newInstance(String resourceIdVideo) {
+    public static VideoViewFragment newInstance(String resourceIdVideo,
+                                                OnCompletionListenerDTO onCompletionListenerDTO) {
         VideoViewFragment fragment = new VideoViewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_RESOURCE_ID_VIDEO, resourceIdVideo);
+        args.putSerializable(ARG_ON_COMPLETION_LISTENER_DTO, onCompletionListenerDTO);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static VideoViewFragment newInstance(String arg1, String arg2) {
+    public static VideoViewFragment newInstance() {
         VideoViewFragment fragment = new VideoViewFragment();
         return fragment;
     }
@@ -52,6 +60,7 @@ public class VideoViewFragment extends Fragment {
 
         if (getArguments() != null) {
             resourceIdVideo = getArguments().getString(ARG_RESOURCE_ID_VIDEO);
+            onCompletionListenerDTO = (OnCompletionListenerDTO) getArguments().getSerializable(ARG_ON_COMPLETION_LISTENER_DTO);
         }
 
         if (savedInstanceState != null) {
@@ -75,6 +84,32 @@ public class VideoViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
+
+        StringBuilder sb = new StringBuilder();
+        String logo = "Next Week Tonight";
+        for (int i = 0; i < 100; i++) {
+            sb.append(logo + "    ");
+        }
+        String logoRepeated100Times = sb.toString();
+        List<String> rowsOfLogoRepeated100Times = new ArrayList();
+        int counter = 0;
+        for (int i = 0; i < 100; i++) {
+            counter++;
+            if (counter > 4) {
+                counter = 1;
+            }
+
+            if (counter == 1 || counter == 2) {
+                rowsOfLogoRepeated100Times.add(logoRepeated100Times);
+            } else {
+                rowsOfLogoRepeated100Times.add("    " + logoRepeated100Times);
+            }
+        }
+        AnimatedTextViewAdapter adapter = new AnimatedTextViewAdapter(rowsOfLogoRepeated100Times);
+
+        recyclerViewMarquee = view.findViewById(R.id.rv_animated_textview);
+        recyclerViewMarquee.setAdapter(adapter);
+        recyclerViewMarquee.setLayoutManager(new LinearLayoutManager(getContext()));
 
         videoView = view.findViewById(R.id.video_view);
         videoView.setZOrderMediaOverlay(true);
@@ -142,12 +177,15 @@ public class VideoViewFragment extends Fragment {
             videoView.seekTo(1);
         }
 
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                Toast.makeText(getContext(), "Playback complete", Toast.LENGTH_SHORT).show();
-            }
-        });
+        videoView.setOnCompletionListener(
+                onCompletionListenerDTO.getOnCompletionListener()
+        );
+//        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mediaPlayer) {
+//                Toast.makeText(getContext(), "Playback complete", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         videoView.start();
     }

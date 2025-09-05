@@ -92,7 +92,7 @@ public class NextWeekTonightUsingCameraFragment extends Fragment
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VideoViewFragment videoViewFragment = VideoViewFragment.newInstance(null, null);
+                VideoViewFragment videoViewFragment = VideoViewFragment.newInstance();
                 replaceFragmentInContainer(videoViewFragment);
             }
         });
