@@ -60,26 +60,34 @@
 
     <string name="ide_dialogfragment_execute">execute</string>
 
-    <string-array name="names_of_sender_dialogue_array_java_loops">
+    <string-array name="names_of_sender_dialogue_array_run_one">
         <item>HonestStruggler</item>
         <item>A-Student</item>
-        <item>Half-Correct</item>
         <item>NotTrying</item>
-        <item>A-Student</item>
         <item>HonestStruggler</item>
-        <item>Half-Correct</item>
+        <item>A-Student</item>
         <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>SYSTEM42</item>
     </string-array>
 
-    <string-array name="messages_dialogue_array_java_loops">
-        <item>So loops are like checking your plants daily, right? You repeat it, same task, until harvest.</item>
-        <item>Exactly! \'for\' loops are like: \'for 60 days, give them 12 hours of light\'. Precise schedule.</item>
-        <item>Or a \'while\' loop: \'while the soil\'s still damp, don\'t water again.\'</item>
-        <item>I tried looping feeding every day. Accidentally nuked my plants with nutrients.</item>
-        <item>\'do-while\' would be like: \'flush once, then keep flushing while runoff is dark.\' Always flush at least once.</item>
-        <item>Ohhh… that helps. A \'do-while\' always acts before it checks conditions. Got it.</item>
-        <item>Loops are how you automate care. Like a watering schedule but made of code.</item>
-        <item>Can we make a loop that grows weed faster tho?</item>
+    <string-array name="messages_dialogue_array_run_one">
+        <item>So wait, the blueprint thing... if the Chicken class is just text, how does that ever become like... an actual chicken? Feels like I\'m missing a step.</item>
+        <item>That\'s where the \"new\" keyword comes in. The class is just the blueprint. But new Chicken(); makes a chicken object in memory - like building the house from the blueprint.</item>
+        <item>I\'m skipping class Chicken. My blueprint is \'NotBadNotBadMansion\'. It comes with dinosaur-shaped bushes and trees.</item>
+        <item>Okay but... fields vs methods - I keep mixing them up. Which is which again?</item>
+        <item>Fields are what the class knows, like a chicken\'s eggCount or color. Methods are what it can do, like layEgg() or cluck()</item>
+        <item>My chicken method is crossRoad(). That’s all it does. It just crosses roads... forever.</item>
+        <item>And the comments part… I don\'t get it. Why write code that doesn\'t even run?</item>
+        <item>They\'re notes. For your future self, your teammates, or whoever has to fix your code later. The computer ignores them, but humans need them.</item>
+        <item>My only comment: \'don\'t touch my NotBadNotBadMansion class or else\'.</item>
+        <item>Okay, last thing - the methods. Main method, constructor, getters/setters. I got lost when they were all listed out.</item>
+        <item>Main method is what Java looks for when your program starts. Constructor sets things up when you first build the object. Getters/setters are small helper methods to safely read or change a field.</item>
+        <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
     <string-array name="delay_ms_dialogue_array_java_loops">
@@ -91,7 +99,50 @@
         <item>8500</item>
         <item>10000</item>
         <item>11500</item>
+        <item>13500</item>
+        <item>15500</item>
+        <item>16500</item>
+        <item>18000</item>
     </string-array>
+
+    <!--
+    <string-array name="names_of_sender_dialogue_array_java_loops">
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>Half-Correct</item>
+        <item>NotTrying</item>
+        <item>A-Student</item>
+        <item>HonestStruggler</item>
+        <item>Half-Correct</item>
+        <item>NotTrying</item>
+    </string-array>
+    -->
+
+    <!--
+    <string-array name="messages_dialogue_array_java_loops">
+        <item>So loops are like checking your plants daily, right? You repeat it, same task, until harvest.</item>
+        <item>Exactly! \'for\' loops are like: \'for 60 days, give them 12 hours of light\'. Precise schedule.</item>
+        <item>Or a \'while\' loop: \'while the soil\'s still damp, don\'t water again.\'</item>
+        <item>I tried looping feeding every day. Accidentally nuked my plants with nutrients.</item>
+        <item>\'do-while\' would be like: \'flush once, then keep flushing while runoff is dark.\' Always flush at least once.</item>
+        <item>Ohhh… that helps. A \'do-while\' always acts before it checks conditions. Got it.</item>
+        <item>Loops are how you automate care. Like a watering schedule but made of code.</item>
+        <item>Can we make a loop that grows weed faster tho?</item>
+    </string-array>
+    -->
+
+    <!--
+    <string-array name="delay_ms_dialogue_array_java_loops">
+        <item>1000</item>
+        <item>2500</item>
+        <item>4000</item>
+        <item>5500</item>
+        <item>7000</item>
+        <item>8500</item>
+        <item>10000</item>
+        <item>11500</item>
+    </string-array>
+    -->
 
     <string name="ide_dialogfragment_console">
         Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.

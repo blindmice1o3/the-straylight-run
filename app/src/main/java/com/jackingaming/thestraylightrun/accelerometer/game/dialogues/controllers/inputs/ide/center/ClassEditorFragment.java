@@ -1280,6 +1280,22 @@ public class ClassEditorFragment extends Fragment {
                                 typingView.setCode(answer);
                             }
                         }
+                        // class RobotRun1
+                        else if (method.getName().equals("plantSeed")) {
+
+                            String answer = "        moveToUnoccupiedTile();\n" +
+                                    "        tillTile();\n" +
+                                    "        seedTile();\n" +
+                                    "        waterTile();";
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
                         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                         llLine.addView(tvLineAfterTODO);
                     } else if (hasComment) {

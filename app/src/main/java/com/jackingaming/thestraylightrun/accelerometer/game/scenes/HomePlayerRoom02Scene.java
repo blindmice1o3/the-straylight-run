@@ -18,7 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.notes.NotesViewerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.notes.topics.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
@@ -284,13 +284,13 @@ public class HomePlayerRoom02Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES) {
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES_TOPIC) {
                                 return false;
                             }
 
                             pause();
 
-                            Fragment fragment = NotesViewerFragment.newInstance(null, null);
+                            Fragment fragment = NotesViewerFragment.newInstance(NotesViewerFragment.NoteType.TOPICS);
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
@@ -464,7 +464,7 @@ public class HomePlayerRoom02Scene extends Scene {
             unhighlightGameConsoleTile();
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES) {
+        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC) {
             highlightTableTile();
         } else {
             unhighlightTableTile();

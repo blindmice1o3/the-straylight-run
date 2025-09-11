@@ -44,6 +44,7 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
     public static final String NAME_CLASS_GROWABLE_TILE_RUN1 = "GrowableTileRun1";
     public static final String NAME_CLASS_SEED_RUN1 = "SeedRun1";
+    public static final String NAME_CLASS_ROBOT_RUN1 = "RobotRun1";
     public static final String NAME_CLASS_CHICKEN_RUN1 = "ChickenRun1";
     public static final String NAME_CLASS_COW_RUN1 = "CowRun1";
     public static final String NAME_METHOD_MAIN = "main";
@@ -549,6 +550,32 @@ public class ProjectViewportFragment extends Fragment {
         return classSeedRun1;
     }
 
+    public Class initClassRobotRun1() {
+        Class classRobotRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_ROBOT_RUN1, null);
+
+        // FIELDS
+        // Intentionally blank.
+
+        // CONSTRUCTORS
+        // Intentionally blank.
+
+        // METHODS
+        List<VariableDeclaration> argumentPlantSeed = new ArrayList<>();
+        argumentPlantSeed.add(
+                new VariableDeclaration("Seed", "seedToPlant")
+        );
+        String bodyPlantSeed = "        // TODO: complete tilling, seeding, and watering steps";
+        classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "plantSeed",
+                argumentPlantSeed,
+                bodyPlantSeed,
+                null, null, true));
+
+        return classRobotRun1;
+    }
+
     public Class initClassChickenRun1() {
         Class classChickenRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
                 NAME_CLASS_CHICKEN_RUN1, null);
@@ -639,6 +666,9 @@ public class ProjectViewportFragment extends Fragment {
         );
         classes.add(
                 initClassSeedRun1()
+        );
+        classes.add(
+                initClassRobotRun1()
         );
         classes.add(
                 initClassChickenRun1()

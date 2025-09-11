@@ -95,67 +95,67 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //            imageViewNotePrimitiveTypesPt1.setImageResource(R.drawable.notes_02);
 //            ImageWithSlideAnimation imageWithSlideAnimation = new ImageWithSlideAnimation(imageViewNotePrimitiveTypesPt1);
 
-            List listForMultipleImagesSlide1 = new ArrayList();
-            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_2of4);
-            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_3of4);
-            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_4of4);
-
-            List listForMultipleImagesSlide2 = new ArrayList();
-            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_1of5);
-            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_2of5);
-            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_3of5);
-            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_4of5);
-            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_5of5);
-
-            List listForMultipleImagesSlide3 = new ArrayList();
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_primitive);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_primitive_lowercase);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_object_uppercase);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_names);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_return_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_return_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_return_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_return_types);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_argument_lists);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_argument_lists);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_argument_lists);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_argument_lists);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_body);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_body);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_body);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_body);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_6of7);
-            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_7of7);
+//            List listForMultipleImagesSlide1 = new ArrayList();
+//            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_2of4);
+//            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_3of4);
+//            listForMultipleImagesSlide1.add(R.drawable.nwt_run_one_slide1_4of4);
+//
+//            List listForMultipleImagesSlide2 = new ArrayList();
+//            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_1of5);
+//            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_2of5);
+//            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_3of5);
+//            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_4of5);
+//            listForMultipleImagesSlide2.add(R.drawable.nwt_run_one_slide2_5of5);
+//
+//            List listForMultipleImagesSlide3 = new ArrayList();
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_fields_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_fields_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_fields_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_primitive);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_primitive_lowercase);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_4of7_object_uppercase);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_names);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_return_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_return_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_return_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_return_types);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_argument_lists);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_argument_lists);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_argument_lists);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_argument_lists);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_1of7_methods_body);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_2of7_methods_body);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_3of7_methods_body);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_5of7_methods_body);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_6of7);
+//            listForMultipleImagesSlide3.add(R.drawable.nwt_run_one_slide3_7of7);
 
             resourceIDs = new ArrayList();
 //            resourceIDs.add(listForMultipleImagesSlide1);
-            resourceIDs.add(listForMultipleImagesSlide3);
+//            resourceIDs.add(listForMultipleImagesSlide3);
 //            resourceIDs.add(ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS);
 //            resourceIDs.add(ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE);
 //            resourceIDs.add(ID_IMAGE_CORGI);
@@ -178,19 +178,8 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //    private ImageView imageViewClassCat, imageViewClassHouse, imageViewClassChicken,
 //            imageViewBlueprint, imageViewInstancesOfHouse;
     private ImageView ivClassCat, ivClassHouse, ivClassChicken,
-    //            ivClassCatField, ivClassHouseField, ivClassChickenField,
-//            ivClassCatFieldType, ivClassHouseFieldType, ivClassChickenFieldType,
-//            ivClassCatFieldName, ivClassHouseFieldName, ivClassChickenFieldName,
-//            ivClassCatMethod, ivClassHouseMethod, ivClassChickenMethod,
-//            ivClassCatMethodName, ivClassHouseMethodName, ivClassChickenMethodName,
-//            ivClassCatMethodReturnType, ivClassHouseMethodReturnType, ivClassChickenMethodReturnType,
-//            ivClassCatMethodArgumentList, ivClassHouseMethodArgumentList, ivClassChickenMethodArgumentList,
-//            ivClassCatMethodBody, ivClassHouseMethodBody, ivClassChickenMethodBody,
-    ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
-    //            ivTypePrimitive, ivTypeObject,
-    ivMethodSignature, ivBookVsJavaProgram, ivMainGetterSetterConstructorComments;
-//            ivMethodSignatureName, ivMethodSignatureReturnType,
-//            ivMethodSignatureArgumentList, ivMethodSignatureBody;
+            ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
+            ivMethodSignature, ivBookVsJavaProgram, ivMainGetterSetterConstructorComments;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -202,10 +191,6 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ivClassCat, ivClassHouse, ivClassChicken,
-//                ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
-//                ivMethodSignature
-
                 List listOfResources = (List) resourceIDs.get(0);
 
                 if (indexList == 0) {

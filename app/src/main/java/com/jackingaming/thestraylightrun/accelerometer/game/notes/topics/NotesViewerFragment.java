@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.notes;
+package com.jackingaming.thestraylightrun.accelerometer.game.notes.topics;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -33,16 +33,16 @@ public class NotesViewerFragment extends Fragment
         implements Serializable {
     public static final String TAG = NotesViewerFragment.class.getSimpleName();
 
+    public enum NoteType {LEARNERS, TOPICS;}
+
     // ref: https://stackoverflow.com/questions/71579104/zoom-in-and-zoom-out-android-imageview
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_NOTE_TYPE = "noteType";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private NoteType noteType;
 
     private FrameLayout flNotesViewer;
     private ScrollView svZoom;
@@ -62,16 +62,14 @@ public class NotesViewerFragment extends Fragment
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param noteType Parameter 1.
      * @return A new instance of fragment NotesViewerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NotesViewerFragment newInstance(String param1, String param2) {
+    public static NotesViewerFragment newInstance(NoteType noteType) {
         NotesViewerFragment fragment = new NotesViewerFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_NOTE_TYPE, noteType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,31 +78,43 @@ public class NotesViewerFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            noteType = (NoteType) getArguments().getSerializable(ARG_NOTE_TYPE);
 
             drawbles = new ArrayList<>();
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_01)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_02)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_03)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_04)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_05)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_06)
-            );
-            drawbles.add(
-                    getResources().getDrawable(R.drawable.notes_07)
-            );
+
+            if (noteType == NoteType.TOPICS) {
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_one_topic_methods)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_two_topic_if_else)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_three_topic_for_loops)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_four_topic_lists)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_topic_primitive_01)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_topic_primitive_02)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_topic_01)
+                );
+            } else if (noteType == NoteType.LEARNERS) {
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_one_learner_a_student)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_one_learner_honest_struggler)
+                );
+                drawbles.add(
+                        getResources().getDrawable(R.drawable.notes_run_one_learner_not_trying)
+                );
+            }
             indexDrawables = 0;
 
             gestureDetector = new GestureDetector(getContext(), new GestureListener());

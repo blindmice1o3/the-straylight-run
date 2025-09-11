@@ -18,7 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.notes.NotesViewerFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.notes.topics.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
@@ -346,13 +346,19 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES) {
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES_TOPIC &&
+                                    gameListener.getDailyLoop() != Game.DailyLoop.NOTES_LEARNERS) {
                                 return false;
                             }
 
                             pause();
 
-                            Fragment fragment = NotesViewerFragment.newInstance(null, null);
+                            NotesViewerFragment.NoteType noteType =
+                                    (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC) ?
+                                            NotesViewerFragment.NoteType.TOPICS :
+                                            NotesViewerFragment.NoteType.LEARNERS;
+
+                            Fragment fragment = NotesViewerFragment.newInstance(noteType);
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
@@ -584,7 +590,8 @@ public class HomePlayerRoom01Scene extends Scene {
             unhighlightTelevisionTile();
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES) {
+        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
+                gameListener.getDailyLoop() == Game.DailyLoop.NOTES_LEARNERS) {
             highlightTableTile();
         } else {
             unhighlightTableTile();
@@ -596,16 +603,16 @@ public class HomePlayerRoom01Scene extends Scene {
             unhighlightGroupChatDrawer();
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
-            highlightGameConsoleTile();
-        } else {
-            unhighlightGameConsoleTile();
-        }
-
         if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
             highlightComputerTile();
         } else {
             unhighlightComputerTile();
+        }
+
+        if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
+            highlightGameConsoleTile();
+        } else {
+            unhighlightGameConsoleTile();
         }
 
         if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
