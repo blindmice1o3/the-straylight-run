@@ -106,9 +106,12 @@ public class DrawerStartFragment extends Fragment {
 
     private void initMessageQueue() {
         messageQueue = new ArrayList<>();
-        String[] namesOfSenderDialogueArrayJavaLoops = getResources().getStringArray(R.array.names_of_sender_dialogue_array_run_one);
-        String[] messagesDialogueArrayJavaLoops = getResources().getStringArray(R.array.messages_dialogue_array_run_one);
-        String[] delayMsDialogueArrayJavaLoops = getResources().getStringArray(R.array.delay_ms_dialogue_array_java_loops);
+        String[] namesOfSenderDialogueArrayJavaLoops = getResources().getStringArray(R.array.names_of_sender_dialogue_array_run_two);
+        String[] messagesDialogueArrayJavaLoops = getResources().getStringArray(R.array.messages_dialogue_array_run_two);
+        String[] delayMsDialogueArrayJavaLoops = getResources().getStringArray(R.array.delay_ms_dialogue_array_run_two);
+//        String[] namesOfSenderDialogueArrayJavaLoops = getResources().getStringArray(R.array.names_of_sender_dialogue_array_run_one);
+//        String[] messagesDialogueArrayJavaLoops = getResources().getStringArray(R.array.messages_dialogue_array_run_one);
+//        String[] delayMsDialogueArrayJavaLoops = getResources().getStringArray(R.array.delay_ms_dialogue_array_run_one);
         for (int i = 0; i < namesOfSenderDialogueArrayJavaLoops.length; i++) {
             String nameOfSender = namesOfSenderDialogueArrayJavaLoops[i];
             String message = messagesDialogueArrayJavaLoops[i];

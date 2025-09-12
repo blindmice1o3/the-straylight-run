@@ -60,6 +60,56 @@
 
     <string name="ide_dialogfragment_execute">execute</string>
 
+    <string-array name="names_of_sender_dialogue_array_run_two">
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>SYSTEM42</item>
+    </string-array>
+
+    <string-array name="messages_dialogue_array_run_two">
+        <item>So... when I inspect the plant, how does the robot decide if it waters or not?</item>
+        <item>That\'s the if\/else part. If the plant is dry -> water. Else -> skip to the next one.</item>
+        <item>Skip? Nah, I just drown all of mine. Easy win.</item>
+        <item>But like... in the code, where does that choice go?</item>
+        <item>Example: \n
+            if (checkIfDry(tile)) { \n
+                waterTile(tile); \n
+            } else { \n
+                moveToNextTile(); \n
+            }</item>
+        <item>ELSE\: order pizza. Done.</item>
+        <item>Ohhh. So [if] checks the condition, and [else] is what happens when it\'s false?</item>
+        <item>Exactly. The robot always does one or the other - never both.</item>
+        <item>Unless you code it wrong. Then it does nothing. Like me.</item>
+        <item>Okay, I think I get it now. If dry -> water. Else -> skip. Simple pattern.</item>
+        <item>Yes. That\'s the whole logic.</item>
+        <item>***COLLECTING LEARNER\'S NOTES***</item>
+    </string-array>
+
+    <string-array name="delay_ms_dialogue_array_run_two">
+        <item>1000</item>
+        <item>2500</item>
+        <item>4000</item>
+        <item>5500</item>
+        <item>7000</item>
+        <item>8500</item>
+        <item>10000</item>
+        <item>11500</item>
+        <item>13500</item>
+        <item>15500</item>
+        <item>16500</item>
+        <item>18000</item>
+    </string-array>
+
     <string-array name="names_of_sender_dialogue_array_run_one">
         <item>HonestStruggler</item>
         <item>A-Student</item>
@@ -90,19 +140,19 @@
         <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
-    <string-array name="delay_ms_dialogue_array_java_loops">
-        <item>1000</item>
-        <item>2500</item>
-        <item>4000</item>
+    <string-array name="delay_ms_dialogue_array_run_one">
+        <item>2000</item>
+        <item>3500</item>
+        <item>4500</item>
         <item>5500</item>
         <item>7000</item>
+        <item>7500</item>
         <item>8500</item>
         <item>10000</item>
+        <item>10500</item>
         <item>11500</item>
         <item>13500</item>
-        <item>15500</item>
-        <item>16500</item>
-        <item>18000</item>
+        <item>14500</item>
     </string-array>
 
     <!--
