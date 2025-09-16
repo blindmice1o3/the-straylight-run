@@ -505,20 +505,86 @@ public class ProjectViewportFragment extends Fragment {
         return classGrowableTileRun1;
     }
 
+//    private String furColor, name;
+//    private int ageInYears;
+//
+//    private void biteHandGently() {
+//
+//    }
+//
+//    private void giftDeadAnimals() {
+//
+//
+//        List<String> plants = List.of("Blue Dream", "AK-47", "GSC");
+//
+//        for (int i = 0; i < plants.size(); i++) {
+//            System.out.println("Checking " + plants.get(i));
+//        }
+//
+//
+//
+//
+//    }
+//
+//    private void purr() {
+//
+//    }
+//
+//    private void lookConfused() {
+//
+//    }
+//
+//    public static class Treat {
+//        private FreshnessLevel freshnessLevel;
+//
+//        public enum FreshnessLevel {
+//            STALE,
+//            OVER_NIGHT,
+//            CRUNCHY;
+//        }
+//
+//        public FreshnessLevel getFreshnessLevel() {
+//            return freshnessLevel;
+//        }
+//    }
+//
+//    public void showAffectionBasedOnTreats(Treat treatGiven) {
+//        if (treatGiven.getFreshnessLevel() == Treat.FreshnessLevel.STALE) {
+//            biteHandGently();
+//        } else if (treatGiven.getFreshnessLevel() == Treat.FreshnessLevel.OVER_NIGHT) {
+//            giftDeadAnimals();
+//        } else if (treatGiven.getFreshnessLevel() == Treat.FreshnessLevel.CRUNCHY) {
+//            purr();
+//        } else {
+//            lookConfused();
+//        }
+//    }
+
     public Class initClassSeedRun1() {
         Class classSeedRun1 = new Class(ClassComponent.AccessModifier.PUBLIC,
                 NAME_CLASS_SEED_RUN1, null);
 
         // FIELDS
+        String inLineCommentName = " // e.g. \"UtilityKit Kush\"";
         classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "String", "name", null,
-                null, null, null, false));
-        String inLineCommentSeedRun1 = " // indica, sativa, hybrid";
+                null, null, inLineCommentName, false));
+        String inLineCommentType = " // indica, sativa, or hybrid";
         classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "String", "type", null,
-                null, null, inLineCommentSeedRun1, false));
+                null, null, inLineCommentType, false));
+        String inLineCommentDescription = " // e.g. \"Helps me focus on long days\"";
+        classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "description", null,
+                null, null, inLineCommentDescription, false));
+        String inLineCommentOrigin = " // e.g. \"The eighth (bought from someone in the alley behind the cannabis lounge) had seeds in it.\"";
+        classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "origin", null,
+                null, null, inLineCommentOrigin, false));
 
         // CONSTRUCTORS
         List<VariableDeclaration> argumentListSeedRun1 = new ArrayList<>();
@@ -528,8 +594,16 @@ public class ProjectViewportFragment extends Fragment {
         argumentListSeedRun1.add(
                 new VariableDeclaration("String", "type")
         );
+        argumentListSeedRun1.add(
+                new VariableDeclaration("String", "description")
+        );
+        argumentListSeedRun1.add(
+                new VariableDeclaration("String", "origin")
+        );
         String bodySeedRun1 = "        this.name = name;\n" +
-                "        // TODO: Set this.type to the provided type";
+                "        // TODO: Set this.type to the provided type\n" +
+                "        this.description = description;\n" +
+                "        this.origin = origin;";
         classSeedRun1.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListSeedRun1,
                 bodySeedRun1,
@@ -546,6 +620,16 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "String", "getType",
                 null, bodyGetType, null, null, true));
+        String bodyGetDescription = "        return description;";
+        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "String", "getDescription",
+                null, bodyGetDescription, null, null, true));
+        String bodyGetOrigin = "        return origin;";
+        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "String", "getOrigin",
+                null, bodyGetOrigin, null, null, true));
 
         return classSeedRun1;
     }

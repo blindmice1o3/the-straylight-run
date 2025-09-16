@@ -38,7 +38,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     //    private static final String ID_VIDEO_HOST = "vid_20250826_045602759_run_one_attempt_1";
     //    private static final String ID_VIDEO_HOST = "vid_20250904_195343803_run_one_attempt_2";
     //    private static final String ID_VIDEO_HOST = "pxl_20250429_193429506";
-    private static final String ID_VIDEO_HOST = "vid_20250907_164743392_run_one_attempt_3_pre";
+    private static final String ID_VIDEO_HOST = "vid_20250913_161759550_run_two_part_1_pre";
     private static final String ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS = "vid_not_bad_not_bad_burger_2025_06_10";
     private static final String ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE = "vid_primitive_vs_object_type_2025_08_11";
 //    private static final String ID_VIDEO_FULL_SCREEN = "vid_20230603_145112";
@@ -177,7 +177,8 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //            imageViewJavaReservedWords;
 //    private ImageView imageViewClassCat, imageViewClassHouse, imageViewClassChicken,
 //            imageViewBlueprint, imageViewInstancesOfHouse;
-    private ImageView ivClassCat, ivClassHouse, ivClassChicken,
+    private ImageView ivClassCat, ivIfElseGeneralForm, ivIfElseTemperature, ivIfElseCheckIfDry, ivComparisonAndLogicalOperators, ivElseIfAgeInYears, ivElseIfSoilMoisture, ivForLoop,
+            ivClassHouse, ivClassChicken,
             ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
             ivMethodSignature, ivBookVsJavaProgram, ivMainGetterSetterConstructorComments;
 
@@ -191,16 +192,16 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List listOfResources = (List) resourceIDs.get(0);
+//                List listOfResources = (List) resourceIDs.get(0);
 
                 if (indexList == 0) {
-                    // 3 classes (base)
+                    // class Cat (base)
                     Log.e(TAG, "indexList == 0");
 
                     ivClassCat = new ImageView(getContext());
                     ivClassCat.setScaleType(ImageView.ScaleType.FIT_XY);
                     ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
+                            R.drawable.nwt_run_two_slide1_1of7_cat
                     );
                     FrameLayout.LayoutParams layoutParamsCat = new FrameLayout.LayoutParams(
                             360, // Width
@@ -209,330 +210,152 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
                     layoutParamsCat.setMargins(32, 32, 0, 0);
                     frameLayoutParent.addView(ivClassCat, layoutParamsCat);
                     indexList++;
+                } else if (indexList == 1) {
+                    // class Cat (fields)
+                    Log.e(TAG, "indexList == 1");
 
-                    ivClassHouse = new ImageView(getContext());
-                    ivClassHouse.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivClassCat.setImageResource(
+                            R.drawable.nwt_run_two_slide1_2of7_cat_fields
                     );
-                    FrameLayout.LayoutParams layoutParamsHouse = new FrameLayout.LayoutParams(
-                            417, // Width
-                            398  // Height
-                    );
-                    layoutParamsHouse.setMargins(424, 32, 0, 0);
-                    frameLayoutParent.addView(ivClassHouse, layoutParamsHouse);
                     indexList++;
+                } else if (indexList == 2) {
+                    // class Cat (methods)
+                    Log.e(TAG, "indexList == 2");
 
-                    ivClassChicken = new ImageView(getContext());
-                    ivClassChicken.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivClassCat.setImageResource(
+                            R.drawable.nwt_run_two_slide1_3of7_cat_methods
                     );
-                    FrameLayout.LayoutParams layoutParamsChicken = new FrameLayout.LayoutParams(
-                            360, // Width
-                            246  // Height
-                    );
-                    layoutParamsChicken.setMargins(873, 32, 0, 0);
-                    frameLayoutParent.addView(ivClassChicken, layoutParamsChicken);
                     indexList++;
                 } else if (indexList == 3) {
-                    // 3 classes (fields)
+                    // class Cat (methods body)
                     Log.e(TAG, "indexList == 3");
 
                     ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
+                            R.drawable.nwt_run_two_slide1_4of7_cat_methods_body
                     );
                     indexList++;
+                } else if (indexList == 4) {
+                    // if-else (general form)
+                    Log.e(TAG, "indexList == 4");
 
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivIfElseGeneralForm = new ImageView(getContext());
+                    ivIfElseGeneralForm.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivIfElseGeneralForm.setImageResource(
+                            R.drawable.nwt_run_two_slide1_5of7_if_else_general
                     );
-                    indexList++;
-
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 6) {
-                    // 3 classes (methods)
-                    Log.e(TAG, "indexList == 6");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 9) {
-                    // 3 classes (fields)
-                    Log.e(TAG, "indexList == 9");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 12) {
-                    // 3 classes (fields - type)
-                    Log.e(TAG, "indexList == 12");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 15) {
-                    // 3 classes (fields - name)
-                    Log.e(TAG, "indexList == 15");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 18) {
-                    // primitive vs object type (base)
-                    Log.e(TAG, "indexList == 18");
-
-                    ivTypePrimitiveVsObject = new ImageView(getContext());
-                    ivTypePrimitiveVsObject.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivTypePrimitiveVsObject.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                            540, // Width
-                            214  // Height
-                    );
-                    layoutParams.setMargins(32, 604, 0, 0);
-                    frameLayoutParent.addView(ivTypePrimitiveVsObject, layoutParams);
-                    indexList++;
-                } else if (indexList == 19) {
-                    // java reserved words (primitive types)
-                    Log.e(TAG, "indexList == 19");
-
-                    ivJavaReservedWordsPrimitive = new ImageView(getContext());
-                    ivJavaReservedWordsPrimitive.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivJavaReservedWordsPrimitive.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams layoutParamsHouse = new FrameLayout.LayoutParams(
                             540, // Width
                             360  // Height
                     );
-                    layoutParams.setMargins(604, 604, 0, 0);
-                    frameLayoutParent.addView(ivJavaReservedWordsPrimitive, layoutParams);
+                    layoutParamsHouse.setMargins(424, 32, 0, 0);
+                    frameLayoutParent.addView(ivIfElseGeneralForm, layoutParamsHouse);
                     indexList++;
-                } else if (indexList == 20) {
-                    // primitive vs object type (primitive)
-                    Log.e(TAG, "indexList == 20");
+                } else if (indexList == 5) {
+                    // if-else (temperature)
+                    Log.e(TAG, "indexList == 5");
 
-                    ivTypePrimitiveVsObject.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivIfElseTemperature = new ImageView(getContext());
+                    ivIfElseTemperature.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivIfElseTemperature.setImageResource(
+                            R.drawable.nwt_run_two_slide1_6of7_if_else_temperature
                     );
+                    FrameLayout.LayoutParams layoutParamsHouse = new FrameLayout.LayoutParams(
+                            304, // Width
+                            268  // Height
+                    );
+                    layoutParamsHouse.setMargins(32, 604, 0, 0);
+                    frameLayoutParent.addView(ivIfElseTemperature, layoutParamsHouse);
                     indexList++;
-                } else if (indexList == 21) {
-                    // primitive vs object type (object)
-                    Log.e(TAG, "indexList == 21");
+                } else if (indexList == 6) {
+                    // if-else (checkIfDry())
+                    Log.e(TAG, "indexList == 6");
 
-                    ivTypePrimitiveVsObject.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivIfElseCheckIfDry = new ImageView(getContext());
+                    ivIfElseCheckIfDry.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivIfElseCheckIfDry.setImageResource(
+                            R.drawable.nwt_run_two_slide1_7of7_if_else_check_if_dry
                     );
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            303, // Width
+                            273  // Height
+                    );
+                    layoutParams.setMargins(368, 604, 0, 0);
+                    frameLayoutParent.addView(ivIfElseCheckIfDry, layoutParams);
                     indexList++;
-                } else if (indexList == 22) {
-                    // 3 classes (methods)
-                    // method signature (base)
-                    Log.e(TAG, "indexList == 22");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    frameLayoutParent.removeView(ivJavaReservedWordsPrimitive);
-                    frameLayoutParent.removeView(ivTypePrimitiveVsObject);
-
-                    ivMethodSignature = new ImageView(getContext());
-                    ivMethodSignature.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivMethodSignature.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    FrameLayout.LayoutParams layoutParamsMethodSignature = new FrameLayout.LayoutParams(
-                            1080, // Width
-                            404 // Height
-                    );
-                    layoutParamsMethodSignature.setMargins(32, 588, 0, 0);
-                    frameLayoutParent.addView(ivMethodSignature, layoutParamsMethodSignature);
-                    indexList++;
-                } else if (indexList == 26) {
-                    // method signature (name)
-                    Log.e(TAG, "indexList == 26");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivMethodSignature.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 30) {
-                    // method signature (return type)
-                    Log.e(TAG, "indexList == 30");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivMethodSignature.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 34) {
-                    // method signature (argument list)
-                    Log.e(TAG, "indexList == 34");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivMethodSignature.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 38) {
-                    // method signature (body)
-                    Log.e(TAG, "indexList == 38");
-
-                    ivClassCat.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassHouse.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                    ivClassChicken.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-
-                    ivMethodSignature.setImageResource(
-                            (int) listOfResources.get(indexList)
-                    );
-                    indexList++;
-                } else if (indexList == 42) {
-                    // structure of book and java program
-                    Log.e(TAG, "indexList == 42");
+                } else if (indexList == 7) {
+                    // comparison and logical operators
+                    Log.e(TAG, "indexList == 7");
 
                     frameLayoutParent.removeView(ivClassCat);
-                    frameLayoutParent.removeView(ivClassHouse);
-                    frameLayoutParent.removeView(ivClassChicken);
-                    frameLayoutParent.removeView(ivMethodSignature);
+                    frameLayoutParent.removeView(ivIfElseGeneralForm);
 
-                    ivBookVsJavaProgram = new ImageView(getContext());
-                    ivBookVsJavaProgram.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivBookVsJavaProgram.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivComparisonAndLogicalOperators = new ImageView(getContext());
+                    ivComparisonAndLogicalOperators.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivComparisonAndLogicalOperators.setImageResource(
+                            R.drawable.nwt_run_two_slide2_1of4_comparison_and_logical_operators
                     );
-                    FrameLayout.LayoutParams layoutParamsBookVsJavaProgram = new FrameLayout.LayoutParams(
-                            864, // Width
-                            576 // Height
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            808, // Width
+                            540  // Height
                     );
-                    layoutParamsBookVsJavaProgram.setMargins(32, 32, 0, 0);
-                    frameLayoutParent.addView(ivBookVsJavaProgram, layoutParamsBookVsJavaProgram);
+                    layoutParams.setMargins(32, 32, 0, 0);
+                    frameLayoutParent.addView(ivComparisonAndLogicalOperators, layoutParams);
                     indexList++;
-                } else if (indexList == 43) {
-                    // main, getter+setter, constructor, comments
-                    Log.e(TAG, "indexList == 43");
+                } else if (indexList == 8) {
+                    // else if (ageInYears)
+                    Log.e(TAG, "indexList == 8");
 
-                    frameLayoutParent.removeView(ivBookVsJavaProgram);
+                    frameLayoutParent.removeView(ivIfElseTemperature);
+                    frameLayoutParent.removeView(ivIfElseCheckIfDry);
 
-                    ivMainGetterSetterConstructorComments = new ImageView(getContext());
-                    ivMainGetterSetterConstructorComments.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivMainGetterSetterConstructorComments.setImageResource(
-                            (int) listOfResources.get(indexList)
+                    ivElseIfAgeInYears = new ImageView(getContext());
+                    ivElseIfAgeInYears.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivElseIfAgeInYears.setImageResource(
+                            R.drawable.nwt_run_two_slide2_2of4_else_if_age_in_years
                     );
-                    FrameLayout.LayoutParams layoutParamsMainGetterSetterConstructorComments = new FrameLayout.LayoutParams(
-                            864, // Width
-                            576 // Height
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            453, // Width
+                            310  // Height
                     );
-                    layoutParamsMainGetterSetterConstructorComments.setMargins(32, 32, 0, 0);
-                    frameLayoutParent.addView(ivMainGetterSetterConstructorComments, layoutParamsMainGetterSetterConstructorComments);
+                    layoutParams.setMargins(32, 604, 0, 0);
+                    frameLayoutParent.addView(ivElseIfAgeInYears, layoutParams);
                     indexList++;
-                } else if (indexList == 44) {
-                    Log.e(TAG, "indexList == 44");
+                } else if (indexList == 9) {
+                    // else if (soil moisture)
+                    Log.e(TAG, "indexList == 9");
 
-                    // TODO:
+                    ivElseIfSoilMoisture = new ImageView(getContext());
+                    ivElseIfSoilMoisture.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivElseIfSoilMoisture.setImageResource(
+                            R.drawable.nwt_run_two_slide2_3of4_else_if_soil_moisture
+                    );
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            387, // Width
+                            358  // Height
+                    );
+                    layoutParams.setMargins(517, 604, 0, 0);
+                    frameLayoutParent.addView(ivElseIfSoilMoisture, layoutParams);
+                    indexList++;
+                } else if (indexList == 10) {
+                    // for loop
+                    Log.e(TAG, "indexList == 10");
+
+                    ivForLoop = new ImageView(getContext());
+                    ivForLoop.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivForLoop.setImageResource(
+                            R.drawable.nwt_run_two_slide2_4of4_for_loop_watering_plants
+                    );
+                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                            1332, // Width
+                            386  // Height
+                    );
+                    layoutParams.setMargins(64, 300, 0, 0);
+                    frameLayoutParent.addView(ivForLoop, layoutParams);
+                    indexList++;
+                } else if (indexList == 11) {
+                    Log.e(TAG, "indexList == 11");
+                } else if (indexList == 12) {
+                    Log.e(TAG, "indexList == 12");
                 }
 
 //                ///////////////////
