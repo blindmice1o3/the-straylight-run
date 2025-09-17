@@ -38,7 +38,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     //    private static final String ID_VIDEO_HOST = "vid_20250826_045602759_run_one_attempt_1";
     //    private static final String ID_VIDEO_HOST = "vid_20250904_195343803_run_one_attempt_2";
     //    private static final String ID_VIDEO_HOST = "pxl_20250429_193429506";
-    private static final String ID_VIDEO_HOST = "vid_20250913_161759550_run_two_part_1_pre";
+    private static final String ID_VIDEO_HOST = "vid_20250917_180111542_run_three_pre";
     private static final String ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS = "vid_not_bad_not_bad_burger_2025_06_10";
     private static final String ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE = "vid_primitive_vs_object_type_2025_08_11";
 //    private static final String ID_VIDEO_FULL_SCREEN = "vid_20230603_145112";
@@ -177,10 +177,13 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //            imageViewJavaReservedWords;
 //    private ImageView imageViewClassCat, imageViewClassHouse, imageViewClassChicken,
 //            imageViewBlueprint, imageViewInstancesOfHouse;
-    private ImageView ivClassCat, ivIfElseGeneralForm, ivIfElseTemperature, ivIfElseCheckIfDry, ivComparisonAndLogicalOperators, ivElseIfAgeInYears, ivElseIfSoilMoisture, ivForLoop,
-            ivClassHouse, ivClassChicken,
-            ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
-            ivMethodSignature, ivBookVsJavaProgram, ivMainGetterSetterConstructorComments;
+    private ImageView ivGeneralForm, ivGeneralFormStart, ivGeneralFormStop, ivGeneralFormUpdate,
+            ivWateringPlants, ivWateringPlantsStart, ivWateringPlantsStop, ivWateringPlantsUpdate,
+            ivCollectionOfPlants, ivForEachLoop, ivKeywordContinue, ivInfiniteLoop;
+//            ivClassCat, ivIfElseGeneralForm, ivIfElseTemperature, ivIfElseCheckIfDry, ivComparisonAndLogicalOperators, ivElseIfAgeInYears, ivElseIfSoilMoisture, ivForLoop,
+//            ivClassHouse, ivClassChicken,
+//            ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
+//            ivMethodSignature, ivBookVsJavaProgram, ivMainGetterSetterConstructorComments;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -195,163 +198,173 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //                List listOfResources = (List) resourceIDs.get(0);
 
                 if (indexList == 0) {
-                    // class Cat (base)
+                    // general form (base)
                     Log.e(TAG, "indexList == 0");
 
-                    ivClassCat = new ImageView(getContext());
-                    ivClassCat.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivClassCat.setImageResource(
-                            R.drawable.nwt_run_two_slide1_1of7_cat
+                    ivGeneralForm = new ImageView(getContext());
+                    ivGeneralForm.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivGeneralForm.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form
                     );
-                    FrameLayout.LayoutParams layoutParamsCat = new FrameLayout.LayoutParams(
-                            360, // Width
-                            540  // Height
+                    FrameLayout.LayoutParams layoutParamsGeneralForm = new FrameLayout.LayoutParams(
+                            1142, // Width
+                            232  // Height
                     );
-                    layoutParamsCat.setMargins(32, 32, 0, 0);
-                    frameLayoutParent.addView(ivClassCat, layoutParamsCat);
+                    layoutParamsGeneralForm.setMargins(32, 32, 0, 0);
+                    frameLayoutParent.addView(ivGeneralForm, layoutParamsGeneralForm);
                     indexList++;
                 } else if (indexList == 1) {
-                    // class Cat (fields)
+                    // watering plants (base)
                     Log.e(TAG, "indexList == 1");
 
-                    ivClassCat.setImageResource(
-                            R.drawable.nwt_run_two_slide1_2of7_cat_fields
+                    ivWateringPlants = new ImageView(getContext());
+                    ivWateringPlants.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivWateringPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants
                     );
-                    indexList++;
-                } else if (indexList == 2) {
-                    // class Cat (methods)
-                    Log.e(TAG, "indexList == 2");
-
-                    ivClassCat.setImageResource(
-                            R.drawable.nwt_run_two_slide1_3of7_cat_methods
-                    );
-                    indexList++;
-                } else if (indexList == 3) {
-                    // class Cat (methods body)
-                    Log.e(TAG, "indexList == 3");
-
-                    ivClassCat.setImageResource(
-                            R.drawable.nwt_run_two_slide1_4of7_cat_methods_body
-                    );
-                    indexList++;
-                } else if (indexList == 4) {
-                    // if-else (general form)
-                    Log.e(TAG, "indexList == 4");
-
-                    ivIfElseGeneralForm = new ImageView(getContext());
-                    ivIfElseGeneralForm.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivIfElseGeneralForm.setImageResource(
-                            R.drawable.nwt_run_two_slide1_5of7_if_else_general
-                    );
-                    FrameLayout.LayoutParams layoutParamsHouse = new FrameLayout.LayoutParams(
-                            540, // Width
-                            360  // Height
-                    );
-                    layoutParamsHouse.setMargins(424, 32, 0, 0);
-                    frameLayoutParent.addView(ivIfElseGeneralForm, layoutParamsHouse);
-                    indexList++;
-                } else if (indexList == 5) {
-                    // if-else (temperature)
-                    Log.e(TAG, "indexList == 5");
-
-                    ivIfElseTemperature = new ImageView(getContext());
-                    ivIfElseTemperature.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivIfElseTemperature.setImageResource(
-                            R.drawable.nwt_run_two_slide1_6of7_if_else_temperature
-                    );
-                    FrameLayout.LayoutParams layoutParamsHouse = new FrameLayout.LayoutParams(
-                            304, // Width
-                            268  // Height
-                    );
-                    layoutParamsHouse.setMargins(32, 604, 0, 0);
-                    frameLayoutParent.addView(ivIfElseTemperature, layoutParamsHouse);
-                    indexList++;
-                } else if (indexList == 6) {
-                    // if-else (checkIfDry())
-                    Log.e(TAG, "indexList == 6");
-
-                    ivIfElseCheckIfDry = new ImageView(getContext());
-                    ivIfElseCheckIfDry.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivIfElseCheckIfDry.setImageResource(
-                            R.drawable.nwt_run_two_slide1_7of7_if_else_check_if_dry
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                            303, // Width
-                            273  // Height
-                    );
-                    layoutParams.setMargins(368, 604, 0, 0);
-                    frameLayoutParent.addView(ivIfElseCheckIfDry, layoutParams);
-                    indexList++;
-                } else if (indexList == 7) {
-                    // comparison and logical operators
-                    Log.e(TAG, "indexList == 7");
-
-                    frameLayoutParent.removeView(ivClassCat);
-                    frameLayoutParent.removeView(ivIfElseGeneralForm);
-
-                    ivComparisonAndLogicalOperators = new ImageView(getContext());
-                    ivComparisonAndLogicalOperators.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivComparisonAndLogicalOperators.setImageResource(
-                            R.drawable.nwt_run_two_slide2_1of4_comparison_and_logical_operators
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                            808, // Width
-                            540  // Height
-                    );
-                    layoutParams.setMargins(32, 32, 0, 0);
-                    frameLayoutParent.addView(ivComparisonAndLogicalOperators, layoutParams);
-                    indexList++;
-                } else if (indexList == 8) {
-                    // else if (ageInYears)
-                    Log.e(TAG, "indexList == 8");
-
-                    frameLayoutParent.removeView(ivIfElseTemperature);
-                    frameLayoutParent.removeView(ivIfElseCheckIfDry);
-
-                    ivElseIfAgeInYears = new ImageView(getContext());
-                    ivElseIfAgeInYears.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivElseIfAgeInYears.setImageResource(
-                            R.drawable.nwt_run_two_slide2_2of4_else_if_age_in_years
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                            453, // Width
-                            310  // Height
-                    );
-                    layoutParams.setMargins(32, 604, 0, 0);
-                    frameLayoutParent.addView(ivElseIfAgeInYears, layoutParams);
-                    indexList++;
-                } else if (indexList == 9) {
-                    // else if (soil moisture)
-                    Log.e(TAG, "indexList == 9");
-
-                    ivElseIfSoilMoisture = new ImageView(getContext());
-                    ivElseIfSoilMoisture.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivElseIfSoilMoisture.setImageResource(
-                            R.drawable.nwt_run_two_slide2_3of4_else_if_soil_moisture
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                            387, // Width
-                            358  // Height
-                    );
-                    layoutParams.setMargins(517, 604, 0, 0);
-                    frameLayoutParent.addView(ivElseIfSoilMoisture, layoutParams);
-                    indexList++;
-                } else if (indexList == 10) {
-                    // for loop
-                    Log.e(TAG, "indexList == 10");
-
-                    ivForLoop = new ImageView(getContext());
-                    ivForLoop.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivForLoop.setImageResource(
-                            R.drawable.nwt_run_two_slide2_4of4_for_loop_watering_plants
-                    );
-                    FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams layoutParamsWateringPlants = new FrameLayout.LayoutParams(
                             1332, // Width
                             386  // Height
                     );
-                    layoutParams.setMargins(64, 300, 0, 0);
-                    frameLayoutParent.addView(ivForLoop, layoutParams);
+                    layoutParamsWateringPlants.setMargins(32, 296, 0, 0);
+                    frameLayoutParent.addView(ivWateringPlants, layoutParamsWateringPlants);
                     indexList++;
+                } else if (indexList == 2) {
+                    // general form (start)
+                    // watering plants (start)
+                    Log.e(TAG, "indexList == 2");
+
+                    ivGeneralForm.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_start
+                    );
+                    ivWateringPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_start
+                    );
+                    indexList++;
+                } else if (indexList == 3) {
+                    // general form (stop)
+                    // watering plants (stop)
+                    Log.e(TAG, "indexList == 3");
+
+                    ivGeneralForm.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_stop
+                    );
+                    ivWateringPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_stop
+                    );
+                    indexList++;
+                } else if (indexList == 4) {
+                    // general form (update)
+                    // watering plants (update)
+                    Log.e(TAG, "indexList == 4");
+
+                    ivGeneralForm.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_update
+                    );
+                    ivWateringPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_update
+                    );
+                    indexList++;
+                } else if (indexList == 5) {
+                    // general form (base)
+                    // watering plants (stop)
+                    Log.e(TAG, "indexList == 5");
+
+                    ivGeneralForm.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form
+                    );
+                    ivWateringPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_stop
+                    );
+                    indexList++;
+                } else if (indexList == 6) {
+                    // collection of plants (list)
+                    Log.e(TAG, "indexList == 6");
+
+                    FrameLayout.LayoutParams layoutParamsGeneralForm = new FrameLayout.LayoutParams(
+                            571, // Width
+                            116  // Height
+                    );
+                    layoutParamsGeneralForm.setMargins(32, 32, 0, 0);
+                    ivGeneralForm.setLayoutParams(layoutParamsGeneralForm);
+
+                    FrameLayout.LayoutParams layoutParamsWateringPlants = new FrameLayout.LayoutParams(
+                            666, // Width
+                            193  // Height
+                    );
+                    layoutParamsWateringPlants.setMargins(32, 180, 0, 0);
+                    ivWateringPlants.setLayoutParams(layoutParamsWateringPlants
+                    );
+
+                    ivCollectionOfPlants = new ImageView(getContext());
+                    ivCollectionOfPlants.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivCollectionOfPlants.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_3of6_for_loop_collection_of_plants
+                    );
+                    FrameLayout.LayoutParams layoutParamsCollectionOfPlants = new FrameLayout.LayoutParams(
+                            1514, // Width
+                            384  // Height
+                    );
+                    layoutParamsCollectionOfPlants.setMargins(32, 405, 0, 0);
+                    frameLayoutParent.addView(ivCollectionOfPlants, layoutParamsCollectionOfPlants);
+                    indexList++;
+                } else if (indexList == 7) {
+                    // for each loop
+                    Log.e(TAG, "indexList == 7");
+
+                    FrameLayout.LayoutParams layoutParamsCollectionOfPlants = new FrameLayout.LayoutParams(
+                            757, // Width
+                            192  // Height
+                    );
+                    layoutParamsCollectionOfPlants.setMargins(32, 405, 0, 0);
+                    ivCollectionOfPlants.setLayoutParams(layoutParamsCollectionOfPlants);
+
+                    ivForEachLoop = new ImageView(getContext());
+                    ivForEachLoop.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivForEachLoop.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_4of6_for_each_loop
+                    );
+                    FrameLayout.LayoutParams layoutParamsForEachLoop = new FrameLayout.LayoutParams(
+                            378, // Width
+                            117  // Height
+                    );
+                    layoutParamsForEachLoop.setMargins(32, 629, 0, 0);
+                    frameLayoutParent.addView(ivForEachLoop, layoutParamsForEachLoop);
+                    indexList++;
+                } else if (indexList == 8) {
+                    // keyword continue
+                    Log.e(TAG, "indexList == 8");
+
+                    ivKeywordContinue = new ImageView(getContext());
+                    ivKeywordContinue.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivKeywordContinue.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_5of6_keyword_continue
+                    );
+                    FrameLayout.LayoutParams layoutParamsKeywordContinue = new FrameLayout.LayoutParams(
+                            320, // Width
+                            232  // Height
+                    );
+                    layoutParamsKeywordContinue.setMargins(442, 629, 0, 0);
+                    frameLayoutParent.addView(ivKeywordContinue, layoutParamsKeywordContinue);
+                    indexList++;
+                } else if (indexList == 9) {
+                    // infinite loop
+                    Log.e(TAG, "indexList == 9");
+
+                    ivInfiniteLoop = new ImageView(getContext());
+                    ivInfiniteLoop.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivInfiniteLoop.setImageResource(
+                            R.drawable.nwt_run_three_slide_1_6of6_for_loop_infinite_loop
+                    );
+                    FrameLayout.LayoutParams layoutParamsInfiniteLoop = new FrameLayout.LayoutParams(
+                            366, // Width
+                            167  // Height
+                    );
+                    layoutParamsInfiniteLoop.setMargins(794, 629, 0, 0);
+                    frameLayoutParent.addView(ivInfiniteLoop, layoutParamsInfiniteLoop);
+                    indexList++;
+                } else if (indexList == 10) {
+                    Log.e(TAG, "indexList == 10");
                 } else if (indexList == 11) {
                     Log.e(TAG, "indexList == 11");
                 } else if (indexList == 12) {
