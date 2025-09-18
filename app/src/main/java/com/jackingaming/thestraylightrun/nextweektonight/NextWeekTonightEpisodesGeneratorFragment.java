@@ -38,7 +38,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     //    private static final String ID_VIDEO_HOST = "vid_20250826_045602759_run_one_attempt_1";
     //    private static final String ID_VIDEO_HOST = "vid_20250904_195343803_run_one_attempt_2";
     //    private static final String ID_VIDEO_HOST = "pxl_20250429_193429506";
-    private static final String ID_VIDEO_HOST = "vid_20250917_180111542_run_three_pre";
+    private static final String ID_VIDEO_HOST = "vid_20250918_173333392_run_four_pre";
     private static final String ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS = "vid_not_bad_not_bad_burger_2025_06_10";
     private static final String ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE = "vid_primitive_vs_object_type_2025_08_11";
 //    private static final String ID_VIDEO_FULL_SCREEN = "vid_20230603_145112";
@@ -79,7 +79,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Log.i(TAG, "onAttach()");
-//        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
     @Override
@@ -177,9 +177,10 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //            imageViewJavaReservedWords;
 //    private ImageView imageViewClassCat, imageViewClassHouse, imageViewClassChicken,
 //            imageViewBlueprint, imageViewInstancesOfHouse;
-    private ImageView ivGeneralForm, ivGeneralFormStart, ivGeneralFormStop, ivGeneralFormUpdate,
-            ivWateringPlants, ivWateringPlantsStart, ivWateringPlantsStop, ivWateringPlantsUpdate,
-            ivCollectionOfPlants, ivForEachLoop, ivKeywordContinue, ivInfiniteLoop;
+    private ImageView ivRoadmap, ivListOfString, ivDeclaringList, ivAddingItems, ivAccessingItems, ivLoopingThroughList, ivModifyingList;
+//            ivGeneralForm, ivGeneralFormStart, ivGeneralFormStop, ivGeneralFormUpdate,
+//            ivWateringPlants, ivWateringPlantsStart, ivWateringPlantsStop, ivWateringPlantsUpdate,
+//            ivCollectionOfPlants, ivForEachLoop, ivKeywordContinue, ivInfiniteLoop;
 //            ivClassCat, ivIfElseGeneralForm, ivIfElseTemperature, ivIfElseCheckIfDry, ivComparisonAndLogicalOperators, ivElseIfAgeInYears, ivElseIfSoilMoisture, ivForLoop,
 //            ivClassHouse, ivClassChicken,
 //            ivTypePrimitiveVsObject, ivJavaReservedWordsPrimitive,
@@ -190,179 +191,143 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
         fcvPresentationBox = view.findViewById(R.id.fcv_presentation_box);
-
         frameLayoutParent = view.findViewById(R.id.framelayout_parent);
+
+        // roadmap
+        ivRoadmap = new ImageView(getContext());
+        ivRoadmap.setScaleType(ImageView.ScaleType.FIT_XY);
+        ivRoadmap.setImageResource(
+                R.drawable.nwt_run_four_slide_1_0of6_list_roadmap
+        );
+        FrameLayout.LayoutParams layoutParamsRoadmap = new FrameLayout.LayoutParams(
+                414, // Width
+                203  // Height
+        );
+        layoutParamsRoadmap.setMargins(32, 32, 0, 0);
+        frameLayoutParent.addView(ivRoadmap, layoutParamsRoadmap);
+
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                List listOfResources = (List) resourceIDs.get(0);
 
                 if (indexList == 0) {
-                    // general form (base)
+                    // list of string
                     Log.e(TAG, "indexList == 0");
 
-                    ivGeneralForm = new ImageView(getContext());
-                    ivGeneralForm.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivGeneralForm.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form
+                    ivListOfString = new ImageView(getContext());
+                    ivListOfString.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivListOfString.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
                     );
-                    FrameLayout.LayoutParams layoutParamsGeneralForm = new FrameLayout.LayoutParams(
-                            1142, // Width
-                            232  // Height
+                    FrameLayout.LayoutParams layoutParamsListOfString = new FrameLayout.LayoutParams(
+                            768, // Width
+                            512  // Height
                     );
-                    layoutParamsGeneralForm.setMargins(32, 32, 0, 0);
-                    frameLayoutParent.addView(ivGeneralForm, layoutParamsGeneralForm);
+                    layoutParamsListOfString.setMargins(32, 267, 0, 0);
+                    frameLayoutParent.addView(ivListOfString, layoutParamsListOfString);
                     indexList++;
                 } else if (indexList == 1) {
-                    // watering plants (base)
+                    // declaring a list
                     Log.e(TAG, "indexList == 1");
 
-                    ivWateringPlants = new ImageView(getContext());
-                    ivWateringPlants.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivWateringPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants
+                    frameLayoutParent.removeView(ivListOfString);
+                    ivListOfString = new ImageView(getContext());
+                    ivListOfString.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivListOfString.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
                     );
-                    FrameLayout.LayoutParams layoutParamsWateringPlants = new FrameLayout.LayoutParams(
-                            1332, // Width
-                            386  // Height
+                    FrameLayout.LayoutParams layoutParamsListOfString = new FrameLayout.LayoutParams(
+                            384, // Width
+                            256  // Height
                     );
-                    layoutParamsWateringPlants.setMargins(32, 296, 0, 0);
-                    frameLayoutParent.addView(ivWateringPlants, layoutParamsWateringPlants);
+                    layoutParamsListOfString.setMargins(478, 32, 0, 0);
+                    frameLayoutParent.addView(ivListOfString, layoutParamsListOfString);
+
+                    ivDeclaringList = new ImageView(getContext());
+                    ivDeclaringList.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivDeclaringList.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_2of6_list_declaring_a_list
+                    );
+                    FrameLayout.LayoutParams layoutParamsDeclaringList = new FrameLayout.LayoutParams(
+                            668, // Width
+                            64  // Height
+                    );
+                    layoutParamsDeclaringList.setMargins(32, 320, 0, 0);
+                    frameLayoutParent.addView(ivDeclaringList, layoutParamsDeclaringList);
                     indexList++;
                 } else if (indexList == 2) {
-                    // general form (start)
-                    // watering plants (start)
+                    // adding items
                     Log.e(TAG, "indexList == 2");
 
-                    ivGeneralForm.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_start
+                    ivAddingItems = new ImageView(getContext());
+                    ivAddingItems.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivAddingItems.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_3of6_list_adding_items
                     );
-                    ivWateringPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_start
+                    FrameLayout.LayoutParams layoutParamsDeclaringList = new FrameLayout.LayoutParams(
+                            323, // Width
+                            113  // Height
                     );
+                    layoutParamsDeclaringList.setMargins(32, 416, 0, 0);
+                    frameLayoutParent.addView(ivAddingItems, layoutParamsDeclaringList);
                     indexList++;
                 } else if (indexList == 3) {
-                    // general form (stop)
-                    // watering plants (stop)
+                    // accessing items
                     Log.e(TAG, "indexList == 3");
 
-                    ivGeneralForm.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_stop
+                    ivAccessingItems = new ImageView(getContext());
+                    ivAccessingItems.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivAccessingItems.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_4of6_list_accessing_items
                     );
-                    ivWateringPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_stop
+                    FrameLayout.LayoutParams layoutParamsAccessingItems = new FrameLayout.LayoutParams(
+                            458, // Width
+                            64  // Height
                     );
+                    layoutParamsAccessingItems.setMargins(32, 561, 0, 0);
+                    frameLayoutParent.addView(ivAccessingItems, layoutParamsAccessingItems);
                     indexList++;
                 } else if (indexList == 4) {
-                    // general form (update)
-                    // watering plants (update)
+                    // looping through a list
                     Log.e(TAG, "indexList == 4");
 
-                    ivGeneralForm.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form_update
+                    ivLoopingThroughList = new ImageView(getContext());
+                    ivLoopingThroughList.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivLoopingThroughList.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_5of6_list_looping_through_a_list
                     );
-                    ivWateringPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_update
+                    FrameLayout.LayoutParams layoutParamsLoopingThroughList = new FrameLayout.LayoutParams(
+                            558, // Width
+                            112  // Height
                     );
+                    layoutParamsLoopingThroughList.setMargins(32, 657, 0, 0);
+                    frameLayoutParent.addView(ivLoopingThroughList, layoutParamsLoopingThroughList);
                     indexList++;
                 } else if (indexList == 5) {
-                    // general form (base)
-                    // watering plants (stop)
+                    // modifying a list
                     Log.e(TAG, "indexList == 5");
 
-                    ivGeneralForm.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_1of6_for_loop_general_form
+                    ivModifyingList = new ImageView(getContext());
+                    ivModifyingList.setScaleType(ImageView.ScaleType.FIT_XY);
+                    ivModifyingList.setImageResource(
+                            R.drawable.nwt_run_four_slide_1_6of6_list_modifying_a_list
                     );
-                    ivWateringPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_2of6_for_loop_watering_plants_stop
+                    FrameLayout.LayoutParams layoutParamsModifyingList = new FrameLayout.LayoutParams(
+                            396, // Width
+                            78  // Height
                     );
+                    layoutParamsModifyingList.setMargins(32, 801, 0, 0);
+                    frameLayoutParent.addView(ivModifyingList, layoutParamsModifyingList);
                     indexList++;
                 } else if (indexList == 6) {
-                    // collection of plants (list)
                     Log.e(TAG, "indexList == 6");
-
-                    FrameLayout.LayoutParams layoutParamsGeneralForm = new FrameLayout.LayoutParams(
-                            571, // Width
-                            116  // Height
-                    );
-                    layoutParamsGeneralForm.setMargins(32, 32, 0, 0);
-                    ivGeneralForm.setLayoutParams(layoutParamsGeneralForm);
-
-                    FrameLayout.LayoutParams layoutParamsWateringPlants = new FrameLayout.LayoutParams(
-                            666, // Width
-                            193  // Height
-                    );
-                    layoutParamsWateringPlants.setMargins(32, 180, 0, 0);
-                    ivWateringPlants.setLayoutParams(layoutParamsWateringPlants
-                    );
-
-                    ivCollectionOfPlants = new ImageView(getContext());
-                    ivCollectionOfPlants.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivCollectionOfPlants.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_3of6_for_loop_collection_of_plants
-                    );
-                    FrameLayout.LayoutParams layoutParamsCollectionOfPlants = new FrameLayout.LayoutParams(
-                            1514, // Width
-                            384  // Height
-                    );
-                    layoutParamsCollectionOfPlants.setMargins(32, 405, 0, 0);
-                    frameLayoutParent.addView(ivCollectionOfPlants, layoutParamsCollectionOfPlants);
-                    indexList++;
                 } else if (indexList == 7) {
-                    // for each loop
                     Log.e(TAG, "indexList == 7");
-
-                    FrameLayout.LayoutParams layoutParamsCollectionOfPlants = new FrameLayout.LayoutParams(
-                            757, // Width
-                            192  // Height
-                    );
-                    layoutParamsCollectionOfPlants.setMargins(32, 405, 0, 0);
-                    ivCollectionOfPlants.setLayoutParams(layoutParamsCollectionOfPlants);
-
-                    ivForEachLoop = new ImageView(getContext());
-                    ivForEachLoop.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivForEachLoop.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_4of6_for_each_loop
-                    );
-                    FrameLayout.LayoutParams layoutParamsForEachLoop = new FrameLayout.LayoutParams(
-                            378, // Width
-                            117  // Height
-                    );
-                    layoutParamsForEachLoop.setMargins(32, 629, 0, 0);
-                    frameLayoutParent.addView(ivForEachLoop, layoutParamsForEachLoop);
-                    indexList++;
                 } else if (indexList == 8) {
-                    // keyword continue
                     Log.e(TAG, "indexList == 8");
-
-                    ivKeywordContinue = new ImageView(getContext());
-                    ivKeywordContinue.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivKeywordContinue.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_5of6_keyword_continue
-                    );
-                    FrameLayout.LayoutParams layoutParamsKeywordContinue = new FrameLayout.LayoutParams(
-                            320, // Width
-                            232  // Height
-                    );
-                    layoutParamsKeywordContinue.setMargins(442, 629, 0, 0);
-                    frameLayoutParent.addView(ivKeywordContinue, layoutParamsKeywordContinue);
-                    indexList++;
                 } else if (indexList == 9) {
-                    // infinite loop
                     Log.e(TAG, "indexList == 9");
-
-                    ivInfiniteLoop = new ImageView(getContext());
-                    ivInfiniteLoop.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivInfiniteLoop.setImageResource(
-                            R.drawable.nwt_run_three_slide_1_6of6_for_loop_infinite_loop
-                    );
-                    FrameLayout.LayoutParams layoutParamsInfiniteLoop = new FrameLayout.LayoutParams(
-                            366, // Width
-                            167  // Height
-                    );
-                    layoutParamsInfiniteLoop.setMargins(794, 629, 0, 0);
-                    frameLayoutParent.addView(ivInfiniteLoop, layoutParamsInfiniteLoop);
-                    indexList++;
                 } else if (indexList == 10) {
                     Log.e(TAG, "indexList == 10");
                 } else if (indexList == 11) {
