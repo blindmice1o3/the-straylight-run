@@ -38,7 +38,13 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     //    private static final String ID_VIDEO_HOST = "vid_20250826_045602759_run_one_attempt_1";
     //    private static final String ID_VIDEO_HOST = "vid_20250904_195343803_run_one_attempt_2";
     //    private static final String ID_VIDEO_HOST = "pxl_20250429_193429506";
-    private static final String ID_VIDEO_HOST = "vid_20250918_173333392_run_four_pre";
+//    private static final String ID_VIDEO_HOST_RUN_ONE_PART_ONE = "vid_20250826_045602759_run_one_part_1_post_compression_10";
+    private static final String ID_VIDEO_HOST_RUN_ONE_PART_ONE = "vid_20250907_164743392_run_one_part_3_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_ONE_PART_TWO = "vid_20250905_184949442_run_one_part_2_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_ONE_PART_THREE = "vid_20250907_164743392_run_one_part_3_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_TWO = "vid_20250913_161759550_run_two_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_THREE = "vid_20250917_180111542_run_three_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_FOUR = "vid_20250918_173333392_run_four_post_compression_10_rotated";
     private static final String ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS = "vid_not_bad_not_bad_burger_2025_06_10";
     private static final String ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE = "vid_primitive_vs_object_type_2025_08_11";
 //    private static final String ID_VIDEO_FULL_SCREEN = "vid_20230603_145112";
@@ -736,7 +742,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     private void initializePlayer() {
         Log.i(TAG, "initializePlayer()");
 
-        Uri videoUri = getMedia(ID_VIDEO_HOST);
+        Uri videoUri = getMedia(ID_VIDEO_HOST_RUN_ONE_PART_ONE);
         videoViewHost.setVideoURI(videoUri);
         // Skipping to 1 shows the first frame of the video.
         videoViewHost.seekTo(1);

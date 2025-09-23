@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoViewFragment extends Fragment {
+public class VideoViewFragment extends Fragment
+        implements Serializable {
     public static final String TAG = VideoViewFragment.class.getSimpleName();
     private static final String POSITION_CURRENT = "position_current";
 
@@ -30,7 +32,8 @@ public class VideoViewFragment extends Fragment {
     private String resourceIdVideo;
     private OnCompletionListenerDTO onCompletionListenerDTO;
 
-    private RecyclerView recyclerViewMarquee;
+//    private RecyclerView recyclerViewMarquee;
+//    private VideoView videoView;
     private VideoView videoView;
     private int positionCurrent;
 
@@ -85,31 +88,31 @@ public class VideoViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.i(TAG, "onViewCreated()");
 
-        StringBuilder sb = new StringBuilder();
-        String logo = "Next Week Tonight";
-        for (int i = 0; i < 100; i++) {
-            sb.append(logo + "    ");
-        }
-        String logoRepeated100Times = sb.toString();
-        List<String> rowsOfLogoRepeated100Times = new ArrayList();
-        int counter = 0;
-        for (int i = 0; i < 100; i++) {
-            counter++;
-            if (counter > 4) {
-                counter = 1;
-            }
-
-            if (counter == 1 || counter == 2) {
-                rowsOfLogoRepeated100Times.add(logoRepeated100Times);
-            } else {
-                rowsOfLogoRepeated100Times.add("    " + logoRepeated100Times);
-            }
-        }
-        AnimatedTextViewAdapter adapter = new AnimatedTextViewAdapter(rowsOfLogoRepeated100Times);
-
-        recyclerViewMarquee = view.findViewById(R.id.rv_animated_textview);
-        recyclerViewMarquee.setAdapter(adapter);
-        recyclerViewMarquee.setLayoutManager(new LinearLayoutManager(getContext()));
+//        StringBuilder sb = new StringBuilder();
+//        String logo = "Next Week Tonight";
+//        for (int i = 0; i < 100; i++) {
+//            sb.append(logo + "    ");
+//        }
+//        String logoRepeated100Times = sb.toString();
+//        List<String> rowsOfLogoRepeated100Times = new ArrayList();
+//        int counter = 0;
+//        for (int i = 0; i < 100; i++) {
+//            counter++;
+//            if (counter > 4) {
+//                counter = 1;
+//            }
+//
+//            if (counter == 1 || counter == 2) {
+//                rowsOfLogoRepeated100Times.add(logoRepeated100Times);
+//            } else {
+//                rowsOfLogoRepeated100Times.add("    " + logoRepeated100Times);
+//            }
+//        }
+//        AnimatedTextViewAdapter adapter = new AnimatedTextViewAdapter(rowsOfLogoRepeated100Times);
+//
+//        recyclerViewMarquee = view.findViewById(R.id.rv_animated_textview);
+//        recyclerViewMarquee.setAdapter(adapter);
+//        recyclerViewMarquee.setLayoutManager(new LinearLayoutManager(getContext()));
 
         videoView = view.findViewById(R.id.video_view);
         videoView.setZOrderMediaOverlay(true);

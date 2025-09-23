@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -26,6 +27,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMap
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
+import com.jackingaming.thestraylightrun.nextweektonight.OnCompletionListenerDTO;
+import com.jackingaming.thestraylightrun.nextweektonight.VideoViewFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -250,7 +253,14 @@ public class HomePlayerRoom01Scene extends Scene {
                             pause();
 
                             boolean showToolbarOnDismiss = false;
-                            Fragment fragment = NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
+                            Fragment fragment =
+//                                    NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
+                                    VideoViewFragment.newInstance("vid_20250907_164743392_run_one_part_3_post_compression_10_rotated", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                                        @Override
+                                        public void onCompletion(MediaPlayer mediaPlayer) {
+                                            Log.e(TAG, "finished playback!");
+                                        }
+                                    }));
                             String tag = NextWeekTonightEpisodesGeneratorFragment.TAG;
                             boolean canceledOnTouchOutside = true;
                             DialogFragment dialogFragment =

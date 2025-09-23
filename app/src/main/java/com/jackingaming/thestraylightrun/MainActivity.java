@@ -1,9 +1,11 @@
 package com.jackingaming.thestraylightrun;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
 import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
-import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
+import com.jackingaming.thestraylightrun.nextweektonight.OnCompletionListenerDTO;
+import com.jackingaming.thestraylightrun.nextweektonight.VideoViewFragment;
 import com.jackingaming.thestraylightrun.sandbox.SandboxFragment;
 import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
@@ -81,8 +84,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.options_item_next_week_tonight:
                 boolean showToolbarOnDismiss = true;
                 replaceFragmentInContainerUsingCardFlipAnimations(
-                        NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss)
-                );
+//                        NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss)
+                        VideoViewFragment.newInstance("vid_20250907_164743392_run_one_part_3_post_compression_10_rotated", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                Toast.makeText(MainActivity.this, "finished playback!", Toast.LENGTH_SHORT).show();
+                            }
+                        })));
                 return true;
             case R.id.options_item_game_controller:
                 replaceFragmentInContainerUsingCardFlipAnimations(
