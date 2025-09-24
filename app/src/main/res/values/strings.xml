@@ -77,6 +77,7 @@
         <item>HonestStruggler</item>
         <item>A-Student</item>
         <item>NotTrying</item>
+        <item>SYSTEM42</item>
     </string-array>
 
     <string-array name="messages_dialogue_array_run_four">
@@ -97,6 +98,7 @@
         <item>And .remove() kicks something out of the basket, .set() swaps it with something else?</item>
         <item>Right. Remove takes it out completely, set replaces it.</item>
         <item>So I can remove broccoli and replace with fries. Done.</item>
+        <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
 
@@ -117,6 +119,7 @@
         <item>26000</item>
         <item>28500</item>
         <item>31000</item>
+        <item>33000</item>
     </string-array>
 
     <string-array name="names_of_sender_dialogue_array_run_three">
@@ -138,6 +141,7 @@
         <item>NotTrying</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
+        <item>SYSTEM42</item>
     </string-array>
 
     <string-array name="messages_dialogue_array_run_three">
@@ -166,6 +170,7 @@ Cleaner, no counter needed.</item>
 (2) Counter loop vs. for-each.
 (3) Break = stop, Continue = skip.</item>
         <item>Yep, that\'s the roadmap.</item>
+        <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
     <string-array name="delay_ms_dialogue_array_run_three">
@@ -187,6 +192,7 @@ Cleaner, no counter needed.</item>
         <item>31000</item>
         <item>34000</item>
         <item>36500</item>
+        <item>37000</item>
     </string-array>
 
     <string-array name="names_of_sender_dialogue_array_run_two">
@@ -260,8 +266,8 @@ Cleaner, no counter needed.</item>
         <item>I\'m skipping class Chicken. My blueprint is \'NotBadNotBadMansion\'. It comes with dinosaur-shaped bushes and trees.</item>
         <item>Okay but... fields vs methods - I keep mixing them up. Which is which again?</item>
         <item>Fields are what the class knows, like a chicken\'s eggCount or color. Methods are what it can do, like layEgg() or cluck()</item>
-        <item>My chicken method is crossRoad(). That’s all it does. It just crosses roads... forever.</item>
-        <item>And the comments part… I don\'t get it. Why write code that doesn\'t even run?</item>
+        <item>My chicken method is crossRoad(). That\'s all it does. It just crosses roads... forever.</item>
+        <item>And the comments part... I don\'t get it. Why write code that doesn\'t even run?</item>
         <item>They\'re notes. For your future self, your teammates, or whoever has to fix your code later. The computer ignores them, but humans need them.</item>
         <item>My only comment: \'don\'t touch my NotBadNotBadMansion class or else\'.</item>
         <item>Okay, last thing - the methods. Main method, constructor, getters/setters. I got lost when they were all listed out.</item>
