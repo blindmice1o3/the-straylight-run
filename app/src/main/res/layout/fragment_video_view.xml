@@ -10,9 +10,10 @@
         android:id="@+id/video_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_centerInParent="true"
         android:text="Hello, VideoViewFragment"
         app:layout_constraintBottom_toBottomOf="parent"
-
+        app:layout_constraintDimensionRatio="9:16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean showToolbarOnDismiss = true;
                 replaceFragmentInContainerUsingCardFlipAnimations(
 //                        NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss)
-                        VideoViewFragment.newInstance("vid_20250907_164743392_run_one_part_3_post_compression_10_rotated", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                        VideoViewFragment.newInstance("vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mediaPlayer) {
                                 Toast.makeText(MainActivity.this, "finished playback!", Toast.LENGTH_SHORT).show();
