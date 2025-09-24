@@ -255,7 +255,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             boolean showToolbarOnDismiss = false;
                             Fragment fragment =
 //                                    NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
-                            VideoViewFragment.newInstance("vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                                    VideoViewFragment.newInstance("vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
                                         @Override
                                         public void onCompletion(MediaPlayer mediaPlayer) {
                                             Log.e(TAG, "finished playback!");
@@ -312,7 +312,7 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                             unpause();
                                         }
-                                    }, IDEDialogFragment.Mode.KEYBOARD_TRAINER);
+                                    }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS);
 
                             gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
 

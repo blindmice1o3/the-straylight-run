@@ -56,12 +56,12 @@ public class Game {
                 dailyLoop = DailyLoop.NOTES_LEARNERS;
                 break;
             case NOTES_LEARNERS:
-                dailyLoop = DailyLoop.GAME_CONSOLE;
-                break;
-            case GAME_CONSOLE:
                 dailyLoop = DailyLoop.COMPUTER;
                 break;
             case COMPUTER:
+                dailyLoop = DailyLoop.GAME_CONSOLE;
+                break;
+            case GAME_CONSOLE:
                 dailyLoop = DailyLoop.JOURNAL;
                 break;
             case JOURNAL:
