@@ -60,6 +60,135 @@
 
     <string name="ide_dialogfragment_execute">execute</string>
 
+    <string-array name="names_of_sender_dialogue_array_run_four">
+        <item>A-Student</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+    </string-array>
+
+    <string-array name="messages_dialogue_array_run_four">
+        <item>So a List is basically like a basket. You can put multiple things inside instead of just one. I like that metaphor.</item>
+        <item>Okay... but how do you actually make one in Java?</item>
+        <item>You declare it. Like: List groceries = new ArrayList();
+            That makes an empty basket ready to hold grocery items.</item>
+        <item>Empty basket = sad basket. Fill it with pizza already!</item>
+        <item>And then .add() puts stuff inside, right? So if I add \"Apples,\" \"Bananas,\" and \"Milk,\" now my List has 3 things.</item>
+        <item>Exactly. And each item has an index. The first one you added is at index 0.</item>
+        <item>0?? Not 1?? Bruh. So groceries.get(0) is apples?? That\'s sus.</item>
+        <item>Yeah, I keep wanting to start at 1. That\'s gonna mess me up.</item>
+        <item>It\'s a programming standard. Just takes practice. But yeah, groceries.get(0) will print \"Apples.\"</item>
+        <item>Cool, I’ll just .get() \"Cookies\" instead.</item>
+        <item>What about checking the size? That was .size(), right?</item>
+        <item>Yep! That tells you how many items are in the List. Super useful for looping through.</item>
+        <item>For loop = \"go through all the snacks one by one\" lol.</item>
+        <item>And .remove() kicks something out of the basket, .set() swaps it with something else?</item>
+        <item>Right. Remove takes it out completely, set replaces it.</item>
+        <item>So I can remove broccoli and replace with fries. Done.</item>
+    </string-array>
+
+
+    <string-array name="delay_ms_dialogue_array_run_four">
+        <item>1000</item>
+        <item>2500</item>
+        <item>4000</item>
+        <item>5500</item>
+        <item>7000</item>
+        <item>8500</item>
+        <item>10000</item>
+        <item>11500</item>
+        <item>14500</item>
+        <item>17000</item>
+        <item>19500</item>
+        <item>21000</item>
+        <item>23500</item>
+        <item>26000</item>
+        <item>28500</item>
+        <item>31000</item>
+    </string-array>
+
+    <string-array name="names_of_sender_dialogue_array_run_three">
+        <item>A-Student</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+        <item>NotTrying</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
+    </string-array>
+
+    <string-array name="messages_dialogue_array_run_three">
+        <item>Okay, so for loops are about repeating stuff without copy-pasting lines of code. Super efficient.</item>
+        <item>Wait... so like, instead of writing waterPlant() five times, you use a loop?</item>
+        <item>Exactly. You set it up like:
+for (int i = 0; i &lt; 5; i++) { waterPlant(); }
+That runs 5 times.</item>
+        <item>Lol just write it 5 times... faster.</item>
+        <item>But the loop has 3 parts, right? Start, stop, update? I think I get start (i = 0) and update (i++), but the stop part confuses me.</item>
+        <item>The stop condition is how long it keeps looping. Like i &lt; 5. If you change that number, it changes how many times it runs.</item>
+        <item>Bro I\'d set it to i &lt; 9999 and water plants forever.</item>
+        <item>Ohhh. So if you use plants.size() instead of 5, it automatically knows how many plants are in the list. That makes sense.</item>
+        <item>Yep. That\'s dynamic. Doesn\'t matter if it\'s 3 plants or 300k.</item>
+        <item>300,000 plants?? nah fam I\'m done after 2.</item>
+        <item>And then there\'s a \"for-each loop\"? I kinda missed that part.</item>
+        <item>Yeah, it\'s like:
+for (Plant p : plants) { water(p); }
+Cleaner, no counter needed.</item>
+        <item>Looks like magic. One line to rule them all. Lord of the Plants!</item>
+        <item>LOL. And break means stop early... continue means skip the rest of that one plant?</item>
+        <item>Correct. Break exits the loop, continue just skips one round.</item>
+        <item>So basically: break when I\'m tired, continue when it\'s broccoli. Got it.</item>
+        <item>Haha. Okay, I think I get it now:
+(1) Use loops for repetition.
+(2) Counter loop vs. for-each.
+(3) Break = stop, Continue = skip.</item>
+        <item>Yep, that\'s the roadmap.</item>
+    </string-array>
+
+    <string-array name="delay_ms_dialogue_array_run_three">
+        <item>1000</item>
+        <item>2500</item>
+        <item>4000</item>
+        <item>5500</item>
+        <item>7000</item>
+        <item>8500</item>
+        <item>10000</item>
+        <item>11500</item>
+        <item>14500</item>
+        <item>17000</item>
+        <item>19500</item>
+        <item>21000</item>
+        <item>23500</item>
+        <item>26000</item>
+        <item>28500</item>
+        <item>31000</item>
+        <item>34000</item>
+        <item>36500</item>
+    </string-array>
+
     <string-array name="names_of_sender_dialogue_array_run_two">
         <item>HonestStruggler</item>
         <item>A-Student</item>
@@ -154,45 +283,6 @@
         <item>13500</item>
         <item>14500</item>
     </string-array>
-
-    <!--
-    <string-array name="names_of_sender_dialogue_array_java_loops">
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>Half-Correct</item>
-        <item>NotTrying</item>
-        <item>A-Student</item>
-        <item>HonestStruggler</item>
-        <item>Half-Correct</item>
-        <item>NotTrying</item>
-    </string-array>
-    -->
-
-    <!--
-    <string-array name="messages_dialogue_array_java_loops">
-        <item>So loops are like checking your plants daily, right? You repeat it, same task, until harvest.</item>
-        <item>Exactly! \'for\' loops are like: \'for 60 days, give them 12 hours of light\'. Precise schedule.</item>
-        <item>Or a \'while\' loop: \'while the soil\'s still damp, don\'t water again.\'</item>
-        <item>I tried looping feeding every day. Accidentally nuked my plants with nutrients.</item>
-        <item>\'do-while\' would be like: \'flush once, then keep flushing while runoff is dark.\' Always flush at least once.</item>
-        <item>Ohhh… that helps. A \'do-while\' always acts before it checks conditions. Got it.</item>
-        <item>Loops are how you automate care. Like a watering schedule but made of code.</item>
-        <item>Can we make a loop that grows weed faster tho?</item>
-    </string-array>
-    -->
-
-    <!--
-    <string-array name="delay_ms_dialogue_array_java_loops">
-        <item>1000</item>
-        <item>2500</item>
-        <item>4000</item>
-        <item>5500</item>
-        <item>7000</item>
-        <item>8500</item>
-        <item>10000</item>
-        <item>11500</item>
-    </string-array>
-    -->
 
     <string name="ide_dialogfragment_console">
         Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
