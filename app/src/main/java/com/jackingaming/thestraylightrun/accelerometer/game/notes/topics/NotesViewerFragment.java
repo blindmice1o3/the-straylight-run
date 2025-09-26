@@ -19,6 +19,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,10 +40,12 @@ public class NotesViewerFragment extends Fragment
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_NOTE_TYPE = "noteType";
+    private static final String ARG_NOTE_TYPE = "note_type";
+    private static final String ARG_RUN = "run";
 
     // TODO: Rename and change types of parameters
     private NoteType noteType;
+    private Game.Run run;
 
     private FrameLayout flNotesViewer;
     private ScrollView svZoom;
@@ -66,10 +69,11 @@ public class NotesViewerFragment extends Fragment
      * @return A new instance of fragment NotesViewerFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NotesViewerFragment newInstance(NoteType noteType) {
+    public static NotesViewerFragment newInstance(NoteType noteType, Game.Run run) {
         NotesViewerFragment fragment = new NotesViewerFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_NOTE_TYPE, noteType);
+        args.putSerializable(ARG_RUN, run);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,42 +81,81 @@ public class NotesViewerFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            noteType = (NoteType) getArguments().getSerializable(ARG_NOTE_TYPE);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            noteType = (NoteType) arguments.getSerializable(ARG_NOTE_TYPE);
+            run = (Game.Run) arguments.getSerializable(ARG_RUN);
 
             drawbles = new ArrayList<>();
 
             if (noteType == NoteType.TOPICS) {
+                int idTopicByRun = -1;
+                switch (run) {
+                    case ONE:
+                        idTopicByRun = R.drawable.notes_run_one_topic_methods;
+                        break;
+                    case TWO:
+                        idTopicByRun = R.drawable.notes_run_two_topic_if_else;
+                        break;
+                    case THREE:
+                        idTopicByRun = R.drawable.notes_run_three_topic_for_loops;
+                        break;
+                    case FOUR:
+                        idTopicByRun = R.drawable.notes_run_four_topic_lists;
+                        break;
+                    case FIVE:
+                        idTopicByRun = R.drawable.notes_run_three_topic_for_loops;
+                        break;
+                }
+
+
                 drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_one_topic_methods)
-                );
-                drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_two_topic_if_else)
-                );
-                drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_three_topic_for_loops)
-                );
-                drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_four_topic_lists)
-                );
-                drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_topic_primitive_01)
-                );
-                drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_topic_primitive_02)
+                        getResources().getDrawable(idTopicByRun)
                 );
                 drawbles.add(
                         getResources().getDrawable(R.drawable.notes_topic_01)
                 );
             } else if (noteType == NoteType.LEARNERS) {
+                int idLearnerAStudentByRun = -1;
+                int idLearnerHonestStrugglerByRun = -1;
+                int idLearnerNotTryingByRun = -1;
+                switch (run) {
+                    case ONE:
+                        idLearnerAStudentByRun = R.drawable.notes_run_one_learner_a_student;
+                        idLearnerHonestStrugglerByRun = R.drawable.notes_run_one_learner_honest_struggler;
+                        idLearnerNotTryingByRun = R.drawable.notes_run_one_learner_not_trying;
+                        break;
+                    case TWO:
+                        idLearnerAStudentByRun = R.drawable.notes_run_two_learner_a_student;
+                        idLearnerHonestStrugglerByRun = R.drawable.notes_run_two_learner_honest_struggler;
+                        idLearnerNotTryingByRun = R.drawable.notes_run_two_learner_not_trying;
+                        break;
+                    case THREE:
+                        idLearnerAStudentByRun = R.drawable.notes_run_three_learner_a_student;
+                        idLearnerHonestStrugglerByRun = R.drawable.notes_run_three_learner_honest_struggler;
+                        idLearnerNotTryingByRun = R.drawable.notes_run_three_learner_not_trying;
+                        break;
+                    case FOUR:
+                        idLearnerAStudentByRun = R.drawable.notes_run_four_learner_a_student;
+                        idLearnerHonestStrugglerByRun = R.drawable.notes_run_four_learner_honest_struggler;
+                        idLearnerNotTryingByRun = R.drawable.notes_run_four_learner_not_trying;
+                        break;
+                    case FIVE:
+                        // TODO: load run five learners' notes.
+                        idLearnerAStudentByRun = R.drawable.notes_run_three_learner_a_student;
+                        idLearnerHonestStrugglerByRun = R.drawable.notes_run_three_learner_honest_struggler;
+                        idLearnerNotTryingByRun = R.drawable.notes_run_three_learner_not_trying;
+                        break;
+                }
+
                 drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_one_learner_a_student)
+                        getResources().getDrawable(idLearnerAStudentByRun)
                 );
                 drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_one_learner_honest_struggler)
+                        getResources().getDrawable(idLearnerHonestStrugglerByRun)
                 );
                 drawbles.add(
-                        getResources().getDrawable(R.drawable.notes_run_one_learner_not_trying)
+                        getResources().getDrawable(idLearnerNotTryingByRun)
                 );
             }
             indexDrawables = 0;

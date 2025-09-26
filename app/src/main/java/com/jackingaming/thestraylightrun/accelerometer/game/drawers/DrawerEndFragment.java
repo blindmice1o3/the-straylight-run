@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 
 import java.io.Serializable;
 
@@ -120,5 +121,27 @@ public class DrawerEndFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void updateJournalPrompt(Game.Run run) {
+        String prompt = null;
+        switch (run) {
+            case ONE:
+                prompt = "What's one way you could explain the difference between a class and an object to someone who's never coded before?";
+                break;
+            case TWO:
+                prompt = "Think of a real-life decision you make every day. How could you turn that into an if/else statement?";
+                break;
+            case THREE:
+                prompt = "When have you had to repeat the same task over and over? How would a for loop help in that situation?";
+                break;
+            case FOUR:
+                prompt = "If you could make a List of anything right now - snacks, games, or even chores - what would be on it?";
+                break;
+            case FIVE:
+                prompt = "If you had to build a simple program to take care of a farm, which parts would you use classes, loops, lists, and if/else for?";
+                break;
+        }
+        tvJournalPrompt.setText(prompt);
     }
 }

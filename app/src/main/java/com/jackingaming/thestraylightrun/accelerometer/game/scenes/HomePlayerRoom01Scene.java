@@ -331,7 +331,8 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                             unpause();
                                         }
-                                    }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS);
+                                    }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS,
+                                    gameListener.getRun());
 
                             gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
 
@@ -346,7 +347,8 @@ public class HomePlayerRoom01Scene extends Scene {
 
                             // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                             String gameTitle = "Pooh Farmer";
-                            Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                            Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
+                                    gameListener.getRun());
                             String tag = GameConsoleFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment =
@@ -387,7 +389,8 @@ public class HomePlayerRoom01Scene extends Scene {
                                             NotesViewerFragment.NoteType.TOPICS :
                                             NotesViewerFragment.NoteType.LEARNERS;
 
-                            Fragment fragment = NotesViewerFragment.newInstance(noteType);
+                            Fragment fragment = NotesViewerFragment.newInstance(noteType,
+                                    gameListener.getRun());
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,

@@ -206,9 +206,15 @@ public class GameFragment extends Fragment
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START opened");
 
-                    drawerStartFragment.startMessageQueue();
+                    drawerStartFragment.startMessageQueue(
+                            gameListener.getRun()
+                    );
                 } else {
                     Log.e(TAG, "drawer END opened");
+
+                    drawerEndFragment.updateJournalPrompt(
+                            gameListener.getRun()
+                    );
                 }
             }
 

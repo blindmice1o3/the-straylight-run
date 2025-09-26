@@ -319,7 +319,8 @@ public class WorldScene extends Scene {
 
                                         unpause();
                                     }
-                                }, IDEDialogFragment.Mode.KEYBOARD_TRAINER);
+                                }, IDEDialogFragment.Mode.KEYBOARD_TRAINER,
+                                gameListener.getRun());
 
                         gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
@@ -329,7 +330,8 @@ public class WorldScene extends Scene {
 
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Pooh Farmer";
-                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
+                                gameListener.getRun());
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =
@@ -385,7 +387,8 @@ public class WorldScene extends Scene {
 
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Bubble Pop";
-                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle);
+                        Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
+                                gameListener.getRun());
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =

@@ -52,6 +52,7 @@ public class GameConsoleFragment extends Fragment
         StatsDisplayerFragment.IconClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
     public static final String ARG_GAME_TITLE = "game";
+    public static final String ARG_RUN = "run";
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
 
     transient private ObjectAnimator animatorBackgroundColor;
@@ -65,16 +66,18 @@ public class GameConsoleFragment extends Fragment
 
     private String gameTitle;
     transient private Game game;
+    private com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run;
     transient private InputManager inputManager;
 
     public GameConsoleFragment() {
         // Required empty public constructor
     }
 
-    public static GameConsoleFragment newInstance(String gameTitle) {
+    public static GameConsoleFragment newInstance(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
         GameConsoleFragment fragment = new GameConsoleFragment();
         Bundle args = new Bundle();
         args.putString(ARG_GAME_TITLE, gameTitle);
+        args.putSerializable(ARG_RUN, run);
         fragment.setArguments(args);
         return fragment;
     }
@@ -137,14 +140,15 @@ public class GameConsoleFragment extends Fragment
         buttonPadFragment = (ButtonPadFragment) gamePadFragment.getChildFragmentManager().findFragmentById(R.id.buttonpadfragment_game_pad_fragment);
         buttonPadFragment.setButtonPadListener(inputManager);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
             //////////////////////////////////////////
-            gameTitle = bundle.getString(ARG_GAME_TITLE);
+            gameTitle = arguments.getString(ARG_GAME_TITLE);
+            run = (com.jackingaming.thestraylightrun.accelerometer.game.Game.Run) arguments.getSerializable(ARG_RUN);
             Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState) gameTitle selected is: " + gameTitle);
             //////////////////////////////////////////
             Assets.init(getResources());
-            game = new Game(gameTitle);
+            game = new Game(gameTitle, run);
         }
 
         game.setViewportListener(this);

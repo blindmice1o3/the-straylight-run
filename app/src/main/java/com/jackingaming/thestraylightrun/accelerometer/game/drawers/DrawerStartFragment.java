@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.GroupChatAdapter;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.Message;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.SlideFromBottomItemAnimator;
@@ -100,22 +101,50 @@ public class DrawerStartFragment extends Fragment {
         rvDrawerStart.setAdapter(adapter);
         rvDrawerStart.setLayoutManager(new LinearLayoutManager(getContext()));
         rvDrawerStart.setItemAnimator(new SlideFromBottomItemAnimator());
-
-        initMessageQueue();
     }
 
-    private void initMessageQueue() {
+    public void startMessageQueue(Game.Run run) {
         messageQueue = new ArrayList<>();
-        String[] namesOfSenderDialogueArrayJavaLoops = getResources().getStringArray(R.array.names_of_sender_dialogue_array_run_four);
-        String[] messagesDialogueArrayJavaLoops = getResources().getStringArray(R.array.messages_dialogue_array_run_four);
-        String[] delayMsDialogueArrayJavaLoops = getResources().getStringArray(R.array.delay_ms_dialogue_array_run_four);
-//        String[] namesOfSenderDialogueArrayJavaLoops = getResources().getStringArray(R.array.names_of_sender_dialogue_array_run_one);
-//        String[] messagesDialogueArrayJavaLoops = getResources().getStringArray(R.array.messages_dialogue_array_run_one);
-//        String[] delayMsDialogueArrayJavaLoops = getResources().getStringArray(R.array.delay_ms_dialogue_array_run_one);
-        for (int i = 0; i < namesOfSenderDialogueArrayJavaLoops.length; i++) {
-            String nameOfSender = namesOfSenderDialogueArrayJavaLoops[i];
-            String message = messagesDialogueArrayJavaLoops[i];
-            long delayMs = Long.parseLong(delayMsDialogueArrayJavaLoops[i]);
+
+        int idNamesOfSenderDialogueArray = -1;
+        int idMessagesDialogueArray = -1;
+        int idDelayMsDialogueArray = -1;
+        switch (run) {
+            case ONE:
+                idNamesOfSenderDialogueArray = R.array.names_of_sender_dialogue_array_run_one;
+                idMessagesDialogueArray = R.array.messages_dialogue_array_run_one;
+                idDelayMsDialogueArray = R.array.delay_ms_dialogue_array_run_one;
+                break;
+            case TWO:
+                idNamesOfSenderDialogueArray = R.array.names_of_sender_dialogue_array_run_two;
+                idMessagesDialogueArray = R.array.messages_dialogue_array_run_two;
+                idDelayMsDialogueArray = R.array.delay_ms_dialogue_array_run_two;
+                break;
+            case THREE:
+                idNamesOfSenderDialogueArray = R.array.names_of_sender_dialogue_array_run_three;
+                idMessagesDialogueArray = R.array.messages_dialogue_array_run_three;
+                idDelayMsDialogueArray = R.array.delay_ms_dialogue_array_run_three;
+                break;
+            case FOUR:
+                idNamesOfSenderDialogueArray = R.array.names_of_sender_dialogue_array_run_four;
+                idMessagesDialogueArray = R.array.messages_dialogue_array_run_four;
+                idDelayMsDialogueArray = R.array.delay_ms_dialogue_array_run_four;
+                break;
+            case FIVE:
+                // TODO: change to run five.
+                idNamesOfSenderDialogueArray = R.array.names_of_sender_dialogue_array_run_three;
+                idMessagesDialogueArray = R.array.messages_dialogue_array_run_three;
+                idDelayMsDialogueArray = R.array.delay_ms_dialogue_array_run_three;
+                break;
+        }
+
+        String[] namesOfSenderDialogueArray = getResources().getStringArray(idNamesOfSenderDialogueArray);
+        String[] messagesDialogueArray = getResources().getStringArray(idMessagesDialogueArray);
+        String[] delayMsDialogueArray = getResources().getStringArray(idDelayMsDialogueArray);
+        for (int i = 0; i < namesOfSenderDialogueArray.length; i++) {
+            String nameOfSender = namesOfSenderDialogueArray[i];
+            String message = messagesDialogueArray[i];
+            long delayMs = Long.parseLong(delayMsDialogueArray[i]);
 
             messageQueue.add(new Message(nameOfSender, message, delayMs, false));
         }
@@ -125,9 +154,7 @@ public class DrawerStartFragment extends Fragment {
         messageQueue.add(6, new Message("player", "meow?", 9000L, true));
         messageQueue.add(8, new Message("player", "meow?!", 11000L, true));
         messageQueue.add(10, new Message("player", "*silence*", 16000L, true));
-    }
 
-    public void startMessageQueue() {
         for (Message messageToAdd : messageQueue) {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {

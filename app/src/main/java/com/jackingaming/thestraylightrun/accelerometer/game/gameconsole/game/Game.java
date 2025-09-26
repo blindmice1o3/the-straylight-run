@@ -151,6 +151,7 @@ public class Game {
     private int heightViewport;
     private boolean loadNeeded;
     private String gameTitle;
+    private com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run;
 
     private TimeManager timeManager;
     private SceneManager sceneManager;
@@ -175,9 +176,10 @@ public class Game {
     private boolean paused;
     private boolean inBackpackDialogState;
 
-    public Game(String gameTitle) {
+    public Game(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
         loadNeeded = false;
         this.gameTitle = gameTitle;
+        this.run = run;
 
         timeManager = new TimeManager();
         sceneManager = new SceneManager(gameTitle);

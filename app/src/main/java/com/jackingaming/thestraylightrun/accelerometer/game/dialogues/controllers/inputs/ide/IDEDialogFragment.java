@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.bottom.ConsoleViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
@@ -32,9 +33,10 @@ import java.io.Serializable;
 public class IDEDialogFragment extends DialogFragment
         implements Serializable {
     public static final String TAG = IDEDialogFragment.class.getSimpleName();
-    public static final String ARG_BUTTON_LISTENER = "buttonListener";
-    public static final String ARG_DISMISS_LISTENER = "dismissListener";
+    public static final String ARG_BUTTON_LISTENER = "button_listener";
+    public static final String ARG_DISMISS_LISTENER = "dismiss_listener";
     public static final String ARG_MODE = "mode";
+    public static final String ARG_RUN = "run";
 
     public interface ButtonListener extends Serializable {
         void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment);
@@ -50,6 +52,7 @@ public class IDEDialogFragment extends DialogFragment
     public enum Mode {LONG_PRESS_REVEALS, KEYBOARD_TRAINER;}
 
     private Mode mode;
+    private Game.Run run;
 
     private TextView tvClose;
     private TextView tvExecute;
@@ -62,13 +65,15 @@ public class IDEDialogFragment extends DialogFragment
 
     public static IDEDialogFragment newInstance(ButtonListener buttonListener,
                                                 DismissListener dismissListener,
-                                                Mode mode) {
+                                                Mode mode,
+                                                Game.Run run) {
         IDEDialogFragment fragment = new IDEDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_BUTTON_LISTENER, buttonListener);
         args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         args.putSerializable(ARG_MODE, mode);
+        args.putSerializable(ARG_RUN, run);
         fragment.setArguments(args);
 
         return fragment;
@@ -79,10 +84,12 @@ public class IDEDialogFragment extends DialogFragment
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
 
-        if (getArguments() != null) {
-            buttonListener = (ButtonListener) getArguments().getSerializable(ARG_BUTTON_LISTENER);
-            dismissListener = (DismissListener) getArguments().getSerializable(ARG_DISMISS_LISTENER);
-            mode = (Mode) getArguments().getSerializable(ARG_MODE);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            buttonListener = (ButtonListener) arguments.getSerializable(ARG_BUTTON_LISTENER);
+            dismissListener = (DismissListener) arguments.getSerializable(ARG_DISMISS_LISTENER);
+            mode = (Mode) arguments.getSerializable(ARG_MODE);
+            run = (Game.Run) arguments.getSerializable(ARG_RUN);
         }
     }
 
@@ -98,6 +105,8 @@ public class IDEDialogFragment extends DialogFragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
+
+        // TODO: load panes' content via Run.
 
         projectViewportFragment = ProjectViewportFragment.newInstance();
         mainViewportFragment = MainViewportFragment.newInstance(

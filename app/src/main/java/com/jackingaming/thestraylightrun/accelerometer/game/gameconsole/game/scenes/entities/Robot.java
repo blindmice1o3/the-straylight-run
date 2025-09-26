@@ -460,7 +460,7 @@ public class Robot extends Creature {
             public void onDismiss() {
                 Log.e(TAG, "onDismiss()");
             }
-        }, IDEDialogFragment.Mode.KEYBOARD_TRAINER);
+        }, IDEDialogFragment.Mode.KEYBOARD_TRAINER, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE);
 
         if (listener != null) {
             listener.onOpenIDEDialogFragment();
