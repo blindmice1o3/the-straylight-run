@@ -252,10 +252,29 @@ public class HomePlayerRoom01Scene extends Scene {
 
                             pause();
 
+                            String videoByRun = null;
+                            switch (gameListener.getRun()) {
+                                case ONE:
+                                    videoByRun = "vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90";
+                                    break;
+                                case TWO:
+                                    videoByRun = "vid_20250913_161759550_run_two_post_compressed_rotated_90";
+                                    break;
+                                case THREE:
+                                    videoByRun = "vid_20250917_180111542_run_three_post_compressed_rotated_90";
+                                    break;
+                                case FOUR:
+                                    videoByRun = "vid_20250918_173333392_run_four_post_compressed_rotated_90";
+                                    break;
+                                case FIVE:
+                                    videoByRun = "pxl_20250429_193429506";
+                                    break;
+                            }
+
                             boolean showToolbarOnDismiss = false;
                             Fragment fragment =
 //                                    NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
-                                    VideoViewFragment.newInstance("vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90", new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                                    VideoViewFragment.newInstance(videoByRun, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
                                         @Override
                                         public void onCompletion(MediaPlayer mediaPlayer) {
                                             Log.e(TAG, "finished playback!");

@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".accelerometer.game.drawers.DrawerTopFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tv_run_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run One" />
+
+    <TextView
+        android:id="@+id/tv_run_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Two" />
+
+    <TextView
+        android:id="@+id/tv_run_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Three" />
+
+    <TextView
+        android:id="@+id/tv_run_four"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Four" />
+
+    <TextView
+        android:id="@+id/tv_run_five"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Five" />
+
     <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
         android:id="@+id/type_writer_tv_in_drawer_top"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="Hello, TypeWriterTextViewTop" />
 
-</FrameLayout>
+</LinearLayout>

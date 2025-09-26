@@ -27,6 +27,18 @@ public class Game {
     public static final String TAG = Game.class.getSimpleName();
     public static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
 
+    public enum Run {ONE, TWO, THREE, FOUR, FIVE;}
+
+    private Run run = Run.ONE;
+
+    public Run getRun() {
+        return run;
+    }
+
+    public void setRun(Run run) {
+        this.run = run;
+    }
+
     public enum DailyLoop {
         TELEVISION,
         NOTES_TOPIC,
@@ -94,6 +106,8 @@ public class Game {
         void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst);
 
         void removeImageViewOfEntityFromFrameLayout();
+
+        Run getRun();
 
         DailyLoop getDailyLoop();
 

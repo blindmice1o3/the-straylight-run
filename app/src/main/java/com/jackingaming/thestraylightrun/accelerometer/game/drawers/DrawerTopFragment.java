@@ -5,12 +5,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 
 import java.io.Serializable;
@@ -27,7 +29,16 @@ public class DrawerTopFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_DRAWER_TOP_LISTENER = "drawerTopListener";
+    private static final String ARG_DRAWER_TOP_LISTENER = "drawer_top_listener";
+    private static final String ARG_RUN_SELECTION_LISTENER = "run_selection_listener";
+
+    public interface RunSelectionListener extends Serializable {
+        void onRunSelected(Game.Run run);
+
+        void onCloseDrawerTop();
+    }
+
+    private RunSelectionListener runSelectionListener;
 
     public interface DrawerTopListener extends Serializable {
         void onClickTypeWriterTextView(View view, String tag);
@@ -35,6 +46,7 @@ public class DrawerTopFragment extends Fragment {
 
     private DrawerTopListener listener;
 
+    private TextView tvRunOne, tvRunTwo, tvRunThree, tvRunFour, tvRunFive;
     private TypeWriterTextView typeWriterTextView;
     private String textInitial;
 
@@ -56,7 +68,8 @@ public class DrawerTopFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static DrawerTopFragment newInstance(String param1, String param2,
-                                                DrawerTopListener drawerTopListener) {
+                                                DrawerTopListener drawerTopListener,
+                                                RunSelectionListener runSelectionListener) {
         Log.e(TAG, "newInstance()");
         DrawerTopFragment fragment = new DrawerTopFragment();
 
@@ -64,6 +77,7 @@ public class DrawerTopFragment extends Fragment {
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         args.putSerializable(ARG_DRAWER_TOP_LISTENER, drawerTopListener);
+        args.putSerializable(ARG_RUN_SELECTION_LISTENER, runSelectionListener);
         fragment.setArguments(args);
 
         return fragment;
@@ -73,10 +87,13 @@ public class DrawerTopFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "onCreate()");
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            listener = (DrawerTopListener) getArguments().getSerializable(ARG_DRAWER_TOP_LISTENER);
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mParam1 = arguments.getString(ARG_PARAM1);
+            mParam2 = arguments.getString(ARG_PARAM2);
+            listener = (DrawerTopListener) arguments.getSerializable(ARG_DRAWER_TOP_LISTENER);
+            runSelectionListener = (RunSelectionListener) arguments.getSerializable(ARG_RUN_SELECTION_LISTENER);
         }
     }
 
@@ -100,9 +117,50 @@ public class DrawerTopFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
+        tvRunOne = view.findViewById(R.id.tv_run_one);
+        tvRunTwo = view.findViewById(R.id.tv_run_two);
+        tvRunThree = view.findViewById(R.id.tv_run_three);
+        tvRunFour = view.findViewById(R.id.tv_run_four);
+        tvRunFive = view.findViewById(R.id.tv_run_five);
         typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_top);
-        textInitial = (String) typeWriterTextView.getText();
 
+        tvRunOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runSelectionListener.onRunSelected(Game.Run.ONE);
+                runSelectionListener.onCloseDrawerTop();
+            }
+        });
+        tvRunTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runSelectionListener.onRunSelected(Game.Run.TWO);
+                runSelectionListener.onCloseDrawerTop();
+            }
+        });
+        tvRunThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runSelectionListener.onRunSelected(Game.Run.THREE);
+                runSelectionListener.onCloseDrawerTop();
+            }
+        });
+        tvRunFour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runSelectionListener.onRunSelected(Game.Run.FOUR);
+                runSelectionListener.onCloseDrawerTop();
+            }
+        });
+        tvRunFive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                runSelectionListener.onRunSelected(Game.Run.FIVE);
+                runSelectionListener.onCloseDrawerTop();
+            }
+        });
+
+        textInitial = (String) typeWriterTextView.getText();
         typeWriterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

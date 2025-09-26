@@ -274,18 +274,48 @@ public class GameFragment extends Fragment
             drawerEndFragment = DrawerEndFragment.newInstance(null, null, new DrawerEndFragment.DrawerEndListener() {
                 @Override
                 public void onSubmitJournalEntry(View view, String journalEntry) {
-                    // TODO: Save to local sb, file, or in-memory list.
+                    // TODO: Save to local db, file, or in-memory list.
                     Toast.makeText(getContext(), "Journal saved!", Toast.LENGTH_SHORT).show();
                     drawerLayout.closeDrawer(GravityCompat.END);
                 }
             });
-            drawerTopFragment = DrawerTopFragment.newInstance(null, null, new DrawerTopFragment.DrawerTopListener() {
-                @Override
-                public void onClickTypeWriterTextView(View view, String tag) {
-                    String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                    ((TypeWriterTextView) view).displayTextWithAnimation(message);
-                }
-            });
+            drawerTopFragment = DrawerTopFragment.newInstance(null, null,
+                    new DrawerTopFragment.DrawerTopListener() {
+                        @Override
+                        public void onClickTypeWriterTextView(View view, String tag) {
+                            String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
+                            ((TypeWriterTextView) view).displayTextWithAnimation(message);
+                        }
+                    }, new DrawerTopFragment.RunSelectionListener() {
+                        @Override
+                        public void onRunSelected(Game.Run run) {
+                            switch (run) {
+                                case ONE:
+                                    game.setRun(Game.Run.ONE);
+                                    break;
+                                case TWO:
+                                    game.setRun(Game.Run.TWO);
+                                    break;
+                                case THREE:
+                                    game.setRun(Game.Run.THREE);
+                                    break;
+                                case FOUR:
+                                    game.setRun(Game.Run.FOUR);
+                                    break;
+                                case FIVE:
+                                    game.setRun(Game.Run.FIVE);
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onCloseDrawerTop() {
+                            appBarLayout.setExpanded(false);
+
+                            DrawerTopFragment drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_top);
+                            drawerTopFragment.stopTypeWriterTextView();
+                        }
+                    });
             getChildFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.fcv_drawer_start,
@@ -449,6 +479,11 @@ public class GameFragment extends Fragment
             @Override
             public void removeImageViewOfEntityFromFrameLayout() {
                 GameFragment.this.removeImageViewOfEntityFromFrameLayout();
+            }
+
+            @Override
+            public Game.Run getRun() {
+                return game.getRun();
             }
 
             @Override
