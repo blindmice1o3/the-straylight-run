@@ -106,9 +106,7 @@ public class IDEDialogFragment extends DialogFragment
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        // TODO: load panes' content via Run.
-
-        projectViewportFragment = ProjectViewportFragment.newInstance();
+        projectViewportFragment = ProjectViewportFragment.newInstance(run);
         mainViewportFragment = MainViewportFragment.newInstance(
                 projectViewportFragment.getMainClass(), mode
         );

@@ -46,6 +46,8 @@ public class ClassEditorFragment extends Fragment {
     public static final String TAG = ClassEditorFragment.class.getSimpleName();
     public static final String DEFAULT_INDENT = "    ";
     public static final String IDENTIFIER_COMMENT_SINGLE_LINE = "//";
+    public static final String IDENTIFIER_COMMENT_MULTI_LINE_START = "/*";
+    public static final String IDENTIFIER_COMMENT_MULTI_LINE_END = "*/";
     public static final String IDENTIFIER_COMMENT_TODO = "todo";
 
     // TODO: Rename parameter arguments, choose names that match
@@ -1080,23 +1082,42 @@ public class ClassEditorFragment extends Fragment {
                     llLine.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     llLine.setOrientation(LinearLayout.HORIZONTAL);
 
-                    boolean hasComment = false;
-                    int indexComment = -1;
+                    boolean hasCommentSingleLine = false;
+                    int indexCommentSingleLine = -1;
+                    boolean hasCommentMultiLineStart = false;
+                    int indexRowCommentMultiLineStart = -1;
+                    int indexColumnCommentMultiLineStart = -1;
+                    boolean hasCommentMultiLineEnd = false;
+                    int indexRowCommentMultiLineEnd = -1;
+                    int indexColumnCommentMultiLineEnd = -1;
                     for (int j = 0; j < line.length(); j++) {
                         // scan line for single line comment (prevents index out of bounds).
                         if (j + IDENTIFIER_COMMENT_SINGLE_LINE.length() - 1 < line.length()) {
-                            // FOUND COMMENT
+                            // FOUND COMMENT (SINGLE-LINE)
                             if (line.substring(j, j + IDENTIFIER_COMMENT_SINGLE_LINE.length()).equals(IDENTIFIER_COMMENT_SINGLE_LINE)) {
-                                hasComment = true;
-                                indexComment = j;
+                                hasCommentSingleLine = true;
+                                indexCommentSingleLine = j;
                                 break;
+                            }
+                            // FOUND COMMENT (MULTI-LINE)
+                            else if (line.substring(j, j + IDENTIFIER_COMMENT_MULTI_LINE_START.length()).equals(IDENTIFIER_COMMENT_MULTI_LINE_START)) {
+                                hasCommentMultiLineStart = true;
+                                indexRowCommentMultiLineStart = i;
+                                indexColumnCommentMultiLineStart = j;
+
+                                // TODO: check the rest of THIS same line
+                                //  for IDENTIFIER_COMMENT_MULTI_LINE_END
+                                //  (break if found).
+
+                                // TODO: search the rest of bodyMethodSplitByNewLine
+                                //  for IDENTIFIER_COMMENT_MULTI_LINE_END.
                             }
                         }
                     }
 
                     int indexTODO = -1;
-                    if (hasComment) {
-                        for (int k = indexComment; k < line.length(); k++) {
+                    if (hasCommentSingleLine) {
+                        for (int k = indexCommentSingleLine; k < line.length(); k++) {
                             // scan line for TO-DO (prevents index out of bounds).
                             if (k + IDENTIFIER_COMMENT_TODO.length() - 1 < line.length()) {
                                 // FOUND TO-DO
@@ -1113,7 +1134,7 @@ public class ClassEditorFragment extends Fragment {
                         TextView tvLineBeforeComment = new TextView(getContext());
                         tvLineBeforeComment.setLayoutParams(layoutParams);
                         Spannable spannableLineBeforeComment = convertToColoredSpannableString(
-                                line.substring(0, indexComment), Color.BLACK
+                                line.substring(0, indexCommentSingleLine), Color.BLACK
                         );
                         tvLineBeforeComment.setText(spannableLineBeforeComment);
                         llLine.addView(tvLineBeforeComment);
@@ -1122,7 +1143,7 @@ public class ClassEditorFragment extends Fragment {
                         TextView tvLineAfterCommentBeforeTODO = new TextView(getContext());
                         tvLineAfterCommentBeforeTODO.setLayoutParams(layoutParams);
                         Spannable spannableLineAfterCommentBeforeTODO = convertToColoredSpannableString(
-                                line.substring(indexComment, indexTODO), Color.GRAY
+                                line.substring(indexCommentSingleLine, indexTODO), Color.GRAY
                         );
                         tvLineAfterCommentBeforeTODO.setText(spannableLineAfterCommentBeforeTODO);
                         llLine.addView(tvLineAfterCommentBeforeTODO);
@@ -1172,19 +1193,15 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("performDiagnostics")) {
 
                             String answer = null;
-                            if (i == 3) {
+                            if (i == 2) {
                                 answer = "        for (Equipment e : equipmentList) {\n" +
-                                        "            if (e.name.contains(\"Light\") && e.isPowered) {\n" +
-                                        "                allLightsOff = false;\n" +
-                                        "            }\n" +
-                                        "\n" +
                                         "            if (e.isFunctional()) {\n" +
                                         "                functionalCount++;\n" +
                                         "            }\n" +
                                         "        }";
-                            } else if (i == 5) {
-                                answer = "        if (functionalCount < 3 || allLightsOff) {\n" +
-                                        "            System.out.println(\"Warning: System not ready. Functional: \" + functionalCount + \", All lights off: \" + allLightsOff);\n" +
+                            } else if (i == 4) {
+                                answer = "        if (functionalCount < 6) {\n" +
+                                        "            System.out.println(\"Warning: System not ready. Functional: \" + functionalCount + \");\n" +
                                         "        } else {\n" +
                                         "            System.out.println(\"Diagnostics passed. Ready to grow!\");\n" +
                                         "        }";
@@ -1199,6 +1216,40 @@ public class ClassEditorFragment extends Fragment {
                                     typingView = new TypingPracticeView(getContext());
                                     typingView.setCode(answer);
                                 }
+                            }
+                        }
+                        // class PlantRun3
+                        else if (method.getName().equals("inspectAndCull")) {
+
+                            String answer = "        for (int i = 0; i < plants.size(); i++) {\n" +
+                                    "            if (plants.get(i).isDiseased()) {\n" +
+                                    "                // remove diseased plant\n" +
+                                    "            }\n" +
+                                    "        }";
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
+                            }
+                        }
+                        // class PlantRun3
+                        else if (method.getName().equals("harvestAll")) {
+
+                            String answer = "        for (Plant p : plants) {\n" +
+                                    "            if (p.readyToHarvest) {\n" +
+                                    "                p.harvest();\n" +
+                                    "            }\n" +
+                                    "        }";
+                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                tvLineAfterTODO.setOnLongClickListener(
+                                        generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
+                                );
+                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                typingView = new TypingPracticeView(getContext());
+                                typingView.setCode(answer);
                             }
                         }
                         // class RobotRun3
@@ -1285,7 +1336,7 @@ public class ClassEditorFragment extends Fragment {
 
                             String answer = "        moveToUnoccupiedTile();\n" +
                                     "        tillTile();\n" +
-                                    "        seedTile();\n" +
+                                    "        seedTile(seedToPlant);\n" +
                                     "        waterTile();";
                             if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
@@ -1298,23 +1349,44 @@ public class ClassEditorFragment extends Fragment {
                         }
                         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                         llLine.addView(tvLineAfterTODO);
-                    } else if (hasComment) {
+                    } else if (hasCommentSingleLine) {
                         TextView tvLineAfterComment = new TextView(getContext());
                         tvLineAfterComment.setLayoutParams(layoutParams);
                         Spannable spannableLineAfterComment = convertToColoredSpannableString(
-                                line.substring(indexComment), Color.GRAY
+                                line.substring(indexCommentSingleLine), Color.GRAY
                         );
                         tvLineAfterComment.setText(spannableLineAfterComment);
 
                         TextView tvLineBeforeComment = new TextView(getContext());
                         tvLineBeforeComment.setLayoutParams(layoutParams);
                         Spannable spannableLineBeforeComment = convertToColoredSpannableString(
-                                line.substring(0, indexComment), Color.BLACK
+                                line.substring(0, indexCommentSingleLine), Color.BLACK
                         );
                         tvLineBeforeComment.setText(spannableLineBeforeComment);
 
                         llLine.addView(tvLineBeforeComment);
                         llLine.addView(tvLineAfterComment);
+                    } else if (hasCommentMultiLineStart) {
+                        TextView tvLineAfterComment = new TextView(getContext());
+                        tvLineAfterComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineAfterComment = convertToColoredSpannableString(
+                                line.substring(indexColumnCommentMultiLineStart), Color.GRAY
+                        );
+                        tvLineAfterComment.setText(spannableLineAfterComment);
+
+                        TextView tvLineBeforeComment = new TextView(getContext());
+                        tvLineBeforeComment.setLayoutParams(layoutParams);
+                        Spannable spannableLineBeforeComment = convertToColoredSpannableString(
+                                line.substring(0, indexColumnCommentMultiLineStart), Color.BLACK
+                        );
+                        tvLineBeforeComment.setText(spannableLineBeforeComment);
+
+                        llLine.addView(tvLineBeforeComment);
+                        llLine.addView(tvLineAfterComment);
+
+
+                        // TODO: continue with Color.GRAY until
+                        //  reaching hasCommentMultiLineEnd
                     } else {
                         TextView tvLine = new TextView(getContext());
                         tvLine.setLayoutParams(layoutParams);
@@ -1428,14 +1500,78 @@ public class ClassEditorFragment extends Fragment {
         // CLASS-OPENING
         initLinesOfClassOpening();
 
+        Spannable spannableCommentFields = convertToColoredSpannableString(
+                "    // FIELDS", Color.GRAY);
+        TextView tvCommentFields = new TextView(getContext());
+        tvCommentFields.setLayoutParams(layoutParams);
+        tvCommentFields.setText(spannableCommentFields);
+        linearLayoutParent.addView(tvCommentFields);
+
         // FIELDS
         initLinesOfFields();
+
+        Spannable spannableEllipsisFields = convertToColoredSpannableString(
+                "    ...", Color.CYAN);
+        TextView tvEllipsisFields = new TextView(getContext());
+        tvEllipsisFields.setLayoutParams(layoutParams);
+        tvEllipsisFields.setText(spannableEllipsisFields);
+        linearLayoutParent.addView(tvEllipsisFields);
+
+        addTextViewAsBlankLineToLinearLayout();
+        Spannable spannableCommentConstructors = convertToColoredSpannableString(
+                "    // CONSTRUCTORS", Color.GRAY);
+        TextView tvCommentConstructors = new TextView(getContext());
+        tvCommentConstructors.setLayoutParams(layoutParams);
+        tvCommentConstructors.setText(spannableCommentConstructors);
+        linearLayoutParent.addView(tvCommentConstructors);
 
         // CONSTRUCTORS
         initLinesOfConstructors();
 
+        if (classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4)) {
+            addTextViewAsBlankLineToLinearLayout();
+        }
+        Spannable spannableEllipsisConstructor = convertToColoredSpannableString(
+                "    ...", Color.CYAN);
+        TextView tvEllipsisConstructor = new TextView(getContext());
+        tvEllipsisConstructor.setLayoutParams(layoutParams);
+        tvEllipsisConstructor.setText(spannableEllipsisConstructor);
+        linearLayoutParent.addView(tvEllipsisConstructor);
+
+        addTextViewAsBlankLineToLinearLayout();
+        Spannable spannableCommentMethods = convertToColoredSpannableString(
+                "    // METHODS", Color.GRAY);
+        TextView tvCommentMethods = new TextView(getContext());
+        tvCommentMethods.setLayoutParams(layoutParams);
+        tvCommentMethods.setText(spannableCommentMethods);
+        linearLayoutParent.addView(tvCommentMethods);
+
         // METHODS
         initLinesOfMethods();
+
+        if (classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_MAIN) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROWABLE_TILE_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_CHICKEN_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_COW_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN2) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN3) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN3) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4)) {
+            addTextViewAsBlankLineToLinearLayout();
+        }
+        Spannable spannableEllipsisMethod = convertToColoredSpannableString(
+                "    ...", Color.CYAN);
+        TextView tvEllipsisMethod = new TextView(getContext());
+        tvEllipsisMethod.setLayoutParams(layoutParams);
+        tvEllipsisMethod.setText(spannableEllipsisMethod);
+        linearLayoutParent.addView(tvEllipsisMethod);
 
         // CLIPPIT-MESSAGE
         addTextViewAsBlankLineToLinearLayout();

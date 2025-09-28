@@ -319,7 +319,7 @@ public class WorldScene extends Scene {
 
                                         unpause();
                                     }
-                                }, IDEDialogFragment.Mode.KEYBOARD_TRAINER,
+                                }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS,
                                 gameListener.getRun());
 
                         gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);

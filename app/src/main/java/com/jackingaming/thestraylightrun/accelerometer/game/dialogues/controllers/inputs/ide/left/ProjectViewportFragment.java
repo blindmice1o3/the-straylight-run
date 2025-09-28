@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Package;
@@ -39,6 +40,7 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_GROW_TENT_SYSTEM_RUN5 = "GrowTentSystemRun5";
     public static final String NAME_CLASS_GROW_TENT_SYSTEM_RUN4 = "GrowTentSystemRun4";
     public static final String NAME_CLASS_EQUIPMENT_RUN4 = "EquipmentRun4";
+    public static final String NAME_CLASS_PLANT_RUN3 = "PlantRun3";
     public static final String NAME_CLASS_ROBOT_RUN3 = "RobotRun3";
     public static final String NAME_CLASS_PLANT_RUN2 = "PlantRun2";
     public static final String NAME_CLASS_ROBOT_RUN2 = "RobotRun2";
@@ -48,6 +50,7 @@ public class ProjectViewportFragment extends Fragment {
     public static final String NAME_CLASS_CHICKEN_RUN1 = "ChickenRun1";
     public static final String NAME_CLASS_COW_RUN1 = "CowRun1";
     public static final String NAME_METHOD_MAIN = "main";
+    public static final String ARG_RUN = "run";
 
     public interface ProjectViewportListener {
         void onPackageClicked(Package packageClicked);
@@ -70,6 +73,7 @@ public class ProjectViewportFragment extends Fragment {
     private TextView textView;
     private RecyclerView recyclerView;
     private ClassRVAdapterForProject classRVAdapter;
+    private Game.Run run;
 
     private Class initClassMain() {
         Class classMain = new Class(ClassComponent.AccessModifier.PUBLIC,
@@ -92,7 +96,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", NAME_METHOD_MAIN,
                 argumentListMain,
                 bodyMain,
-                null, null, true));
+                null, null, false));
 
         return classMain;
     }
@@ -190,21 +194,20 @@ public class ProjectViewportFragment extends Fragment {
         classGrowTentSystem.addConstructor(new Constructor(
                 ClassComponent.AccessModifier.PUBLIC,
                 argumentListGrowTentSystemWithEquipmentList, bodyGrowTentSystemWithEquipments,
-                null, null, true));
+                null, null, false));
 
         // METHODS
         String bodyPerformDiagnostics = "        int functionalCount = 0;\n" +
-                "        boolean allLightsOff = true;\n" +
                 "\n" +
                 "        // TODO: Loop through each Equipment item, use isFunctional() to count how many are working\n" +
                 "\n" +
-                "        // TODO: Print a warning if fewer than 3 are functional OR if all lights are off";
+                "        // TODO: Print a warning if fewer than 6 are functional";
         classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "performDiagnostics",
                 null,
                 bodyPerformDiagnostics,
-                null, null, true));
+                null, null, false));
 
         return classGrowTentSystem;
     }
@@ -243,7 +246,7 @@ public class ProjectViewportFragment extends Fragment {
                 "        this.isCalibrated = isCalibrated;";
         classEquipment.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListEquipment, bodyEquipment,
-                null, null, true));
+                null, null, false));
 
         // METHODS
         classEquipment.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
@@ -253,9 +256,52 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 null,
                 "// TODO: Write a method isFunctional() that returns true only if powered AND calibrated",
-                true));
+                false));
 
         return classEquipment;
+    }
+
+    private Class initClassPlantRun3() {
+        Class classPlant = new Class(ClassComponent.AccessModifier.PUBLIC,
+                NAME_CLASS_PLANT_RUN3, null);
+
+        // FIELDS
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "diseased", null,
+                null,
+                null,
+                null, false));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "readyToHarvest", null,
+                null,
+                null,
+                null, false));
+
+        // CONSTRUCTORS
+
+        // METHODS
+        String bodyIsDiseased = "        return diseased;";
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "boolean", "isDiseased",
+                null,
+                bodyIsDiseased,
+                null,
+                null,
+                false));
+        String bodyHarvest = "        /* cut & collect */";
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "harvest",
+                null,
+                bodyHarvest,
+                null,
+                null,
+                true));
+
+        return classPlant;
     }
 
     public Class initClassRobotRun3() {
@@ -269,34 +315,27 @@ public class ProjectViewportFragment extends Fragment {
         // Intentionally blank.
 
         // METHODS
-        String bodyWalkToSeededTile = "        ...";
-        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "walkToSeededTile",
-                null,
-                bodyWalkToSeededTile,
-                null, null, true));
-        List<VariableDeclaration> argumentListCheckForDisease = new ArrayList<>();
-        argumentListCheckForDisease.add(
-                new VariableDeclaration("Plant", "plant")
+        List<VariableDeclaration> argumentListInspectAndCull = new ArrayList<>();
+        argumentListInspectAndCull.add(
+                new VariableDeclaration("List<Plant>", "plants")
         );
-        String bodyCheckForDisease = "        // TODO: Inspect plant's health, cull if not healthy.";
+        String bodyInspectAndCull = "        // TODO: Use for loop to check each plant. If the plant is diseased, remove it.";
         classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "checkForDisease",
-                argumentListCheckForDisease,
-                bodyCheckForDisease,
-                null, null, true));
-        List<VariableDeclaration> argumentListWater = new ArrayList<>();
-        argumentListWater.add(
-                new VariableDeclaration("GrowableTile", "growableTile")
+                "void", "inspectAndCull",
+                argumentListInspectAndCull,
+                bodyInspectAndCull,
+                null, null, false));
+        List<VariableDeclaration> argumentListHarvestAll = new ArrayList<>();
+        argumentListHarvestAll.add(
+                new VariableDeclaration("List<Plant>", "plants")
         );
-        String bodyWater = "        growableTile.water();";
+        String bodyHarvestAll = "        // TODO: Use enhanced for loop to check each plant. If the plant is ready to harvest, harvest it.";
         classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "water",
-                argumentListWater,
-                bodyWater,
+                "void", "harvestAll",
+                argumentListHarvestAll,
+                bodyHarvestAll,
                 null,
                 null,
                 true));
@@ -335,6 +374,18 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "// TODO: Declare an int for number of days in veg stage",
                 null, false));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "needsWater", null,
+                null,
+                null,
+                null, false));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "int", "hydrationLevel", null,
+                null,
+                null,
+                null, false));
 
         // CONSTRUCTORS
         List<VariableDeclaration> argumentListPlant = new ArrayList<>();
@@ -345,10 +396,12 @@ public class ProjectViewportFragment extends Fragment {
                 "        this.type = seed.getType();\n" +
                 "        this.isFlowering = false; // Initialize to false\n" +
                 "        this.isHealthy = true;       // Assume healthy on creation\n" +
-                "        this.vegDays = 0;";
+                "        this.vegDays = 0;\n" +
+                "        this.needsWater = true;\n" +
+                "        this.hydrationLevel = 0;";
         classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListPlant, bodyPlant,
-                null, null, true));
+                null, null, false));
 
         // METHODS
         String bodyUpdateGrowth = "        // Only grow if there's enough light and no pests.\n" +
@@ -367,7 +420,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "updateGrowth",
                 argumentListUpdateGrowth,
                 bodyUpdateGrowth,
-                null, null, true));
+                null, null, false));
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "boolean", "isReadyForHarvest",
@@ -375,6 +428,25 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 null,
                 "// TODO: Write a method that returns true if flowering, healthy, vegDays >= 21)",
+                true));
+        String bodyWater = "        hydrationLevel++;\n" +
+                "        needsWater = false;";
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "void", "water",
+                null,
+                bodyWater,
+                null,
+                null,
+                true));
+        String bodyCheckHydration = "        return needsWater;";
+        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+                null,
+                "boolean", "checkHydration",
+                null,
+                bodyCheckHydration,
+                null,
+                null,
                 true));
 
         return classPlant;
@@ -391,55 +463,21 @@ public class ProjectViewportFragment extends Fragment {
         // Intentionally blank.
 
         // METHODS
-        String bodyWalkToUntilledTile = "        ...";
+        List<VariableDeclaration> argumentListWaterIfNeeded = new ArrayList<>();
+        argumentListWaterIfNeeded.add(
+                new VariableDeclaration("Plant", "plant")
+        );
+        String bodyWaterIfNeeded = "        if (plant.checkHydration()) { \n" +
+                "            plant.water(); \n" +
+                "        } else { \n" +
+                "            System.out.println(\"Skip\"); \n" +
+                "        }";
         classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "walkToUntilledTile",
-                null,
-                bodyWalkToUntilledTile,
-                null, null, true));
-        List<VariableDeclaration> argumentListTill = new ArrayList<>();
-        argumentListTill.add(
-                new VariableDeclaration("GrowableTile", "growableTile")
-        );
-        String bodyTill = "        growableTile.till();";
-        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "till",
-                argumentListTill,
-                bodyTill,
-                null,
-                null,
-                false));
-        List<VariableDeclaration> argumentListSeed = new ArrayList<>();
-        argumentListSeed.add(
-                new VariableDeclaration("GrowableTile", "growableTile")
-        );
-        argumentListSeed.add(
-                new VariableDeclaration("String ", "seedType")
-        );
-        String bodySeed = "        growableTile.seed(seedType);";
-        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "seed",
-                argumentListSeed,
-                bodySeed,
-                null,
-                null,
-                true));
-        List<VariableDeclaration> argumentListWater = new ArrayList<>();
-        argumentListWater.add(
-                new VariableDeclaration("GrowableTile", "growableTile")
-        );
-        String bodyWater = "        growableTile.water();";
-        classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "water",
-                argumentListWater,
-                bodyWater,
-                null,
-                null,
-                true));
+                "void", "waterIfNeeded",
+                argumentListWaterIfNeeded,
+                bodyWaterIfNeeded,
+                null, null, false));
 
         return classRobotRun2;
     }
@@ -476,7 +514,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "till",
                 null,
                 bodyTill,
-                null, null, true
+                null, null, false
         ));
         List<VariableDeclaration> argumentListPlantSeed = new ArrayList<>();
         argumentListPlantSeed.add(new VariableDeclaration(
@@ -607,14 +645,14 @@ public class ProjectViewportFragment extends Fragment {
         classSeedRun1.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListSeedRun1,
                 bodySeedRun1,
-                null, null, true));
+                null, null, false));
 
         // METHODS
         String bodyGetName = "        return name;";
         classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "String", "getName",
-                null, bodyGetName, null, null, true));
+                null, bodyGetName, null, null, false));
         String bodyGetType = "        return type;";
         classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
@@ -655,7 +693,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "plantSeed",
                 argumentPlantSeed,
                 bodyPlantSeed,
-                null, null, true));
+                null, null, false));
 
         return classRobotRun1;
     }
@@ -682,7 +720,7 @@ public class ProjectViewportFragment extends Fragment {
         classChickenRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "cluck",
-                null, bodyCluck, null, null, true));
+                null, bodyCluck, null, null, false));
 
         return classChickenRun1;
     }
@@ -709,7 +747,7 @@ public class ProjectViewportFragment extends Fragment {
         classCowRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "walk",
-                null, bodyWalk, null, null, true));
+                null, bodyWalk, null, null, false));
 
         return classCowRun1;
     }
@@ -726,39 +764,6 @@ public class ProjectViewportFragment extends Fragment {
         );
         classes.add(
                 initClassBar()
-        );
-        classes.add(
-                initClassGrowTentSystemRun5()
-        );
-        classes.add(
-                initClassGrowTentSystemRun4()
-        );
-        classes.add(
-                initClassEquipmentRun4()
-        );
-        classes.add(
-                initClassRobotRun3()
-        );
-        classes.add(
-                initClassPlantRun2()
-        );
-        classes.add(
-                initClassRobotRun2()
-        );
-        classes.add(
-                initClassGrowableTileRun1()
-        );
-        classes.add(
-                initClassSeedRun1()
-        );
-        classes.add(
-                initClassRobotRun1()
-        );
-        classes.add(
-                initClassChickenRun1()
-        );
-        classes.add(
-                initClassCowRun1()
         );
     }
 
@@ -780,9 +785,10 @@ public class ProjectViewportFragment extends Fragment {
      * @return A new instance of fragment ProjectViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProjectViewportFragment newInstance() {
+    public static ProjectViewportFragment newInstance(Game.Run run) {
         ProjectViewportFragment fragment = new ProjectViewportFragment();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_RUN, run);
 //        args.putSerializable(ARG_CLASSES_DATA_OBJECT, classesDataObject);
         fragment.setArguments(args);
         return fragment;
@@ -791,9 +797,61 @@ public class ProjectViewportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        Bundle arguments = getArguments();
+        if (arguments != null) {
 //            ClassesDataObject classesDataObject = (ClassesDataObject) getArguments().getSerializable(ARG_CLASSES_DATA_OBJECT);
 //            classes = classesDataObject.getClasses();
+            run = (Game.Run) arguments.getSerializable(ARG_RUN);
+
+            // TODO: load panes' content via Run.
+            switch (run) {
+                case ONE:
+                    classes.add(
+                            initClassGrowableTileRun1()
+                    );
+                    classes.add(
+                            initClassSeedRun1()
+                    );
+                    classes.add(
+                            initClassRobotRun1()
+                    );
+                    classes.add(
+                            initClassChickenRun1()
+                    );
+                    classes.add(
+                            initClassCowRun1()
+                    );
+                    break;
+                case TWO:
+                    classes.add(
+                            initClassPlantRun2()
+                    );
+                    classes.add(
+                            initClassRobotRun2()
+                    );
+                    break;
+                case THREE:
+                    classes.add(
+                            initClassPlantRun3()
+                    );
+                    classes.add(
+                            initClassRobotRun3()
+                    );
+                    break;
+                case FOUR:
+                    classes.add(
+                            initClassGrowTentSystemRun4()
+                    );
+                    classes.add(
+                            initClassEquipmentRun4()
+                    );
+                    break;
+                case FIVE:
+                    classes.add(
+                            initClassGrowTentSystemRun5()
+                    );
+                    break;
+            }
         }
     }
 

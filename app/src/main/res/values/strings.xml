@@ -257,6 +257,8 @@ Cleaner, no counter needed.</item>
         <item>NotTrying</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
+        <item>HonestStruggler</item>
+        <item>A-Student</item>
         <item>SYSTEM42</item>
     </string-array>
 
@@ -270,6 +272,8 @@ Cleaner, no counter needed.</item>
         <item>And the comments part... I don\'t get it. Why write code that doesn\'t even run?</item>
         <item>They\'re notes. For your future self, your teammates, or whoever has to fix your code later. The computer ignores them, but humans need them.</item>
         <item>My only comment: \'don\'t touch my NotBadNotBadMansion class or else\'.</item>
+        <item>I don\'t remember much about constructors (they\'re suppose to be similar to methods, except they don\'t have a [return type], they always return an instance of their class), please help!</item>
+        <item>That\'s right! Also, both constructor\'s and method\'s argument lists are optional. A constructor\'s body is mainly used to set up the object (assign values to fields). This is different for a method\'s body (which depends on the method\'s intended use).</item>
         <item>Okay, last thing - the methods. Main method, constructor, getters/setters. I got lost when they were all listed out.</item>
         <item>Main method is what Java looks for when your program starts. Constructor sets things up when you first build the object. Getters/setters are small helper methods to safely read or change a field.</item>
         <item>***COLLECTING LEARNER\'S NOTES***</item>
@@ -288,6 +292,8 @@ Cleaner, no counter needed.</item>
         <item>11500</item>
         <item>13500</item>
         <item>14500</item>
+        <item>17000</item>
+        <item>19500</item>
     </string-array>
 
     <string name="ide_dialogfragment_console">

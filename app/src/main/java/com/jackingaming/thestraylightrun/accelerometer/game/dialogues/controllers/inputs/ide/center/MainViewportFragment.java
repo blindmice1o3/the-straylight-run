@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class MainViewportFragment extends Fragment {
     public static final String TAG = MainViewportFragment.class.getSimpleName();
-    public static final String ARG_CLASS_MAIN = "classMain";
+    public static final String ARG_CLASS_MAIN = "class_main";
     public static final String ARG_MODE = "mode";
 
     public interface MainViewportListener extends Serializable {
@@ -69,7 +69,8 @@ public class MainViewportFragment extends Fragment {
      * @return A new instance of fragment MainViewportFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainViewportFragment newInstance(Class classMain, IDEDialogFragment.Mode mode) {
+    public static MainViewportFragment newInstance(
+            Class classMain, IDEDialogFragment.Mode mode) {
         MainViewportFragment fragment = new MainViewportFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_MAIN, classMain);
@@ -81,10 +82,11 @@ public class MainViewportFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Class classMain = (Class) getArguments().getSerializable(ARG_CLASS_MAIN);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            Class classMain = (Class) arguments.getSerializable(ARG_CLASS_MAIN);
             classes.add(classMain);
-            mode = (IDEDialogFragment.Mode) getArguments().getSerializable(ARG_MODE);
+            mode = (IDEDialogFragment.Mode) arguments.getSerializable(ARG_MODE);
         }
     }
 
