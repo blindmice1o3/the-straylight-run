@@ -257,14 +257,6 @@ public class SceneFarm extends Scene {
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
-                for (int i = 0; i < 6; i++) {
-                    addGrowingPotToRandomTile();
-                }
-            }
-        }, 7, 0, false);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
                 addSwarmOfEel();
             }
         }, 7, 0, false);
@@ -292,6 +284,17 @@ public class SceneFarm extends Scene {
                 removeSwarmOfEel();
             }
         }, 6, 0, true);
+
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    for (int i = 0; i < 6; i++) {
+                        addGrowingPotToRandomTile();
+                    }
+                }
+            }, 7, 0, false);
+        }
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -350,18 +353,79 @@ public class SceneFarm extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        aimlessWalker1.pickUp(growSystemParts1);
-        aimlessWalker2.pickUp(growSystemParts2);
-        aimlessWalker3.pickUp(growSystemParts3);
-        aimlessWalker4.pickUp(growSystemParts4);
-        aimlessWalker5.pickUp(growSystemParts5);
-        aimlessWalker6.pickUp(growSystemParts6);
-        aimlessWalker1.changeToWalk();
-        aimlessWalker2.changeToWalk();
-        aimlessWalker3.changeToWalk();
-        aimlessWalker4.changeToWalk();
-        aimlessWalker5.changeToWalk();
-        aimlessWalker6.changeToWalk();
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
+            aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
+                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                    (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+            aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                    ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
+                    ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+            aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
+                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                    ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+            aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                    ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
+            aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                    ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+            aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                    ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+
+            aimlessWalker1.init(game);
+            aimlessWalker2.init(game);
+            aimlessWalker3.init(game);
+            aimlessWalker4.init(game);
+            aimlessWalker5.init(game);
+            aimlessWalker6.init(game);
+
+            entityManager.addEntity(aimlessWalker1);
+            entityManager.addEntity(aimlessWalker2);
+            entityManager.addEntity(aimlessWalker3);
+            entityManager.addEntity(aimlessWalker4);
+            entityManager.addEntity(aimlessWalker5);
+            entityManager.addEntity(aimlessWalker6);
+
+            /////////////////////////////////////////////////
+
+            growSystemParts1 = new GrowSystemParts(1);
+            growSystemParts2 = new GrowSystemParts(2);
+            growSystemParts3 = new GrowSystemParts(3);
+            growSystemParts4 = new GrowSystemParts(4);
+            growSystemParts5 = new GrowSystemParts(5);
+            growSystemParts6 = new GrowSystemParts(6);
+
+            growSystemParts1.init(game);
+            growSystemParts2.init(game);
+            growSystemParts3.init(game);
+            growSystemParts4.init(game);
+            growSystemParts5.init(game);
+            growSystemParts6.init(game);
+
+            itemManager.addItem(growSystemParts1);
+            itemManager.addItem(growSystemParts2);
+            itemManager.addItem(growSystemParts3);
+            itemManager.addItem(growSystemParts4);
+            itemManager.addItem(growSystemParts5);
+            itemManager.addItem(growSystemParts6);
+
+            ////////////////////////////////////////////
+
+            aimlessWalker1.pickUp(growSystemParts1);
+            aimlessWalker2.pickUp(growSystemParts2);
+            aimlessWalker3.pickUp(growSystemParts3);
+            aimlessWalker4.pickUp(growSystemParts4);
+            aimlessWalker5.pickUp(growSystemParts5);
+            aimlessWalker6.pickUp(growSystemParts6);
+
+            aimlessWalker1.changeToWalk();
+            aimlessWalker2.changeToWalk();
+            aimlessWalker3.changeToWalk();
+            aimlessWalker4.changeToWalk();
+            aimlessWalker5.changeToWalk();
+            aimlessWalker6.changeToWalk();
+        }
 
         // Age the [plant] so it's almost harvestable
         // (has to be done after Entity.init(), which sets ageInDays to 0).
@@ -491,7 +555,13 @@ public class SceneFarm extends Scene {
             if (player.hasCarryable()) {
                 Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
-                if (entityCurrentlyFacing == null &&
+                if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                    Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+                    if (player.getCarryable() instanceof Sellable) {
+                        Log.e(TAG, "carryable is Sellable");
+                        player.placeInShippingBin();
+                    }
+                } else if (entityCurrentlyFacing == null &&
                         tileCurrentlyFacing.isWalkable()) {
                     player.placeDown();
                 }
@@ -505,13 +575,7 @@ public class SceneFarm extends Scene {
             Log.e(TAG, "has carryable and entityFacing is null");
             Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
-            if (tileCurrentlyFacing instanceof ShippingBinTile) {
-                Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
-                if (player.getCarryable() instanceof Sellable) {
-                    Log.e(TAG, "carryable is Sellable");
-                    player.placeInShippingBin();
-                }
-            } else if (tileCurrentlyFacing.isWalkable()) {
+            if (tileCurrentlyFacing.isWalkable()) {
                 Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
                 if (player.getCarryable() instanceof AimlessWalker) {
                     ((AimlessWalker) player.getCarryable()).changeToWalk();
@@ -587,7 +651,7 @@ public class SceneFarm extends Scene {
             inDialogueWithClippitState = false;
 
             game.getTextboxListener().showStatsDisplayer();
-        } else if (((SceneFarm) game.getSceneManager().getCurrentScene()).isInSeedShopState()) {
+        } else if (inSeedShopState) {
             ((SceneFarm) game.getSceneManager().getCurrentScene()).removeSeedShopFragment();
 
             game.getTextboxListener().showStatsDisplayer();
@@ -1092,31 +1156,7 @@ public class SceneFarm extends Scene {
         // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
-                ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
-        aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
-        aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
         entities.add(robot);
-        entities.add(aimlessWalker1);
-        entities.add(aimlessWalker2);
-        entities.add(aimlessWalker3);
-        entities.add(aimlessWalker4);
-        entities.add(aimlessWalker5);
-        entities.add(aimlessWalker6);
         return entities;
     }
 
@@ -1179,12 +1219,6 @@ public class SceneFarm extends Scene {
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
         // TODO: Insert scene specific items here.
-        growSystemParts1 = new GrowSystemParts(1);
-        growSystemParts2 = new GrowSystemParts(2);
-        growSystemParts3 = new GrowSystemParts(3);
-        growSystemParts4 = new GrowSystemParts(4);
-        growSystemParts5 = new GrowSystemParts(5);
-        growSystemParts6 = new GrowSystemParts(6);
         milkOnGround = new Milk();
         milkOnGround.setPosition(
                 ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
@@ -1203,12 +1237,7 @@ public class SceneFarm extends Scene {
         items.add(eggOnGround);
         items.add(milkOnGround);
         items.add(fodderOnGround);
-        items.add(growSystemParts1);
-        items.add(growSystemParts2);
-        items.add(growSystemParts3);
-        items.add(growSystemParts4);
-        items.add(growSystemParts5);
-        items.add(growSystemParts6);
+
         return items;
     }
 

@@ -286,13 +286,7 @@ public class GameFragment extends Fragment
                 }
             });
             drawerTopFragment = DrawerTopFragment.newInstance(null, null,
-                    new DrawerTopFragment.DrawerTopListener() {
-                        @Override
-                        public void onClickTypeWriterTextView(View view, String tag) {
-                            String message = "DrawerTopFragment: Congratulations! You beat our 5 contest trainers! You just earned a fabulous prize! [Player] received a NUGGET! By the way, would you like to join TEAM ROCKET? We're a group dedicated to evil using POKEMON! Want to join? Are you sure? Come on, join us! I'm telling you to join! OK, you need convincing! I'll make you an offer you can't refuse! \n\nWith your ability, you could become a top leader in TEAM ROCKET!";
-                            ((TypeWriterTextView) view).displayTextWithAnimation(message);
-                        }
-                    }, new DrawerTopFragment.RunSelectionListener() {
+                    new DrawerTopFragment.RunSelectionListener() {
                         @Override
                         public void onRunSelected(Game.Run run) {
                             switch (run) {
@@ -317,9 +311,6 @@ public class GameFragment extends Fragment
                         @Override
                         public void onCloseDrawerTop() {
                             appBarLayout.setExpanded(false);
-
-                            DrawerTopFragment drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_top);
-                            drawerTopFragment.stopTypeWriterTextView();
                         }
                     });
             getChildFragmentManager().beginTransaction()
@@ -346,9 +337,6 @@ public class GameFragment extends Fragment
                 soundManager.sfxIterateAndPlay();
 
                 appBarLayout.setExpanded(false);
-
-                DrawerTopFragment drawerTopFragment = (DrawerTopFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_top);
-                drawerTopFragment.stopTypeWriterTextView();
 
                 return super.onSingleTapUp(event);
             }

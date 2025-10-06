@@ -6,8 +6,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.IntroState;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
@@ -179,11 +178,9 @@ public class RunOne
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-                return dialogueArray[0];
             case STARTED:
-                return dialogueArray[1];
             case COMPLETED:
-                return dialogueArray[2];
+                return dialogueArray[0];
         }
         return null;
     }
@@ -195,15 +192,15 @@ public class RunOne
 
     @Override
     public void attachListener() {
-        SeedShopDialogFragment.SeedListener seedListener = new SeedShopDialogFragment.SeedListener() {
+        IntroState.SeedListener seedListener = new IntroState.SeedListener() {
             @Override
             public void onAssignedNameAndDescription() {
                 Player.getInstance().getQuestManager().addEntityAsString(
                         ENTITY_REQUIREMENT_AS_STRING);
                 Log.e(TAG, "number of named seeds: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
 
-                String seedName = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedName();
-                String seedDescription = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedDescription();
+                String seedName = game.getStateManager().getIntroState().getSeedName();
+                String seedDescription = game.getStateManager().getIntroState().getSeedDescription();
                 Log.e(TAG, "seedName: " + seedName);
                 Log.e(TAG, "seedDescription: " + seedDescription);
 
@@ -217,11 +214,11 @@ public class RunOne
             }
         };
 
-        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(seedListener);
+        game.getStateManager().getIntroState().setSeedListener(seedListener);
     }
 
     @Override
     public void detachListener() {
-        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(null);
+        game.getStateManager().getIntroState().setSeedListener(null);
     }
 }

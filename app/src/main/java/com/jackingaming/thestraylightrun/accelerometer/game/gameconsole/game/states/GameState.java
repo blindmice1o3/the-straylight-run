@@ -5,12 +5,12 @@ import android.graphics.Canvas;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 
-public class GameStateImpl
+public class GameState
         implements State {
 
     private Game game;
 
-    public GameStateImpl() {
+    public GameState() {
 
     }
 

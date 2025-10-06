@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 
 import java.io.Serializable;
 
@@ -29,7 +28,6 @@ public class DrawerTopFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ARG_DRAWER_TOP_LISTENER = "drawer_top_listener";
     private static final String ARG_RUN_SELECTION_LISTENER = "run_selection_listener";
 
     public interface RunSelectionListener extends Serializable {
@@ -40,15 +38,7 @@ public class DrawerTopFragment extends Fragment {
 
     private RunSelectionListener runSelectionListener;
 
-    public interface DrawerTopListener extends Serializable {
-        void onClickTypeWriterTextView(View view, String tag);
-    }
-
-    private DrawerTopListener listener;
-
     private TextView tvRunOne, tvRunTwo, tvRunThree, tvRunFour, tvRunFive;
-    private TypeWriterTextView typeWriterTextView;
-    private String textInitial;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,7 +58,6 @@ public class DrawerTopFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static DrawerTopFragment newInstance(String param1, String param2,
-                                                DrawerTopListener drawerTopListener,
                                                 RunSelectionListener runSelectionListener) {
         Log.e(TAG, "newInstance()");
         DrawerTopFragment fragment = new DrawerTopFragment();
@@ -76,7 +65,6 @@ public class DrawerTopFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
-        args.putSerializable(ARG_DRAWER_TOP_LISTENER, drawerTopListener);
         args.putSerializable(ARG_RUN_SELECTION_LISTENER, runSelectionListener);
         fragment.setArguments(args);
 
@@ -92,7 +80,6 @@ public class DrawerTopFragment extends Fragment {
         if (arguments != null) {
             mParam1 = arguments.getString(ARG_PARAM1);
             mParam2 = arguments.getString(ARG_PARAM2);
-            listener = (DrawerTopListener) arguments.getSerializable(ARG_DRAWER_TOP_LISTENER);
             runSelectionListener = (RunSelectionListener) arguments.getSerializable(ARG_RUN_SELECTION_LISTENER);
         }
     }
@@ -101,7 +88,6 @@ public class DrawerTopFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         Log.e(TAG, "onDetach()");
-        listener = null;
     }
 
     @Override
@@ -122,7 +108,6 @@ public class DrawerTopFragment extends Fragment {
         tvRunThree = view.findViewById(R.id.tv_run_three);
         tvRunFour = view.findViewById(R.id.tv_run_four);
         tvRunFive = view.findViewById(R.id.tv_run_five);
-        typeWriterTextView = view.findViewById(R.id.type_writer_tv_in_drawer_top);
 
         tvRunOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,26 +144,5 @@ public class DrawerTopFragment extends Fragment {
                 runSelectionListener.onCloseDrawerTop();
             }
         });
-
-        textInitial = (String) typeWriterTextView.getText();
-        typeWriterTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onClickTypeWriterTextView(view, DrawerTopFragment.TAG);
-            }
-        });
-        typeWriterTextView.setTextCompletionListener(new TypeWriterTextView.TextCompletionListener() {
-            @Override
-            public void onAnimationFinish() {
-                Log.e(TAG, "onAnimationFinish()");
-
-                // TODO:
-            }
-        });
-    }
-
-    public void stopTypeWriterTextView() {
-        typeWriterTextView.stopAnimation();
-        typeWriterTextView.setText(textInitial);
     }
 }

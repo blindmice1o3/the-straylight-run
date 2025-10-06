@@ -176,10 +176,17 @@ public class Game {
     private boolean paused;
     private boolean inBackpackDialogState;
 
-    public Game(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
+    private FragmentManager fragmentManager;
+
+    public FragmentManager getFragmentManager() {
+        return fragmentManager;
+    }
+
+    public Game(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run, FragmentManager fragmentManager) {
         loadNeeded = false;
         this.gameTitle = gameTitle;
         this.run = run;
+        this.fragmentManager = fragmentManager;
 
         timeManager = new TimeManager();
         sceneManager = new SceneManager(gameTitle);
@@ -189,6 +196,10 @@ public class Game {
 
         paused = false;
         inBackpackDialogState = false;
+    }
+
+    public com.jackingaming.thestraylightrun.accelerometer.game.Game.Run getRun() {
+        return run;
     }
 
     public void startNewDay() {

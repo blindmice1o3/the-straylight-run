@@ -8,7 +8,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:scaleType="fitStart" />
 
     <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
         android:id="@+id/tv_type_writer"

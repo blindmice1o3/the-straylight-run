@@ -148,7 +148,7 @@ public class GameConsoleFragment extends Fragment
             Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState) gameTitle selected is: " + gameTitle);
             //////////////////////////////////////////
             Assets.init(getResources());
-            game = new Game(gameTitle, run);
+            game = new Game(gameTitle, run, getChildFragmentManager());
         }
 
         game.setViewportListener(this);

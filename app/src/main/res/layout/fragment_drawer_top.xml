@@ -10,36 +10,37 @@
         android:id="@+id/tv_run_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Run One" />
 
     <TextView
         android:id="@+id/tv_run_two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Run Two" />
 
     <TextView
         android:id="@+id/tv_run_three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Run Three" />
 
     <TextView
         android:id="@+id/tv_run_four"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="Run Four" />
 
     <TextView
         android:id="@+id/tv_run_five"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Run Five" />
-
-    <com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView
-        android:id="@+id/type_writer_tv_in_drawer_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello, TypeWriterTextViewTop" />
 
 </LinearLayout>

@@ -14,18 +14,21 @@ public class StateManager {
     private Game game;
 
     private NewOrContinueState newOrContinueState;
-    private GameStateImpl gameState;
+    private IntroState introState;
+    private GameState gameState;
     private MenuStateImpl menuState;
-    private TextboxStateImpl textboxState;
+    private TextboxState textboxState;
 
     private List<State> stateStack;
 
     public StateManager() {
         newOrContinueState = new NewOrContinueState();
-        gameState = new GameStateImpl();
+        introState = new IntroState();
+        gameState = new GameState();
 
         stateStack = new ArrayList<State>();
         stateStack.add(gameState);
+        stateStack.add(introState);
         stateStack.add(newOrContinueState);
     }
 
@@ -100,7 +103,7 @@ public class StateManager {
         getCurrentState().exit();
 
         if (textboxState == null) {
-            textboxState = new TextboxStateImpl();
+            textboxState = new TextboxState();
             textboxState.init(game);
         }
 
@@ -108,5 +111,9 @@ public class StateManager {
 
         Object[] args = {text, x, y};
         textboxState.enter(args);
+    }
+
+    public IntroState getIntroState() {
+        return introState;
     }
 }

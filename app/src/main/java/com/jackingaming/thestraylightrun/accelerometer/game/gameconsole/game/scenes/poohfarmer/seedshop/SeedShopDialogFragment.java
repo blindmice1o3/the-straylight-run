@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -31,13 +30,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFive;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFour;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunOne;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
 
 import java.util.ArrayList;
@@ -46,25 +39,12 @@ import java.util.List;
 public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
 
-    public interface SeedListener {
-        void onAssignedNameAndDescription();
-    }
-
-    private SeedListener seedListener;
-
-    public void setSeedListener(SeedListener seedListener) {
-        this.seedListener = seedListener;
-    }
-
     private Game game;
     private Bitmap seedShopBackgroundTop;
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
     private Quest seedShopOwnerQuest00;
-
-    private String seedName;
-    private String seedDescription;
 
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
@@ -107,28 +87,7 @@ public class SeedShopDialogFragment extends DialogFragment {
 
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
         seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
-
-        String[] dialogueArrayRunOne = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
-        runOne = new RunOne(game, dialogueArrayRunOne);
-
-        String[] dialogueArrayRunTwo = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
-        runTwo = new RunTwo(game, dialogueArrayRunTwo);
-
-        String[] dialogueArrayRunThree = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
-        runThree = new RunThree(game, dialogueArrayRunThree);
-
-        String[] dialogueArrayRunFour = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
-        runFour = new RunFour(game, dialogueArrayRunFour);
-
-        String[] dialogueArrayRunFive = game.getContext().getResources().getStringArray(R.array.clippit_dialogue_array);
-        runFive = new RunFive(game, dialogueArrayRunFive);
     }
-
-    private RunOne runOne;
-    private RunTwo runTwo;
-    private RunThree runThree;
-    private RunFour runFour;
-    private RunFive runFive;
 
     private void performTrade(Item itemToTrade, Player player) {
         float priceOfItemToTrade = itemToTrade.getPrice();
@@ -231,119 +190,7 @@ public class SeedShopDialogFragment extends DialogFragment {
                         Log.e(TAG, "!wasQuestAccepted");
                     }
 
-                    //////////////////////////////////////////////////////////
 
-                    boolean wasQuestAcceptedRunTwo =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    runTwo
-                            );
-
-                    if (wasQuestAcceptedRunTwo) {
-                        Log.e(TAG, "wasQuestAcceptedRunTwo");
-                        runTwo.dispenseStartingItems();
-                    } else {
-                        Log.e(TAG, "!wasQuestAcceptedRunTwo");
-                    }
-
-                    //////////////////////////////////////////////////////////
-
-                    boolean wasQuestAcceptedRunThree =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    runThree
-                            );
-
-                    if (wasQuestAcceptedRunThree) {
-                        Log.e(TAG, "wasQuestAcceptedRunThree");
-                        runThree.dispenseStartingItems();
-                    } else {
-                        Log.e(TAG, "!wasQuestAcceptedRunThree");
-                    }
-
-                    //////////////////////////////////////////////////////////
-
-                    boolean wasQuestAcceptedRunFour =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    runFour
-                            );
-
-                    if (wasQuestAcceptedRunFour) {
-                        Log.e(TAG, "wasQuestAcceptedRunFour");
-                        runFour.dispenseStartingItems();
-                    } else {
-                        Log.e(TAG, "!wasQuestAcceptedRunFour");
-                    }
-
-                    //////////////////////////////////////////////////////////
-
-                    boolean wasQuestAcceptedRunOne =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    runOne
-                            );
-
-                    if (wasQuestAcceptedRunOne) {
-                        Log.e(TAG, "wasQuestAcceptedRunOne");
-                        runOne.dispenseStartingItems();
-                    } else {
-                        Log.e(TAG, "!wasQuestAcceptedRunOne");
-                    }
-
-                    EditTextDialogFragment dialogFragmentRunOneName = EditTextDialogFragment.newInstance(
-                            new EditTextDialogFragment.EnterListener() {
-                                @Override
-                                public void onDismiss() {
-                                    Log.e(TAG, "onDismiss()");
-                                }
-
-                                @Override
-                                public void onEnterKeyPressed(String name) {
-                                    Log.e(TAG, "onEnterKeyPressed()");
-
-                                    seedName = name;
-
-                                    EditTextDialogFragment dialogFragmentRunOneDescription = EditTextDialogFragment.newInstance(
-                                            new EditTextDialogFragment.EnterListener() {
-                                                @Override
-                                                public void onDismiss() {
-                                                    Log.e(TAG, "onDismiss()");
-                                                }
-
-                                                @Override
-                                                public void onEnterKeyPressed(String name) {
-                                                    Log.e(TAG, "onEnterKeyPressed()");
-
-                                                    seedDescription = name;
-
-                                                    seedListener.onAssignedNameAndDescription();
-                                                }
-                                            },
-                                            "seed description",
-                                            false
-                                    );
-                                    dialogFragmentRunOneDescription.show(getChildFragmentManager(), TAG);
-                                }
-                            },
-                            "seed name",
-                            false
-                    );
-                    dialogFragmentRunOneName.show(getChildFragmentManager(), TAG);
-
-                    //////////////////////////////////////////////////////////
-
-                    SceneHothouse.getInstance().init(game);
-
-                    boolean wasQuestAcceptedRunFive =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    runFive
-                            );
-
-                    if (wasQuestAcceptedRunFive) {
-                        Log.e(TAG, "wasQuestAcceptedRunFive");
-                        runFive.dispenseStartingItems();
-                    } else {
-                        Log.e(TAG, "!wasQuestAcceptedRunFive");
-                    }
-
-                    //////////////////////////////////////////////////////////
                 }
             };
         }
@@ -390,13 +237,5 @@ public class SeedShopDialogFragment extends DialogFragment {
 
     public List<Item> getSeedShopInventory() {
         return seedShopInventory;
-    }
-
-    public String getSeedName() {
-        return seedName;
-    }
-
-    public String getSeedDescription() {
-        return seedDescription;
     }
 }

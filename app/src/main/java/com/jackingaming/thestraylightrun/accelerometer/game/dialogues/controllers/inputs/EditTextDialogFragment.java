@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs;
 
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -31,6 +32,9 @@ public class EditTextDialogFragment extends DialogFragment {
     public static final String ARG_ENTER_LISTENER = "enterListener";
     public static final String ARG_HINT = "hint";
     public static final String ARG_ARE_LINES_LIMITED = "areLinesLimited";
+
+    public void show(FragmentManager fragmentManager, String tag) {
+    }
 
     public interface EnterListener extends Serializable {
         void onDismiss();

@@ -40,6 +40,26 @@
         <item>Hello! The mystery products you\'ve harvested were FAR out. Like OUTER-SPACE far. You can probably bring about world peace with what you\'re growing.</item>
     </string-array>
 
+    <string-array name="run_one_dialogue_array">
+        <item>REQUIREMENT: provide [name] and [description] for your seed.</item>
+    </string-array>
+
+    <string-array name="run_two_dialogue_array">
+        <item>REQUIREMENT: till, seed, and water [3] tiles.</item>
+    </string-array>
+
+    <string-array name="run_three_dialogue_array">
+        <item>REQUIREMENT: harvest [10] mystery products AND cull all [diseased] plants.</item>
+    </string-array>
+
+    <string-array name="run_four_dialogue_array">
+        <item>REQUIREMENT: herd [4] sheeps into grow room to obtain [grow system parts].</item>
+    </string-array>
+
+    <string-array name="run_five_dialogue_array">
+        <item>REQUIREMENT: ...</item>
+    </string-array>
+
     <string-array name="clippit_dialogue_array">
         <item>It looks like you\'re trying to bring about world peace. Would you like some help?</item>
         <item>We\'re going to get the entire world stoned for a week! We\'ll need a lot of mystery product. Start by tilling 4,200 GrowableTile.</item>

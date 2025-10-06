@@ -179,11 +179,9 @@ public class RunFive
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-                return dialogueArray[0];
             case STARTED:
-                return dialogueArray[1];
             case COMPLETED:
-                return dialogueArray[2];
+                return dialogueArray[0];
         }
         return null;
     }

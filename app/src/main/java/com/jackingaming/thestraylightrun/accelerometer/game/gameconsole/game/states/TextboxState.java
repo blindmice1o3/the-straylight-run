@@ -14,9 +14,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
-public class TextboxStateImpl
+public class TextboxState
         implements State {
-    public static final String TAG = TextboxStateImpl.class.getSimpleName();
+    public static final String TAG = TextboxState.class.getSimpleName();
 
     private static final String TEXT_DEFAULT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     transient private Game game;
@@ -31,7 +31,7 @@ public class TextboxStateImpl
     transient private TextPaint textPaint;
     private String text;
 
-    public TextboxStateImpl() {
+    public TextboxState() {
 
     }
 
