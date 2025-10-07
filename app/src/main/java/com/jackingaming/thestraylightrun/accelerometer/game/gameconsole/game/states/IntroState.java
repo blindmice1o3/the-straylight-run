@@ -13,11 +13,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputMan
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFive;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunFour;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunOne;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunTwo;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFive;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFour;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunOne;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunTwo;
 
 public class IntroState
         implements State {
@@ -32,8 +32,6 @@ public class IntroState
     private boolean isTextShown = false;
 
     private RunOne runOne;
-    private String seedName;
-    private String seedDescription;
     private SeedListener seedListener;
 
     public void setSeedListener(SeedListener seedListener) {
@@ -52,20 +50,11 @@ public class IntroState
     public void init(Game game) {
         this.game = game;
 
-        String[] dialogueArrayRunOne = game.getContext().getResources().getStringArray(R.array.run_one_dialogue_array);
-        runOne = new RunOne(game, dialogueArrayRunOne);
-
-        String[] dialogueArrayRunTwo = game.getContext().getResources().getStringArray(R.array.run_two_dialogue_array);
-        runTwo = new RunTwo(game, dialogueArrayRunTwo);
-
-        String[] dialogueArrayRunThree = game.getContext().getResources().getStringArray(R.array.run_three_dialogue_array);
-        runThree = new RunThree(game, dialogueArrayRunThree);
-
-        String[] dialogueArrayRunFour = game.getContext().getResources().getStringArray(R.array.run_four_dialogue_array);
-        runFour = new RunFour(game, dialogueArrayRunFour);
-
-        String[] dialogueArrayRunFive = game.getContext().getResources().getStringArray(R.array.run_five_dialogue_array);
-        runFive = new RunFive(game, dialogueArrayRunFive);
+        runOne = new RunOne(game);
+        runTwo = new RunTwo(game);
+        runThree = new RunThree(game);
+        runFour = new RunFour(game);
+        runFive = new RunFive(game);
     }
 
     @Override
@@ -107,8 +96,11 @@ public class IntroState
             }
 
             Bitmap imageForTextbox = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-            String textForTextBox = String.format("Run: %s + NOW IN IntroState!!! \n" + "%s",
-                    game.getRun().toString(),
+            String runNumberFormattedAllLowerCase = game.getRun().toString().toLowerCase();
+            String runNumberFirstLetterAsUpperCase = runNumberFormattedAllLowerCase.substring(0, 1).toUpperCase();
+            String runNumberForFirstLetterCapital = runNumberFirstLetterAsUpperCase + runNumberFormattedAllLowerCase.substring(1);
+            String textForTextBox = String.format("Run%s: %s",
+                    runNumberForFirstLetterCapital,
                     requirementForRun);
             game.getTextboxListener().showTextbox(
                     TypeWriterDialogFragment.newInstance(
@@ -230,7 +222,7 @@ public class IntroState
                         public void onEnterKeyPressed(String name) {
                             Log.e(TAG, "onEnterKeyPressed()");
 
-                            seedName = name;
+                            runOne.setSeedName(name);
 
                             EditTextDialogFragment dialogFragmentRunOneDescription = EditTextDialogFragment.newInstance(
                                     new EditTextDialogFragment.EnterListener() {
@@ -243,7 +235,7 @@ public class IntroState
                                         public void onEnterKeyPressed(String name) {
                                             Log.e(TAG, "onEnterKeyPressed()");
 
-                                            seedDescription = name;
+                                            runOne.setSeedDescription(name);
 
                                             seedListener.onAssignedNameAndDescription();
                                         }
@@ -275,13 +267,5 @@ public class IntroState
     @Override
     public void render(Canvas canvas) {
         game.getSceneManager().drawCurrentFrame(canvas);
-    }
-
-    public String getSeedName() {
-        return seedName;
-    }
-
-    public String getSeedDescription() {
-        return seedDescription;
     }
 }

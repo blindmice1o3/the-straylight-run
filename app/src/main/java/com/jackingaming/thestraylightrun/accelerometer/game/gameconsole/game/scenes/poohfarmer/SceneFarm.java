@@ -45,7 +45,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter.RunThree;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RobotDialogQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;

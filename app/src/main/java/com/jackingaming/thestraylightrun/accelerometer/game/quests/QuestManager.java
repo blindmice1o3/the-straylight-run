@@ -36,7 +36,10 @@ public class QuestManager {
     }
 
     public boolean addQuest(Quest quest) {
-        return quests.add(quest);
+        if (!alreadyHaveQuest(quest.getTAG())) {
+            return quests.add(quest);
+        }
+        return false;
     }
 
     public boolean alreadyHaveQuest(String questTAG) {

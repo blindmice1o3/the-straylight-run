@@ -1,43 +1,39 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
+package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.RemoveEntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RunThree
+public class RunFive
         implements Quest {
-    public static final String TAG = RunThree.class.getSimpleName();
-    public static final String CULL_ENTITY_REQUIREMENT_AS_STRING = "cullPlant";
-    public static final int CULL_QUANTITY_REQUIRED = Plant.numberOfDiseasedPlant;
-    public static final String HARVEST_ENTITY_REQUIREMENT_AS_STRING = "harvestPlant";
-    public static final int HARVEST_QUANTITY_REQUIRED = 10;
+    public static final String TAG = RunFive.class.getSimpleName();
+    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTileIndoor";
+    public static final int QUANTITY_REQUIRED = 3;
 
     private Quest.State state;
     private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> requirementEntitiesAsString;
+    private Map<String, Integer> requirementTilesAsString;
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunThree(Game game, String[] dialogueArray) {
-        state = State.NOT_STARTED;
+    public RunFive(Game game) {
         this.game = game;
-        this.dialogueArray = dialogueArray;
+        dialogueArray = game.getContext().getResources().getStringArray(R.array.run_five_dialogue_array);
+        state = State.NOT_STARTED;
 
         initRequirements();
         initStartingItemsAsString();
@@ -48,11 +44,10 @@ public class RunThree
     public void initRequirements() {
         requirements = new HashMap<>();
 
-        requirementEntitiesAsString = new HashMap<>();
-        requirementEntitiesAsString.put(CULL_ENTITY_REQUIREMENT_AS_STRING, CULL_QUANTITY_REQUIRED);
-        requirementEntitiesAsString.put(HARVEST_ENTITY_REQUIREMENT_AS_STRING, HARVEST_QUANTITY_REQUIRED);
+        requirementTilesAsString = new HashMap<>();
+        requirementTilesAsString.put(TILE_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.ENTITY, requirementEntitiesAsString);
+        requirements.put(RequirementType.TILE, requirementTilesAsString);
     }
 
     @Override
@@ -69,23 +64,10 @@ public class RunThree
                 switch (requirementType) {
                     case ENTITY:
                         Set<String> entitiesRequired = requirementsAsString.keySet();
-                        int counterEntitiesRequired = 0;
                         for (String entityAsString : entitiesRequired) {
                             int requiredNumberOfEntityAsString = requirementsAsString.get(entityAsString);
                             int currentNumberOfEntityAsString = Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString);
-                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString): " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(entityAsString));
-
-                            boolean isMetRequirements = currentNumberOfEntityAsString >= requiredNumberOfEntityAsString;
-
-                            if (isMetRequirements) {
-                                counterEntitiesRequired++;
-                            }
-                        }
-
-                        Log.e(TAG, "counterEntitiesRequired: " + counterEntitiesRequired);
-                        Log.e(TAG, "entitiesRequired.size(): " + entitiesRequired.size());
-                        if (counterEntitiesRequired == entitiesRequired.size()) {
-                            return true;
+                            return (currentNumberOfEntityAsString >= requiredNumberOfEntityAsString);
                         }
                         break;
                     case EVENT:
@@ -109,6 +91,7 @@ public class RunThree
                         for (String tileAsString : tilesRequired) {
                             int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
                             int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString): " + Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString));
                             return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
                         }
                         break;
@@ -146,7 +129,7 @@ public class RunThree
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 42000);
+        rewardsAsString.put(REWARD_COINS, 42);
     }
 
     @Override
@@ -197,9 +180,11 @@ public class RunThree
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-            case STARTED:
-            case COMPLETED:
                 return dialogueArray[0];
+            case STARTED:
+                return dialogueArray[1];
+            case COMPLETED:
+                return dialogueArray[2];
         }
         return null;
     }
@@ -211,34 +196,14 @@ public class RunThree
 
     @Override
     public void attachListener() {
-        RemoveEntityCommand.EntityListener entityListener = new RemoveEntityCommand.EntityListener() {
-            @Override
-            public void removeDiseasedPlantEntityFromScene() {
-                Player.getInstance().getQuestManager().addEntityAsString(
-                        CULL_ENTITY_REQUIREMENT_AS_STRING);
-                Log.e(TAG, "number of times diseased plants culled: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(CULL_ENTITY_REQUIREMENT_AS_STRING));
-                if (checkIfMetRequirements()) {
-                    Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                    game.getViewportListener().addAndShowParticleExplosionView();
-                    dispenseRewards();
-                } else {
-                    Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                }
-            }
-        };
-
-        EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
-        ((RemoveEntityCommand) entityCommand).setEntityListener(entityListener);
-
-        ////////////////////////////////////////////////////////////////////
-        Creature.PlaceInShippingBinListener placeInShippingBinListener = new Creature.PlaceInShippingBinListener() {
-            @Override
-            public void sellableAdded(Sellable sellableAdded) {
-                if (sellableAdded instanceof Plant) {
-                    Player.getInstance().getQuestManager().addEntityAsString(
-                            HARVEST_ENTITY_REQUIREMENT_AS_STRING
-                    );
-                    Log.e(TAG, "number of plants harvested: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(HARVEST_ENTITY_REQUIREMENT_AS_STRING));
+        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+            GrowableIndoorTile.IndoorWaterChangeListener indoorWaterChangeListener = new GrowableIndoorTile.IndoorWaterChangeListener() {
+                @Override
+                public void changeToWateredSeeded() {
+                    Log.e(TAG, "changeToWateredOccupied() ***************");
+                    Player.getInstance().getQuestManager().addTileAsString(
+                            TILE_REQUIREMENT_AS_STRING);
+                    Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                         game.getViewportListener().addAndShowParticleExplosionView();
@@ -247,17 +212,16 @@ public class RunThree
                         Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                     }
                 }
-            }
-        };
+            };
 
-        Player.getInstance().setPlaceInShippingBinListener(placeInShippingBinListener);
+            SceneHothouse.getInstance().registerWaterChangeListenerForAllGrowableTile(
+                    indoorWaterChangeListener
+            );
+        }
     }
 
     @Override
     public void detachListener() {
-        EntityCommand entityCommand = ((EntityCommandOwner) game.getScissors()).getEntityCommand();
-        ((RemoveEntityCommand) entityCommand).setEntityListener(null);
-
-        Player.getInstance().setPlaceInShippingBinListener(null);
+        SceneHothouse.getInstance().unregisterWaterChangeListenerForAllGrowableTile();
     }
 }

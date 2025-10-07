@@ -1,7 +1,8 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
+package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -28,10 +29,13 @@ public class RunOne
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunOne(Game game, String[] dialogueArray) {
-        state = State.NOT_STARTED;
+    private String seedName;
+    private String seedDescription;
+
+    public RunOne(Game game) {
         this.game = game;
-        this.dialogueArray = dialogueArray;
+        dialogueArray = game.getContext().getResources().getStringArray(R.array.run_one_dialogue_array);
+        state = State.NOT_STARTED;
 
         initRequirements();
         initStartingItemsAsString();
@@ -178,9 +182,12 @@ public class RunOne
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
-            case STARTED:
-            case COMPLETED:
                 return dialogueArray[0];
+            case STARTED:
+                return dialogueArray[1];
+            case COMPLETED:
+                return String.format(dialogueArray[2], seedName, seedDescription);
+
         }
         return null;
     }
@@ -199,8 +206,6 @@ public class RunOne
                         ENTITY_REQUIREMENT_AS_STRING);
                 Log.e(TAG, "number of named seeds: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
 
-                String seedName = game.getStateManager().getIntroState().getSeedName();
-                String seedDescription = game.getStateManager().getIntroState().getSeedDescription();
                 Log.e(TAG, "seedName: " + seedName);
                 Log.e(TAG, "seedDescription: " + seedDescription);
 
@@ -220,5 +225,13 @@ public class RunOne
     @Override
     public void detachListener() {
         game.getStateManager().getIntroState().setSeedListener(null);
+    }
+
+    public void setSeedName(String seedName) {
+        this.seedName = seedName;
+    }
+
+    public void setSeedDescription(String seedDescription) {
+        this.seedDescription = seedDescription;
     }
 }

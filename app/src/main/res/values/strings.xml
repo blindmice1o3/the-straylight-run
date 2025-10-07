@@ -41,23 +41,33 @@
     </string-array>
 
     <string-array name="run_one_dialogue_array">
-        <item>REQUIREMENT: provide [name] and [description] for your seed.</item>
+        <item>provide [name] and [description] for your seed.</item>
+        <item>in progress, currently providing a [name] and [description] for your seed.</item>
+        <item>excellent work! you\'ve named your seed [%s] and its description is [%s].</item>
     </string-array>
 
     <string-array name="run_two_dialogue_array">
-        <item>REQUIREMENT: till, seed, and water [3] tiles.</item>
+        <item>till, seed, and water [%d] tiles.</item>
+        <item>in progress, currently at [%d] out of [%d] tiles tilled, seeded, and watered.</item>
+        <item>congratulation! you\'ve finished tilling, seeding, and watering [%d] tiles.</item>
     </string-array>
 
     <string-array name="run_three_dialogue_array">
-        <item>REQUIREMENT: harvest [10] mystery products AND cull all [diseased] plants.</item>
+        <item>harvest [%d] mystery products AND cull all [%d] diseased plants.</item>
+        <item>in progress, currently at [%d] out of [%d] harvested AND [%d] out of [%d] culled.</item>
+        <item>well done! you\'ve finished harvesting [%d] mystery products AND culled [%d] diseased plants.</item>
     </string-array>
 
     <string-array name="run_four_dialogue_array">
-        <item>REQUIREMENT: herd [4] sheeps into grow room to obtain [grow system parts].</item>
+        <item>herd [%d] sheeps into grow room to obtain [grow system parts].</item>
+        <item>in progress, currently at [%d] out of [%d] sheeps herded ([grow system parts] obtained).</item>
+        <item>take pride! you\'ve finished herding [%d] sheeps (obtaining [grow system parts]).</item>
     </string-array>
 
     <string-array name="run_five_dialogue_array">
-        <item>REQUIREMENT: ...</item>
+        <item>...</item>
+        <item>in progress.</item>
+        <item>rest! you\'ve made them proud.</item>
     </string-array>
 
     <string-array name="clippit_dialogue_array">

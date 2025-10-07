@@ -1,23 +1,23 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
+package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RunFive
+public class RunTwo
         implements Quest {
-    public static final String TAG = RunFive.class.getSimpleName();
-    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTileIndoor";
+    public static final String TAG = RunTwo.class.getSimpleName();
+    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTileOutdoor";
     public static final int QUANTITY_REQUIRED = 3;
 
     private Quest.State state;
@@ -29,10 +29,10 @@ public class RunFive
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunFive(Game game, String[] dialogueArray) {
-        state = State.NOT_STARTED;
+    public RunTwo(Game game) {
         this.game = game;
-        this.dialogueArray = dialogueArray;
+        dialogueArray = game.getContext().getResources().getStringArray(R.array.run_two_dialogue_array);
+        state = State.NOT_STARTED;
 
         initRequirements();
         initStartingItemsAsString();
@@ -128,7 +128,7 @@ public class RunFive
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 42);
+        rewardsAsString.put(REWARD_COINS, 4200);
     }
 
     @Override
@@ -179,9 +179,13 @@ public class RunFive
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
+                return String.format(dialogueArray[0], QUANTITY_REQUIRED);
             case STARTED:
+                return String.format(dialogueArray[1],
+                        Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING),
+                        QUANTITY_REQUIRED);
             case COMPLETED:
-                return dialogueArray[0];
+                return String.format(dialogueArray[2], QUANTITY_REQUIRED);
         }
         return null;
     }
@@ -194,10 +198,9 @@ public class RunFive
     @Override
     public void attachListener() {
         if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-            GrowableIndoorTile.IndoorWaterChangeListener indoorWaterChangeListener = new GrowableIndoorTile.IndoorWaterChangeListener() {
+            GrowableTile.OutdoorWaterChangeListener waterChangeListener = new GrowableTile.OutdoorWaterChangeListener() {
                 @Override
                 public void changeToWateredSeeded() {
-                    Log.e(TAG, "changeToWateredOccupied() ***************");
                     Player.getInstance().getQuestManager().addTileAsString(
                             TILE_REQUIREMENT_AS_STRING);
                     Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
@@ -211,14 +214,14 @@ public class RunFive
                 }
             };
 
-            SceneHothouse.getInstance().registerWaterChangeListenerForAllGrowableTile(
-                    indoorWaterChangeListener
+            SceneFarm.getInstance().registerWaterChangeListenerForAllGrowableTile(
+                    waterChangeListener
             );
         }
     }
 
     @Override
     public void detachListener() {
-        SceneHothouse.getInstance().unregisterWaterChangeListenerForAllGrowableTile();
+        SceneFarm.getInstance().unregisterWaterChangeListenerForAllGrowableTile();
     }
 }

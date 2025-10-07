@@ -1,37 +1,37 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.quests.daughter;
+package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class RunTwo
+public class RunFour
         implements Quest {
-    public static final String TAG = RunTwo.class.getSimpleName();
-    public static final String TILE_REQUIREMENT_AS_STRING = "wateredTileOutdoor";
-    public static final int QUANTITY_REQUIRED = 3;
+    public static final String TAG = RunFour.class.getSimpleName();
+    public static final String ITEM_REQUIREMENT_AS_STRING = "growSystemParts";
+    public static final int QUANTITY_REQUIRED = 4;
 
     private Quest.State state;
     private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;
-    private Map<String, Integer> requirementTilesAsString;
+    private Map<String, Integer> requirementItemsAsString;
     private Map<String, Item> startingItems;
     private Map<String, Integer> rewardsAsString;
 
-    public RunTwo(Game game, String[] dialogueArray) {
-        state = State.NOT_STARTED;
+    public RunFour(Game game) {
         this.game = game;
-        this.dialogueArray = dialogueArray;
+        dialogueArray = game.getContext().getResources().getStringArray(R.array.run_four_dialogue_array);
+        state = State.NOT_STARTED;
 
         initRequirements();
         initStartingItemsAsString();
@@ -42,10 +42,10 @@ public class RunTwo
     public void initRequirements() {
         requirements = new HashMap<>();
 
-        requirementTilesAsString = new HashMap<>();
-        requirementTilesAsString.put(TILE_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
+        requirementItemsAsString = new HashMap<>();
+        requirementItemsAsString.put(ITEM_REQUIREMENT_AS_STRING, QUANTITY_REQUIRED);
 
-        requirements.put(RequirementType.TILE, requirementTilesAsString);
+        requirements.put(RequirementType.ITEM, requirementItemsAsString);
     }
 
     @Override
@@ -81,6 +81,7 @@ public class RunTwo
                         for (String itemAsString : itemsRequired) {
                             int requiredNumberOfItemAsString = requirementsAsString.get(itemAsString);
                             int currentNumberOfItemAsString = Player.getInstance().getQuestManager().getNumberOfItemAsString(itemAsString);
+                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfItemAsString(itemAsString): " + Player.getInstance().getQuestManager().getNumberOfItemAsString(itemAsString));
                             return (currentNumberOfItemAsString >= requiredNumberOfItemAsString);
                         }
                         break;
@@ -89,7 +90,6 @@ public class RunTwo
                         for (String tileAsString : tilesRequired) {
                             int requiredNumberOfTileAsString = requirementsAsString.get(tileAsString);
                             int currentNumberOfTileAsString = Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString);
-                            Log.e(TAG, "Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString): " + Player.getInstance().getQuestManager().getNumberOfTileAsString(tileAsString));
                             return (currentNumberOfTileAsString >= requiredNumberOfTileAsString);
                         }
                         break;
@@ -127,7 +127,7 @@ public class RunTwo
     @Override
     public void initRewardsAsString() {
         rewardsAsString = new HashMap<>();
-        rewardsAsString.put(REWARD_COINS, 4200);
+        rewardsAsString.put(REWARD_COINS, 420420);
     }
 
     @Override
@@ -178,9 +178,13 @@ public class RunTwo
     public String getDialogueForCurrentState() {
         switch (state) {
             case NOT_STARTED:
+                return String.format(dialogueArray[0], QUANTITY_REQUIRED);
             case STARTED:
+                return String.format(dialogueArray[1],
+                        Player.getInstance().getQuestManager().getNumberOfItemAsString(ITEM_REQUIREMENT_AS_STRING),
+                        QUANTITY_REQUIRED);
             case COMPLETED:
-                return dialogueArray[0];
+                return String.format(dialogueArray[2], QUANTITY_REQUIRED);
         }
         return null;
     }
@@ -192,31 +196,27 @@ public class RunTwo
 
     @Override
     public void attachListener() {
-        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-            GrowableTile.OutdoorWaterChangeListener waterChangeListener = new GrowableTile.OutdoorWaterChangeListener() {
-                @Override
-                public void changeToWateredSeeded() {
-                    Player.getInstance().getQuestManager().addTileAsString(
-                            TILE_REQUIREMENT_AS_STRING);
-                    Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
-                    if (checkIfMetRequirements()) {
-                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        game.getViewportListener().addAndShowParticleExplosionView();
-                        dispenseRewards();
-                    } else {
-                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                    }
+        SceneHothouse.LootListener lootListener = new SceneHothouse.LootListener() {
+            @Override
+            public void onLootDropped() {
+                Player.getInstance().getQuestManager().addItemAsString(
+                        ITEM_REQUIREMENT_AS_STRING);
+                Log.e(TAG, "number of grow system parts dropped: " + Player.getInstance().getQuestManager().getNumberOfItemAsString(ITEM_REQUIREMENT_AS_STRING));
+                if (checkIfMetRequirements()) {
+                    Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                    game.getViewportListener().addAndShowParticleExplosionView();
+                    dispenseRewards();
+                } else {
+                    Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                 }
-            };
+            }
+        };
 
-            SceneFarm.getInstance().registerWaterChangeListenerForAllGrowableTile(
-                    waterChangeListener
-            );
-        }
+        SceneHothouse.getInstance().setLootListener(lootListener);
     }
 
     @Override
     public void detachListener() {
-        SceneFarm.getInstance().unregisterWaterChangeListenerForAllGrowableTile();
+        SceneHothouse.getInstance().setLootListener(null);
     }
 }
