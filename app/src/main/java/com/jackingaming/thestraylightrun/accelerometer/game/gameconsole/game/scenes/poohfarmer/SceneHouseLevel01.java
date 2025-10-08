@@ -25,8 +25,8 @@ import java.util.Map;
 public class SceneHouseLevel01 extends Scene {
     public static final String TAG = SceneHouseLevel01.class.getSimpleName();
 
-    public static final int X_SPAWN_INDEX_DEFAULT = 4;
-    public static final int Y_SPAWN_INDEX_DEFAULT = 8;
+    public static final int X_SPAWN_INDEX_DEFAULT = 7;
+    public static final int Y_SPAWN_INDEX_DEFAULT = 14;
 
     private boolean leftHouseToday; // initialize to false if game starts if game starts in SceneHouseLevel01.
     private boolean slept;
@@ -121,10 +121,10 @@ public class SceneHouseLevel01 extends Scene {
         // Assign image and init() all the tiles in houseLevel01.
         for (int y = 0; y < houseLevel01.length; y++) {
             for (int x = 0; x < houseLevel01[0].length; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * (Tile.WIDTH * 4);
+                int yInPixel = y * (Tile.HEIGHT * 4);
+                int widthInPixel = (Tile.WIDTH * 4);
+                int heightInPixel = (Tile.HEIGHT * 4);
 
                 Tile tile = houseLevel01[y][x];
                 //GenericWalkableTile
@@ -158,21 +158,24 @@ public class SceneHouseLevel01 extends Scene {
     private Bitmap cropImageHouseLevel01(Resources resources) {
         Log.d(TAG, "SceneHouseLevel01.cropImageHouseLevel01(Resources resources)");
 
-        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
-        Bitmap houseLevel01 = null;
+//        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
+//        Bitmap houseLevel01 = null;
+//
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        houseLevel01 = Bitmap.createBitmap(indoorsFarmHM2, 6, 6, 160, 192);
+//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//        Log.d(TAG, "Bitmap houseLevel01's (width, height): " + houseLevel01.getWidth() + ", " + houseLevel01.getHeight());
+//
+//        return houseLevel01;
 
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        houseLevel01 = Bitmap.createBitmap(indoorsFarmHM2, 6, 6, 160, 192);
-        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        Log.d(TAG, "Bitmap houseLevel01's (width, height): " + houseLevel01.getWidth() + ", " + houseLevel01.getHeight());
-
+        Bitmap houseLevel01 = BitmapFactory.decodeResource(resources, R.drawable.scene_house_player_idyllic);
         return houseLevel01;
     }
 
     private Map<String, Rect> createTransferPointsForHouseLevel01() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("FARM", new Rect((4 * Tile.WIDTH), (9 * Tile.HEIGHT),
-                (4 * Tile.WIDTH) + (2 * Tile.WIDTH), (9 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (16 * Tile.HEIGHT),
+                (6 * Tile.WIDTH) + (4 * Tile.WIDTH), (16 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 

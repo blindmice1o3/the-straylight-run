@@ -46,12 +46,14 @@ public class Robot extends Creature {
     private static final int COUNTER_COMMANDS_TARGET = 25;
     private static final long DEFAULT_MOVEMENT_DURATION = 1000L;
     private static final long RUNNING_MOVEMENT_DURATION = 500L;
-    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TL = 10;
-    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TL = 19;
-    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TR = 11;
-    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TR = 19;
-    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_BR = 11;
-    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_BR = 20;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TL = 7;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TL = 8;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_TR = 8;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_TR = 8;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_BL = 7;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_BL = 9;
+    private static final int X_INDEX_SHIPPING_BIN_DROP_TILE_BR = 8;
+    private static final int Y_INDEX_SHIPPING_BIN_DROP_TILE_BR = 9;
 
     public interface DialogListener {
         void onOpenIDEDialogFragment();
@@ -130,11 +132,13 @@ public class Robot extends Creature {
         Tile[][] tilesScene = tileManager.getTiles();
         Tile tileShippingBinTL = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_TL][X_INDEX_SHIPPING_BIN_DROP_TILE_TL];
         Tile tileShippingBinTR = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_TR][X_INDEX_SHIPPING_BIN_DROP_TILE_TR];
+        Tile tileShippingBinBL = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_BL][X_INDEX_SHIPPING_BIN_DROP_TILE_BL];
         Tile tileShippingBinBR = tilesScene[Y_INDEX_SHIPPING_BIN_DROP_TILE_BR][X_INDEX_SHIPPING_BIN_DROP_TILE_BR];
 
         tilesShippingBinDrop = new ArrayList<>();
         tilesShippingBinDrop.add(tileShippingBinTL);
         tilesShippingBinDrop.add(tileShippingBinTR);
+        tilesShippingBinDrop.add(tileShippingBinBL);
         tilesShippingBinDrop.add(tileShippingBinBR);
     }
 

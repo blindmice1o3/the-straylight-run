@@ -45,9 +45,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RobotDialogQuest00;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class SceneFarm extends Scene {
     public static final String TAG = SceneFarm.class.getSimpleName();
 
     private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
-    private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 4;
+    private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
@@ -305,17 +305,17 @@ public class SceneFarm extends Scene {
         tileManager.init(game); // updates tileManager's reference to the new game.
 
         // Set up GrowableTile in front of player's house with a [plant].
-        Tile tileInitializedForHarvesting1 = tilesForFarm[17][11];
+        Tile tileInitializedForHarvesting1 = tilesForFarm[15][11];
         if (tileInitializedForHarvesting1 instanceof GrowableTile) {
             ((GrowableTile) tileInitializedForHarvesting1).changeToSeeded(MysterySeed.TAG);
             ((GrowableTile) tileInitializedForHarvesting1).germinateSeed();
         }
-        Tile tileInitializedForHarvesting2 = tilesForFarm[17][12];
+        Tile tileInitializedForHarvesting2 = tilesForFarm[15][12];
         if (tileInitializedForHarvesting2 instanceof GrowableTile) {
             ((GrowableTile) tileInitializedForHarvesting2).changeToSeeded(MysterySeed.TAG);
             ((GrowableTile) tileInitializedForHarvesting2).germinateSeed();
         }
-        Tile tileInitializedForHarvesting3 = tilesForFarm[17][13];
+        Tile tileInitializedForHarvesting3 = tilesForFarm[15][13];
         if (tileInitializedForHarvesting3 instanceof GrowableTile) {
             ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(MysterySeed.TAG);
             ((GrowableTile) tileInitializedForHarvesting3).germinateSeed();
@@ -325,12 +325,12 @@ public class SceneFarm extends Scene {
         if (Plant.numberOfDiseasedPlant == 0) {
             int xIndex = 14;
             while (Plant.numberOfDiseasedPlant == 0) {
-                if (xIndex > tilesForFarm[17].length - 1) {
+                if (xIndex > tilesForFarm[15].length - 1) {
                     Log.e(TAG, "xIndex > tilesForFarm[17].length!!!");
                     break;
                 }
 
-                Tile tileInitializingForHarvestingBugFix = tilesForFarm[17][xIndex];
+                Tile tileInitializingForHarvestingBugFix = tilesForFarm[15][xIndex];
                 if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
                     ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(MysterySeed.TAG);
                     ((GrowableTile) tileInitializingForHarvestingBugFix).germinateSeed();
@@ -441,9 +441,9 @@ public class SceneFarm extends Scene {
             }
 
             int xIndexBugFix = 14;
-            while (tilesForFarm[17][xIndexBugFix] instanceof GrowableTile &&
-                    ((GrowableTile) tilesForFarm[17][xIndexBugFix]).getEntity() != null) {
-                Plant plantBugFix = (Plant) ((GrowableTile) tilesForFarm[17][xIndexBugFix]).getEntity();
+            while (tilesForFarm[15][xIndexBugFix] instanceof GrowableTile &&
+                    ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity() != null) {
+                Plant plantBugFix = (Plant) ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity();
                 for (int i = 0; i < 6; i++) {
                     plantBugFix.incrementAgeInDays();
                 }
@@ -954,7 +954,7 @@ public class SceneFarm extends Scene {
 
     private Tile[][] createAndInitTiles(Game game) {
         //rgbTileMapMyFarm is an image where each pixel represents a tile.
-        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_my_farm);
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_idyllic_aligned_doors);
         int columns = rgbTileMapFarm.getWidth();            //Always need.
         int rows = rgbTileMapFarm.getHeight();              //Always need.
 
@@ -962,7 +962,7 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_aligned_doors);
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_idyllic_aligned_doors);
 //        imageFarm = cropImageFarm(
 //                game.getContext().getResources(),
 //                game.getTimeManager().getSeason());
@@ -1133,19 +1133,19 @@ public class SceneFarm extends Scene {
 
     private Map<String, Rect> createTransferPointsForFarm() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("HOUSE_LEVEL_01", new Rect((6 * Tile.WIDTH), (4 * Tile.HEIGHT),
-                (6 * Tile.WIDTH) + (1 * Tile.WIDTH), (4 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("HOTHOUSE", new Rect((12 * Tile.WIDTH), (10 * Tile.HEIGHT),
-                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (10 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOUSE_LEVEL_01", new Rect((4 * Tile.WIDTH), (5 * Tile.HEIGHT),
+                (4 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOTHOUSE", new Rect((12 * Tile.WIDTH), (5 * Tile.HEIGHT),
+                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
 //        transferPoints.put("SHEEP_PEN", new Rect((21 * Tile.WIDTH), (7 * Tile.HEIGHT),
 //                (21 * Tile.WIDTH) + (1 * Tile.WIDTH), (7 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("CHICKEN_COOP", new Rect((11 * Tile.WIDTH), (13 * Tile.HEIGHT),
-                (11 * Tile.WIDTH) + (1 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("COW_BARN", new Rect((7 * Tile.WIDTH), (14 * Tile.HEIGHT),
-                (7 * Tile.WIDTH) + (1 * Tile.WIDTH), (14 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("CHICKEN_COOP", new Rect((4 * Tile.WIDTH), (13 * Tile.HEIGHT),
+                (4 * Tile.WIDTH) + (1 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("COW_BARN", new Rect((19 * Tile.WIDTH), (12 * Tile.HEIGHT),
+                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (12 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
 
-        transferPoints.put("SEEDS_SHOP", new Rect((12 * Tile.WIDTH), (5 * Tile.HEIGHT),
-                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("SEEDS_SHOP", new Rect((19 * Tile.WIDTH), (5 * Tile.HEIGHT),
+                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 
