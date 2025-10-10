@@ -284,7 +284,7 @@ public class SceneHothouse extends Scene {
         Tile[][] hothouse = TileManagerLoader.convertStringToTiles(hothouseLoadedAsString);
         Bitmap imageHothouse = cropImageHothouse(game.getContext().getResources());
 
-        // InitiaClize the tiles (provide image and define walkable)
+        // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in hothouse.
         for (int y = 0; y < hothouse.length; y++) {
             for (int x = 0; x < hothouse[0].length; x++) {

@@ -128,9 +128,10 @@ public class PoohForm
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
-        game.addItemToBackpack(item);
+    public boolean respondToItemCollisionViaClick(Item item) {
+        boolean successfullyAddedToBackpack = game.addItemToBackpack(item);
         game.getSceneManager().getCurrentScene().getItemManager().removeItem(item);
+        return successfullyAddedToBackpack;
     }
 
     @Override

@@ -124,8 +124,8 @@ public class Player extends Creature {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
-        form.respondToItemCollisionViaClick(item);
+    public boolean respondToItemCollisionViaClick(Item item) {
+        return form.respondToItemCollisionViaClick(item);
     }
 
     @Override

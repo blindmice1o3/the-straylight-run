@@ -144,8 +144,9 @@ public class CollidingOrbit extends Creature {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         Log.e(TAG, "respondToItemCollisionViaClick()");
+        return false;
     }
 
     @Override

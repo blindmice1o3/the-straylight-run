@@ -217,7 +217,7 @@ public class Game {
         SceneHothouse.getInstance().startNewDay();
     }
 
-    public void addItemToBackpack(Item item) {
+    public boolean addItemToBackpack(Item item) {
         for (ItemStackable stackable : backpack) {
             if (stackable.getItem().getName().equals(item.getName())) {
                 stackable.increment();
@@ -229,10 +229,10 @@ public class Game {
                                 itemStoredInButtonHolderB
                         )
                 );
-                return;
+                return true;
             }
         }
-        backpack.add(new ItemStackable(item, 1));
+        return backpack.add(new ItemStackable(item, 1));
     }
 
     public void removeItemFromBackpack(Item item) {

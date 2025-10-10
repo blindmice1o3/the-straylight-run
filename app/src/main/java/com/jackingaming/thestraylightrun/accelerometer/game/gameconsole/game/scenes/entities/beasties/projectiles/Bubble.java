@@ -148,8 +148,9 @@ public class Bubble extends Entity {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         bubbleStateManager.respondToItemCollisionViaClick(item);
+        return true;
     }
 
     @Override

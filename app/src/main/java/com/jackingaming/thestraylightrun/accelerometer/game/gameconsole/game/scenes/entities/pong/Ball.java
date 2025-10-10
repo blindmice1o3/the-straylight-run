@@ -107,8 +107,8 @@ public class Ball extends Creature {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
-
+    public boolean respondToItemCollisionViaClick(Item item) {
+        return false;
     }
 
     @Override

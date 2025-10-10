@@ -24,7 +24,7 @@ public interface Form extends Serializable {
 
     boolean respondToEntityCollision(Entity e);
 
-    void respondToItemCollisionViaClick(Item item);
+    boolean respondToItemCollisionViaClick(Item item);
 
     void respondToItemCollisionViaMove(Item item);
 }

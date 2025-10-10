@@ -544,13 +544,15 @@ public class FishForm
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         if (item instanceof Meat) {
             // TODO: display these numbers via HeadUpDisplay?
             Meat meat = (Meat) item;
             meat.integrateWithHost(this);
             game.getSceneManager().getCurrentScene().getItemManager().removeItem(item);
+            return true;
         }
+        return false;
     }
 
     @Override

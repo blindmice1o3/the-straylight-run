@@ -69,8 +69,9 @@ public class Kelp extends Entity
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         // Intentionally blank.
+        return false;
     }
 
     @Override

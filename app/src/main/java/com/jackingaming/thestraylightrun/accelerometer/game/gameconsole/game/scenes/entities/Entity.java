@@ -41,7 +41,7 @@ public abstract class Entity
 
     public abstract boolean respondToEntityCollision(Entity e);
 
-    public abstract void respondToItemCollisionViaClick(Item item);
+    public abstract boolean respondToItemCollisionViaClick(Item item);
 
     public abstract void respondToItemCollisionViaMove(Item item);
 
@@ -60,11 +60,11 @@ public abstract class Entity
         for (Item item : game.getSceneManager().getCurrentScene().getItemManager().getItems()) {
             if (item.getCollisionBounds(0f, 0f).intersect(getCollisionBounds(xOffset, yOffset))) {
                 if (viaClick) {
-                    respondToItemCollisionViaClick(item);
+                    return respondToItemCollisionViaClick(item);
                 } else {
                     respondToItemCollisionViaMove(item);
+                    return true;
                 }
-                return true;
             }
         }
         return false;

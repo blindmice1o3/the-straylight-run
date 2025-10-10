@@ -122,8 +122,9 @@ public class Bubblun extends Creature {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         bubblunStateManager.respondToItemCollisionViaClick(item);
+        return true;
     }
 
     @Override

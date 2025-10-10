@@ -523,100 +523,182 @@ public class SceneFarm extends Scene {
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
-        // ITEM CHECK
-        if (itemCurrentlyFacing != null) {
-            Log.e(TAG, "itemCurrentlyFacing != null");
+        // holding vs not holding
+        if (player.hasCarryable()) {
+            Log.d(TAG, "player.hasCarryable()");
 
-            // There an item in front of player.
-            if (itemCurrentlyFacing instanceof Fodder) {
-                if (!player.hasCarryable()) {
-                    // pick up itemCurrentlyFacing
-                    player.pickUp(itemCurrentlyFacing);
-                } else {
-                    Log.e(TAG, "player.hasCarryable()");
-                }
-            }
-            // The item in front of player will receive
-            // default response (putting item into backpack).
-            else {
-                Log.e(TAG, "itemCurrentlyFacing NOT instanceof Fodder");
+            // holding Carryable (place down or place in shipping bin)
 
-                // put itemCurrentlyFacing into backpack
-                player.respondToItemCollisionViaClick(
-                        itemCurrentlyFacing
-                );
-            }
+            // ITEM CHECK
+            if (itemCurrentlyFacing == null) {
+                Log.d(TAG, "itemCurrentlyFacing == null");
+                // ENTITY CHECK
+                if (entityCurrentlyFacing == null) {
+                    Log.d(TAG, "entityCurrentlyFacing == null");
+                    // TILE CHECK
+                    if (tileCurrentlyFacing == null) {
+                        Log.e(TAG, "tileCurrentlyFacing == null");
+                    } else {
+                        Log.d(TAG, "tileCurrentlyFacing != null");
 
-            return;
-        }
-        // itemCurrentlyFacing == null
-        else {
-            if (player.hasCarryable()) {
-                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                        if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                            Log.d(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
 
-                if (tileCurrentlyFacing instanceof ShippingBinTile) {
-                    Log.e(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
-                    if (player.getCarryable() instanceof Sellable) {
-                        Log.e(TAG, "carryable is Sellable");
-                        player.placeInShippingBin();
+                            if (player.getCarryable() instanceof Sellable) {
+                                Log.d(TAG, "player.getCarryable() instanceof Sellable | placeInShippingBin()");
+
+                                ////////////////////////////
+                                player.placeInShippingBin();
+                                ////////////////////////////
+                            } else {
+                                Log.d(TAG, "player.getCarryable() NOT instanceof Sellable");
+                            }
+                        } else if (tileCurrentlyFacing.isWalkable()) {
+                            Log.d(TAG, "tileCurrentlyFacing NOT instanceof ShippingBinTile and tileCurrentlyFacing.isWalkable()");
+
+                            if (player.getCarryable() instanceof AimlessWalker) {
+                                ((AimlessWalker) player.getCarryable()).changeToWalk();
+                            }
+
+                            ///////////////////
+                            player.placeDown();
+                            ///////////////////
+                        } else {
+                            Log.e(TAG, "tileCurrentlyFacing NOT instanceof ShippingBinTile and NOT tileCurrentlyFacing.isWalkable()");
+                        }
                     }
-                } else if (entityCurrentlyFacing == null &&
-                        tileCurrentlyFacing.isWalkable()) {
-                    player.placeDown();
+                } else {
+                    Log.d(TAG, "entityCurrentlyFacing != null");
                 }
-
-                return;
-            }
-        }
-
-        // ENTITY CHECK (no item in front of player)
-        if (player.hasCarryable() && entityCurrentlyFacing == null) {
-            Log.e(TAG, "has carryable and entityFacing is null");
-            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-
-            if (tileCurrentlyFacing.isWalkable()) {
-                Log.e(TAG, "tileCurrentlyFacing.isWalkable()");
-                if (player.getCarryable() instanceof AimlessWalker) {
-                    ((AimlessWalker) player.getCarryable()).changeToWalk();
-                }
-
-                player.placeDown();
-            }
-        } else if (entityCurrentlyFacing != null &&
-                entityCurrentlyFacing instanceof Plant &&
-                ((Plant) entityCurrentlyFacing).isHarvestable()) {
-            player.pickUp(entityCurrentlyFacing);
-
-            Tile tileFacing = player.checkTileCurrentlyFacing();
-            if (tileFacing instanceof GrowableTile) {
-                ((GrowableTile) tileFacing).changeToUntilled();
             } else {
-                Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+                Log.d(TAG, "itemCurrentlyFacing != null");
             }
-        } else if (entityCurrentlyFacing != null &&
-                entityCurrentlyFacing instanceof AimlessWalker) {
-            ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+        } else {
+            Log.d(TAG, "NOT player.hasCarryable()");
 
-            player.pickUp(entityCurrentlyFacing);
-        }
-        // check item occupying StatsDisplayerFragment's button holder.
-        else if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
-            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
-            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+            // not holding Carryable (pick up)
 
-            Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-            Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-            tileCommand.setTile(tileCurrentlyFacing);
-            tileCommand.execute();
-        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
-            if (entityCurrentlyFacing != null) {
-                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
-                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+            // ITEM CHECK
+            if (itemCurrentlyFacing == null) {
+                Log.d(TAG, "itemCurrentlyFacing == null");
+                // ENTITY CHECK
+                if (entityCurrentlyFacing == null) {
+                    Log.d(TAG, "entityCurrentlyFacing == null");
+                    // TILE CHECK
+                    if (tileCurrentlyFacing == null) {
+                        Log.e(TAG, "tileCurrentlyFacing == null");
+                    } else {
+                        Log.d(TAG, "tileCurrentlyFacing != null");
 
-                Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
-                entityCommand.setEntity(entityCurrentlyFacing);
-                entityCommand.execute();
+                        // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                            tileCommand.setTile(tileCurrentlyFacing);
+                            tileCommand.execute();
+                        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                            if (entityCurrentlyFacing != null) {
+                                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                                entityCommand.setEntity(entityCurrentlyFacing);
+                                entityCommand.execute();
+                            }
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "entityCurrentlyFacing != null");
+
+                    // check for harvestable plants (change tile to untilled)
+                    if (entityCurrentlyFacing instanceof Plant &&
+                            ((Plant) entityCurrentlyFacing).isHarvestable()) {
+                        Log.d(TAG, "entityCurrentlyFacing instanceof Plant && ((Plant) entityCurrentlyFacing).isHarvestable()");
+
+                        /////////////////////////////////////
+                        player.pickUp(entityCurrentlyFacing);
+                        /////////////////////////////////////
+
+                        // TILE CHECK
+                        if (tileCurrentlyFacing instanceof GrowableTile) {
+                            Log.d(TAG, "tileCurrentlyFacing instanceof GrowableTile");
+
+                            ((GrowableTile) tileCurrentlyFacing).changeToUntilled();
+                        } else {
+                            Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+                        }
+                    }
+                    // check for aimless walkers (change walker to off)
+                    else if (entityCurrentlyFacing instanceof AimlessWalker) {
+                        Log.d(TAG, "entityCurrentlyFacing instanceof AimlessWalker");
+
+                        ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+
+                        /////////////////////////////////////
+                        player.pickUp(entityCurrentlyFacing);
+                        /////////////////////////////////////
+                    } else {
+                        // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                            tileCommand.setTile(tileCurrentlyFacing);
+                            tileCommand.execute();
+                        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                            if (entityCurrentlyFacing != null) {
+                                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                                entityCommand.setEntity(entityCurrentlyFacing);
+                                entityCommand.execute();
+                            }
+                        }
+                    }
+                }
+            } else {
+                Log.d(TAG, "itemCurrentlyFacing != null");
+
+                // check for fodder
+                if (itemCurrentlyFacing instanceof Fodder) {
+                    player.pickUp(itemCurrentlyFacing);
+                }
+                // everything else goes into backpack (default response)
+                else {
+                    // put item into backpack
+                    boolean successfullyAddedToBackpack = player.respondToItemCollisionViaClick(
+                            itemCurrentlyFacing
+                    );
+
+                    if (successfullyAddedToBackpack) {
+                        // do nothing.
+                    } else {
+                        // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                            tileCommand.setTile(tileCurrentlyFacing);
+                            tileCommand.execute();
+                        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                            if (entityCurrentlyFacing != null) {
+                                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                                entityCommand.setEntity(entityCurrentlyFacing);
+                                entityCommand.execute();
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -660,28 +742,32 @@ public class SceneFarm extends Scene {
             //  give/start second quest.
             boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getTAG());
             if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
-                Log.e(TAG, "first quest's state == Quest.State.COMPLETED");
+                Log.d(TAG, "first quest's state == Quest.State.COMPLETED");
                 Bitmap portraitAI = WorldScene.imagesClippit[0][0];
                 startDialogueWithAI(portraitAI);
             }
         } else {
-            // check item occupying StatsDisplayerFragment's button holder.
-            if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
-                TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
-                TileCommand tileCommand = tileCommandOwner.getTileCommand();
+            if (player.hasCarryable()) {
+                // do nothing.
+            } else {
+                // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+                    TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+                    TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-                Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
-                Log.e(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-                tileCommand.setTile(tileCurrentlyFacing);
-                tileCommand.execute();
-            } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
-                if (entityCurrentlyFacing != null) {
-                    EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
-                    EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+                    Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                    tileCommand.setTile(tileCurrentlyFacing);
+                    tileCommand.execute();
+                } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+                    if (entityCurrentlyFacing != null) {
+                        EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                        EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
 
-                    Log.e(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
-                    entityCommand.setEntity(entityCurrentlyFacing);
-                    entityCommand.execute();
+                        Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                        entityCommand.setEntity(entityCurrentlyFacing);
+                        entityCommand.execute();
+                    }
                 }
             }
         }

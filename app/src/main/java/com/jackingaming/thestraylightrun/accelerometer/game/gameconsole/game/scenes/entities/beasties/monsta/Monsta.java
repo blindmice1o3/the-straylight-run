@@ -58,8 +58,9 @@ public class Monsta extends Entity {
     }
 
     @Override
-    public void respondToItemCollisionViaClick(Item item) {
+    public boolean respondToItemCollisionViaClick(Item item) {
         monstaStateManager.respondToItemCollisionViaClick(item);
+        return true;
     }
 
     @Override
