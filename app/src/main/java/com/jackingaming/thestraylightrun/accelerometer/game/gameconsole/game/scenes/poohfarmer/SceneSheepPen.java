@@ -11,11 +11,23 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,6 +86,201 @@ public class SceneSheepPen extends Scene {
             Player.getInstance().setY(yLastKnown);
         }
         GameCamera.getInstance().update(0L);
+    }
+
+    @Override
+    protected void doJustPressedButtonA() {
+        super.doJustPressedButtonA();
+
+        Player player = Player.getInstance();
+        Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
+
+        // holding vs not holding
+        if (player.hasCarryable()) {
+            Log.d(TAG, "player.hasCarryable()");
+
+            // holding Carryable (place down or place in shipping bin)
+
+            // ITEM CHECK
+            if (itemCurrentlyFacing == null) {
+                Log.d(TAG, "itemCurrentlyFacing == null");
+                // ENTITY CHECK
+                if (entityCurrentlyFacing == null) {
+                    Log.d(TAG, "entityCurrentlyFacing == null");
+                    // TILE CHECK
+                    if (tileCurrentlyFacing == null) {
+                        Log.e(TAG, "tileCurrentlyFacing == null");
+                    } else {
+                        Log.d(TAG, "tileCurrentlyFacing != null");
+
+                        if (tileCurrentlyFacing instanceof FeedingStallTile) {
+                            if (player.getCarryable() instanceof Fodder) {
+                                if (!((FeedingStallTile) tileCurrentlyFacing).isOccupied()) {
+                                    ((FeedingStallTile) tileCurrentlyFacing).acceptFodder(
+                                            (Fodder) (player.getCarryable())
+                                    );
+
+                                    player.removeCarryable();
+                                }
+                            } else {
+                                Log.e(TAG, "player.getCarryable() NOT instanceof Fodder");
+                            }
+                        } else if (tileCurrentlyFacing instanceof ShippingBinTile) {
+                            Log.d(TAG, "tileCurrentlyFacing instanceof ShippingBinTile");
+
+                            if (player.getCarryable() instanceof Sellable) {
+                                Log.d(TAG, "player.getCarryable() instanceof Sellable | placeInShippingBin()");
+
+                                ////////////////////////////
+                                player.placeInShippingBin();
+                                ////////////////////////////
+                            } else {
+                                Log.d(TAG, "player.getCarryable() NOT instanceof Sellable");
+                            }
+                        } else if (tileCurrentlyFacing.isWalkable()) {
+                            Log.d(TAG, "tileCurrentlyFacing NOT instanceof ShippingBinTile and tileCurrentlyFacing.isWalkable()");
+
+                            if (player.getCarryable() instanceof AimlessWalker) {
+                                ((AimlessWalker) player.getCarryable()).changeToWalk();
+                            }
+
+                            ///////////////////
+                            player.placeDown();
+                            ///////////////////
+                        } else {
+                            Log.e(TAG, "tileCurrentlyFacing NOT instanceof ShippingBinTile and NOT tileCurrentlyFacing.isWalkable()");
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "entityCurrentlyFacing != null");
+                }
+            } else {
+                Log.d(TAG, "itemCurrentlyFacing != null");
+            }
+        } else {
+            Log.d(TAG, "NOT player.hasCarryable()");
+
+            // not holding Carryable (pick up)
+
+            // ITEM CHECK
+            if (itemCurrentlyFacing == null) {
+                Log.d(TAG, "itemCurrentlyFacing == null");
+                // ENTITY CHECK
+                if (entityCurrentlyFacing == null) {
+                    Log.d(TAG, "entityCurrentlyFacing == null");
+                    // TILE CHECK
+                    if (tileCurrentlyFacing == null) {
+                        Log.e(TAG, "tileCurrentlyFacing == null");
+                    } else {
+                        Log.d(TAG, "tileCurrentlyFacing != null");
+
+                        if (tileCurrentlyFacing instanceof FodderStashTile) {
+                            Log.d(TAG, "tileCurrentlyFacing instanceof FodderStashTile");
+
+                            Fodder fodderToBeCarried = ((FodderStashTile) tileCurrentlyFacing).generateFodder();
+                            if (fodderToBeCarried != null) {
+                                fodderToBeCarried.init(game);
+
+                                player.pickUp(fodderToBeCarried);
+                            } else {
+                                Log.e(TAG, "fodderToBeCarried == null");
+                            }
+                        } else {
+                            // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                            if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                                TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                                TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                                Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                                tileCommand.setTile(tileCurrentlyFacing);
+                                tileCommand.execute();
+                            } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                                if (entityCurrentlyFacing != null) {
+                                    EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                                    EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                                    Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                                    entityCommand.setEntity(entityCurrentlyFacing);
+                                    entityCommand.execute();
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "entityCurrentlyFacing != null");
+
+                    // check for harvestable plants (change tile to untilled)
+                    if (entityCurrentlyFacing instanceof Plant &&
+                            ((Plant) entityCurrentlyFacing).isHarvestable()) {
+                        Log.d(TAG, "entityCurrentlyFacing instanceof Plant && ((Plant) entityCurrentlyFacing).isHarvestable()");
+
+                        /////////////////////////////////////
+                        player.pickUp(entityCurrentlyFacing);
+                        /////////////////////////////////////
+
+                        // TILE CHECK
+                        if (tileCurrentlyFacing instanceof GrowableTile) {
+                            Log.d(TAG, "tileCurrentlyFacing instanceof GrowableTile");
+
+                            ((GrowableTile) tileCurrentlyFacing).changeToUntilled();
+                        } else {
+                            Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
+                        }
+                    }
+                    // check for aimless walkers (change walker to off)
+                    else if (entityCurrentlyFacing instanceof AimlessWalker) {
+                        Log.d(TAG, "entityCurrentlyFacing instanceof AimlessWalker");
+
+                        ((AimlessWalker) entityCurrentlyFacing).changeToOff();
+
+                        /////////////////////////////////////
+                        player.pickUp(entityCurrentlyFacing);
+                        /////////////////////////////////////
+                    } else {
+                        // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+                        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
+                            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
+                            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+
+                            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                            tileCommand.setTile(tileCurrentlyFacing);
+                            tileCommand.execute();
+                        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
+                            if (entityCurrentlyFacing != null) {
+                                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
+                                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
+
+                                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                                entityCommand.setEntity(entityCurrentlyFacing);
+                                entityCommand.execute();
+                            }
+                        }
+                    }
+                }
+            } else {
+                Log.d(TAG, "itemCurrentlyFacing != null");
+
+                // check for fodder
+                if (itemCurrentlyFacing instanceof Fodder) {
+                    player.pickUp(itemCurrentlyFacing);
+                }
+                // everything else goes into backpack (default response)
+                else {
+                    // put item into backpack
+                    boolean successfullyAddedToBackpack = player.respondToItemCollisionViaClick(
+                            itemCurrentlyFacing
+                    );
+
+                    if (successfullyAddedToBackpack) {
+                        // do nothing.
+                    } else {
+                        // do nothing.
+                    }
+                }
+            }
+        }
     }
 
     private Tile[][] createAndInitTilesForSheepPen(Game game) {

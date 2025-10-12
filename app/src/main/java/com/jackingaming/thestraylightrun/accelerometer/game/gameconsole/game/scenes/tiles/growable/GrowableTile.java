@@ -85,6 +85,18 @@ public class GrowableTile extends Tile {
         changeToOccupied();
     }
 
+    public Entity harvestCrop() {
+        if (entity != null) {
+            Entity crop = entity;
+
+            changeToUntilled();
+
+            return crop;
+        } else {
+            return null;
+        }
+    }
+
     public void startNewDay() {
         if (watered) {
             if (state == State.SEEDED) {

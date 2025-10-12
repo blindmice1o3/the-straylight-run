@@ -679,24 +679,7 @@ public class SceneFarm extends Scene {
                     if (successfullyAddedToBackpack) {
                         // do nothing.
                     } else {
-                        // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
-                        if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
-                            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
-                            TileCommand tileCommand = tileCommandOwner.getTileCommand();
-
-                            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-                            tileCommand.setTile(tileCurrentlyFacing);
-                            tileCommand.execute();
-                        } else if (game.getItemStoredInButtonHolderA() instanceof EntityCommandOwner) {
-                            if (entityCurrentlyFacing != null) {
-                                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderA();
-                                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
-
-                                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
-                                entityCommand.setEntity(entityCurrentlyFacing);
-                                entityCommand.execute();
-                            }
-                        }
+                        // do nothing.
                     }
                 }
             }
@@ -728,6 +711,8 @@ public class SceneFarm extends Scene {
 
         Player player = Player.getInstance();
         Entity entityCurrentlyFacing = player.getEntityCurrentlyFacing();
+        Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
+        Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
         if (inDialogueWithClippitState) {
             inDialogueWithClippitState = false;
@@ -755,7 +740,6 @@ public class SceneFarm extends Scene {
                     TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
                     TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-                    Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
                     Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                     tileCommand.setTile(tileCurrentlyFacing);
                     tileCommand.execute();
