@@ -86,6 +86,33 @@ public class SceneFarm extends Scene {
     private Quest aIQuest00;
     private Quest robotDialogQuest00;
     private DialogueStateManager dialogueStateManager;
+    private boolean firstTimeEquippingRobotReprogrammer4000 = true;
+    private boolean inTutorialEquipRobotReprogrammer4000 = false;
+    private boolean inTutorialUseRobotReprogrammer4000 = false;
+
+    public boolean isFirstTimeEquippingRobotReprogrammer4000() {
+        return firstTimeEquippingRobotReprogrammer4000;
+    }
+
+    public void setFirstTimeEquippingRobotReprogrammer4000(boolean firstTimeEquippingRobotReprogrammer4000) {
+        this.firstTimeEquippingRobotReprogrammer4000 = firstTimeEquippingRobotReprogrammer4000;
+    }
+
+    public boolean isInTutorialEquipRobotReprogrammer4000() {
+        return inTutorialEquipRobotReprogrammer4000;
+    }
+
+    public void setInTutorialEquipRobotReprogrammer4000(boolean inTutorialEquipRobotReprogrammer4000) {
+        this.inTutorialEquipRobotReprogrammer4000 = inTutorialEquipRobotReprogrammer4000;
+    }
+
+    public boolean isInTutorialUseRobotReprogrammer4000() {
+        return inTutorialUseRobotReprogrammer4000;
+    }
+
+    public void setInTutorialUseRobotReprogrammer4000(boolean inTutorialUseRobotReprogrammer4000) {
+        this.inTutorialUseRobotReprogrammer4000 = inTutorialUseRobotReprogrammer4000;
+    }
 
     private SceneFarm() {
         super();
@@ -353,80 +380,6 @@ public class SceneFarm extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
-            aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
-                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                    (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
-            aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
-                    ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
-                    ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-            aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
-                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                    ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-            aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                    ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
-            aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                    ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
-            aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                    ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                    ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
-
-            aimlessWalker1.init(game);
-            aimlessWalker2.init(game);
-            aimlessWalker3.init(game);
-            aimlessWalker4.init(game);
-            aimlessWalker5.init(game);
-            aimlessWalker6.init(game);
-
-            entityManager.addEntity(aimlessWalker1);
-            entityManager.addEntity(aimlessWalker2);
-            entityManager.addEntity(aimlessWalker3);
-            entityManager.addEntity(aimlessWalker4);
-            entityManager.addEntity(aimlessWalker5);
-            entityManager.addEntity(aimlessWalker6);
-
-            /////////////////////////////////////////////////
-
-            growSystemParts1 = new GrowSystemParts(1);
-            growSystemParts2 = new GrowSystemParts(2);
-            growSystemParts3 = new GrowSystemParts(3);
-            growSystemParts4 = new GrowSystemParts(4);
-            growSystemParts5 = new GrowSystemParts(5);
-            growSystemParts6 = new GrowSystemParts(6);
-
-            growSystemParts1.init(game);
-            growSystemParts2.init(game);
-            growSystemParts3.init(game);
-            growSystemParts4.init(game);
-            growSystemParts5.init(game);
-            growSystemParts6.init(game);
-
-            itemManager.addItem(growSystemParts1);
-            itemManager.addItem(growSystemParts2);
-            itemManager.addItem(growSystemParts3);
-            itemManager.addItem(growSystemParts4);
-            itemManager.addItem(growSystemParts5);
-            itemManager.addItem(growSystemParts6);
-
-            ////////////////////////////////////////////
-
-            aimlessWalker1.pickUp(growSystemParts1);
-            aimlessWalker2.pickUp(growSystemParts2);
-            aimlessWalker3.pickUp(growSystemParts3);
-            aimlessWalker4.pickUp(growSystemParts4);
-            aimlessWalker5.pickUp(growSystemParts5);
-            aimlessWalker6.pickUp(growSystemParts6);
-
-            aimlessWalker1.changeToWalk();
-            aimlessWalker2.changeToWalk();
-            aimlessWalker3.changeToWalk();
-            aimlessWalker4.changeToWalk();
-            aimlessWalker5.changeToWalk();
-            aimlessWalker6.changeToWalk();
-        }
-
         // Age the [plant] so it's almost harvestable
         // (has to be done after Entity.init(), which sets ageInDays to 0).
         if (tileInitializedForHarvesting1 instanceof GrowableTile) {
@@ -471,17 +424,96 @@ public class SceneFarm extends Scene {
         dialogueStates.add(new AIDialogue02(game, robotDialogQuest00));
         dialogueStateManager = new DialogueStateManager(dialogueStates);
 
-        ///////////////////
-        setupForRunThree();
-        ///////////////////
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
+            setupForRunFour();
+        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
+            setupForRunThree();
+        }
+
         Log.e(TAG, "init() END");
     }
 
-    private static final int NUMBER_OF_MYSTERY_PRODUCT_TO_HARVEST = RunThree.HARVEST_QUANTITY_REQUIRED;
-    private int numberOfMysteryProductReady = 0;
+    public void setupForRunFour() {
+        Log.d(TAG, "setupForRunFour()");
+
+        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
+        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
+        aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+        aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+
+        aimlessWalker1.init(game);
+        aimlessWalker2.init(game);
+        aimlessWalker3.init(game);
+        aimlessWalker4.init(game);
+        aimlessWalker5.init(game);
+        aimlessWalker6.init(game);
+
+        entityManager.addEntity(aimlessWalker1);
+        entityManager.addEntity(aimlessWalker2);
+        entityManager.addEntity(aimlessWalker3);
+        entityManager.addEntity(aimlessWalker4);
+        entityManager.addEntity(aimlessWalker5);
+        entityManager.addEntity(aimlessWalker6);
+
+        /////////////////////////////////////////////////
+
+        growSystemParts1 = new GrowSystemParts(1);
+        growSystemParts2 = new GrowSystemParts(2);
+        growSystemParts3 = new GrowSystemParts(3);
+        growSystemParts4 = new GrowSystemParts(4);
+        growSystemParts5 = new GrowSystemParts(5);
+        growSystemParts6 = new GrowSystemParts(6);
+
+        growSystemParts1.init(game);
+        growSystemParts2.init(game);
+        growSystemParts3.init(game);
+        growSystemParts4.init(game);
+        growSystemParts5.init(game);
+        growSystemParts6.init(game);
+
+        itemManager.addItem(growSystemParts1);
+        itemManager.addItem(growSystemParts2);
+        itemManager.addItem(growSystemParts3);
+        itemManager.addItem(growSystemParts4);
+        itemManager.addItem(growSystemParts5);
+        itemManager.addItem(growSystemParts6);
+
+        ////////////////////////////////////////////
+
+        aimlessWalker1.pickUp(growSystemParts1);
+        aimlessWalker2.pickUp(growSystemParts2);
+        aimlessWalker3.pickUp(growSystemParts3);
+        aimlessWalker4.pickUp(growSystemParts4);
+        aimlessWalker5.pickUp(growSystemParts5);
+        aimlessWalker6.pickUp(growSystemParts6);
+
+        aimlessWalker1.changeToWalk();
+        aimlessWalker2.changeToWalk();
+        aimlessWalker3.changeToWalk();
+        aimlessWalker4.changeToWalk();
+        aimlessWalker5.changeToWalk();
+        aimlessWalker6.changeToWalk();
+    }
 
     public void setupForRunThree() {
-        while (numberOfMysteryProductReady < NUMBER_OF_MYSTERY_PRODUCT_TO_HARVEST) {
+        Log.d(TAG, "setupForRunThree()");
+
+        int numberOfMysteryProductReady = 0;
+        while (numberOfMysteryProductReady < RunThree.HARVEST_QUANTITY_REQUIRED) {
             Tile[][] tiles = tileManager.getTiles();
             Log.e(TAG, "tiles.length: " + tiles.length);
             Log.e(TAG, "tiles[0].length: " + tiles[0].length);
@@ -716,6 +748,14 @@ public class SceneFarm extends Scene {
 
         if (inDialogueWithClippitState) {
             inDialogueWithClippitState = false;
+
+            game.getTextboxListener().showStatsDisplayer();
+        } else if (inTutorialEquipRobotReprogrammer4000) {
+            inTutorialEquipRobotReprogrammer4000 = false;
+
+            game.getTextboxListener().showStatsDisplayer();
+        } else if (inTutorialUseRobotReprogrammer4000) {
+            inTutorialUseRobotReprogrammer4000 = false;
 
             game.getTextboxListener().showStatsDisplayer();
         } else if (inSeedShopState) {

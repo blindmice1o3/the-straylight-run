@@ -17,7 +17,7 @@ public class RunFour
         implements Quest {
     public static final String TAG = RunFour.class.getSimpleName();
     public static final String ITEM_REQUIREMENT_AS_STRING = "growSystemParts";
-    public static final int QUANTITY_REQUIRED = 4;
+    public static final int QUANTITY_REQUIRED = 6;
 
     private Quest.State state;
     private Game game;

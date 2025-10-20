@@ -6,6 +6,8 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,12 +27,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
@@ -231,6 +236,14 @@ public class GameConsoleFragment extends Fragment
         handler.post(new Runnable() {
             @Override
             public void run() {
+                // Stop previous particleExplosionView before starting new particleExplosionView.
+                // This prevents overlap-bug (immediately finishing multiple quests,
+                // one-after-another, caused previous particleExplosionView to stay on screen).
+                if (particleExplosionView != null && particleExplosionView.getVisibility() == View.VISIBLE) {
+                    particleExplosionView.setVisibility(View.INVISIBLE);
+                    frameLayoutUsedAsBorderForViewport.removeView(particleExplosionView);
+                }
+
                 particleExplosionView = new ParticleExplosionView(getContext());
                 particleExplosionView.initParticles();
                 particleExplosionView.setX(
@@ -408,8 +421,50 @@ public class GameConsoleFragment extends Fragment
                             itemA
                     )
             );
+
+            // used for RunOne's "tutorial"
+            if (itemA instanceof RobotReprogrammer4000) {
+                checkIfFirstTimeEquippingRobotReprogrammer4000();
+            }
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
+        }
+    }
+
+    public void checkIfFirstTimeEquippingRobotReprogrammer4000() {
+        if (SceneFarm.getInstance().isFirstTimeEquippingRobotReprogrammer4000()) {
+            Log.d(TAG, "SceneFarm.getInstance().isFirstTimeEquippingRobotReprogrammer4000()");
+            SceneFarm.getInstance().setFirstTimeEquippingRobotReprogrammer4000(
+                    false
+            );
+
+            game.getViewportListener().addAndShowParticleExplosionView();
+
+            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
+            String text = getResources().getString(R.string.equipRobotReprogrammer4000);
+            TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                    50L, portrait, text,
+                    new TypeWriterDialogFragment.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
+                        }
+                    }, new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
+                        }
+                    }
+            );
+
+            SceneFarm.getInstance().setInTutorialEquipRobotReprogrammer4000(
+                    true
+            );
+            game.getTextboxListener().showTextbox(typeWriterDialogFragment);
+        } else {
+            Log.d(TAG, "NOT SceneFarm.getInstance().isFirstTimeEquippingRobotReprogrammer4000()");
+
+            // do nothing;
         }
     }
 
@@ -422,6 +477,11 @@ public class GameConsoleFragment extends Fragment
                             itemB
                     )
             );
+
+            // used for RunOne's "tutorial"
+            if (itemB instanceof RobotReprogrammer4000) {
+                checkIfFirstTimeEquippingRobotReprogrammer4000();
+            }
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
         }

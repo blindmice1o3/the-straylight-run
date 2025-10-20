@@ -1,8 +1,12 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
@@ -213,6 +217,25 @@ public class RunOne
                     Log.e(TAG, "!!!REQUIREMENTS MET!!!");
                     game.getViewportListener().addAndShowParticleExplosionView();
                     dispenseRewards();
+
+                    Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
+                    String text = game.getContext().getResources().getString(R.string.clickButtonHolderAorB);
+                    TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                            50L, portrait, text,
+                            new TypeWriterDialogFragment.DismissListener() {
+                                @Override
+                                public void onDismiss() {
+                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
+                                }
+                            }, new TypeWriterTextView.TextCompletionListener() {
+                                @Override
+                                public void onAnimationFinish() {
+                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
+                                }
+                            }
+                    );
+
+                    game.getTextboxListener().showTextbox(typeWriterDialogFragment);
                 } else {
                     Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                 }

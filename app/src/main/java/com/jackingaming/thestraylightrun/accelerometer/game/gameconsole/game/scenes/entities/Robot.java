@@ -1,6 +1,8 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -8,10 +10,13 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.jackingaming.thestraylightrun.MainActivity;
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.RobotAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.Command;
@@ -31,6 +36,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
@@ -81,6 +87,8 @@ public class Robot extends Creature {
     private int counterCommands = 0;
     private List<Tile> tilesShippingBinDrop;
 
+    private boolean isFirstTimeShowingRobotDialogFragment = true;
+
     public Robot(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
 
@@ -106,11 +114,48 @@ public class Robot extends Creature {
         random = new Random();
     }
 
+    public void checkIfFirstTimeShowingRobotDialogFragment() {
+        if (isFirstTimeShowingRobotDialogFragment) {
+            Log.d(TAG, "isFirstTimeShowingRobotDialogFragment");
+            isFirstTimeShowingRobotDialogFragment = false;
+
+            game.getViewportListener().addAndShowParticleExplosionView();
+
+            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
+            String text = game.getContext().getResources().getString(R.string.useRobotReprogrammer4000);
+            TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                    50L, portrait, text,
+                    new TypeWriterDialogFragment.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
+                        }
+                    }, new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
+                        }
+                    }
+            );
+
+            SceneFarm.getInstance().setInTutorialUseRobotReprogrammer4000(
+                    true
+            );
+            game.getTextboxListener().showTextbox(typeWriterDialogFragment);
+        } else {
+            Log.d(TAG, "!isFirstTimeShowingRobotDialogFragment");
+
+            // do nothing;
+        }
+    }
+
     public void showRobotDialogFragment() {
         game.setPaused(true);
 
-        RobotDialogFragment robotDialogFragment = instantiateRobotDialogFragment();
+        // used for RunOne's "tutorial"
+        checkIfFirstTimeShowingRobotDialogFragment();
 
+        RobotDialogFragment robotDialogFragment = instantiateRobotDialogFragment();
         robotDialogFragment.show(
                 ((MainActivity) game.getContext()).getSupportFragmentManager(),
                 RobotDialogFragment.TAG
@@ -417,7 +462,7 @@ public class Robot extends Creature {
 
             @Override
             public void onTillSeedWaterButtonClick(View view, RobotDialogFragment robotDialogFragment) {
-                showRobotDialogFragment(
+                showSelectionsOfRobotDialogFragment(
                         TileSelectorView.Mode.TILL_SEED_WATER,
                         robotDialogFragment
                 );
@@ -425,7 +470,7 @@ public class Robot extends Creature {
 
             @Override
             public void onWaterButtonClick(View view, RobotDialogFragment robotDialogFragment) {
-                showRobotDialogFragment(
+                showSelectionsOfRobotDialogFragment(
                         TileSelectorView.Mode.ONLY_WATER,
                         robotDialogFragment
                 );
@@ -433,7 +478,7 @@ public class Robot extends Creature {
 
             @Override
             public void onHarvestButtonClick(View view, RobotDialogFragment robotDialogFragment) {
-                showRobotDialogFragment(
+                showSelectionsOfRobotDialogFragment(
                         TileSelectorView.Mode.HARVEST,
                         robotDialogFragment
                 );
@@ -476,8 +521,8 @@ public class Robot extends Creature {
         );
     }
 
-    private void showRobotDialogFragment(TileSelectorView.Mode modeForTileSelectorView,
-                                         RobotDialogFragment robotDialogFragment) {
+    private void showSelectionsOfRobotDialogFragment(TileSelectorView.Mode modeForTileSelectorView,
+                                                     RobotDialogFragment robotDialogFragment) {
         TileSelectorDialogFragment tileSelectorDialogFragment =
                 TileSelectorDialogFragment.newInstance(
                         game.getSceneManager().getCurrentScene().getTileManager(),

@@ -126,8 +126,8 @@ public class TextboxState
         canvas.translate(xTextbox, yTextbox);
         Paint paintBackground = new Paint();
         paintBackground.setColor(Color.RED);
-        paintBackground.setAlpha(185);
-        Rect rectBackground = new Rect(0, 0, widthStaticLayout, (int) heightStaticLayout);
+        paintBackground.setAlpha(5);
+        Rect rectBackground = new Rect(0, 0, (int) (widthStaticLayout - xTextbox), (int) heightStaticLayout);
         canvas.drawRect(rectBackground, paintBackground);
         staticLayout.draw(canvas);
 

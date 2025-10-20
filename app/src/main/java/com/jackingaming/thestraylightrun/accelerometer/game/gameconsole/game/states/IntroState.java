@@ -102,46 +102,50 @@ public class IntroState
             String textForTextBox = String.format("Run%s: %s",
                     runNumberForFirstLetterCapital,
                     requirementForRun);
-            game.getTextboxListener().showTextbox(
-                    TypeWriterDialogFragment.newInstance(
-                            50L, imageForTextbox,
-                            textForTextBox,
-                            new TypeWriterDialogFragment.DismissListener() {
-                                @Override
-                                public void onDismiss() {
-                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
-                                }
-                            }, new TypeWriterTextView.TextCompletionListener() {
-                                @Override
-                                public void onAnimationFinish() {
-                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
-                                    isIntroTextAnimationFinished = true;
+            typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                    50L, imageForTextbox,
+                    textForTextBox,
+                    new TypeWriterDialogFragment.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
+                        }
+                    }, new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
+                            isIntroTextAnimationFinished = true;
 
-                                    switch (game.getRun()) {
-                                        case ONE:
-                                            giveRunOneQuest();
-                                            break;
-                                        case TWO:
-                                            giveRunTwoQuest();
-                                            break;
-                                        case THREE:
-                                            giveRunThreeQuest();
-                                            break;
-                                        case FOUR:
-                                            giveRunFourQuest();
-                                            break;
-                                        case FIVE:
-                                            giveRunFiveQuest();
-                                            break;
-                                    }
-                                }
+                            switch (game.getRun()) {
+                                case ONE:
+                                    giveRunOneQuest();
+                                    break;
+                                case TWO:
+                                    giveRunTwoQuest();
+                                    break;
+                                case THREE:
+                                    giveRunThreeQuest();
+                                    break;
+                                case FOUR:
+                                    giveRunFourQuest();
+                                    break;
+                                case FIVE:
+                                    giveRunFiveQuest();
+                                    break;
                             }
-                    )
+                        }
+                    }
+            );
+
+            game.getTextboxListener().showTextbox(
+                    typeWriterDialogFragment
             );
         }
 
         interpretInput();
     }
+
+    TypeWriterDialogFragment typeWriterDialogFragment;
 
     private void giveRunFiveQuest() {
         SceneHothouse.getInstance().init(game);
