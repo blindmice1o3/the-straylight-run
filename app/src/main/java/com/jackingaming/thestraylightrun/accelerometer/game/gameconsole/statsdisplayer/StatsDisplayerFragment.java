@@ -173,10 +173,12 @@ public class StatsDisplayerFragment extends Fragment
             }
         });
 
+        String textA = getResources().getString(R.string.text_a);
+        String textB = getResources().getString(R.string.text_b);
         ButtonHolderFragment buttonHolderFragmentA = (ButtonHolderFragment) getChildFragmentManager().findFragmentById(R.id.buttonholderfragment_a_stats_displayer_fragment);
-        buttonHolderFragmentA.setTextForTextView("A");
+        buttonHolderFragmentA.setTextForTextView(textA);
         ButtonHolderFragment buttonHolderFragmentB = (ButtonHolderFragment) getChildFragmentManager().findFragmentById(R.id.buttonholderfragment_b_stats_displayer_fragment);
-        buttonHolderFragmentB.setTextForTextView("B");
+        buttonHolderFragmentB.setTextForTextView(textB);
     }
 
     private void initImageQuest(Resources resources) {

@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.jackingaming.thestraylightrun.MainActivity;
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 
@@ -67,6 +68,8 @@ public class TimeManager
 
     public enum Season {SPRING, SUMMER, FALL, WINTER;}
 
+    private String textSpring, textSummer, textFall, textWinter;
+
     public enum ModeOfDay {DAYLIGHT, TWILIGHT, NIGHT;}
 
     private static final float MILLISECOND_TO_MINUTE_RATIO = 20000f / 60;
@@ -103,6 +106,11 @@ public class TimeManager
         this.game = game;
         this.statsChangeListener = statsChangeListener;
         timeManagerListeners = new HashMap<EventTime, TimeManagerListener>();
+
+        textSpring = game.getContext().getResources().getString(R.string.text_spring);
+        textSummer = game.getContext().getResources().getString(R.string.text_summer);
+        textFall = game.getContext().getResources().getString(R.string.text_fall);
+        textWinter = game.getContext().getResources().getString(R.string.text_winter);
     }
 
     public void update(long elapsed) {
@@ -171,7 +179,22 @@ public class TimeManager
 
         //CALENDAR ((SEASON) DAY)
         String dayFormatted = String.format("%02d", day);
-        String calendarText = "(" + season.name() + ") " + dayFormatted;
+        String textSeason = null;
+        switch (season) {
+            case SPRING:
+                textSeason = textSpring;
+                break;
+            case SUMMER:
+                textSeason = textSummer;
+                break;
+            case FALL:
+                textSeason = textFall;
+                break;
+            case WINTER:
+                textSeason = textWinter;
+                break;
+        }
+        String calendarText = "(" + textSeason + ") " + dayFormatted;
 
         //GAME-CLOCK (HOUR:MINUTE)
         String hourCurrent = String.format("%02d", hour);

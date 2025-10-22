@@ -33,6 +33,10 @@ public class ButtonPadFragment extends Fragment {
     }
 
     private ConstraintLayout constraintLayout;
+    // TODO: associate imageViewButtonMenu, imageViewButtonA, and
+    //  imageViewButtonB with R.string.text_menu, R.string.text_a, and
+    //  R.string.text_b (instead of "MENU", "A", and "B" hard-coded
+    //  inside the image).
     private ImageView imageViewButtonMenu;
     private ImageView imageViewButtonA;
     private ImageView imageViewButtonB;

@@ -60,7 +60,7 @@ public class StateManager {
         return stateStack.size() - 1;
     }
 
-    private State getCurrentState() {
+    public State getCurrentState() {
         return stateStack.get(getIndexOfTop());
     }
 

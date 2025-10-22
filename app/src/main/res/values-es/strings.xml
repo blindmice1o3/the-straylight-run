@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TheStraylightRun</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="text_new">NUEVO</string>
+    <string name="text_load">CARGA</string>
+    <string name="text_cursor">-></string>
+    <string name="text_menu">MENU</string>
+    <string name="text_a">A</string>
+    <string name="text_b">B</string>
+    <string name="text_spring">PRIMAVERA</string>
+    <string name="text_summer">VERANO</string>
+    <string name="text_fall">OTONO</string>
+    <string name="text_winter">INVIERNO</string>
+    <string name="text_seed_name">nombre de la semilla</string>
+    <string name="text_seed_description">descripción de la semilla</string>
+    <string name="click_button_holder_a_or_b">Haga clic en \"ButtonHolderA\" o \"ButtonHolderB\" para equipar el RobotReprogrammer4000.</string>
+    <string name="equip_robot_reprogrammer_4000">¡Felicitaciones por equipar el RobotReprogrammer4000! ¡Úsalo en el robot para ejecutar el nuevo código!</string>
+    <string name="use_robot_reprogrammer_4000">¡Felicitaciones por utilizar RobotReprogrammer4000 en el robot!</string>
+    <string name="robot_dialogfragment_off">apagado</string>
+    <string name="robot_dialogfragment_walk">caminar</string>
+    <string name="robot_dialogfragment_run">correr</string>
+    <string name="robot_dialogfragment_till_seed_water">labrar/sembrar/regar</string>
+    <string name="robot_dialogfragment_water">regar</string>
+    <string name="robot_dialogfragment_harvest">cosechar</string>
+    <string name="robot_dialogfragment_ide">IDE</string>
+    <string name="ide_dialogfragment_execute">ejecutar</string>
+    <string name="rival_leader_dialogue00">¡Felicidades! ¡Venceste a nuestros 5 entrenadores del concurso! ¡Acabas de ganar un premio fabuloso! ¡[Jugador] recibió una NUGGET! Por cierto, ¿te gustaría unirte al EQUIPO ROCKET? ¡Somos un grupo dedicado a la maldad usando POKÉMON! ¿Quieres unirte? ¿Seguro? ¡Vamos, únete! ¡Te estoy diciendo que te unas! ¡Vale, necesitas convencerte! ¡Te haré una oferta irresistible! ¡Con tu habilidad, podrías convertirte en un líder destacado del EQUIPO ROCKET!</string>
+    <string name="scientist_dialogue00">¡Hola! ¡Bienvenidos al mundo de JAVA! ¡Me llamo FOO BAR! ¡Me llaman el PROFESOR DE JAVA! Este mundo está habitado por criaturas llamadas OBJETO. Para algunos, los OBJETOS son mascotas. Otros los usan para pelear. Yo... estudio OBJETO como profesión. Primero, ¿cómo te llamas?</string>
+    <string name="edittext_name_hint">nombre</string>
+    <string name="scientist_dialogue01_template">¡Correcto! ¡Entonces tu nombre es %s!</string>
+    <string name="scientist_dialogue02">Este es mi nieto. Ha sido tu rival desde que eras un bebé... Eh... ¿cómo se llama?</string>
+    <string name="scientist_dialogue03_template">¡Así es! ¡Ya lo recuerdo! ¡Se llama %s!</string>
+    <string name="scientist_dialogue04_template">%s!</string>
+    <string name="scientist_dialogue05">¡Tu propia leyenda de JAVA está a punto de desvelarse! ¡Te espera un mundo de sueños y aventuras con OBJECT! ¡Vamos!</string>
+    <string name="ide_dialogfragment_console">"         Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.     "</string>
+
+    <!-- WorldScene -->
+    <string-array name="bug_catcher_dialogue_array">
+        <item>¡Sólo estoy en esto para atrapar una anguila terrestre!</item>
+        <item>¿Alguien ve mi red para atrapar insectos?</item>
+        <item>¡Llámame el AMO DE LAS BESTIAS!</item>
+        <item>¿Habrá pastel?</item>
+        <item>Hay un aroma flotando de nuestro líder ...</item>
+    </string-array>
+
+    <!-- SeedShopDialogFragment -->
+    <string-array name="seed_shop_dialogue_array">
+        <item>¡Hola! Estaba ordenando las pertenencias de mi padre cuando encontré estas semillas misteriosas. No puedo mantener vivo ni un cactus. Si tienes buena mano para las plantas, ¿qué tal si cultivas estas semillas para mí? ¡Si me consigues 3 productos misteriosos, te daré algunas monedas! Además, ¡puedes quedarte con la pala, la regadera y las semillas misteriosas!</item>
+        <item>¡Hola! Germinen y cultiven las semillas misteriosas, luego cosechen 3 productos misteriosos y colóquenlos en el contenedor de envío.</item>
+        <item>¡Hola! Los productos misteriosos que has cosechado son muy lejanos. De un lugar tan lejano como el espacio exterior. Probablemente puedas lograr la paz mundial con lo que cultivas.</item>
+    </string-array>
+
+    <!-- RunOne -->
+    <string-array name="run_one_dialogue_array">
+        <item>proporcione [nombre] y [descripción] para su semilla.</item>
+        <item>en progreso, actualmente proporcionamos un [nombre] y una [descripción] para su semilla.</item>
+        <item>¡excelente trabajo! has nombrado tu semilla [%s] y su descripción es [%s].</item>
+    </string-array>
+
+    <!-- RunTwo -->
+    <string-array name="run_two_dialogue_array">
+        <item>labrar, sembrar y regar [%d] fichas.</item>
+        <item>en progreso, actualmente con [%d] de [%d] casillas cultivadas, sembradas y regadas.</item>
+        <item>¡felicitaciones! has terminado de labrar, sembrar y regar [%d] mosaicos.</item>
+    </string-array>
+
+    <!-- RunThree -->
+    <string-array name="run_three_dialogue_array">
+        <item>cosechar [%d] productos misteriosos Y descartar todas las [%d] plantas enfermas.</item>
+        <item>en progreso, actualmente [%d] de [%d] cosechados Y [%d] de [%d] descartados.</item>
+        <item>¡bien hecho! has terminado de cosechar [%d] productos misteriosos Y has descartado [%d] plantas enfermas.</item>
+    </string-array>
+
+    <!-- RunFour -->
+    <string-array name="run_four_dialogue_array">
+        <item>arrear [%d] ovejas al cuarto de cultivo para obtener [partes del sistema de cultivo].</item>
+        <item>en progreso, actualmente en [%d] de [%d] ovejas pastoreadas ([partes del sistema de cultivo] obtenidas).</item>
+        <item>¡siéntete orgulloso! has terminado de pastorear [%d] ovejas (obteniendo [partes del sistema de cultivo]).</item>
+    </string-array>
+
+    <!-- RunFive -->
+    <string-array name="run_five_dialogue_array">
+        <item>...</item>
+        <item>en curso.</item>
+        <item>¡descansa! los has hecho sentir orgullosos.</item>
+    </string-array>
+
+    <!-- AIDialogue00, AIDialogue01, AIDialogue02, and SceneFarm -->
+    <string-array name="clippit_dialogue_array">
+        <item>Parece que intentas lograr la paz mundial. ¿Necesitas ayuda?</item>
+        <item>¡Vamos a drogar al mundo entero durante una semana! Necesitaremos un montón de producto misterioso. Empieza cultivando 4200 GrowableTile.</item>
+        <item>Cultivar 4200 GrowableTile con una pala te llevará todo el día. Por suerte, existe un robot oxidado con software actualizable. ¡Es hora de trabajar de forma más inteligente (y no más duro)!</item>
+        <item>Somos los primeros en terminar, pero ahora tenemos que esperar a los demás. En lugar de perder el tiempo sin hacer nada, ¿qué tal si aprendemos los fundamentos de la modificación genética? Así podremos insertar el gen responsable de la producción de THC en el genoma del organismo de más rápido crecimiento del mundo.</item>
+        <item>¡Bien! Has creado algas productoras de THC y estás un paso más cerca de tener al mundo entero drogado durante una semana. ¡Vamos a una misión secundaria para depositar las semillas misteriosas en el banco de semillas del mundo!</item>
+        <item>Te han reclutado para un equipo que tiene la misión de terraformar la luna. ¡Es hora de crear rocas lunares!</item>
+        <item>Aquí está, la última ronda. Las Panteras están sembrando el caos y manteniendo ocupadas a las fuerzas del orden. Tienes a Molly en tus oídos y a Mary como tu rastreadora. Bienvenido a Straylight.</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="names_of_sender_dialogue_array_run_four">
+        <item>EstudianteA+</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>SISTEMA42</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="messages_dialogue_array_run_four">
+        <item>Una lista es básicamente como una cesta. Puedes poner varias cosas dentro en lugar de solo una. Me gusta esa metáfora.</item>
+        <item>Bien... pero ¿cómo se crea uno en Java?</item>
+        <item>Lo declaras. Por ejemplo: List groceries = new ArrayList();
+            Esto crea una cesta vacía lista para guardar los artículos de la compra.</item>
+        <item>Cesta vacía = cesta triste. ¡Llénala ya de pizza!</item>
+        <item>Y luego .add() añade cosas, ¿verdad? Entonces, si añado \"Manzanas\", \"Plátanos\" y \"Leche\", mi lista tiene 3 cosas.</item>
+        <item>Exactamente. Y cada elemento tiene un índice. El primero que agregaste está en el índice 0.</item>
+        <item>¿0? ¿No 1? Vaya. ¿Entonces groceries.get(0) es manzanas? Eso es sospechoso.</item>
+        <item>Sí, sigo queriendo empezar en 1. Eso me va a arruinar.</item>
+        <item>Es un estándar de programación. Solo requiere práctica. Pero sí, groceries.get(0) imprimirá \"Manzanas\".</item>
+        <item>Genial, simplemente usaré .get() \"Cookies\" en su lugar.</item>
+        <item>¿Qué tal si comprobamos el tamaño? Eso era .size(), ¿verdad?</item>
+        <item>¡Sí! Eso te indica cuántos elementos hay en la lista. Es muy útil para navegar por ella.</item>
+        <item>For loop = \"revisar todos los snacks uno por uno\" jajaja.</item>
+        <item>¿Y .remove() saca algo de la canasta, y .set() lo intercambia con otra cosa?</item>
+        <item>Correcto. Quitar lo saca por completo, configurar lo reemplaza.</item>
+        <item>Así que puedo quitar el brócoli y reemplazarlo con papas fritas. Listo.</item>
+        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="names_of_sender_dialogue_array_run_three">
+        <item>EstudianteA+</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>SISTEMA42</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="messages_dialogue_array_run_three">
+        <item>Bien, los bucles for sirven para repetir cosas sin copiar y pegar líneas de código. Son súper eficientes.</item>
+        <item>Espera... entonces, en lugar de escribir waterPlant() cinco veces, ¿usas un bucle?</item>
+        <item>Exactamente. Lo configuras así:
+for (int i = 0; i &lt; 5; i++) { waterPlant(); }
+Eso se ejecuta 5 veces.</item>
+        <item>Jaja, solo escríbelo 5 veces... más rápido.</item>
+        <item>Pero el bucle tiene tres partes, ¿verdad? ¿Inicio, fin, actualización? Creo que obtengo inicio (i = 0) y actualización (i++), pero el fin me confunde.</item>
+        <item>La condición de parada indica cuánto tiempo se repite el bucle. Por ejemplo, i &lt; 5. Si cambias ese número, cambia el número de veces que se ejecuta.</item>
+        <item>Hermano, lo configuraría en i &lt; 9999 y regaría las plantas para siempre.</item>
+        <item>Ah, sí. Entonces, si usas plants.size() en lugar de 5, automáticamente sabrá cuántas plantas hay en la lista. Tiene sentido.</item>
+        <item>Sí. Es dinámico. No importa si son 3 plantas o 300.000.</item>
+        <item>¿300.000 plantas? No, no, ya terminé después de 2.</item>
+        <item>¿Y luego hay un bucle "for-each"? Me perdí esa parte.</item>
+        <item>Sí, es como:
+for (Plant p : plants) { water(p); }
+Más limpio, no necesita contador.</item>
+        <item>Parece magia. Una línea para gobernarlos a todos. ¡El Señor de las Plantas!</item>
+        <item>Jaja. ¿Y romper significa parar antes... continuar significa saltarse el resto de esa planta?</item>
+        <item>Correcto. Break sale del bucle, continuar solo se salta una ronda.</item>
+        <item>Básicamente: descanso cuando estoy cansado, sigo cuando es brócoli. Entendido.</item>
+        <item>Jaja. Bueno, creo que ya lo entiendo:
+(1) Usar bucles para la repetición.
+(2) Contrabucle vs. para cada uno.
+(3) Interrumpir = parar, continuar = saltar.</item>
+        <item>Sí, esa es la hoja de ruta.</item>
+        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="names_of_sender_dialogue_array_run_two">
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>SISTEMA42</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="messages_dialogue_array_run_two">
+        <item>Entonces... cuando inspecciono la planta, ¿cómo decide el robot si riega o no?</item>
+        <item>Esa es la parte if/else. Si la planta está seca, regar. Si no, pasar a la siguiente.</item>
+        <item>¿Saltar? No, yo solo ahogo todos los míos. Victoria fácil.</item>
+        <item>Pero como... en el código, ¿dónde va esa elección?</item>
+        <item>Ejemplo: \n
+            if (checkIfDry(azulejo)) { \n
+                waterTile(azulejo); \n
+            } else { \n
+                moveToNextTile(); \n
+            }</item>
+        <item>ELSE\: pedir pizza. Listo.</item>
+        <item>Ohhh. Entonces [if] verifica la condición, y [else] es lo que sucede cuando es falsa?</item>
+        <item>Exactamente. El robot siempre hace una cosa o la otra, nunca ambas.</item>
+        <item>A menos que lo codifiques mal. Entonces no hace nada. Como yo.</item>
+        <item>Bueno, creo que ya lo entiendo. Si está seco, agua. Si no, omítelo. Patrón simple.</item>
+        <item>Sí. Esa es toda la lógica.</item>
+        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="names_of_sender_dialogue_array_run_one">
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>NoIntentarlo</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>LuchadorHonesto</item>
+        <item>EstudianteA+</item>
+        <item>SISTEMA42</item>
+    </string-array>
+
+    <!-- DrawerStartFragment -->
+    <string-array name="messages_dialogue_array_run_one">
+        <item>Espera, lo del plano... si la clase Pollo es solo texto, ¿cómo se convierte en... un pollo de verdad? Siento que me estoy saltando un paso.</item>
+        <item>Ahí es donde entra en juego la palabra clave \"new\". La clase es solo el plano. Pero new Chicken(); crea un objeto de pollo en memoria, como construir la casa a partir del plano.</item>
+        <item>Me estoy saltando la clase de Pollo. Mi plano es \'NoMaloNoMaloMansión\'. Viene con arbustos y árboles con forma de dinosaurio.</item>
+        <item>Bueno, pero... campos vs. métodos... sigo confundiéndolos. ¿Cuál es cuál?</item>
+        <item>Los campos son lo que la clase conoce, como el número de huevos o el color de una gallina. Los métodos son lo que puede hacer, como ponerHuevo() o cloquear().</item>
+        <item>Mi método de pollo es crossRoad(). Eso es todo lo que hace. Simplemente cruza caminos... eternamente.</item>
+        <item>Y lo de los comentarios... no lo entiendo. ¿Por qué escribir código que ni siquiera funciona?</item>
+        <item>Son notas. Para ti, tus compañeros o quien tenga que corregir tu código más adelante. La computadora las ignora, pero los humanos las necesitamos.</item>
+        <item>Mi único comentario: \'no toques mi clase NotBadNotBadMansion o si no...\'.</item>
+        <item>No recuerdo mucho sobre los constructores (se supone que son similares a los métodos, excepto que no tienen un [tipo de retorno], siempre devuelven una instancia de su clase), ¡por favor ayuda!</item>
+        <item>¡Correcto! Además, tanto las listas de argumentos del constructor como las del método son opcionales. El cuerpo del constructor se usa principalmente para configurar el objeto (asignar valores a los campos). Esto es diferente para el cuerpo del método (que depende del uso previsto del método).</item>
+        <item>Bueno, lo último: los métodos. Método principal, constructor, getters/setters. Me perdí cuando los listaron todos.</item>
+        <item>El método principal es lo que Java busca al iniciar el programa. El constructor configura todo al crear el objeto por primera vez. Los métodos get/setters son pequeños métodos auxiliares para leer o modificar un campo de forma segura.</item>
+        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+    </string-array>
+</resources>

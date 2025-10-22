@@ -219,7 +219,7 @@ public class RunOne
                     dispenseRewards();
 
                     Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-                    String text = game.getContext().getResources().getString(R.string.clickButtonHolderAorB);
+                    String text = game.getContext().getResources().getString(R.string.click_button_holder_a_or_b);
                     TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                             50L, portrait, text,
                             new TypeWriterDialogFragment.DismissListener() {

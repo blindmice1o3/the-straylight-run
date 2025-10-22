@@ -215,6 +215,8 @@ public class IntroState
             Log.e(TAG, "wasQuestAcceptedRunOne");
             runOne.dispenseStartingItems();
 
+            String textSeedName = game.getContext().getResources().getString(R.string.text_seed_name);
+            String textSeedDescription = game.getContext().getResources().getString(R.string.text_seed_description);
             EditTextDialogFragment dialogFragmentRunOneName = EditTextDialogFragment.newInstance(
                     new EditTextDialogFragment.EnterListener() {
                         @Override
@@ -244,13 +246,13 @@ public class IntroState
                                             seedListener.onAssignedNameAndDescription();
                                         }
                                     },
-                                    "seed description",
+                                    textSeedDescription,
                                     false
                             );
                             dialogFragmentRunOneDescription.show(game.getFragmentManager(), TAG);
                         }
                     },
-                    "seed name",
+                    textSeedName,
                     false
             );
             dialogFragmentRunOneName.show(game.getFragmentManager(), TAG);

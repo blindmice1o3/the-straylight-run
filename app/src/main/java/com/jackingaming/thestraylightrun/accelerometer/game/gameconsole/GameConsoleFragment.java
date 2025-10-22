@@ -37,6 +37,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.GameState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment;
@@ -441,7 +442,7 @@ public class GameConsoleFragment extends Fragment
             game.getViewportListener().addAndShowParticleExplosionView();
 
             Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-            String text = getResources().getString(R.string.equipRobotReprogrammer4000);
+            String text = getResources().getString(R.string.equip_robot_reprogrammer_4000);
             TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                     50L, portrait, text,
                     new TypeWriterDialogFragment.DismissListener() {
@@ -505,11 +506,31 @@ public class GameConsoleFragment extends Fragment
 
     @Override
     public void onButtonHolderClicked(StatsDisplayerFragment.ButtonHolder buttonHolder) {
-        game.doClickButtonHolder(buttonHolder);
+        Log.d(TAG, "onButtonHolderClicked(buttonHolder): buttonHolder=" + buttonHolder.name());
+
+        if (game.getStateManager().getCurrentState() instanceof GameState) {
+            Log.d(TAG, "game.getStateManager().getCurrentState() instanceof GameState");
+
+            game.doClickButtonHolder(buttonHolder);
+        } else {
+            Log.d(TAG, "NOT game.getStateManager().getCurrentState() instanceof GameState");
+
+            // Do nothing.
+        }
     }
 
     @Override
     public void onIconClicked(View view) {
-        game.doClickIcon(view, getChildFragmentManager());
+        Log.d(TAG, "onIconClicked(view): view.getTag()=" + view.getTag());
+
+        if (game.getStateManager().getCurrentState() instanceof GameState) {
+            Log.d(TAG, "game.getStateManager().getCurrentState() instanceof GameState");
+
+            game.doClickIcon(view, getChildFragmentManager());
+        } else {
+            Log.d(TAG, "NOT game.getStateManager().getCurrentState() instanceof GameState");
+
+            // Do nothing.
+        }
     }
 }

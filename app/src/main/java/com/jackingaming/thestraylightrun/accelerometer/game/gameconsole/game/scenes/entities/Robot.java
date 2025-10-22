@@ -122,7 +122,7 @@ public class Robot extends Creature {
             game.getViewportListener().addAndShowParticleExplosionView();
 
             Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-            String text = game.getContext().getResources().getString(R.string.useRobotReprogrammer4000);
+            String text = game.getContext().getResources().getString(R.string.use_robot_reprogrammer_4000);
             TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                     50L, portrait, text,
                     new TypeWriterDialogFragment.DismissListener() {

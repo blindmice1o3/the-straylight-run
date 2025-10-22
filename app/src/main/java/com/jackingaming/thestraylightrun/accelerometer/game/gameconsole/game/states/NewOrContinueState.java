@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
@@ -13,12 +14,13 @@ import java.util.concurrent.ExecutionException;
 public class NewOrContinueState
         implements State {
     public static final String TAG = NewOrContinueState.class.getSimpleName();
-    private static final String TEXT_NEW = "NEW";
-    private static final String TEXT_LOAD = "LOAD";
-    private static final String TEXT_CURSOR = "->";
     private static final int TEXT_PADDING = 16;
 
     private Game game;
+
+    private String textNew;
+    private String textLoad;
+    private String textCursor;
 
     private int index;
     private Paint textPaint;
@@ -41,18 +43,22 @@ public class NewOrContinueState
         index = 0;
         initTextPaint();
 
+        textNew = game.getContext().getResources().getString(R.string.text_new);
+        textLoad = game.getContext().getResources().getString(R.string.text_load);
+        textCursor = game.getContext().getResources().getString(R.string.text_cursor);
+
         Rect boundsNew = new Rect();
-        textPaint.getTextBounds(TEXT_NEW, 0, TEXT_NEW.length(), boundsNew);
+        textPaint.getTextBounds(textNew, 0, textNew.length(), boundsNew);
         textNewWidth = boundsNew.width();
         textNewHeight = boundsNew.height();
 
         Rect boundsLoad = new Rect();
-        textPaint.getTextBounds(TEXT_LOAD, 0, TEXT_LOAD.length(), boundsLoad);
+        textPaint.getTextBounds(textLoad, 0, textLoad.length(), boundsLoad);
         textLoadWidth = boundsLoad.width();
         textLoadHeight = boundsLoad.height();
 
         Rect boundsCursor = new Rect();
-        textPaint.getTextBounds(TEXT_CURSOR, 0, TEXT_CURSOR.length(), boundsCursor);
+        textPaint.getTextBounds(textCursor, 0, textCursor.length(), boundsCursor);
         textCursorWidth = boundsCursor.width();
         textCursorHeight = boundsCursor.height();
 
@@ -152,8 +158,8 @@ public class NewOrContinueState
     public void render(Canvas canvas) {
         canvas.drawColor(Color.GREEN);
 
-        canvas.drawText(TEXT_NEW, xTextNew, yTextNew, textPaint);
-        canvas.drawText(TEXT_LOAD, xTextLoad, yTextLoad, textPaint);
-        canvas.drawText(TEXT_CURSOR, xTextCursor, yTextCursor, textPaint);
+        canvas.drawText(textNew, xTextNew, yTextNew, textPaint);
+        canvas.drawText(textLoad, xTextLoad, yTextLoad, textPaint);
+        canvas.drawText(textCursor, xTextCursor, yTextCursor, textPaint);
     }
 }
