@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
@@ -8,7 +9,6 @@ public class GrowingPot extends Item
         implements TileCommandOwner {
     public static final String TAG = GrowingPot.class.getSimpleName();
 
-    private static final String NAME_DEFAULT = "GrowingPot";
     private static final float PRICE_DEFAULT = -1f;
 
     private TileCommand tileCommand;
@@ -19,7 +19,7 @@ public class GrowingPot extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_growing_pot);
     }
 
     @Override

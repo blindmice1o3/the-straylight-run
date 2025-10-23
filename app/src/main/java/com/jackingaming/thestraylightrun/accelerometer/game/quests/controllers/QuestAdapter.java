@@ -72,7 +72,8 @@ public class QuestAdapter extends RecyclerView.Adapter<QuestAdapter.QuestViewHol
         Quest quest = quests.get(position);
 
         TextView textViewTAG = holder.getTextViewTAG();
-        textViewTAG.setText(quest.getTAG());
+        String textQuestLabelNoSpace = quest.getQuestLabel().replaceAll("\\s", "");
+        textViewTAG.setText(textQuestLabelNoSpace);
     }
 
     @Override

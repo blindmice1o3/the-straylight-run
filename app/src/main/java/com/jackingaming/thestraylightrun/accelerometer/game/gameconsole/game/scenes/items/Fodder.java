@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import com.jackingaming.thestraylightrun.R;
 
 public class Fodder extends Item {
-    public static final String NAME_DEFAULT = Fodder.class.getSimpleName();
     public static final float PRICE_DEFAULT = -1f;
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_fodder);
     }
 
     @Override

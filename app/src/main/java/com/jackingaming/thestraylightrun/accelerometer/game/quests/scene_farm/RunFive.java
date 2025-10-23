@@ -190,8 +190,9 @@ public class RunFive
     }
 
     @Override
-    public String getTAG() {
-        return TAG;
+    public String getQuestLabel() {
+        String textQuestLabel = game.getContext().getString(R.string.text_run_five);
+        return textQuestLabel;
     }
 
     @Override

@@ -162,7 +162,7 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getTAG());
+        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getQuestLabel());
         TypeWriterTextView.TextCompletionListener textCompletionListener;
         if (alreadyHaveQuest) {
             textCompletionListener = new TypeWriterTextView.TextCompletionListener() {

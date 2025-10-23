@@ -7,7 +7,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class GrowSystemParts extends Item {
     public static final String TAG = GrowSystemParts.class.getSimpleName();
-    private static final String NAME_DEFAULT = "Grow System Parts";
+
     private static final float PRICE_DEFAULT = -1f;
 
     private int id;
@@ -18,7 +18,7 @@ public class GrowSystemParts extends Item {
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_grow_system_parts);
     }
 
     @Override

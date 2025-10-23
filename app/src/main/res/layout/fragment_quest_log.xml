@@ -14,7 +14,7 @@
         android:background="@color/green"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Quest Log"
+        android:text="@string/text_quest_log"
         android:textSize="42sp"
         app:layout_constraintBottom_toTopOf="@id/rv_recycler_view_fragment"
         app:layout_constraintEnd_toEndOf="parent"

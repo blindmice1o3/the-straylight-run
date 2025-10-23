@@ -36,7 +36,7 @@ public interface Quest extends Serializable {
 
     String getDialogueForCurrentState();
 
-    String getTAG();
+    String getQuestLabel();
 
     void attachListener();
 

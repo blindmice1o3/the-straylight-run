@@ -8,7 +8,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class BugCatchingNet extends Item
         implements EntityCommandOwner {
-    private static final String NAME_DEFAULT = "Bug Catching Net";
     private static final float PRICE_DEFAULT = 3f;
 
     private EntityCommand entityCommand;
@@ -19,7 +18,7 @@ public class BugCatchingNet extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_bug_catching_net);
     }
 
     @Override

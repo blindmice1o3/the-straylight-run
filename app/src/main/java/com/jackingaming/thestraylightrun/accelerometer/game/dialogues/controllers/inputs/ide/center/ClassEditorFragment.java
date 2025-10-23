@@ -221,9 +221,9 @@ public class ClassEditorFragment extends Fragment {
                 tvTodo.setLayoutParams(layoutParams);
                 tvTodo.setText(spannableTodo);
 
-                if (field.getName().equals("isFlowering")) {
+                if (field.getName().equals("flowering")) {
                     typingView = new TypingPracticeView(getContext());
-                    String answer = "    boolean isFlowering;";
+                    String answer = "    boolean flowering;";
                     if (field.getInLineComment() != null) {
                         answer += field.getInLineComment();
                     }
@@ -237,9 +237,9 @@ public class ClassEditorFragment extends Fragment {
                     } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
-                } else if (field.getName().equals("isHealthy")) {
+                } else if (field.getName().equals("diseased")) {
                     typingView = new TypingPracticeView(getContext());
-                    String answer = "    boolean isHealthy;";
+                    String answer = "    boolean diseased;";
                     if (field.getInLineComment() != null) {
                         answer += field.getInLineComment();
                     }
@@ -783,10 +783,10 @@ public class ClassEditorFragment extends Fragment {
                 tvTodo.setText(spannableTodo);
 
                 // run 2 (class Plant)
-                if (method.getName().equals("isReadyForHarvest")) {
+                if (method.getName().equals("readyToHarvest")) {
                     typingView = new TypingPracticeView(getContext());
-                    answer = "    public boolean isReadyForHarvest() {\n" +
-                            "        return isFlowering && isHealthy && vegDays >= 21;\n" +
+                    answer = "    public boolean readyToHarvest() {\n" +
+                            "        return flowering && !diseased && vegDays >= 21;\n" +
                             "    }";
 
                     if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -1170,7 +1170,7 @@ public class ClassEditorFragment extends Fragment {
                             } else if (i == 6) {
                                 answer = "        int readyCount = 0;\n" +
                                         "        for (Plant p : plants) {\n" +
-                                        "            if (p.isReadyForHarvest()) {\n" +
+                                        "            if (p.readyToHarvest()) {\n" +
                                         "                readyCount++;\n" +
                                         "            }\n" +
                                         "        }\n" +
@@ -1239,7 +1239,7 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("harvestAll")) {
 
                             String answer = "        for (Plant p : plants) {\n" +
-                                    "            if (p.readyToHarvest) {\n" +
+                                    "            if (p.readyToHarvest()) {\n" +
                                     "                p.harvest();\n" +
                                     "            }\n" +
                                     "        }";
@@ -1255,7 +1255,7 @@ public class ClassEditorFragment extends Fragment {
                         // class RobotRun3
                         else if (method.getName().equals("checkForDisease")) {
 
-                            String answer = "        if (!plant.isHealthy()) {\n" +
+                            String answer = "        if (plant.isDiseased()) {\n" +
                                     "            cull(plant);\n" +
                                     "        }";
                             if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
@@ -1276,8 +1276,8 @@ public class ClassEditorFragment extends Fragment {
                                         "            vegDays++;\n" +
                                         "        }";
                             } else if (i == 3) {
-                                answer = "        if (vegDays >= 14 && isHealthy) {\n" +
-                                        "            isFlowering = true;\n" +
+                                answer = "        if (vegDays >= 14 && !diseased) {\n" +
+                                        "            flowering = true;\n" +
                                         "        }";
                             }
 

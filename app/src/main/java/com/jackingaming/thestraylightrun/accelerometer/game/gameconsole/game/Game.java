@@ -379,9 +379,10 @@ public class Game {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(itemRecyclerViewAdapter);
         int numberOfColumns = 4;
+        String textBackpack = context.getString(R.string.text_backpack);
         recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
         backpackDialog = new AlertDialog.Builder(context)
-                .setTitle("Backpack")
+                .setTitle(textBackpack)
                 .setView(viewContainingRecyclerView)
                 .create();
         backpackDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -741,7 +742,7 @@ public class Game {
                         Log.e(TAG, "onItemClick() position: " + position);
 
                         Quest questClicked = questsPlayer.get(position);
-                        Log.e(TAG, "questClicked: " + questClicked.getTAG());
+                        Log.e(TAG, "questClicked: " + questClicked.getQuestLabel());
                         showQuestDetailDialog(fm, questClicked);
                     }
                 }

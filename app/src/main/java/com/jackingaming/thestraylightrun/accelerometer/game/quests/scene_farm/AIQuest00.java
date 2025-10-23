@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
@@ -179,8 +180,9 @@ public class AIQuest00
     }
 
     @Override
-    public String getTAG() {
-        return TAG;
+    public String getQuestLabel() {
+        String textQuestLabel = game.getContext().getString(R.string.text_ai_quest_00);
+        return textQuestLabel;
     }
 
     @Override

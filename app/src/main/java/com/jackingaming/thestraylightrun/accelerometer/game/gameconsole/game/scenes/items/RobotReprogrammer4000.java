@@ -8,7 +8,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class RobotReprogrammer4000 extends Item
         implements EntityCommandOwner {
-    private static final String NAME_DEFAULT = "Robot Reprogrammer 4000";
     private static final float PRICE_DEFAULT = -1f;
 
     private EntityCommand entityCommand;
@@ -19,7 +18,7 @@ public class RobotReprogrammer4000 extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_robot_reprogrammer_4000);
     }
 
     @Override

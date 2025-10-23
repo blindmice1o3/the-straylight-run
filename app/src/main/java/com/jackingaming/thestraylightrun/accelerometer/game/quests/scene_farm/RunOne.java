@@ -197,8 +197,9 @@ public class RunOne
     }
 
     @Override
-    public String getTAG() {
-        return TAG;
+    public String getQuestLabel() {
+        String textQuestLabel = game.getContext().getString(R.string.text_run_one);
+        return textQuestLabel;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class QuestManager {
 
     public Quest getQuestViaTag(String questTAG) {
         for (Quest quest : quests) {
-            if (quest.getTAG().equals(questTAG)) {
+            if (quest.getQuestLabel().equals(questTAG)) {
                 return quest;
             }
         }
@@ -36,7 +36,7 @@ public class QuestManager {
     }
 
     public boolean addQuest(Quest quest) {
-        if (!alreadyHaveQuest(quest.getTAG())) {
+        if (!alreadyHaveQuest(quest.getQuestLabel())) {
             return quests.add(quest);
         }
         return false;
@@ -44,7 +44,7 @@ public class QuestManager {
 
     public boolean alreadyHaveQuest(String questTAG) {
         for (Quest quest : quests) {
-            if (quest.getTAG().equals(questTAG)) {
+            if (quest.getQuestLabel().equals(questTAG)) {
                 return true;
             }
         }

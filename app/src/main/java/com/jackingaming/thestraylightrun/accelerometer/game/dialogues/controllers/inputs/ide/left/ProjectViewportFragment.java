@@ -272,12 +272,6 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 null,
                 null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "readyToHarvest", null,
-                null,
-                null,
-                null, false));
 
         // CONSTRUCTORS
 
@@ -358,15 +352,23 @@ public class ProjectViewportFragment extends Fragment {
                 null, null, null, false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isFlowering", null,
+                "String", "description", null,
+                null, null, null, false));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "origin", null,
+                null, null, null, false));
+        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "boolean", "flowering", null,
                 "    // This plant will be grown inside a controlled tent.",
                 "// TODO: Declare a boolean to track if the plant is flowering",
                 null, false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "boolean", "isHealthy", null,
+                "boolean", "diseased", null,
                 null,
-                "// TODO: Declare a boolean to track if the plant is healthy",
+                "// TODO: Declare a boolean to track if the plant is diseased",
                 null, false));
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
@@ -394,8 +396,10 @@ public class ProjectViewportFragment extends Fragment {
         );
         String bodyPlant = "        this.name = seed.getName();\n" +
                 "        this.type = seed.getType();\n" +
-                "        this.isFlowering = false; // Initialize to false\n" +
-                "        this.isHealthy = true;       // Assume healthy on creation\n" +
+                "        this.description = seed.getDescription();\n" +
+                "        this.origin = seed.getOrigin();\n" +
+                "        this.flowering = false; // Initialize to false\n" +
+                "        this.diseased = false;       // Assume healthy on creation\n" +
                 "        this.vegDays = 0;\n" +
                 "        this.needsWater = true;\n" +
                 "        this.hydrationLevel = 0;";
@@ -407,7 +411,7 @@ public class ProjectViewportFragment extends Fragment {
         String bodyUpdateGrowth = "        // Only grow if there's enough light and no pests.\n" +
                 "        // TODO: If light is correct and no pests, increase days in veg\n" +
                 "\n" +
-                "        // TODO: If days in veg is >= 14 and plant is healthy, set flowering to true";
+                "        // TODO: If days in veg is >= 14 and plant is NOT diseased, set flowering to true";
         List<VariableDeclaration> argumentListUpdateGrowth = new ArrayList<>();
         argumentListUpdateGrowth.add(
                 new VariableDeclaration("boolean", "lightIsCorrect")
@@ -423,11 +427,11 @@ public class ProjectViewportFragment extends Fragment {
                 null, null, false));
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "boolean", "isReadyForHarvest",
+                "boolean", "readyToHarvest",
                 null,
                 null,
                 null,
-                "// TODO: Write a method that returns true if flowering, healthy, vegDays >= 21)",
+                "// TODO: Write a method that returns true if flowering, NOT diseased, vegDays >= 21)",
                 true));
         String bodyWater = "        hydrationLevel++;\n" +
                 "        needsWater = false;";

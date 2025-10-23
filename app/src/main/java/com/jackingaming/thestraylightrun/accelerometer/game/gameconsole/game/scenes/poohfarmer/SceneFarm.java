@@ -765,7 +765,7 @@ public class SceneFarm extends Scene {
 
             // TODO: check for first quest's completion, show clippit TypeWriterDialogFragment,
             //  give/start second quest.
-            boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getTAG());
+            boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getQuestLabel());
             if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
                 Log.d(TAG, "first quest's state == Quest.State.COMPLETED");
                 Bitmap portraitAI = WorldScene.imagesClippit[0][0];

@@ -8,7 +8,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class WateringCan extends Item
         implements TileCommandOwner {
-    private static final String NAME_DEFAULT = "Watering Can";
     private static final float PRICE_DEFAULT = -1f;
 
     private TileCommand tileCommand;
@@ -19,7 +18,7 @@ public class WateringCan extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_watering_can);
     }
 
     @Override

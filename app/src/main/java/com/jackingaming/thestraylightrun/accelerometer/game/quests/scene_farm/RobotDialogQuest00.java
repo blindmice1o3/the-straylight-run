@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
@@ -184,8 +185,9 @@ public class RobotDialogQuest00
     }
 
     @Override
-    public String getTAG() {
-        return TAG;
+    public String getQuestLabel() {
+        String textQuestLabel = game.getContext().getString(R.string.text_robot_dialog_quest_00);
+        return textQuestLabel;
     }
 
     @Override

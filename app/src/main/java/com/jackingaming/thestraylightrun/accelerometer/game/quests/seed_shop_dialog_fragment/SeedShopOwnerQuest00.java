@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_di
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
@@ -203,8 +204,9 @@ public class SeedShopOwnerQuest00
     }
 
     @Override
-    public String getTAG() {
-        return TAG;
+    public String getQuestLabel() {
+        String textQuestLabel = game.getContext().getString(R.string.text_seed_shop_owner_quest_00);
+        return textQuestLabel;
     }
 
     @Override

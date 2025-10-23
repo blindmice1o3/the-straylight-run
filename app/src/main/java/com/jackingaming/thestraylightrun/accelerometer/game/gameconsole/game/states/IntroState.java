@@ -76,31 +76,35 @@ public class IntroState
 
             game.getSceneManager().update(elapsed);
 
+            String textRunNumber = null;
             String requirementForRun = null;
             switch (game.getRun()) {
                 case ONE:
+                    textRunNumber = game.getContext().getString(R.string.text_run_one);
                     requirementForRun = runOne.getDialogueForCurrentState();
                     break;
                 case TWO:
+                    textRunNumber = game.getContext().getString(R.string.text_run_two);
                     requirementForRun = runTwo.getDialogueForCurrentState();
                     break;
                 case THREE:
+                    textRunNumber = game.getContext().getString(R.string.text_run_three);
                     requirementForRun = runThree.getDialogueForCurrentState();
                     break;
                 case FOUR:
+                    textRunNumber = game.getContext().getString(R.string.text_run_four);
                     requirementForRun = runFour.getDialogueForCurrentState();
                     break;
                 case FIVE:
+                    textRunNumber = game.getContext().getString(R.string.text_run_five);
                     requirementForRun = runFive.getDialogueForCurrentState();
                     break;
             }
 
             Bitmap imageForTextbox = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-            String runNumberFormattedAllLowerCase = game.getRun().toString().toLowerCase();
-            String runNumberFirstLetterAsUpperCase = runNumberFormattedAllLowerCase.substring(0, 1).toUpperCase();
-            String runNumberForFirstLetterCapital = runNumberFirstLetterAsUpperCase + runNumberFormattedAllLowerCase.substring(1);
-            String textForTextBox = String.format("Run%s: %s",
-                    runNumberForFirstLetterCapital,
+            String textRunNumberNoSpace = textRunNumber.replaceAll("\\s", "");
+            String textForTextBox = String.format("%s: %s",
+                    textRunNumberNoSpace,
                     requirementForRun);
             typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                     50L, imageForTextbox,

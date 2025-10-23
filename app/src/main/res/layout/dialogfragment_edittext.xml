@@ -21,6 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
-        android:text="done" />
+        android:text="@string/text_done" />
 
 </LinearLayout>

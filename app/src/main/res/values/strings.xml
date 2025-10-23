@@ -19,6 +19,38 @@
     <string name="text_fall">FALL</string>
     <string name="text_winter">WINTER</string>
 
+    <!-- fragment_quest_log.xml -->
+    <string name="text_quest_log">Quest Log</string>
+
+    <!-- Game -->
+    <string name="text_backpack">Backpack</string>
+
+    <!-- implementations of Item -->
+    <string name="text_bug_catching_net">Bug Catching Net</string>
+    <string name="text_egg">Egg</string>
+    <string name="text_fodder">Fodder</string>
+    <string name="text_growing_pot">Growing Pot</string>
+    <string name="text_grow_system_parts">Grow System Parts</string>
+    <string name="text_honey_pot">Honey Pot</string>
+    <string name="text_meat">Meat</string>
+    <string name="text_milk">Milk</string>
+    <string name="text_mystery_seed">Mystery Seed</string>
+    <string name="text_plant_inspectioner_200">Plant Inspectioner 200</string>
+    <string name="text_robot_reprogrammer_4000">Robot Reprogrammer 4000</string>
+    <string name="text_scissors">Scissors</string>
+    <string name="text_shovel">Shovel</string>
+    <string name="text_watering_can">Watering Can</string>
+
+    <!-- IntroState, implementations of Quest, and fragment_drawer_top.xml -->
+    <string name="text_run_one">Run One</string>
+    <string name="text_run_two">Run Two</string>
+    <string name="text_run_three">Run Three</string>
+    <string name="text_run_four">Run Four</string>
+    <string name="text_run_five">Run Five</string>
+    <string name="text_ai_quest_00">AI Quest 00</string>
+    <string name="text_robot_dialog_quest_00">Robot Dialog Quest 00</string>
+    <string name="text_seed_shop_owner_quest_00">Seed Shop Owner Quest 00</string>
+
     <!-- IntroState -->
     <string name="text_seed_name">seed\'s name</string>
     <string name="text_seed_description">seed\'s description</string>
@@ -38,6 +70,9 @@
     <string name="robot_dialogfragment_water">water</string>
     <string name="robot_dialogfragment_harvest">harvest</string>
     <string name="robot_dialogfragment_ide">IDE</string>
+
+    <!-- dialogfragment_edittext.xml -->
+    <string name="text_done">done</string>
 
     <!-- dialogfragment_ide.xml -->
     <string name="ide_dialogfragment_execute">execute</string>

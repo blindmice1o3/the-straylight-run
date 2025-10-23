@@ -10,7 +10,6 @@ public class MysterySeed extends Item
         implements TileCommandOwner {
     public static final String TAG = MysterySeed.class.getSimpleName();
 
-    private static final String NAME_DEFAULT = "Mystery Seed";
     private static final float PRICE_DEFAULT = -1f;
 
     private TileCommand tileCommand;
@@ -21,7 +20,7 @@ public class MysterySeed extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_mystery_seed);
     }
 
     @Override

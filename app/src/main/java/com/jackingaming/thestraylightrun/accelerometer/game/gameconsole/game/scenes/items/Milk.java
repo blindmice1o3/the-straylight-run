@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import com.jackingaming.thestraylightrun.R;
 
 public class Milk extends Item {
-    private static final String NAME_DEFAULT = "Milk";
     private static final float PRICE_DEFAULT = -1f;
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_milk);
     }
 
     @Override

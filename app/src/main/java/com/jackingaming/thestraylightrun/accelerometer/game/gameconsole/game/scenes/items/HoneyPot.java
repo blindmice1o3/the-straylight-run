@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import com.jackingaming.thestraylightrun.R;
 
 public class HoneyPot extends Item {
-    private static final String NAME_DEFAULT = "Honey Pot";
     private static final float PRICE_DEFAULT = 1f;
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_honey_pot);
     }
 
     @Override

@@ -11,28 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Run One" />
+        android:text="@string/text_run_one" />
 
     <TextView
         android:id="@+id/tv_run_two"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Run Two" />
+        android:text="@string/text_run_two" />
 
     <TextView
         android:id="@+id/tv_run_three"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Run Three" />
+        android:text="@string/text_run_three" />
 
     <TextView
         android:id="@+id/tv_run_four"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Run Four" />
+        android:text="@string/text_run_four" />
 
     <TextView
         android:id="@+id/tv_run_five"
@@ -41,6 +41,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Run Five" />
+        android:text="@string/text_run_five" />
 
 </LinearLayout>

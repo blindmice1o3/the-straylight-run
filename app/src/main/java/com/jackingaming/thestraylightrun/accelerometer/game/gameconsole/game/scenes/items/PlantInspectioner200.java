@@ -8,7 +8,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class PlantInspectioner200 extends Item
         implements EntityCommandOwner {
     public static final String TAG = PlantInspectioner200.class.getSimpleName();
-    private static final String NAME_DEFAULT = "Plant Inspectioner 200";
+
     private static final float PRICE_DEFAULT = -1f;
 
     private EntityCommand entityCommand;
@@ -19,7 +19,7 @@ public class PlantInspectioner200 extends Item
 
     @Override
     void initName() {
-        name = NAME_DEFAULT;
+        name = game.getContext().getString(R.string.text_plant_inspectioner_200);
     }
 
     @Override
