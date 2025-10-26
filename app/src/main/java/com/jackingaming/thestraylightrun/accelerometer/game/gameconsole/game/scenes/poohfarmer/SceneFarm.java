@@ -61,8 +61,8 @@ public class SceneFarm extends Scene {
 
     private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
-    private static final int X_INDEX_SPAWN_ROBOT = 7;
-    private static final int Y_INDEX_SPAWN_ROBOT = 7;
+    private static final int X_INDEX_SPAWN_ROBOT = 0;
+    private static final int Y_INDEX_SPAWN_ROBOT = 0;
     private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
     private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;

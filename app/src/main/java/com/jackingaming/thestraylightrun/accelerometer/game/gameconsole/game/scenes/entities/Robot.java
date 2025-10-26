@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -84,7 +86,7 @@ public class Robot extends Creature {
             harvestTileCommand, placeInShippingBinTileCommand;
 
     private List<Command> commands;
-    private int counterCommands = 0;
+    //    private int counterCommands = 0;
     private List<Tile> tilesShippingBinDrop;
 
     private boolean isFirstTimeShowingRobotDialogFragment = true;
@@ -172,6 +174,15 @@ public class Robot extends Creature {
                 ObjectAnimator.ofFloat(this, "x", x - Tile.WIDTH);
         movementAnimator.setDuration(RUNNING_MOVEMENT_DURATION);
         movementAnimator.setInterpolator(new LinearInterpolator());
+        movementAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e(TAG, "movementAnimator.onAnimationEnd()");
+
+                doNextCommand();
+            }
+        });
 
         TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
         Tile[][] tilesScene = tileManager.getTiles();
@@ -202,76 +213,7 @@ public class Robot extends Creature {
                 }
                 break;
             case TILE_SELECTED:
-                if (!commands.isEmpty()) {
-                    counterCommands++;
-                    if (counterCommands == COUNTER_COMMANDS_TARGET) {
-                        counterCommands = 0;
-
-                        Command command = commands.get(0);
-                        if (command instanceof TileCommand) {
-                            Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
-
-                            ((TileCommand) command).setTile(tileCurrentlyFacing);
-                        }
-
-                        boolean success = command.execute();
-                        if (success) {
-                            Log.e(TAG, "command successfully executed... removing command from front of queue. command: " + command.getClass().getSimpleName());
-                            commands.remove(command);
-
-                            if (command instanceof HarvestGrowableTileCommand) {
-                                List<Command> pathToShippingBinAsCommands =
-                                        handleFindShortestPathToShippingBin();
-                                commands.addAll(pathToShippingBinAsCommands);
-
-                                commands.add(placeInShippingBinTileCommand);
-                            } else if (command instanceof PlaceInShippingBinTileCommand) {
-                                List<Command> pathFromShippingBinAsCommands =
-                                        handleFindPathBackFromShippingBin();
-                                commands.addAll(pathFromShippingBinAsCommands);
-                            }
-
-                            if (commands.isEmpty()) {
-                                tileWorkRequests.remove(0);
-                            }
-                        } else {
-                            Log.e(TAG, "command NOT successfully executed... keep queue the same. command: " + command.getClass().getSimpleName());
-                            if (command instanceof WalkUpCommand || command instanceof WalkDownCommand ||
-                                    command instanceof WalkLeftCommand || command instanceof WalkRightCommand) {
-                                commands.clear();
-                            } else {
-                                Log.e(TAG, "command NOT instanceof WalkUpCommand, WalkDownCommand, WalkLeftCommand, nor WalkRightCommand.");
-                            }
-                        }
-                    }
-                } else {
-                    if (!tileWorkRequests.isEmpty()) {
-                        TileWorkRequest tileWorkRequestHead = tileWorkRequests.get(0);
-
-                        int xIndexSrc = ((int) x / Tile.WIDTH);
-                        int yIndexSrc = ((int) y / Tile.HEIGHT);
-                        int xIndexDest = tileWorkRequestHead.getTile().getxIndex();
-                        int yIndexDest = tileWorkRequestHead.getTile().getyIndex();
-
-                        TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
-                        Tile[][] tilesScene = tileManager.getTiles();
-                        Tile tileSrc = tilesScene[yIndexSrc][xIndexSrc];
-                        Tile tileDest = tilesScene[yIndexDest][xIndexDest];
-                        List<Tile> pathToTravel = tileManager.doesExistPath(tileSrc, tileDest);
-
-                        List<Command> pathToTravelAsCommands = convertPathToTravelToCommands(pathToTravel,
-                                tileWorkRequestHead.getModeForTileSelectorView());
-                        commands.addAll(pathToTravelAsCommands);
-                    } else {
-                        counterCommands++;
-                        if (counterCommands == COUNTER_COMMANDS_TARGET) {
-                            counterCommands = 0;
-
-                            state = State.OFF;
-                        }
-                    }
-
-                }
+                // Intentionally blank.
                 break;
         }
 
@@ -313,6 +255,16 @@ public class Robot extends Creature {
         propertyName = "x";
         valueStart = x;
         valueEnd = x + xMove;
+    }
+
+    @Override
+    public boolean checkItemCollision(float xOffset, float yOffset, boolean viaClick) {
+        return false;
+    }
+
+    @Override
+    public boolean checkEntityCollision(float xOffset, float yOffset) {
+        return false;
     }
 
     @Override
@@ -425,6 +377,7 @@ public class Robot extends Creature {
     public void changeToOff() {
         state = State.OFF;
         commands.clear();
+        tileWorkRequests.clear();
     }
 
     public void changeToWalk() {
@@ -521,6 +474,106 @@ public class Robot extends Creature {
         );
     }
 
+    private void doNextCommand() {
+        Log.e(TAG, "doNextCommand" +
+                "()");
+        if (!commands.isEmpty()) {
+            Log.e(TAG, "!commands.isEmpty()");
+//            counterCommands++;
+//            if (counterCommands == COUNTER_COMMANDS_TARGET) {
+//                counterCommands = 0;
+
+            Command command = commands.get(0);
+            Log.e(TAG, "command: " + command.getClass());
+            if (command instanceof TileCommand) {
+                Tile tileCurrentlyFacing = checkTileCurrentlyFacing();
+
+                ((TileCommand) command).setTile(tileCurrentlyFacing);
+            }
+
+            boolean success = command.execute();
+            if (success) {
+                Log.e(TAG, "command successfully executed... removing command from front of queue. command: " + command.getClass().getSimpleName());
+                commands.remove(command);
+
+                if (command instanceof HarvestGrowableTileCommand) {
+                    List<Command> pathToShippingBinAsCommands =
+                            handleFindShortestPathToShippingBin();
+                    commands.addAll(pathToShippingBinAsCommands);
+
+                    commands.add(placeInShippingBinTileCommand);
+                } else if (command instanceof PlaceInShippingBinTileCommand) {
+                    List<Command> pathFromShippingBinAsCommands =
+                            handleFindPathBackFromShippingBin();
+                    commands.addAll(pathFromShippingBinAsCommands);
+                }
+
+                if (commands.isEmpty()) {
+                    tileWorkRequests.remove(0);
+                }
+
+                if (command instanceof WalkRightCommand || command instanceof WalkDownCommand || command instanceof WalkLeftCommand || command instanceof WalkUpCommand) {
+                    // do nothing.
+                } else {
+                    doNextCommand();
+                }
+            } else {
+                Log.e(TAG, "command NOT successfully executed... keep queue the same. command: " + command.getClass().getSimpleName());
+                // TODO: 2025_10_23. do nothing. (maybe).
+//                            if (command instanceof WalkUpCommand || command instanceof WalkDownCommand ||
+//                                    command instanceof WalkLeftCommand || command instanceof WalkRightCommand) {
+//                                commands.clear();
+//                            } else {
+//                                Log.e(TAG, "command NOT instanceof WalkUpCommand, WalkDownCommand, WalkLeftCommand, nor WalkRightCommand.");
+//                            }
+
+//                            // TODO: 2025_10_23 experimenting (start off aligned).
+//                            if (x % Tile.WIDTH != 0) {
+//                                int xRemainder = (int) (x % Tile.WIDTH);
+//                                x -= xRemainder;
+//                            }
+//                            if (x % Tile.HEIGHT != 0) {
+//                                int yRemainder = (int) (y % Tile.HEIGHT);
+//                                y -= yRemainder;
+//                            }
+            }
+//            }
+        } else {
+            Log.e(TAG, "commands.isEmpty()");
+
+            if (!tileWorkRequests.isEmpty()) {
+                Log.e(TAG, "!tileWorkRequests.isEmpty()");
+                TileWorkRequest tileWorkRequestHead = tileWorkRequests.get(0);
+
+                int xIndexSrc = ((int) x / Tile.WIDTH);
+                int yIndexSrc = ((int) y / Tile.HEIGHT);
+                int xIndexDest = tileWorkRequestHead.getTile().getxIndex();
+                int yIndexDest = tileWorkRequestHead.getTile().getyIndex();
+
+                TileManager tileManager = game.getSceneManager().getCurrentScene().getTileManager();
+                Tile[][] tilesScene = tileManager.getTiles();
+                Tile tileSrc = tilesScene[yIndexSrc][xIndexSrc];
+                Tile tileDest = tilesScene[yIndexDest][xIndexDest];
+                List<Tile> pathToTravel = tileManager.doesExistPath(tileSrc, tileDest);
+
+                List<Command> pathToTravelAsCommands = convertPathToTravelToCommands(pathToTravel,
+                        tileWorkRequestHead.getModeForTileSelectorView());
+                commands.addAll(pathToTravelAsCommands);
+
+                doNextCommand();
+            } else {
+                Log.e(TAG, "tileWorkRequests.isEmpty()");
+//                counterCommands++;
+//                if (counterCommands == COUNTER_COMMANDS_TARGET) {
+//                    counterCommands = 0;
+
+                state = State.OFF;
+//                }
+            }
+
+        }
+    }
+
     private void showSelectionsOfRobotDialogFragment(TileSelectorView.Mode modeForTileSelectorView,
                                                      RobotDialogFragment robotDialogFragment) {
         TileSelectorDialogFragment tileSelectorDialogFragment =
@@ -543,6 +596,9 @@ public class Robot extends Creature {
                             @Override
                             public void onDismiss() {
                                 robotDialogFragment.dismiss();
+
+                                Log.e(TAG, "TileSelectorDialogFragment.DismissListener.onDismiss()");
+                                doNextCommand();
                             }
                         });
 
