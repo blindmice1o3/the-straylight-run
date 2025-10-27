@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuStateImpl;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.evo.MenuStateImplEvo;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.pocketcritters.MenuStateImplPocketCritters;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +86,7 @@ public class StateManager {
 
         if (menuState == null) {
             // TODO: possible temporary... this should work as a default.
-            menuState = new MenuStateImplPocketCritters();
+            menuState = new MenuState();
             menuState.init(game);
         }
 

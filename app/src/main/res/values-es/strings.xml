@@ -2,6 +2,13 @@
 <resources>
     <string name="app_name">TheStraylightRun</string>
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="text_menustate_change_skin">CAMBIAR DE PIEL</string>
+    <string name="text_menustate_team">EQUIPO</string>
+    <string name="text_menustate_backpack">MOCHILA</string>
+    <string name="text_menustate_load">CARGA</string>
+    <string name="text_menustate_save">AHORRAR</string>
+    <string name="text_menustate_option">OPCIÓN</string>
+    <string name="text_menustate_exit">SALIDA</string>
     <string name="text_new">NUEVO</string>
     <string name="text_load">CARGA</string>
     <string name="text_cursor">-></string>

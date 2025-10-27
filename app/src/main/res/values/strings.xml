@@ -3,6 +3,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- MenuState -->
+    <string name="text_menustate_change_skin">CHANGE SKIN</string>
+    <string name="text_menustate_team">TEAM</string>
+    <string name="text_menustate_backpack">BACKPACK</string>
+    <string name="text_menustate_load">LOAD</string>
+    <string name="text_menustate_save">SAVE</string>
+    <string name="text_menustate_option">OPTION</string>
+    <string name="text_menustate_exit">EXIT</string>
+
     <!-- NewOrContinueState -->
     <string name="text_new">NEW</string>
     <string name="text_load">LOAD</string>

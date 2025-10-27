@@ -1,4 +1,4 @@
-package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.pocketcritters;
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -13,14 +13,13 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuStateImpl;
 
 import java.util.concurrent.ExecutionException;
 
-public class MenuStateImplPocketCritters extends MenuStateImpl {
-    public static final String TAG = MenuStateImplPocketCritters.class.getSimpleName();
+public class MenuState extends MenuStateImpl {
+    public static final String TAG = MenuState.class.getSimpleName();
 
-    public enum MenuItem {CRITTER_DEX, BELT_LIST, BACKPACK_LIST, LOAD, SAVE, OPTION, EXIT;}
+    public enum MenuItem {CHANGE_SKIN, TEAM, BACKPACK, LOAD, SAVE, OPTION, EXIT;}
 
     private Game game;
     private int indexMenu;
@@ -30,7 +29,9 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
 
     private int scaleFactor;
 
-    public MenuStateImplPocketCritters() {
+    String textMenustateChangeSkin, textMenustateTeam, textMenustateBackpack, textMenustateLoad, textMenustateSave, textMenustateOption, textMenustateExit;
+
+    public MenuState() {
         indexMenu = 0;
     }
 
@@ -53,12 +54,25 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
 
         initTextPaint();
         initPositionOfLoad();
+
+        textMenustateChangeSkin = game.getContext().getResources().getString(R.string.text_menustate_change_skin);
+        textMenustateTeam = game.getContext().getResources().getString(R.string.text_menustate_team);
+        textMenustateBackpack = game.getContext().getResources().getString(R.string.text_menustate_backpack);
+        textMenustateLoad = game.getContext().getResources().getString(R.string.text_menustate_load);
+        textMenustateSave = game.getContext().getResources().getString(R.string.text_menustate_save);
+        textMenustateOption = game.getContext().getResources().getString(R.string.text_menustate_option);
+        textMenustateExit = game.getContext().getResources().getString(R.string.text_menustate_exit);
     }
 
     private void initImage(Resources resources) {
-        Bitmap startMenuSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.start_menu_state);
-        menuBackgroundImage = Bitmap.createBitmap(startMenuSpriteSheet, 239, 3, 75, 124);
-        menuCursorImage = Bitmap.createBitmap(startMenuSpriteSheet, 3, 162, 7, 7);
+        Bitmap startMenuSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.background_for_menu_and_textbox);
+        menuBackgroundImage = Bitmap.createScaledBitmap(startMenuSpriteSheet, 75, 124, false);
+        Bitmap menuCursorImageUnscaled = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_s);
+        menuCursorImage = Bitmap.createScaledBitmap(menuCursorImageUnscaled, 7, 7, false);
+
+//        Bitmap startMenuSpriteSheet = BitmapFactory.decodeResource(resources, R.drawable.start_menu_state);
+//        menuBackgroundImage = Bitmap.createBitmap(startMenuSpriteSheet, 239, 3, 75, 124);
+//        menuCursorImage = Bitmap.createBitmap(startMenuSpriteSheet, 3, 162, 7, 7);
     }
 
     @Override
@@ -81,18 +95,18 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
         if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
             MenuItem selectedMenuItem = MenuItem.values()[indexMenu];
             switch (selectedMenuItem) {
-                case CRITTER_DEX:
+                case CHANGE_SKIN:
                     Log.d(TAG, getClass().getSimpleName() + ".interpretInput() a-button-justPressed CRITTER_DEX");
                     //////////////////////////////////
                     Player.getInstance().toggleForm();
                     //////////////////////////////////
                     game.getStateManager().toggleMenuState();
                     break;
-                case BELT_LIST:
+                case TEAM:
                     Log.d(TAG, getClass().getSimpleName() + ".interpretInput() a-button-justPressed BELT_LIST");
                     game.getStateManager().toggleMenuState();
                     break;
-                case BACKPACK_LIST:
+                case BACKPACK:
                     Log.d(TAG, getClass().getSimpleName() + ".interpretInput() a-button-justPressed BACKPACK_LIST");
                     game.getStateManager().toggleMenuState();
                     break;
@@ -181,7 +195,7 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
         destinationBoundsOfMenuBackgroundImage = new Rect(
                 horizontalEndOfScreenMinusWidthOfMenuBackgroundImage,
                 verticalHalfOfScreenMinusHalfHeightOfMenuBackgroundImage,
-                horizontalEndOfScreen,
+                horizontalEndOfScreen - 16,
                 verticalHalfOfScreenPlusHalfHeightOfMenuBackgroundImage);
     }
 
@@ -227,15 +241,32 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
         textPaint.setTextSize(64);
     }
 
-    private int xOffsetLoad;
-    private int yOffsetLoad;
+    private int xOffsetMenuItems, yOffsetChangeSkin, yOffsetTeam, yOffsetBackpack, yOffsetLoad, yOffsetSave, yOffsetOption, yOffsetExit;
 
     private void initPositionOfLoad() {
-        xOffsetLoad = (X_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+        xOffsetMenuItems = (X_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
                 (menuCursorImage.getWidth() * scaleFactor) + (1 * scaleFactor);
+        yOffsetChangeSkin = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.CHANGE_SKIN.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
+        yOffsetTeam = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.TEAM.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
+        yOffsetBackpack = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.BACKPACK.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
         yOffsetLoad = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
                 (menuCursorImage.getHeight() * scaleFactor) +
                 (MenuItem.LOAD.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
+        yOffsetSave = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.SAVE.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
+        yOffsetOption = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.OPTION.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
+        yOffsetExit = (Y_OFFSET_INITIAL_IN_PIXELS * scaleFactor) +
+                (menuCursorImage.getHeight() * scaleFactor) +
+                (MenuItem.EXIT.ordinal() * (HEIGHT_BETWEEN_MENU_ITEMS_IN_PIXELS * scaleFactor));
     }
 
     @Override
@@ -249,9 +280,33 @@ public class MenuStateImplPocketCritters extends MenuStateImpl {
                 sourceBoundsOfMenuCursorImage, destinationBoundsOfMenuCursorImage, null);
 
         //FILL IN BLANK OF BACKGROUND IMAGE
-        canvas.drawText("LOAD",
-                (destinationBoundsOfMenuBackgroundImage.left + xOffsetLoad),
+        canvas.drawText(textMenustateChangeSkin,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetChangeSkin),
+                textPaint);
+        canvas.drawText(textMenustateTeam,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetTeam),
+                textPaint);
+        canvas.drawText(textMenustateBackpack,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetBackpack),
+                textPaint);
+        canvas.drawText(textMenustateLoad,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
                 (destinationBoundsOfMenuBackgroundImage.top + yOffsetLoad),
+                textPaint);
+        canvas.drawText(textMenustateSave,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetSave),
+                textPaint);
+        canvas.drawText(textMenustateOption,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetOption),
+                textPaint);
+        canvas.drawText(textMenustateExit,
+                (destinationBoundsOfMenuBackgroundImage.left + xOffsetMenuItems),
+                (destinationBoundsOfMenuBackgroundImage.top + yOffsetExit),
                 textPaint);
     }
 }
