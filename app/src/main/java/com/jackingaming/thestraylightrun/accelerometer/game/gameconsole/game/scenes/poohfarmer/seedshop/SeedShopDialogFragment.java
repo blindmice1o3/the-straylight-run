@@ -129,10 +129,12 @@ public class SeedShopDialogFragment extends DialogFragment {
                 new GridLayoutManager(getContext(), numberOfRows, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(gridLayoutManagerHorizontal);
 
-
-        Bitmap seedShopSpriteSheet = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.gbc_hm_seeds_shop);
-        seedShopBackgroundTop = Bitmap.createBitmap(seedShopSpriteSheet, 31, 14, 160, 80);
-        seedShopBackgroundBottom = Bitmap.createBitmap(seedShopSpriteSheet, 31, 102, 160, 16);
+        Bitmap seedShopSpriteSheet = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.scene_seed_shop);
+        seedShopBackgroundTop = Bitmap.createBitmap(seedShopSpriteSheet, 0, 0, 1253, 589);
+        seedShopBackgroundBottom = Bitmap.createBitmap(seedShopSpriteSheet, 0, 767, 1253, 141);
+//        Bitmap seedShopSpriteSheet = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.gbc_hm_seeds_shop);
+//        seedShopBackgroundTop = Bitmap.createBitmap(seedShopSpriteSheet, 31, 14, 160, 80);
+//        seedShopBackgroundBottom = Bitmap.createBitmap(seedShopSpriteSheet, 31, 102, 160, 16);
 
         ImageView imageViewBackgroundTop = (ImageView) viewContainingRecyclerView.findViewById(R.id.imageview_seed_shop_background_top);
         imageViewBackgroundTop.setImageBitmap(seedShopBackgroundTop);
