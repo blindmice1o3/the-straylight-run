@@ -24,7 +24,7 @@ public class Player extends Creature {
         questManager = new QuestManager();
     }
 
-    private int indexOfForm = -1;
+    private int indexOfForm;
 
     public void toggleForm() {
         indexOfForm++;

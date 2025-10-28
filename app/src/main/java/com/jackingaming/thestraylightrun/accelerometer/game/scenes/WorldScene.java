@@ -33,6 +33,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.Animation;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveUpCommand;
@@ -985,43 +986,76 @@ public class WorldScene extends Scene {
     }
 
     private Player generatePlayer() {
+        Bitmap spriteSheetDaughter = BitmapFactory.decodeResource(resources, R.drawable.entity_daughter_down_up_right);
+
         AnimationDrawable animationDrawableUp = new AnimationDrawable();
         animationDrawableUp.setOneShot(false);
+        Bitmap[] daughterUp = new Bitmap[1];
+        daughterUp[0] = Bitmap.createBitmap(spriteSheetDaughter, 713, 74, 193, 431);
         animationDrawableUp.addFrame(
-                new BitmapDrawable(resources, sprites[3][1]), durationOfFrameInMilli);
-        animationDrawableUp.addFrame(
-                new BitmapDrawable(resources, sprites[4][1]), durationOfFrameInMilli);
-        animationDrawableUp.addFrame(
-                new BitmapDrawable(resources, sprites[5][1]), durationOfFrameInMilli);
+                new BitmapDrawable(resources, daughterUp[0]), durationOfFrameInMilli);
+//        animationDrawableUp.addFrame(
+//                new BitmapDrawable(resources, sprites[3][1]), durationOfFrameInMilli);
+//        animationDrawableUp.addFrame(
+//                new BitmapDrawable(resources, sprites[4][1]), durationOfFrameInMilli);
+//        animationDrawableUp.addFrame(
+//                new BitmapDrawable(resources, sprites[5][1]), durationOfFrameInMilli);
 
         AnimationDrawable animationDrawableDown = new AnimationDrawable();
         animationDrawableDown.setOneShot(false);
+        Bitmap[] daughterDown = new Bitmap[2];
+        daughterDown[0] = Bitmap.createBitmap(spriteSheetDaughter, 99, 71, 184, 432);
+        daughterDown[1] = Bitmap.createBitmap(spriteSheetDaughter, 411, 74, 187, 431);
         animationDrawableDown.addFrame(
-                new BitmapDrawable(resources, sprites[0][1]), durationOfFrameInMilli);
+                new BitmapDrawable(resources, daughterDown[0]), durationOfFrameInMilli);
         animationDrawableDown.addFrame(
-                new BitmapDrawable(resources, sprites[1][1]), durationOfFrameInMilli);
-        animationDrawableDown.addFrame(
-                new BitmapDrawable(resources, sprites[2][1]), durationOfFrameInMilli);
-
-        AnimationDrawable animationDrawableLeft = new AnimationDrawable();
-        animationDrawableLeft.setOneShot(false);
-        animationDrawableLeft.addFrame(
-                new BitmapDrawable(resources, sprites[6][1]), durationOfFrameInMilli);
-        animationDrawableLeft.addFrame(
-                new BitmapDrawable(resources, sprites[7][1]), durationOfFrameInMilli);
+                new BitmapDrawable(resources, daughterDown[1]), durationOfFrameInMilli);
+//        animationDrawableDown.addFrame(
+//                new BitmapDrawable(resources, sprites[0][1]), durationOfFrameInMilli);
+//        animationDrawableDown.addFrame(
+//                new BitmapDrawable(resources, sprites[1][1]), durationOfFrameInMilli);
+//        animationDrawableDown.addFrame(
+//                new BitmapDrawable(resources, sprites[2][1]), durationOfFrameInMilli);
 
         AnimationDrawable animationDrawableRight = new AnimationDrawable();
         animationDrawableRight.setOneShot(false);
+        Bitmap[] daughterRight = new Bitmap[3];
+        daughterRight[0] = Bitmap.createBitmap(spriteSheetDaughter, 99, 541, 201, 422);
+        daughterRight[1] = Bitmap.createBitmap(spriteSheetDaughter, 703, 542, 226, 429);
+        daughterRight[2] = Bitmap.createBitmap(spriteSheetDaughter, 694, 1010, 234, 429);
         animationDrawableRight.addFrame(
-                new BitmapDrawable(resources, sprites[8][1]), durationOfFrameInMilli);
+                new BitmapDrawable(resources, daughterRight[0]), durationOfFrameInMilli);
         animationDrawableRight.addFrame(
-                new BitmapDrawable(resources, sprites[9][1]), durationOfFrameInMilli);
+                new BitmapDrawable(resources, daughterRight[1]), durationOfFrameInMilli);
+        animationDrawableRight.addFrame(
+                new BitmapDrawable(resources, daughterRight[2]), durationOfFrameInMilli);
+//        animationDrawableRight.addFrame(
+//                new BitmapDrawable(resources, sprites[8][1]), durationOfFrameInMilli);
+//        animationDrawableRight.addFrame(
+//                new BitmapDrawable(resources, sprites[9][1]), durationOfFrameInMilli);
+
+        AnimationDrawable animationDrawableLeft = new AnimationDrawable();
+        animationDrawableLeft.setOneShot(false);
+        Bitmap[] daughterLeft = new Bitmap[3];
+        daughterLeft[0] = Animation.flipImageHorizontally(daughterRight[0]);
+        daughterLeft[1] = Animation.flipImageHorizontally(daughterRight[1]);
+        daughterLeft[2] = Animation.flipImageHorizontally(daughterRight[2]);
+        animationDrawableLeft.addFrame(
+                new BitmapDrawable(resources, daughterLeft[0]), durationOfFrameInMilli);
+        animationDrawableLeft.addFrame(
+                new BitmapDrawable(resources, daughterLeft[1]), durationOfFrameInMilli);
+        animationDrawableLeft.addFrame(
+                new BitmapDrawable(resources, daughterLeft[2]), durationOfFrameInMilli);
+//        animationDrawableLeft.addFrame(
+//                new BitmapDrawable(resources, sprites[6][1]), durationOfFrameInMilli);
+//        animationDrawableLeft.addFrame(
+//                new BitmapDrawable(resources, sprites[7][1]), durationOfFrameInMilli);
 
         Map<Direction, AnimationDrawable> animationsByDirection = new HashMap<>();
         animationsByDirection.put(UP, animationDrawableUp);
         animationsByDirection.put(DOWN, animationDrawableDown);
-        animationsByDirection.put(LEFT, animationDrawableLeft);
         animationsByDirection.put(RIGHT, animationDrawableRight);
+        animationsByDirection.put(LEFT, animationDrawableLeft);
         Player player = new Player(animationsByDirection);
         return player;
     }
