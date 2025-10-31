@@ -11,7 +11,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.IntroState;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
@@ -204,7 +205,7 @@ public class RunOne
 
     @Override
     public void attachListener() {
-        IntroState.SeedListener seedListener = new IntroState.SeedListener() {
+        SeedShopDialogFragment.SeedListener seedListener = new SeedShopDialogFragment.SeedListener() {
             @Override
             public void onAssignedNameAndDescription() {
                 Player.getInstance().getQuestManager().addEntityAsString(
@@ -219,8 +220,8 @@ public class RunOne
                     game.getViewportListener().addAndShowParticleExplosionView();
                     dispenseRewards();
 
-                    Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
-                    String text = game.getContext().getResources().getString(R.string.click_button_holder_a_or_b);
+                    Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
+                    String text = getDialogueForCurrentState();
                     TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                             50L, portrait, text,
                             new TypeWriterDialogFragment.DismissListener() {
@@ -243,12 +244,12 @@ public class RunOne
             }
         };
 
-        game.getStateManager().getIntroState().setSeedListener(seedListener);
+        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(seedListener);
     }
 
     @Override
     public void detachListener() {
-        game.getStateManager().getIntroState().setSeedListener(null);
+        SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(null);
     }
 
     public void setSeedName(String seedName) {

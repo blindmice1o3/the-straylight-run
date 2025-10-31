@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
@@ -31,6 +32,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
 
 import java.util.ArrayList;
@@ -39,12 +41,22 @@ import java.util.List;
 public class SeedShopDialogFragment extends DialogFragment {
     public static final String TAG = "SeedShopDialogFragment";
 
+    public interface SeedListener {
+        void onAssignedNameAndDescription();
+    }
+
+    public void setSeedListener(SeedListener seedListener) {
+        this.seedListener = seedListener;
+    }
+
     private Game game;
     private Bitmap seedShopBackgroundTop;
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;
     private List<Item> seedShopInventory;
     private Quest seedShopOwnerQuest00;
+    private RunOne runOne;
+    private SeedListener seedListener;
 
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
@@ -80,6 +92,8 @@ public class SeedShopDialogFragment extends DialogFragment {
     public void init(Game game) {
         Log.e(TAG, "init()");
         this.game = game;
+
+        runOne = new RunOne(game);
 
         for (Item item : seedShopInventory) {
             item.init(game);
@@ -180,26 +194,98 @@ public class SeedShopDialogFragment extends DialogFragment {
                 public void onAnimationFinish() {
                     Log.e(TAG, "!alreadyHaveQuest");
 
-                    boolean wasQuestAccepted =
-                            Player.getInstance().getQuestManager().addQuest(
-                                    seedShopOwnerQuest00
+                    if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+                        Log.e(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+
+                        boolean wasQuestAcceptedRunOne =
+                                Player.getInstance().getQuestManager().addQuest(
+                                        runOne
+                                );
+
+                        if (wasQuestAcceptedRunOne) {
+                            Log.e(TAG, "wasQuestAcceptedRunOne");
+                            runOne.dispenseStartingItems();
+                        } else {
+                            Log.e(TAG, "!wasQuestAcceptedRunOne");
+                        }
+
+                        if (runOne.getCurrentState() == Quest.State.STARTED) {
+                            Log.e(TAG, "runOne.getCurrentState() == Quest.State.STARTED");
+
+                            String textSeedName = game.getContext().getResources().getString(R.string.text_seed_name);
+                            String textSeedDescription = game.getContext().getResources().getString(R.string.text_seed_description);
+                            EditTextDialogFragment dialogFragmentRunOneName = EditTextDialogFragment.newInstance(
+                                    new EditTextDialogFragment.EnterListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            Log.e(TAG, "onDismiss()");
+                                        }
+
+                                        @Override
+                                        public void onEnterKeyPressed(String name) {
+                                            Log.e(TAG, "onEnterKeyPressed()");
+
+                                            runOne.setSeedName(name);
+
+                                            EditTextDialogFragment dialogFragmentRunOneDescription = EditTextDialogFragment.newInstance(
+                                                    new EditTextDialogFragment.EnterListener() {
+                                                        @Override
+                                                        public void onDismiss() {
+                                                            Log.e(TAG, "onDismiss()");
+                                                        }
+
+                                                        @Override
+                                                        public void onEnterKeyPressed(String name) {
+                                                            Log.e(TAG, "onEnterKeyPressed()");
+
+                                                            runOne.setSeedDescription(name);
+
+                                                            seedListener.onAssignedNameAndDescription();
+                                                        }
+                                                    },
+                                                    textSeedDescription,
+                                                    false
+                                            );
+                                            dialogFragmentRunOneDescription.show(game.getFragmentManager(), TAG);
+                                        }
+                                    },
+                                    textSeedName,
+                                    false
                             );
+                            dialogFragmentRunOneName.show(game.getFragmentManager(), TAG);
+                        } else {
+                            Log.e(TAG, "runOne.getCurrentState() != Quest.State.STARTED");
+                        }
 
-                    if (wasQuestAccepted) {
-                        Log.e(TAG, "wasQuestAccepted");
-                        seedShopOwnerQuest00.dispenseStartingItems();
                     } else {
-                        Log.e(TAG, "!wasQuestAccepted");
+                        Log.e(TAG, "game.getRun() != com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+
+                        boolean wasQuestAccepted = Player.getInstance().getQuestManager().addQuest(
+                                seedShopOwnerQuest00
+                        );
+
+                        if (wasQuestAccepted) {
+                            Log.e(TAG, "wasQuestAccepted");
+                            seedShopOwnerQuest00.dispenseStartingItems();
+                        } else {
+                            Log.e(TAG, "!wasQuestAccepted");
+                        }
                     }
-
-
                 }
             };
         }
 
-        Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_coins_l);
-        // TODO: switch to runOne.getDialogueForCurrentState().
-        String messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
+        Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
+        String messageGreeting = null;
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+            Log.d(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE USING run one DIALOGUE");
+
+            messageGreeting = runOne.getDialogueForCurrentState();
+        } else {
+            Log.d(TAG, "game.getRun() != com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE USING default DIALOGUE");
+
+            messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
+        }
 
         TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                 100L, image, messageGreeting,

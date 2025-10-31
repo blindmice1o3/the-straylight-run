@@ -61,10 +61,6 @@
     <string name="text_seed_shop_owner_quest_00">Seed Shop Owner Quest 00</string>
 
     <!-- IntroState -->
-    <string name="text_seed_name">seed\'s name</string>
-    <string name="text_seed_description">seed\'s description</string>
-
-    <!-- RunOne -->
     <string name="click_button_holder_a_or_b">Click \"ButtonHolderA\" or \"ButtonHolderB\" to equip the RobotReprogrammer4000.</string>
     <!-- GameConsoleFragment -->
     <string name="equip_robot_reprogrammer_4000">Congratulation for equipping the RobotReprogrammer4000! Use it on the robot to run the new code!</string>
@@ -132,6 +128,10 @@
         <item>Hello! Please germinate and grow the mystery seeds, then harvest 3 mystery products and place them in the shipping bin.</item>
         <item>Hello! The mystery products you\'ve harvested were FAR out. Like OUTER-SPACE far. You can probably bring about world peace with what you\'re growing.</item>
     </string-array>
+
+    <!-- SeedShopDialogFragment -->
+    <string name="text_seed_name">seed\'s name</string>
+    <string name="text_seed_description">seed\'s description</string>
 
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">

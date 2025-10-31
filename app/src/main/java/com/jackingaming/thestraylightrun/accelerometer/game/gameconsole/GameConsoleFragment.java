@@ -441,7 +441,7 @@ public class GameConsoleFragment extends Fragment
 
             game.getViewportListener().addAndShowParticleExplosionView();
 
-            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
+            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
             String text = getResources().getString(R.string.equip_robot_reprogrammer_4000);
             TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
                     50L, portrait, text,

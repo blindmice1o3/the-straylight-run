@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
@@ -15,7 +14,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFive;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFour;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunTwo;
 
@@ -23,20 +21,9 @@ public class IntroState
         implements State {
     public static final String TAG = IntroState.class.getSimpleName();
 
-    public interface SeedListener {
-        void onAssignedNameAndDescription();
-    }
-
     private Game game;
 
     private boolean isTextShown = false;
-
-    private RunOne runOne;
-    private SeedListener seedListener;
-
-    public void setSeedListener(SeedListener seedListener) {
-        this.seedListener = seedListener;
-    }
 
     private RunTwo runTwo;
     private RunThree runThree;
@@ -50,7 +37,6 @@ public class IntroState
     public void init(Game game) {
         this.game = game;
 
-        runOne = new RunOne(game);
         runTwo = new RunTwo(game);
         runThree = new RunThree(game);
         runFour = new RunFour(game);
@@ -81,7 +67,7 @@ public class IntroState
             switch (game.getRun()) {
                 case ONE:
                     textRunNumber = game.getContext().getString(R.string.text_run_one);
-                    requirementForRun = runOne.getDialogueForCurrentState();
+                    requirementForRun = game.getContext().getResources().getString(R.string.click_button_holder_a_or_b);
                     break;
                 case TWO:
                     textRunNumber = game.getContext().getString(R.string.text_run_two);
@@ -101,7 +87,7 @@ public class IntroState
                     break;
             }
 
-            Bitmap imageForTextbox = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.group_chat_image_nwt_host);
+            Bitmap imageForTextbox = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
             String textRunNumberNoSpace = textRunNumber.replaceAll("\\s", "");
             String textForTextBox = String.format("%s: %s",
                     textRunNumberNoSpace,
@@ -122,7 +108,8 @@ public class IntroState
 
                             switch (game.getRun()) {
                                 case ONE:
-                                    giveRunOneQuest();
+                                    // Do nothing.
+//                                    game.giveRunOneQuest();
                                     break;
                                 case TWO:
                                     giveRunTwoQuest();
@@ -209,61 +196,6 @@ public class IntroState
         }
     }
 
-    private void giveRunOneQuest() {
-        boolean wasQuestAcceptedRunOne =
-                Player.getInstance().getQuestManager().addQuest(
-                        runOne
-                );
-
-        if (wasQuestAcceptedRunOne) {
-            Log.e(TAG, "wasQuestAcceptedRunOne");
-            runOne.dispenseStartingItems();
-
-            String textSeedName = game.getContext().getResources().getString(R.string.text_seed_name);
-            String textSeedDescription = game.getContext().getResources().getString(R.string.text_seed_description);
-            EditTextDialogFragment dialogFragmentRunOneName = EditTextDialogFragment.newInstance(
-                    new EditTextDialogFragment.EnterListener() {
-                        @Override
-                        public void onDismiss() {
-                            Log.e(TAG, "onDismiss()");
-                        }
-
-                        @Override
-                        public void onEnterKeyPressed(String name) {
-                            Log.e(TAG, "onEnterKeyPressed()");
-
-                            runOne.setSeedName(name);
-
-                            EditTextDialogFragment dialogFragmentRunOneDescription = EditTextDialogFragment.newInstance(
-                                    new EditTextDialogFragment.EnterListener() {
-                                        @Override
-                                        public void onDismiss() {
-                                            Log.e(TAG, "onDismiss()");
-                                        }
-
-                                        @Override
-                                        public void onEnterKeyPressed(String name) {
-                                            Log.e(TAG, "onEnterKeyPressed()");
-
-                                            runOne.setSeedDescription(name);
-
-                                            seedListener.onAssignedNameAndDescription();
-                                        }
-                                    },
-                                    textSeedDescription,
-                                    false
-                            );
-                            dialogFragmentRunOneDescription.show(game.getFragmentManager(), TAG);
-                        }
-                    },
-                    textSeedName,
-                    false
-            );
-            dialogFragmentRunOneName.show(game.getFragmentManager(), TAG);
-        } else {
-            Log.e(TAG, "!wasQuestAcceptedRunOne");
-        }
-    }
 
     private void interpretInput() {
         if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
