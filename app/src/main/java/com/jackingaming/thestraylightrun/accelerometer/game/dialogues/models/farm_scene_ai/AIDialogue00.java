@@ -26,8 +26,6 @@ public class AIDialogue00
     private LabScene labScene;
     private Bitmap portraitOfSpeaker;
 
-    private TypeWriterDialogFragment dialogFragmentAIDialogue00;
-
     private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
     private Quest aIQuest00;
 
@@ -47,74 +45,74 @@ public class AIDialogue00
 
         String[] messages = resources.getStringArray(R.array.clippit_dialogue_array);
         String message = messages[0];
-        dialogFragmentAIDialogue00 =
-                TypeWriterDialogFragment.newInstance(100L, portraitOfSpeaker,
-                        message,
-                        new TypeWriterDialogFragment.DismissListener() {
+        TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.e(TAG, "onDismiss()");
+            }
+        };
+        TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onAnimationFinish()");
+
+                game.setPaused(true);
+
+                ChoiceDialogFragment choiceDialogFragmentYesOrNo = ChoiceDialogFragment.newInstance(
+                        new ChoiceDialogFragment.ChoiceListener() {
                             @Override
-                            public void onDismiss() {
-                                Log.e(TAG, "onDismiss()");
+                            public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                Log.e(TAG, "YES selected");
+
+                                choiceDialogFragment.dismiss();
+
+                                // TODO:
+
+                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
+                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
+                                }
                             }
-                        }, new TypeWriterTextView.TextCompletionListener() {
+
                             @Override
-                            public void onAnimationFinish() {
-                                Log.e(TAG, "onAnimationFinish()");
+                            public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
+                                Log.e(TAG, "NO selected");
 
-                                game.setPaused(true);
+                                // TODO:
 
-                                ChoiceDialogFragment choiceDialogFragmentYesOrNo = ChoiceDialogFragment.newInstance(
-                                        new ChoiceDialogFragment.ChoiceListener() {
-                                            @Override
-                                            public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "YES selected");
+                                choiceDialogFragment.dismiss();
+                            }
 
-                                                choiceDialogFragment.dismiss();
+                            @Override
+                            public void onDismiss(ChoiceDialogFragment choiceDialogFragment) {
+                                Log.e(TAG, "onDismiss(ChoiceDialogFragment)");
 
-                                                // TODO:
+                                game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
 
-                                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
-                                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
-                                                }
-                                            }
+                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).setInDialogueWithClippitState(false);
+                                }
+                                game.getTextboxListener().showStatsDisplayer();
 
-                                            @Override
-                                            public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "NO selected");
+                                game.setPaused(false);
+                            }
 
-                                                // TODO:
-
-                                                choiceDialogFragment.dismiss();
-                                            }
-
-                                            @Override
-                                            public void onDismiss(ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "onDismiss(ChoiceDialogFragment)");
-
-                                                dialogFragmentAIDialogue00.dismiss();
-                                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).setInDialogueWithClippitState(false);
-                                                }
-                                                game.getTextboxListener().showStatsDisplayer();
-
-                                                game.setPaused(false);
-                                            }
-
-                                            @Override
-                                            public void onCancel(ChoiceDialogFragment choiceDialogFragment) {
-                                                Log.e(TAG, "onCancel(ChoiceDialogFragment)");
-                                            }
-                                        });
-
-                                choiceDialogFragmentYesOrNo.show(
-                                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                                        ChoiceDialogFragment.TAG
-                                );
+                            @Override
+                            public void onCancel(ChoiceDialogFragment choiceDialogFragment) {
+                                Log.e(TAG, "onCancel(ChoiceDialogFragment)");
                             }
                         });
 
-        game.getTextboxListener().showTextbox(
-                dialogFragmentAIDialogue00
-        );
+                choiceDialogFragmentYesOrNo.show(
+                        ((MainActivity) game.getContext()).getSupportFragmentManager(),
+                        ChoiceDialogFragment.TAG
+                );
+            }
+        };
+
+        game.getStateManager().pushTextboxState(portraitOfSpeaker,
+                message,
+                dismissListener,
+                textCompletionListener);
     }
 }

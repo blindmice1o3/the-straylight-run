@@ -222,22 +222,25 @@ public class RunOne
 
                     Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
                     String text = getDialogueForCurrentState();
-                    TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                            50L, portrait, text,
-                            new TypeWriterDialogFragment.DismissListener() {
-                                @Override
-                                public void onDismiss() {
-                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
-                                }
-                            }, new TypeWriterTextView.TextCompletionListener() {
-                                @Override
-                                public void onAnimationFinish() {
-                                    Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
-                                }
-                            }
-                    );
+                    TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            Log.e(TAG, "attachListener() TypeWriterDialogFragment.DismissListener.onDismiss()");
+                        }
+                    };
+                    TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.e(TAG, "attachListener() TypeWriterDialogFragment.TextCompletionListener.onAnimationFinish()");
 
-                    game.getTextboxListener().showTextbox(typeWriterDialogFragment);
+                            game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                        }
+                    };
+
+                    game.getStateManager().pushTextboxState(portrait,
+                            text,
+                            dismissListener,
+                            textCompletionListener);
                 } else {
                     Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
                 }

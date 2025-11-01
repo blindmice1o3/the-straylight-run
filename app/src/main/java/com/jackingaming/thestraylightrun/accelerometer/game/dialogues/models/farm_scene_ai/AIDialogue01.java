@@ -24,8 +24,6 @@ public class AIDialogue01
     private LabScene labScene;
     private Bitmap portraitOfSpeaker;
 
-    private TypeWriterDialogFragment dialogFragmentAIDialogue01;
-
     private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
     private Quest aIQuest00;
 
@@ -45,42 +43,42 @@ public class AIDialogue01
 
         String[] messages = resources.getStringArray(R.array.clippit_dialogue_array);
         String message = messages[1];
+        TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.e(TAG, "onDismiss()");
+            }
+        };
+        TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onAnimationFinish()");
 
-        dialogFragmentAIDialogue01 =
-                TypeWriterDialogFragment.newInstance(100L, portraitOfSpeaker,
-                        message,
-                        new TypeWriterDialogFragment.DismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                Log.e(TAG, "onDismiss()");
-                            }
-                        }, new TypeWriterTextView.TextCompletionListener() {
-                            @Override
-                            public void onAnimationFinish() {
-                                Log.e(TAG, "onAnimationFinish()");
+                game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
 
-                                // give/start second quest.
-                                boolean wasQuestAccepted =
-                                        Player.getInstance().getQuestManager().addQuest(
-                                                aIQuest00
-                                        );
+                // give/start second quest.
+                boolean wasQuestAccepted =
+                        Player.getInstance().getQuestManager().addQuest(
+                                aIQuest00
+                        );
 
-                                if (wasQuestAccepted) {
-                                    Log.e(TAG, "wasQuestAccepted");
-                                    aIQuest00.dispenseStartingItems();
-                                } else {
-                                    Log.e(TAG, "!wasQuestAccepted");
-                                }
+                if (wasQuestAccepted) {
+                    Log.e(TAG, "wasQuestAccepted");
+                    aIQuest00.dispenseStartingItems();
+                } else {
+                    Log.e(TAG, "!wasQuestAccepted");
+                }
 
-                                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
-                                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
-                                }
-                            }
-                        });
+                if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
+                    ((SceneFarm) game.getSceneManager().getCurrentScene()).changeToNextDialogueWithAI();
+                    ((SceneFarm) game.getSceneManager().getCurrentScene()).startDialogueWithAI(portraitOfSpeaker);
+                }
+            }
+        };
 
-        game.getTextboxListener().showTextbox(
-                dialogFragmentAIDialogue01
-        );
+        game.getStateManager().pushTextboxState(portraitOfSpeaker,
+                message,
+                dismissListener,
+                textCompletionListener);
     }
 }

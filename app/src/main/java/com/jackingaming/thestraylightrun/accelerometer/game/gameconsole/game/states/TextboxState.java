@@ -1,146 +1,281 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFive;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFour;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunTwo;
 
 public class TextboxState
         implements State {
     public static final String TAG = TextboxState.class.getSimpleName();
 
-    private static final String TEXT_DEFAULT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    transient private Game game;
+    private Game game;
 
-    transient private StaticLayout staticLayout;
-    private int widthStaticLayout;
-    private float heightStaticLayout;
+    private boolean isTextShown = false;
+    private Bitmap imageForDialogue;
+    private String textToShow;
+    private TypeWriterDialogFragment.DismissListener dismissListener;
+    private TypeWriterTextView.TextCompletionListener textCompletionListener;
 
-    private float xTextbox;
-    private float yTextbox;
-
-    transient private TextPaint textPaint;
-    private String text;
+    private RunTwo runTwo;
+    private RunThree runThree;
+    private RunFour runFour;
+    private RunFive runFive;
 
     public TextboxState() {
-
     }
 
     @Override
     public void init(Game game) {
         this.game = game;
-        text = TEXT_DEFAULT;
+
+        runTwo = new RunTwo(game);
+        runThree = new RunThree(game);
+        runFour = new RunFour(game);
+        runFive = new RunFive(game);
     }
 
     @Override
     public void enter(Object[] args) {
+        Log.d(TAG, "enter()");
+
+        isTextShown = false;
+        isTextboxAnimationFinished = false;
+
         if (args != null) {
-            if (args[0] instanceof String) {
-                text = (String) args[0];
-                Log.d(TAG, getClass().getSimpleName() + " .enter(Object[] args) text: " + text);
-            }
-            if (args.length >= 3) {
-                xTextbox = (float) args[1];
-                yTextbox = (float) args[2];
-            }
+            Log.d(TAG, "args != null");
+
+            imageForDialogue = (Bitmap) args[0];
+            textToShow = (String) args[1];
+            dismissListener = (TypeWriterDialogFragment.DismissListener) args[2];
+            textCompletionListener = (TypeWriterTextView.TextCompletionListener) args[3];
+        } else {
+            Log.d(TAG, "args == null");
+
+            // Do nothing.
         }
-
-        textPaint = new TextPaint();
-        textPaint.setAntiAlias(true);
-        textPaint.setTextSize(16 * game.getContext().getResources().getDisplayMetrics().density);
-        textPaint.setColor(0xFF000000);
-
-        widthStaticLayout = game.getWidthViewport();
-        Layout.Alignment alignment = Layout.Alignment.ALIGN_NORMAL;
-        float spacingMultiplier = 1;
-        float spacingAddition = 0;
-        boolean includePadding = false;
-
-        staticLayout = new StaticLayout(text, textPaint, widthStaticLayout,
-                alignment, spacingMultiplier, spacingAddition, includePadding);
-
-        heightStaticLayout = staticLayout.getHeight();
-        Log.d(TAG, getClass().getSimpleName() + " .enter(Object[] args) heightStaticLayout: " + heightStaticLayout);
     }
 
     @Override
     public void exit() {
+        Log.e(TAG, "exit()");
 
+        // Do nothing.
     }
+
+    private boolean isTextboxAnimationFinished = false;
 
     @Override
     public void update(long elapsed) {
+        if (!isTextShown) {
+            isTextShown = true;
+
+            game.getSceneManager().update(elapsed);
+
+            if (imageForDialogue != null) {
+                Log.d(TAG, "imageForDialogue != null");
+
+                // Do nothing.
+            } else {
+                Log.d(TAG, "imageForDialogue == null");
+
+                imageForDialogue = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
+            }
+
+            if (textToShow != null) {
+                Log.d(TAG, "textToShow != null");
+
+                // Do nothing.
+            } else {
+                Log.d(TAG, "textToShow == null");
+
+                String textRunNumber = null;
+                String requirementForRun = null;
+                switch (game.getRun()) {
+                    case ONE:
+                        textRunNumber = game.getContext().getString(R.string.text_run_one);
+                        requirementForRun = game.getContext().getResources().getString(R.string.click_button_holder_a_or_b);
+                        break;
+                    case TWO:
+                        textRunNumber = game.getContext().getString(R.string.text_run_two);
+                        requirementForRun = runTwo.getDialogueForCurrentState();
+                        break;
+                    case THREE:
+                        textRunNumber = game.getContext().getString(R.string.text_run_three);
+                        requirementForRun = runThree.getDialogueForCurrentState();
+                        break;
+                    case FOUR:
+                        textRunNumber = game.getContext().getString(R.string.text_run_four);
+                        requirementForRun = runFour.getDialogueForCurrentState();
+                        break;
+                    case FIVE:
+                        textRunNumber = game.getContext().getString(R.string.text_run_five);
+                        requirementForRun = runFive.getDialogueForCurrentState();
+                        break;
+                }
+
+                String textRunNumberNoSpace = textRunNumber.replaceAll("\\s", "");
+                textToShow = String.format("%s: %s",
+                        textRunNumberNoSpace,
+                        requirementForRun);
+            }
+
+            if (dismissListener != null) {
+                Log.d(TAG, "dismissListener != null");
+
+                // Do nothing.
+            } else {
+                Log.d(TAG, "dismissListener == null");
+
+                dismissListener = new TypeWriterDialogFragment.DismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        Log.d(TAG, "update() TypeWriterDialogFragment.DismissListener.onDismiss()");
+
+                        // Do nothing.
+                    }
+                };
+            }
+
+            if (textCompletionListener != null) {
+                Log.d(TAG, "textCompletionListener != null");
+
+                // Do nothing.
+            } else {
+                Log.d(TAG, "textCompletionListener == null");
+
+                textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                    @Override
+                    public void onAnimationFinish() {
+                        Log.d(TAG, "update() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
+
+                        isTextboxAnimationFinished = true;
+
+                        switch (game.getRun()) {
+                            case ONE:
+                                // Do nothing.
+//                                    game.giveRunOneQuest();
+                                break;
+                            case TWO:
+                                giveRunTwoQuest();
+                                break;
+                            case THREE:
+                                giveRunThreeQuest();
+                                break;
+                            case FOUR:
+                                giveRunFourQuest();
+                                break;
+                            case FIVE:
+                                giveRunFiveQuest();
+                                break;
+                        }
+                    }
+                };
+            }
+
+            typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
+                    50L, imageForDialogue,
+                    textToShow,
+                    dismissListener,
+                    textCompletionListener
+            );
+
+            game.getTextboxListener().showTextbox(
+                    typeWriterDialogFragment
+            );
+        }
+
         interpretInput();
     }
 
-    private void interpretInput() {
-        if (game.getInputManager().isJustPressed(InputManager.Button.A)) {
-            // Intentionally blank.
-        } else if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
-            game.getStateManager().popTextboxState();
-        } else if (game.getInputManager().isJustPressed(InputManager.Button.MENU)) {
-            // Intentionally blank.
-        }
+    TypeWriterDialogFragment typeWriterDialogFragment;
 
-        if (game.getInputManager().isJustPressed(InputManager.Button.UP)) {
-            // Intentionally blank.
-        } else if (game.getInputManager().isJustPressed(InputManager.Button.DOWN)) {
-            // Intentionally blank.
-        } else if (game.getInputManager().isJustPressed(InputManager.Button.LEFT)) {
-            // Intentionally blank.
-        } else if (game.getInputManager().isJustPressed(InputManager.Button.RIGHT)) {
-            // Intentionally blank.
+    private void giveRunFiveQuest() {
+        SceneHothouse.getInstance().init(game);
+
+        boolean wasQuestAcceptedRunFive =
+                Player.getInstance().getQuestManager().addQuest(
+                        runFive
+                );
+
+        if (wasQuestAcceptedRunFive) {
+            Log.e(TAG, "wasQuestAcceptedRunFive");
+            runFive.dispenseStartingItems();
+        } else {
+            Log.e(TAG, "!wasQuestAcceptedRunFive");
+        }
+    }
+
+    private void giveRunFourQuest() {
+        boolean wasQuestAcceptedRunFour =
+                Player.getInstance().getQuestManager().addQuest(
+                        runFour
+                );
+
+        if (wasQuestAcceptedRunFour) {
+            Log.e(TAG, "wasQuestAcceptedRunFour");
+            runFour.dispenseStartingItems();
+        } else {
+            Log.e(TAG, "!wasQuestAcceptedRunFour");
+        }
+    }
+
+    private void giveRunThreeQuest() {
+        boolean wasQuestAcceptedRunThree =
+                Player.getInstance().getQuestManager().addQuest(
+                        runThree
+                );
+
+        if (wasQuestAcceptedRunThree) {
+            Log.e(TAG, "wasQuestAcceptedRunThree");
+            runThree.dispenseStartingItems();
+        } else {
+            Log.e(TAG, "!wasQuestAcceptedRunThree");
+        }
+    }
+
+    private void giveRunTwoQuest() {
+        boolean wasQuestAcceptedRunTwo =
+                Player.getInstance().getQuestManager().addQuest(
+                        runTwo
+                );
+
+        if (wasQuestAcceptedRunTwo) {
+            Log.e(TAG, "wasQuestAcceptedRunTwo");
+            runTwo.dispenseStartingItems();
+        } else {
+            Log.e(TAG, "!wasQuestAcceptedRunTwo");
+        }
+    }
+
+
+    private void interpretInput() {
+        if (game.getInputManager().isJustPressed(InputManager.Button.B)) {
+            if (isTextboxAnimationFinished) {
+                game.getTextboxListener().showStatsDisplayer();
+                game.getStateManager().pop();
+            }
         }
     }
 
     @Override
     public void render(Canvas canvas) {
-        Rect bounds = canvas.getClipBounds();
-
-        Paint paintCenter = new Paint();
-        paintCenter.setColor(Color.YELLOW);
-        float x0Center = bounds.exactCenterX();
-        float y0Center = bounds.exactCenterY();
-        float x1Center = x0Center + (Tile.WIDTH * GameCamera.getInstance().getWidthPixelToViewportRatio());
-        float y1Center = y0Center + (Tile.HEIGHT * GameCamera.getInstance().getHeightPixelToViewportRatio());
-        canvas.drawRect(x0Center, y0Center, x1Center, y1Center, paintCenter);
-
-        float lineHeight = getLineHeight(text, textPaint);
-        int numberOfTextLines = staticLayout.getLineCount();
-        // VERTICAL CENTER
-//        yTextbox = bounds.exactCenterY() - ((numberOfTextLines * textHeight) / 2);
-        // VERTICAL BOTTOM
-//        yTextbox = bounds.bottom - (numberOfTextLines * lineHeight);
-//        xTextbox = 0;
-
-        canvas.save();
-        canvas.translate(xTextbox, yTextbox);
-        Paint paintBackground = new Paint();
-        paintBackground.setColor(Color.RED);
-        paintBackground.setAlpha(5);
-        Rect rectBackground = new Rect(0, 0, (int) (widthStaticLayout - xTextbox), (int) heightStaticLayout);
-        canvas.drawRect(rectBackground, paintBackground);
-        staticLayout.draw(canvas);
-
-        canvas.restore();
+        game.getSceneManager().drawCurrentFrame(canvas);
     }
 
-    private float getLineHeight(String text, Paint paint) {
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        float height = fm.bottom - fm.top + fm.leading;
-        return height;
-
-//        Rect rect = new Rect();
-//        paint.getTextBounds(text, 0, text.length(), rect);
-//        return rect.height();
+    public void setTextboxAnimationFinished(boolean textboxAnimationFinished) {
+        this.isTextboxAnimationFinished = textboxAnimationFinished;
     }
 }

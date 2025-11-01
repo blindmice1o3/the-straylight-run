@@ -38,7 +38,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
@@ -125,25 +124,25 @@ public class Robot extends Creature {
 
             Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
             String text = game.getContext().getResources().getString(R.string.use_robot_reprogrammer_4000);
-            TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                    50L, portrait, text,
-                    new TypeWriterDialogFragment.DismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
-                        }
-                    }, new TypeWriterTextView.TextCompletionListener() {
-                        @Override
-                        public void onAnimationFinish() {
-                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
-                        }
-                    }
-            );
+            TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+                @Override
+                public void onDismiss() {
+                    Log.e(TAG, "checkIfFirstTimeShowingRobotDialogFragment() TypeWriterDialogFragment.DismissListener.onDismiss()");
+                }
+            };
+            TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                @Override
+                public void onAnimationFinish() {
+                    Log.e(TAG, "checkIfFirstTimeShowingRobotDialogFragment() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
 
-            SceneFarm.getInstance().setInTutorialUseRobotReprogrammer4000(
-                    true
-            );
-            game.getTextboxListener().showTextbox(typeWriterDialogFragment);
+                    game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                }
+            };
+
+            game.getStateManager().pushTextboxState(portrait,
+                    text,
+                    dismissListener,
+                    textCompletionListener);
         } else {
             Log.d(TAG, "!isFirstTimeShowingRobotDialogFragment");
 

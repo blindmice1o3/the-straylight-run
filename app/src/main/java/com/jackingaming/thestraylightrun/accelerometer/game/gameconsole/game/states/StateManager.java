@@ -1,11 +1,14 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuStateImpl;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.evo.MenuStateImplEvo;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,21 +17,20 @@ public class StateManager {
     private Game game;
 
     private NewOrContinueState newOrContinueState;
-    private IntroState introState;
+    private TextboxState textboxState;
     private GameState gameState;
     private MenuStateImpl menuState;
-    private TextboxState textboxState;
 
     private List<State> stateStack;
 
     public StateManager() {
         newOrContinueState = new NewOrContinueState();
-        introState = new IntroState();
+        textboxState = new TextboxState();
         gameState = new GameState();
 
         stateStack = new ArrayList<State>();
         stateStack.add(gameState);
-        stateStack.add(introState);
+        stateStack.add(textboxState);
         stateStack.add(newOrContinueState);
     }
 
@@ -95,11 +97,9 @@ public class StateManager {
         getCurrentState().enter(null);
     }
 
-    public void popTextboxState() {
-        pop();
-    }
-
-    public void pushTextboxState(String text, float x, float y) {
+    public void pushTextboxState(Bitmap imageForDialogue, String textToShow,
+                                 TypeWriterDialogFragment.DismissListener dismissListener,
+                                 TypeWriterTextView.TextCompletionListener textCompletionListener) {
         getCurrentState().exit();
 
         if (textboxState == null) {
@@ -109,11 +109,15 @@ public class StateManager {
 
         stateStack.add(textboxState);
 
-        Object[] args = {text, x, y};
+        Object[] args = {imageForDialogue,
+                textToShow,
+                dismissListener,
+                textCompletionListener
+        };
         textboxState.enter(args);
     }
 
-    public IntroState getIntroState() {
-        return introState;
+    public TextboxState getTextboxState() {
+        return textboxState;
     }
 }

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
@@ -178,24 +177,32 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
+        // TODO: seedShopOwnerQuest NEVER given/started anywhere.
         boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getQuestLabel());
         TypeWriterTextView.TextCompletionListener textCompletionListener;
         if (alreadyHaveQuest) {
+            Log.d(TAG, "alreadyHaveQuest");
+
             textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
                 @Override
                 public void onAnimationFinish() {
-                    Log.e(TAG, "alreadyHaveQuest");
-                    // TODO:
+                    Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
+
+                    game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
                 }
             };
         } else {
+            Log.d(TAG, "!alreadyHaveQuest");
+
             textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
                 @Override
                 public void onAnimationFinish() {
-                    Log.e(TAG, "!alreadyHaveQuest");
+                    Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
 
                     if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
                         Log.e(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+
+                        game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
 
                         boolean wasQuestAcceptedRunOne =
                                 Player.getInstance().getQuestManager().addQuest(
@@ -287,20 +294,11 @@ public class SeedShopDialogFragment extends DialogFragment {
             messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
         }
 
-        TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                100L, image, messageGreeting,
-                new TypeWriterDialogFragment.DismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        Log.e(TAG, "onDismiss(): seed_shop_dialogue00");
-
-                    }
-                }, textCompletionListener
-        );
-
-        game.getTextboxListener().showTextbox(
-                typeWriterDialogFragment
-        );
+        // TODO: 2025_10_31 commander IntroState to activate textbox.
+        game.getStateManager().pushTextboxState(image,
+                messageGreeting,
+                null,
+                textCompletionListener);
     }
 
     @Override

@@ -23,8 +23,6 @@ public class AIDialogue02
     private LabScene labScene;
     private Bitmap portraitOfSpeaker;
 
-    private TypeWriterDialogFragment dialogFragmentAIDialogue02;
-
     private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
     private Quest robotDialogQuest00;
 
@@ -44,37 +42,37 @@ public class AIDialogue02
 
         String[] messages = resources.getStringArray(R.array.clippit_dialogue_array);
         String message = messages[2];
+        TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.e(TAG, "onDismiss()");
+            }
+        };
+        TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onAnimationFinish()");
 
-        dialogFragmentAIDialogue02 =
-                TypeWriterDialogFragment.newInstance(100L, portraitOfSpeaker,
-                        message,
-                        new TypeWriterDialogFragment.DismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                Log.e(TAG, "onDismiss()");
-                            }
-                        }, new TypeWriterTextView.TextCompletionListener() {
-                            @Override
-                            public void onAnimationFinish() {
-                                Log.e(TAG, "onAnimationFinish()");
+                game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
 
-                                // TODO: start/give third quest.
-                                boolean wasQuestAccepted =
-                                        Player.getInstance().getQuestManager().addQuest(
-                                                robotDialogQuest00
-                                        );
+                // TODO: start/give third quest.
+                boolean wasQuestAccepted =
+                        Player.getInstance().getQuestManager().addQuest(
+                                robotDialogQuest00
+                        );
 
-                                if (wasQuestAccepted) {
-                                    Log.e(TAG, "wasQuestAccepted");
-                                    robotDialogQuest00.dispenseStartingItems();
-                                } else {
-                                    Log.e(TAG, "!wasQuestAccepted");
-                                }
-                            }
-                        });
+                if (wasQuestAccepted) {
+                    Log.e(TAG, "wasQuestAccepted");
+                    robotDialogQuest00.dispenseStartingItems();
+                } else {
+                    Log.e(TAG, "!wasQuestAccepted");
+                }
+            }
+        };
 
-        game.getTextboxListener().showTextbox(
-                dialogFragmentAIDialogue02
-        );
+        game.getStateManager().pushTextboxState(portraitOfSpeaker,
+                message,
+                dismissListener,
+                textCompletionListener);
     }
 }

@@ -87,8 +87,6 @@ public class SceneFarm extends Scene {
     private Quest robotDialogQuest00;
     private DialogueStateManager dialogueStateManager;
     private boolean firstTimeEquippingRobotReprogrammer4000 = true;
-    private boolean inTutorialEquipRobotReprogrammer4000 = false;
-    private boolean inTutorialUseRobotReprogrammer4000 = false;
 
     public boolean isFirstTimeEquippingRobotReprogrammer4000() {
         return firstTimeEquippingRobotReprogrammer4000;
@@ -96,22 +94,6 @@ public class SceneFarm extends Scene {
 
     public void setFirstTimeEquippingRobotReprogrammer4000(boolean firstTimeEquippingRobotReprogrammer4000) {
         this.firstTimeEquippingRobotReprogrammer4000 = firstTimeEquippingRobotReprogrammer4000;
-    }
-
-    public boolean isInTutorialEquipRobotReprogrammer4000() {
-        return inTutorialEquipRobotReprogrammer4000;
-    }
-
-    public void setInTutorialEquipRobotReprogrammer4000(boolean inTutorialEquipRobotReprogrammer4000) {
-        this.inTutorialEquipRobotReprogrammer4000 = inTutorialEquipRobotReprogrammer4000;
-    }
-
-    public boolean isInTutorialUseRobotReprogrammer4000() {
-        return inTutorialUseRobotReprogrammer4000;
-    }
-
-    public void setInTutorialUseRobotReprogrammer4000(boolean inTutorialUseRobotReprogrammer4000) {
-        this.inTutorialUseRobotReprogrammer4000 = inTutorialUseRobotReprogrammer4000;
     }
 
     private SceneFarm() {
@@ -748,14 +730,6 @@ public class SceneFarm extends Scene {
 
         if (inDialogueWithClippitState) {
             inDialogueWithClippitState = false;
-
-            game.getTextboxListener().showStatsDisplayer();
-        } else if (inTutorialEquipRobotReprogrammer4000) {
-            inTutorialEquipRobotReprogrammer4000 = false;
-
-            game.getTextboxListener().showStatsDisplayer();
-        } else if (inTutorialUseRobotReprogrammer4000) {
-            inTutorialUseRobotReprogrammer4000 = false;
 
             game.getTextboxListener().showStatsDisplayer();
         } else if (inSeedShopState) {

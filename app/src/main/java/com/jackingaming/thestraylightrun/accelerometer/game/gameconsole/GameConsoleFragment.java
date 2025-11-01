@@ -443,25 +443,25 @@ public class GameConsoleFragment extends Fragment
 
             Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
             String text = getResources().getString(R.string.equip_robot_reprogrammer_4000);
-            TypeWriterDialogFragment typeWriterDialogFragment = TypeWriterDialogFragment.newInstance(
-                    50L, portrait, text,
-                    new TypeWriterDialogFragment.DismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onDismiss() )");
-                        }
-                    }, new TypeWriterTextView.TextCompletionListener() {
-                        @Override
-                        public void onAnimationFinish() {
-                            Log.e(TAG, "TextboxListener.showTextbox( TypeWriterDialogFragment.onAnimationFinish() )");
-                        }
-                    }
-            );
+            TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+                @Override
+                public void onDismiss() {
+                    Log.e(TAG, "checkIfFirstTimeEquippingRobotReprogrammer4000() TypeWriterDialogFragment.DismissListener.onDismiss()");
+                }
+            };
+            TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                @Override
+                public void onAnimationFinish() {
+                    Log.e(TAG, "checkIfFirstTimeEquippingRobotReprogrammer4000() TypeWriterDialogFragment.TextCompletionListener.onAnimationFinish()");
 
-            SceneFarm.getInstance().setInTutorialEquipRobotReprogrammer4000(
-                    true
-            );
-            game.getTextboxListener().showTextbox(typeWriterDialogFragment);
+                    game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                }
+            };
+
+            game.getStateManager().pushTextboxState(portrait,
+                    text,
+                    dismissListener,
+                    textCompletionListener);
         } else {
             Log.d(TAG, "NOT SceneFarm.getInstance().isFirstTimeEquippingRobotReprogrammer4000()");
 
