@@ -133,7 +133,7 @@ public class PoohAnimationManager
         dippyRight[0] = Bitmap.createBitmap(spriteSheetDippyRight, 35, 397, 250, 190);
         dippyRight[1] = Bitmap.createBitmap(spriteSheetDippyRight, 290, 397, 227, 190);
         dippyRight[2] = Bitmap.createBitmap(spriteSheetDippyRight, 518, 397, 232, 190);
-        dippyRight[3] = Bitmap.createBitmap(spriteSheetDippyRight, 751, 397, 235, 190);
+        dippyRight[3] = Bitmap.createBitmap(spriteSheetDippyRight, 756, 397, 235, 190);
 
 //        Bitmap[] poohRight = new Bitmap[11];
 //        poohRight[0] = Bitmap.createBitmap(spriteSheet, 20, 1217, 24, 34);

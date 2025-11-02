@@ -109,10 +109,10 @@ public class EelAnimationManager
                     Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218)
             );
             framesPatrolLeft[1] = Animation.flipImageHorizontally(
-                    Bitmap.createBitmap(spriteSheet, 371, 448, 311, 208)
+                    Bitmap.createBitmap(spriteSheet, 371, 448, 321, 208)
             );
             framesPatrolLeft[2] = Animation.flipImageHorizontally(
-                    Bitmap.createBitmap(spriteSheet, 682, 460, 341, 195)
+                    Bitmap.createBitmap(spriteSheet, 706, 460, 318, 195)
             );
         }
         animationPatrolLeft = new Animation(framesPatrolLeft, ANIMATION_SPEED_DEFAULT);
@@ -121,8 +121,8 @@ public class EelAnimationManager
             Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_caterpillar_right);
             framesPatrolRight = new Bitmap[3];
             framesPatrolRight[0] = Bitmap.createBitmap(spriteSheet, 0, 439, 340, 218);
-            framesPatrolRight[1] = Bitmap.createBitmap(spriteSheet, 371, 448, 311, 208);
-            framesPatrolRight[2] = Bitmap.createBitmap(spriteSheet, 682, 460, 341, 195);
+            framesPatrolRight[1] = Bitmap.createBitmap(spriteSheet, 371, 448, 321, 208);
+            framesPatrolRight[2] = Bitmap.createBitmap(spriteSheet, 706, 460, 318, 195);
         }
         animationPatrolRight = new Animation(framesPatrolRight, ANIMATION_SPEED_DEFAULT);
 
