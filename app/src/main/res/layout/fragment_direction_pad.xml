@@ -5,7 +5,7 @@
     android:id="@+id/constraintlayout_direction_pad_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
+    android:padding="4dp"
     tools:context=".accelerometer.game.gameconsole.gamepad.directionpad.DirectionPadFragment">
 
     <ImageView

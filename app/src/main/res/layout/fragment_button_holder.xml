@@ -15,7 +15,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginRight="12dp"
         android:layout_marginBottom="12dp"
-        app:srcCompat="@drawable/btn_star_on_normal_holo_light" />
+        app:srcCompat="@drawable/btn_star_on_normal_holo_light_custom_color" />
 
     <TextView
         android:id="@+id/tv_quantity"

@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class StatsDisplayerFragment extends Fragment
         implements Serializable {
     public static final String TAG = StatsDisplayerFragment.class.getSimpleName();
-    public static final int IMAGE_DEFAULT = R.drawable.btn_star_on_normal_holo_light;
+    public static final int IMAGE_DEFAULT = R.drawable.btn_star_on_normal_holo_light_custom_color;
     public static final String TAG_CURRENCY_ICON = "currencyIcon";
     public static final String TAG_TIME_ICON = "timeIcon";
     public static final String TAG_QUEST_ICON = "questIcon";
@@ -186,7 +186,7 @@ public class StatsDisplayerFragment extends Fragment
     }
 
     private void initImageCalendar(Resources resources) {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(resources, R.drawable.d_pad);
+        Bitmap spriteSheet = BitmapFactory.decodeResource(resources, R.drawable.d_pad_custom_color);
         calendar = Bitmap.createBitmap(spriteSheet, 17, 320, 20, 20);
     }
 

@@ -5,10 +5,7 @@
     android:id="@+id/constraintlayout_button_pad_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp"
-    android:paddingTop="20dp"
-    android:paddingRight="10dp"
-    android:paddingBottom="20dp"
+    android:padding="4dp"
     tools:context=".accelerometer.game.gameconsole.gamepad.buttonpad.ButtonPadFragment">
 
     <ImageView

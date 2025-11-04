@@ -58,7 +58,7 @@ public class ButtonPadFragment extends Fragment {
         imageViewButtonA = view.findViewById(R.id.imageview_button_a_button_pad_fragment);
         imageViewButtonB = view.findViewById(R.id.imageview_button_b_button_pad_fragment);
 
-        Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.d_pad);
+        Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.d_pad_custom_color);
         Bitmap imageButtonMenu = Bitmap.createBitmap(source, 172, 375, 136, 52);
         Bitmap imageButtonA = Bitmap.createBitmap(source, 172, 435, 64, 52);
         Bitmap imageButtonB = Bitmap.createBitmap(source, 244, 435, 64, 52);

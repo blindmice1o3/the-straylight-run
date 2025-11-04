@@ -72,7 +72,7 @@ public class DirectionPadFragment extends Fragment {
         imageViewBottomCenter = view.findViewById(R.id.imageview_bottomcenter_direction_pad_fragment);
         imageViewBottomRight = view.findViewById(R.id.imageview_bottomright_direction_pad_fragment);
 
-        Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.d_pad);
+        Bitmap source = BitmapFactory.decodeResource(getResources(), R.drawable.d_pad_custom_color);
         Bitmap imageTopleft = Bitmap.createBitmap(source, 22, 365, 40, 40);
         Bitmap imageTopCenter = Bitmap.createBitmap(source, 62, 365, 52, 40);
         Bitmap imageTopRight = Bitmap.createBitmap(source, 114, 365, 40, 40);
