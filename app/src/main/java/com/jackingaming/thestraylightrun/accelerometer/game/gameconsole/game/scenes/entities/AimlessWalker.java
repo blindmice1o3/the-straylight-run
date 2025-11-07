@@ -31,6 +31,7 @@ public class AimlessWalker extends Creature {
     private Type type;
     private State state;
     private Random random;
+    private int ageInDays;
 
     public AimlessWalker(Type type, int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);

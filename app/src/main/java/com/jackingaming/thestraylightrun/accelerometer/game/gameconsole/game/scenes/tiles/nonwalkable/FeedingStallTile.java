@@ -22,8 +22,7 @@ public class FeedingStallTile extends Tile {
     public void startNewDay() {
         Log.e(TAG, "startNewDay()");
 
-        occupied = false;
-        image = imageDefaultBackground;
+        resetFodder();
     }
 
     @Override
@@ -39,8 +38,8 @@ public class FeedingStallTile extends Tile {
         Bitmap imageFodder = fodder.getImage();
         Bitmap tileSpriteAndFodder = Bitmap.createBitmap(imageDefaultBackground.getWidth(), imageDefaultBackground.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(tileSpriteAndFodder);
-        Rect srcRect = new Rect(0, 0, imageFodder.getWidth(), imageFodder.getWidth());
-        Rect dstRect = new Rect(0, 0, imageDefaultBackground.getWidth(), imageDefaultBackground.getHeight());
+        Rect srcRect = new Rect(0, 0, imageFodder.getWidth(), imageFodder.getHeight());
+        Rect dstRect = new Rect(0, 0, tileSpriteAndFodder.getWidth(), tileSpriteAndFodder.getHeight());
 
         canvas.drawBitmap(imageDefaultBackground, 0, 0, null);
         canvas.drawBitmap(imageFodder, srcRect, dstRect, null);

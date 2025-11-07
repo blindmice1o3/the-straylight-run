@@ -19,6 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -27,6 +28,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.CheeseMakerTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
@@ -46,6 +48,8 @@ public class SceneCowBarn extends Scene {
 
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
     private List<FeedingStallTile> feedingStallTiles;
+
+    private CheeseMakerTile cheeseMakerTile;
 
     private SceneCowBarn() {
         super();
@@ -200,7 +204,13 @@ public class SceneCowBarn extends Scene {
                     } else {
                         Log.d(TAG, "tileCurrentlyFacing != null");
 
-                        if (tileCurrentlyFacing instanceof FeedingStallTile) {
+                        if (tileCurrentlyFacing instanceof CheeseMakerTile) {
+                            if (player.getCarryable() instanceof Milk) {
+                                // TODO: CheeseMakerTile
+                            } else {
+                                Log.e(TAG, "player.getCarryable() NOT instanceof Milk");
+                            }
+                        } else if (tileCurrentlyFacing instanceof FeedingStallTile) {
                             if (player.getCarryable() instanceof Fodder) {
                                 if (!((FeedingStallTile) tileCurrentlyFacing).isOccupied()) {
                                     ((FeedingStallTile) tileCurrentlyFacing).acceptFodder(
@@ -347,8 +357,10 @@ public class SceneCowBarn extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder
-                if (itemCurrentlyFacing instanceof Fodder) {
+                // check for fodder, egg, and milk
+                if (itemCurrentlyFacing instanceof Fodder ||
+                        itemCurrentlyFacing instanceof Egg ||
+                        itemCurrentlyFacing instanceof Milk) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)
@@ -402,11 +414,15 @@ public class SceneCowBarn extends Scene {
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //(CabbageFermenterTile)
+                //(CheeseMakerTile)
                 else if (tile.getId().equals("g")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    cheeseMakerTile = new CheeseMakerTile(CheeseMakerTile.TAG);
+                    cheeseMakerTile.init(game, x, y, tileSprite);
+                    cheeseMakerTile.setWalkable(false);
+
+                    cowBarn[y][x] = cheeseMakerTile;
                 }
                 //FodderStashTile
                 else if (tile.getId().equals("h")) {

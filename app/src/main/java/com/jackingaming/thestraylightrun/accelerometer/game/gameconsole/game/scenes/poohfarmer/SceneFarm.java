@@ -679,8 +679,10 @@ public class SceneFarm extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder
-                if (itemCurrentlyFacing instanceof Fodder) {
+                // check for fodder, egg, and milk
+                if (itemCurrentlyFacing instanceof Fodder ||
+                        itemCurrentlyFacing instanceof Egg ||
+                        itemCurrentlyFacing instanceof Milk) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)

@@ -23,10 +23,12 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManagerLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.EggIncubatorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
@@ -49,6 +51,8 @@ public class SceneChickenCoop extends Scene {
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
     private List<FeedingStallTile> feedingStallTiles;
 
+    private List<EggIncubatorTile> eggIncubatorTiles;
+
     private SceneChickenCoop() {
         super();
         List<Entity> entitiesForChickenCoop = createEntitiesForChickenCoop();
@@ -64,6 +68,7 @@ public class SceneChickenCoop extends Scene {
         };
 
         feedingStallTiles = new ArrayList<>();
+        eggIncubatorTiles = new ArrayList<>();
     }
 
     public static SceneChickenCoop getInstance() {
@@ -74,7 +79,7 @@ public class SceneChickenCoop extends Scene {
     }
 
     public void startNewDay() {
-        Log.e(TAG, "startNewDay()");
+        Log.d(TAG, "startNewDay()");
 
         int numberOfFodderInFeedingStall = 0;
         for (FeedingStallTile feedingStallTile : feedingStallTiles) {
@@ -109,6 +114,24 @@ public class SceneChickenCoop extends Scene {
         else {
             for (int i = 0; i < numberOfFodderInFeedingStall; i++) {
                 generateEggToRandomWalkableTile();
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        if (!EggIncubatorTile.isAvailableToIncubate()) {
+            AimlessWalker chickJustHatched = EggIncubatorTile.startNewDay(
+                    tileManager,
+                    eggIncubatorTiles.get(0),
+                    eggIncubatorTiles.get(1)
+            );
+            if (chickJustHatched != null) {
+                Log.d(TAG, "chickJustHatched != null");
+
+                chickJustHatched.changeToWalk();
+                entityManager.addEntity(chickJustHatched);
+            } else {
+                Log.e(TAG, "chickJustHatched == null");
             }
         }
     }
@@ -202,7 +225,26 @@ public class SceneChickenCoop extends Scene {
                     } else {
                         Log.d(TAG, "tileCurrentlyFacing != null");
 
-                        if (tileCurrentlyFacing instanceof FeedingStallTile) {
+                        if (tileCurrentlyFacing instanceof EggIncubatorTile) {
+                            if (player.getCarryable() instanceof Egg) {
+                                if (EggIncubatorTile.isAvailableToIncubate()) {
+                                    Log.d(TAG, "EggIncubatorTile.isAvailableToIncubate()");
+
+                                    EggIncubatorTile eggIncubatorTile = (EggIncubatorTile) tileCurrentlyFacing;
+                                    Egg eggToIncubateIntoChicken = (Egg) player.getCarryable();
+
+                                    ////////////////////////////////////////////////////////////////
+                                    eggIncubatorTile.startIncubatingEggIntoChicken(eggToIncubateIntoChicken,
+                                            eggIncubatorTiles.get(0), eggIncubatorTiles.get(1));
+                                    player.removeCarryable();
+                                    ////////////////////////////////////////////////////////////////
+                                } else {
+                                    Log.e(TAG, "!EggIncubatorTile.isAvailableToIncubate()");
+                                }
+                            } else {
+                                Log.e(TAG, "player.getCarryable() NOT instanceof Egg");
+                            }
+                        } else if (tileCurrentlyFacing instanceof FeedingStallTile) {
                             if (player.getCarryable() instanceof Fodder) {
                                 if (!((FeedingStallTile) tileCurrentlyFacing).isOccupied()) {
                                     ((FeedingStallTile) tileCurrentlyFacing).acceptFodder(
@@ -224,7 +266,7 @@ public class SceneChickenCoop extends Scene {
                                 player.placeInShippingBin();
                                 ////////////////////////////
                             } else {
-                                Log.d(TAG, "player.getCarryable() NOT instanceof Sellable");
+                                Log.e(TAG, "player.getCarryable() NOT instanceof Sellable");
                             }
                         } else if (tileCurrentlyFacing.isWalkable()) {
                             Log.d(TAG, "tileCurrentlyFacing NOT instanceof ShippingBinTile and tileCurrentlyFacing.isWalkable()");
@@ -349,8 +391,10 @@ public class SceneChickenCoop extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder
-                if (itemCurrentlyFacing instanceof Fodder) {
+                // check for fodder, egg, and milk
+                if (itemCurrentlyFacing instanceof Fodder ||
+                        itemCurrentlyFacing instanceof Egg ||
+                        itemCurrentlyFacing instanceof Milk) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)
@@ -407,8 +451,14 @@ public class SceneChickenCoop extends Scene {
                 //(EggIncubatorTile)
                 else if (tile.getId().equals("g")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    EggIncubatorTile eggIncubatorTile = new EggIncubatorTile(EggIncubatorTile.TAG);
+                    eggIncubatorTile.init(game, x, y, tileSprite);
+                    eggIncubatorTile.setWalkable(false);
+
+                    chickenCoop[y][x] = eggIncubatorTile;
+
+                    eggIncubatorTiles.add(eggIncubatorTile);
                 }
                 //FodderStashTile
                 else if (tile.getId().equals("h")) {
