@@ -36,6 +36,7 @@
 
     <!-- implementations of Item -->
     <string name="text_bug_catching_net">Bug Catching Net</string>
+    <string name="text_cheese">Cheese</string>
     <string name="text_egg">Egg</string>
     <string name="text_fodder">Fodder</string>
     <string name="text_growing_pot">Growing Pot</string>

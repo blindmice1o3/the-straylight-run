@@ -13,7 +13,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 public class EggIncubatorTile extends Tile {
     public static final String TAG = EggIncubatorTile.class.getSimpleName();
-    public static final int DAYS_INCUBATED_REQUIRED_TO_HATCH = 3;
+    public static final int DAYS_REQUIRED_TO_HATCH = 3;
 
     private static int daysIncubated;
     private static boolean availableToIncubate = true;
@@ -41,8 +41,8 @@ public class EggIncubatorTile extends Tile {
 
             daysIncubated++;
 
-            if (daysIncubated >= DAYS_INCUBATED_REQUIRED_TO_HATCH) {
-                return hatchEggToIncubateIntoChicken(
+            if (daysIncubated >= DAYS_REQUIRED_TO_HATCH) {
+                return hatchEggIntoChicken(
                         tileManager,
                         tileTopLeft,
                         tileTopRight
@@ -55,9 +55,9 @@ public class EggIncubatorTile extends Tile {
         return null;
     }
 
-    private static AimlessWalker hatchEggToIncubateIntoChicken(TileManager tileManager,
-                                                               EggIncubatorTile tileTopLeft,
-                                                               EggIncubatorTile tileTopRight) {
+    private static AimlessWalker hatchEggIntoChicken(TileManager tileManager,
+                                                     EggIncubatorTile tileTopLeft,
+                                                     EggIncubatorTile tileTopRight) {
         Tile[][] tiles = tileManager.getTiles();
         boolean lookingForRandomWalkableTile = true;
 
@@ -122,15 +122,11 @@ public class EggIncubatorTile extends Tile {
         tileTopRight.setImage(tileTopRightYesEgg);
     }
 
-    public Bitmap getImageWithoutEgg() {
-        return imageWithoutEgg;
-    }
-
-    public void setImageWithoutEgg(Bitmap imageWithoutEgg) {
-        this.imageWithoutEgg = imageWithoutEgg;
-    }
-
     public static boolean isAvailableToIncubate() {
         return availableToIncubate;
+    }
+
+    public Bitmap getImageWithoutEgg() {
+        return imageWithoutEgg;
     }
 }

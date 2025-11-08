@@ -19,6 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Cheese;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
@@ -43,13 +44,15 @@ public class SceneCowBarn extends Scene {
 
     public static final int X_SPAWN_INDEX_DEFAULT = 7;
     public static final int Y_SPAWN_INDEX_DEFAULT = 12;
+    private static final int TILE_WIDTH = 64;
+    private static final int TILE_HEIGHT = 64;
 
     private static SceneCowBarn uniqueInstance;
 
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
     private List<FeedingStallTile> feedingStallTiles;
 
-    private CheeseMakerTile cheeseMakerTile;
+    private List<CheeseMakerTile> cheeseMakerTiles;
 
     private SceneCowBarn() {
         super();
@@ -66,6 +69,7 @@ public class SceneCowBarn extends Scene {
         };
 
         feedingStallTiles = new ArrayList<>();
+        cheeseMakerTiles = new ArrayList<>();
     }
 
     public static SceneCowBarn getInstance() {
@@ -111,6 +115,23 @@ public class SceneCowBarn extends Scene {
         else {
             for (int i = 0; i < numberOfFodderInFeedingStall; i++) {
                 generateMilkToRandomWalkableTile();
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        if (!CheeseMakerTile.isAvailableToProcess()) {
+            Cheese cheeseJustProcessed = CheeseMakerTile.startNewDay(
+                    tileManager,
+                    cheeseMakerTiles.get(0),
+                    cheeseMakerTiles.get(1)
+            );
+            if (cheeseJustProcessed != null) {
+                Log.d(TAG, "cheeseJustProcessed != null");
+
+                itemManager.addItem(cheeseJustProcessed);
+            } else {
+                Log.e(TAG, "cheeseJustProcessed == null");
             }
         }
     }
@@ -206,7 +227,20 @@ public class SceneCowBarn extends Scene {
 
                         if (tileCurrentlyFacing instanceof CheeseMakerTile) {
                             if (player.getCarryable() instanceof Milk) {
-                                // TODO: CheeseMakerTile
+                                if (CheeseMakerTile.isAvailableToProcess()) {
+                                    Log.d(TAG, "CheeseMakerTile.isAvailableToProcess()");
+
+                                    CheeseMakerTile cheeseMakerTile = (CheeseMakerTile) tileCurrentlyFacing;
+                                    Milk milkToProcessIntoCheese = (Milk) player.getCarryable();
+
+                                    ////////////////////////////////////////////////////////////////
+                                    cheeseMakerTile.startProcessingMilkIntoCheese(milkToProcessIntoCheese,
+                                            cheeseMakerTiles.get(0), cheeseMakerTiles.get(1));
+                                    player.removeCarryable();
+                                    ////////////////////////////////////////////////////////////////
+                                } else {
+                                    Log.e(TAG, "!CheeseMakerTile.isAvailableToProcess()");
+                                }
                             } else {
                                 Log.e(TAG, "player.getCarryable() NOT instanceof Milk");
                             }
@@ -357,10 +391,11 @@ public class SceneCowBarn extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder, egg, and milk
+                // check for fodder, egg, milk, and cheese
                 if (itemCurrentlyFacing instanceof Fodder ||
                         itemCurrentlyFacing instanceof Egg ||
-                        itemCurrentlyFacing instanceof Milk) {
+                        itemCurrentlyFacing instanceof Milk ||
+                        itemCurrentlyFacing instanceof Cheese) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)
@@ -381,20 +416,20 @@ public class SceneCowBarn extends Scene {
     }
 
     private Tile[][] createAndInitTilesForCowBarn(Game game) {
-        String cowBarnLoadedAsString = TileManagerLoader.loadFileAsString(game.getContext().getResources(), R.raw.tile_cow_barn);
+        String cowBarnLoadedAsString = TileManagerLoader.loadFileAsString(
+                game.getContext().getResources(), R.raw.tile_cow_barn
+        );
         Tile[][] cowBarn = TileManagerLoader.convertStringToTiles(cowBarnLoadedAsString);
         Bitmap imageCowBarn = cropImageCowBarn(game.getContext().getResources());
 
         // Initialize the tiles (provide image and define walkable)
-        // Assign image and init() all the tiles in cowBarn.
-        int tileWidth = 64;
-        int tileHeight = 64;
+        // Assign image and init() all the tiles in cow barn.
         for (int y = 0; y < cowBarn.length; y++) {
             for (int x = 0; x < cowBarn[0].length; x++) {
-                int xInPixel = x * tileWidth;
-                int yInPixel = y * tileHeight;
-                int widthInPixel = tileWidth;
-                int heightInPixel = tileHeight;
+                int xInPixel = x * TILE_WIDTH;
+                int yInPixel = y * TILE_HEIGHT;
+                int widthInPixel = TILE_WIDTH;
+                int heightInPixel = TILE_HEIGHT;
 
                 Tile tile = cowBarn[y][x];
                 //(GenericWalkableTile)
@@ -414,15 +449,17 @@ public class SceneCowBarn extends Scene {
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //(CheeseMakerTile)
+                //CheeseMakerTile
                 else if (tile.getId().equals("g")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
-                    cheeseMakerTile = new CheeseMakerTile(CheeseMakerTile.TAG);
+                    CheeseMakerTile cheeseMakerTile = new CheeseMakerTile(CheeseMakerTile.TAG);
                     cheeseMakerTile.init(game, x, y, tileSprite);
                     cheeseMakerTile.setWalkable(false);
 
                     cowBarn[y][x] = cheeseMakerTile;
+
+                    cheeseMakerTiles.add(cheeseMakerTile);
                 }
                 //FodderStashTile
                 else if (tile.getId().equals("h")) {

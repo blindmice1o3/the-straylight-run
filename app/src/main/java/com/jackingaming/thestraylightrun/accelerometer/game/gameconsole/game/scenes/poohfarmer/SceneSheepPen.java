@@ -18,6 +18,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Cheese;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
@@ -264,10 +265,11 @@ public class SceneSheepPen extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder, egg, and milk
+                // check for fodder, egg, milk, and cheese
                 if (itemCurrentlyFacing instanceof Fodder ||
                         itemCurrentlyFacing instanceof Egg ||
-                        itemCurrentlyFacing instanceof Milk) {
+                        itemCurrentlyFacing instanceof Milk ||
+                        itemCurrentlyFacing instanceof Cheese) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)

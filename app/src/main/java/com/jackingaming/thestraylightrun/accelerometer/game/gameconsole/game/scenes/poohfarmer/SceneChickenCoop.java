@@ -19,6 +19,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Cheese;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
@@ -391,10 +392,11 @@ public class SceneChickenCoop extends Scene {
             } else {
                 Log.d(TAG, "itemCurrentlyFacing != null");
 
-                // check for fodder, egg, and milk
+                // check for fodder, egg, milk, and cheese
                 if (itemCurrentlyFacing instanceof Fodder ||
                         itemCurrentlyFacing instanceof Egg ||
-                        itemCurrentlyFacing instanceof Milk) {
+                        itemCurrentlyFacing instanceof Milk ||
+                        itemCurrentlyFacing instanceof Cheese) {
                     player.pickUp(itemCurrentlyFacing);
                 }
                 // everything else goes into backpack (default response)
@@ -422,7 +424,7 @@ public class SceneChickenCoop extends Scene {
         Bitmap imageChickenCoop = cropImageChickenCoop(game.getContext().getResources());
 
         // Initialize the tiles (provide image and define walkable)
-        // Assign image and init() all the tiles in chickenCoop.
+        // Assign image and init() all the tiles in chicken coop.
         for (int y = 0; y < chickenCoop.length; y++) {
             for (int x = 0; x < chickenCoop[0].length; x++) {
                 int xInPixel = x * TILE_WIDTH;
@@ -448,7 +450,7 @@ public class SceneChickenCoop extends Scene {
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
-                //(EggIncubatorTile)
+                //EggIncubatorTile
                 else if (tile.getId().equals("g")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
