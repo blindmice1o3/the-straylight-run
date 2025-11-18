@@ -48,6 +48,11 @@ public class HomePlayerRoom01Scene extends Scene {
     private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02;
     private static final int X_TRANSFER_POINT_INDEX_WORLD = X_SPAWN_INDEX_PLAYER_WORLD;
     private static final int Y_TRANSFER_POINT_INDEX_WORLD = Y_SPAWN_INDEX_PLAYER_WORLD + 1;
+    private static final String VIDEO_RUN_ONE = "vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_TWO = "vid_20250913_161759550_run_two_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_THREE = "vid_20250917_180111542_run_three_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_FOUR = "vid_20250918_173333392_run_four_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_FIVE = "pxl_20250429_193429506";
 
     private static HomePlayerRoom01Scene instance;
 
@@ -255,19 +260,19 @@ public class HomePlayerRoom01Scene extends Scene {
                             String videoByRun = null;
                             switch (gameListener.getRun()) {
                                 case ONE:
-                                    videoByRun = "vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90";
+                                    videoByRun = VIDEO_RUN_ONE;
                                     break;
                                 case TWO:
-                                    videoByRun = "vid_20250913_161759550_run_two_post_compressed_rotated_90";
+                                    videoByRun = VIDEO_RUN_TWO;
                                     break;
                                 case THREE:
-                                    videoByRun = "vid_20250917_180111542_run_three_post_compressed_rotated_90";
+                                    videoByRun = VIDEO_RUN_THREE;
                                     break;
                                 case FOUR:
-                                    videoByRun = "vid_20250918_173333392_run_four_post_compressed_rotated_90";
+                                    videoByRun = VIDEO_RUN_FOUR;
                                     break;
                                 case FIVE:
-                                    videoByRun = "pxl_20250429_193429506";
+                                    videoByRun = VIDEO_RUN_FIVE;
                                     break;
                             }
 

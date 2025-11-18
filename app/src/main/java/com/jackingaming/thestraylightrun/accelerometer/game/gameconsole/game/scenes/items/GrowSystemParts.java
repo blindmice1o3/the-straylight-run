@@ -17,17 +17,17 @@ public class GrowSystemParts extends Item {
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_grow_system_parts);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_grow_system_parts);
         if (id == 1) {
             image = Bitmap.createBitmap(spriteSheet, 76, 67, 250, 383);

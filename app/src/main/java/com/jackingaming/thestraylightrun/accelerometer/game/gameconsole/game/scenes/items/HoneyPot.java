@@ -9,17 +9,17 @@ public class HoneyPot extends Item {
     private static final float PRICE_DEFAULT = 1f;
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_honey_pot);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
         image = Bitmap.createBitmap(spriteSheet, 318, 1556, 38, 37);
     }

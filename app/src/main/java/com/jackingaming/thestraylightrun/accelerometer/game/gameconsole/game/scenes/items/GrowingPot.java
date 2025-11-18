@@ -18,17 +18,17 @@ public class GrowingPot extends Item
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_growing_pot);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         image = GrowableIndoorTile.cropGrowableTableTile(game.getContext().getResources(),
                 GrowableTile.State.TILLED, false);
     }

@@ -11,17 +11,17 @@ public class Cheese extends Item
     private static final float PRICE_DEFAULT = 420f;
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_cheese);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_entities_carryable_and_bubbled);
         image = Bitmap.createBitmap(spriteSheet, 351, 154, 104, 107);
     }

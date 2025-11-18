@@ -17,17 +17,17 @@ public class WateringCan extends Item
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_watering_can);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
         image = Bitmap.createBitmap(spriteSheet, 61, 381, 274, 236);
 //        image = Bitmap.createBitmap(spriteSheet, 60, 379, 277, 240);

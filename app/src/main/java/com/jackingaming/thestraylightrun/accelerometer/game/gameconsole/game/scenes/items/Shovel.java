@@ -17,17 +17,17 @@ public class Shovel extends Item
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_shovel);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_and_tiles);
         image = Bitmap.createBitmap(spriteSheet, 395, 363, 245, 254);
 //        image = Bitmap.createBitmap(spriteSheet, 393, 361, 249, 258);

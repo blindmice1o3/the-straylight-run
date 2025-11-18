@@ -17,17 +17,17 @@ public class RobotReprogrammer4000 extends Item
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_robot_reprogrammer_4000);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
         image = Bitmap.createBitmap(spriteSheet, 137, 103, 16, 16);
     }

@@ -18,17 +18,17 @@ public class PlantInspectioner200 extends Item
     }
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_plant_inspectioner_200);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_menu_find);
     }
 

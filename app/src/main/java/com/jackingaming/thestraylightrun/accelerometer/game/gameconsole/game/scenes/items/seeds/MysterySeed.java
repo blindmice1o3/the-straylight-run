@@ -1,0 +1,18 @@
+package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds;
+
+import com.jackingaming.thestraylightrun.R;
+
+public class MysterySeed extends Seed {
+    public static final String TAG = MysterySeed.class.getSimpleName();
+    private static final float PRICE_DEFAULT = 1f;
+
+    @Override
+    protected void initName() {
+        name = game.getContext().getString(R.string.text_seed_mystery);
+    }
+
+    @Override
+    protected void initPrice() {
+        price = PRICE_DEFAULT;
+    }
+}

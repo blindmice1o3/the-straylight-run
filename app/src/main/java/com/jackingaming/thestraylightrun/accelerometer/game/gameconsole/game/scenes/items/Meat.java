@@ -11,17 +11,17 @@ public class Meat extends Item
     private static final int REWARD_HEALTH = 2;
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_meat);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         image = Assets.meat;
     }
 

@@ -42,11 +42,11 @@ public abstract class Item
         initImage();
     }
 
-    abstract void initName();
+    protected abstract void initName();
 
-    abstract void initPrice();
+    protected abstract void initPrice();
 
-    abstract void initImage();
+    protected abstract void initImage();
 
     public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         if (image != null) {

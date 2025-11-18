@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
@@ -12,9 +11,10 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.Seed;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 
 import java.util.HashMap;
@@ -127,9 +127,7 @@ public class SeedShopOwnerQuest00
                 )
         );
         startingItems.put(MYSTERY_SEEDS,
-                new MysterySeed(
-                        new SeedGrowableTileCommand(null, MysterySeed.TAG)
-                )
+                new MysterySeed()
         );
 
         for (Item item : startingItems.values()) {
@@ -147,7 +145,7 @@ public class SeedShopOwnerQuest00
     public void dispenseStartingItems() {
         for (Item item : startingItems.values()) {
             Player.getInstance().receiveItem(item);
-            if (item instanceof MysterySeed) {
+            if (item instanceof Seed) {
                 Log.e(TAG, "mysterySeed GIVEN");
             }
         }

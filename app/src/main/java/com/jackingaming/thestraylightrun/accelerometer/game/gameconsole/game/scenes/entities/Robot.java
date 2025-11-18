@@ -37,7 +37,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.Seed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
@@ -105,7 +105,7 @@ public class Robot extends Creature {
         faceRightCommand = new FaceRightCommand(this);
         faceDownCommand = new FaceDownCommand(this);
         tillTileCommand = new TillGrowableTileCommand(null);
-        seedTileCommand = new SeedGrowableTileCommand(null, MysterySeed.TAG);
+        seedTileCommand = new SeedGrowableTileCommand(null, Seed.TAG);
         waterTileCommand = new WaterGrowableTileCommand(null);
         harvestTileCommand = new HarvestGrowableTileCommand(null, this);
         placeInShippingBinTileCommand = new PlaceInShippingBinTileCommand(null, this);

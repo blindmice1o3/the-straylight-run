@@ -32,7 +32,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenPlantDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.RemoveEntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
@@ -44,12 +43,27 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.PlantInspectioner200;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Scissors;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BananaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BitterMelonSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CarrotSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CornSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.EggplantSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GarlicSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GuavaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LemongrassSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LonganSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.OnionSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PapayaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PeanutSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.RadishSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.StrawberrySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.TomatoSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneChickenCoop;
@@ -282,10 +296,6 @@ public class Game {
                 new TillGrowableIndoorTileCommand(null)
         );
         growingPot.init(this);
-        Item mysterySeed = new MysterySeed(
-                new SeedGrowableTileCommand(null, MysterySeed.TAG)
-        );
-        mysterySeed.init(this);
         Item shovel = new Shovel(
                 new TillGrowableTileCommand(null)
         );
@@ -310,8 +320,39 @@ public class Game {
                 new RemoveEntityCommand(this, null)
         );
         scissors.init(this);
+        Item bananaSeed = new BananaSeed();
+        bananaSeed.init(this);
+        Item bitterMelonSeed = new BitterMelonSeed();
+        bitterMelonSeed.init(this);
+        Item carrotSeed = new CarrotSeed();
+        carrotSeed.init(this);
+        Item cornSeed = new CornSeed();
+        cornSeed.init(this);
+        Item eggplantSeed = new EggplantSeed();
+        eggplantSeed.init(this);
+        Item garlicSeed = new GarlicSeed();
+        garlicSeed.init(this);
+        Item guavaSeed = new GuavaSeed();
+        guavaSeed.init(this);
+        Item lemongrassSeed = new LemongrassSeed();
+        lemongrassSeed.init(this);
+        Item longanSeed = new LonganSeed();
+        longanSeed.init(this);
+        Item mysterySeed = new MysterySeed();
+        mysterySeed.init(this);
+        Item onionSeed = new OnionSeed();
+        onionSeed.init(this);
+        Item papayaSeed = new PapayaSeed();
+        papayaSeed.init(this);
+        Item peanutSeed = new PeanutSeed();
+        peanutSeed.init(this);
+        Item radishSeed = new RadishSeed();
+        radishSeed.init(this);
+        Item strawberrySeed = new StrawberrySeed();
+        strawberrySeed.init(this);
+        Item tomatoSeed = new TomatoSeed();
+        tomatoSeed.init(this);
 
-        addItemToBackpack(mysterySeed);
         addItemToBackpack(growingPot);
         addItemToBackpack(shovel);
         addItemToBackpack(wateringCan);
@@ -319,6 +360,22 @@ public class Game {
         addItemToBackpack(robotReprogrammer4000);
         addItemToBackpack(plantInspectioner200);
         addItemToBackpack(scissors);
+        addItemToBackpack(bananaSeed);
+        addItemToBackpack(bitterMelonSeed);
+        addItemToBackpack(carrotSeed);
+        addItemToBackpack(cornSeed);
+        addItemToBackpack(eggplantSeed);
+        addItemToBackpack(garlicSeed);
+        addItemToBackpack(guavaSeed);
+        addItemToBackpack(lemongrassSeed);
+        addItemToBackpack(longanSeed);
+        addItemToBackpack(mysterySeed);
+        addItemToBackpack(onionSeed);
+        addItemToBackpack(papayaSeed);
+        addItemToBackpack(peanutSeed);
+        addItemToBackpack(radishSeed);
+        addItemToBackpack(strawberrySeed);
+        addItemToBackpack(tomatoSeed);
 
         backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<ItemStackable>();
 

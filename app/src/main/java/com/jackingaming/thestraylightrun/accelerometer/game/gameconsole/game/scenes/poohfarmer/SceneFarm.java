@@ -38,7 +38,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.TileCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.seedshop.SeedShopDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
@@ -317,17 +316,20 @@ public class SceneFarm extends Scene {
         // Set up GrowableTile in front of player's house with a [plant].
         Tile tileInitializedForHarvesting1 = tilesForFarm[15][11];
         if (tileInitializedForHarvesting1 instanceof GrowableTile) {
-            ((GrowableTile) tileInitializedForHarvesting1).changeToSeeded(MysterySeed.TAG);
+            String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
+            ((GrowableTile) tileInitializedForHarvesting1).changeToSeeded(mysterySeed);
             ((GrowableTile) tileInitializedForHarvesting1).germinateSeed();
         }
         Tile tileInitializedForHarvesting2 = tilesForFarm[15][12];
         if (tileInitializedForHarvesting2 instanceof GrowableTile) {
-            ((GrowableTile) tileInitializedForHarvesting2).changeToSeeded(MysterySeed.TAG);
+            String papayaSeed = game.getContext().getString(R.string.text_seed_papaya);
+            ((GrowableTile) tileInitializedForHarvesting2).changeToSeeded(papayaSeed);
             ((GrowableTile) tileInitializedForHarvesting2).germinateSeed();
         }
         Tile tileInitializedForHarvesting3 = tilesForFarm[15][13];
         if (tileInitializedForHarvesting3 instanceof GrowableTile) {
-            ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(MysterySeed.TAG);
+            String eggplantSeed = game.getContext().getString(R.string.text_seed_eggplant);
+            ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(eggplantSeed);
             ((GrowableTile) tileInitializedForHarvesting3).germinateSeed();
         }
         // Fix bug (having a QUANTITY_REQUIRED of 0) for
@@ -342,7 +344,8 @@ public class SceneFarm extends Scene {
 
                 Tile tileInitializingForHarvestingBugFix = tilesForFarm[15][xIndex];
                 if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
-                    ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(MysterySeed.TAG);
+                    String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
+                    ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(mysterySeed);
                     ((GrowableTile) tileInitializingForHarvestingBugFix).germinateSeed();
                 }
                 xIndex++;
@@ -513,7 +516,8 @@ public class SceneFarm extends Scene {
                 }
 
                 if (growableTileRandom.getState() == GrowableTile.State.TILLED) {
-                    growableTileRandom.changeToSeeded(MysterySeed.TAG);
+                    String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
+                    growableTileRandom.changeToSeeded(mysterySeed);
                     growableTileRandom.germinateSeed();
 
                     Plant plant = (Plant) growableTileRandom.getEntity();

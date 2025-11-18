@@ -8,7 +8,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Ass
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.MysterySeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
 import java.io.Serializable;
@@ -71,13 +70,7 @@ public class GrowableTile extends Tile {
     }
 
     public void germinateSeed() {
-        Entity entityToAdd = null;
-        if (idSeed.equals(MysterySeed.TAG)) {
-            entityToAdd = new Plant(xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
-        } else {
-            Log.e(TAG, "startNewDay() else-clause: idSeed does NOT match defined options");
-        }
-
+        Entity entityToAdd = new Plant(idSeed, xIndex * Tile.WIDTH, yIndex * Tile.HEIGHT);
         entityToAdd.init(game);
         entityListener.addEntityToScene(entityToAdd);
 

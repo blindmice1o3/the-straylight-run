@@ -9,17 +9,17 @@ public class Fodder extends Item {
     public static final float PRICE_DEFAULT = -1f;
 
     @Override
-    void initName() {
+    protected void initName() {
         name = game.getContext().getString(R.string.text_fodder);
     }
 
     @Override
-    void initPrice() {
+    protected void initPrice() {
         price = PRICE_DEFAULT;
     }
 
     @Override
-    void initImage() {
+    protected void initImage() {
         Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.items_entities_carryable_and_bubbled);
         image = Bitmap.createBitmap(spriteSheet, 52, 422, 261, 224);
     }
