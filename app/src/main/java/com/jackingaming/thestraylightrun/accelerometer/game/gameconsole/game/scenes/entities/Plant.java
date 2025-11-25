@@ -26,11 +26,11 @@ public class Plant extends Entity
     public static final int BRACKET01_MIN_INCLUSIVE = 0;
     public static final int BRACKET01_MAX_EXCLUSIVE = 1;
     public static final int BRACKET02_MIN_INCLUSIVE = 1;
-    public static final int BRACKET02_MAX_EXCLUSIVE = 3;
-    public static final int BRACKET03_MIN_INCLUSIVE = 3;
-    public static final int BRACKET03_MAX_EXCLUSIVE = 5;
-    public static final int BRACKET04_MIN_INCLUSIVE = 5;
-    public static final int BRACKET04_MAX_EXCLUSIVE = 7;
+    public static final int BRACKET02_MAX_EXCLUSIVE = 2;
+    public static final int BRACKET03_MIN_INCLUSIVE = 2;
+    public static final int BRACKET03_MAX_EXCLUSIVE = 3;
+    public static final int BRACKET04_MIN_INCLUSIVE = 3;
+    public static final int BRACKET04_MAX_EXCLUSIVE = 4;
     private static final float PRICE_GREEN = 60f;
     private static final float PRICE_PURPLE = 85f;
     private static final int HEALTH_MAX_DEFAULT = 10;
@@ -102,7 +102,7 @@ public class Plant extends Entity
     public void becomeCarried() {
         super.becomeCarried();
 
-        updateImageBasedOnAgeInDays();
+        image = imageHarvested;
     }
 
     @Override
@@ -369,11 +369,11 @@ public class Plant extends Entity
             image = imageBracket02;
         } else if (ageInDays >= BRACKET03_MIN_INCLUSIVE && ageInDays < BRACKET03_MAX_EXCLUSIVE) {
             image = imageBracket03;
-        } else if (ageInDays >= BRACKET04_MIN_INCLUSIVE && ageInDays < BRACKET04_MAX_EXCLUSIVE) {
+        } else if (ageInDays >= BRACKET04_MIN_INCLUSIVE) {
+            harvestable = true;
             image = imageBracket04;
         } else {
-            harvestable = true;
-            image = imageHarvested;
+            Log.e(TAG, "updateImageBasedOnAgeInDays() else-clause");
         }
     }
 
