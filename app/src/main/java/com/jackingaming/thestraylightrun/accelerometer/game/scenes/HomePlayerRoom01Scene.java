@@ -48,7 +48,9 @@ public class HomePlayerRoom01Scene extends Scene {
     private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02;
     private static final int X_TRANSFER_POINT_INDEX_WORLD = X_SPAWN_INDEX_PLAYER_WORLD;
     private static final int Y_TRANSFER_POINT_INDEX_WORLD = Y_SPAWN_INDEX_PLAYER_WORLD + 1;
-    private static final String VIDEO_RUN_ONE = "vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_ONE_PART_1 = "vid_20250826_045602759_run_one_part_1_post_compressed_rotated_90";
+    private static final String VIDEO_RUN_ONE_COMMERCIAL = "vid_not_bad_not_bad_burger_2025_06_10_compressed_rotated_90";
+    private static final String VIDEO_RUN_ONE_PART_2 = "vid_20251125_141730_run_one_part_2a_post_compressed_rotated_90";
     private static final String VIDEO_RUN_TWO = "vid_20250913_161759550_run_two_post_compressed_rotated_90";
     private static final String VIDEO_RUN_THREE = "vid_20250917_180111542_run_three_post_compressed_rotated_90";
     private static final String VIDEO_RUN_FOUR = "vid_20250918_173333392_run_four_post_compressed_rotated_90";
@@ -81,6 +83,8 @@ public class HomePlayerRoom01Scene extends Scene {
     private List<UniqueSolidTile> tilesBed = new ArrayList<>();
     private UniqueSolidTile tileTelevision, tileComputer, tileGameConsole,
             tileTableLeft, tileTableRight, tileBedTop, tileBedBottom;
+
+    private FCVDialogFragment dialogFragment;
 
     private HomePlayerRoom01Scene() {
     }
@@ -260,7 +264,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             String videoByRun = null;
                             switch (gameListener.getRun()) {
                                 case ONE:
-                                    videoByRun = VIDEO_RUN_ONE;
+                                    videoByRun = VIDEO_RUN_ONE_PART_1;
                                     break;
                                 case TWO:
                                     videoByRun = VIDEO_RUN_TWO;
@@ -277,18 +281,42 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             boolean showToolbarOnDismiss = false;
-                            Fragment fragment =
+                            VideoViewFragment videoViewFragmentPart1 =
 //                                    NextWeekTonightEpisodesGeneratorFragment.newInstance(showToolbarOnDismiss);
                                     VideoViewFragment.newInstance(videoByRun, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
                                         @Override
                                         public void onCompletion(MediaPlayer mediaPlayer) {
-                                            Log.e(TAG, "finished playback!");
+                                            Log.i(TAG, "finished playback part1!");
+
+                                            if (gameListener.getRun() == Game.Run.ONE) {
+                                                Log.i(TAG, "gameListener.getRun() == Game.Run.ONE - showing second video (commercial) and then third video (part2)");
+
+                                                VideoViewFragment videoViewFragmentCommercial = VideoViewFragment.newInstance(VIDEO_RUN_ONE_COMMERCIAL, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                                                    @Override
+                                                    public void onCompletion(MediaPlayer mediaPlayer) {
+                                                        Log.i(TAG, "finished playback commercial!");
+
+                                                        VideoViewFragment videoViewFragmentPart2 = VideoViewFragment.newInstance(VIDEO_RUN_ONE_PART_2, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
+                                                            @Override
+                                                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                                                Log.i(TAG, "finished playback part2!");
+                                                            }
+                                                        }));
+
+                                                        dialogFragment.replaceFragment(videoViewFragmentPart2);
+                                                    }
+                                                }));
+
+                                                dialogFragment.replaceFragment(videoViewFragmentCommercial);
+                                            } else {
+                                                Log.i(TAG, "gameListener.getRun() != Game.Run.ONE - doing nothing.");
+                                            }
                                         }
                                     }));
                             String tag = NextWeekTonightEpisodesGeneratorFragment.TAG;
                             boolean canceledOnTouchOutside = true;
-                            DialogFragment dialogFragment =
-                                    FCVDialogFragment.newInstance(fragment, tag,
+                            dialogFragment =
+                                    FCVDialogFragment.newInstance(videoViewFragmentPart1, tag,
                                             canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
                                             new FCVDialogFragment.LifecycleListener() {
                                                 @Override

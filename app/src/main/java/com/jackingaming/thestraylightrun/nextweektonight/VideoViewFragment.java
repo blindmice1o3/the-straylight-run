@@ -12,14 +12,10 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class VideoViewFragment extends Fragment
         implements Serializable {
@@ -32,8 +28,6 @@ public class VideoViewFragment extends Fragment
     private String resourceIdVideo;
     private OnCompletionListenerDTO onCompletionListenerDTO;
 
-//    private RecyclerView recyclerViewMarquee;
-//    private VideoView videoView;
     private VideoView videoView;
     private int positionCurrent;
 

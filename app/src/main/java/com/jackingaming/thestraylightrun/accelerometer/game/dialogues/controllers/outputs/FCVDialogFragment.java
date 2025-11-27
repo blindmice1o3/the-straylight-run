@@ -108,6 +108,14 @@ public class FCVDialogFragment extends DialogFragment {
                 .commit();
     }
 
+    public void replaceFragment(Fragment fragmentNew) {
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fcv_dialog_fragment, fragmentNew)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
