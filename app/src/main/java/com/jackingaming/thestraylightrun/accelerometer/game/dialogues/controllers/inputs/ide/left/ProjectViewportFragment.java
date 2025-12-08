@@ -34,6 +34,7 @@ import java.util.List;
  */
 public class ProjectViewportFragment extends Fragment {
     public static final String TAG = ProjectViewportFragment.class.getSimpleName();
+    public static final String NAME_PACKAGE = "com.greenhorizonstudio";
     public static final String NAME_CLASS_MAIN = "Main";
     public static final String NAME_CLASS_FOO = "Foo";
     public static final String NAME_CLASS_BAR = "Bar";
@@ -69,6 +70,7 @@ public class ProjectViewportFragment extends Fragment {
     }
 
     private Package packageMain;
+    private Class classMain;
     private List<Class> classes = new ArrayList<>();
     private TextView textView;
     private RecyclerView recyclerView;
@@ -612,16 +614,16 @@ public class ProjectViewportFragment extends Fragment {
                 null,
                 "String", "name", null,
                 null, null, inLineCommentName, false));
-        String inLineCommentType = " // indica, sativa, or hybrid";
-        classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "String", "type", null,
-                null, null, inLineCommentType, false));
         String inLineCommentDescription = " // e.g. \"Helps me focus on long days\"";
         classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
                 "String", "description", null,
                 null, null, inLineCommentDescription, false));
+        String inLineCommentType = " // indica, sativa, or hybrid";
+        classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+                null,
+                "String", "type", null,
+                null, null, inLineCommentType, false));
         String inLineCommentOrigin = " // e.g. \"The eighth (bought from someone in the alley behind the cannabis lounge) had seeds in it.\"";
         classSeedRun1.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
@@ -634,17 +636,17 @@ public class ProjectViewportFragment extends Fragment {
                 new VariableDeclaration("String", "name")
         );
         argumentListSeedRun1.add(
-                new VariableDeclaration("String", "type")
+                new VariableDeclaration("String", "description")
         );
         argumentListSeedRun1.add(
-                new VariableDeclaration("String", "description")
+                new VariableDeclaration("String", "type")
         );
         argumentListSeedRun1.add(
                 new VariableDeclaration("String", "origin")
         );
         String bodySeedRun1 = "        this.name = name;\n" +
-                "        // TODO: Set this.type to the provided type\n" +
                 "        this.description = description;\n" +
+                "        // TODO: Set this.type to the provided type\n" +
                 "        this.origin = origin;";
         classSeedRun1.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
                 argumentListSeedRun1,
@@ -652,26 +654,26 @@ public class ProjectViewportFragment extends Fragment {
                 null, null, false));
 
         // METHODS
-        String bodyGetName = "        return name;";
-        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "String", "getName",
-                null, bodyGetName, null, null, false));
-        String bodyGetType = "        return type;";
-        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "String", "getType",
-                null, bodyGetType, null, null, true));
-        String bodyGetDescription = "        return description;";
-        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "String", "getDescription",
-                null, bodyGetDescription, null, null, true));
-        String bodyGetOrigin = "        return origin;";
-        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "String", "getOrigin",
-                null, bodyGetOrigin, null, null, true));
+//        String bodyGetName = "        return name;";
+//        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "String", "getName",
+//                null, bodyGetName, null, null, false));
+//        String bodyGetDescription = "        return description;";
+//        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "String", "getDescription",
+//                null, bodyGetDescription, null, null, true));
+//        String bodyGetType = "        return type;";
+//        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "String", "getType",
+//                null, bodyGetType, null, null, true));
+//        String bodyGetOrigin = "        return origin;";
+//        classSeedRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "String", "getOrigin",
+//                null, bodyGetOrigin, null, null, true));
 
         return classSeedRun1;
     }
@@ -687,16 +689,25 @@ public class ProjectViewportFragment extends Fragment {
         // Intentionally blank.
 
         // METHODS
-        List<VariableDeclaration> argumentPlantSeed = new ArrayList<>();
-        argumentPlantSeed.add(
-                new VariableDeclaration("Seed", "seedToPlant")
-        );
-        String bodyPlantSeed = "        // TODO: complete tilling, seeding, and watering steps";
+//        List<VariableDeclaration> argumentPlantSeed = new ArrayList<>();
+//        argumentPlantSeed.add(
+//                new VariableDeclaration("Seed", "seedToPlant")
+//        );
+//        String bodyPlantSeed = "        // TODO: complete tilling, seeding, and watering steps";
+//        classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "void", "plantSeed",
+//                argumentPlantSeed,
+//                null,
+//                bodyPlantSeed,
+//                null, null, false));
+
+        String bodySpin = "        ...";
         classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "plantSeed",
-                argumentPlantSeed,
-                bodyPlantSeed,
+                "void", "spin",
+                null,
+                bodySpin,
                 null, null, false));
 
         return classRobotRun1;
@@ -759,26 +770,24 @@ public class ProjectViewportFragment extends Fragment {
     public ProjectViewportFragment() {
         // Required empty public constructor
 
-        packageMain = new Package("com.megacoolcorp");
+        packageMain = new Package(NAME_PACKAGE);
+        classMain = initClassMain();
+
         classes.add(
-                initClassMain()
+                classMain
         );
-        classes.add(
-                initClassFoo()
-        );
-        classes.add(
-                initClassBar()
-        );
+//        classes.add(
+//                initClassFoo()
+//        );
+//        classes.add(
+//                initClassBar()
+//        );
     }
 
     public Class getClassMain() {
-        for (Class myClass : classes) {
-            if (myClass.getName().equals(NAME_CLASS_MAIN)) {
-                return myClass;
-            }
-        }
-        return null;
+        return classMain;
     }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -810,21 +819,21 @@ public class ProjectViewportFragment extends Fragment {
             // TODO: load panes' content via Run.
             switch (run) {
                 case ONE:
-                    classes.add(
-                            initClassGrowableTileRun1()
-                    );
-                    classes.add(
-                            initClassSeedRun1()
-                    );
+//                    classes.add(
+//                            initClassGrowableTileRun1()
+//                    );
                     classes.add(
                             initClassRobotRun1()
                     );
                     classes.add(
-                            initClassChickenRun1()
+                            initClassSeedRun1()
                     );
-                    classes.add(
-                            initClassCowRun1()
-                    );
+//                    classes.add(
+//                            initClassChickenRun1()
+//                    );
+//                    classes.add(
+//                            initClassCowRun1()
+//                    );
                     break;
                 case TWO:
                     classes.add(
@@ -952,10 +961,4 @@ public class ProjectViewportFragment extends Fragment {
                 classes.size()
         );
     }
-
-    public Class getMainClass() {
-        return classes.get(0);
-    }
-
-
 }

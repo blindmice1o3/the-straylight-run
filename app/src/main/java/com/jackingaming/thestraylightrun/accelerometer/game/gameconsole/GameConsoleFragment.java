@@ -424,8 +424,10 @@ public class GameConsoleFragment extends Fragment
             );
 
             // used for RunOne's "tutorial"
-            if (itemA instanceof RobotReprogrammer4000) {
-                checkIfFirstTimeEquippingRobotReprogrammer4000();
+            if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+                if (itemA instanceof RobotReprogrammer4000) {
+                    checkIfFirstTimeEquippingRobotReprogrammer4000();
+                }
             }
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");
@@ -480,8 +482,10 @@ public class GameConsoleFragment extends Fragment
             );
 
             // used for RunOne's "tutorial"
-            if (itemB instanceof RobotReprogrammer4000) {
-                checkIfFirstTimeEquippingRobotReprogrammer4000();
+            if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+                if (itemB instanceof RobotReprogrammer4000) {
+                    checkIfFirstTimeEquippingRobotReprogrammer4000();
+                }
             }
         } else {
             Log.e(TAG, "fragmentInMiddleContainer NOT instanceof StatsDisplayerFragment");

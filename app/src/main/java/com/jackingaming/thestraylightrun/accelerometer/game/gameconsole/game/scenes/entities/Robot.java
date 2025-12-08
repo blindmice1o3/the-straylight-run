@@ -72,7 +72,7 @@ public class Robot extends Creature {
         this.listener = listener;
     }
 
-    public enum State {OFF, WALK, RUN, TILE_SELECTED;}
+    public enum State {OFF, WALK, RUN, TILE_SELECTED, SPIN;}
 
     private RobotAnimationManager robotAnimationManager;
     transient private ObjectAnimator movementAnimator;
@@ -115,52 +115,68 @@ public class Robot extends Creature {
         random = new Random();
     }
 
-    public void checkIfFirstTimeShowingRobotDialogFragment() {
-        if (isFirstTimeShowingRobotDialogFragment) {
-            Log.d(TAG, "isFirstTimeShowingRobotDialogFragment");
-            isFirstTimeShowingRobotDialogFragment = false;
+    public void doShowRobotDialogFragmentFirstTime() {
+        Log.d(TAG, "doShowRobotDialogFragmentFirstTime");
+        isFirstTimeShowingRobotDialogFragment = false;
 
-            game.getViewportListener().addAndShowParticleExplosionView();
+        state = State.SPIN;
 
-            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
-            String text = game.getContext().getResources().getString(R.string.use_robot_reprogrammer_4000);
-            TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
-                @Override
-                public void onDismiss() {
-                    Log.e(TAG, "checkIfFirstTimeShowingRobotDialogFragment() TypeWriterDialogFragment.DismissListener.onDismiss()");
-                }
-            };
-            TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
-                @Override
-                public void onAnimationFinish() {
-                    Log.e(TAG, "checkIfFirstTimeShowingRobotDialogFragment() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
+        game.getViewportListener().addAndShowParticleExplosionView();
 
-                    game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
-                }
-            };
+        Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
+        String text = game.getContext().getResources().getString(R.string.use_robot_reprogrammer_4000);
+        TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.e(TAG, "doShowRobotDialogFragmentFirstTime() TypeWriterDialogFragment.DismissListener.onDismiss()");
+            }
+        };
+        TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "doShowRobotDialogFragmentFirstTime() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
 
-            game.getStateManager().pushTextboxState(portrait,
-                    text,
-                    dismissListener,
-                    textCompletionListener);
-        } else {
-            Log.d(TAG, "!isFirstTimeShowingRobotDialogFragment");
+                game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+            }
+        };
 
-            // do nothing;
-        }
+        game.getStateManager().pushTextboxState(portrait,
+                text,
+                dismissListener,
+                textCompletionListener);
     }
 
-    public void showRobotDialogFragment() {
+    public void doShowRobotDialogFragmentNormal() {
         game.setPaused(true);
-
-        // used for RunOne's "tutorial"
-        checkIfFirstTimeShowingRobotDialogFragment();
 
         RobotDialogFragment robotDialogFragment = instantiateRobotDialogFragment();
         robotDialogFragment.show(
                 ((MainActivity) game.getContext()).getSupportFragmentManager(),
                 RobotDialogFragment.TAG
         );
+    }
+
+    public void showRobotDialogFragment() {
+        Log.d(TAG, "showRobotDialogFragment()");
+
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+            Log.d(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+
+            // used for RunOne's "tutorial"
+            if (isFirstTimeShowingRobotDialogFragment) {
+                Log.d(TAG, "isFirstTimeShowingRobotDialogFragment");
+
+                doShowRobotDialogFragmentFirstTime();
+            } else {
+                Log.d(TAG, "!isFirstTimeShowingRobotDialogFragment");
+
+                doShowRobotDialogFragmentNormal();
+            }
+        } else {
+            Log.d(TAG, "game.getRun() != com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+
+            doShowRobotDialogFragmentNormal();
+        }
     }
 
     @Override
@@ -212,6 +228,9 @@ public class Robot extends Creature {
                 }
                 break;
             case TILE_SELECTED:
+                // Intentionally blank.
+                break;
+            case SPIN:
                 // Intentionally blank.
                 break;
         }

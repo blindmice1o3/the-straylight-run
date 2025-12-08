@@ -108,7 +108,7 @@ public class IDEDialogFragment extends DialogFragment
 
         projectViewportFragment = ProjectViewportFragment.newInstance(run);
         mainViewportFragment = MainViewportFragment.newInstance(
-                projectViewportFragment.getMainClass(), mode
+                projectViewportFragment.getClassMain(), mode
         );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
         consoleViewportFragment = ConsoleViewportFragment.newInstance(null, null);

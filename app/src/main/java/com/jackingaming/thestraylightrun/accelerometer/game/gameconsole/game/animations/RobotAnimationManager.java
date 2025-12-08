@@ -23,6 +23,7 @@ public class RobotAnimationManager
     transient private HashMap<Creature.Direction, Animation> walkAnimations;
     transient private HashMap<Creature.Direction, Animation> runAnimations;
     transient private Bitmap stateOff;
+    transient private Animation spinAnimation;
 
     public RobotAnimationManager() {
         speed = ANIMATION_SPEED_DEFAULT;
@@ -35,6 +36,7 @@ public class RobotAnimationManager
         for (Animation runAnimation : runAnimations.values()) {
             runAnimation.update(elapsed);
         }
+        spinAnimation.update(elapsed);
     }
 
     public void changeSpeedForAllWalkAnimations(int speed) {
@@ -73,6 +75,8 @@ public class RobotAnimationManager
                 Log.e(TAG, "getCurrentFrame() state is RUN... direction is one that is not defined.");
                 return null;
             }
+        } else if (state == Robot.State.SPIN) {
+            return spinAnimation.getCurrentFrame();
         } else {
             Log.e(TAG, "getCurrentFrame() else-clause... state is unknown.");
             return null;
@@ -215,5 +219,12 @@ public class RobotAnimationManager
 
 //        stateOff = robotRSeries[6][1];
         stateOff = Bitmap.createBitmap(spriteSheetRobotOff, 116, 379, 802, 830);
+
+        Bitmap[] spin = new Bitmap[4];
+        spin[0] = walkLeft[0];
+        spin[1] = walkDown[0];
+        spin[2] = walkRight[0];
+        spin[3] = walkUp[0];
+        spinAnimation = new Animation(spin, speed);
     }
 }

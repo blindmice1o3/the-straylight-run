@@ -691,7 +691,7 @@ public class ClassEditorFragment extends Fragment {
                                 line.length() - 1
                         );
 //                        if (lastChar.equals("e")) {
-                        if (i == 1) {
+                        if (i == 2) {
                             answer = "        this.type = type;";
                         }
 
