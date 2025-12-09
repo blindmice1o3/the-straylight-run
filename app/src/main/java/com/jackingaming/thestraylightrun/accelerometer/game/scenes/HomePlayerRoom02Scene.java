@@ -479,12 +479,6 @@ public class HomePlayerRoom02Scene extends Scene {
             unhighlightComputerTile();
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
-            highlightJournalDrawer();
-        } else {
-            unhighlightJournalDrawer();
-        }
-
         if (gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
             highlightBedTile();
         } else {

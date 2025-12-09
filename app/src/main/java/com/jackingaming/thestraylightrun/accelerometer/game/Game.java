@@ -43,10 +43,8 @@ public class Game {
         TELEVISION,
         NOTES_TOPIC,
         GROUP_CHAT,
-        NOTES_LEARNERS,
         COMPUTER,
         GAME_CONSOLE,
-        JOURNAL,
         SLEEP_SAVE;
     }
 
@@ -65,18 +63,12 @@ public class Game {
                 dailyLoop = DailyLoop.GROUP_CHAT;
                 break;
             case GROUP_CHAT:
-                dailyLoop = DailyLoop.NOTES_LEARNERS;
-                break;
-            case NOTES_LEARNERS:
                 dailyLoop = DailyLoop.COMPUTER;
                 break;
             case COMPUTER:
                 dailyLoop = DailyLoop.GAME_CONSOLE;
                 break;
             case GAME_CONSOLE:
-                dailyLoop = DailyLoop.JOURNAL;
-                break;
-            case JOURNAL:
                 dailyLoop = DailyLoop.SLEEP_SAVE;
                 break;
             case SLEEP_SAVE:

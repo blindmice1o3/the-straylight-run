@@ -234,13 +234,6 @@ public class GameFragment extends Fragment
                     //////////////////////////////////
                 } else {
                     Log.e(TAG, "drawer END closed");
-
-                    //////////////////////////////////
-                    if (game.getDailyLoop() == Game.DailyLoop.JOURNAL) {
-                        game.resetJournalState();
-                        game.incrementDailyLoop();
-                    }
-                    //////////////////////////////////
                 }
 
                 DrawerStartFragment drawerStartFragment = (DrawerStartFragment) getChildFragmentManager().findFragmentById(R.id.fcv_drawer_start);

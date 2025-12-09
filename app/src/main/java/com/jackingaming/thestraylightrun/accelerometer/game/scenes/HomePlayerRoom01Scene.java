@@ -410,8 +410,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES_TOPIC &&
-                                    gameListener.getDailyLoop() != Game.DailyLoop.NOTES_LEARNERS) {
+                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES_TOPIC) {
                                 return false;
                             }
 
@@ -655,8 +654,7 @@ public class HomePlayerRoom01Scene extends Scene {
             unhighlightTelevisionTile();
         }
 
-        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
-                gameListener.getDailyLoop() == Game.DailyLoop.NOTES_LEARNERS) {
+        if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC) {
             highlightTableTile();
         } else {
             unhighlightTableTile();
@@ -678,12 +676,6 @@ public class HomePlayerRoom01Scene extends Scene {
             highlightGameConsoleTile();
         } else {
             unhighlightGameConsoleTile();
-        }
-
-        if (gameListener.getDailyLoop() == Game.DailyLoop.JOURNAL) {
-            highlightJournalDrawer();
-        } else {
-            unhighlightJournalDrawer();
         }
 
         if (gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
