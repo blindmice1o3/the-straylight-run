@@ -292,26 +292,22 @@ Más limpio, no necesita contador.</item>
         <item>NoIntentarlo</item>
         <item>LuchadorHonesto</item>
         <item>EstudianteA+</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>SISTEMA42</item>
+        <item>NoIntentarlo</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_one">
-        <item>Espera, lo del plano... si la clase Pollo es solo texto, ¿cómo se convierte en... un pollo de verdad? Siento que me estoy saltando un paso.</item>
-        <item>Ahí es donde entra en juego la palabra clave \"new\". La clase es solo el plano. Pero new Chicken(); crea un objeto de pollo en memoria, como construir la casa a partir del plano.</item>
-        <item>Me estoy saltando la clase de Pollo. Mi plano es \'NoMaloNoMaloMansión\'. Viene con arbustos y árboles con forma de dinosaurio.</item>
-        <item>Bueno, pero... campos vs. métodos... sigo confundiéndolos. ¿Cuál es cuál?</item>
-        <item>Los campos son lo que la clase conoce, como el número de huevos o el color de una gallina. Los métodos son lo que puede hacer, como ponerHuevo() o cloquear().</item>
-        <item>Mi método de pollo es crossRoad(). Eso es todo lo que hace. Simplemente cruza caminos... eternamente.</item>
-        <item>Y lo de los comentarios... no lo entiendo. ¿Por qué escribir código que ni siquiera funciona?</item>
-        <item>Son notas. Para ti, tus compañeros o quien tenga que corregir tu código más adelante. La computadora las ignora, pero los humanos las necesitamos.</item>
-        <item>Mi único comentario: \'no toques mi clase NotBadNotBadMansion o si no...\'.</item>
-        <item>No recuerdo mucho sobre los constructores (se supone que son similares a los métodos, excepto que no tienen un [tipo de retorno], siempre devuelven una instancia de su clase), ¡por favor ayuda!</item>
-        <item>¡Correcto! Además, tanto las listas de argumentos del constructor como las del método son opcionales. El cuerpo del constructor se usa principalmente para configurar el objeto (asignar valores a los campos). Esto es diferente para el cuerpo del método (que depende del uso previsto del método).</item>
-        <item>Bueno, lo último: los métodos. Método principal, constructor, getters/setters. Me perdí cuando los listaron todos.</item>
-        <item>El método principal es lo que Java busca al iniciar el programa. El constructor configura todo al crear el objeto por primera vez. Los métodos get/setters son pequeños métodos auxiliares para leer o modificar un campo de forma segura.</item>
-        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+        <item>Vale, entonces... lo de los planos tenía cierto sentido, pero sigo sin entender cómo una clase no es el objeto en sí. Me resulta extraño que algo hecho de texto se convierta en... una cosa.</item>
+        <item>Piénsalo como la diferencia entre la receta y el pastel. La receta no es comestible. El pastel es el objeto. Las clases de Java son las recetas. Cuando Java \"crea\" un objeto, ese es el pastel.</item>
+        <item>Mi receta es para \"NadaMalNadaMalPastel\". Ingredientes: azúcar, harina y mucha actitud.</item>
+        <item>Todavía me confunde la diferencia entre \"field\" y \"method\". Los sigo confundiendo.</item>
+        <item>\"Fields\" = hechos. \"Methods\" = acciones.</item>
+        <item>\"Field\": coolnessLevel = 9000. \"Method\": showOff().</item>
+        <item>Y los comentarios... ¿por qué escribir cosas que Java ignora? Esa parte también me confundió.</item>
+        <item>Porque son notas para humanos, no para ordenadores. Piensa en ellas como notas adhesivas en tu código para que tu yo del futuro no olvide lo que estabas haciendo.</item>
+        <item>Mi único comentario será: \'\/\/ No tengo ni idea de lo que estoy haciendo, pero funcionó una vez\'.</item>
+        <item>Vale... creo que lo estoy entendiendo. Clase = plano, \"field\" = cosas que conoce, \"method\" = cosas que puede hacer. Y objetos = la cosa real que utilizamos.</item>
+        <item>Eso es todo. ¡Básicamente ya lo tienes todo!</item>
+        <item>Aprendí que las gallinas tienen sus propios \"methods\". Mi \"method\" para las gallinas es crossRoad(). Eso es todo lo que hace. Simplemente cruza carreteras... sin parar.</item>
     </string-array>
 </resources>

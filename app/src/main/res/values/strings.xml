@@ -402,27 +402,23 @@ Cleaner, no counter needed.</item>
         <item>NotTrying</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>SYSTEM42</item>
+        <item>NotTrying</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_one">
-        <item>So wait, the blueprint thing... if the Chicken class is just text, how does that ever become like... an actual chicken? Feels like I\'m missing a step.</item>
-        <item>That\'s where the \"new\" keyword comes in. The class is just the blueprint. But new Chicken(); makes a chicken object in memory - like building the house from the blueprint.</item>
-        <item>I\'m skipping class Chicken. My blueprint is \'NotBadNotBadMansion\'. It comes with dinosaur-shaped bushes and trees.</item>
-        <item>Okay but... fields vs methods - I keep mixing them up. Which is which again?</item>
-        <item>Fields are what the class knows, like a chicken\'s eggCount or color. Methods are what it can do, like layEgg() or cluck()</item>
-        <item>My chicken method is crossRoad(). That\'s all it does. It just crosses roads... forever.</item>
-        <item>And the comments part... I don\'t get it. Why write code that doesn\'t even run?</item>
-        <item>They\'re notes. For your future self, your teammates, or whoever has to fix your code later. The computer ignores them, but humans need them.</item>
-        <item>My only comment: \'don\'t touch my NotBadNotBadMansion class or else\'.</item>
-        <item>I don\'t remember much about constructors (they\'re suppose to be similar to methods, except they don\'t have a [return type], they always return an instance of their class), please help!</item>
-        <item>That\'s right! Also, both constructor\'s and method\'s argument lists are optional. A constructor\'s body is mainly used to set up the object (assign values to fields). This is different for a method\'s body (which depends on the method\'s intended use).</item>
-        <item>Okay, last thing - the methods. Main method, constructor, getters/setters. I got lost when they were all listed out.</item>
-        <item>Main method is what Java looks for when your program starts. Constructor sets things up when you first build the object. Getters/setters are small helper methods to safely read or change a field.</item>
-        <item>***COLLECTING LEARNER\'S NOTES***</item>
+        <item>Okay so... the blueprint thing kind of made sense, but I still don\'t get how a class is not the actual object. It feels weird that something made of text becomes... a thing.</item>
+        <item>Think of it like the recipe vs. the cake. The recipe isn\'t edible. The cake is the object. Java classes are recipes. When Java \"makes\" an object, that\'s the cake.</item>
+        <item>My recipe is for \"NotBadNotBadCake\". Ingredients: sugar, flour, and pure swagger.</item>
+        <item>Field vs. method is still confusing me. I keep mixing them up.</item>
+        <item>Fields = facts. Methods = actions.</item>
+        <item>Field: coolnessLevel = 9000. Method: showOff().</item>
+        <item>And comments... why write stuff that Java ignores? That part confused me too.</item>
+        <item>Because they\'re notes for humans, not computers. Think of them like sticky notes on your code so future-you doesn\'t forget what you were doing.</item>
+        <item>My only comment will be: \'\/\/ I have no idea what I\'m doing, but it worked once\'.</item>
+        <item>Okay... I think I\'m getting it. Class = blueprint, fields = things it knows, methods = things it can do. And objects = the real thing we use.</item>
+        <item>That\'s it. You\'ve basically got everything!</item>
+        <item>I learned that chickens have methods. My chicken method is crossRoad(). That\'s all it does. It just crosses roads... forever.</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -439,8 +435,6 @@ Cleaner, no counter needed.</item>
         <item>11500</item>
         <item>13500</item>
         <item>14500</item>
-        <item>17000</item>
-        <item>19500</item>
     </string-array>
 
     <!-- ConsoleViewportFragment -->
