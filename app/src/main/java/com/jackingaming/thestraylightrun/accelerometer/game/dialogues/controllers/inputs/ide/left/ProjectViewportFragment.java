@@ -702,12 +702,12 @@ public class ProjectViewportFragment extends Fragment {
 //                bodyPlantSeed,
 //                null, null, false));
 
-        String bodySpin = "        ...";
+        String bodyTurnInPlace = "        ...";
         classRobotRun1.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "spin",
+                "void", "turnInPlace",
                 null,
-                bodySpin,
+                bodyTurnInPlace,
                 null, null, false));
 
         return classRobotRun1;
