@@ -201,7 +201,7 @@ public class RunTwo
         if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
             GrowableTile.OutdoorWaterChangeListener waterChangeListener = new GrowableTile.OutdoorWaterChangeListener() {
                 @Override
-                public void changeToWateredSeeded() {
+                public void changeToWateredOccupied() {
                     Player.getInstance().getQuestManager().addTileAsString(
                             TILE_REQUIREMENT_AS_STRING);
                     Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));

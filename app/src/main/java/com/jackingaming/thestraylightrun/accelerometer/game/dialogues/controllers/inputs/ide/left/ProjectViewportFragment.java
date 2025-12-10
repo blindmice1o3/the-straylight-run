@@ -346,114 +346,118 @@ public class ProjectViewportFragment extends Fragment {
         // FIELDS
         classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
                 null,
-                "String", "name", null,
+                "boolean", "isDry", null,
                 null, null, null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "String", "type", null,
-                null, null, null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "String", "description", null,
-                null, null, null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "String", "origin", null,
-                null, null, null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "flowering", null,
-                "    // This plant will be grown inside a controlled tent.",
-                "// TODO: Declare a boolean to track if the plant is flowering",
-                null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "diseased", null,
-                null,
-                "// TODO: Declare a boolean to track if the plant is diseased",
-                null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "int", "vegDays", null,
-                null,
-                "// TODO: Declare an int for number of days in veg stage",
-                null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "needsWater", null,
-                null,
-                null,
-                null, false));
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "int", "hydrationLevel", null,
-                null,
-                null,
-                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "String", "name", null,
+//                null, null, null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "String", "type", null,
+//                null, null, null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "String", "description", null,
+//                null, null, null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "String", "origin", null,
+//                null, null, null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "boolean", "flowering", null,
+//                "    // This plant will be grown inside a controlled tent.",
+//                "// TODO: Declare a boolean to track if the plant is flowering",
+//                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "boolean", "diseased", null,
+//                null,
+//                "// TODO: Declare a boolean to track if the plant is diseased",
+//                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "int", "vegDays", null,
+//                null,
+//                "// TODO: Declare an int for number of days in veg stage",
+//                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "boolean", "needsWater", null,
+//                null,
+//                null,
+//                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "int", "hydrationLevel", null,
+//                null,
+//                null,
+//                null, false));
 
         // CONSTRUCTORS
-        List<VariableDeclaration> argumentListPlant = new ArrayList<>();
-        argumentListPlant.add(
-                new VariableDeclaration("Seed", "seed")
-        );
-        String bodyPlant = "        this.name = seed.getName();\n" +
-                "        this.type = seed.getType();\n" +
-                "        this.description = seed.getDescription();\n" +
-                "        this.origin = seed.getOrigin();\n" +
-                "        this.flowering = false; // Initialize to false\n" +
-                "        this.diseased = false;       // Assume healthy on creation\n" +
-                "        this.vegDays = 0;\n" +
-                "        this.needsWater = true;\n" +
-                "        this.hydrationLevel = 0;";
-        classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
-                argumentListPlant, bodyPlant,
-                null, null, false));
+//        List<VariableDeclaration> argumentListPlant = new ArrayList<>();
+//        argumentListPlant.add(
+//                new VariableDeclaration("Seed", "seed")
+//        );
+//        String bodyPlant = "        this.name = seed.getName();\n" +
+//                "        this.type = seed.getType();\n" +
+//                "        this.description = seed.getDescription();\n" +
+//                "        this.origin = seed.getOrigin();\n" +
+//                "        this.flowering = false; // Initialize to false\n" +
+//                "        this.diseased = false;       // Assume healthy on creation\n" +
+//                "        this.vegDays = 0;\n" +
+//                "        this.needsWater = true;\n" +
+//                "        this.hydrationLevel = 0;";
+//        classPlant.addConstructor(new Constructor(ClassComponent.AccessModifier.PUBLIC,
+//                argumentListPlant, bodyPlant,
+//                null, null, false));
 
         // METHODS
-        String bodyUpdateGrowth = "        // Only grow if there's enough light and no pests.\n" +
-                "        // TODO: If light is correct and no pests, increase days in veg\n" +
-                "\n" +
-                "        // TODO: If days in veg is >= 14 and plant is NOT diseased, set flowering to true";
-        List<VariableDeclaration> argumentListUpdateGrowth = new ArrayList<>();
-        argumentListUpdateGrowth.add(
-                new VariableDeclaration("boolean", "lightIsCorrect")
-        );
-        argumentListUpdateGrowth.add(
-                new VariableDeclaration("boolean", "hasPests")
-        );
-        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "updateGrowth",
-                argumentListUpdateGrowth,
-                bodyUpdateGrowth,
-                null, null, false));
-        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "boolean", "readyToHarvest",
-                null,
-                null,
-                null,
-                "// TODO: Write a method that returns true if flowering, NOT diseased, vegDays >= 21)",
-                true));
-        String bodyWater = "        hydrationLevel++;\n" +
-                "        needsWater = false;";
-        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "water",
-                null,
-                bodyWater,
-                null,
-                null,
-                true));
-        String bodyCheckHydration = "        return needsWater;";
-        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "boolean", "checkHydration",
-                null,
-                bodyCheckHydration,
-                null,
-                null,
-                true));
+//        String bodyUpdateGrowth = "        // Only grow if there's enough light and no pests.\n" +
+//                "        // TODO: If light is correct and no pests, increase days in veg\n" +
+//                "\n" +
+//                "        // TODO: If days in veg is >= 14 and plant is NOT diseased, set flowering to true";
+//        List<VariableDeclaration> argumentListUpdateGrowth = new ArrayList<>();
+//        argumentListUpdateGrowth.add(
+//                new VariableDeclaration("boolean", "lightIsCorrect")
+//        );
+//        argumentListUpdateGrowth.add(
+//                new VariableDeclaration("boolean", "hasPests")
+//        );
+//        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "void", "updateGrowth",
+//                argumentListUpdateGrowth,
+//                bodyUpdateGrowth,
+//                null, null, false));
+//        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "boolean", "readyToHarvest",
+//                null,
+//                null,
+//                null,
+//                "// TODO: Write a method that returns true if flowering, NOT diseased, vegDays >= 21)",
+//                true));
+//        String bodyWater = "        hydrationLevel++;\n" +
+//                "        needsWater = false;";
+//        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "void", "water",
+//                null,
+//                bodyWater,
+//                null,
+//                null,
+//                true));
+//        String bodyCheckHydration = "        return needsWater;";
+//        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "boolean", "checkHydration",
+//                null,
+//                bodyCheckHydration,
+//                null,
+//                null,
+//                true));
 
         return classPlant;
     }
@@ -469,20 +473,20 @@ public class ProjectViewportFragment extends Fragment {
         // Intentionally blank.
 
         // METHODS
-        List<VariableDeclaration> argumentListWaterIfNeeded = new ArrayList<>();
-        argumentListWaterIfNeeded.add(
-                new VariableDeclaration("Plant", "plant")
+        List<VariableDeclaration> argumentListWaterIfDry = new ArrayList<>();
+        argumentListWaterIfDry.add(
+                new VariableDeclaration("Plant", "p")
         );
-        String bodyWaterIfNeeded = "        if (plant.checkHydration()) { \n" +
-                "            plant.water(); \n" +
-                "        } else { \n" +
-                "            System.out.println(\"Skip\"); \n" +
+        String bodyWaterIfDry = "        if (p.isDry) {\n" +
+                "            System.out.println(\"Watering plant!\");\n" +
+                "        } else {\n" +
+                "            System.out.println(\"Skipping plant.\");\n" +
                 "        }";
         classRobotRun2.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
-                "void", "waterIfNeeded",
-                argumentListWaterIfNeeded,
-                bodyWaterIfNeeded,
+                "void", "waterIfDry",
+                argumentListWaterIfDry,
+                bodyWaterIfDry,
                 null, null, false));
 
         return classRobotRun2;
@@ -823,10 +827,10 @@ public class ProjectViewportFragment extends Fragment {
 //                            initClassGrowableTileRun1()
 //                    );
                     classes.add(
-                            initClassRobotRun1()
+                            initClassSeedRun1()
                     );
                     classes.add(
-                            initClassSeedRun1()
+                            initClassRobotRun1()
                     );
 //                    classes.add(
 //                            initClassChickenRun1()

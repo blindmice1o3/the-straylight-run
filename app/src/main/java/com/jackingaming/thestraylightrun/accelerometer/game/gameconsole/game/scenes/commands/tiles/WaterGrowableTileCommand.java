@@ -28,8 +28,11 @@ public class WaterGrowableTileCommand
             if (growableIndoorTile.getState() == GrowableTile.State.TILLED ||
                     growableIndoorTile.getState() == GrowableTile.State.SEEDED ||
                     growableIndoorTile.getState() == GrowableTile.State.OCCUPIED) {
-                Log.e(TAG, "growableIndoorTile.changeToWatered()");
-                growableIndoorTile.changeToWatered();
+
+                if (!growableIndoorTile.isWatered()) {
+                    Log.e(TAG, "!growableIndoorTile.isWatered() growableIndoorTile.changeToWatered()");
+                    growableIndoorTile.changeToWatered();
+                }
 
                 return true;
             }
@@ -39,8 +42,11 @@ public class WaterGrowableTileCommand
             if (growableTile.getState() == GrowableTile.State.TILLED ||
                     growableTile.getState() == GrowableTile.State.SEEDED ||
                     growableTile.getState() == GrowableTile.State.OCCUPIED) {
-                Log.e(TAG, "growableTile.changeToWatered()");
-                growableTile.changeToWatered();
+
+                if (!growableTile.isWatered()) {
+                    Log.e(TAG, "!growableTile.isWatered() growableTile.changeToWatered()");
+                    growableTile.changeToWatered();
+                }
 
                 return true;
             }

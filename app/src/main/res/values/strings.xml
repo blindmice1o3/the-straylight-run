@@ -159,9 +159,9 @@
 
     <!-- RunTwo -->
     <string-array name="run_two_dialogue_array">
-        <item>till, seed, and water [%d] tiles.</item>
-        <item>in progress, currently at [%d] out of [%d] tiles tilled, seeded, and watered.</item>
-        <item>congratulation! you\'ve finished tilling, seeding, and watering [%d] tiles.</item>
+        <item>water [%d] plants (HINT: use the RobotReprogrammer4000 on the robot to run the new code).</item>
+        <item>in progress, currently at [%d] out of [%d] plants watered.</item>
+        <item>congratulation! you\'ve finished watering [%d] plants.</item>
     </string-array>
 
     <!-- RunThree -->
