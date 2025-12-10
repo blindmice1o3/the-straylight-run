@@ -255,7 +255,6 @@ Más limpio, no necesita contador.</item>
         <item>NoIntentarlo</item>
         <item>LuchadorHonesto</item>
         <item>EstudianteA+</item>
-        <item>SISTEMA42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -265,8 +264,8 @@ Más limpio, no necesita contador.</item>
         <item>¿Saltar? No, yo solo ahogo todos los míos. Victoria fácil.</item>
         <item>Pero como... en el código, ¿dónde va esa elección?</item>
         <item>Ejemplo: \n
-            if (checkIfDry(azulejo)) { \n
-                waterTile(azulejo); \n
+            if (checkIfDry(tile)) { \n
+                waterTile(tile); \n
             } else { \n
                 moveToNextTile(); \n
             }</item>
@@ -276,7 +275,6 @@ Más limpio, no necesita contador.</item>
         <item>A menos que lo codifiques mal. Entonces no hace nada. Como yo.</item>
         <item>Bueno, creo que ya lo entiendo. Si está seco, agua. Si no, omítelo. Patrón simple.</item>
         <item>Sí. Esa es toda la lógica.</item>
-        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
     </string-array>
 
     <!-- DrawerStartFragment -->

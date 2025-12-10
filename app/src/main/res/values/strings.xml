@@ -349,7 +349,6 @@ Cleaner, no counter needed.</item>
         <item>NotTrying</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
-        <item>SYSTEM42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -370,7 +369,6 @@ Cleaner, no counter needed.</item>
         <item>Unless you code it wrong. Then it does nothing. Like me.</item>
         <item>Okay, I think I get it now. If dry -> water. Else -> skip. Simple pattern.</item>
         <item>Yes. That\'s the whole logic.</item>
-        <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -386,7 +384,6 @@ Cleaner, no counter needed.</item>
         <item>13500</item>
         <item>15500</item>
         <item>16500</item>
-        <item>18000</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
