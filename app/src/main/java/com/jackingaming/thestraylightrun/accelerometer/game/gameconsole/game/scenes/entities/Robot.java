@@ -585,7 +585,9 @@ public class Robot extends Creature {
 //                if (counterCommands == COUNTER_COMMANDS_TARGET) {
 //                    counterCommands = 0;
 
-                state = State.OFF;
+                if (state != State.WALK && state != State.RUN) {
+                    state = State.OFF;
+                }
 //                }
             }
 
