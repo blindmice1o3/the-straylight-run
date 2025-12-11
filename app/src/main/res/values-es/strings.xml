@@ -191,7 +191,6 @@
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_three">
-        <item>EstudianteA+</item>
         <item>LuchadorHonesto</item>
         <item>EstudianteA+</item>
         <item>NoIntentarlo</item>
@@ -203,43 +202,52 @@
         <item>NoIntentarlo</item>
         <item>LuchadorHonesto</item>
         <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>SISTEMA42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_three">
-        <item>Bien, los bucles for sirven para repetir cosas sin copiar y pegar líneas de código. Son súper eficientes.</item>
-        <item>Espera... entonces, en lugar de escribir waterPlant() cinco veces, ¿usas un bucle?</item>
-        <item>Exactamente. Lo configuras así:
-for (int i = 0; i &lt; 5; i++) { waterPlant(); }
-Eso se ejecuta 5 veces.</item>
-        <item>Jaja, solo escríbelo 5 veces... más rápido.</item>
-        <item>Pero el bucle tiene tres partes, ¿verdad? ¿Inicio, fin, actualización? Creo que obtengo inicio (i = 0) y actualización (i++), pero el fin me confunde.</item>
-        <item>La condición de parada indica cuánto tiempo se repite el bucle. Por ejemplo, i &lt; 5. Si cambias ese número, cambia el número de veces que se ejecuta.</item>
-        <item>Hermano, lo configuraría en i &lt; 9999 y regaría las plantas para siempre.</item>
-        <item>Ah, sí. Entonces, si usas plants.size() en lugar de 5, automáticamente sabrá cuántas plantas hay en la lista. Tiene sentido.</item>
-        <item>Sí. Es dinámico. No importa si son 3 plantas o 300.000.</item>
-        <item>¿300.000 plantas? No, no, ya terminé después de 2.</item>
-        <item>¿Y luego hay un bucle "for-each"? Me perdí esa parte.</item>
-        <item>Sí, es como:
-for (Plant p : plants) { water(p); }
-Más limpio, no necesita contador.</item>
-        <item>Parece magia. Una línea para gobernarlos a todos. ¡El Señor de las Plantas!</item>
-        <item>Jaja. ¿Y romper significa parar antes... continuar significa saltarse el resto de esa planta?</item>
-        <item>Correcto. Break sale del bucle, continuar solo se salta una ronda.</item>
-        <item>Básicamente: descanso cuando estoy cansado, sigo cuando es brócoli. Entendido.</item>
-        <item>Jaja. Bueno, creo que ya lo entiendo:
-(1) Usar bucles para la repetición.
-(2) Contrabucle vs. para cada uno.
-(3) Interrumpir = parar, continuar = saltar.</item>
-        <item>Sí, esa es la hoja de ruta.</item>
-        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
+        <item>Vale, vuelvo a estar confundido.
+El robot recolectó las plantas que seleccioné, pero el entorno de desarrollo integrado (IDE) mostró todo eso de
+for (int i = 0; i &lt; plants.size(); i++).
+¿Por qué necesitamos la parte de la \"i\"?</item>
+        <item>La variable \"i\" es el contador del bucle.
+Comienza en 0, y cada vez que se ejecuta el bucle, aumenta en uno.
+El robot la utiliza para tomar la siguiente planta de la lista:
+Plant p = plants.get(i);</item>
+        <item>Mi \"i\" significa \"Debería estar durmiendo la siesta\".
+Todavía le doy vueltas a esa decisión.</item>
+        <item>Pero no escribí ningún número.
+Solo toqué algunas plantas.
+¿Por qué el código sigue necesitando contar?</item>
+        <item>Porque las listas están ordenadas.
+Cuando tocaste las plantas, el juego creó una lista en el mismo orden en que las seleccionaste:
+(primer toque -&gt; índice 0),
+(segundo toque -&gt; índice 1),
+(tercer toque -&gt; índice 2),
+...y así sucesivamente.
+El bucle for recorre esas posiciones.</item>
+        <item>El mío era algo así:
+for (int i = 0; i &lt; snacks.size(); i++)
+{ eat(snacks.get(i)); }
+Error de tiempo de ejecución: la lista de aperitivos está vacía. ¡Qué desastre!</item>
+        <item>Entonces, la \"i\" no se refiere a los números que escribo...
+¿Se refiere a que el robot lleva la cuenta de qué planta viene después?</item>
+        <item>Exactamente.
+El bucle repite una sola instrucción: \"revisa esta planta y cosecha si está lista\",
+pero el índice permite recorrer la lista planta por planta.
+Tú eliges las plantas.
+El bucle se encarga de la repetición.</item>
+        <item>Pensé que el robot se había saltado una planta...
+Resulta que ni siquiera la había seleccionado.
+Error del usuario.
+Típico de mí.</item>
+        <item>Vale, creo que lo entiendo:
+(Ejecución dos = decisiones),
+(Ejecución tres = repetir la tarea con un contador).
+Así que el robot básicamente... ¿está contando mis elecciones?</item>
+        <item>Sí.
+En la próxima ejecución, analizaremos directamente las listas, que contienen muchísimos de estos objetos.
+Los bucles y las listas van de la mano.</item>
     </string-array>
 
     <!-- DrawerStartFragment -->

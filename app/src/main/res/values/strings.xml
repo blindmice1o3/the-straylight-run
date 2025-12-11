@@ -262,7 +262,6 @@
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_three">
-        <item>A-Student</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
         <item>NotTrying</item>
@@ -274,43 +273,52 @@
         <item>NotTrying</item>
         <item>HonestStruggler</item>
         <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>SYSTEM42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_three">
-        <item>Okay, so for loops are about repeating stuff without copy-pasting lines of code. Super efficient.</item>
-        <item>Wait... so like, instead of writing waterPlant() five times, you use a loop?</item>
-        <item>Exactly. You set it up like:
-for (int i = 0; i &lt; 5; i++) { waterPlant(); }
-That runs 5 times.</item>
-        <item>Lol just write it 5 times... faster.</item>
-        <item>But the loop has 3 parts, right? Start, stop, update? I think I get start (i = 0) and update (i++), but the stop part confuses me.</item>
-        <item>The stop condition is how long it keeps looping. Like i &lt; 5. If you change that number, it changes how many times it runs.</item>
-        <item>Bro I\'d set it to i &lt; 9999 and water plants forever.</item>
-        <item>Ohhh. So if you use plants.size() instead of 5, it automatically knows how many plants are in the list. That makes sense.</item>
-        <item>Yep. That\'s dynamic. Doesn\'t matter if it\'s 3 plants or 300k.</item>
-        <item>300,000 plants?? nah fam I\'m done after 2.</item>
-        <item>And then there\'s a \"for-each loop\"? I kinda missed that part.</item>
-        <item>Yeah, it\'s like:
-for (Plant p : plants) { water(p); }
-Cleaner, no counter needed.</item>
-        <item>Looks like magic. One line to rule them all. Lord of the Plants!</item>
-        <item>LOL. And break means stop early... continue means skip the rest of that one plant?</item>
-        <item>Correct. Break exits the loop, continue just skips one round.</item>
-        <item>So basically: break when I\'m tired, continue when it\'s broccoli. Got it.</item>
-        <item>Haha. Okay, I think I get it now:
-(1) Use loops for repetition.
-(2) Counter loop vs. for-each.
-(3) Break = stop, Continue = skip.</item>
-        <item>Yep, that\'s the roadmap.</item>
-        <item>***COLLECTING LEARNER\'S NOTES***</item>
+        <item>Okay, I\'m confused again.
+The robot harvested the plants I selected, but the IDE showed that whole
+for (int i = 0; i &lt; plants.size(); i++) thing.
+Why do we need the \"i\" part?</item>
+        <item>The \"i\" is the loop counter.
+It starts at 0, and each time the loop runs, it goes up by one.
+The robot uses it to grab the next plant in your list:
+Plant p = plants.get(i);</item>
+        <item>My \"i\" stands for \"I should be napping.\"
+Still looping through that decision.</item>
+        <item>But I didn\'t type any numbers.
+I just tapped some plants.
+Why does the code still need counting?</item>
+        <item>Because lists are ordered.
+When you tapped the plants, the game created a list in the same order you selected them:
+(first tap -&gt; index 0),
+(second tap -&gt; index 1),
+(third tap -&gt; index 2),
+...and so on.
+The for loop counts through those positions.</item>
+        <item>Mine was like:
+for (int i = 0; i &lt; snacks.size(); i++)
+{ eat(snacks.get(i)); }
+Runtime error: snacks empty. Dark times.</item>
+        <item>So \"i\" isn\'t about numbers I type...
+It\'s about the robot keeping track of which plant comes next?</item>
+        <item>Exactly.
+The loop repeats a single instruction - \"check this plant and harvest if ready\" -
+but the index lets it step through the list one plant at a time.
+You pick the plants.
+The loop handles the repetition.</item>
+        <item>I thought the robot skipped a plant...
+Turns out I never selected it in the first place.
+User error.
+Classic me.</item>
+        <item>Okay — I think I get it:
+(Run Two = decisions),
+(Run Three = repeating work with a counter).
+So the robot is basically... counting my choices?</item>
+        <item>Yes.
+And next run, we\'ll look directly at Lists, which hold tons of these objects.
+Loops and Lists go hand-in-hand.</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
