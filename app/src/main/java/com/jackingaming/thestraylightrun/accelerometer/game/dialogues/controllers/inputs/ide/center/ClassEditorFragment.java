@@ -1218,7 +1218,7 @@ public class ClassEditorFragment extends Fragment {
                                 }
                             }
                         }
-                        // class PlantRun3
+                        // class RobotRun3
                         else if (method.getName().equals("inspectAndCull")) {
 
                             String answer = "        for (int i = 0; i < plants.size(); i++) {\n" +
@@ -1235,13 +1235,16 @@ public class ClassEditorFragment extends Fragment {
                                 typingView.setCode(answer);
                             }
                         }
-                        // class PlantRun3
+                        // class RobotRun3
                         else if (method.getName().equals("harvestAll")) {
 
-                            String answer = "        for (Plant p : plants) {\n" +
-                                    "            if (p.readyToHarvest()) {\n" +
+                            String answer = "        for (int i = 0; i < plants.size(); i++) {\n" +
+                                    "            \n" +
+                                    "            Plant p = plants.get(i);\n" +
+                                    "            if (p.isReadyToHarvest()) {\n" +
                                     "                p.harvest();\n" +
                                     "            }\n" +
+                                    "            \n" +
                                     "        }";
                             if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(

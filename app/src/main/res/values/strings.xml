@@ -166,9 +166,9 @@
 
     <!-- RunThree -->
     <string-array name="run_three_dialogue_array">
-        <item>harvest [%d] mystery products AND cull all [%d] diseased plants.</item>
-        <item>in progress, currently at [%d] out of [%d] harvested AND [%d] out of [%d] culled.</item>
-        <item>well done! you\'ve finished harvesting [%d] mystery products AND culled [%d] diseased plants.</item>
+        <item>harvest [%d] mystery products.</item>
+        <item>in progress, currently at [%d] out of [%d] harvested.</item>
+        <item>well done! you\'ve finished harvesting [%d] mystery products.</item>
     </string-array>
 
     <!-- RunFour -->

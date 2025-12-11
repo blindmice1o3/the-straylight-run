@@ -116,9 +116,9 @@
 
     <!-- RunThree -->
     <string-array name="run_three_dialogue_array">
-        <item>cosechar [%d] productos misteriosos Y descartar todas las [%d] plantas enfermas.</item>
-        <item>en progreso, actualmente [%d] de [%d] cosechados Y [%d] de [%d] descartados.</item>
-        <item>¡bien hecho! has terminado de cosechar [%d] productos misteriosos Y has descartado [%d] plantas enfermas.</item>
+        <item>cosechar [%d] productos misteriosos.</item>
+        <item>en progreso, actualmente [%d] de [%d] cosechados.</item>
+        <item>¡bien hecho! has terminado de cosechar [%d] productos misteriosos.</item>
     </string-array>
 
     <!-- RunFour -->

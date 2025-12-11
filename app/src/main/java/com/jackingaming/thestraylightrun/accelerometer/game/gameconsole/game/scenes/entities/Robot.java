@@ -524,6 +524,12 @@ public class Robot extends Creature {
                     List<Command> pathFromShippingBinAsCommands =
                             handleFindPathBackFromShippingBin();
                     commands.addAll(pathFromShippingBinAsCommands);
+
+                    if (placeInShippingBinListener != null) {
+                        placeInShippingBinListener.sellableAdded(
+                                (Sellable) carryable
+                        );
+                    }
                 }
 
                 if (commands.isEmpty()) {
@@ -537,6 +543,21 @@ public class Robot extends Creature {
                 }
             } else {
                 Log.e(TAG, "command NOT successfully executed... keep queue the same. command: " + command.getClass().getSimpleName());
+
+                // In case player harvested before robot got to it on its list of harvest.
+                if (command instanceof HarvestGrowableTileCommand) {
+                    commands.remove(command);
+
+                    if (commands.isEmpty()) {
+                        tileWorkRequests.remove(0);
+                    }
+
+                    if (command instanceof WalkRightCommand || command instanceof WalkDownCommand || command instanceof WalkLeftCommand || command instanceof WalkUpCommand) {
+                        // do nothing.
+                    } else {
+                        doNextCommand();
+                    }
+                }
                 // TODO: 2025_10_23. do nothing. (maybe).
 //                            if (command instanceof WalkUpCommand || command instanceof WalkDownCommand ||
 //                                    command instanceof WalkLeftCommand || command instanceof WalkRightCommand) {

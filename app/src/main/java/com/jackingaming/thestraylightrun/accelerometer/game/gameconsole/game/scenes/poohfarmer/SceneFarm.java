@@ -263,36 +263,36 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "init()");
 
         this.game = game;
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                addSwarmOfEel();
-            }
-        }, 7, 0, false);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                removeSwarmOfEel();
-            }
-        }, 9, 0, false);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                addSwarmOfEel();
-            }
-        }, 4, 0, true);
+//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+//            @Override
+//            public void executeTimedEvent() {
+//                addSwarmOfEel();
+//            }
+//        }, 7, 0, false);
+//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+//            @Override
+//            public void executeTimedEvent() {
+//                removeSwarmOfEel();
+//            }
+//        }, 9, 0, false);
+//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+//            @Override
+//            public void executeTimedEvent() {
+//                addSwarmOfEel();
+//            }
+//        }, 4, 0, true);
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
                 ShippingBinTile.sellStash();
             }
         }, 5, 0, true);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                removeSwarmOfEel();
-            }
-        }, 6, 0, true);
+//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+//            @Override
+//            public void executeTimedEvent() {
+//                removeSwarmOfEel();
+//            }
+//        }, 6, 0, true);
 
         if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {

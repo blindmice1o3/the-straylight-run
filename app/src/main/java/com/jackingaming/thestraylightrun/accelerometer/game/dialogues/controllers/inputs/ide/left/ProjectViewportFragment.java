@@ -268,25 +268,25 @@ public class ProjectViewportFragment extends Fragment {
                 NAME_CLASS_PLANT_RUN3, null);
 
         // FIELDS
-        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
-                null,
-                "boolean", "diseased", null,
-                null,
-                null,
-                null, false));
+//        classPlant.addField(new Field(ClassComponent.AccessModifier.DEFAULT,
+//                null,
+//                "boolean", "diseased", null,
+//                null,
+//                null,
+//                null, false));
 
         // CONSTRUCTORS
 
         // METHODS
-        String bodyIsDiseased = "        return diseased;";
-        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "boolean", "isDiseased",
-                null,
-                bodyIsDiseased,
-                null,
-                null,
-                false));
+//        String bodyIsDiseased = "        return diseased;";
+//        classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "boolean", "isDiseased",
+//                null,
+//                bodyIsDiseased,
+//                null,
+//                null,
+//                false));
         String bodyHarvest = "        /* cut & collect */";
         classPlant.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
@@ -295,7 +295,7 @@ public class ProjectViewportFragment extends Fragment {
                 bodyHarvest,
                 null,
                 null,
-                true));
+                false));
 
         return classPlant;
     }
@@ -311,17 +311,17 @@ public class ProjectViewportFragment extends Fragment {
         // Intentionally blank.
 
         // METHODS
-        List<VariableDeclaration> argumentListInspectAndCull = new ArrayList<>();
-        argumentListInspectAndCull.add(
-                new VariableDeclaration("List<Plant>", "plants")
-        );
-        String bodyInspectAndCull = "        // TODO: Use for loop to check each plant. If the plant is diseased, remove it.";
-        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
-                null,
-                "void", "inspectAndCull",
-                argumentListInspectAndCull,
-                bodyInspectAndCull,
-                null, null, false));
+//        List<VariableDeclaration> argumentListInspectAndCull = new ArrayList<>();
+//        argumentListInspectAndCull.add(
+//                new VariableDeclaration("List<Plant>", "plants")
+//        );
+//        String bodyInspectAndCull = "        // TODO: Use for loop to check each plant. If the plant is diseased, remove it.";
+//        classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
+//                null,
+//                "void", "inspectAndCull",
+//                argumentListInspectAndCull,
+//                bodyInspectAndCull,
+//                null, null, false));
         List<VariableDeclaration> argumentListHarvestAll = new ArrayList<>();
         argumentListHarvestAll.add(
                 new VariableDeclaration("List<Plant>", "plants")
@@ -334,7 +334,7 @@ public class ProjectViewportFragment extends Fragment {
                 bodyHarvestAll,
                 null,
                 null,
-                true));
+                false));
 
         return classRobotRun3;
     }

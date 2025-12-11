@@ -17,7 +17,7 @@ public abstract class Creature extends Entity {
         void sellableAdded(Sellable sellableAdded);
     }
 
-    private PlaceInShippingBinListener placeInShippingBinListener;
+    protected PlaceInShippingBinListener placeInShippingBinListener;
 
     public void setPlaceInShippingBinListener(PlaceInShippingBinListener placeInShippingBinListener) {
         this.placeInShippingBinListener = placeInShippingBinListener;
