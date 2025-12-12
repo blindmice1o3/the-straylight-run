@@ -70,7 +70,7 @@ public class TextboxState
 
     @Override
     public void exit() {
-        Log.e(TAG, "exit()");
+        Log.d(TAG, "exit()");
 
         // Do nothing.
     }

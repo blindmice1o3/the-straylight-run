@@ -30,8 +30,8 @@ public class TypeWriterDialogFragment extends DialogFragment
     public static final String ARG_DELAY = "delay";
     public static final String ARG_PORTRAIT = "portrait";
     public static final String ARG_TEXT = "text";
-    public static final String ARG_DISMISS_LISTENER = "dismissListener";
-    public static final String ARG_TEXT_COMPLETION_LISTENER = "textCompletionListener";
+    public static final String ARG_DISMISS_LISTENER = "dismiss_listener";
+    public static final String ARG_TEXT_COMPLETION_LISTENER = "text_completion_listener";
 
     public interface DismissListener extends Serializable {
         void onDismiss();
@@ -50,7 +50,6 @@ public class TypeWriterDialogFragment extends DialogFragment
                                                        DismissListener dismissListener,
                                                        TypeWriterTextView.TextCompletionListener textCompletionListener) {
         TypeWriterDialogFragment fragment = new TypeWriterDialogFragment();
-
 
         Bundle args = new Bundle();
         args.putLong(ARG_DELAY, delay);
@@ -71,6 +70,7 @@ public class TypeWriterDialogFragment extends DialogFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate()");
 
         if (getArguments() != null) {
             delay = getArguments().getLong(ARG_DELAY);

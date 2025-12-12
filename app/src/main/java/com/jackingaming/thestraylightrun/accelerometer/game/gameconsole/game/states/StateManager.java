@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.GrowSystemPartsDataCarrier;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuState;
@@ -18,6 +19,7 @@ public class StateManager {
 
     private NewOrContinueState newOrContinueState;
     private TextboxState textboxState;
+    private GrowSystemPartsDisplayerState growSystemPartsDisplayerState;
     private GameState gameState;
     private MenuStateImpl menuState;
 
@@ -115,6 +117,20 @@ public class StateManager {
                 textCompletionListener
         };
         textboxState.enter(args);
+    }
+
+    public void pushGrowSystemPartsDisplayerState(GrowSystemPartsDataCarrier growSystemPartsDataCarrier) {
+        getCurrentState().exit();
+
+        if (growSystemPartsDisplayerState == null) {
+            growSystemPartsDisplayerState = new GrowSystemPartsDisplayerState();
+            growSystemPartsDisplayerState.init(game);
+        }
+
+        stateStack.add(growSystemPartsDisplayerState);
+
+        Object[] args = {growSystemPartsDataCarrier};
+        growSystemPartsDisplayerState.enter(args);
     }
 
     public TextboxState getTextboxState() {

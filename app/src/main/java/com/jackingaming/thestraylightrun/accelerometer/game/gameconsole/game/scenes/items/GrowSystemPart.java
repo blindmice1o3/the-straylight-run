@@ -5,14 +5,14 @@ import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
 
-public class GrowSystemParts extends Item {
-    public static final String TAG = GrowSystemParts.class.getSimpleName();
+public class GrowSystemPart extends Item {
+    public static final String TAG = GrowSystemPart.class.getSimpleName();
 
     private static final float PRICE_DEFAULT = -1f;
 
     private int id;
 
-    public GrowSystemParts(int id) {
+    public GrowSystemPart(int id) {
         this.id = id;
     }
 

@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models.GrowSystemPartsDataCarrier;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
@@ -23,6 +24,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemPart;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
@@ -50,6 +52,8 @@ public class SceneHothouse extends Scene {
     public void setLootListener(LootListener lootListener) {
         this.lootListener = lootListener;
     }
+
+    private List<GrowSystemPart> growSystemParts = new ArrayList<>();
 
     public static final int X_SPAWN_INDEX_DEFAULT = 5;
     public static final int Y_SPAWN_INDEX_DEFAULT = 12;
@@ -295,6 +299,19 @@ public class SceneHothouse extends Scene {
                         itemCurrentlyFacing instanceof Milk ||
                         itemCurrentlyFacing instanceof Cheese) {
                     player.pickUp(itemCurrentlyFacing);
+                } else if (itemCurrentlyFacing instanceof GrowSystemPart) {
+
+                    growSystemParts.add(
+                            (GrowSystemPart) itemCurrentlyFacing
+                    );
+                    GrowSystemPartsDataCarrier growSystemPartsDataCarrier = new GrowSystemPartsDataCarrier(growSystemParts);
+
+                    itemManager.removeItem(itemCurrentlyFacing);
+
+                    // TODO: push new state onto stateStack.
+                    game.getStateManager().pushGrowSystemPartsDisplayerState(
+                            growSystemPartsDataCarrier
+                    );
                 }
                 // everything else goes into backpack (default response)
                 else {

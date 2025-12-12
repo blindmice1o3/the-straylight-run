@@ -34,7 +34,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.EntityCommandOwner;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Fodder;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemParts;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowSystemPart;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
@@ -457,35 +457,35 @@ public class SceneFarm extends Scene {
 
         /////////////////////////////////////////////////
 
-        growSystemParts1 = new GrowSystemParts(1);
-        growSystemParts2 = new GrowSystemParts(2);
-        growSystemParts3 = new GrowSystemParts(3);
-        growSystemParts4 = new GrowSystemParts(4);
-        growSystemParts5 = new GrowSystemParts(5);
-        growSystemParts6 = new GrowSystemParts(6);
+        growSystemPart1 = new GrowSystemPart(1);
+        growSystemPart2 = new GrowSystemPart(2);
+        growSystemPart3 = new GrowSystemPart(3);
+        growSystemPart4 = new GrowSystemPart(4);
+        growSystemPart5 = new GrowSystemPart(5);
+        growSystemPart6 = new GrowSystemPart(6);
 
-        growSystemParts1.init(game);
-        growSystemParts2.init(game);
-        growSystemParts3.init(game);
-        growSystemParts4.init(game);
-        growSystemParts5.init(game);
-        growSystemParts6.init(game);
+        growSystemPart1.init(game);
+        growSystemPart2.init(game);
+        growSystemPart3.init(game);
+        growSystemPart4.init(game);
+        growSystemPart5.init(game);
+        growSystemPart6.init(game);
 
-        itemManager.addItem(growSystemParts1);
-        itemManager.addItem(growSystemParts2);
-        itemManager.addItem(growSystemParts3);
-        itemManager.addItem(growSystemParts4);
-        itemManager.addItem(growSystemParts5);
-        itemManager.addItem(growSystemParts6);
+        itemManager.addItem(growSystemPart1);
+        itemManager.addItem(growSystemPart2);
+        itemManager.addItem(growSystemPart3);
+        itemManager.addItem(growSystemPart4);
+        itemManager.addItem(growSystemPart5);
+        itemManager.addItem(growSystemPart6);
 
         ////////////////////////////////////////////
 
-        aimlessWalker1.pickUp(growSystemParts1);
-        aimlessWalker2.pickUp(growSystemParts2);
-        aimlessWalker3.pickUp(growSystemParts3);
-        aimlessWalker4.pickUp(growSystemParts4);
-        aimlessWalker5.pickUp(growSystemParts5);
-        aimlessWalker6.pickUp(growSystemParts6);
+        aimlessWalker1.pickUp(growSystemPart1);
+        aimlessWalker2.pickUp(growSystemPart2);
+        aimlessWalker3.pickUp(growSystemPart3);
+        aimlessWalker4.pickUp(growSystemPart4);
+        aimlessWalker5.pickUp(growSystemPart5);
+        aimlessWalker6.pickUp(growSystemPart6);
 
         aimlessWalker1.changeToWalk();
         aimlessWalker2.changeToWalk();
@@ -1303,7 +1303,7 @@ public class SceneFarm extends Scene {
         });
     }
 
-    private GrowSystemParts growSystemParts1, growSystemParts2, growSystemParts3, growSystemParts4, growSystemParts5, growSystemParts6;
+    private GrowSystemPart growSystemPart1, growSystemPart2, growSystemPart3, growSystemPart4, growSystemPart5, growSystemPart6;
     private Milk milkOnGround;
     private Egg eggOnGround;
     private Fodder fodderOnGround;

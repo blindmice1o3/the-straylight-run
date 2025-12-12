@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.GrowSystemPartsDisplayerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
@@ -355,6 +356,16 @@ public class GameConsoleFragment extends Fragment
                 .setReorderingAllowed(true)
                 .setCustomAnimations(R.anim.slide_from_bottom_via_translate, R.anim.slide_to_top_via_translate)
                 .replace(R.id.fcv_statsdisplayerfragment, typeWriterDialogFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showGrowSystemPartsDisplayerFragment(GrowSystemPartsDisplayerFragment growSystemPartsDisplayerFragment) {
+        getChildFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_from_bottom_via_translate, R.anim.slide_to_top_via_translate)
+                .replace(R.id.fcv_statsdisplayerfragment, growSystemPartsDisplayerFragment)
                 .addToBackStack(null)
                 .commit();
     }
