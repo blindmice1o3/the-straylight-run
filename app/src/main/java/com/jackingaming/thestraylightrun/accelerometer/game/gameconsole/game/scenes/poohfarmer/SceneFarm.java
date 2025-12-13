@@ -423,23 +423,23 @@ public class SceneFarm extends Scene {
         Log.d(TAG, "setupForRunFour()");
 
         aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
         aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
-                ((X_INDEX_SPAWN_ROBOT) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
+        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+        aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 4) * Tile.HEIGHT));
         aimlessWalker5 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 5) * Tile.HEIGHT));
         aimlessWalker6 = new AimlessWalker(AimlessWalker.Type.SHEEP,
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
+                ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 6) * Tile.HEIGHT));
 
         aimlessWalker1.init(game);
         aimlessWalker2.init(game);
@@ -463,6 +463,67 @@ public class SceneFarm extends Scene {
         growSystemPart4 = new GrowSystemPart(4);
         growSystemPart5 = new GrowSystemPart(5);
         growSystemPart6 = new GrowSystemPart(6);
+
+        // Make 2 GrowSystemPart broken.
+        List<GrowSystemPart> growSystemParts = new ArrayList<>();
+        growSystemParts.add(growSystemPart1);
+        growSystemParts.add(growSystemPart2);
+        growSystemParts.add(growSystemPart3);
+        growSystemParts.add(growSystemPart4);
+        growSystemParts.add(growSystemPart5);
+        growSystemParts.add(growSystemPart6);
+        int targetBrokenParts = 2;
+        int counterBrokenParts = 0;
+        for (GrowSystemPart growSystemPart : growSystemParts) {
+            if (counterBrokenParts < targetBrokenParts) {
+                double randomNumber = Math.random();
+                // broken
+                if (randomNumber < 0.5) {
+                    /////////////////////
+                    counterBrokenParts++;
+                    /////////////////////
+                    // isPowered broken
+                    if (randomNumber < 0.16) {
+                        growSystemPart.setPowered(false);
+                    }
+                    // isCalibrated broken
+                    else if (randomNumber >= 0.16 && randomNumber < 0.32) {
+                        growSystemPart.setCalibrated(false);
+                    }
+                    // isPowered AND isCalibrated broken
+                    else {
+                        growSystemPart.setPowered(false);
+                        growSystemPart.setCalibrated(false);
+                    }
+                }
+            }
+        }
+        // in case we don't reach 2 broken parts from first for-loop.
+        if (counterBrokenParts < targetBrokenParts) {
+            for (GrowSystemPart growSystemPart : growSystemParts) {
+                if (counterBrokenParts < targetBrokenParts) {
+                    if (growSystemPart.isPowered() && growSystemPart.isCalibrated()) {
+                        /////////////////////
+                        counterBrokenParts++;
+                        /////////////////////
+                        double randomNumber = Math.random();
+                        // isPowered broken
+                        if (randomNumber < 0.33) {
+                            growSystemPart.setPowered(false);
+                        }
+                        // isCalibrated broken
+                        else if (randomNumber >= 0.33 && randomNumber < 0.66) {
+                            growSystemPart.setCalibrated(false);
+                        }
+                        // isPowered AND isCalibrated broken
+                        else {
+                            growSystemPart.setPowered(false);
+                            growSystemPart.setCalibrated(false);
+                        }
+                    }
+                }
+            }
+        }
 
         growSystemPart1.init(game);
         growSystemPart2.init(game);

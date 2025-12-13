@@ -124,8 +124,8 @@
     <!-- RunFour -->
     <string-array name="run_four_dialogue_array">
         <item>arrear [%d] ovejas al cuarto de cultivo para obtener [partes del sistema de cultivo].</item>
-        <item>en progreso, actualmente en [%d] de [%d] ovejas pastoreadas ([partes del sistema de cultivo] obtenidas).</item>
-        <item>¡siéntete orgulloso! has terminado de pastorear [%d] ovejas (obteniendo [partes del sistema de cultivo]).</item>
+        <item>en progreso, actualmente en [%d] de [%d] ovejas pastoreadas.</item>
+        <item>¡siéntete orgulloso! has terminado de pastorear [%d] ovejas.</item>
     </string-array>
 
     <!-- RunFive -->

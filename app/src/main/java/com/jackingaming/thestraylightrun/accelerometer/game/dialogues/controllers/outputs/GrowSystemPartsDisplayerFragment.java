@@ -1,6 +1,9 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +34,7 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
     }
 
     private GrowSystemPartsDataCarrier growSystemPartsDataCarrier;
+    private List<GrowSystemPart> growSystemParts;
     private List<ImageView> ivGrowSystemPartsList;
     private AnimationListener animationListener;
 
@@ -56,6 +60,8 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
         if (getArguments() != null) {
             growSystemPartsDataCarrier = (GrowSystemPartsDataCarrier) getArguments().getSerializable(ARG_GROW_SYSTEM_PARTS_DATA_CARRIER);
             animationListener = (AnimationListener) getArguments().getSerializable(ARG_ANIMATION_LISTENER);
+
+            growSystemParts = growSystemPartsDataCarrier.getGrowSystemParts();
         }
     }
 
@@ -87,7 +93,6 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
         ivGrowSystemPartsList.add(ivGrowSystemParts4);
         ivGrowSystemPartsList.add(ivGrowSystemParts5);
 
-        List<GrowSystemPart> growSystemParts = growSystemPartsDataCarrier.getGrowSystemParts();
         for (int i = 0; i < growSystemParts.size(); i++) {
             ivGrowSystemPartsList.get(i).setImageBitmap(
                     growSystemParts.get(i).getImage()
@@ -114,30 +119,140 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
 
         if (elapsedOverall >= 0 && elapsedOverall < 1000 && !updatedIndex0) {
             updatedIndex0 = true;
+
             ivGrowSystemParts0.animate().setDuration(2500L);
+            ivGrowSystemParts0.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 0) {
+                        GrowSystemPart growSystemPart0 = growSystemParts.get(0);
+                        ImageView ivGrowSystemPart0 = ivGrowSystemPartsList.get(0);
+                        if (growSystemPart0.isPowered() && growSystemPart0.isCalibrated()) {
+                            ivGrowSystemPart0.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart0.setBackgroundColor(Color.RED);
+                        }
+                    }
+                }
+            });
             ivGrowSystemParts0.animate().rotation(360);
         } else if (elapsedOverall >= 1000 && elapsedOverall < 2000 && !updatedIndex1) {
             updatedIndex1 = true;
+
             ivGrowSystemParts1.animate().setDuration(2500L);
+            ivGrowSystemParts1.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 1) {
+                        GrowSystemPart growSystemPart1 = growSystemParts.get(1);
+                        ImageView ivGrowSystemPart1 = ivGrowSystemPartsList.get(1);
+                        if (growSystemPart1.isPowered() && growSystemPart1.isCalibrated()) {
+                            ivGrowSystemPart1.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart1.setBackgroundColor(Color.RED);
+                        }
+                    }
+                }
+            });
             ivGrowSystemParts1.animate().rotation(360);
         } else if (elapsedOverall >= 2000 && elapsedOverall < 3000 && !updatedIndex2) {
             updatedIndex2 = true;
+
             ivGrowSystemParts2.animate().setDuration(2500L);
+            ivGrowSystemParts2.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 2) {
+                        GrowSystemPart growSystemPart2 = growSystemParts.get(2);
+                        ImageView ivGrowSystemPart2 = ivGrowSystemPartsList.get(2);
+                        if (growSystemPart2.isPowered() && growSystemPart2.isCalibrated()) {
+                            ivGrowSystemPart2.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart2.setBackgroundColor(Color.RED);
+                        }
+                    }
+                }
+            });
             ivGrowSystemParts2.animate().rotation(360);
         } else if (elapsedOverall >= 3000 && elapsedOverall < 4000 && !updatedIndex3) {
             updatedIndex3 = true;
+
             ivGrowSystemParts3.animate().setDuration(2500L);
+            ivGrowSystemParts3.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 3) {
+                        GrowSystemPart growSystemPart3 = growSystemParts.get(3);
+                        ImageView ivGrowSystemPart3 = ivGrowSystemPartsList.get(3);
+                        if (growSystemPart3.isPowered() && growSystemPart3.isCalibrated()) {
+                            ivGrowSystemPart3.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart3.setBackgroundColor(Color.RED);
+                        }
+                    }
+                }
+            });
             ivGrowSystemParts3.animate().rotation(360);
         } else if (elapsedOverall >= 4000 && elapsedOverall < 5000 && !updatedIndex4) {
             updatedIndex4 = true;
+
             ivGrowSystemParts4.animate().setDuration(2500L);
+            ivGrowSystemParts4.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 4) {
+                        GrowSystemPart growSystemPart4 = growSystemParts.get(4);
+                        ImageView ivGrowSystemPart4 = ivGrowSystemPartsList.get(4);
+                        if (growSystemPart4.isPowered() && growSystemPart4.isCalibrated()) {
+                            ivGrowSystemPart4.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart4.setBackgroundColor(Color.RED);
+                        }
+                    }
+                }
+            });
             ivGrowSystemParts4.animate().rotation(360);
         } else if (elapsedOverall >= 5000 && elapsedOverall < 6000 && !updatedIndex5) {
             updatedIndex5 = true;
-            ivGrowSystemParts5.animate().setDuration(2500L);
-            ivGrowSystemParts5.animate().rotation(360);
 
-            animationListener.onAnimationFinish();
+            ivGrowSystemParts5.animate().setDuration(2500L);
+            ivGrowSystemParts5.animate().setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+
+                    // check broken
+                    if (growSystemParts.size() > 5) {
+                        GrowSystemPart growSystemPart5 = growSystemParts.get(5);
+                        ImageView ivGrowSystemPart5 = ivGrowSystemPartsList.get(5);
+                        if (growSystemPart5.isPowered() && growSystemPart5.isCalibrated()) {
+                            ivGrowSystemPart5.setBackgroundColor(Color.GREEN);
+                        } else {
+                            ivGrowSystemPart5.setBackgroundColor(Color.RED);
+                        }
+                    }
+
+                    //////////////////////////////////////
+                    animationListener.onAnimationFinish();
+                    //////////////////////////////////////
+                }
+            });
+            ivGrowSystemParts5.animate().rotation(360);
         }
     }
 

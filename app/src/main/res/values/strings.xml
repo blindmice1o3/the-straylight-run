@@ -174,8 +174,8 @@
     <!-- RunFour -->
     <string-array name="run_four_dialogue_array">
         <item>herd [%d] sheeps into grow room to obtain [grow system parts].</item>
-        <item>in progress, currently at [%d] out of [%d] sheeps herded ([grow system parts] obtained).</item>
-        <item>take pride! you\'ve finished herding [%d] sheeps (obtaining [grow system parts]).</item>
+        <item>in progress, currently at [%d] out of [%d] sheeps herded.</item>
+        <item>take pride! you\'ve finished herding [%d] sheeps.</item>
     </string-array>
 
     <!-- RunFive -->

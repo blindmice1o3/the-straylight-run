@@ -11,9 +11,13 @@ public class GrowSystemPart extends Item {
     private static final float PRICE_DEFAULT = -1f;
 
     private int id;
+    private boolean isPowered;
+    private boolean isCalibrated;
 
     public GrowSystemPart(int id) {
         this.id = id;
+        isPowered = true;
+        isCalibrated = true;
     }
 
     @Override
@@ -42,5 +46,21 @@ public class GrowSystemPart extends Item {
         } else if (id == 6) {
             image = Bitmap.createBitmap(spriteSheet, 729, 512, 258, 413);
         }
+    }
+
+    public boolean isPowered() {
+        return isPowered;
+    }
+
+    public void setPowered(boolean powered) {
+        isPowered = powered;
+    }
+
+    public boolean isCalibrated() {
+        return isCalibrated;
+    }
+
+    public void setCalibrated(boolean calibrated) {
+        isCalibrated = calibrated;
     }
 }
