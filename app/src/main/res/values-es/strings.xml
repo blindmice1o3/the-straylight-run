@@ -164,7 +164,6 @@
         <item>LuchadorHonesto</item>
         <item>EstudianteA+</item>
         <item>NoIntentarlo</item>
-        <item>SISTEMA42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -186,7 +185,6 @@
         <item>¿Y .remove() saca algo de la canasta, y .set() lo intercambia con otra cosa?</item>
         <item>Correcto. Quitar lo saca por completo, configurar lo reemplaza.</item>
         <item>Así que puedo quitar el brócoli y reemplazarlo con papas fritas. Listo.</item>
-        <item>***RECOPILA LAS NOTAS DEL ALUMNO***</item>
     </string-array>
 
     <!-- DrawerStartFragment -->

@@ -214,7 +214,6 @@
         <item>HonestStruggler</item>
         <item>A-Student</item>
         <item>NotTrying</item>
-        <item>SYSTEM42</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -236,7 +235,6 @@
         <item>And .remove() kicks something out of the basket, .set() swaps it with something else?</item>
         <item>Right. Remove takes it out completely, set replaces it.</item>
         <item>So I can remove broccoli and replace with fries. Done.</item>
-        <item>***COLLECTING LEARNER\'S NOTES***</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -257,7 +255,6 @@
         <item>26000</item>
         <item>28500</item>
         <item>31000</item>
-        <item>33000</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
