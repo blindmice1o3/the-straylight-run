@@ -177,30 +177,18 @@ public class SeedShopDialogFragment extends DialogFragment {
 //            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
 
-        // TODO: seedShopOwnerQuest NEVER given/started anywhere.
-        boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getQuestLabel());
-        TypeWriterTextView.TextCompletionListener textCompletionListener;
-        if (alreadyHaveQuest) {
-            Log.d(TAG, "alreadyHaveQuest");
+        // Set up to push TextboxState based on Run Number.
+        Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
+        String messageGreeting = null;
+        TypeWriterTextView.TextCompletionListener textCompletionListener = null;
 
-            textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
-                @Override
-                public void onAnimationFinish() {
-                    Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
-
-                    game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
-                }
-            };
-        } else {
-            Log.d(TAG, "!alreadyHaveQuest");
-
-            textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
-                @Override
-                public void onAnimationFinish() {
-                    Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
-
-                    if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
-                        Log.e(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
+        switch (game.getRun()) {
+            case ONE:
+                messageGreeting = runOne.getDialogueForCurrentState();
+                textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                    @Override
+                    public void onAnimationFinish() {
+                        Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
 
                         game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
 
@@ -263,42 +251,71 @@ public class SeedShopDialogFragment extends DialogFragment {
                         } else {
                             Log.e(TAG, "runOne.getCurrentState() != Quest.State.STARTED");
                         }
-
-                    } else {
-                        Log.e(TAG, "game.getRun() != com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE");
-
-                        boolean wasQuestAccepted = Player.getInstance().getQuestManager().addQuest(
-                                seedShopOwnerQuest00
-                        );
-
-                        if (wasQuestAccepted) {
-                            Log.e(TAG, "wasQuestAccepted");
-                            seedShopOwnerQuest00.dispenseStartingItems();
-                        } else {
-                            Log.e(TAG, "!wasQuestAccepted");
-                        }
                     }
+                };
+                break;
+            case TWO:
+            case THREE:
+            case FOUR:
+                messageGreeting = getString(R.string.text_message_greeting_default);
+                textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                    @Override
+                    public void onAnimationFinish() {
+                        Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
+
+                        game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                    }
+                };
+                break;
+            case FIVE:
+                // unlocked version
+                messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
+
+                boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(seedShopOwnerQuest00.getQuestLabel());
+                if (alreadyHaveQuest) {
+                    Log.d(TAG, "alreadyHaveQuest");
+
+                    textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
+
+                            game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                        }
+                    };
+                } else {
+                    Log.d(TAG, "!alreadyHaveQuest");
+
+                    textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.d(TAG, "onStart() textCompletionListener.onAnimationFinish()");
+
+                            game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+
+                            boolean wasQuestAccepted = Player.getInstance().getQuestManager().addQuest(
+                                    seedShopOwnerQuest00
+                            );
+
+                            if (wasQuestAccepted) {
+                                Log.e(TAG, "wasQuestAccepted");
+                                seedShopOwnerQuest00.dispenseStartingItems();
+                            } else {
+                                Log.e(TAG, "!wasQuestAccepted");
+                            }
+                        }
+                    };
                 }
-            };
+
+                break;
         }
 
-        Bitmap image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
-        String messageGreeting = null;
-        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
-            Log.d(TAG, "game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE USING run one DIALOGUE");
-
-            messageGreeting = runOne.getDialogueForCurrentState();
-        } else {
-            Log.d(TAG, "game.getRun() != com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE USING default DIALOGUE");
-
-            messageGreeting = seedShopOwnerQuest00.getDialogueForCurrentState();
-        }
-
-        // TODO: 2025_10_31 commander IntroState to activate textbox.
+        //////////////////////////////////////////////
         game.getStateManager().pushTextboxState(image,
                 messageGreeting,
                 null,
                 textCompletionListener);
+        //////////////////////////////////////////////
     }
 
     @Override

@@ -150,6 +150,7 @@
     <!-- SeedShopDialogFragment -->
     <string name="text_seed_name">seed\'s name</string>
     <string name="text_seed_description">seed\'s description</string>
+    <string name="text_message_greeting_default">hello! welcome to my shop!</string>
 
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">
