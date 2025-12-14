@@ -64,6 +64,7 @@
     <string name="equip_robot_reprogrammer_4000">¡Felicitaciones por equipar el ReprogramadorDeRobots4000! ¡Úsalo en el robot para ejecutar el nuevo código!</string>
     <string name="use_robot_reprogrammer_4000">¡Felicitaciones por utilizar ReprogramadorDeRobots4000 en el robot!</string>
     <string name="robot_dialogfragment_off">apagado</string>
+    <string name="robot_dialogfragment_turn_in_place">girar en el lugar</string>
     <string name="robot_dialogfragment_walk">caminar</string>
     <string name="robot_dialogfragment_run">correr</string>
     <string name="robot_dialogfragment_till_seed_water">labrar/sembrar/regar</string>

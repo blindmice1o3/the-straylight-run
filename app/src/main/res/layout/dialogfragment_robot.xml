@@ -14,10 +14,25 @@
         android:layout_marginBottom="2dp"
         android:text="@string/robot_dialogfragment_off"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/tv_walk"
+        app:layout_constraintBottom_toTopOf="@id/tv_turn_in_place"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_turn_in_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/robot_dialogfragment_turn_in_place"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/tv_walk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_off" />
 
     <TextView
         android:id="@+id/tv_walk"
@@ -32,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/tv_run"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_off" />
+        app:layout_constraintTop_toBottomOf="@id/tv_turn_in_place" />
 
     <TextView
         android:id="@+id/tv_run"

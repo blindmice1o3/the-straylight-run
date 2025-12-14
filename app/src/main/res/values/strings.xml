@@ -86,6 +86,7 @@
 
     <!-- dialogfragment_robot.xml -->
     <string name="robot_dialogfragment_off">off</string>
+    <string name="robot_dialogfragment_turn_in_place">turn in place</string>
     <string name="robot_dialogfragment_walk">walk</string>
     <string name="robot_dialogfragment_run">run</string>
     <string name="robot_dialogfragment_till_seed_water">till/seed/water</string>

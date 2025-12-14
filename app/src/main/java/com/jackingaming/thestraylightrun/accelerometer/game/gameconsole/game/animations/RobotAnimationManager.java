@@ -75,7 +75,7 @@ public class RobotAnimationManager
                 Log.e(TAG, "getCurrentFrame() state is RUN... direction is one that is not defined.");
                 return null;
             }
-        } else if (state == Robot.State.SPIN) {
+        } else if (state == Robot.State.TURN_IN_PLACE) {
             return spinAnimation.getCurrentFrame();
         } else {
             Log.e(TAG, "getCurrentFrame() else-clause... state is unknown.");

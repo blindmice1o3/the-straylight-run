@@ -72,7 +72,7 @@ public class Robot extends Creature {
         this.listener = listener;
     }
 
-    public enum State {OFF, WALK, RUN, TILE_SELECTED, SPIN;}
+    public enum State {OFF, WALK, RUN, TILE_SELECTED, TURN_IN_PLACE;}
 
     private RobotAnimationManager robotAnimationManager;
     transient private ObjectAnimator movementAnimator;
@@ -119,7 +119,7 @@ public class Robot extends Creature {
         Log.d(TAG, "doShowRobotDialogFragmentFirstTime");
         isFirstTimeShowingRobotDialogFragment = false;
 
-        state = State.SPIN;
+        state = State.TURN_IN_PLACE;
 
         game.getViewportListener().addAndShowParticleExplosionView();
 
@@ -230,7 +230,7 @@ public class Robot extends Creature {
             case TILE_SELECTED:
                 // Intentionally blank.
                 break;
-            case SPIN:
+            case TURN_IN_PLACE:
                 // Intentionally blank.
                 break;
         }
@@ -398,6 +398,10 @@ public class Robot extends Creature {
         tileWorkRequests.clear();
     }
 
+    public void changeToTurnInPlace() {
+        state = State.TURN_IN_PLACE;
+    }
+
     public void changeToWalk() {
         state = State.WALK;
         movementAnimator.setDuration(DEFAULT_MOVEMENT_DURATION);
@@ -414,6 +418,13 @@ public class Robot extends Creature {
             public void onOffButtonClick(View view, RobotDialogFragment robotDialogFragment) {
                 Log.e(TAG, "OFF");
                 changeToOff();
+                game.setPaused(false);
+            }
+
+            @Override
+            public void onTurnInPlaceButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+                Log.e(TAG, "TURN_IN_PLACE");
+                changeToTurnInPlace();
                 game.setPaused(false);
             }
 

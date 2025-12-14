@@ -25,6 +25,8 @@ public class RobotDialogFragment extends DialogFragment {
     public interface ButtonListener extends Serializable {
         void onOffButtonClick(View view, RobotDialogFragment robotDialogFragment);
 
+        void onTurnInPlaceButtonClick(View view, RobotDialogFragment robotDialogFragment);
+
         void onWalkButtonClick(View view, RobotDialogFragment robotDialogFragment);
 
         void onRunButtonClick(View view, RobotDialogFragment robotDialogFragment);
@@ -45,7 +47,7 @@ public class RobotDialogFragment extends DialogFragment {
     private ButtonListener buttonListener;
     private DismissListener dismissListener;
 
-    private TextView tvOff, tvWalk, tvRun, tvTillSeedWater, tvWater, tvHarvest, tvIDE;
+    private TextView tvOff, tvTurnInPlace, tvWalk, tvRun, tvTillSeedWater, tvWater, tvHarvest, tvIDE;
 
     public static RobotDialogFragment newInstance(ButtonListener buttonListener,
                                                   DismissListener dismissListener) {
@@ -87,6 +89,7 @@ public class RobotDialogFragment extends DialogFragment {
         Log.e(TAG, "onViewCreated()");
 
         tvOff = view.findViewById(R.id.tv_off);
+        tvTurnInPlace = view.findViewById(R.id.tv_turn_in_place);
         tvWalk = view.findViewById(R.id.tv_walk);
         tvRun = view.findViewById(R.id.tv_run);
         tvTillSeedWater = view.findViewById(R.id.tv_till_seed_water);
@@ -98,6 +101,14 @@ public class RobotDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 buttonListener.onOffButtonClick(view, RobotDialogFragment.this);
+                dismiss();
+            }
+        });
+
+        tvTurnInPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonListener.onTurnInPlaceButtonClick(view, RobotDialogFragment.this);
                 dismiss();
             }
         });
