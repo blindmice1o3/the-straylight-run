@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,10 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
 
     private ImageView ivGrowSystemParts0, ivGrowSystemParts1, ivGrowSystemParts2,
             ivGrowSystemParts3, ivGrowSystemParts4, ivGrowSystemParts5;
+    private TextView tvIsPoweredGrowSystemParts0, tvIsPoweredGrowSystemParts1, tvIsPoweredGrowSystemParts2,
+            tvIsPoweredGrowSystemParts3, tvIsPoweredGrowSystemParts4, tvIsPoweredGrowSystemParts5;
+    private TextView tvIsCalibratedGrowSystemParts0, tvIsCalibratedGrowSystemParts1, tvIsCalibratedGrowSystemParts2,
+            tvIsCalibratedGrowSystemParts3, tvIsCalibratedGrowSystemParts4, tvIsCalibratedGrowSystemParts5;
 
     public static GrowSystemPartsDisplayerFragment newInstance(GrowSystemPartsDataCarrier growSystemPartsDataCarrier, AnimationListener animationListener) {
         GrowSystemPartsDisplayerFragment fragment = new GrowSystemPartsDisplayerFragment();
@@ -98,6 +103,20 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                     growSystemParts.get(i).getImage()
             );
         }
+
+        tvIsPoweredGrowSystemParts0 = view.findViewById(R.id.tv_is_powered_grow_system_parts_0);
+        tvIsPoweredGrowSystemParts1 = view.findViewById(R.id.tv_is_powered_grow_system_parts_1);
+        tvIsPoweredGrowSystemParts2 = view.findViewById(R.id.tv_is_powered_grow_system_parts_2);
+        tvIsPoweredGrowSystemParts3 = view.findViewById(R.id.tv_is_powered_grow_system_parts_3);
+        tvIsPoweredGrowSystemParts4 = view.findViewById(R.id.tv_is_powered_grow_system_parts_4);
+        tvIsPoweredGrowSystemParts5 = view.findViewById(R.id.tv_is_powered_grow_system_parts_5);
+
+        tvIsCalibratedGrowSystemParts0 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_0);
+        tvIsCalibratedGrowSystemParts1 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_1);
+        tvIsCalibratedGrowSystemParts2 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_2);
+        tvIsCalibratedGrowSystemParts3 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_3);
+        tvIsCalibratedGrowSystemParts4 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_4);
+        tvIsCalibratedGrowSystemParts5 = view.findViewById(R.id.tv_is_calibrated_grow_system_parts_5);
     }
 
     @Override
@@ -135,6 +154,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                         } else {
                             ivGrowSystemPart0.setBackgroundColor(Color.RED);
                         }
+
+                        if (growSystemPart0.isPowered()) {
+                            tvIsPoweredGrowSystemParts0.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts0.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart0.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts0.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts0.setTextColor(Color.RED);
+                        }
                     }
                 }
             });
@@ -156,6 +187,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                             ivGrowSystemPart1.setBackgroundColor(Color.GREEN);
                         } else {
                             ivGrowSystemPart1.setBackgroundColor(Color.RED);
+                        }
+
+                        if (growSystemPart1.isPowered()) {
+                            tvIsPoweredGrowSystemParts1.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts1.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart1.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts1.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts1.setTextColor(Color.RED);
                         }
                     }
                 }
@@ -179,6 +222,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                         } else {
                             ivGrowSystemPart2.setBackgroundColor(Color.RED);
                         }
+
+                        if (growSystemPart2.isPowered()) {
+                            tvIsPoweredGrowSystemParts2.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts2.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart2.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts2.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts2.setTextColor(Color.RED);
+                        }
                     }
                 }
             });
@@ -200,6 +255,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                             ivGrowSystemPart3.setBackgroundColor(Color.GREEN);
                         } else {
                             ivGrowSystemPart3.setBackgroundColor(Color.RED);
+                        }
+
+                        if (growSystemPart3.isPowered()) {
+                            tvIsPoweredGrowSystemParts3.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts3.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart3.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts3.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts3.setTextColor(Color.RED);
                         }
                     }
                 }
@@ -223,6 +290,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                         } else {
                             ivGrowSystemPart4.setBackgroundColor(Color.RED);
                         }
+
+                        if (growSystemPart4.isPowered()) {
+                            tvIsPoweredGrowSystemParts4.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts4.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart4.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts4.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts4.setTextColor(Color.RED);
+                        }
                     }
                 }
             });
@@ -244,6 +323,18 @@ public class GrowSystemPartsDisplayerFragment extends DialogFragment
                             ivGrowSystemPart5.setBackgroundColor(Color.GREEN);
                         } else {
                             ivGrowSystemPart5.setBackgroundColor(Color.RED);
+                        }
+
+                        if (growSystemPart5.isPowered()) {
+                            tvIsPoweredGrowSystemParts5.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsPoweredGrowSystemParts5.setTextColor(Color.RED);
+                        }
+
+                        if (growSystemPart5.isCalibrated()) {
+                            tvIsCalibratedGrowSystemParts5.setTextColor(Color.GREEN);
+                        } else {
+                            tvIsCalibratedGrowSystemParts5.setTextColor(Color.RED);
                         }
                     }
 

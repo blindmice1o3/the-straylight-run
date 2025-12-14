@@ -63,6 +63,8 @@
     <string name="click_button_holder_a_or_b">Haga clic en \"PortabotonesA\" o \"PortabotonesB\" para equipar el ReprogramadorDeRobots4000.</string>
     <string name="equip_robot_reprogrammer_4000">¡Felicitaciones por equipar el ReprogramadorDeRobots4000! ¡Úsalo en el robot para ejecutar el nuevo código!</string>
     <string name="use_robot_reprogrammer_4000">¡Felicitaciones por utilizar ReprogramadorDeRobots4000 en el robot!</string>
+    <string name="is_powered">estáAlimentado</string>
+    <string name="is_calibrated">estáCalibrado</string>
     <string name="robot_dialogfragment_off">apagado</string>
     <string name="robot_dialogfragment_turn_in_place">girar en el lugar</string>
     <string name="robot_dialogfragment_walk">caminar</string>

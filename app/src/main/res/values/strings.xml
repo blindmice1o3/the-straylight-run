@@ -83,6 +83,9 @@
     <string name="equip_robot_reprogrammer_4000">Congratulation for equipping the RobotReprogrammer4000! Use it on the robot to run the new code!</string>
     <!-- Robot -->
     <string name="use_robot_reprogrammer_4000">Congratulation for using the RobotReprogrammer4000 on the robot!</string>
+    <!-- GrowSystemPartsDisplayerFragment -->
+    <string name="is_powered">isPowered</string>
+    <string name="is_calibrated">isCalibrated</string>
 
     <!-- dialogfragment_robot.xml -->
     <string name="robot_dialogfragment_off">off</string>
