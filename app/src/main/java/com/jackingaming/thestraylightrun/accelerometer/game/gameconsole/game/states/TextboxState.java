@@ -266,6 +266,10 @@ public class TextboxState
             if (isTextboxAnimationFinished) {
                 game.getTextboxListener().showStatsDisplayer();
                 game.getStateManager().pop();
+
+                ////////////////////////////
+                dismissListener.onDismiss();
+                ////////////////////////////
             }
         }
     }

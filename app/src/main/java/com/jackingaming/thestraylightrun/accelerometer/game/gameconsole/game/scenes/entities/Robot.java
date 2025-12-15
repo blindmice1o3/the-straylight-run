@@ -36,11 +36,15 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.Seed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,6 +133,36 @@ public class Robot extends Creature {
             @Override
             public void onDismiss() {
                 Log.e(TAG, "doShowRobotDialogFragmentFirstTime() TypeWriterDialogFragment.DismissListener.onDismiss()");
+
+                QuestManager questManager = Player.getInstance().getQuestManager();
+                Quest runOne = SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne();
+                if (!questManager.alreadyHaveQuest(runOne.getQuestLabel())) {
+                    Log.e(TAG, "!questManager.alreadyHaveQuest(runOne.getQuestLabel())");
+
+                    Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
+                    String text = game.getContext().getResources().getString(R.string.visit_seed_shop);
+                    TypeWriterDialogFragment.DismissListener dismissListener = new TypeWriterDialogFragment.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            Log.e(TAG, "doShowRobotDialogFragmentFirstTime() TypeWriterDialogFragment.DismissListener.onDismiss() visit seed shop");
+                        }
+                    };
+                    TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
+                        @Override
+                        public void onAnimationFinish() {
+                            Log.e(TAG, "doShowRobotDialogFragmentFirstTime() TypeWriterTextView.TextCompletionListener.onAnimationFinish() visit seed shop");
+
+                            game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                        }
+                    };
+
+                    game.getStateManager().pushTextboxState(portrait,
+                            text,
+                            dismissListener,
+                            textCompletionListener);
+                } else {
+                    Log.e(TAG, "questManager.alreadyHaveQuest(runOne.getQuestLabel())");
+                }
             }
         };
         TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
@@ -879,4 +913,8 @@ public class Robot extends Creature {
     }
 
     private List<TileWorkRequest> tileWorkRequests = new ArrayList<>();
+
+    public boolean isFirstTimeShowingRobotDialogFragment() {
+        return isFirstTimeShowingRobotDialogFragment;
+    }
 }

@@ -77,12 +77,13 @@
     <string name="text_robot_dialog_quest_00">Robot Dialog Quest 00</string>
     <string name="text_seed_shop_owner_quest_00">Seed Shop Owner Quest 00</string>
 
-    <!-- IntroState -->
+    <!-- TextboxState -->
     <string name="click_button_holder_a_or_b">Click \"ButtonHolderA\" or \"ButtonHolderB\" to equip the RobotReprogrammer4000.</string>
     <!-- GameConsoleFragment -->
     <string name="equip_robot_reprogrammer_4000">Congratulation for equipping the RobotReprogrammer4000! Use it on the robot to run the new code!</string>
     <!-- Robot -->
     <string name="use_robot_reprogrammer_4000">Congratulation for using the RobotReprogrammer4000 on the robot!</string>
+    <string name="visit_seed_shop">Visit the seed shop.</string>
     <!-- GrowSystemPartsDisplayerFragment -->
     <string name="is_powered">isPowered</string>
     <string name="is_calibrated">isCalibrated</string>

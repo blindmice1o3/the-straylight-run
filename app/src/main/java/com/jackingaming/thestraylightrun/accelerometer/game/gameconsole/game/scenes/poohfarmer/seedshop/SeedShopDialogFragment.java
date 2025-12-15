@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
@@ -166,6 +167,37 @@ public class SeedShopDialogFragment extends DialogFragment {
         clBaseLayout.setLayoutParams(params);
     }
 
+    public void showTextboxAboutRobotReprogrammer4000QuestStatus() {
+        Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);
+        String textToShow = null;
+        if (SceneFarm.getInstance().isFirstTimeEquippingRobotReprogrammer4000()) {
+            textToShow = game.getContext().getString(R.string.click_button_holder_a_or_b);
+        } else if (SceneFarm.getInstance().getRobot().isFirstTimeShowingRobotDialogFragment()) {
+            textToShow = game.getContext().getString(R.string.equip_robot_reprogrammer_4000);
+        } else {
+            textToShow = game.getContext().getString(R.string.use_robot_reprogrammer_4000);
+        }
+        TypeWriterDialogFragment.DismissListener dismissListener1 = new TypeWriterDialogFragment.DismissListener() {
+            @Override
+            public void onDismiss() {
+                Log.e(TAG, "onStart() TypeWriterDialogFragment.DismissListener.onDismiss()");
+            }
+        };
+        TypeWriterTextView.TextCompletionListener textCompletionListener1 = new TypeWriterTextView.TextCompletionListener() {
+            @Override
+            public void onAnimationFinish() {
+                Log.e(TAG, "onStart() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
+
+                game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+            }
+        };
+
+        game.getStateManager().pushTextboxState(portrait,
+                textToShow,
+                dismissListener1,
+                textCompletionListener1);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -250,6 +282,8 @@ public class SeedShopDialogFragment extends DialogFragment {
                             dialogFragmentRunOneName.show(game.getFragmentManager(), TAG);
                         } else {
                             Log.e(TAG, "runOne.getCurrentState() != Quest.State.STARTED");
+
+                            showTextboxAboutRobotReprogrammer4000QuestStatus();
                         }
                     }
                 };
@@ -340,5 +374,9 @@ public class SeedShopDialogFragment extends DialogFragment {
 
     public List<Item> getSeedShopInventory() {
         return seedShopInventory;
+    }
+
+    public RunOne getRunOne() {
+        return runOne;
     }
 }

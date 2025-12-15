@@ -226,6 +226,8 @@ public class RunOne
                         @Override
                         public void onDismiss() {
                             Log.e(TAG, "attachListener() TypeWriterDialogFragment.DismissListener.onDismiss()");
+
+                            SceneFarm.getInstance().getSeedShopDialogFragment().showTextboxAboutRobotReprogrammer4000QuestStatus();
                         }
                     };
                     TypeWriterTextView.TextCompletionListener textCompletionListener = new TypeWriterTextView.TextCompletionListener() {
