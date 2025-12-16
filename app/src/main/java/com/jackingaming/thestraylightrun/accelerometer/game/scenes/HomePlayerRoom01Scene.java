@@ -126,6 +126,10 @@ public class HomePlayerRoom01Scene extends Scene {
         for (Tile[] row : tiles) {
             for (Tile column : row) {
                 if (column instanceof UniqueSolidTile) {
+                    /////////////////////////////////////////////////////
+                    ((UniqueSolidTile) column).setGameCamera(gameCamera);
+                    /////////////////////////////////////////////////////
+
                     if (((UniqueSolidTile) column).getId().equals(UniqueSolidTile.TELEVISION)) {
                         tilesTelevision.add((UniqueSolidTile) column);
 //                        tileTelevision = (UniqueSolidTile) column;

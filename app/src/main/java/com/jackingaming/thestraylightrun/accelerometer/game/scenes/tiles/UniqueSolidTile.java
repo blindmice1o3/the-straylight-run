@@ -10,6 +10,8 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
+
 public class UniqueSolidTile extends SolidTile {
 
     public static final String COMPUTER = "computer";
@@ -30,6 +32,7 @@ public class UniqueSolidTile extends SolidTile {
     private ObjectAnimator animatorCircleDown;
     private ObjectAnimator animatorCircleLeft;
     private ObjectAnimator animatorCircleUp;
+    private GameCamera gameCamera;
 
     public UniqueSolidTile(String id, Bitmap texture) {
         super(texture);
@@ -124,6 +127,8 @@ public class UniqueSolidTile extends SolidTile {
                 animatorCircleUp.isRunning();
     }
 
+    private int xGameCameraOriginal, yGameCameraOriginal;
+
     @Override
     public void render(Canvas canvas, int x, int y, int widthSpriteDst, int heightSpriteDst) {
         super.render(canvas, x, y, widthSpriteDst, heightSpriteDst);
@@ -133,12 +138,18 @@ public class UniqueSolidTile extends SolidTile {
             yCircleNow = y;
             this.widthSpriteDst = widthSpriteDst;
             this.heightSpriteDst = heightSpriteDst;
+            xGameCameraOriginal = (int) gameCamera.getxOffset();
+            yGameCameraOriginal = (int) gameCamera.getyOffset();
 
             initCircle();
         }
 
         if (isAnimationRunning()) {
-            canvas.drawCircle(xCircleNow, yCircleNow, radiusCirle, paintCircle);
+            canvas.drawCircle(
+                    xCircleNow + xGameCameraOriginal - gameCamera.getxOffset(),
+                    yCircleNow + yGameCameraOriginal - gameCamera.getyOffset(),
+                    radiusCirle,
+                    paintCircle);
         }
     }
 
@@ -160,5 +171,9 @@ public class UniqueSolidTile extends SolidTile {
 
     public void setYCircleNow(int yCircle) {
         this.yCircleNow = yCircle;
+    }
+
+    public void setGameCamera(GameCamera gameCamera) {
+        this.gameCamera = gameCamera;
     }
 }
