@@ -279,7 +279,19 @@ public class GameFragment extends Fragment
                 }
             });
             drawerTopFragment = DrawerTopFragment.newInstance(null, null,
-                    new DrawerTopFragment.RunSelectionListener() {
+                    new DrawerTopFragment.SelectionListener() {
+                        @Override
+                        public void onSaveSelected() {
+                            Log.e(TAG, "onViewCreated() drawerTopFragment onSaveSelected()");
+                            // TODO: Save to local db, file, or in-memory list.
+                        }
+
+                        @Override
+                        public void onLoadSelected() {
+                            Log.e(TAG, "onViewCreated() drawerTopFragment onLoadSelected()");
+                            // TODO: Load from local db, file, or in-memory list.
+                        }
+
                         @Override
                         public void onRunSelected(Game.Run run) {
                             switch (run) {
@@ -299,6 +311,8 @@ public class GameFragment extends Fragment
                                     game.setRun(Game.Run.FIVE);
                                     break;
                             }
+
+
                         }
 
                         @Override

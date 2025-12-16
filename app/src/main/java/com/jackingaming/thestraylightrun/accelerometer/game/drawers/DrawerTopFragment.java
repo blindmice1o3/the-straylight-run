@@ -30,15 +30,19 @@ public class DrawerTopFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_RUN_SELECTION_LISTENER = "run_selection_listener";
 
-    public interface RunSelectionListener extends Serializable {
+    public interface SelectionListener extends Serializable {
         void onRunSelected(Game.Run run);
+
+        void onSaveSelected();
+
+        void onLoadSelected();
 
         void onCloseDrawerTop();
     }
 
-    private RunSelectionListener runSelectionListener;
+    private SelectionListener selectionListener;
 
-    private TextView tvRunOne, tvRunTwo, tvRunThree, tvRunFour, tvRunFive;
+    private TextView tvRunOne, tvRunTwo, tvRunThree, tvRunFour, tvRunFive, tvSave, tvLoad;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,7 +62,7 @@ public class DrawerTopFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static DrawerTopFragment newInstance(String param1, String param2,
-                                                RunSelectionListener runSelectionListener) {
+                                                SelectionListener runSelectionListener) {
         Log.e(TAG, "newInstance()");
         DrawerTopFragment fragment = new DrawerTopFragment();
 
@@ -80,7 +84,7 @@ public class DrawerTopFragment extends Fragment {
         if (arguments != null) {
             mParam1 = arguments.getString(ARG_PARAM1);
             mParam2 = arguments.getString(ARG_PARAM2);
-            runSelectionListener = (RunSelectionListener) arguments.getSerializable(ARG_RUN_SELECTION_LISTENER);
+            selectionListener = (SelectionListener) arguments.getSerializable(ARG_RUN_SELECTION_LISTENER);
         }
     }
 
@@ -108,40 +112,56 @@ public class DrawerTopFragment extends Fragment {
         tvRunThree = view.findViewById(R.id.tv_run_three);
         tvRunFour = view.findViewById(R.id.tv_run_four);
         tvRunFive = view.findViewById(R.id.tv_run_five);
+        tvSave = view.findViewById(R.id.tv_save);
+        tvLoad = view.findViewById(R.id.tv_load);
 
         tvRunOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runSelectionListener.onRunSelected(Game.Run.ONE);
-                runSelectionListener.onCloseDrawerTop();
+                selectionListener.onRunSelected(Game.Run.ONE);
+                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runSelectionListener.onRunSelected(Game.Run.TWO);
-                runSelectionListener.onCloseDrawerTop();
+                selectionListener.onRunSelected(Game.Run.TWO);
+                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunThree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runSelectionListener.onRunSelected(Game.Run.THREE);
-                runSelectionListener.onCloseDrawerTop();
+                selectionListener.onRunSelected(Game.Run.THREE);
+                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunFour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runSelectionListener.onRunSelected(Game.Run.FOUR);
-                runSelectionListener.onCloseDrawerTop();
+                selectionListener.onRunSelected(Game.Run.FOUR);
+                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunFive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runSelectionListener.onRunSelected(Game.Run.FIVE);
-                runSelectionListener.onCloseDrawerTop();
+                selectionListener.onRunSelected(Game.Run.FIVE);
+                selectionListener.onCloseDrawerTop();
+            }
+        });
+        tvSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectionListener.onSaveSelected();
+                selectionListener.onCloseDrawerTop();
+            }
+        });
+        tvLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectionListener.onLoadSelected();
+                selectionListener.onCloseDrawerTop();
             }
         });
     }
