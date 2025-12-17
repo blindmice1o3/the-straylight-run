@@ -202,6 +202,14 @@ public class Game {
         /////////////////////////////////////////////////////////////////////////////////
     }
 
+    public void save() {
+        // TODO: Save to local db, file, or in-memory list.
+    }
+
+    public void load() {
+        // TODO: Load from local db, file, or in-memory list.
+    }
+
     public void update(long elapsed) {
         if (sceneCurrent.isPaused()) {
             return;

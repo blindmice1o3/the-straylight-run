@@ -21,7 +21,7 @@ public class RemoveEntityCommand
         this.entityListener = entityListener;
     }
 
-    private Game game;
+    transient private Game game;
     private Entity entity;
 
     public RemoveEntityCommand(Game game, Entity entity) {

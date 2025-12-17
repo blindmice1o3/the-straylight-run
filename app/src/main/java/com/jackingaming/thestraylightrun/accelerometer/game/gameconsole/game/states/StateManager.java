@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StateManager {
-    private Game game;
+    transient private Game game;
 
     private NewOrContinueState newOrContinueState;
     private TextboxState textboxState;

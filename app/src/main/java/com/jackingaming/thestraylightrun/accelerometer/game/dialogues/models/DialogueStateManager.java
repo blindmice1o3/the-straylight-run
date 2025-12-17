@@ -1,9 +1,11 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DialogueStateManager {
-    private List<DialogueState> dialogueStates;
+public class DialogueStateManager
+        implements Serializable {
+    transient private List<DialogueState> dialogueStates;
     private int indexCurrent;
 
     public DialogueStateManager(List<DialogueState> dialogueStates) {

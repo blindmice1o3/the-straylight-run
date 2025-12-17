@@ -516,10 +516,14 @@ public class Game {
             Log.e(TAG, "BEFORE timeManager");
             os.writeObject(timeManager);
             Log.e(TAG, "AFTER timeManager");
+            Log.e(TAG, "BEFORE sceneManager");
             os.writeObject(sceneManager);
+            Log.e(TAG, "AFTER sceneManager");
             os.writeFloat(currency);
 
+            Log.e(TAG, "BEFORE backpack");
             os.writeObject(backpack);
+            Log.e(TAG, "AFTER backpack");
             boolean hasItemInButtonHolderA = (itemStoredInButtonHolderA != null);
             os.writeBoolean(hasItemInButtonHolderA);
             if (hasItemInButtonHolderA) {
@@ -535,8 +539,10 @@ public class Game {
             os.writeInt(ordinalValueOfButtonHolderCurrentlySelected);
 
             // do AFTER SceneFarm is reloaded.
+            Log.e(TAG, "BEFORE seedShopInventory");
             List<Item> seedShopInventory = SceneFarm.getInstance().getSeedShopDialogFragment().getSeedShopInventory();
             os.writeObject(seedShopInventory);
+            Log.e(TAG, "AFTER seedShopInventory");
 
             boolean isBlinkingBorderOn = viewportListener.isBlinkingBorderOn();
             os.writeBoolean(isBlinkingBorderOn);
@@ -610,6 +616,7 @@ public class Game {
                 statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA);
             }
             boolean hasItemInButtonHolderB = os.readBoolean();
+            Log.e(TAG, "hasItemInButtonHolderB: " + hasItemInButtonHolderB);
             if (hasItemInButtonHolderB) {
                 itemStoredInButtonHolderB = (Item) os.readObject();
                 itemStoredInButtonHolderB.init(this);

@@ -1,11 +1,13 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.quests;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QuestManager {
+public class QuestManager
+        implements Serializable {
     private List<Quest> quests = new ArrayList<>();
     private int indexCurrent;
 

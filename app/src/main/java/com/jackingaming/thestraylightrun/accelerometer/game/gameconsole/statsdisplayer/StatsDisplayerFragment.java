@@ -246,23 +246,43 @@ public class StatsDisplayerFragment extends Fragment
     }
 
     public void setImageAndQuantityForButtonHolderA(ItemStackable itemStackableStoredInButtonHolderA) {
-        imageViewButtonHolderA.setImageBitmap(
-                itemStackableStoredInButtonHolderA.getItem().getImage()
-        );
+        if (itemStackableStoredInButtonHolderA != null) {
+            imageViewButtonHolderA.setImageBitmap(
+                    itemStackableStoredInButtonHolderA.getItem().getImage()
+            );
 
-        tvQuantityA.setText(
-                Integer.toString(itemStackableStoredInButtonHolderA.getQuantity())
-        );
+            tvQuantityA.setText(
+                    Integer.toString(itemStackableStoredInButtonHolderA.getQuantity())
+            );
+        } else {
+            imageViewButtonHolderA.setImageDrawable(
+                    getResources().getDrawable(IMAGE_DEFAULT)
+            );
+
+            tvQuantityA.setText(
+                    ""
+            );
+        }
     }
 
-    public void setImageaAndQuantityForButtonHolderB(ItemStackable itemStackableStoredInButtonHolderB) {
-        imageViewButtonHolderB.setImageBitmap(
-                itemStackableStoredInButtonHolderB.getItem().getImage()
-        );
+    public void setImageAndQuantityForButtonHolderB(ItemStackable itemStackableStoredInButtonHolderB) {
+        if (itemStackableStoredInButtonHolderB != null) {
+            imageViewButtonHolderB.setImageBitmap(
+                    itemStackableStoredInButtonHolderB.getItem().getImage()
+            );
 
-        tvQuantityB.setText(
-                Integer.toString(itemStackableStoredInButtonHolderB.getQuantity())
-        );
+            tvQuantityB.setText(
+                    Integer.toString(itemStackableStoredInButtonHolderB.getQuantity())
+            );
+        } else {
+            imageViewButtonHolderB.setImageDrawable(
+                    getResources().getDrawable(IMAGE_DEFAULT)
+            );
+
+            tvQuantityB.setText(
+                    ""
+            );
+        }
     }
 
 }

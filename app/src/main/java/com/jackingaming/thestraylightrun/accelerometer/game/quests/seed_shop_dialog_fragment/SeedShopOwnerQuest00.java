@@ -32,7 +32,7 @@ public class SeedShopOwnerQuest00
     public static final int QUANTITY_UNDEFINED = -1;
 
     private Quest.State state;
-    private Game game;
+    transient private Game game;
     private String[] dialogueArray;
 
     private Map<RequirementType, Map<String, Integer>> requirements;

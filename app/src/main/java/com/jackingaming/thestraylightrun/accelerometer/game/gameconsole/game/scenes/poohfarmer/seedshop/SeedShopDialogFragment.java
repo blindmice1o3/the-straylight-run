@@ -49,7 +49,7 @@ public class SeedShopDialogFragment extends DialogFragment {
         this.seedListener = seedListener;
     }
 
-    private Game game;
+    transient private Game game;
     private Bitmap seedShopBackgroundTop;
     private Bitmap seedShopBackgroundBottom;
     private ItemRecyclerViewAdapterSeedShop itemRecyclerViewAdapterSeedShop;

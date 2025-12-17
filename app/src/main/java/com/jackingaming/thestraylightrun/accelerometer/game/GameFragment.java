@@ -283,13 +283,15 @@ public class GameFragment extends Fragment
                         @Override
                         public void onSaveSelected() {
                             Log.e(TAG, "onViewCreated() drawerTopFragment onSaveSelected()");
-                            // TODO: Save to local db, file, or in-memory list.
+
+                            game.save();
                         }
 
                         @Override
                         public void onLoadSelected() {
                             Log.e(TAG, "onViewCreated() drawerTopFragment onLoadSelected()");
-                            // TODO: Load from local db, file, or in-memory list.
+
+                            game.load();
                         }
 
                         @Override
@@ -311,8 +313,6 @@ public class GameFragment extends Fragment
                                     game.setRun(Game.Run.FIVE);
                                     break;
                             }
-
-
                         }
 
                         @Override

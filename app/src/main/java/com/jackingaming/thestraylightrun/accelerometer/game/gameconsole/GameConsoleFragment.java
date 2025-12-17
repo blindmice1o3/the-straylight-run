@@ -393,7 +393,7 @@ public class GameConsoleFragment extends Fragment
                     );
                 }
                 if (game.getItemStoredInButtonHolderB() != null) {
-                    statsDisplayerFragment.setImageaAndQuantityForButtonHolderB(
+                    statsDisplayerFragment.setImageAndQuantityForButtonHolderB(
                             game.findItemStackableViaItem(
                                     game.getItemStoredInButtonHolderB()
                             )
@@ -428,11 +428,22 @@ public class GameConsoleFragment extends Fragment
     public void onButtonHolderAChange(Item itemA) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setImageAndQuantityForButtonHolderA(
-                    game.findItemStackableViaItem(
-                            itemA
-                    )
-            );
+            if (itemA != null) {
+                Log.e(TAG, "onButtonHolderAChange() itemA != null");
+
+                statsDisplayerFragment.setImageAndQuantityForButtonHolderA(
+                        game.findItemStackableViaItem(
+                                itemA
+                        )
+                );
+            } else {
+                Log.e(TAG, "onButtonHolderAChange() itemA == null");
+
+                statsDisplayerFragment.setImageAndQuantityForButtonHolderA(
+                        null
+                );
+
+            }
 
             // used for RunOne's "tutorial"
             if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
@@ -486,7 +497,24 @@ public class GameConsoleFragment extends Fragment
     public void onButtonHolderBChange(Item itemB) {
         Fragment fragmentInMiddleContainer = getChildFragmentManager().findFragmentById(R.id.fcv_statsdisplayerfragment);
         if (fragmentInMiddleContainer instanceof StatsDisplayerFragment) {
-            statsDisplayerFragment.setImageaAndQuantityForButtonHolderB(
+            if (itemB != null) {
+                Log.e(TAG, "onButtonHolderBChange() itemB != null");
+
+                statsDisplayerFragment.setImageAndQuantityForButtonHolderB(
+                        game.findItemStackableViaItem(
+                                itemB
+                        )
+                );
+            } else {
+                Log.e(TAG, "onButtonHolderBChange() itemB == null");
+
+                statsDisplayerFragment.setImageAndQuantityForButtonHolderB(
+                        null
+                );
+
+            }
+
+            statsDisplayerFragment.setImageAndQuantityForButtonHolderB(
                     game.findItemStackableViaItem(
                             itemB
                     )

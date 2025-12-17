@@ -236,9 +236,13 @@ public class SceneFarm extends Scene {
         }, 6, 0, true);
         updatePaintLightingColorFilter(game.getTimeManager().getModeOfDay());
 
+        // For scenes loaded from external file, the [create] and [init] steps in TileManager
+        // are combined (unlike EntityManager and ItemManager).
         tileManager.reload(game);
         Map<String, Rect> transferPointsForFarm = createTransferPointsForFarm();
         tileManager.loadTransferPoints(transferPointsForFarm); // transferPoints are transient and should be reloaded everytime.
+        // TODO: need to update "reloadTileManager()" to use new farm image and tile map.
+        //  (afterward, tilled and watered tiles should be accounted for).
         reloadTileManager(game);
 
         for (GrowableTile growableTile : growableTiles) {
@@ -966,22 +970,30 @@ public class SceneFarm extends Scene {
 
     public void reloadTileManager(Game game) {
         //rgbTileMapFarm is an image where each pixel represents a tile.
-        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_idyllic_aligned_doors);
+//        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
         int columns = rgbTileMapFarm.getWidth();            //Always need.
         int rows = rgbTileMapFarm.getHeight();              //Always need.
 
         Tile[][] tiles = tileManager.getTiles();
 
-        imageFarm = cropImageFarm(
-                game.getContext().getResources(),
-                game.getTimeManager().getSeason());
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_idyllic_aligned_doors);
+//        imageFarm = cropImageFarm(
+//                game.getContext().getResources(),
+//                game.getTimeManager().getSeason());
         //DEFINE EACH ELEMENT.
+        int tileWidth = 64;
+        int tileHeight = 64;
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * tileWidth;
+                int yInPixel = y * tileHeight;
+                int widthInPixel = tileWidth;
+                int heightInPixel = tileHeight;
+//                int xInPixel = x * Tile.WIDTH;
+//                int yInPixel = y * Tile.HEIGHT;
+//                int widthInPixel = Tile.WIDTH;
+//                int heightInPixel = Tile.HEIGHT;
                 Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                 int pixel = rgbTileMapFarm.getPixel(x, y);
