@@ -61,8 +61,8 @@ public class SceneFarm extends Scene {
 
     private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
-    private static final int X_INDEX_SPAWN_ROBOT = 0;
-    private static final int Y_INDEX_SPAWN_ROBOT = 0;
+    private static final int X_INDEX_SPAWN_ROBOT = 7;
+    private static final int Y_INDEX_SPAWN_ROBOT = 4;
     private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
     private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
     private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;
@@ -83,8 +83,8 @@ public class SceneFarm extends Scene {
     private List<GrowableTile> growableTiles;
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
 
-    private Quest aIQuest00;
-    private Quest robotDialogQuest00;
+    private AIQuest00 aIQuest00;
+    private RobotDialogQuest00 robotDialogQuest00;
     private DialogueStateManager dialogueStateManager;
     private boolean firstTimeEquippingRobotReprogrammer4000 = true;
 
@@ -260,6 +260,15 @@ public class SceneFarm extends Scene {
             needDisplaySeedShopFragment = false;
             showSeedShopFragment();
         }
+
+        aIQuest00.reload(game);
+        robotDialogQuest00.reload(game);
+
+        List<DialogueState> dialogueStates = new ArrayList<>();
+        dialogueStates.add(new AIDialogue00(game, aIQuest00));
+        dialogueStates.add(new AIDialogue01(game, aIQuest00));
+        dialogueStates.add(new AIDialogue02(game, robotDialogQuest00));
+        dialogueStateManager = new DialogueStateManager(dialogueStates);
     }
 
     @Override
@@ -1386,18 +1395,18 @@ public class SceneFarm extends Scene {
         // TODO: Insert scene specific items here.
         milkOnGround = new Milk();
         milkOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT)
+                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 4) * Tile.HEIGHT)
         );
         eggOnGround = new Egg();
         eggOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT)
+                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 5) * Tile.HEIGHT)
         );
         fodderOnGround = new Fodder();
         fodderOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT - 1) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT)
+                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
+                ((Y_INDEX_SPAWN_ROBOT + 6) * Tile.HEIGHT)
         );
         items.add(eggOnGround);
         items.add(milkOnGround);

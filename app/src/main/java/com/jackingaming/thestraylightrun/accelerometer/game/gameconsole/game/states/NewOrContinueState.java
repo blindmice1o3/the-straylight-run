@@ -38,6 +38,11 @@ public class NewOrContinueState
     }
 
     @Override
+    public void reload(Game game) {
+        this.game = game;
+    }
+
+    @Override
     public void init(Game game) {
         this.game = game;
         index = 0;

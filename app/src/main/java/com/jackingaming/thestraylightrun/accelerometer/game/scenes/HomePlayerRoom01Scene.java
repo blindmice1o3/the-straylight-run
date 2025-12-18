@@ -42,7 +42,7 @@ public class HomePlayerRoom01Scene extends Scene {
 //    private static final int RES_ID_TILE_COLLISION_BACKGROUND = R.drawable.indoors_home_and_room;
     private static final int X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 6;
     private static final int Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 = 1;
-    private static final int X_SPAWN_INDEX_PLAYER_WORLD = 2;
+    private static final int X_SPAWN_INDEX_PLAYER_WORLD = 7;
     private static final int Y_SPAWN_INDEX_PLAYER_WORLD = 6;
     private static final int X_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = X_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02 + 1;
     private static final int Y_TRANSFER_POINT_INDEX_HOME_PLAYER_ROOM_02 = Y_SPAWN_INDEX_PLAYER_HOME_PLAYER_ROOM02;
@@ -318,7 +318,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                         }
                                     }));
                             String tag = NextWeekTonightEpisodesGeneratorFragment.TAG;
-                            boolean canceledOnTouchOutside = true;
+                            boolean canceledOnTouchOutside = false;
                             dialogFragment =
                                     FCVDialogFragment.newInstance(videoViewFragmentPart1, tag,
                                             canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,

@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.quests;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
+
 import java.io.Serializable;
 
 public interface Quest extends Serializable {
@@ -17,6 +19,8 @@ public interface Quest extends Serializable {
         STARTED,
         COMPLETED;
     }
+
+    void reload(Game game);
 
     void initRequirements();
 

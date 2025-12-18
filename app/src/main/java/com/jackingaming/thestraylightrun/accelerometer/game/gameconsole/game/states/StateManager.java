@@ -28,12 +28,24 @@ public class StateManager {
     public StateManager() {
         newOrContinueState = new NewOrContinueState();
         textboxState = new TextboxState();
+        growSystemPartsDisplayerState = new GrowSystemPartsDisplayerState();
         gameState = new GameState();
+        menuState = new MenuState();
 
         stateStack = new ArrayList<State>();
         stateStack.add(gameState);
         stateStack.add(textboxState);
         stateStack.add(newOrContinueState);
+    }
+
+    public void reload(Game game) {
+        this.game = game;
+
+        newOrContinueState.reload(game);
+        textboxState.reload(game);
+        growSystemPartsDisplayerState.reload(game);
+        gameState.reload(game);
+        menuState.reload(game);
     }
 
     public void init(Game game) {
@@ -45,9 +57,11 @@ public class StateManager {
             menuState.init(game);
         }
 
-        for (State state : stateStack) {
-            state.init(game);
-        }
+        newOrContinueState.init(game);
+        textboxState.init(game);
+        growSystemPartsDisplayerState.init(game);
+        gameState.init(game);
+        menuState.init(game);
     }
 
     public void update(long elapsed) {
@@ -88,12 +102,6 @@ public class StateManager {
     private void pushMenuState() {
         getCurrentState().exit();
 
-        if (menuState == null) {
-            // TODO: possible temporary... this should work as a default.
-            menuState = new MenuState();
-            menuState.init(game);
-        }
-
         stateStack.add(menuState);
 
         getCurrentState().enter(null);
@@ -103,11 +111,6 @@ public class StateManager {
                                  TypeWriterDialogFragment.DismissListener dismissListener,
                                  TypeWriterTextView.TextCompletionListener textCompletionListener) {
         getCurrentState().exit();
-
-        if (textboxState == null) {
-            textboxState = new TextboxState();
-            textboxState.init(game);
-        }
 
         stateStack.add(textboxState);
 
@@ -121,11 +124,6 @@ public class StateManager {
 
     public void pushGrowSystemPartsDisplayerState(GrowSystemPartsDataCarrier growSystemPartsDataCarrier) {
         getCurrentState().exit();
-
-        if (growSystemPartsDisplayerState == null) {
-            growSystemPartsDisplayerState = new GrowSystemPartsDisplayerState();
-            growSystemPartsDisplayerState.init(game);
-        }
 
         stateStack.add(growSystemPartsDisplayerState);
 

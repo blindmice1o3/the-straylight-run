@@ -22,6 +22,11 @@ public class GrowSystemPartsDisplayerState
     }
 
     @Override
+    public void reload(Game game) {
+        this.game = game;
+    }
+
+    @Override
     public void init(Game game) {
         this.game = game;
     }

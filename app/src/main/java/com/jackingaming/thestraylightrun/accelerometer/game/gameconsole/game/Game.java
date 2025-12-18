@@ -589,6 +589,7 @@ public class Game {
                 Log.e(TAG, "gameConsoleFragment == null");
             }
             sceneManager.reload(this);
+            stateManager.reload(this);
             Player.getInstance().setForm(form);
             currency = os.readFloat();
             statsChangeListener.onCurrencyChange(currency);

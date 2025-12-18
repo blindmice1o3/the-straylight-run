@@ -38,6 +38,16 @@ public class TextboxState
     }
 
     @Override
+    public void reload(Game game) {
+        this.game = game;
+
+        runTwo.reload(game);
+        runThree.reload(game);
+        runFour.reload(game);
+        runFive.reload(game);
+    }
+
+    @Override
     public void init(Game game) {
         this.game = game;
 

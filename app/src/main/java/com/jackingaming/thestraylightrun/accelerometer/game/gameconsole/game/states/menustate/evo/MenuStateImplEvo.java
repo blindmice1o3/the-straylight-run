@@ -41,6 +41,11 @@ public class MenuStateImplEvo extends MenuStateImpl {
     }
 
     @Override
+    public void reload(Game game) {
+        this.game = game;
+    }
+
+    @Override
     public void init(Game game) {
         this.game = game;
         menuItemManager.init(game);

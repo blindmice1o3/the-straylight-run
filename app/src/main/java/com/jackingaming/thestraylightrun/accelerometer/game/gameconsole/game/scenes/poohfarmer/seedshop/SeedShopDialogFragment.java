@@ -66,6 +66,9 @@ public class SeedShopDialogFragment extends DialogFragment {
         for (Item item : seedShopInventory) {
             item.init(game);
         }
+
+        seedShopOwnerQuest00.reload(game);
+        runOne.reload(game);
     }
 
     public SeedShopDialogFragment() {
