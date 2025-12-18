@@ -1,11 +1,13 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import androidx.fragment.app.DialogFragment;
@@ -20,11 +22,18 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
     public static final String TAG = Game.class.getSimpleName();
+    public static final String GAME_TITLE = "TheQuietLoop";
     public static final int NUMBER_OF_TILES_ON_SHORTER_SIDE = 12;
 
     public enum Run {ONE, TWO, THREE, FOUR, FIVE;}
@@ -202,12 +211,42 @@ public class Game {
         /////////////////////////////////////////////////////////////////////////////////
     }
 
-    public void save() {
-        // TODO: Save to local db, file, or in-memory list.
+    private String savedFileViaUserInputFileName = "savedFileViaUserInput" + GAME_TITLE + ".ser";
+
+    public String getSavedFileViaUserInputFileName() {
+        return savedFileViaUserInputFileName;
     }
 
-    public void load() {
+    public void save(Context context, String fileName) {
+        // TODO: Save to local db, file, or in-memory list.
+        Log.e(TAG, "save(Context context, String fileName) START fileName: " + fileName);
+        try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+             ObjectOutputStream os = new ObjectOutputStream(fs)) {
+            os.writeObject(run);
+            os.writeObject(dailyLoop);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "save(Context context, String fileName) FINISHED fileName: " + fileName);
+    }
+
+    public void load(Context context, String fileName) {
         // TODO: Load from local db, file, or in-memory list.
+        Log.d(TAG, "load(Context context, String fileName) START fileName: " + fileName);
+        try (FileInputStream fi = context.openFileInput(fileName);
+             ObjectInputStream os = new ObjectInputStream(fi)) {
+            run = (Run) os.readObject();
+            dailyLoop = (DailyLoop) os.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "load(Context context, String fileName) FINISHED fileName: " + fileName);
     }
 
     public void update(long elapsed) {

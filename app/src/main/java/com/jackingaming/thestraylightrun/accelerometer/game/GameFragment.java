@@ -284,14 +284,20 @@ public class GameFragment extends Fragment
                         public void onSaveSelected() {
                             Log.e(TAG, "onViewCreated() drawerTopFragment onSaveSelected()");
 
-                            game.save();
+                            game.save(
+                                    getContext(),
+                                    game.getSavedFileViaUserInputFileName()
+                            );
                         }
 
                         @Override
                         public void onLoadSelected() {
                             Log.e(TAG, "onViewCreated() drawerTopFragment onLoadSelected()");
 
-                            game.load();
+                            game.load(
+                                    getContext(),
+                                    game.getSavedFileViaUserInputFileName()
+                            );
                         }
 
                         @Override
