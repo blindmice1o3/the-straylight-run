@@ -83,7 +83,9 @@ public class ButtonPadFragment extends Fragment {
 
                 // Determine if the touch event occurred within the bounds of a "button".
                 if (boundsOfButtonMenu.contains((int) event.getX(), (int) event.getY())) {
-                    button = Button.BUTTON_MENU;
+                    if (imageViewButtonMenu.getVisibility() == View.VISIBLE) {
+                        button = Button.BUTTON_MENU;
+                    }
                 } else if (boundsOfButtonA.contains((int) event.getX(), (int) event.getY())) {
                     button = Button.BUTTON_A;
                 } else if (boundsOfButtonB.contains((int) event.getX(), (int) event.getY())) {
@@ -98,5 +100,13 @@ public class ButtonPadFragment extends Fragment {
                 return false;
             }
         });
+    }
+
+    public void hideImageViewButtonMenu() {
+        imageViewButtonMenu.setVisibility(View.INVISIBLE);
+    }
+
+    public void showImageViewButtonMenu() {
+        imageViewButtonMenu.setVisibility(View.VISIBLE);
     }
 }

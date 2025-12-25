@@ -284,5 +284,4 @@ public class StatsDisplayerFragment extends Fragment
             );
         }
     }
-
 }

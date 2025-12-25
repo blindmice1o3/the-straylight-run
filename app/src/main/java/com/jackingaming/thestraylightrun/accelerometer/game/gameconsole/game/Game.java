@@ -161,6 +161,18 @@ public class Game {
         this.statsChangeListener = statsChangeListener;
     }
 
+    public interface MenuButtonChangeListener extends Serializable {
+        void onHideMenuButton();
+
+        void onShowMenuButton();
+    }
+
+    private MenuButtonChangeListener menuButtonChangeListener;
+
+    public void setMenuButtonChangeListener(MenuButtonChangeListener menuButtonChangeListener) {
+        this.menuButtonChangeListener = menuButtonChangeListener;
+    }
+
     private Context context;
     private InputManager inputManager;
     private SurfaceHolder holder;
@@ -207,7 +219,7 @@ public class Game {
 
         timeManager = new TimeManager();
         sceneManager = new SceneManager(gameTitle);
-        stateManager = new StateManager();
+        stateManager = new StateManager(run);
 
         currency = 100f;
 
@@ -400,6 +412,12 @@ public class Game {
         statsChangeListener.onCurrencyChange(currency);
         GameCamera.getInstance().init(Player.getInstance(), widthViewport, heightViewport,
                 sceneManager.getCurrentScene().getTileManager().getWidthScene(), sceneManager.getCurrentScene().getTileManager().getHeightScene());
+
+        if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            menuButtonChangeListener.onShowMenuButton();
+        } else {
+            menuButtonChangeListener.onHideMenuButton();
+        }
     }
 
     private void createBackpackDialog() {

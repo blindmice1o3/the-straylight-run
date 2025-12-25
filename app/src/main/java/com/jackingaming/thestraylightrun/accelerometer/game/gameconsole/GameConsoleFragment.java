@@ -55,6 +55,7 @@ public class GameConsoleFragment extends Fragment
         Game.ViewportListener,
         Game.TextboxListener,
         Game.StatsChangeListener,
+        Game.MenuButtonChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener,
         StatsDisplayerFragment.IconClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
@@ -161,6 +162,7 @@ public class GameConsoleFragment extends Fragment
         game.setViewportListener(this);
         game.setTextboxListener(this);
         game.setStatsChangeListener(this);
+        game.setMenuButtonChangeListener(this);
 
         if (savedInstanceState == null) {
             Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState) savedInstanceState == null");
@@ -575,5 +577,19 @@ public class GameConsoleFragment extends Fragment
 
             // Do nothing.
         }
+    }
+
+    @Override
+    public void onHideMenuButton() {
+        Log.d(TAG, "onHideMenuButton()");
+
+        gamePadFragment.hideMenuButton();
+    }
+
+    @Override
+    public void onShowMenuButton() {
+        Log.d(TAG, "onShowMenuButton()");
+
+        gamePadFragment.showMenuButton();
     }
 }

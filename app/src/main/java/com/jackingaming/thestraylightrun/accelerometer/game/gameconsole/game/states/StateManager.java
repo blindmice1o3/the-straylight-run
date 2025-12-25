@@ -25,7 +25,7 @@ public class StateManager {
 
     private List<State> stateStack;
 
-    public StateManager() {
+    public StateManager(com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
         newOrContinueState = new NewOrContinueState();
         textboxState = new TextboxState();
         growSystemPartsDisplayerState = new GrowSystemPartsDisplayerState();
@@ -35,7 +35,9 @@ public class StateManager {
         stateStack = new ArrayList<State>();
         stateStack.add(gameState);
         stateStack.add(textboxState);
-        stateStack.add(newOrContinueState);
+        if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            stateStack.add(newOrContinueState);
+        }
     }
 
     public void reload(Game game) {

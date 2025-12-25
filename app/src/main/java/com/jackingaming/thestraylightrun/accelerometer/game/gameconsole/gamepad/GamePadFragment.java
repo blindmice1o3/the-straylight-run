@@ -65,4 +65,12 @@ public class GamePadFragment extends Fragment {
         buttonPadFragment = (ButtonPadFragment) getChildFragmentManager().findFragmentById(R.id.buttonpadfragment_game_pad_fragment);
         return view;
     }
+
+    public void hideMenuButton() {
+        buttonPadFragment.hideImageViewButtonMenu();
+    }
+
+    public void showMenuButton() {
+        buttonPadFragment.showImageViewButtonMenu();
+    }
 }
