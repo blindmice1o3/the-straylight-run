@@ -204,22 +204,22 @@
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_four">
-        <item>A-Student</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
+        <item>SA</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -245,7 +245,7 @@
 
     <!-- DrawerStartFragment -->
     <string-array name="delay_ms_dialogue_array_run_four">
-        <item>1000</item>
+        <item>500</item>
         <item>2500</item>
         <item>4000</item>
         <item>5500</item>
@@ -265,17 +265,17 @@
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_three">
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -326,7 +326,7 @@ Loops and Lists go hand-in-hand.</item>
 
     <!-- DrawerStartFragment -->
     <string-array name="delay_ms_dialogue_array_run_three">
-        <item>1000</item>
+        <item>500</item>
         <item>2500</item>
         <item>4000</item>
         <item>5500</item>
@@ -349,17 +349,17 @@ Loops and Lists go hand-in-hand.</item>
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_two">
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>SA</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -384,7 +384,7 @@ Loops and Lists go hand-in-hand.</item>
 
     <!-- DrawerStartFragment -->
     <string-array name="delay_ms_dialogue_array_run_two">
-        <item>1000</item>
+        <item>500</item>
         <item>2500</item>
         <item>4000</item>
         <item>5500</item>
@@ -399,18 +399,18 @@ Loops and Lists go hand-in-hand.</item>
 
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_one">
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
-        <item>HonestStruggler</item>
-        <item>A-Student</item>
-        <item>NotTrying</item>
+        <item>HS</item>
+        <item>AS</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>AS</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>AS</item>
+        <item>NT</item>
+        <item>HS</item>
+        <item>AS</item>
+        <item>NT</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -431,8 +431,8 @@ Loops and Lists go hand-in-hand.</item>
 
     <!-- DrawerStartFragment -->
     <string-array name="delay_ms_dialogue_array_run_one">
+        <item>500</item>
         <item>2000</item>
-        <item>3500</item>
         <item>4500</item>
         <item>5500</item>
         <item>7000</item>

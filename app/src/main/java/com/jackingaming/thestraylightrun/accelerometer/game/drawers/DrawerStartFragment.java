@@ -39,8 +39,8 @@ public class DrawerStartFragment extends Fragment {
     private RecyclerView rvDrawerStart;
     private GroupChatAdapter adapter;
     private List<Message> messages;
-
     private List<Message> messageQueue;
+    private Handler handler;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,6 +79,7 @@ public class DrawerStartFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        handler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -104,6 +105,11 @@ public class DrawerStartFragment extends Fragment {
     }
 
     public void startMessageQueue(Game.Run run) {
+        handler.removeCallbacksAndMessages(null);
+
+        messages.clear();
+        adapter.notifyDataSetChanged();
+
         messageQueue = new ArrayList<>();
 
         int idNamesOfSenderDialogueArray = -1;
@@ -146,17 +152,23 @@ public class DrawerStartFragment extends Fragment {
             String message = messagesDialogueArray[i];
             long delayMs = Long.parseLong(delayMsDialogueArray[i]);
 
-            messageQueue.add(new Message(nameOfSender, message, delayMs, false));
+
+            boolean isFromPlayer = false;
+            if (nameOfSender.equals("HS")) {
+                isFromPlayer = true;
+            }
+
+            messageQueue.add(new Message(nameOfSender, message, delayMs, isFromPlayer));
         }
-        messageQueue.add(0, new Message("player", "meow?", 500L, true));
-        messageQueue.add(2, new Message("player", "meow???", 3500L, true));
-        messageQueue.add(4, new Message("player", "MEOW?", 6000L, true));
-        messageQueue.add(6, new Message("player", "meow?", 9000L, true));
-        messageQueue.add(8, new Message("player", "meow?!", 11000L, true));
-        messageQueue.add(10, new Message("player", "*silence*", 16000L, true));
+//        messageQueue.add(0, new Message("player", "meow?", 500L, true));
+//        messageQueue.add(2, new Message("player", "meow???", 3500L, true));
+//        messageQueue.add(4, new Message("player", "MEOW?", 6000L, true));
+//        messageQueue.add(6, new Message("player", "meow?", 9000L, true));
+//        messageQueue.add(8, new Message("player", "meow?!", 11000L, true));
+//        messageQueue.add(10, new Message("player", "*silence*", 16000L, true));
+
 
         for (Message messageToAdd : messageQueue) {
-            Handler handler = new Handler(Looper.getMainLooper());
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {

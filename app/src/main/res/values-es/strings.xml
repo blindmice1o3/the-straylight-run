@@ -152,26 +152,6 @@
     </string-array>
 
     <!-- DrawerStartFragment -->
-    <string-array name="names_of_sender_dialogue_array_run_four">
-        <item>EstudianteA+</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-    </string-array>
-
-    <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_four">
         <item>Una lista es básicamente como una cesta. Puedes poner varias cosas dentro en lugar de solo una. Me gusta esa metáfora.</item>
         <item>Bien... pero ¿cómo se crea uno en Java?</item>
@@ -190,21 +170,6 @@
         <item>¿Y .remove() saca algo de la canasta, y .set() lo intercambia con otra cosa?</item>
         <item>Correcto. Quitar lo saca por completo, configurar lo reemplaza.</item>
         <item>Así que puedo quitar el brócoli y reemplazarlo con papas fritas. Listo.</item>
-    </string-array>
-
-    <!-- DrawerStartFragment -->
-    <string-array name="names_of_sender_dialogue_array_run_three">
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
@@ -254,21 +219,6 @@ Los bucles y las listas van de la mano.</item>
     </string-array>
 
     <!-- DrawerStartFragment -->
-    <string-array name="names_of_sender_dialogue_array_run_two">
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-    </string-array>
-
-    <!-- DrawerStartFragment -->
     <string-array name="messages_dialogue_array_run_two">
         <item>Entonces... cuando inspecciono la planta, ¿cómo decide el robot si riega o no?</item>
         <item>Esa es la parte if/else. Si la planta está seca, regar. Si no, pasar a la siguiente.</item>
@@ -286,22 +236,6 @@ Los bucles y las listas van de la mano.</item>
         <item>A menos que lo codifiques mal. Entonces no hace nada. Como yo.</item>
         <item>Bueno, creo que ya lo entiendo. Si está seco, agua. Si no, omítelo. Patrón simple.</item>
         <item>Sí. Esa es toda la lógica.</item>
-    </string-array>
-
-    <!-- DrawerStartFragment -->
-    <string-array name="names_of_sender_dialogue_array_run_one">
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
-        <item>LuchadorHonesto</item>
-        <item>EstudianteA+</item>
-        <item>NoIntentarlo</item>
     </string-array>
 
     <!-- DrawerStartFragment -->

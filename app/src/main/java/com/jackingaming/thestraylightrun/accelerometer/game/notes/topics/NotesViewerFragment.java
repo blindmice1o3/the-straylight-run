@@ -217,19 +217,19 @@ public class NotesViewerFragment extends Fragment
         ivNotes.setImageDrawable(
                 drawbles.get(indexDrawables)
         );
-        ivNotes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                indexDrawables++;
-                if (indexDrawables > drawbles.size() - 1) {
-                    indexDrawables = 0;
-                }
-
-                ivNotes.setImageDrawable(
-                        drawbles.get(indexDrawables)
-                );
-            }
-        });
+//        ivNotes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                indexDrawables++;
+//                if (indexDrawables > drawbles.size() - 1) {
+//                    indexDrawables = 0;
+//                }
+//
+//                ivNotes.setImageDrawable(
+//                        drawbles.get(indexDrawables)
+//                );
+//            }
+//        });
 
         svZoom.addView(ivNotes);
 
