@@ -26,7 +26,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.EditTextDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.SpinnerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.VariableDeclaration;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassComponent;
@@ -61,7 +61,7 @@ public class ClassEditorFragment extends Fragment {
     private Class classToEdit;
     private LinearLayout linearLayoutParent;
     private LinearLayout.LayoutParams layoutParams;
-    private IDEDialogFragment.Mode mode;
+    private IDEFragment.Mode mode;
 
     public ClassEditorFragment() {
         // Required empty public constructor
@@ -75,7 +75,7 @@ public class ClassEditorFragment extends Fragment {
      * @return A new instance of fragment ClassEditorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit, IDEDialogFragment.Mode mode) {
+    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit, IDEFragment.Mode mode) {
         ClassEditorFragment fragment = new ClassEditorFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_VP2_ADAPTER, adapter);
@@ -91,7 +91,7 @@ public class ClassEditorFragment extends Fragment {
         if (getArguments() != null) {
             adapter = (ClassVP2Adapter) getArguments().getSerializable(ARG_CLASS_VP2_ADAPTER);
             classToEdit = (Class) getArguments().getSerializable(ARG_CLASS);
-            mode = (IDEDialogFragment.Mode) getArguments().getSerializable(ARG_MODE);
+            mode = (IDEFragment.Mode) getArguments().getSerializable(ARG_MODE);
 
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -228,13 +228,13 @@ public class ClassEditorFragment extends Fragment {
                         answer += field.getInLineComment();
                     }
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                         tvTodo.setOnLongClickListener(
                                 generateOnLongClickListenerToInsertDirectlyBeneath(
                                         answer, false
                                 )
                         );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
                 } else if (field.getName().equals("diseased")) {
@@ -244,13 +244,13 @@ public class ClassEditorFragment extends Fragment {
                         answer += field.getInLineComment();
                     }
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                         tvTodo.setOnLongClickListener(
                                 generateOnLongClickListenerToInsertDirectlyBeneath(
                                         answer, false
                                 )
                         );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
                 } else if (field.getName().equals("vegDays")) {
@@ -260,13 +260,13 @@ public class ClassEditorFragment extends Fragment {
                         answer += field.getInLineComment();
                     }
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                         tvTodo.setOnLongClickListener(
                                 generateOnLongClickListenerToInsertDirectlyBeneath(
                                         answer, false
                                 )
                         );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
                 }
@@ -281,7 +281,7 @@ public class ClassEditorFragment extends Fragment {
                 );
 
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                if (mode == IDEFragment.Mode.KEYBOARD_TRAINER &&
                         typingView != null) {
                     linearLayoutParent.addView(typingView);
                 }
@@ -670,11 +670,11 @@ public class ClassEditorFragment extends Fragment {
                         }
 
                         if (answer != null) {
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -696,11 +696,11 @@ public class ClassEditorFragment extends Fragment {
                         }
 
                         if (answer != null) {
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -746,7 +746,7 @@ public class ClassEditorFragment extends Fragment {
                 );
 
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                if (mode == IDEFragment.Mode.KEYBOARD_TRAINER &&
                         typingView != null) {
                     linearLayoutParent.addView(typingView);
                 }
@@ -789,13 +789,13 @@ public class ClassEditorFragment extends Fragment {
                             "        return flowering && !diseased && vegDays >= 21;\n" +
                             "    }";
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                         tvTodo.setOnLongClickListener(
                                 generateOnLongClickListenerToInsertDirectlyBeneath(
                                         answer, false
                                 )
                         );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
                 }
@@ -806,13 +806,13 @@ public class ClassEditorFragment extends Fragment {
                             "        return isPowered && isCalibrated;\n" +
                             "    }";
 
-                    if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                    if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                         tvTodo.setOnLongClickListener(
                                 generateOnLongClickListenerToInsertDirectlyBeneath(
                                         answer, false
                                 )
                         );
-                    } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                    } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                         typingView.setCode(answer);
                     }
                 }
@@ -827,7 +827,7 @@ public class ClassEditorFragment extends Fragment {
                 );
 
                 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                if (mode == IDEFragment.Mode.KEYBOARD_TRAINER &&
                         typingView != null) {
                     linearLayoutParent.addView(typingView);
                 }
@@ -1179,11 +1179,11 @@ public class ClassEditorFragment extends Fragment {
                             }
 
                             if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                     tvLineAfterTODO.setOnLongClickListener(
                                             generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                     );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                     typingView = new TypingPracticeView(getContext());
                                     typingView.setCode(answer);
                                 }
@@ -1208,11 +1208,11 @@ public class ClassEditorFragment extends Fragment {
                             }
 
                             if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                     tvLineAfterTODO.setOnLongClickListener(
                                             generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                     );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                     typingView = new TypingPracticeView(getContext());
                                     typingView.setCode(answer);
                                 }
@@ -1226,11 +1226,11 @@ public class ClassEditorFragment extends Fragment {
                                     "                // remove diseased plant\n" +
                                     "            }\n" +
                                     "        }";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1246,11 +1246,11 @@ public class ClassEditorFragment extends Fragment {
                                     "            }\n" +
                                     "            \n" +
                                     "        }";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1261,11 +1261,11 @@ public class ClassEditorFragment extends Fragment {
                             String answer = "        if (plant.isDiseased()) {\n" +
                                     "            cull(plant);\n" +
                                     "        }";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1285,11 +1285,11 @@ public class ClassEditorFragment extends Fragment {
                             }
 
                             if (answer != null) {
-                                if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                                if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                     tvLineAfterTODO.setOnLongClickListener(
                                             generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                     );
-                                } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                                } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                     typingView = new TypingPracticeView(getContext());
                                     typingView.setCode(answer);
                                 }
@@ -1299,11 +1299,11 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("till")) {
 
                             String answer = "        tile.till();";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1312,11 +1312,11 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("water")) {
 
                             String answer = "        tile.water();";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1325,11 +1325,11 @@ public class ClassEditorFragment extends Fragment {
                         else if (method.getName().equals("seed")) {
 
                             String answer = "        tile.seed(seed);";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1341,11 +1341,11 @@ public class ClassEditorFragment extends Fragment {
                                     "        tillTile();\n" +
                                     "        seedTile(seedToPlant);\n" +
                                     "        waterTile();";
-                            if (mode == IDEDialogFragment.Mode.LONG_PRESS_REVEALS) {
+                            if (mode == IDEFragment.Mode.LONG_PRESS_REVEALS) {
                                 tvLineAfterTODO.setOnLongClickListener(
                                         generateOnLongClickListenerToInsertDirectlyBeneath(answer, true)
                                 );
-                            } else if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER) {
+                            } else if (mode == IDEFragment.Mode.KEYBOARD_TRAINER) {
                                 typingView = new TypingPracticeView(getContext());
                                 typingView.setCode(answer);
                             }
@@ -1411,7 +1411,7 @@ public class ClassEditorFragment extends Fragment {
                     );
 
                     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                    if (mode == IDEDialogFragment.Mode.KEYBOARD_TRAINER &&
+                    if (mode == IDEFragment.Mode.KEYBOARD_TRAINER &&
                             typingView != null) {
                         linearLayoutParent.addView(typingView);
                     }

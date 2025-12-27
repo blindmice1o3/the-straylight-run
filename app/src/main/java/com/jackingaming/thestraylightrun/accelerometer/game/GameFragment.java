@@ -226,6 +226,8 @@ public class GameFragment extends Fragment
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START closed");
 
+                    drawerStartFragment.resetGroupChat();
+
                     //////////////////////////////////
                     if (game.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
                         game.resetGroupChatState();

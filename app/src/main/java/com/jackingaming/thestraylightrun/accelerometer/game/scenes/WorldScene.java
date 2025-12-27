@@ -28,7 +28,7 @@ import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ChoiceDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
@@ -307,23 +307,31 @@ public class WorldScene extends Scene {
 
                         pause();
 
-                        DialogFragment dialogFragment = IDEDialogFragment.newInstance(
-                                new IDEDialogFragment.ButtonListener() {
+                        Fragment fragment = IDEFragment.newInstance(IDEFragment.Mode.LONG_PRESS_REVEALS,
+                                gameListener.getRun());
+                        String tag = IDEFragment.TAG;
+                        boolean canceledOnTouchOutside = false;
+                        DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+                                canceledOnTouchOutside, 1.0f, 0.7f,
+                                new FCVDialogFragment.LifecycleListener() {
                                     @Override
-                                    public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
-                                        ideDialogFragment.dismiss();
+                                    public void onResume() {
+                                        // Intentionally blank.
                                     }
-                                }, new IDEDialogFragment.DismissListener() {
+
                                     @Override
                                     public void onDismiss() {
-                                        Log.e(TAG, "onDismiss()");
+                                        //////////////////////////////////
+                                        gameListener.incrementDailyLoop();
+                                        //////////////////////////////////
 
                                         unpause();
                                     }
-                                }, IDEDialogFragment.Mode.LONG_PRESS_REVEALS,
-                                gameListener.getRun());
+                                });
 
-                        gameListener.onShowDialogFragment(dialogFragment, IDEDialogFragment.TAG);
+                        gameListener.onShowDialogFragment(
+                                dialogFragment, tag
+                        );
                     } else if (((NonPlayableCharacter) collided).getId().equals(ID_LASS01)) {
 //                        joinParty(collided);
 

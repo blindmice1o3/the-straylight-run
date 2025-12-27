@@ -75,7 +75,6 @@
     <string name="robot_dialogfragment_harvest">cosechar</string>
     <string name="robot_dialogfragment_ide">IDE</string>
     <string name="text_done">terminado</string>
-    <string name="ide_dialogfragment_execute">ejecutar</string>
     <string name="rival_leader_dialogue00">¡Felicidades! ¡Venceste a nuestros 5 entrenadores del concurso! ¡Acabas de ganar un premio fabuloso! ¡[Jugador] recibió una NUGGET! Por cierto, ¿te gustaría unirte al EQUIPO ROCKET? ¡Somos un grupo dedicado a la maldad usando POKÉMON! ¿Quieres unirte? ¿Seguro? ¡Vamos, únete! ¡Te estoy diciendo que te unas! ¡Vale, necesitas convencerte! ¡Te haré una oferta irresistible! ¡Con tu habilidad, podrías convertirte en un líder destacado del EQUIPO ROCKET!</string>
     <string name="scientist_dialogue00">¡Hola! ¡Bienvenidos al mundo de JAVA! ¡Me llamo FOO BAR! ¡Me llaman el PROFESOR DE JAVA! Este mundo está habitado por criaturas llamadas OBJETO. Para algunos, los OBJETOS son mascotas. Otros los usan para pelear. Yo... estudio OBJETO como profesión. Primero, ¿cómo te llamas?</string>
     <string name="edittext_name_hint">nombre</string>

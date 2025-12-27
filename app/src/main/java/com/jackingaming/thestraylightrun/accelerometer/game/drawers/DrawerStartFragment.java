@@ -104,12 +104,16 @@ public class DrawerStartFragment extends Fragment {
         rvDrawerStart.setItemAnimator(new SlideFromBottomItemAnimator());
     }
 
-    public void startMessageQueue(Game.Run run) {
+    public void resetGroupChat() {
+        Log.e(TAG, "resetGroupChat()");
+
         handler.removeCallbacksAndMessages(null);
 
         messages.clear();
         adapter.notifyDataSetChanged();
+    }
 
+    public void startMessageQueue(Game.Run run) {
         messageQueue = new ArrayList<>();
 
         int idNamesOfSenderDialogueArray = -1;

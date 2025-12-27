@@ -3,7 +3,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
@@ -21,7 +21,7 @@ public class RobotDialogQuest00
         implements Quest {
     public static final String TAG = RobotDialogQuest00.class.getSimpleName();
     public static final String ROBOT_REPROGRAMMER_4000 = "robotReprogrammer4000";
-    public static final String EVENT_REQUIREMENT_AS_STRING = IDEDialogFragment.TAG;
+    public static final String EVENT_REQUIREMENT_AS_STRING = IDEFragment.TAG;
     public static final int QUANTITY_REQUIRED = 1;
 
     private Quest.State state;

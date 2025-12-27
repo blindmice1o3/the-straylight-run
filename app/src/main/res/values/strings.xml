@@ -101,9 +101,6 @@
     <!-- dialogfragment_edittext.xml -->
     <string name="text_done">done</string>
 
-    <!-- dialogfragment_ide.xml -->
-    <string name="ide_dialogfragment_execute">execute</string>
-
     <string-array name="hummingbird_mother">
         <item>if (hope.exist()) {</item>
         <item>    mother.keepTrying();</item>

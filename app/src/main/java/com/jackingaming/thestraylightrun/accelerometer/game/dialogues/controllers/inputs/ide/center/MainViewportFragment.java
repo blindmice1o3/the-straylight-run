@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
@@ -54,7 +54,7 @@ public class MainViewportFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
 
-    private IDEDialogFragment.Mode mode;
+    private IDEFragment.Mode mode;
 
     public MainViewportFragment() {
         // Required empty public constructor
@@ -70,7 +70,7 @@ public class MainViewportFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static MainViewportFragment newInstance(
-            Class classMain, IDEDialogFragment.Mode mode) {
+            Class classMain, IDEFragment.Mode mode) {
         MainViewportFragment fragment = new MainViewportFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_MAIN, classMain);
@@ -86,7 +86,7 @@ public class MainViewportFragment extends Fragment {
         if (arguments != null) {
             Class classMain = (Class) arguments.getSerializable(ARG_CLASS_MAIN);
             classes.add(classMain);
-            mode = (IDEDialogFragment.Mode) arguments.getSerializable(ARG_MODE);
+            mode = (IDEFragment.Mode) arguments.getSerializable(ARG_MODE);
         }
     }
 

@@ -1,26 +1,18 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide;
 
-import android.content.DialogInterface;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentContainerView;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.bottom.ConsoleViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.center.MainViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.left.ProjectViewportFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.ClassViewerFragment;
@@ -30,48 +22,26 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 
 import java.io.Serializable;
 
-public class IDEDialogFragment extends DialogFragment
+public class IDEFragment extends Fragment
         implements Serializable {
-    public static final String TAG = IDEDialogFragment.class.getSimpleName();
-    public static final String ARG_BUTTON_LISTENER = "button_listener";
-    public static final String ARG_DISMISS_LISTENER = "dismiss_listener";
+    public static final String TAG = IDEFragment.class.getSimpleName();
     public static final String ARG_MODE = "mode";
     public static final String ARG_RUN = "run";
-
-    public interface ButtonListener extends Serializable {
-        void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment);
-    }
-
-    public interface DismissListener extends Serializable {
-        void onDismiss();
-    }
-
-    private ButtonListener buttonListener;
-    private DismissListener dismissListener;
 
     public enum Mode {LONG_PRESS_REVEALS, KEYBOARD_TRAINER;}
 
     private Mode mode;
     private Game.Run run;
 
-    private TextView tvClose;
-    private TextView tvExecute;
-
     private ProjectViewportFragment projectViewportFragment;
     private MainViewportFragment mainViewportFragment;
     private StructureViewportFragment structureViewportFragment;
-    private FragmentContainerView fcvBottom;
-    private ConsoleViewportFragment consoleViewportFragment;
 
-    public static IDEDialogFragment newInstance(ButtonListener buttonListener,
-                                                DismissListener dismissListener,
-                                                Mode mode,
-                                                Game.Run run) {
-        IDEDialogFragment fragment = new IDEDialogFragment();
+    public static IDEFragment newInstance(Mode mode,
+                                          Game.Run run) {
+        IDEFragment fragment = new IDEFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_BUTTON_LISTENER, buttonListener);
-        args.putSerializable(ARG_DISMISS_LISTENER, dismissListener);
         args.putSerializable(ARG_MODE, mode);
         args.putSerializable(ARG_RUN, run);
         fragment.setArguments(args);
@@ -86,8 +56,6 @@ public class IDEDialogFragment extends DialogFragment
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            buttonListener = (ButtonListener) arguments.getSerializable(ARG_BUTTON_LISTENER);
-            dismissListener = (DismissListener) arguments.getSerializable(ARG_DISMISS_LISTENER);
             mode = (Mode) arguments.getSerializable(ARG_MODE);
             run = (Game.Run) arguments.getSerializable(ARG_RUN);
         }
@@ -111,8 +79,6 @@ public class IDEDialogFragment extends DialogFragment
                 projectViewportFragment.getClassMain(), mode
         );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
-        consoleViewportFragment = ConsoleViewportFragment.newInstance(null, null);
-        fcvBottom = view.findViewById(R.id.fcv_bottom);
 
         projectViewportFragment.setProjectViewportListener(new ProjectViewportFragment.ProjectViewportListener() {
             @Override
@@ -189,91 +155,6 @@ public class IDEDialogFragment extends DialogFragment
         ft.add(R.id.fcv_left, projectViewportFragment);
         ft.add(R.id.fcv_center, mainViewportFragment);
         ft.add(R.id.fcv_right, structureViewportFragment);
-        ft.add(R.id.fcv_bottom, consoleViewportFragment);
         ft.commit();
-
-        //////////////////////////////////////////////////////////////////////
-
-        tvClose = view.findViewById(R.id.tv_close);
-        tvClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonListener.onCloseButtonClicked(view, IDEDialogFragment.this);
-            }
-        });
-
-        tvExecute = view.findViewById(R.id.tv_execute);
-        tvExecute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Class classMain = projectViewportFragment.getClassMain();
-
-                Method methodMain = null;
-                for (Method method : classMain.getMethods()) {
-                    if (method.getName().equals(ProjectViewportFragment.NAME_METHOD_MAIN)) {
-                        methodMain = method;
-                        break;
-                    }
-                }
-
-                consoleViewportFragment.displayToConsole(
-                        methodMain.getBody()
-                );
-
-                //////////////////////////////
-                openConsoleViewportFragment();
-                //////////////////////////////
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume()");
-
-        if (getDialog() != null) {
-            getDialog().setCancelable(false);
-
-            Window window = getDialog().getWindow();
-            Display display = window.getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-            window.setLayout(width, (height / 2));
-            window.setGravity(Gravity.CENTER);
-
-            TextView tvConsole = getView().findViewById(R.id.tv_console);
-            tvConsole.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    closeConsoleViewportFragment();
-                }
-            });
-            closeConsoleViewportFragment();
-        }
-    }
-
-    private void closeConsoleViewportFragment() {
-        fcvBottom.setVisibility(View.GONE);
-    }
-
-    public void openConsoleViewportFragment() {
-        fcvBottom.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onDismiss(@NonNull DialogInterface dialog) {
-        super.onDismiss(dialog);
-        Log.e(TAG, "onDismiss()");
-
-        dismissListener.onDismiss();
-    }
-
-    @Override
-    public void onCancel(@NonNull DialogInterface dialog) {
-        super.onCancel(dialog);
-        Log.e(TAG, "onCancel()");
     }
 }

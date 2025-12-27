@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.Class;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 
@@ -24,9 +24,9 @@ public class ClassVP2Adapter extends FragmentStateAdapter
     private List<Class> classes;
     private Map<Class, Fragment> fragmentsByClass;
 
-    private IDEDialogFragment.Mode mode;
+    private IDEFragment.Mode mode;
 
-    public ClassVP2Adapter(@NonNull Fragment fragment, List<Class> classes, IDEDialogFragment.Mode mode) {
+    public ClassVP2Adapter(@NonNull Fragment fragment, List<Class> classes, IDEFragment.Mode mode) {
         super(fragment);
         this.fragment = fragment;
         this.classes = classes;

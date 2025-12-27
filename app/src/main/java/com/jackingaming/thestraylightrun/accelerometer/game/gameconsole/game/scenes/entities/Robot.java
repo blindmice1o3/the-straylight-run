@@ -15,7 +15,7 @@ import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
@@ -515,26 +515,17 @@ public class Robot extends Creature {
     }
 
     private void showIDEDialogFragment(RobotDialogFragment robotDialogFragment) {
-        IDEDialogFragment ideDialogFragment = IDEDialogFragment.newInstance(new IDEDialogFragment.ButtonListener() {
-            @Override
-            public void onCloseButtonClicked(View view, IDEDialogFragment ideDialogFragment) {
-                ideDialogFragment.dismiss();
-            }
-        }, new IDEDialogFragment.DismissListener() {
-            @Override
-            public void onDismiss() {
-                Log.e(TAG, "onDismiss()");
-            }
-        }, IDEDialogFragment.Mode.KEYBOARD_TRAINER, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE);
+        IDEFragment ideFragment = IDEFragment.newInstance(IDEFragment.Mode.KEYBOARD_TRAINER,
+                com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE);
 
         if (listener != null) {
             listener.onOpenIDEDialogFragment();
         }
 
-        ideDialogFragment.show(
-                ((MainActivity) game.getContext()).getSupportFragmentManager(),
-                IDEDialogFragment.TAG
-        );
+//        ideDialogFragment.show(
+//                ((MainActivity) game.getContext()).getSupportFragmentManager(),
+//                IDEDialogFragment.TAG
+//        );
     }
 
     private void doNextCommand() {
