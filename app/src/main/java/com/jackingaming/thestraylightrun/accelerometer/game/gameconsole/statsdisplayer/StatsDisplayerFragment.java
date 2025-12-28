@@ -62,7 +62,7 @@ public class StatsDisplayerFragment extends Fragment
 
     public enum ButtonHolder {A, B;}
 
-    transient private Bitmap honeyPot;
+    transient private Bitmap currency;
     transient private Bitmap calendar;
     transient private Bitmap quest;
 
@@ -140,9 +140,9 @@ public class StatsDisplayerFragment extends Fragment
         tvQuantityA = view.findViewById(R.id.buttonholderfragment_a_stats_displayer_fragment).findViewById(R.id.tv_quantity);
         tvQuantityB = view.findViewById(R.id.buttonholderfragment_b_stats_displayer_fragment).findViewById(R.id.tv_quantity);
 
-        initImageHoneyPot(getResources());
+        initImageCurrency(getResources());
         ImageView imageViewCurrencyIcon = view.findViewById(R.id.imageview_currency_stats_displayer_fragment);
-        imageViewCurrencyIcon.setImageBitmap(honeyPot);
+        imageViewCurrencyIcon.setImageBitmap(currency);
         imageViewCurrencyIcon.setTag(TAG_CURRENCY_ICON);
         imageViewCurrencyIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,9 +190,11 @@ public class StatsDisplayerFragment extends Fragment
         calendar = Bitmap.createBitmap(spriteSheet, 17, 320, 20, 20);
     }
 
-    private void initImageHoneyPot(Resources resources) {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(resources, R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
-        honeyPot = Bitmap.createBitmap(spriteSheet, 318, 1556, 38, 37);
+    private void initImageCurrency(Resources resources) {
+        Bitmap spriteSheetCoin = BitmapFactory.decodeResource(resources, R.drawable.icon_currency);
+        currency = Bitmap.createBitmap(spriteSheetCoin, 275, 278, 477, 467);
+//        Bitmap spriteSheet = BitmapFactory.decodeResource(resources, R.drawable.gba_kingdom_hearts_chain_of_memories_winnie_the_pooh);
+//        honeyPot = Bitmap.createBitmap(spriteSheet, 318, 1556, 38, 37);
     }
 
     public void setCurrency(float currency) {
