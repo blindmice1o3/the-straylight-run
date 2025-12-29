@@ -134,7 +134,7 @@ public class Game {
 
     private Scene sceneCurrent;
 
-    private UpdateableSprite ball;
+//    private UpdateableSprite ball;
 
     public void resetGroupChatState() {
         HomePlayerRoom01Scene.getInstance().setGroupChatDrawerClosed(true);
@@ -160,7 +160,7 @@ public class Game {
         gameCamera = new GameCamera(0f, 0f, widthSurfaceView, heightSurfaceView);
 
         /////////////////////////////////////////////////////////////////////////////////
-        ball = new UpdateableSprite(widthSurfaceView, heightSurfaceView);
+//        ball = new UpdateableSprite(widthSurfaceView, heightSurfaceView);
         /////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -206,8 +206,8 @@ public class Game {
         sceneCurrent.enter(argsSceneTransfer);
 
         /////////////////////////////////////////////////////////////////////////////////
-        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
-        ball.init(ballImage);
+//        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
+//        ball.init(ballImage);
         /////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -257,7 +257,7 @@ public class Game {
         sceneCurrent.update(elapsed);
 
         /////////////////////////////////////////////////////////////////////////////////
-        ball.update(elapsed);
+//        ball.update(elapsed);
         /////////////////////////////////////////////////////////////////////////////////
     }
 
@@ -271,7 +271,7 @@ public class Game {
             sceneCurrent.draw(canvas);
 
             /////////////////////////////////////////////////////////////////////////////////
-            ball.draw(canvas);
+//            ball.draw(canvas);
             /////////////////////////////////////////////////////////////////////////////////
 
             holder.unlockCanvasAndPost(canvas);

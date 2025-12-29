@@ -326,7 +326,7 @@ public class ProjectViewportFragment extends Fragment {
         argumentListHarvestAll.add(
                 new VariableDeclaration("List<Plant>", "plants")
         );
-        String bodyHarvestAll = "        // TODO: Use enhanced for loop to check each plant. If the plant is ready to harvest, harvest it.";
+        String bodyHarvestAll = "        // TODO: Use for loop to check each plant. If the plant is ready to harvest, harvest it.";
         classRobotRun3.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
                 "void", "harvestAll",
