@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -170,6 +171,17 @@ public class GameFragment extends Fragment
 
     public static final float THRESHOLD_SLIDE_OFFSET = 0.05f;
 
+    private void handleDrawerStartClosing() {
+        drawerStartFragment.resetGroupChat();
+
+        //////////////////////////////////
+        if (game.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
+            game.resetGroupChatState();
+            game.incrementDailyLoop();
+        }
+        //////////////////////////////////
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -226,14 +238,9 @@ public class GameFragment extends Fragment
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START closed");
 
-                    drawerStartFragment.resetGroupChat();
-
-                    //////////////////////////////////
-                    if (game.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
-                        game.resetGroupChatState();
-                        game.incrementDailyLoop();
-                    }
-                    //////////////////////////////////
+                    ///////////////////////////
+                    handleDrawerStartClosing();
+                    ///////////////////////////
                 } else {
                     Log.e(TAG, "drawer END closed");
                 }
@@ -401,6 +408,25 @@ public class GameFragment extends Fragment
                 }
             }
         });
+
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    Log.e(TAG, "custom handling of back press");
+                    // TODO: handleOnBackPressed()
+                    ///////////////////////////
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    handleDrawerStartClosing();
+                    ///////////////////////////
+                } else {
+                    Log.e(TAG, "default handling of back press");
+                    setEnabled(false); // Disable this callback
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
     }
 
     private Game game;
