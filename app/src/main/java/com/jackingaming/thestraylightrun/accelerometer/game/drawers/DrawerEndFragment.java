@@ -7,16 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
-import com.jackingaming.thestraylightrun.accelerometer.game.Game;
 
 import java.io.Serializable;
 
@@ -35,15 +32,15 @@ public class DrawerEndFragment extends Fragment {
     private static final String ARG_DRAWER_END_LISTENER = "drawerEndListener";
 
     public interface DrawerEndListener extends Serializable {
-        void onSubmitJournalEntry(View view, String journalEntry);
+        void onSave();
+
+        void onLoad();
     }
 
     private DrawerEndListener listener;
 
     private LinearLayout rightDrawer;
-    private TextView tvJournalPrompt;
-    private EditText etJournalEntry;
-    private Button buttonSubmitJournal;
+    private Button buttonSave, buttonLoad;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -108,40 +105,21 @@ public class DrawerEndFragment extends Fragment {
         Log.e(TAG, "onViewCreated()");
 
         rightDrawer = view.findViewById(R.id.right_drawer);
-        tvJournalPrompt = view.findViewById(R.id.tv_journal_prompt);
-        etJournalEntry = view.findViewById(R.id.et_journal_entry);
-        buttonSubmitJournal = view.findViewById(R.id.button_submit_journal);
+        buttonSave = view.findViewById(R.id.button_save);
+        buttonLoad = view.findViewById(R.id.button_load);
 
-        buttonSubmitJournal.setOnClickListener(new View.OnClickListener() {
+        buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String entry = etJournalEntry.getText().toString().trim();
-                if (!entry.isEmpty()) {
-                    listener.onSubmitJournalEntry(view, entry);
-                }
+                listener.onSave();
             }
         });
-    }
 
-    public void updateJournalPrompt(Game.Run run) {
-        String prompt = null;
-        switch (run) {
-            case ONE:
-                prompt = "What's one way you could explain the difference between a class and an object to someone who's never coded before?";
-                break;
-            case TWO:
-                prompt = "Think of a real-life decision you make every day. How could you turn that into an if/else statement?";
-                break;
-            case THREE:
-                prompt = "When have you had to repeat the same task over and over? How would a for loop help in that situation?";
-                break;
-            case FOUR:
-                prompt = "If you could make a List of anything right now - snacks, games, or even chores - what would be on it?";
-                break;
-            case FIVE:
-                prompt = "If you had to build a simple program to take care of a farm, which parts would you use classes, loops, lists, and if/else for?";
-                break;
-        }
-        tvJournalPrompt.setText(prompt);
+        buttonLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onLoad();
+            }
+        });
     }
 }

@@ -870,4 +870,8 @@ public class HomePlayerRoom01Scene extends Scene {
     public void setJournalDrawerClosed(boolean journalDrawerClosed) {
         isJournalDrawerClosed = journalDrawerClosed;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }

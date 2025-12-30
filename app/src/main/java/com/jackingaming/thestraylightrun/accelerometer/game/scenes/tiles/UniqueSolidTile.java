@@ -57,6 +57,13 @@ public class UniqueSolidTile extends SolidTile {
     }
 
     public void startCirleAnimation() {
+        if (animatorCircleRight == null ||
+                animatorCircleDown == null ||
+                animatorCircleLeft == null ||
+                animatorCircleUp == null) {
+            return;
+        }
+
         animatorCircleRight.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

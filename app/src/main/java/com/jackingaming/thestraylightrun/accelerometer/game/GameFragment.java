@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -224,9 +223,7 @@ public class GameFragment extends Fragment
                 } else {
                     Log.e(TAG, "drawer END opened");
 
-                    drawerEndFragment.updateJournalPrompt(
-                            gameListener.getRun()
-                    );
+                    // Intentionally blank.
                 }
             }
 
@@ -281,34 +278,31 @@ public class GameFragment extends Fragment
             drawerStartFragment = DrawerStartFragment.newInstance(null, null);
             drawerEndFragment = DrawerEndFragment.newInstance(null, null, new DrawerEndFragment.DrawerEndListener() {
                 @Override
-                public void onSubmitJournalEntry(View view, String journalEntry) {
-                    // TODO: Save to local db, file, or in-memory list.
-                    Toast.makeText(getContext(), "Journal saved!", Toast.LENGTH_SHORT).show();
+                public void onSave() {
+                    Log.e(TAG, "onViewCreated() drawerEndFragment onSave()");
+
+                    game.save(
+                            getContext(),
+                            game.getSavedFileViaUserInputFileName()
+                    );
+
+                    drawerLayout.closeDrawer(GravityCompat.END);
+                }
+
+                @Override
+                public void onLoad() {
+                    Log.e(TAG, "onViewCreated() drawerEndFragment onLoad()");
+
+                    game.load(
+                            getContext(),
+                            game.getSavedFileViaUserInputFileName()
+                    );
+
                     drawerLayout.closeDrawer(GravityCompat.END);
                 }
             });
             drawerTopFragment = DrawerTopFragment.newInstance(null, null,
                     new DrawerTopFragment.SelectionListener() {
-                        @Override
-                        public void onSaveSelected() {
-                            Log.e(TAG, "onViewCreated() drawerTopFragment onSaveSelected()");
-
-                            game.save(
-                                    getContext(),
-                                    game.getSavedFileViaUserInputFileName()
-                            );
-                        }
-
-                        @Override
-                        public void onLoadSelected() {
-                            Log.e(TAG, "onViewCreated() drawerTopFragment onLoadSelected()");
-
-                            game.load(
-                                    getContext(),
-                                    game.getSavedFileViaUserInputFileName()
-                            );
-                        }
-
                         @Override
                         public void onRunSelected(Game.Run run) {
                             switch (run) {

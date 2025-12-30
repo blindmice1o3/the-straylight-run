@@ -2,8 +2,6 @@ package com.jackingaming.thestraylightrun.accelerometer.game;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Handler;
@@ -13,7 +11,6 @@ import android.view.SurfaceHolder;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom02Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
@@ -224,6 +221,8 @@ public class Game {
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
             os.writeObject(run);
             os.writeObject(dailyLoop);
+            os.writeFloat(HomePlayerRoom01Scene.getInstance().getPlayer().getXPos());
+            os.writeFloat(HomePlayerRoom01Scene.getInstance().getPlayer().getYPos());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -239,6 +238,12 @@ public class Game {
              ObjectInputStream os = new ObjectInputStream(fi)) {
             run = (Run) os.readObject();
             dailyLoop = (DailyLoop) os.readObject();
+            HomePlayerRoom01Scene.getInstance().getPlayer().setXPos(
+                    os.readFloat()
+            );
+            HomePlayerRoom01Scene.getInstance().getPlayer().setYPos(
+                    os.readFloat()
+            );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
