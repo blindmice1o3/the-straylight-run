@@ -413,11 +413,15 @@ public class GameFragment extends Fragment
             @Override
             public void handleOnBackPressed() {
                 if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    Log.e(TAG, "custom handling of back press");
-                    // TODO: handleOnBackPressed()
+                    Log.e(TAG, "custom handling of back press for drawer start");
                     ///////////////////////////
                     drawerLayout.closeDrawer(GravityCompat.START);
                     handleDrawerStartClosing();
+                    ///////////////////////////
+                } else if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    Log.e(TAG, "custom handling of back press for drawer end");
+                    ///////////////////////////
+                    drawerLayout.closeDrawer(GravityCompat.END);
                     ///////////////////////////
                 } else {
                     Log.e(TAG, "default handling of back press");
