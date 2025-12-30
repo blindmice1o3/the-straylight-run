@@ -397,16 +397,16 @@ Loops and Lists go hand-in-hand.</item>
     <!-- DrawerStartFragment -->
     <string-array name="names_of_sender_dialogue_array_run_one">
         <item>HS</item>
-        <item>AS</item>
+        <item>SA</item>
         <item>NT</item>
         <item>HS</item>
-        <item>AS</item>
+        <item>SA</item>
         <item>NT</item>
         <item>HS</item>
-        <item>AS</item>
+        <item>SA</item>
         <item>NT</item>
         <item>HS</item>
-        <item>AS</item>
+        <item>SA</item>
         <item>NT</item>
     </string-array>
 

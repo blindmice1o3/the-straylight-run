@@ -23,7 +23,9 @@
             android:id="@+id/tv_name_of_sender"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Nyx" />
+            android:gravity="center_vertical"
+            android:text="Nyx"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView

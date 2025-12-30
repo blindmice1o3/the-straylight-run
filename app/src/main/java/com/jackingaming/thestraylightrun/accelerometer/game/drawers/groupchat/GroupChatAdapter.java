@@ -1,5 +1,8 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.drawers.groupchat.views.CircularBorderedImageView;
 
 import java.util.List;
 
@@ -16,12 +20,14 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
     public static final String TAG = GroupChatAdapter.class.getSimpleName();
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        private CircularBorderedImageView ivThumbnail;
         private TextView tvNameOfSender;
         private TextView tvMessage;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
             tvNameOfSender = itemView.findViewById(R.id.tv_name_of_sender);
             tvMessage = itemView.findViewById(R.id.tv_message);
         }
@@ -33,6 +39,17 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.View
                 tvNameOfSender.setVisibility(View.GONE);
             } else {
                 String nameOfSender = messageCurrent.getNameOfSender();
+
+                if (nameOfSender.equals("SA")) {
+                    Bitmap thumbnailSA = BitmapFactory.decodeResource(itemView.getResources(), R.drawable.group_chat_image_student_a);
+                    ivThumbnail.setImageBitmap(thumbnailSA);
+                    tvNameOfSender.setTextColor(Color.MAGENTA);
+                } else if (nameOfSender.equals("NT")) {
+                    Bitmap thumbnailNT = BitmapFactory.decodeResource(itemView.getResources(), R.drawable.group_chat_image_not_trying);
+                    ivThumbnail.setImageBitmap(thumbnailNT);
+                    tvNameOfSender.setTextColor(Color.GREEN);
+                }
+
                 tvNameOfSender.setText(nameOfSender);
             }
 
