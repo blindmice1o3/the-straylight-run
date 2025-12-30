@@ -177,4 +177,9 @@ public class MainViewportFragment extends Fragment {
         );
         Log.e(TAG, "classToAdd was added");
     }
+
+    public void replaceMainWithFirstClassFromList(Class firstClassFromList) {
+        classes.set(0, firstClassFromList);
+        classVP2Adapter.notifyItemChanged(0);
+    }
 }

@@ -150,7 +150,7 @@ public class ProjectViewportFragment extends Fragment {
                 ClassComponent.AccessModifier.PUBLIC,
                 null,
                 bodyGrowTentSystemDefaultConstructor,
-                null, null, true));
+                null, null, false));
 
         // METHODS
         String bodyRunDailyCycle = "        // Only if tent is zipped should light be counted as \"correct\"\n" +
@@ -165,7 +165,7 @@ public class ProjectViewportFragment extends Fragment {
                 "void", "runDailyCycle",
                 null,
                 bodyRunDailyCycle,
-                null, null, true));
+                null, null, false));
         String bodyZipTent = "        isTentZipped = true;";
         classGrowTentSystem.addMethod(new Method(ClassComponent.AccessModifier.PUBLIC,
                 null,
@@ -870,6 +870,16 @@ public class ProjectViewportFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public void removeClassMain() {
+        if (classes.get(0).getName().equals(NAME_CLASS_MAIN)) {
+            classes.remove(0);
+        }
+    }
+
+    public Class getFirstClassFromList() {
+        return classes.get(0);
     }
 
     @Override

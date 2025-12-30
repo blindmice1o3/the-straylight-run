@@ -1513,6 +1513,13 @@ public class ClassEditorFragment extends Fragment {
         // FIELDS
         initLinesOfFields();
 
+        if (classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN5)) {
+            addTextViewAsBlankLineToLinearLayout();
+        }
         Spannable spannableEllipsisFields = convertToColoredSpannableString(
                 "    ...", Color.CYAN);
         TextView tvEllipsisFields = new TextView(getContext());
@@ -1532,9 +1539,10 @@ public class ClassEditorFragment extends Fragment {
         initLinesOfConstructors();
 
         if (classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
-                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
+//                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN4) ||
-                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4)) {
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN5)) {
             addTextViewAsBlankLineToLinearLayout();
         }
         Spannable spannableEllipsisConstructor = convertToColoredSpannableString(
@@ -1557,16 +1565,17 @@ public class ClassEditorFragment extends Fragment {
 
         if (classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_MAIN) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROWABLE_TILE_RUN1) ||
-                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
+//                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_SEED_RUN1) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN1) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_CHICKEN_RUN1) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_COW_RUN1) ||
-                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
+//                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN2) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN2) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_PLANT_RUN3) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_ROBOT_RUN3) ||
                 classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN4) ||
-                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4)) {
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_EQUIPMENT_RUN4) ||
+                classToEdit.getName().equals(ProjectViewportFragment.NAME_CLASS_GROW_TENT_SYSTEM_RUN5)) {
             addTextViewAsBlankLineToLinearLayout();
         }
         Spannable spannableEllipsisMethod = convertToColoredSpannableString(
@@ -1577,13 +1586,13 @@ public class ClassEditorFragment extends Fragment {
         linearLayoutParent.addView(tvEllipsisMethod);
 
         // CLIPPIT-MESSAGE
-        addTextViewAsBlankLineToLinearLayout();
-        Spannable spannableClippitMessage = convertToColoredSpannableString(
-                "    clippit says hello!", Color.CYAN);
-        TextView tvClippitMessage = new TextView(getContext());
-        tvClippitMessage.setLayoutParams(layoutParams);
-        tvClippitMessage.setText(spannableClippitMessage);
-        linearLayoutParent.addView(tvClippitMessage);
+//        addTextViewAsBlankLineToLinearLayout();
+//        Spannable spannableClippitMessage = convertToColoredSpannableString(
+//                "    clippit says hello!", Color.CYAN);
+//        TextView tvClippitMessage = new TextView(getContext());
+//        tvClippitMessage.setLayoutParams(layoutParams);
+//        tvClippitMessage.setText(spannableClippitMessage);
+//        linearLayoutParent.addView(tvClippitMessage);
 
         // CLASS-CLOSING
         initLinesOfClassClosing();

@@ -157,4 +157,13 @@ public class IDEFragment extends Fragment
         ft.add(R.id.fcv_right, structureViewportFragment);
         ft.commit();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        projectViewportFragment.removeClassMain();
+        Class firstClassFromList = projectViewportFragment.getFirstClassFromList();
+        mainViewportFragment.replaceMainWithFirstClassFromList(firstClassFromList);
+    }
 }
