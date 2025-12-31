@@ -17,6 +17,7 @@ import java.util.List;
 public class StateManager {
     transient private Game game;
 
+    private TitleScreenState titleScreenState;
     private NewOrContinueState newOrContinueState;
     private TextboxState textboxState;
     private GrowSystemPartsDisplayerState growSystemPartsDisplayerState;
@@ -26,6 +27,7 @@ public class StateManager {
     private List<State> stateStack;
 
     public StateManager(com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
+        titleScreenState = new TitleScreenState();
         newOrContinueState = new NewOrContinueState();
         textboxState = new TextboxState();
         growSystemPartsDisplayerState = new GrowSystemPartsDisplayerState();
@@ -38,11 +40,13 @@ public class StateManager {
         if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
             stateStack.add(newOrContinueState);
         }
+        stateStack.add(titleScreenState);
     }
 
     public void reload(Game game) {
         this.game = game;
 
+        titleScreenState.reload(game);
         newOrContinueState.reload(game);
         textboxState.reload(game);
         growSystemPartsDisplayerState.reload(game);
@@ -59,6 +63,7 @@ public class StateManager {
             menuState.init(game);
         }
 
+        titleScreenState.init(game);
         newOrContinueState.init(game);
         textboxState.init(game);
         growSystemPartsDisplayerState.init(game);
