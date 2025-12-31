@@ -5,11 +5,11 @@ import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Caterpillar;
 
 import java.io.Serializable;
 
-public class EelAnimationManager
+public class CaterpillarAnimationManager
         implements Serializable {
     transient private static Bitmap[] framesPatrolLeft;
     transient private static Bitmap[] framesPatrolRight;
@@ -32,7 +32,7 @@ public class EelAnimationManager
     transient private Animation animationHurtLeft;
     transient private Animation animationHurtRight;
 
-    public EelAnimationManager() {
+    public CaterpillarAnimationManager() {
         speed = ANIMATION_SPEED_DEFAULT;
     }
 
@@ -58,42 +58,42 @@ public class EelAnimationManager
         animationHurtRight.setSpeed(speed);
     }
 
-    public Bitmap getCurrentFrame(Eel.State state, Eel.DirectionFacing directionFacing) {
+    public Bitmap getCurrentFrame(Caterpillar.State state, Caterpillar.DirectionFacing directionFacing) {
         Bitmap imageByState = null;
         switch (state) {
             case MOVE_RANDOMLY:
             case PATROL:
-                if (directionFacing == Eel.DirectionFacing.LEFT) {
+                if (directionFacing == Caterpillar.DirectionFacing.LEFT) {
                     imageByState = animationPatrolLeft.getCurrentFrame();
-                } else if (directionFacing == Eel.DirectionFacing.RIGHT) {
+                } else if (directionFacing == Caterpillar.DirectionFacing.RIGHT) {
                     imageByState = animationPatrolRight.getCurrentFrame();
                 }
                 break;
             case TURN:
-                if (directionFacing == Eel.DirectionFacing.LEFT) {
+                if (directionFacing == Caterpillar.DirectionFacing.LEFT) {
                     imageByState = animationPatrolRightTurnToLeft.getCurrentFrame();
-                } else if (directionFacing == Eel.DirectionFacing.RIGHT) {
+                } else if (directionFacing == Caterpillar.DirectionFacing.RIGHT) {
                     imageByState = animationPatrolLeftTurnToRight.getCurrentFrame();
                 }
                 break;
             case ATTACK:
-                if (directionFacing == Eel.DirectionFacing.LEFT) {
+                if (directionFacing == Caterpillar.DirectionFacing.LEFT) {
                     imageByState = animationAttackLeft.getCurrentFrame();
-                } else if (directionFacing == Eel.DirectionFacing.RIGHT) {
+                } else if (directionFacing == Caterpillar.DirectionFacing.RIGHT) {
                     imageByState = animationAttackRight.getCurrentFrame();
                 }
                 break;
             case HURT:
-                if (directionFacing == Eel.DirectionFacing.LEFT) {
+                if (directionFacing == Caterpillar.DirectionFacing.LEFT) {
                     imageByState = animationHurtLeft.getCurrentFrame();
-                } else if (directionFacing == Eel.DirectionFacing.RIGHT) {
+                } else if (directionFacing == Caterpillar.DirectionFacing.RIGHT) {
                     imageByState = animationHurtRight.getCurrentFrame();
                 }
                 break;
             case CHASE:
-                if (directionFacing == Eel.DirectionFacing.LEFT) {
+                if (directionFacing == Caterpillar.DirectionFacing.LEFT) {
                     imageByState = animationPatrolLeft.getCurrentFrame();
-                } else if (directionFacing == Eel.DirectionFacing.RIGHT) {
+                } else if (directionFacing == Caterpillar.DirectionFacing.RIGHT) {
                     imageByState = animationPatrolRight.getCurrentFrame();
                 }
                 break;

@@ -10,7 +10,7 @@ import android.view.animation.BounceInterpolator;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Caterpillar;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.PoohForm;
@@ -77,7 +77,7 @@ public class CollidingOrbit extends Creature {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
-        if (e instanceof Eel) {
+        if (e instanceof Caterpillar) {
             Log.e(TAG, "respondToEntityCollision(): e instanceof Eel");
             // bounce Eel based on CollidingOrbit's cw/ccw.
             float xStartEel = e.getX();

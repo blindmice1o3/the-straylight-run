@@ -391,7 +391,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getRun());
                             String tag = GameConsoleFragment.TAG;
                             boolean canceledOnTouchOutside = false;
-                            DialogFragment dialogFragment =
+                            DialogFragment dialogFragmentContainingGameConsoleFragment =
                                     FCVDialogFragment.newInstance(fragment, tag,
                                             canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
                                             new FCVDialogFragment.LifecycleListener() {
@@ -411,7 +411,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                             });
 
                             gameListener.onShowDialogFragment(
-                                    dialogFragment, tag
+                                    dialogFragmentContainingGameConsoleFragment, tag
                             );
 
                             return false;

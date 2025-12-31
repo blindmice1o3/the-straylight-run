@@ -9,7 +9,7 @@ import android.view.animation.BounceInterpolator;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Caterpillar;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 
@@ -30,7 +30,7 @@ public class BounceEntityCommand
 
     @Override
     public boolean execute() {
-        if (entity instanceof Eel) {
+        if (entity instanceof Caterpillar) {
             Log.e(TAG, "BounceEntityCommand.execute(): entity instanceof Eel");
             float xStartEel = entity.getX();
             float yStartEel = entity.getY();

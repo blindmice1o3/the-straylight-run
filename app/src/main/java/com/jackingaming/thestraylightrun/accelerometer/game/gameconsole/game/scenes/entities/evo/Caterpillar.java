@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.EelAnimationManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.animations.CaterpillarAnimationManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.DamageDoer;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Damageable;
@@ -25,9 +25,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 
 import java.util.Random;
 
-public class Eel extends Creature
+public class Caterpillar extends Creature
         implements Damageable, DamageDoer {
-    public static final String TAG = Eel.class.getSimpleName();
+    public static final String TAG = Caterpillar.class.getSimpleName();
 
     private static final int WIDTH_WIDE_SHORT = Tile.WIDTH;
     private static final int HEIGHT_WIDE_SHORT = Tile.HEIGHT / 2;
@@ -40,7 +40,7 @@ public class Eel extends Creature
 
     public static final int HEALTH_MAX_DEFAULT = 3;
 
-    private EelAnimationManager eelAnimationManager;
+    private CaterpillarAnimationManager caterpillarAnimationManager;
 
     private State state;
     private DirectionFacing directionFacing;
@@ -54,8 +54,8 @@ public class Eel extends Creature
     private int healthMax;
     private int health;
 
-    public Eel(int xSpawn, int ySpawn,
-               DirectionFacing directionFacing, int patrolLengthInPixelMax) {
+    public Caterpillar(int xSpawn, int ySpawn,
+                       DirectionFacing directionFacing, int patrolLengthInPixelMax) {
         super(xSpawn, ySpawn);
         width = Tile.WIDTH;
         height = Tile.HEIGHT / 2;
@@ -72,7 +72,7 @@ public class Eel extends Creature
         healthMax = HEALTH_MAX_DEFAULT;
         health = healthMax;
 
-        eelAnimationManager = new EelAnimationManager();
+        caterpillarAnimationManager = new CaterpillarAnimationManager();
     }
 
     transient private Rect detectionRectangleBounds;
@@ -102,8 +102,8 @@ public class Eel extends Creature
     @Override
     public void init(Game game) {
         super.init(game);
-        eelAnimationManager.init(game);
-        image = eelAnimationManager.getCurrentFrame(state, directionFacing);
+        caterpillarAnimationManager.init(game);
+        image = caterpillarAnimationManager.getCurrentFrame(state, directionFacing);
 
         detectionRectangleBounds = new Rect(
                 -detectionRadiusLength,     //NEGATIVE
@@ -114,7 +114,7 @@ public class Eel extends Creature
 
     @Override
     public void update(long elapsed) {
-        eelAnimationManager.update(elapsed);
+        caterpillarAnimationManager.update(elapsed);
 
         attackCooldownTimer.update(elapsed);
 
@@ -208,7 +208,7 @@ public class Eel extends Creature
                 }
                 break;
             case CHASE:
-                // Still chasing: move() Eel and see if hurt() should be called.
+                // Still chasing: move() Caterpillar and see if hurt() should be called.
                 target = checkDetectionCollisions(0f, 0f);
                 if (target != null) {
                     Log.d(TAG, "IMMA GETCHA!");
@@ -262,7 +262,7 @@ public class Eel extends Creature
                         direction = Direction.DOWN;
                     }
                     // enter State.ATTACK through move()'s entity-collision
-                    // response (Eel.respondToEntityCollision).
+                    // response (Caterpillar.respondToEntityCollision).
                 }
                 // target is beyond detection range.
                 else {
@@ -389,7 +389,7 @@ public class Eel extends Creature
     }
 
     private void determineNextImage() {
-        image = eelAnimationManager.getCurrentFrame(state, directionFacing);
+        image = caterpillarAnimationManager.getCurrentFrame(state, directionFacing);
     }
 
     @Override
@@ -406,7 +406,7 @@ public class Eel extends Creature
                 (int) ((detectionSquare.bottom - GameCamera.getInstance().getY()) * GameCamera.getInstance().getHeightPixelToViewportRatio()),
                 paintDetectionSquare);
 
-        // EEL
+        // CATERPILLAR
         Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());
         Rect rectOnScreen = GameCamera.getInstance().convertInGameRectToScreenRect(getCollisionBounds(0, 0));
         canvas.drawBitmap(image, rectOfImage, rectOnScreen, paintLightingColorFilter);

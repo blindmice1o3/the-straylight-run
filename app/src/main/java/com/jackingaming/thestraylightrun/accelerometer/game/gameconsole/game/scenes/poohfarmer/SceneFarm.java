@@ -28,7 +28,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Robot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Sellable;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Caterpillar;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Cheese;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
@@ -63,15 +63,15 @@ public class SceneFarm extends Scene {
     private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
-    private static final int X_INDEX_SPAWN_EEL_NEAR_COWBARN = 11;
-    private static final int Y_INDEX_SPAWN_EEL_NEAR_COWBARN = 7;
-    private static final int X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 18;
-    private static final int Y_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP = 9;
-    private static final int X_INDEX_SPAWN_EEL_NEAR_SEEDSHOP = 6;
-    private static final int Y_INDEX_SPAWN_EEL_NEAR_SEEDSHOP = 15;
-    private static final int X_INDEX_SPAWN_EEL_NEAR_HOTHOUSE = 20;
-    private static final int Y_INDEX_SPAWN_EEL_NEAR_HOTHOUSE = 17;
-    private static final int PATROL_LENGTH_EEL = 3 * Tile.WIDTH;
+    private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN = 11;
+    private static final int Y_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN = 7;
+    private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_CHICKENCOOP = 18;
+    private static final int Y_INDEX_SPAWN_CATERPILLAR_NEAR_CHICKENCOOP = 9;
+    private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_SEEDSHOP = 6;
+    private static final int Y_INDEX_SPAWN_CATERPILLAR_NEAR_SEEDSHOP = 15;
+    private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE = 20;
+    private static final int Y_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE = 17;
+    private static final int PATROL_LENGTH_CATERPILLAR = 3 * Tile.WIDTH;
     private static final int X_INDEX_SPAWN_COLLIDING_ORBIT = X_INDEX_SPAWN_PLAYER_DEFAULT + 2;
     private static final int Y_INDEX_SPAWN_COLLIDING_ORBIT = Y_INDEX_SPAWN_PLAYER_DEFAULT;
     private static SceneFarm uniqueInstance;
@@ -204,36 +204,50 @@ public class SceneFarm extends Scene {
 
     public void reload(Game game) {
         this.game = game;
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                addSwarmOfEel();
-            }
-        }, 7, 0, false);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                removeSwarmOfEel();
-            }
-        }, 9, 0, false);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                addSwarmOfEel();
-            }
-        }, 4, 0, true);
+
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
                 ShippingBinTile.sellStash();
             }
         }, 5, 0, true);
-        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-            @Override
-            public void executeTimedEvent() {
-                removeSwarmOfEel();
-            }
-        }, 6, 0, true);
+
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    for (int i = 0; i < 6; i++) {
+                        addGrowingPotToRandomTile();
+                    }
+                }
+            }, 7, 0, false);
+        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    addSwarmOfCaterpillar();
+                }
+            }, 7, 0, false);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    removeSwarmOfCaterpillar();
+                }
+            }, 9, 0, false);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    addSwarmOfCaterpillar();
+                }
+            }, 4, 0, true);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    removeSwarmOfCaterpillar();
+                }
+            }, 6, 0, true);
+        }
+
         updatePaintLightingColorFilter(game.getTimeManager().getModeOfDay());
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
@@ -276,36 +290,13 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "init()");
 
         this.game = game;
-//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-//            @Override
-//            public void executeTimedEvent() {
-//                addSwarmOfEel();
-//            }
-//        }, 7, 0, false);
-//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-//            @Override
-//            public void executeTimedEvent() {
-//                removeSwarmOfEel();
-//            }
-//        }, 9, 0, false);
-//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-//            @Override
-//            public void executeTimedEvent() {
-//                addSwarmOfEel();
-//            }
-//        }, 4, 0, true);
+
         game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
             @Override
             public void executeTimedEvent() {
                 ShippingBinTile.sellStash();
             }
         }, 5, 0, true);
-//        game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-//            @Override
-//            public void executeTimedEvent() {
-//                removeSwarmOfEel();
-//            }
-//        }, 6, 0, true);
 
         if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
@@ -316,6 +307,31 @@ public class SceneFarm extends Scene {
                     }
                 }
             }, 7, 0, false);
+        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    addSwarmOfCaterpillar();
+                }
+            }, 7, 0, false);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    removeSwarmOfCaterpillar();
+                }
+            }, 9, 0, false);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    addSwarmOfCaterpillar();
+                }
+            }, 4, 0, true);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    removeSwarmOfCaterpillar();
+                }
+            }, 6, 0, true);
         }
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
@@ -861,7 +877,7 @@ public class SceneFarm extends Scene {
             Log.e(TAG, "NEW DAY");
             newDay = false;
 
-            removeSwarmOfEel();
+            removeSwarmOfCaterpillar();
         }
     }
 
@@ -1334,44 +1350,44 @@ public class SceneFarm extends Scene {
         return entities;
     }
 
-    public void addSwarmOfEel() {
-        Eel eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_COWBARN * Tile.WIDTH),
-                (Y_INDEX_SPAWN_EEL_NEAR_COWBARN * Tile.HEIGHT),
-                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
-        eel.setState(Eel.State.MOVE_RANDOMLY);
-        eel.init(game);
+    public void addSwarmOfCaterpillar() {
+        Caterpillar caterpillar = new Caterpillar((X_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN * Tile.WIDTH),
+                (Y_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN * Tile.HEIGHT),
+                Caterpillar.DirectionFacing.LEFT, PATROL_LENGTH_CATERPILLAR);
+        caterpillar.setState(Caterpillar.State.MOVE_RANDOMLY);
+        caterpillar.init(game);
         entityManager.addEntity(
-                eel
+                caterpillar
         );
-        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP * Tile.WIDTH),
-                (Y_INDEX_SPAWN_EEL_NEAR_CHICKENCOOP * Tile.HEIGHT),
-                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
-        eel.setState(Eel.State.MOVE_RANDOMLY);
-        eel.init(game);
+        caterpillar = new Caterpillar((X_INDEX_SPAWN_CATERPILLAR_NEAR_CHICKENCOOP * Tile.WIDTH),
+                (Y_INDEX_SPAWN_CATERPILLAR_NEAR_CHICKENCOOP * Tile.HEIGHT),
+                Caterpillar.DirectionFacing.LEFT, PATROL_LENGTH_CATERPILLAR);
+        caterpillar.setState(Caterpillar.State.MOVE_RANDOMLY);
+        caterpillar.init(game);
         entityManager.addEntity(
-                eel
+                caterpillar
         );
-        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_SEEDSHOP * Tile.WIDTH),
-                (Y_INDEX_SPAWN_EEL_NEAR_SEEDSHOP * Tile.HEIGHT),
-                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
-        eel.setState(Eel.State.MOVE_RANDOMLY);
-        eel.init(game);
+        caterpillar = new Caterpillar((X_INDEX_SPAWN_CATERPILLAR_NEAR_SEEDSHOP * Tile.WIDTH),
+                (Y_INDEX_SPAWN_CATERPILLAR_NEAR_SEEDSHOP * Tile.HEIGHT),
+                Caterpillar.DirectionFacing.LEFT, PATROL_LENGTH_CATERPILLAR);
+        caterpillar.setState(Caterpillar.State.MOVE_RANDOMLY);
+        caterpillar.init(game);
         entityManager.addEntity(
-                eel
+                caterpillar
         );
-        eel = new Eel((X_INDEX_SPAWN_EEL_NEAR_HOTHOUSE * Tile.WIDTH),
-                (Y_INDEX_SPAWN_EEL_NEAR_HOTHOUSE * Tile.HEIGHT),
-                Eel.DirectionFacing.LEFT, PATROL_LENGTH_EEL);
-        eel.setState(Eel.State.MOVE_RANDOMLY);
-        eel.init(game);
+        caterpillar = new Caterpillar((X_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE * Tile.WIDTH),
+                (Y_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE * Tile.HEIGHT),
+                Caterpillar.DirectionFacing.LEFT, PATROL_LENGTH_CATERPILLAR);
+        caterpillar.setState(Caterpillar.State.MOVE_RANDOMLY);
+        caterpillar.init(game);
         entityManager.addEntity(
-                eel
+                caterpillar
         );
     }
 
-    public void removeSwarmOfEel() {
+    public void removeSwarmOfCaterpillar() {
         for (Entity e : entityManager.getEntities()) {
-            if (e instanceof Eel) {
+            if (e instanceof Caterpillar) {
                 e.setActive(false);
             }
         }

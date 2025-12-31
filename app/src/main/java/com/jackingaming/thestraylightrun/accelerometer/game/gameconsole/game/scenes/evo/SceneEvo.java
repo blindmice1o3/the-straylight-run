@@ -14,7 +14,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Damageable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Eel;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Caterpillar;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.Kelp;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo.SeaJelly;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
@@ -328,8 +328,8 @@ public class SceneEvo extends Scene {
                 Creature.Direction.DOWN, 5 * Tile.HEIGHT);
         entities.add(seaJelly1);
 
-        Entity eel1 = new Eel(8 * Tile.WIDTH, 6 * Tile.WIDTH,
-                Eel.DirectionFacing.LEFT, 5 * Tile.WIDTH);
+        Entity eel1 = new Caterpillar(8 * Tile.WIDTH, 6 * Tile.WIDTH,
+                Caterpillar.DirectionFacing.LEFT, 5 * Tile.WIDTH);
         entities.add(eel1);
 
         return entities;
