@@ -15,6 +15,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoo
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom02Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.TitleScreenScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
@@ -165,6 +166,11 @@ public class Game {
         Scene sceneLeaving = sceneCurrent;
         List<Object> args = sceneLeaving.exit();
 
+        if (sceneNext instanceof WorldScene) {
+            args = new ArrayList<>();
+            args.add("init");
+        }
+
         sceneNext.enter(args);
         sceneCurrent = sceneNext;
     }
@@ -174,7 +180,14 @@ public class Game {
         this.gameListener = gameListener;
 
         // SCENES
+
         WorldScene.getInstance().init(resources, handler, soundManager,
+                gameListener, gameCamera,
+                widthSurfaceView, heightSurfaceView,
+                widthSpriteDst, heightSpriteDst);
+        TitleScreenScene.getInstance().init(
+                WorldScene.getInstance().getPlayer(),
+                resources, handler, soundManager,
                 gameListener, gameCamera,
                 widthSurfaceView, heightSurfaceView,
                 widthSpriteDst, heightSpriteDst);
@@ -197,10 +210,11 @@ public class Game {
                 widthSurfaceView, heightSurfaceView,
                 widthSpriteDst, heightSpriteDst);
 
-        sceneCurrent = WorldScene.getInstance();
-        List<Object> argsSceneTransfer = new ArrayList<>();
-        argsSceneTransfer.add("init");
-        sceneCurrent.enter(argsSceneTransfer);
+        sceneCurrent = TitleScreenScene.getInstance();
+//        sceneCurrent = WorldScene.getInstance();
+//        List<Object> argsSceneTransfer = new ArrayList<>();
+//        argsSceneTransfer.add("init");
+//        sceneCurrent.enter(argsSceneTransfer);
 
         /////////////////////////////////////////////////////////////////////////////////
 //        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);

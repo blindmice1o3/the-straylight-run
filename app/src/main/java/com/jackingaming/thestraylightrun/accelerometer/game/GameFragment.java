@@ -41,7 +41,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.drawers.BottomDrawer
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerEndFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerStartFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.drawers.DrawerTopFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.TitleScreenScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveLeftCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.commands.MoveRightCommand;
@@ -350,6 +352,11 @@ public class GameFragment extends Fragment
         OnSwipeListener bottomDrawerSwipeListener = new OnSwipeListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent event) {
+                if (game.getSceneCurrent() instanceof TitleScreenScene) {
+                    game.changeScene(
+                            HomePlayerRoom01Scene.getInstance()
+                    );
+                }
                 soundManager.sfxIterateAndPlay();
 
                 appBarLayout.setExpanded(false);

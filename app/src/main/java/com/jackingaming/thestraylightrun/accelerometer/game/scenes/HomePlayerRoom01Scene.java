@@ -770,8 +770,8 @@ public class HomePlayerRoom01Scene extends Scene {
             }
         } else {
             Log.e(TAG, "args == null");
-            player.setXPos(0);
-            player.setYPos(0);
+            player.setXPos(X_SPAWN_INDEX_PLAYER_WORLD * widthSpriteDst);
+            player.setYPos(Y_SPAWN_INDEX_PLAYER_WORLD * heightSpriteDst);
         }
 
         // GAME CAMERA
