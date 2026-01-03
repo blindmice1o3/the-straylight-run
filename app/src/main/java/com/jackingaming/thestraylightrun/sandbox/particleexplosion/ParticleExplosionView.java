@@ -113,13 +113,13 @@ public class ParticleExplosionView extends View {
         super.onDraw(canvas);
 
         // Background
-        int colorBackground = getResources().getColor(R.color.purple_200);
-        canvas.drawColor(colorBackground);
+//        int colorBackground = getResources().getColor(R.color.purple_200);
+//        canvas.drawColor(colorBackground);
 
         // X-axis
-        canvas.drawLine(0f, halfHeightInPixel, widthInPixel, halfHeightInPixel, paintAxis);
+//        canvas.drawLine(0f, halfHeightInPixel, widthInPixel, halfHeightInPixel, paintAxis);
         // Y-axis
-        canvas.drawLine(halfWidthInPixel, 0, halfWidthInPixel, heightInPixel, paintAxis);
+//        canvas.drawLine(halfWidthInPixel, 0, halfWidthInPixel, heightInPixel, paintAxis);
 
         // Particle
         for (Particle particle : particles) {
