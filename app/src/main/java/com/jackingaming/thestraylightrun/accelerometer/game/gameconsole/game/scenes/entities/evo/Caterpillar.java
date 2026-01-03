@@ -1,7 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.evo;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -395,16 +394,16 @@ public class Caterpillar extends Creature
     @Override
     public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         // DETECTION-RECTANGLE
-        Rect detectionSquare = getDetectionRectangle(0, 0);
-        Paint paintDetectionSquare = new Paint();
-        paintDetectionSquare.setColor(Color.GREEN);
-        paintDetectionSquare.setAlpha(60);
-        canvas.drawRect(
-                (int) ((detectionSquare.left - GameCamera.getInstance().getX()) * GameCamera.getInstance().getWidthPixelToViewportRatio()),
-                (int) ((detectionSquare.top - GameCamera.getInstance().getY()) * GameCamera.getInstance().getHeightPixelToViewportRatio()),
-                (int) ((detectionSquare.right - GameCamera.getInstance().getX()) * GameCamera.getInstance().getWidthPixelToViewportRatio()),
-                (int) ((detectionSquare.bottom - GameCamera.getInstance().getY()) * GameCamera.getInstance().getHeightPixelToViewportRatio()),
-                paintDetectionSquare);
+//        Rect detectionSquare = getDetectionRectangle(0, 0);
+//        Paint paintDetectionSquare = new Paint();
+//        paintDetectionSquare.setColor(Color.GREEN);
+//        paintDetectionSquare.setAlpha(60);
+//        canvas.drawRect(
+//                (int) ((detectionSquare.left - GameCamera.getInstance().getX()) * GameCamera.getInstance().getWidthPixelToViewportRatio()),
+//                (int) ((detectionSquare.top - GameCamera.getInstance().getY()) * GameCamera.getInstance().getHeightPixelToViewportRatio()),
+//                (int) ((detectionSquare.right - GameCamera.getInstance().getX()) * GameCamera.getInstance().getWidthPixelToViewportRatio()),
+//                (int) ((detectionSquare.bottom - GameCamera.getInstance().getY()) * GameCamera.getInstance().getHeightPixelToViewportRatio()),
+//                paintDetectionSquare);
 
         // CATERPILLAR
         Rect rectOfImage = new Rect(0, 0, image.getWidth(), image.getHeight());

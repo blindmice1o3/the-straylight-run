@@ -10,10 +10,16 @@ public class SeedGrowableTileCommand
     public static final String TAG = SeedGrowableTileCommand.class.getSimpleName();
 
     private Tile tile;
-    private final String idSeed;
+    private String idSeed;
 
     public SeedGrowableTileCommand(Tile tile, String idSeed) {
         this.tile = tile;
+        if (idSeed != null) {
+            this.idSeed = idSeed;
+        }
+    }
+
+    public void setIdSeed(String idSeed) {
         this.idSeed = idSeed;
     }
 
