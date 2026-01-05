@@ -31,9 +31,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,7 @@ public class SeedShopDialogFragment extends DialogFragment {
     private Quest seedShopOwnerQuest00;
     private RunOne runOne;
     private SeedListener seedListener;
+    private boolean progressToNextDailyLoopTask;
 
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
@@ -179,6 +182,7 @@ public class SeedShopDialogFragment extends DialogFragment {
             textToShow = game.getContext().getString(R.string.equip_robot_reprogrammer_4000);
         } else {
             textToShow = game.getContext().getString(R.string.use_robot_reprogrammer_4000);
+            progressToNextDailyLoopTask = true;
         }
         TypeWriterDialogFragment.DismissListener dismissListener1 = new TypeWriterDialogFragment.DismissListener() {
             @Override
@@ -192,6 +196,25 @@ public class SeedShopDialogFragment extends DialogFragment {
                 Log.e(TAG, "onStart() TypeWriterTextView.TextCompletionListener.onAnimationFinish()");
 
                 game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+
+                if (progressToNextDailyLoopTask) {
+                    Log.e(TAG, "player have completed robot reprogrammer 4000 quest, closing game console.");
+
+                    game.setPaused(true);
+
+                    SceneFarm.getInstance().removeSeedShopFragment();
+
+                    Player.getInstance().setX(
+                            SceneFarm.getInstance().X_INDEX_SPAWN_PLAYER_DEFAULT * Tile.WIDTH
+                    );
+                    Player.getInstance().setY(
+                            (SceneFarm.getInstance().Y_INDEX_SPAWN_PLAYER_DEFAULT + 1) * Tile.HEIGHT
+                    );
+
+                    HomePlayerRoom01Scene.getInstance().closeGameConsole();
+                } else {
+                    Log.e(TAG, "player haven't completed robot reprogrammer 4000 quest, doing nothing.");
+                }
             }
         };
 

@@ -212,7 +212,7 @@ public class RunFive
                     Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        game.getViewportListener().addAndShowParticleExplosionView();
+                        game.getViewportListener().addAndShowParticleExplosionView(null);
                         dispenseRewards();
                     } else {
                         Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");

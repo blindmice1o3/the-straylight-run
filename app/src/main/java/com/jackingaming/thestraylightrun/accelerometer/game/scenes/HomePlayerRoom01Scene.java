@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
@@ -25,7 +24,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
-import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.OnCompletionListenerDTO;
 import com.jackingaming.thestraylightrun.nextweektonight.VideoViewFragment;
 
@@ -83,9 +81,16 @@ public class HomePlayerRoom01Scene extends Scene {
     private UniqueSolidTile tileTelevision, tileComputer, tileGameConsole,
             tileTableLeft, tileTableRight, tileBedTop, tileBedBottom;
 
-    private FCVDialogFragment dialogFragment;
+    private FCVDialogFragment dialogFragmentContainingVideoViewFragment,
+            dialogFragmentContainingIDEFragment,
+            dialogFragmentContainingGameConsoleFragment,
+            dialogFragmentContainingNotesViewerFragment;
 
     private HomePlayerRoom01Scene() {
+    }
+
+    public void closeGameConsole() {
+        dialogFragmentContainingGameConsoleFragment.dismiss();
     }
 
     public static HomePlayerRoom01Scene getInstance() {
@@ -306,19 +311,19 @@ public class HomePlayerRoom01Scene extends Scene {
                                                             }
                                                         }));
 
-                                                        dialogFragment.replaceFragment(videoViewFragmentPart2);
+                                                        dialogFragmentContainingVideoViewFragment.replaceFragment(videoViewFragmentPart2);
                                                     }
                                                 }));
 
-                                                dialogFragment.replaceFragment(videoViewFragmentCommercial);
+                                                dialogFragmentContainingVideoViewFragment.replaceFragment(videoViewFragmentCommercial);
                                             } else {
                                                 Log.i(TAG, "gameListener.getRun() != Game.Run.ONE - doing nothing.");
                                             }
                                         }
                                     }));
-                            String tag = NextWeekTonightEpisodesGeneratorFragment.TAG;
+                            String tag = VideoViewFragment.TAG;
                             boolean canceledOnTouchOutside = false;
-                            dialogFragment =
+                            dialogFragmentContainingVideoViewFragment =
                                     FCVDialogFragment.newInstance(videoViewFragmentPart1, tag,
                                             canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
                                             new FCVDialogFragment.LifecycleListener() {
@@ -338,7 +343,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                             });
 
                             gameListener.onShowDialogFragment(
-                                    dialogFragment, tag
+                                    dialogFragmentContainingVideoViewFragment, tag
                             );
 
                             return false;
@@ -354,7 +359,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getRun());
                             String tag = IDEFragment.TAG;
                             boolean canceledOnTouchOutside = false;
-                            DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+                            dialogFragmentContainingIDEFragment = FCVDialogFragment.newInstance(fragment, tag,
                                     canceledOnTouchOutside, 1.0f, 0.7f,
                                     new FCVDialogFragment.LifecycleListener() {
                                         @Override
@@ -373,7 +378,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     });
 
                             gameListener.onShowDialogFragment(
-                                    dialogFragment, tag
+                                    dialogFragmentContainingIDEFragment, tag
                             );
 
                             return false;
@@ -391,7 +396,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getRun());
                             String tag = GameConsoleFragment.TAG;
                             boolean canceledOnTouchOutside = false;
-                            DialogFragment dialogFragmentContainingGameConsoleFragment =
+                            dialogFragmentContainingGameConsoleFragment =
                                     FCVDialogFragment.newInstance(fragment, tag,
                                             canceledOnTouchOutside, FCVDialogFragment.DEFAULT_WIDTH_IN_DECIMAL, FCVDialogFragment.DEFAULT_HEIGHT_IN_DECIMAL,
                                             new FCVDialogFragment.LifecycleListener() {
@@ -432,7 +437,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getRun());
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
-                            DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
+                            dialogFragmentContainingNotesViewerFragment = FCVDialogFragment.newInstance(fragment, tag,
                                     canceledOnTouchOutside, 1.0f, 0.7f,
                                     new FCVDialogFragment.LifecycleListener() {
                                         @Override
@@ -451,7 +456,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                     });
 
                             gameListener.onShowDialogFragment(
-                                    dialogFragment, tag
+                                    dialogFragmentContainingNotesViewerFragment, tag
                             );
 
                             return false;
@@ -462,6 +467,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             //////////////////////////////////
+                            gameListener.incrementRun();
                             gameListener.incrementDailyLoop();
                             //////////////////////////////////
                             return false;

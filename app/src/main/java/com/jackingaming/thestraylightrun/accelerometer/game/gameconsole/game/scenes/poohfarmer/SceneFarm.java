@@ -59,8 +59,8 @@ import java.util.Random;
 public class SceneFarm extends Scene {
     public static final String TAG = SceneFarm.class.getSimpleName();
 
-    private static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
-    private static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
+    public static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
+    public static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
     private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN = 11;

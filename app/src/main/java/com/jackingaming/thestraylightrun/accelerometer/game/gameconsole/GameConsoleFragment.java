@@ -59,6 +59,11 @@ public class GameConsoleFragment extends Fragment
         StatsDisplayerFragment.ButtonHolderClickListener,
         StatsDisplayerFragment.IconClickListener {
     public static final String TAG = GameConsoleFragment.class.getSimpleName();
+
+    public interface ParticleExplosionViewListener {
+        void onAnimationEnd();
+    }
+
     public static final String ARG_GAME_TITLE = "game";
     public static final String ARG_RUN = "run";
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
@@ -157,6 +162,7 @@ public class GameConsoleFragment extends Fragment
             //////////////////////////////////////////
             Assets.init(getResources());
             game = new Game(gameTitle, run, getChildFragmentManager());
+            Log.e(TAG, "onActivityCreated() NEW GAME!!!");
         }
 
         game.setViewportListener(this);
@@ -235,7 +241,7 @@ public class GameConsoleFragment extends Fragment
     private ParticleExplosionView particleExplosionView;
 
     @Override
-    public void addAndShowParticleExplosionView() {
+    public void addAndShowParticleExplosionView(GameConsoleFragment.ParticleExplosionViewListener particleExplosionViewListener) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -293,6 +299,12 @@ public class GameConsoleFragment extends Fragment
 
                         particleExplosionView.setVisibility(View.INVISIBLE);
                         frameLayoutUsedAsBorderForViewport.removeView(particleExplosionView);
+
+                        if (particleExplosionViewListener != null) {
+                            ///////////////////////////////////////////////
+                            particleExplosionViewListener.onAnimationEnd();
+                            ///////////////////////////////////////////////
+                        }
                     }
                 });
 
@@ -465,7 +477,7 @@ public class GameConsoleFragment extends Fragment
                     false
             );
 
-            game.getViewportListener().addAndShowParticleExplosionView();
+            game.getViewportListener().addAndShowParticleExplosionView(null);
 
             Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
             String text = getResources().getString(R.string.equip_robot_reprogrammer_4000);

@@ -46,6 +46,26 @@ public class Game {
         this.run = run;
     }
 
+    public void incrementRun() {
+        switch (run) {
+            case ONE:
+                run = Run.TWO;
+                break;
+            case TWO:
+                run = Run.THREE;
+                break;
+            case THREE:
+                run = Run.FOUR;
+                break;
+            case FOUR:
+                run = Run.FIVE;
+                break;
+            case FIVE:
+                // Intentionally blank.
+                break;
+        }
+    }
+
     public enum DailyLoop {
         TELEVISION,
         NOTES_TOPIC,
@@ -107,6 +127,8 @@ public class Game {
         void removeImageViewOfEntityFromFrameLayout();
 
         Run getRun();
+
+        void incrementRun();
 
         DailyLoop getDailyLoop();
 

@@ -527,6 +527,11 @@ public class GameFragment extends Fragment
             }
 
             @Override
+            public void incrementRun() {
+                game.incrementRun();
+            }
+
+            @Override
             public Game.DailyLoop getDailyLoop() {
                 return game.getDailyLoop();
             }

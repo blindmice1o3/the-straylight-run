@@ -222,7 +222,7 @@ public class RunOne
 
                 if (checkIfMetRequirements()) {
                     Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                    game.getViewportListener().addAndShowParticleExplosionView();
+                    game.getViewportListener().addAndShowParticleExplosionView(null);
                     dispenseRewards();
 
                     Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_seed_shop_owner);

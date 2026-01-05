@@ -3,11 +3,13 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -210,7 +212,14 @@ public class RunFour
                 Log.e(TAG, "number of grow system parts dropped: " + Player.getInstance().getQuestManager().getNumberOfItemAsString(ITEM_REQUIREMENT_AS_STRING));
                 if (checkIfMetRequirements()) {
                     Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                    game.getViewportListener().addAndShowParticleExplosionView();
+                    game.getViewportListener().addAndShowParticleExplosionView(new GameConsoleFragment.ParticleExplosionViewListener() {
+                        @Override
+                        public void onAnimationEnd() {
+                            game.setPaused(true);
+
+                            HomePlayerRoom01Scene.getInstance().closeGameConsole();
+                        }
+                    });
                     dispenseRewards();
                 } else {
                     Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");

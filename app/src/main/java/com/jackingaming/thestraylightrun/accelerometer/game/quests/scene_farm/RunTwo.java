@@ -3,12 +3,14 @@ package com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -203,27 +205,32 @@ public class RunTwo
 
     @Override
     public void attachListener() {
-        if (game.getSceneManager().getCurrentScene() instanceof SceneFarm) {
-            GrowableTile.OutdoorWaterChangeListener waterChangeListener = new GrowableTile.OutdoorWaterChangeListener() {
-                @Override
-                public void changeToWateredOccupied() {
-                    Player.getInstance().getQuestManager().addTileAsString(
-                            TILE_REQUIREMENT_AS_STRING);
-                    Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
-                    if (checkIfMetRequirements()) {
-                        Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        game.getViewportListener().addAndShowParticleExplosionView();
-                        dispenseRewards();
-                    } else {
-                        Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
-                    }
-                }
-            };
+        GrowableTile.OutdoorWaterChangeListener waterChangeListener = new GrowableTile.OutdoorWaterChangeListener() {
+            @Override
+            public void changeToWateredOccupied() {
+                Player.getInstance().getQuestManager().addTileAsString(
+                        TILE_REQUIREMENT_AS_STRING);
+                Log.e(TAG, "numberOfWateredTiles: " + Player.getInstance().getQuestManager().getNumberOfTileAsString(TILE_REQUIREMENT_AS_STRING));
+                if (checkIfMetRequirements()) {
+                    Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                    game.getViewportListener().addAndShowParticleExplosionView(new GameConsoleFragment.ParticleExplosionViewListener() {
+                        @Override
+                        public void onAnimationEnd() {
+                            game.setPaused(true);
 
-            SceneFarm.getInstance().registerWaterChangeListenerForAllGrowableTile(
-                    waterChangeListener
-            );
-        }
+                            HomePlayerRoom01Scene.getInstance().closeGameConsole();
+                        }
+                    });
+                    dispenseRewards();
+                } else {
+                    Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");
+                }
+            }
+        };
+
+        SceneFarm.getInstance().registerWaterChangeListenerForAllGrowableTile(
+                waterChangeListener
+        );
     }
 
     @Override

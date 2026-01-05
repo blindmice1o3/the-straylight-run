@@ -223,7 +223,7 @@ public class SeedShopOwnerQuest00
                     Log.e(TAG, "numberOfPlants: " + Player.getInstance().getQuestManager().getNumberOfEntityAsString(ENTITY_REQUIREMENT_AS_STRING));
                     if (checkIfMetRequirements()) {
                         Log.e(TAG, "!!!REQUIREMENTS MET!!!");
-                        game.getViewportListener().addAndShowParticleExplosionView();
+                        game.getViewportListener().addAndShowParticleExplosionView(null);
                         dispenseRewards();
                     } else {
                         Log.e(TAG, "!!!REQUIREMENTS [not] MET!!!");

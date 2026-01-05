@@ -116,7 +116,7 @@ public class Game {
 
         boolean isBlinkingBorderOn();
 
-        void addAndShowParticleExplosionView();
+        void addAndShowParticleExplosionView(GameConsoleFragment.ParticleExplosionViewListener particleExplosionViewListener);
     }
 
     private ViewportListener viewportListener;
@@ -418,6 +418,8 @@ public class Game {
         } else {
             menuButtonChangeListener.onHideMenuButton();
         }
+
+        paused = false;
     }
 
     private void createBackpackDialog() {

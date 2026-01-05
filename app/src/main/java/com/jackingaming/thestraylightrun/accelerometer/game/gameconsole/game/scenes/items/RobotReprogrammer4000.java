@@ -1,6 +1,5 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
@@ -28,8 +27,7 @@ public class RobotReprogrammer4000 extends Item
 
     @Override
     protected void initImage() {
-        Bitmap spriteSheet = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.gbc_hm2_spritesheet_items);
-        image = Bitmap.createBitmap(spriteSheet, 137, 103, 16, 16);
+        image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.item_robot_reprogrammer_4000);
     }
 
     @Override

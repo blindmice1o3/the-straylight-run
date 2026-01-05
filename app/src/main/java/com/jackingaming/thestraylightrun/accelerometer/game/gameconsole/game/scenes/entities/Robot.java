@@ -44,6 +44,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.TileWorkRequest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,7 +125,7 @@ public class Robot extends Creature {
 
         state = State.TURN_IN_PLACE;
 
-        game.getViewportListener().addAndShowParticleExplosionView();
+        game.getViewportListener().addAndShowParticleExplosionView(null);
 
         Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_nwt_host);
         String text = game.getContext().getResources().getString(R.string.use_robot_reprogrammer_4000);
@@ -161,6 +162,16 @@ public class Robot extends Creature {
                             textCompletionListener);
                 } else {
                     Log.e(TAG, "questManager.alreadyHaveQuest(runOne.getQuestLabel())");
+
+                    if (runOne.getCurrentState() == Quest.State.COMPLETED) {
+                        Log.e(TAG, "player have completed seed shop quest, closing game console.");
+
+                        game.setPaused(true);
+
+                        HomePlayerRoom01Scene.getInstance().closeGameConsole();
+                    } else {
+                        Log.e(TAG, "player haven't completed seed shop quest, doing nothing.");
+                    }
                 }
             }
         };
