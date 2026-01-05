@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.io.Serializable;
 
@@ -28,6 +30,7 @@ public class VideoViewFragment extends Fragment
     private String resourceIdVideo;
     private OnCompletionListenerDTO onCompletionListenerDTO;
 
+    private TextView tvCloseButton;
     private VideoView videoView;
     private int positionCurrent;
 
@@ -110,6 +113,15 @@ public class VideoViewFragment extends Fragment
 
         videoView = view.findViewById(R.id.video_view);
         videoView.setZOrderMediaOverlay(true);
+
+        tvCloseButton = view.findViewById(R.id.tv_close_button);
+        tvCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomePlayerRoom01Scene.getInstance().closeTelevision();
+            }
+        });
+        tvCloseButton.setZ(1f);
     }
 
     @Override

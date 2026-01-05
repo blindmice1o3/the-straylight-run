@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Field;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.StructureViewportFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.io.Serializable;
 
@@ -33,6 +35,7 @@ public class IDEFragment extends Fragment
     private Mode mode;
     private Game.Run run;
 
+    private TextView tvCloseButton;
     private ProjectViewportFragment projectViewportFragment;
     private MainViewportFragment mainViewportFragment;
     private StructureViewportFragment structureViewportFragment;
@@ -73,6 +76,15 @@ public class IDEFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
+
+        tvCloseButton = view.findViewById(R.id.tv_close_button);
+        tvCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomePlayerRoom01Scene.getInstance().closeComputer();
+            }
+        });
+        tvCloseButton.setZ(1f);
 
         projectViewportFragment = ProjectViewportFragment.newInstance(run);
         mainViewportFragment = MainViewportFragment.newInstance(

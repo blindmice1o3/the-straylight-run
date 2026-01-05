@@ -28,6 +28,9 @@
     <string name="text_fall">FALL</string>
     <string name="text_winter">WINTER</string>
 
+    <!-- fragment_video_view.xml, fragment_notes_viewer.xml, and dialogfragment_ide -->
+    <string name="text_x">x</string>
+
     <!-- fragment_quest_log.xml -->
     <string name="text_quest_log">Quest Log</string>
 

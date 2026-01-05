@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.view.animation.ScaleAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.Game;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +50,8 @@ public class NotesViewerFragment extends Fragment
     private NoteType noteType;
     private Game.Run run;
 
-    private FrameLayout flNotesViewer;
+    private RelativeLayout rlNotesViewer;
+    private TextView tvCloseButton;
     private ScrollView svZoom;
     private ImageView ivNotes;
     private List<Drawable> drawbles;
@@ -198,7 +202,16 @@ public class NotesViewerFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        flNotesViewer = view.findViewById(R.id.fl_notes_viewer);
+        rlNotesViewer = view.findViewById(R.id.rl_notes_viewer);
+
+        tvCloseButton = view.findViewById(R.id.tv_close_button);
+        tvCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomePlayerRoom01Scene.getInstance().closeTable();
+            }
+        });
+        tvCloseButton.setZ(1f);
 
         svZoom = new ScrollView(getContext()) {
             @Override
@@ -233,7 +246,7 @@ public class NotesViewerFragment extends Fragment
 
         svZoom.addView(ivNotes);
 
-        flNotesViewer.addView(svZoom);
+        rlNotesViewer.addView(svZoom);
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

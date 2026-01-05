@@ -89,8 +89,20 @@ public class HomePlayerRoom01Scene extends Scene {
     private HomePlayerRoom01Scene() {
     }
 
+    public void closeTelevision() {
+        dialogFragmentContainingVideoViewFragment.dismiss();
+    }
+
+    public void closeComputer() {
+        dialogFragmentContainingIDEFragment.dismiss();
+    }
+
     public void closeGameConsole() {
         dialogFragmentContainingGameConsoleFragment.dismiss();
+    }
+
+    public void closeTable() {
+        dialogFragmentContainingNotesViewerFragment.dismiss();
     }
 
     public static HomePlayerRoom01Scene getInstance() {
@@ -307,7 +319,9 @@ public class HomePlayerRoom01Scene extends Scene {
                                                         VideoViewFragment videoViewFragmentPart2 = VideoViewFragment.newInstance(VIDEO_RUN_ONE_PART_2, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
                                                             @Override
                                                             public void onCompletion(MediaPlayer mediaPlayer) {
-                                                                Log.i(TAG, "finished playback part2!");
+                                                                Log.i(TAG, "finished playback part2! dismiss dialogFragmentContainingVideoViewFragment.");
+
+                                                                closeTelevision();
                                                             }
                                                         }));
 
@@ -317,7 +331,9 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                                 dialogFragmentContainingVideoViewFragment.replaceFragment(videoViewFragmentCommercial);
                                             } else {
-                                                Log.i(TAG, "gameListener.getRun() != Game.Run.ONE - doing nothing.");
+                                                Log.i(TAG, "gameListener.getRun() != Game.Run.ONE - dismiss dialogFragmentContainingVideoViewFragment.");
+
+                                                closeTelevision();
                                             }
                                         }
                                     }));
