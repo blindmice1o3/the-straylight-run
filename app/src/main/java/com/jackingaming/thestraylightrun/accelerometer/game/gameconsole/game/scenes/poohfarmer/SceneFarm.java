@@ -44,11 +44,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
-import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.AIQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RobotDialogQuest00;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -837,12 +835,12 @@ public class SceneFarm extends Scene {
 
             // TODO: check for first quest's completion, show clippit TypeWriterDialogFragment,
             //  give/start second quest.
-            boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getQuestLabel());
-            if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
-                Log.d(TAG, "first quest's state == Quest.State.COMPLETED");
-                Bitmap portraitAI = WorldScene.imagesClippit[0][0];
-                startDialogueWithAI(portraitAI);
-            }
+//            boolean alreadyHaveQuest = Player.getInstance().alreadyHaveQuest(aIQuest00.getQuestLabel());
+//            if (!alreadyHaveQuest && !player.getQuestManager().getQuests().isEmpty() && player.getQuestManager().getQuests().get(0).getCurrentState() == Quest.State.COMPLETED) {
+//                Log.d(TAG, "first quest's state == Quest.State.COMPLETED");
+//                Bitmap portraitAI = WorldScene.imagesClippit[0][0];
+//                startDialogueWithAI(portraitAI);
+//            }
         } else {
             if (player.hasCarryable()) {
                 // do nothing.
