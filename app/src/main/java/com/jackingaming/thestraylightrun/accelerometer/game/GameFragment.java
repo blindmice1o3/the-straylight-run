@@ -219,9 +219,14 @@ public class GameFragment extends Fragment
                 if (rvDrawerStart != null) {
                     Log.e(TAG, "drawer START opened");
 
-                    drawerStartFragment.startMessageQueue(
-                            gameListener.getRun()
-                    );
+                    if (gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT ||
+                            gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER ||
+                            gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE ||
+                            gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
+                        drawerStartFragment.startMessageQueue(
+                                gameListener.getRun()
+                        );
+                    }
                 } else {
                     Log.e(TAG, "drawer END opened");
 

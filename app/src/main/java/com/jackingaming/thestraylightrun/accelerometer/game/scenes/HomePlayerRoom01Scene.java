@@ -275,9 +275,6 @@ public class HomePlayerRoom01Scene extends Scene {
                         String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
                         if (id.equals(UniqueSolidTile.TELEVISION)) {
                             Log.e(TAG, "unique solid tile: TELEVISION");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.TELEVISION) {
-                                return false;
-                            }
 
                             pause();
 
@@ -350,9 +347,11 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                                 @Override
                                                 public void onDismiss() {
-                                                    //////////////////////////////////
-                                                    gameListener.incrementDailyLoop();
-                                                    //////////////////////////////////
+                                                    if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
+                                                        //////////////////////////////////
+                                                        gameListener.incrementDailyLoop();
+                                                        //////////////////////////////////
+                                                    }
 
                                                     unpause();
                                                 }
@@ -365,7 +364,9 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.COMPUTER)) {
                             Log.e(TAG, "unique solid tile: COMPUTER");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.COMPUTER) {
+                            if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
                                 return false;
                             }
 
@@ -385,9 +386,11 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                         @Override
                                         public void onDismiss() {
-                                            //////////////////////////////////
-                                            gameListener.incrementDailyLoop();
-                                            //////////////////////////////////
+                                            if (gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
+                                                //////////////////////////////////
+                                                gameListener.incrementDailyLoop();
+                                                //////////////////////////////////
+                                            }
 
                                             unpause();
                                         }
@@ -400,7 +403,10 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.GAME_CONSOLE)) {
                             Log.e(TAG, "unique solid tile: GAME CONSOLE");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.GAME_CONSOLE) {
+                            if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
                                 return false;
                             }
 
@@ -423,9 +429,11 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                                 @Override
                                                 public void onDismiss() {
-                                                    //////////////////////////////////
-                                                    gameListener.incrementDailyLoop();
-                                                    //////////////////////////////////
+                                                    if (gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
+                                                        //////////////////////////////////
+                                                        gameListener.incrementDailyLoop();
+                                                        //////////////////////////////////
+                                                    }
 
                                                     unpause();
                                                 }
@@ -438,7 +446,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.NOTES_TOPIC) {
+                            if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
                                 return false;
                             }
 
@@ -463,9 +471,11 @@ public class HomePlayerRoom01Scene extends Scene {
 
                                         @Override
                                         public void onDismiss() {
-                                            //////////////////////////////////
-                                            gameListener.incrementDailyLoop();
-                                            //////////////////////////////////
+                                            if (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC) {
+                                                //////////////////////////////////
+                                                gameListener.incrementDailyLoop();
+                                                //////////////////////////////////
+                                            }
 
                                             unpause();
                                         }
@@ -478,7 +488,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.BED)) {
                             Log.e(TAG, "unique solid tile: BED");
-                            if (gameListener.getDailyLoop() != Game.DailyLoop.SLEEP_SAVE) {
+                            if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER ||
+                                    gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
                                 return false;
                             }
 
