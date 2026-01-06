@@ -452,12 +452,8 @@ public class HomePlayerRoom01Scene extends Scene {
 
                             pause();
 
-                            NotesViewerFragment.NoteType noteType =
-                                    (gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC) ?
-                                            NotesViewerFragment.NoteType.TOPICS :
-                                            NotesViewerFragment.NoteType.LEARNERS;
-
-                            Fragment fragment = NotesViewerFragment.newInstance(noteType,
+                            Fragment fragment = NotesViewerFragment.newInstance(
+                                    NotesViewerFragment.NoteType.TOPICS,
                                     gameListener.getRun());
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
