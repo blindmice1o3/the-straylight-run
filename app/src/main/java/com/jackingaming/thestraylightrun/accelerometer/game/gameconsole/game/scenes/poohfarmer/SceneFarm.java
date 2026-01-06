@@ -449,13 +449,13 @@ public class SceneFarm extends Scene {
     public void setupForRunFour() {
         Log.d(TAG, "setupForRunFour()");
 
-        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
+        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 1) * Tile.HEIGHT));
-        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 2) * Tile.HEIGHT));
-        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.CHICK,
+        aimlessWalker3 = new AimlessWalker(AimlessWalker.Type.SHEEP,
                 ((X_INDEX_SPAWN_ROBOT + 1) * Tile.WIDTH),
                 ((Y_INDEX_SPAWN_ROBOT + 3) * Tile.HEIGHT));
         aimlessWalker4 = new AimlessWalker(AimlessWalker.Type.SHEEP,
