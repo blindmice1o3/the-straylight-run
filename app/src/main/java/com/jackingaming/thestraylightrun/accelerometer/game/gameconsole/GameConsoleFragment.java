@@ -55,6 +55,7 @@ public class GameConsoleFragment extends Fragment
         Game.ViewportListener,
         Game.TextboxListener,
         Game.StatsChangeListener,
+        Game.SoundChangeListener,
         Game.MenuButtonChangeListener,
         StatsDisplayerFragment.ButtonHolderClickListener,
         StatsDisplayerFragment.IconClickListener {
@@ -64,8 +65,19 @@ public class GameConsoleFragment extends Fragment
         void onAnimationEnd();
     }
 
+    public interface SoundChangeListener extends Serializable {
+        void onChangeToTranceBattle();
+
+        void onChangeToBreathOfDippy();
+
+        void onPlaySFX(int idSFX);
+    }
+
+    private SoundChangeListener soundChangeListener;
+
     public static final String ARG_GAME_TITLE = "game";
     public static final String ARG_RUN = "run";
+    public static final String ARG_SOUND_CHANGE_LISTENER = "sound_change_listener";
     private static final int COLOR_VIEWPORT_BORDER_DEFAULT = Color.WHITE;
 
     transient private ObjectAnimator animatorBackgroundColor;
@@ -86,11 +98,12 @@ public class GameConsoleFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static GameConsoleFragment newInstance(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run) {
+    public static GameConsoleFragment newInstance(String gameTitle, com.jackingaming.thestraylightrun.accelerometer.game.Game.Run run, SoundChangeListener soundsChangeListener) {
         GameConsoleFragment fragment = new GameConsoleFragment();
         Bundle args = new Bundle();
         args.putString(ARG_GAME_TITLE, gameTitle);
         args.putSerializable(ARG_RUN, run);
+        args.putSerializable(ARG_SOUND_CHANGE_LISTENER, soundsChangeListener);
         fragment.setArguments(args);
         return fragment;
     }
@@ -158,6 +171,7 @@ public class GameConsoleFragment extends Fragment
             //////////////////////////////////////////
             gameTitle = arguments.getString(ARG_GAME_TITLE);
             run = (com.jackingaming.thestraylightrun.accelerometer.game.Game.Run) arguments.getSerializable(ARG_RUN);
+            soundChangeListener = (SoundChangeListener) arguments.getSerializable(ARG_SOUND_CHANGE_LISTENER);
             Log.d(TAG, getClass().getSimpleName() + ".onActivityCreated(Bundle savedInstanceState) gameTitle selected is: " + gameTitle);
             //////////////////////////////////////////
             Assets.init(getResources());
@@ -168,6 +182,7 @@ public class GameConsoleFragment extends Fragment
         game.setViewportListener(this);
         game.setTextboxListener(this);
         game.setStatsChangeListener(this);
+        game.setSoundChangeListener(this);
         game.setMenuButtonChangeListener(this);
 
         if (savedInstanceState == null) {
@@ -548,6 +563,21 @@ public class GameConsoleFragment extends Fragment
     @Override
     public void onRefreshQuantityInButtonHolderAAndB(ItemStackable stackableA, ItemStackable stackableB) {
         statsDisplayerFragment.refreshTvQuantityInButtonHolderAAndB(stackableA, stackableB);
+    }
+
+    @Override
+    public void onChangeToTranceBattle() {
+        soundChangeListener.onChangeToTranceBattle();
+    }
+
+    @Override
+    public void onChangeToBreathOfDippy() {
+        soundChangeListener.onChangeToBreathOfDippy();
+    }
+
+    @Override
+    public void onPlaySFX(int idSFX) {
+        soundChangeListener.onPlaySFX(idSFX);
     }
 
     @Override

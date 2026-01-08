@@ -342,7 +342,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                             new FCVDialogFragment.LifecycleListener() {
                                                 @Override
                                                 public void onResume() {
-                                                    // Intentionally blank.
+                                                    soundManager.pauseProject2Marioish();
                                                 }
 
                                                 @Override
@@ -354,6 +354,8 @@ public class HomePlayerRoom01Scene extends Scene {
                                                     }
 
                                                     unpause();
+
+                                                    soundManager.changeBackgroundMusicToProject2Marioish();
                                                 }
                                             });
 
@@ -415,7 +417,22 @@ public class HomePlayerRoom01Scene extends Scene {
                             // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                             String gameTitle = "Pooh Farmer";
                             Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                    gameListener.getRun());
+                                    gameListener.getRun(), new GameConsoleFragment.SoundChangeListener() {
+                                        @Override
+                                        public void onChangeToTranceBattle() {
+                                            soundManager.changeBackgroundMusicToTranceBattle();
+                                        }
+
+                                        @Override
+                                        public void onChangeToBreathOfDippy() {
+                                            soundManager.changeBackgroundMusicToBreatheOfDippy();
+                                        }
+
+                                        @Override
+                                        public void onPlaySFX(int idSFX) {
+                                            soundManager.sfxPlay(idSFX);
+                                        }
+                                    });
                             String tag = GameConsoleFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             dialogFragmentContainingGameConsoleFragment =
@@ -424,7 +441,8 @@ public class HomePlayerRoom01Scene extends Scene {
                                             new FCVDialogFragment.LifecycleListener() {
                                                 @Override
                                                 public void onResume() {
-                                                    // Intentionally blank.
+                                                    soundManager.pauseProject2Marioish();
+                                                    soundManager.changeBackgroundMusicToBreatheOfDippy();
                                                 }
 
                                                 @Override
@@ -436,6 +454,8 @@ public class HomePlayerRoom01Scene extends Scene {
                                                     }
 
                                                     unpause();
+
+                                                    soundManager.changeBackgroundMusicToProject2Marioish();
                                                 }
                                             });
 

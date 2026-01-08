@@ -260,7 +260,7 @@ public class HomePlayerRoom02Scene extends Scene {
                             // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                             String gameTitle = "Pooh Farmer";
                             Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                    gameListener.getRun());
+                                    gameListener.getRun(), null);
                             String tag = GameConsoleFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             DialogFragment dialogFragment =

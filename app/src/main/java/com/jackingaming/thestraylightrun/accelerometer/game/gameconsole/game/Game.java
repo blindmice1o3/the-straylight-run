@@ -161,6 +161,20 @@ public class Game {
         this.statsChangeListener = statsChangeListener;
     }
 
+    public interface SoundChangeListener extends Serializable {
+        void onChangeToTranceBattle();
+
+        void onChangeToBreathOfDippy();
+
+        void onPlaySFX(int idSFX);
+    }
+
+    private SoundChangeListener soundChangeListener;
+
+    public void setSoundChangeListener(SoundChangeListener soundChangeListener) {
+        this.soundChangeListener = soundChangeListener;
+    }
+
     public interface MenuButtonChangeListener extends Serializable {
         void onHideMenuButton();
 
@@ -944,5 +958,17 @@ public class Game {
 
     public Item getScissors() {
         return scissors;
+    }
+
+    public void changeMusicToTranceBattle() {
+        soundChangeListener.onChangeToTranceBattle();
+    }
+
+    public void changeMusicToBreathOfDippy() {
+        soundChangeListener.onChangeToBreathOfDippy();
+    }
+
+    public void playSFX(int idSFX) {
+        soundChangeListener.onPlaySFX(idSFX);
     }
 }

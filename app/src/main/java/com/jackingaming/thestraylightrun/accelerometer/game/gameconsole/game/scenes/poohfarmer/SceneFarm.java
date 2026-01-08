@@ -152,9 +152,6 @@ public class SceneFarm extends Scene {
     private int counterGrowingPotInstantiation = 0;
 
     private void addGrowingPotToRandomTile() {
-        counterGrowingPotInstantiation++;
-        Log.e(TAG, "counterGrowingPotInstantiation: " + counterGrowingPotInstantiation);
-
         int xIndex = -1;
         int yIndex = -1;
         boolean lookingForUnoccupiedWalkableTile = true;
@@ -171,6 +168,8 @@ public class SceneFarm extends Scene {
                     if (((GrowableTile) tileRandom).getEntity() == null) {
                         // unoccupied.
                         // TODO: load Item.
+
+
                         Item itemToAdd = new GrowingPot(
                                 new TillGrowableIndoorTileCommand(null)
                         );
@@ -180,21 +179,12 @@ public class SceneFarm extends Scene {
                                 (yIndex * Tile.HEIGHT)
                         );
                         itemManager.addItem(itemToAdd);
+
+                        counterGrowingPotInstantiation++;
+                        Log.e(TAG, "counterGrowingPotInstantiation: " + counterGrowingPotInstantiation);
+
                         lookingForUnoccupiedWalkableTile = false;
-                    } else {
-                        // Occupied.
                     }
-                } else {
-                    // walkable
-                    // TODO: load Item.
-                    Item itemToAdd = new Milk();
-                    itemToAdd.init(game);
-                    itemToAdd.setPosition(
-                            (xIndex * Tile.WIDTH),
-                            (yIndex * Tile.HEIGHT)
-                    );
-                    itemManager.addItem(itemToAdd);
-                    lookingForUnoccupiedWalkableTile = false;
                 }
             }
         }
@@ -309,24 +299,28 @@ public class SceneFarm extends Scene {
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
+                    game.changeMusicToTranceBattle();
                     addSwarmOfCaterpillar();
                 }
             }, 7, 0, false);
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
+                    game.changeMusicToBreathOfDippy();
                     removeSwarmOfCaterpillar();
                 }
             }, 9, 0, false);
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
+                    game.changeMusicToTranceBattle();
                     addSwarmOfCaterpillar();
                 }
             }, 4, 0, true);
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
+                    game.changeMusicToBreathOfDippy();
                     removeSwarmOfCaterpillar();
                 }
             }, 6, 0, true);

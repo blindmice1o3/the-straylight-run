@@ -340,7 +340,7 @@ public class WorldScene extends Scene {
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Pooh Farmer";
                         Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                gameListener.getRun());
+                                gameListener.getRun(), null);
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =
@@ -397,7 +397,7 @@ public class WorldScene extends Scene {
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Bubble Pop";
                         Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                gameListener.getRun());
+                                gameListener.getRun(), null);
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =

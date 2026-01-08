@@ -11,6 +11,7 @@ import com.jackingaming.thestraylightrun.R;
 public class SoundManager {
     public static final String TAG = SoundManager.class.getSimpleName();
 
+    private Context context;
     private MediaPlayer mediaPlayer;
     private boolean pausedBackgroundMusic;
 
@@ -20,8 +21,46 @@ public class SoundManager {
             sfxEnterPc, sfxGetItem, sfxHorn;
     private boolean loadedSfxBallPoof, loadedSfxBallToss, loadedSfxCollision,
             loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
+    private int positionProject2Marioish = 0;
+    private int positionBreatheOfDippy = 0;
+
+    public void changeBackgroundMusicToTranceBattle() {
+        positionBreatheOfDippy = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_trance_boss_battle_bpm150);
+        mediaPlayer.setLooping(true);
+
+        mediaPlayer.start();
+    }
+
+    public void changeBackgroundMusicToBreatheOfDippy() {
+        mediaPlayer.pause();
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_breathe_of_dippy);
+        mediaPlayer.setLooping(true);
+
+        mediaPlayer.seekTo(positionBreatheOfDippy);
+        mediaPlayer.start();
+    }
+
+    public void changeBackgroundMusicToProject2Marioish() {
+        mediaPlayer.pause();
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_project_2_marioish);
+        mediaPlayer.setLooping(true);
+
+        mediaPlayer.seekTo(positionProject2Marioish);
+        mediaPlayer.start();
+    }
+
+    public void pauseProject2Marioish() {
+        positionProject2Marioish = mediaPlayer.getCurrentPosition();
+        mediaPlayer.pause();
+    }
 
     public SoundManager(Context context) {
+        this.context = context;
 //        mediaPlayer = MediaPlayer.create(context, R.raw.corporate_ukulele);
         mediaPlayer = MediaPlayer.create(context, R.raw.sounds_breathe_of_dippy);
         mediaPlayer.setLooping(true);
