@@ -17,10 +17,8 @@ public class SoundManager {
 
     private SoundPool soundPool;
     private int indexSfx = 0;
-    public int sfxBallPoof, sfxBallToss, sfxCollision,
-            sfxEnterPc, sfxGetItem, sfxHorn;
-    private boolean loadedSfxBallPoof, loadedSfxBallToss, loadedSfxCollision,
-            loadedSfxEnterPc, loadedSfxGetItem, loadedSfxHorn;
+    public static int sfxBubbles, sfxSpin, sfxCoin,
+            sfxSow, sfxScissors, sfxShovel;
     private int positionProject2Marioish = 0;
     private int positionBreatheOfDippy = 0;
 
@@ -28,7 +26,7 @@ public class SoundManager {
         positionBreatheOfDippy = mediaPlayer.getCurrentPosition();
         mediaPlayer.pause();
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_trance_boss_battle_bpm150);
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_cc0_trance_boss_battle_bpm150);
         mediaPlayer.setLooping(true);
 
         mediaPlayer.start();
@@ -47,7 +45,7 @@ public class SoundManager {
     public void changeBackgroundMusicToProject2Marioish() {
         mediaPlayer.pause();
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_project_2_marioish);
+        mediaPlayer = MediaPlayer.create(context, R.raw.sounds_cc0_project_2_marioish);
         mediaPlayer.setLooping(true);
 
         mediaPlayer.seekTo(positionProject2Marioish);
@@ -69,48 +67,25 @@ public class SoundManager {
                 6,
                 AudioManager.STREAM_MUSIC,
                 0);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int i, int i1) {
-                Log.d(TAG, "SoundPool.OnLoadCompleteListener sampleId: " + i);
-
-                int sampleId = i;
-                if (sampleId == sfxBallPoof) {
-                    loadedSfxBallPoof = true;
-                } else if (sampleId == sfxBallToss) {
-                    loadedSfxBallToss = true;
-                } else if (sampleId == sfxCollision) {
-                    loadedSfxCollision = true;
-                } else if (sampleId == sfxEnterPc) {
-                    loadedSfxEnterPc = true;
-                } else if (sampleId == sfxGetItem) {
-                    loadedSfxGetItem = true;
-                } else if (sampleId == sfxHorn) {
-                    loadedSfxHorn = true;
-                } else {
-                    Log.e(TAG, "sampleId: " + sampleId + " (not a pre-defined sound sample).");
-                }
-            }
-        });
 
         // load()'s parameters: context, file_name, priority
-        sfxBallPoof = soundPool.load(context, R.raw.sfx_ball_poof, 1);
-        Log.d(TAG, "sfxBallPoof: " + sfxBallPoof);
+        sfxBubbles = soundPool.load(context, R.raw.sfx_cc0_bubbles, 1);
+        Log.d(TAG, "sfxBubbles: " + sfxBubbles);
 
-        sfxBallToss = soundPool.load(context, R.raw.sfx_ball_toss, 1);
-        Log.d(TAG, "sfxBallToss: " + sfxBallToss);
+        sfxSpin = soundPool.load(context, R.raw.sfx_cc0_car_spinning, 1);
+        Log.d(TAG, "sfxSpin: " + sfxSpin);
 
-        sfxCollision = soundPool.load(context, R.raw.sfx_collision, 1);
-        Log.d(TAG, "sfxCollision: " + sfxCollision);
+        sfxCoin = soundPool.load(context, R.raw.sfx_cc0_coin, 1);
+        Log.d(TAG, "sfxCoin: " + sfxCoin);
 
-        sfxEnterPc = soundPool.load(context, R.raw.sfx_enter_pc, 1);
-        Log.d(TAG, "sfxEnterPc: " + sfxEnterPc);
+        sfxSow = soundPool.load(context, R.raw.sfx_cc0_sow, 1);
+        Log.d(TAG, "sfxSow: " + sfxSow);
 
-        sfxGetItem = soundPool.load(context, R.raw.sfx_get_item_1, 1);
-        Log.d(TAG, "sfxGetItem: " + sfxGetItem);
+        sfxScissors = soundPool.load(context, R.raw.sfx_cc0_scissors, 1);
+        Log.d(TAG, "sfxScissors: " + sfxScissors);
 
-        sfxHorn = soundPool.load(context, R.raw.horn, 1);
-        Log.d(TAG, "sfxHorn: " + sfxHorn);
+        sfxShovel = soundPool.load(context, R.raw.sfx_cc0_shovel, 1);
+        Log.d(TAG, "sfxShovel: " + sfxShovel);
     }
 
     public void sfxPlay(int id) {
@@ -121,19 +96,16 @@ public class SoundManager {
     }
 
     public void sfxIterateAndPlay() {
-        if (loadedSfxBallPoof && loadedSfxBallToss && loadedSfxCollision
-                && loadedSfxEnterPc && loadedSfxGetItem && loadedSfxHorn) {
-            // change selection of sound sample
-            indexSfx++;
-            if (indexSfx > 6) {
-                indexSfx = 1;
-            }
-
-            // play()'s parameters: leftVolume, rightVolume,
-            // priority, loop, and rate
-            soundPool.play(indexSfx, 1, 1,
-                    0, 0, 1);
+        // change selection of sound sample
+        indexSfx++;
+        if (indexSfx > 6) {
+            indexSfx = 1;
         }
+
+        // play()'s parameters: leftVolume, rightVolume,
+        // priority, loop, and rate
+        soundPool.play(indexSfx, 1, 1,
+                0, 0, 1);
     }
 
     public void backgroundMusicTogglePause() {

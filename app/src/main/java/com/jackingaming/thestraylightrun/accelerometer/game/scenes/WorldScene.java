@@ -216,7 +216,7 @@ public class WorldScene extends Scene {
 
                 if (collided instanceof NonPlayableCharacter) {
                     if (((NonPlayableCharacter) collided).getId().equals(ID_COIN)) {
-                        soundManager.sfxPlay(soundManager.sfxGetItem);
+                        soundManager.sfxPlay(soundManager.sfxScissors);
                         player.increaseMovementSpeed();
 
                         // bounce coin based on player's direction.
@@ -787,10 +787,10 @@ public class WorldScene extends Scene {
             public void onJustCollided(Entity collided) {
                 if (collided instanceof NonPlayableCharacter) {
                     if (((NonPlayableCharacter) collided).getId().equals(ID_COIN)) {
-                        soundManager.sfxPlay(soundManager.sfxGetItem);
+                        soundManager.sfxPlay(soundManager.sfxScissors);
                     }
                 } else if (collided instanceof Player) {
-                    soundManager.sfxPlay(soundManager.sfxHorn);
+                    soundManager.sfxPlay(soundManager.sfxShovel);
                 }
             }
         };
@@ -800,7 +800,7 @@ public class WorldScene extends Scene {
                 if (collided instanceof Player) {
                     Log.e(TAG, "coin hit player!!!");
 
-                    soundManager.sfxPlay(soundManager.sfxHorn);
+                    soundManager.sfxPlay(soundManager.sfxShovel);
                 }
             }
         };
@@ -1126,7 +1126,7 @@ public class WorldScene extends Scene {
                                             public void onChoiceYesSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
                                                 Log.e(TAG, "YES selected");
 
-                                                soundManager.sfxPlay(soundManager.sfxGetItem);
+                                                soundManager.sfxPlay(soundManager.sfxScissors);
 
                                                 choiceDialogFragment.dismiss();
                                                 typeWriterDialogFragmentRivalLeader.dismiss();
@@ -1141,7 +1141,7 @@ public class WorldScene extends Scene {
                                             public void onChoiceNoSelected(View view, ChoiceDialogFragment choiceDialogFragment) {
                                                 Log.e(TAG, "NO selected");
 
-                                                soundManager.sfxPlay(soundManager.sfxCollision);
+                                                soundManager.sfxPlay(soundManager.sfxCoin);
 
                                                 choiceDialogFragment.dismiss();
                                                 typeWriterDialogFragmentRivalLeader.dismiss();

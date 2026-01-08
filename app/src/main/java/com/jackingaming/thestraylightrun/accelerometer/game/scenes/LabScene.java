@@ -365,7 +365,7 @@ public class LabScene extends Scene {
             @Override
             public void onJustCollided(Entity collided) {
                 if (collided instanceof Player) {
-                    soundManager.sfxPlay(soundManager.sfxHorn);
+                    soundManager.sfxPlay(soundManager.sfxShovel);
                 }
             }
         };

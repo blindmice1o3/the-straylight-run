@@ -45,6 +45,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
+import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +124,7 @@ public class Robot extends Creature {
         Log.d(TAG, "doShowRobotDialogFragmentFirstTime");
         isFirstTimeShowingRobotDialogFragment = false;
 
-        state = State.TURN_IN_PLACE;
+        changeToTurnInPlace();
 
         game.getViewportListener().addAndShowParticleExplosionView(null);
 
@@ -447,6 +448,7 @@ public class Robot extends Creature {
     }
 
     public void changeToTurnInPlace() {
+        game.playSFX(SoundManager.sfxSpin);
         state = State.TURN_IN_PLACE;
     }
 
