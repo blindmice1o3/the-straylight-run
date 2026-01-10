@@ -23,6 +23,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.cont
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.TileMapLoader;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.tiles.UniqueSolidTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.timer.CountdownTimer;
 import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 import com.jackingaming.thestraylightrun.nextweektonight.OnCompletionListenerDTO;
 import com.jackingaming.thestraylightrun.nextweektonight.VideoViewFragment;
@@ -85,6 +86,9 @@ public class HomePlayerRoom01Scene extends Scene {
             dialogFragmentContainingIDEFragment,
             dialogFragmentContainingGameConsoleFragment,
             dialogFragmentContainingNotesViewerFragment;
+
+    private boolean isCooldownComplete;
+    private CountdownTimer countdownTimer;
 
     private HomePlayerRoom01Scene() {
     }
@@ -195,6 +199,14 @@ public class HomePlayerRoom01Scene extends Scene {
 
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();
+
+        isCooldownComplete = true;
+        countdownTimer = new CountdownTimer(new CountdownTimer.CountdownListener() {
+            @Override
+            public void onCountdownEnd() {
+                isCooldownComplete = true;
+            }
+        });
     }
 
     private Entity.CollisionListener generateCollisionListenerForPlayer() {
@@ -275,6 +287,15 @@ public class HomePlayerRoom01Scene extends Scene {
                         String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
                         if (id.equals(UniqueSolidTile.TELEVISION)) {
                             Log.e(TAG, "unique solid tile: TELEVISION");
+
+                            //////////////////////////
+                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                                return false;
+                            }
+
+                            isCooldownComplete = false;
+                            countdownTimer.start();
+                            //////////////////////////
 
                             pause();
 
@@ -372,6 +393,15 @@ public class HomePlayerRoom01Scene extends Scene {
                                 return false;
                             }
 
+                            //////////////////////////
+                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                                return false;
+                            }
+
+                            isCooldownComplete = false;
+                            countdownTimer.start();
+                            //////////////////////////
+
                             pause();
 
                             Fragment fragment = IDEFragment.newInstance(IDEFragment.Mode.LONG_PRESS_REVEALS,
@@ -411,6 +441,15 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER) {
                                 return false;
                             }
+
+                            //////////////////////////
+                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                                return false;
+                            }
+
+                            isCooldownComplete = false;
+                            countdownTimer.start();
+                            //////////////////////////
 
                             pause();
 
@@ -470,6 +509,15 @@ public class HomePlayerRoom01Scene extends Scene {
                                 return false;
                             }
 
+                            //////////////////////////
+                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                                return false;
+                            }
+
+                            isCooldownComplete = false;
+                            countdownTimer.start();
+                            //////////////////////////
+
                             pause();
 
                             Fragment fragment = NotesViewerFragment.newInstance(
@@ -511,6 +559,15 @@ public class HomePlayerRoom01Scene extends Scene {
                                     gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE) {
                                 return false;
                             }
+
+                            //////////////////////////
+                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                                return false;
+                            }
+
+                            isCooldownComplete = false;
+                            countdownTimer.start();
+                            //////////////////////////
 
                             //////////////////////////////////
                             gameListener.incrementRun();

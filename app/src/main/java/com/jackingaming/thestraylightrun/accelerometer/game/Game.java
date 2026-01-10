@@ -141,6 +141,8 @@ public class Game {
         void unhighlightGroupChatDrawer();
 
         void unhighlightJournalDrawer();
+
+        boolean isStartDrawerOpen();
     }
 
     private SurfaceHolder holder;

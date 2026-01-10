@@ -87,6 +87,7 @@ public class GameFragment extends Fragment
     private String mParam1;
     private String mParam2;
 
+    private DrawerLayout drawerLayout;
     private AppBarLayout appBarLayout;
     private DrawerStartFragment drawerStartFragment;
     private View drawerGripStart;
@@ -187,7 +188,7 @@ public class GameFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        DrawerLayout drawerLayout = view.findViewById(R.id.drawer_layout);
+        drawerLayout = view.findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -564,6 +565,11 @@ public class GameFragment extends Fragment
             @Override
             public void unhighlightJournalDrawer() {
                 GameFragment.this.unhighlightJournalDrawer();
+            }
+
+            @Override
+            public boolean isStartDrawerOpen() {
+                return drawerLayout.isDrawerOpen(GravityCompat.START);
             }
         };
 
