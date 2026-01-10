@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 
 public class Shovel extends Item
         implements TileCommandOwner {
@@ -14,6 +16,13 @@ public class Shovel extends Item
 
     public Shovel(TileCommand tileCommand) {
         this.tileCommand = tileCommand;
+    }
+
+    @Override
+    public void init(Game game) {
+        super.init(game);
+
+        tileCommand.init(game);
     }
 
     @Override

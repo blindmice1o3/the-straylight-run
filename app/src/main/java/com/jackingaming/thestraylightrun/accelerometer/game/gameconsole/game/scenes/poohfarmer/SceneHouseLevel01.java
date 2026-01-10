@@ -175,14 +175,6 @@ public class SceneHouseLevel01 extends Scene {
                                 TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
                                 TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-                                if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                                    game.playSFX(SoundManager.sfxShovel);
-                                } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                                    game.playSFX(SoundManager.sfxSow);
-                                } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                                    game.playSFX(SoundManager.sfxBubbles);
-                                }
-
                                 Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                                 tileCommand.setTile(tileCurrentlyFacing);
                                 tileCommand.execute();
@@ -233,14 +225,6 @@ public class SceneHouseLevel01 extends Scene {
                         if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
                             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
                             TileCommand tileCommand = tileCommandOwner.getTileCommand();
-
-                            if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                                game.playSFX(SoundManager.sfxShovel);
-                            } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                                game.playSFX(SoundManager.sfxSow);
-                            } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                                game.playSFX(SoundManager.sfxBubbles);
-                            }
 
                             Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                             tileCommand.setTile(tileCurrentlyFacing);
@@ -293,30 +277,26 @@ public class SceneHouseLevel01 extends Scene {
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
         Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
-        // check item occupying StatsDisplayerFragment's button holder.
-        if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
-            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
-            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+        if (player.hasCarryable()) {
+            // do nothing.
+        } else {
+            // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+            if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+                TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+                TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-            if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                game.playSFX(SoundManager.sfxShovel);
-            } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                game.playSFX(SoundManager.sfxSow);
-            } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                game.playSFX(SoundManager.sfxBubbles);
-            }
+                Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                tileCommand.setTile(tileCurrentlyFacing);
+                tileCommand.execute();
+            } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+                if (entityCurrentlyFacing != null) {
+                    EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                    EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
 
-            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-            tileCommand.setTile(tileCurrentlyFacing);
-            tileCommand.execute();
-        } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
-            if (entityCurrentlyFacing != null) {
-                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
-                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
-
-                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
-                entityCommand.setEntity(entityCurrentlyFacing);
-                entityCommand.execute();
+                    Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                    entityCommand.setEntity(entityCurrentlyFacing);
+                    entityCommand.execute();
+                }
             }
         }
     }

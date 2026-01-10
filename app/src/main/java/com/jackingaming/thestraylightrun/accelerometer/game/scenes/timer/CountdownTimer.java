@@ -8,7 +8,7 @@ import android.os.Looper;
 
 public class CountdownTimer {
     public static final String TAG = CountdownTimer.class.getSimpleName();
-    public static final long TARGET_COUNTDOWN_TIMER = 6000L;
+    public static final long TARGET_COUNTDOWN_TIMER = 4000L;
 
     public interface CountdownListener {
         void onCountdownEnd();

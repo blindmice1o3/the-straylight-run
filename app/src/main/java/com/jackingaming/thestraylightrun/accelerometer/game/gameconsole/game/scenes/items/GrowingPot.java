@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
@@ -15,6 +16,13 @@ public class GrowingPot extends Item
 
     public GrowingPot(TileCommand tileCommand) {
         this.tileCommand = tileCommand;
+    }
+
+    @Override
+    public void init(Game game) {
+        super.init(game);
+
+        tileCommand.init(game);
     }
 
     @Override

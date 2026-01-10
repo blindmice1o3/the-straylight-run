@@ -2,13 +2,16 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 public class SeedGrowableTileCommand
         implements TileCommand {
     public static final String TAG = SeedGrowableTileCommand.class.getSimpleName();
 
+    private Game game;
     private Tile tile;
     private String idSeed;
 
@@ -17,6 +20,11 @@ public class SeedGrowableTileCommand
         if (idSeed != null) {
             this.idSeed = idSeed;
         }
+    }
+
+    @Override
+    public void init(Game game) {
+        this.game = game;
     }
 
     public void setIdSeed(String idSeed) {
@@ -38,6 +46,7 @@ public class SeedGrowableTileCommand
                 growableTile.changeToUnwatered();
                 Log.e(TAG, "growableTile.changeToSeeded()");
                 growableTile.changeToSeeded(idSeed);
+                game.playSFX(SoundManager.sfxSow);
                 return true;
             }
         }

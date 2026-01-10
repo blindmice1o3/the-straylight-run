@@ -53,6 +53,10 @@ public class SeedShopOwnerQuest00
     @Override
     public void reload(Game game) {
         this.game = game;
+
+        for (Item item : startingItems.values()) {
+            item.init(game);
+        }
     }
 
     @Override

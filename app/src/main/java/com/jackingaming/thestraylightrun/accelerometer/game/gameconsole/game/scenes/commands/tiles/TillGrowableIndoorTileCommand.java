@@ -2,18 +2,26 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 public class TillGrowableIndoorTileCommand
         implements TileCommand {
     public static final String TAG = TillGrowableIndoorTileCommand.class.getSimpleName();
 
+    private Game game;
     private Tile tile;
 
     public TillGrowableIndoorTileCommand(Tile tile) {
         this.tile = tile;
+    }
+
+    @Override
+    public void init(Game game) {
+        this.game = game;
     }
 
     @Override
@@ -29,6 +37,7 @@ public class TillGrowableIndoorTileCommand
             if (growableIndoorTile.getState() == GrowableTile.State.UNTILLED) {
                 Log.e(TAG, "growableIndoorTile.changeToTilled()");
                 growableIndoorTile.changeToTilled();
+                game.playSFX(SoundManager.sfxShovel);
                 return true;
             }
         }

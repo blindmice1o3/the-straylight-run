@@ -21,6 +21,7 @@ public abstract class Seed extends Item
         super.init(game);
 
         tileCommand = new SeedGrowableTileCommand(null, name);
+        tileCommand.init(game);
     }
 
     @Override

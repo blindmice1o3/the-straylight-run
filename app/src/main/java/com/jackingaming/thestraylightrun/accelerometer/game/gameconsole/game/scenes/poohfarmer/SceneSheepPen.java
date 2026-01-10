@@ -12,11 +12,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
@@ -35,7 +31,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
-import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -201,14 +196,6 @@ public class SceneSheepPen extends Scene {
                                 TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
                                 TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-                                if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                                    game.playSFX(SoundManager.sfxShovel);
-                                } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                                    game.playSFX(SoundManager.sfxSow);
-                                } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                                    game.playSFX(SoundManager.sfxBubbles);
-                                }
-
                                 Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                                 tileCommand.setTile(tileCurrentlyFacing);
                                 tileCommand.execute();
@@ -259,14 +246,6 @@ public class SceneSheepPen extends Scene {
                         if (game.getItemStoredInButtonHolderA() instanceof TileCommandOwner) {
                             TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderA();
                             TileCommand tileCommand = tileCommandOwner.getTileCommand();
-
-                            if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                                game.playSFX(SoundManager.sfxShovel);
-                            } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                                game.playSFX(SoundManager.sfxSow);
-                            } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                                game.playSFX(SoundManager.sfxBubbles);
-                            }
 
                             Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
                             tileCommand.setTile(tileCurrentlyFacing);
@@ -319,30 +298,26 @@ public class SceneSheepPen extends Scene {
         Item itemCurrentlyFacing = player.getItemCurrentlyFacing();
         Tile tileCurrentlyFacing = player.checkTileCurrentlyFacing();
 
-        // check item occupying StatsDisplayerFragment's button holder.
-        if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
-            TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
-            TileCommand tileCommand = tileCommandOwner.getTileCommand();
+        if (player.hasCarryable()) {
+            // do nothing.
+        } else {
+            // *** STATS_DISPLAYER_FRAGMENT'S BUTTON HOLDER CHECK ***
+            if (game.getItemStoredInButtonHolderB() instanceof TileCommandOwner) {
+                TileCommandOwner tileCommandOwner = (TileCommandOwner) game.getItemStoredInButtonHolderB();
+                TileCommand tileCommand = tileCommandOwner.getTileCommand();
 
-            if (tileCommand instanceof TillGrowableTileCommand || tileCommand instanceof TillGrowableIndoorTileCommand) {
-                game.playSFX(SoundManager.sfxShovel);
-            } else if (tileCommand instanceof SeedGrowableTileCommand) {
-                game.playSFX(SoundManager.sfxSow);
-            } else if (tileCommand instanceof WaterGrowableTileCommand) {
-                game.playSFX(SoundManager.sfxBubbles);
-            }
+                Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
+                tileCommand.setTile(tileCurrentlyFacing);
+                tileCommand.execute();
+            } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
+                if (entityCurrentlyFacing != null) {
+                    EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
+                    EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
 
-            Log.d(TAG, "tileCurrentlyFacing's class is " + tileCurrentlyFacing.getClass().getSimpleName());
-            tileCommand.setTile(tileCurrentlyFacing);
-            tileCommand.execute();
-        } else if (game.getItemStoredInButtonHolderB() instanceof EntityCommandOwner) {
-            if (entityCurrentlyFacing != null) {
-                EntityCommandOwner entityCommandOwner = (EntityCommandOwner) game.getItemStoredInButtonHolderB();
-                EntityCommand entityCommand = entityCommandOwner.getEntityCommand();
-
-                Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
-                entityCommand.setEntity(entityCurrentlyFacing);
-                entityCommand.execute();
+                    Log.d(TAG, "entityCurrentlyFacing's class is " + entityCurrentlyFacing.getClass().getSimpleName());
+                    entityCommand.setEntity(entityCurrentlyFacing);
+                    entityCommand.execute();
+                }
             }
         }
     }

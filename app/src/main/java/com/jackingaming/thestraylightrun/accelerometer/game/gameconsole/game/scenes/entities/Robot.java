@@ -85,8 +85,8 @@ public class Robot extends Creature {
     private State state;
     private Random random;
     private Command walkLeftCommand, walkUpCommand, walkRightCommand, walkDownCommand,
-            faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand,
-            tillTileCommand, seedTileCommand, waterTileCommand,
+            faceLeftCommand, faceUpCommand, faceRightCommand, faceDownCommand;
+    private TileCommand tillTileCommand, seedTileCommand, waterTileCommand,
             harvestTileCommand, placeInShippingBinTileCommand;
 
     private List<Command> commands;
@@ -229,6 +229,12 @@ public class Robot extends Creature {
         super.init(game);
 
         robotAnimationManager.init(game);
+
+        tillTileCommand.init(game);
+        seedTileCommand.init(game);
+        waterTileCommand.init(game);
+        harvestTileCommand.init(game);
+        placeInShippingBinTileCommand.init(game);
 
         ((SeedGrowableTileCommand) seedTileCommand).setIdSeed(
                 game.getContext().getString(R.string.text_seed_mystery)

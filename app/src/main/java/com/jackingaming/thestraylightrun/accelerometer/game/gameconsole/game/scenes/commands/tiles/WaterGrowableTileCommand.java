@@ -2,18 +2,26 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 public class WaterGrowableTileCommand
         implements TileCommand {
     public static final String TAG = WaterGrowableTileCommand.class.getSimpleName();
 
+    private Game game;
     private Tile tile;
 
     public WaterGrowableTileCommand(Tile tile) {
         this.tile = tile;
+    }
+
+    @Override
+    public void init(Game game) {
+        this.game = game;
     }
 
     @Override
@@ -32,6 +40,7 @@ public class WaterGrowableTileCommand
                 if (!growableIndoorTile.isWatered()) {
                     Log.e(TAG, "!growableIndoorTile.isWatered() growableIndoorTile.changeToWatered()");
                     growableIndoorTile.changeToWatered();
+                    game.playSFX(SoundManager.sfxBubbles);
                 }
 
                 return true;
@@ -46,6 +55,7 @@ public class WaterGrowableTileCommand
                 if (!growableTile.isWatered()) {
                     Log.e(TAG, "!growableTile.isWatered() growableTile.changeToWatered()");
                     growableTile.changeToWatered();
+                    game.playSFX(SoundManager.sfxBubbles);
                 }
 
                 return true;

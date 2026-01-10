@@ -2,6 +2,7 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.util.Log;
 
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
@@ -12,12 +13,18 @@ public class HarvestGrowableTileCommand
         implements TileCommand {
     public static final String TAG = HarvestGrowableTileCommand.class.getSimpleName();
 
+    private Game game;
     private Tile tile;
     private Creature creatureHarvester;
 
     public HarvestGrowableTileCommand(Tile tile, Creature creatureHarvester) {
         this.tile = tile;
         this.creatureHarvester = creatureHarvester;
+    }
+
+    @Override
+    public void init(Game game) {
+        this.game = game;
     }
 
     @Override
