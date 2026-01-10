@@ -158,6 +158,10 @@ public class Game {
 
 //    private UpdateableSprite ball;
 
+    public void resetTransferPointCooldown() {
+        ((HomePlayerRoom01Scene) sceneCurrent).resetTransferPointCooldown();
+    }
+
     public void resetGroupChatState() {
         HomePlayerRoom01Scene.getInstance().setGroupChatDrawerClosed(true);
         HomePlayerRoom02Scene.getInstance().setGroupChatDrawerClosed(true);

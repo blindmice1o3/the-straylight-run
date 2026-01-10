@@ -11,12 +11,14 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.scenes.timer.CountdownTimer;
 
 import java.io.Serializable;
 
 public class PoohForm
         implements Form {
     public static final String TAG = PoohForm.class.getSimpleName();
+    private static final long TARGET_TRANSFER_POINT_COOLDOWN = 500L;
 
     public interface MovementListener extends Serializable {
         void onMove(float xMove, float yMove);
@@ -33,6 +35,9 @@ public class PoohForm
     private Player player;
     private PoohAnimationManager poohAnimationManager;
 
+    private boolean isTransferPointCooldownComplete;
+    private CountdownTimer countdownTimer;
+
     public PoohForm() {
         poohAnimationManager = new PoohAnimationManager();
     }
@@ -42,6 +47,14 @@ public class PoohForm
         this.game = game;
         player = Player.getInstance();
         poohAnimationManager.init(game);
+
+        isTransferPointCooldownComplete = true;
+        countdownTimer = new CountdownTimer(new CountdownTimer.CountdownListener() {
+            @Override
+            public void onCountdownEnd() {
+                isTransferPointCooldownComplete = true;
+            }
+        }, TARGET_TRANSFER_POINT_COOLDOWN);
     }
 
     @Override
@@ -98,7 +111,16 @@ public class PoohForm
     @Override
     public void respondToTransferPointCollision(String key) {
         Log.e(TAG, getClass().getSimpleName() + ".respondToTransferPointCollision(String key) key: " + key);
-        // TODO: change scene.
+
+        //////////////////////////
+        if (!isTransferPointCooldownComplete) {
+            return;
+        }
+
+        isTransferPointCooldownComplete = false;
+        countdownTimer.start();
+        //////////////////////////
+
         game.getSceneManager().changeScene(key);
     }
 

@@ -59,6 +59,7 @@ public class SceneFarm extends Scene {
 
     public static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     public static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
+    private static final int Y_INDEX_TRANSFER_POINT_SEED_SHOP = 5;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
     private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN = 11;
@@ -884,6 +885,12 @@ public class SceneFarm extends Scene {
         game.getTimeManager().setIsPaused(false);
         inSeedShopState = false;
         game.getViewportListener().showSurfaceView();
+
+        //////////////////////////////////////////////////
+        Player.getInstance().setY(
+                (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT) + (1 * Tile.HEIGHT) + (Tile.HEIGHT / 2)
+        );
+        //////////////////////////////////////////////////
     }
 
     private boolean needDisplaySeedShopFragment;
@@ -1326,8 +1333,8 @@ public class SceneFarm extends Scene {
         transferPoints.put("COW_BARN", new Rect((19 * Tile.WIDTH), (12 * Tile.HEIGHT),
                 (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (12 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
 
-        transferPoints.put("SEEDS_SHOP", new Rect((19 * Tile.WIDTH), (5 * Tile.HEIGHT),
-                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("SEEDS_SHOP", new Rect((19 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT),
+                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 

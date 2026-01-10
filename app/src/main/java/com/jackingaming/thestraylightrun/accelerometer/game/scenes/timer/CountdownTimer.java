@@ -8,7 +8,6 @@ import android.os.Looper;
 
 public class CountdownTimer {
     public static final String TAG = CountdownTimer.class.getSimpleName();
-    public static final long TARGET_COUNTDOWN_TIMER = 4000L;
 
     public interface CountdownListener {
         void onCountdownEnd();
@@ -16,18 +15,15 @@ public class CountdownTimer {
 
     private CountdownListener countdownListener;
 
-    private long elapsed;
     private ObjectAnimator objectAnimator;
 
-    public CountdownTimer(CountdownListener countdownListener) {
+    public CountdownTimer(CountdownListener countdownListener, long targetCountdownTimer) {
         this.countdownListener = countdownListener;
-
-        elapsed = TARGET_COUNTDOWN_TIMER;
 
         objectAnimator = new ObjectAnimator();
         objectAnimator.setPropertyName("elapsed");
-        objectAnimator.setFloatValues(elapsed, 0L);
-        objectAnimator.setDuration(elapsed);
+        objectAnimator.setFloatValues(targetCountdownTimer, 0L);
+        objectAnimator.setDuration(targetCountdownTimer);
         objectAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

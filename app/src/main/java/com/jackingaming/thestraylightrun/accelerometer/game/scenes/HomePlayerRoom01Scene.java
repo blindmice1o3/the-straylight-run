@@ -53,6 +53,7 @@ public class HomePlayerRoom01Scene extends Scene {
     private static final String VIDEO_RUN_THREE = "vid_20250917_180111542_run_three_post_compressed_rotated_90";
     private static final String VIDEO_RUN_FOUR = "vid_20250918_173333392_run_four_post_compressed_rotated_90";
     private static final String VIDEO_RUN_FIVE = "pxl_20250429_193429506";
+    private static final long TARGET_TRANSFER_POINT_COOLDOWN = 2500L;
 
     private static HomePlayerRoom01Scene instance;
 
@@ -87,7 +88,7 @@ public class HomePlayerRoom01Scene extends Scene {
             dialogFragmentContainingGameConsoleFragment,
             dialogFragmentContainingNotesViewerFragment;
 
-    private boolean isCooldownComplete;
+    private boolean isTransferPointCooldownComplete;
     private CountdownTimer countdownTimer;
 
     private HomePlayerRoom01Scene() {
@@ -114,6 +115,11 @@ public class HomePlayerRoom01Scene extends Scene {
             instance = new HomePlayerRoom01Scene();
         }
         return instance;
+    }
+
+    public void resetTransferPointCooldown() {
+        isTransferPointCooldownComplete = false;
+        countdownTimer.start();
     }
 
     private void initTiles() {
@@ -200,13 +206,13 @@ public class HomePlayerRoom01Scene extends Scene {
         collisionListenerPlayer = generateCollisionListenerForPlayer();
         movementListenerPlayer = generateMovementListenerForPlayer();
 
-        isCooldownComplete = true;
+        isTransferPointCooldownComplete = true;
         countdownTimer = new CountdownTimer(new CountdownTimer.CountdownListener() {
             @Override
             public void onCountdownEnd() {
-                isCooldownComplete = true;
+                isTransferPointCooldownComplete = true;
             }
-        });
+        }, TARGET_TRANSFER_POINT_COOLDOWN);
     }
 
     private Entity.CollisionListener generateCollisionListenerForPlayer() {
@@ -289,11 +295,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             Log.e(TAG, "unique solid tile: TELEVISION");
 
                             //////////////////////////
-                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                            if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
                             }
 
-                            isCooldownComplete = false;
+                            isTransferPointCooldownComplete = false;
                             countdownTimer.start();
                             //////////////////////////
 
@@ -394,11 +400,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             //////////////////////////
-                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                            if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
                             }
 
-                            isCooldownComplete = false;
+                            isTransferPointCooldownComplete = false;
                             countdownTimer.start();
                             //////////////////////////
 
@@ -443,11 +449,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             //////////////////////////
-                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                            if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
                             }
 
-                            isCooldownComplete = false;
+                            isTransferPointCooldownComplete = false;
                             countdownTimer.start();
                             //////////////////////////
 
@@ -510,11 +516,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             //////////////////////////
-                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                            if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
                             }
 
-                            isCooldownComplete = false;
+                            isTransferPointCooldownComplete = false;
                             countdownTimer.start();
                             //////////////////////////
 
@@ -561,11 +567,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             }
 
                             //////////////////////////
-                            if (!isCooldownComplete || gameListener.isStartDrawerOpen()) {
+                            if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
                             }
 
-                            isCooldownComplete = false;
+                            isTransferPointCooldownComplete = false;
                             countdownTimer.start();
                             //////////////////////////
 

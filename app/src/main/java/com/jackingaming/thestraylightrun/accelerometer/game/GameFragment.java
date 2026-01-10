@@ -182,6 +182,10 @@ public class GameFragment extends Fragment
             game.incrementDailyLoop();
         }
         //////////////////////////////////
+
+        //////////////////////////////////
+        game.resetTransferPointCooldown();
+        //////////////////////////////////
     }
 
     @Override
@@ -363,7 +367,7 @@ public class GameFragment extends Fragment
                             HomePlayerRoom01Scene.getInstance()
                     );
                 }
-                soundManager.sfxIterateAndPlay();
+//                soundManager.sfxIterateAndPlay();
 
                 appBarLayout.setExpanded(false);
 
