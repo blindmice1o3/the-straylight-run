@@ -113,6 +113,13 @@ public class TimeManager
         textWinter = game.getContext().getResources().getString(R.string.text_winter);
     }
 
+    public void startNewDay() {
+        callRemainingActiveEventTimeObjects();
+        setAllEventTimeObjectsToActive();
+        resetInGameClock();
+        incrementDay();
+    }
+
     public void update(long elapsed) {
         //////////////////////
         timePlayed += elapsed;
@@ -211,7 +218,7 @@ public class TimeManager
         });
     }
 
-    public void callRemainingActiveEventTimeObjects() {
+    private void callRemainingActiveEventTimeObjects() {
         for (EventTime eventTime : timeManagerListeners.keySet()) {
             if (eventTime.getIsActive()) {
                 timeManagerListeners.get(eventTime).executeTimedEvent();
@@ -220,13 +227,13 @@ public class TimeManager
         }
     }
 
-    public void setAllEventTimeObjectsToActive() {
+    private void setAllEventTimeObjectsToActive() {
         for (EventTime eventTime : timeManagerListeners.keySet()) {
             eventTime.setIsActive(true);
         }
     }
 
-    public void incrementDay() {
+    private void incrementDay() {
         day++;
         if (day > 30) {
             incrementSeason();
@@ -271,7 +278,7 @@ public class TimeManager
         this.isPaused = isPaused;
     }
 
-    public void resetInGameClock() {
+    private void resetInGameClock() {
         ticker = 0L;
         hour = 5;
         minute = 59;

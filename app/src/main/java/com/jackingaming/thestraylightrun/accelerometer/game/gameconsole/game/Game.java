@@ -246,10 +246,7 @@ public class Game {
     }
 
     public void startNewDay() {
-        timeManager.callRemainingActiveEventTimeObjects();
-        timeManager.setAllEventTimeObjectsToActive();
-        timeManager.resetInGameClock();
-        timeManager.incrementDay();
+        timeManager.startNewDay();
 
         // TODO: implement startNewDay().
         SceneFarm.getInstance().startNewDay();
