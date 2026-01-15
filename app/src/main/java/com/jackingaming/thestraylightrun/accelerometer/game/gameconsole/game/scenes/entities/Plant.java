@@ -178,7 +178,7 @@ public class Plant extends Entity
 
     private void initImageOfBanana() {
         Bitmap spriteSheetBanana = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_tree_banana);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetBanana, 35, 210, 375, 633);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetBanana, 106, 210, 243, 633);
         imageBracket02 = Bitmap.createBitmap(spriteSheetBanana, 338, 210, 375, 633);
         imageBracket03 = Bitmap.createBitmap(spriteSheetBanana, 722, 210, 375, 633);
         imageBracket04 = Bitmap.createBitmap(spriteSheetBanana, 1120, 210, 375, 633);
@@ -222,7 +222,7 @@ public class Plant extends Entity
 
     private void initImageOfEggplant() {
         Bitmap spriteSheetEggplant = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_plant_eggplant);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetEggplant, 183, 252, 323, 514);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetEggplant, 183, 252, 208, 514);
         imageBracket02 = Bitmap.createBitmap(spriteSheetEggplant, 406, 252, 323, 514);
         imageBracket03 = Bitmap.createBitmap(spriteSheetEggplant, 740, 252, 323, 514);
         imageBracket04 = Bitmap.createBitmap(spriteSheetEggplant, 1106, 252, 323, 514);
@@ -266,8 +266,8 @@ public class Plant extends Entity
 
     private void initImageOfLongan() {
         Bitmap spriteSheetLongan = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_tree_logan);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetLongan, 173, 233, 342, 543);
-        imageBracket02 = Bitmap.createBitmap(spriteSheetLongan, 332, 233, 342, 543);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetLongan, 173, 233, 203, 543);
+        imageBracket02 = Bitmap.createBitmap(spriteSheetLongan, 390, 233, 331, 543);
         imageBracket03 = Bitmap.createBitmap(spriteSheetLongan, 729, 233, 342, 543);
         imageBracket04 = Bitmap.createBitmap(spriteSheetLongan, 1110, 233, 342, 543);
 
@@ -304,7 +304,7 @@ public class Plant extends Entity
 
     private void initImageOfPapaya() {
         Bitmap spriteSheetPapaya = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_tree_papaya);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetPapaya, 88, 206, 326, 592);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetPapaya, 88, 206, 307, 592);
         imageBracket02 = Bitmap.createBitmap(spriteSheetPapaya, 372, 206, 326, 592);
         imageBracket03 = Bitmap.createBitmap(spriteSheetPapaya, 732, 206, 326, 592);
         imageBracket04 = Bitmap.createBitmap(spriteSheetPapaya, 1102, 206, 326, 592);
@@ -337,7 +337,7 @@ public class Plant extends Entity
 
     private void initImageOfStrawberry() {
         Bitmap spriteSheetStrawberry = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_plant_strawberry);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetStrawberry, 55, 547, 357, 318);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetStrawberry, 55, 547, 265, 318);
         imageBracket02 = Bitmap.createBitmap(spriteSheetStrawberry, 365, 547, 357, 318);
         imageBracket03 = Bitmap.createBitmap(spriteSheetStrawberry, 750, 547, 357, 318);
         imageBracket04 = Bitmap.createBitmap(spriteSheetStrawberry, 1134, 547, 357, 318);
@@ -348,7 +348,7 @@ public class Plant extends Entity
 
     private void initImageOfTomato() {
         Bitmap spriteSheetTomato = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.entity_plant_tomato);
-        imageBracket01 = Bitmap.createBitmap(spriteSheetTomato, 28, 203, 382, 588);
+        imageBracket01 = Bitmap.createBitmap(spriteSheetTomato, 97, 203, 244, 588);
         imageBracket02 = Bitmap.createBitmap(spriteSheetTomato, 278, 203, 382, 588);
         imageBracket03 = Bitmap.createBitmap(spriteSheetTomato, 643, 203, 382, 588);
         imageBracket04 = Bitmap.createBitmap(spriteSheetTomato, 1048, 203, 382, 588);
