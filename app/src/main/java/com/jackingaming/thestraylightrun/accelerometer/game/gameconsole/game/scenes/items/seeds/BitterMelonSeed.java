@@ -4,7 +4,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class BitterMelonSeed extends Seed {
     public static final String TAG = BitterMelonSeed.class.getSimpleName();
-    private static final float PRICE_DEFAULT = 5f;
+    private static final float PRICE_DEFAULT = 30f;
 
     @Override
     protected void initName() {

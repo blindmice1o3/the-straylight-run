@@ -181,8 +181,10 @@ public abstract class Entity
     }
 
     @Override
-    public void becomeCarried() {
+    public Carryable becomeCarried() {
         active = false;
+
+        return this;
     }
 
     @Override

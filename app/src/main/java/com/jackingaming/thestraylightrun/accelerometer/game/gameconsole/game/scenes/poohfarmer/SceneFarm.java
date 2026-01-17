@@ -729,7 +729,9 @@ public class SceneFarm extends Scene {
                         if (tileCurrentlyFacing instanceof GrowableTile) {
                             Log.d(TAG, "tileCurrentlyFacing instanceof GrowableTile");
 
-                            ((GrowableTile) tileCurrentlyFacing).changeToUntilled();
+                            if (((Plant) entityCurrentlyFacing).getReHarvestLength() == 0) {
+                                ((GrowableTile) tileCurrentlyFacing).changeToUntilled();
+                            }
                         } else {
                             Log.e(TAG, "tileFacing NOT instanceof GrowableTile");
                         }

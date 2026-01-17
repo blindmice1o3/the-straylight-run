@@ -4,7 +4,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class GarlicSeed extends Seed {
     public static final String TAG = GarlicSeed.class.getSimpleName();
-    private static final float PRICE_DEFAULT = 5f;
+    private static final float PRICE_DEFAULT = 13f;
 
     @Override
     protected void initName() {

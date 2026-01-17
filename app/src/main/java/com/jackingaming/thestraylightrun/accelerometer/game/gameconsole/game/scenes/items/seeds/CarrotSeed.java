@@ -4,7 +4,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class CarrotSeed extends Seed {
     public static final String TAG = CarrotSeed.class.getSimpleName();
-    private static final float PRICE_DEFAULT = 5f;
+    private static final float PRICE_DEFAULT = 13f;
 
     @Override
     protected void initName() {

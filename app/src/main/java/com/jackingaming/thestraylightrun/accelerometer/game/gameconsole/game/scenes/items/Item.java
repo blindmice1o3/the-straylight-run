@@ -76,9 +76,11 @@ public abstract class Item
     }
 
     @Override
-    public void becomeCarried() {
+    public Carryable becomeCarried() {
         // Intentionally blank.
         game.getSceneManager().getCurrentScene().getItemManager().removeItem(this);
+
+        return this;
     }
 
     @Override

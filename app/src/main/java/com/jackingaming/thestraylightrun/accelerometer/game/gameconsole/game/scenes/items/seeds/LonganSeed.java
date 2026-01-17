@@ -4,7 +4,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class LonganSeed extends Seed {
     public static final String TAG = LonganSeed.class.getSimpleName();
-    private static final float PRICE_DEFAULT = 5f;
+    private static final float PRICE_DEFAULT = 9000f;
 
     @Override
     protected void initName() {

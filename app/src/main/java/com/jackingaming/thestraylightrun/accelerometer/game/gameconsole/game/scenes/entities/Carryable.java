@@ -5,7 +5,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public interface Carryable {
     boolean isCarryable();
 
-    void becomeCarried();
+    Carryable becomeCarried();
 
     boolean becomeNotCarried(Tile tileToLandOn);
 

@@ -22,24 +22,111 @@ import java.util.Random;
 public class Plant extends Entity
         implements Sellable, Damageable {
     public static final String TAG = Plant.class.getSimpleName();
-
-    public static final int BRACKET01_MIN_INCLUSIVE = 0;
-    public static final int BRACKET01_MAX_EXCLUSIVE = 1;
-    public static final int BRACKET02_MIN_INCLUSIVE = 1;
-    public static final int BRACKET02_MAX_EXCLUSIVE = 2;
-    public static final int BRACKET03_MIN_INCLUSIVE = 2;
-    public static final int BRACKET03_MAX_EXCLUSIVE = 3;
-    public static final int BRACKET04_MIN_INCLUSIVE = 3;
-    public static final int BRACKET04_MAX_EXCLUSIVE = 4;
-    private static final float PRICE_GREEN = 60f;
-    private static final float PRICE_PURPLE = 85f;
+    private static final float PRICE_BANANA = 100f;
+    private static final float PRICE_BITTER_MELON = 60f;
+    private static final float PRICE_CARROT = 25f;
+    private static final float PRICE_CORN = 40f;
+    private static final float PRICE_EGGPLANT = 60f;
+    private static final float PRICE_GARLIC = 25f;
+    private static final float PRICE_GUAVA = 100f;
+    private static final float PRICE_LEMONGRASS = 60f;
+    private static final float PRICE_LONGAN = 100f;
+    private static final float PRICE_MYSTERY_PLANT_GREEN = 60f;
+    private static final float PRICE_MYSTERY_PLANT_PURPLE = 85f;
+    private static final float PRICE_ONION = 25f;
+    private static final float PRICE_PAPAYA = 100f;
+    private static final float PRICE_PEANUT = 25f;
+    private static final float PRICE_RADISH = 25f;
+    private static final float PRICE_STRAWBERRY = 40f;
+    private static final float PRICE_TOMATO = 40f;
     private static final int HEALTH_MAX_DEFAULT = 10;
+
+    public enum LifeCycleGrowthLength {
+        SHORT(0,
+                1,
+                1,
+                2,
+                2,
+                3,
+                3),
+        MEDIUM(0,
+                1,
+                1,
+                2,
+                2,
+                4,
+                4),
+        LONG(0,
+                1,
+                1,
+                3,
+                3,
+                5,
+                5),
+        TREE(0,
+                9,
+                9,
+                20,
+                20,
+                29,
+                29);
+
+        private int bracket01MinInclusive;
+        private int bracket01MaxExclusive;
+        private int bracket02MinInclusive;
+        private int bracket02MaxExclusive;
+        private int bracket03MinInclusive;
+        private int bracket03MaxExclusive;
+        private int bracket04MinInclusive;
+
+        LifeCycleGrowthLength(int bracket01MinInclusive, int bracket01MaxExclusive, int bracket02MinInclusive, int bracket02MaxExclusive, int bracket03MinInclusive, int bracket03MaxExclusive, int bracket04MinInclusive) {
+            this.bracket01MinInclusive = bracket01MinInclusive;
+            this.bracket01MaxExclusive = bracket01MaxExclusive;
+            this.bracket02MinInclusive = bracket02MinInclusive;
+            this.bracket02MaxExclusive = bracket02MaxExclusive;
+            this.bracket03MinInclusive = bracket03MinInclusive;
+            this.bracket03MaxExclusive = bracket03MaxExclusive;
+            this.bracket04MinInclusive = bracket04MinInclusive;
+        }
+
+        public int getBracket01MinInclusive() {
+            return bracket01MinInclusive;
+        }
+
+        public int getBracket01MaxExclusive() {
+            return bracket01MaxExclusive;
+        }
+
+        public int getBracket02MinInclusive() {
+            return bracket02MinInclusive;
+        }
+
+        public int getBracket02MaxExclusive() {
+            return bracket02MaxExclusive;
+        }
+
+        public int getBracket03MinInclusive() {
+            return bracket03MinInclusive;
+        }
+
+        public int getBracket03MaxExclusive() {
+            return bracket03MaxExclusive;
+        }
+
+        public int getBracket04MinInclusive() {
+            return bracket04MinInclusive;
+        }
+    }
 
     public enum Color {GREEN, PURPLE;}
 
     private String type;
+    private LifeCycleGrowthLength lifeCycleGrowthLength;
+    private int reHarvestLength;
     private int ageInDays;
     private boolean harvestable;
+    private boolean firstTimeHarvest;
+    private int ageInDaysSinceMostRecentHarvest;
     transient private Bitmap imageBracket01, imageBracket02, imageBracket03, imageBracket04;
     transient private Bitmap imageHarvested;
     private Color color;
@@ -59,6 +146,8 @@ public class Plant extends Entity
         this.type = type;
         ageInDays = 0;
         harvestable = false;
+        firstTimeHarvest = true;
+        ageInDaysSinceMostRecentHarvest = 0;
 
         Random random = new Random();
         int numberRandom = random.nextInt(100);
@@ -99,10 +188,30 @@ public class Plant extends Entity
     }
 
     @Override
-    public void becomeCarried() {
-        super.becomeCarried();
+    public Carryable becomeCarried() {
+        Carryable carryable = super.becomeCarried();
 
         image = imageHarvested;
+
+        // re-harvestable plants don't become carried.
+        if (reHarvestLength > 0 && ageInDays > 0) {
+            firstTimeHarvest = false;
+
+            active = true;
+            harvestable = false;
+            image = imageBracket03;
+            ageInDaysSinceMostRecentHarvest = 0;
+
+            Plant plant = new Plant(type, (int) x, (int) y);
+            plant.init(game);
+            plant.setActive(false);
+            plant.setHarvestable(true);
+            plant.setImage(imageHarvested);
+
+            carryable = plant;
+        }
+
+        return carryable;
     }
 
     @Override
@@ -111,63 +220,109 @@ public class Plant extends Entity
 
         if (type.equals(
                 game.getContext().getString(R.string.text_seed_banana))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.TREE;
+            reHarvestLength = 1;
+            price = PRICE_BANANA;
             initImageOfBanana();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_bitter_melon))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 4;
+            price = PRICE_BITTER_MELON;
             initImageOfBitterMelon();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_carrot))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.SHORT;
+            reHarvestLength = 0;
+            price = PRICE_CARROT;
             initImageOfCarrot();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_corn))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 3;
+            price = PRICE_CORN;
             initImageOfCorn();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_eggplant))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 4;
+            price = PRICE_EGGPLANT;
             initImageOfEggplant();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_garlic))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.SHORT;
+            reHarvestLength = 0;
+            price = PRICE_GARLIC;
             initImageOfGarlic();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_guava))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.TREE;
+            reHarvestLength = 1;
+            price = PRICE_GUAVA;
             initImageOfGuava();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_lemongrass))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 4;
+            price = PRICE_LEMONGRASS;
             initImageOfLemongrass();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_longan))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.TREE;
+            reHarvestLength = 1;
+            price = PRICE_LONGAN;
             initImageOfLongan();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_mystery))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.MEDIUM;
+            reHarvestLength = 0;
+            if (color == Color.GREEN) {
+                price = PRICE_MYSTERY_PLANT_GREEN;
+            } else if (color == Color.PURPLE) {
+                price = PRICE_MYSTERY_PLANT_PURPLE;
+            }
             initImageOfMysteryPlant();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_onion))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.SHORT;
+            reHarvestLength = 0;
+            price = PRICE_ONION;
             initImageOfOnion();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_papaya))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.TREE;
+            reHarvestLength = 1;
+            price = PRICE_PAPAYA;
             initImageOfPapaya();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_peanut))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.SHORT;
+            reHarvestLength = 0;
+            price = PRICE_PEANUT;
             initImageOfPeanut();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_radish))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.SHORT;
+            reHarvestLength = 0;
+            price = PRICE_RADISH;
             initImageOfRadish();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_strawberry))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 3;
+            price = PRICE_STRAWBERRY;
             initImageOfStrawberry();
         } else if (type.equals(
                 game.getContext().getString(R.string.text_seed_tomato))) {
+            lifeCycleGrowthLength = LifeCycleGrowthLength.LONG;
+            reHarvestLength = 3;
+            price = PRICE_TOMATO;
             initImageOfTomato();
         } else {
             Log.e(TAG, "Plant.type is not listed. Cannot initialize images.");
         }
 
         updateImageBasedOnAgeInDays();
-
-        if (color == Color.GREEN) {
-            price = PRICE_GREEN;
-        } else if (color == Color.PURPLE) {
-            price = PRICE_PURPLE;
-        }
 
         paintBorder = new Paint();
         paintBorder.setAntiAlias(true);
@@ -359,19 +514,34 @@ public class Plant extends Entity
 
     public void incrementAgeInDays() {
         ageInDays++;
+        if (!firstTimeHarvest) {
+            ageInDaysSinceMostRecentHarvest++;
+        }
         updateImageBasedOnAgeInDays();
     }
 
     private void updateImageBasedOnAgeInDays() {
-        if (ageInDays >= BRACKET01_MIN_INCLUSIVE && ageInDays < BRACKET01_MAX_EXCLUSIVE) {
+        if (ageInDays >= lifeCycleGrowthLength.getBracket01MinInclusive() &&
+                ageInDays < lifeCycleGrowthLength.getBracket01MaxExclusive()) {
             image = imageBracket01;
-        } else if (ageInDays >= BRACKET02_MIN_INCLUSIVE && ageInDays < BRACKET02_MAX_EXCLUSIVE) {
+        } else if (ageInDays >= lifeCycleGrowthLength.getBracket02MinInclusive() &&
+                ageInDays < lifeCycleGrowthLength.getBracket02MaxExclusive()) {
             image = imageBracket02;
-        } else if (ageInDays >= BRACKET03_MIN_INCLUSIVE && ageInDays < BRACKET03_MAX_EXCLUSIVE) {
+        } else if (ageInDays >= lifeCycleGrowthLength.getBracket03MinInclusive() &&
+                ageInDays < lifeCycleGrowthLength.getBracket03MaxExclusive()) {
             image = imageBracket03;
-        } else if (ageInDays >= BRACKET04_MIN_INCLUSIVE) {
-            harvestable = true;
-            image = imageBracket04;
+        } else if (ageInDays >= lifeCycleGrowthLength.getBracket04MinInclusive()) {
+            if (firstTimeHarvest) {
+                image = imageBracket04;
+                harvestable = true;
+            } else {
+                image = imageBracket03;
+
+                if (ageInDaysSinceMostRecentHarvest >= reHarvestLength) {
+                    image = imageBracket04;
+                    harvestable = true;
+                }
+            }
         } else {
             Log.e(TAG, "updateImageBasedOnAgeInDays() else-clause");
         }
@@ -414,6 +584,10 @@ public class Plant extends Entity
 
     public boolean isHarvestable() {
         return harvestable;
+    }
+
+    public void setHarvestable(boolean harvestable) {
+        this.harvestable = harvestable;
     }
 
     @Override
@@ -485,5 +659,9 @@ public class Plant extends Entity
 
     public boolean isDiseased() {
         return isDiseased;
+    }
+
+    public int getReHarvestLength() {
+        return reHarvestLength;
     }
 }

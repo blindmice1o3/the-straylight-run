@@ -298,8 +298,7 @@ public abstract class Creature extends Entity {
         Log.e(TAG, "pickUp()");
 
         if (carryable.isCarryable()) {
-            carryable.becomeCarried();
-            this.carryable = carryable;
+            this.carryable = carryable.becomeCarried();
         } else {
             Log.e(TAG, "carryable.isCarryable() is returning false.");
         }
