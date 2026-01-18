@@ -59,7 +59,6 @@ public class SceneFarm extends Scene {
 
     public static final int X_INDEX_SPAWN_PLAYER_DEFAULT = 4;
     public static final int Y_INDEX_SPAWN_PLAYER_DEFAULT = 6;
-    private static final int Y_INDEX_TRANSFER_POINT_SEED_SHOP = 5;
     private static final int X_INDEX_SPAWN_ROBOT = 7;
     private static final int Y_INDEX_SPAWN_ROBOT = 4;
     private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_COWBARN = 11;
@@ -71,8 +70,16 @@ public class SceneFarm extends Scene {
     private static final int X_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE = 20;
     private static final int Y_INDEX_SPAWN_CATERPILLAR_NEAR_HOTHOUSE = 17;
     private static final int PATROL_LENGTH_CATERPILLAR = 3 * Tile.WIDTH;
-    private static final int X_INDEX_SPAWN_COLLIDING_ORBIT = X_INDEX_SPAWN_PLAYER_DEFAULT + 2;
-    private static final int Y_INDEX_SPAWN_COLLIDING_ORBIT = Y_INDEX_SPAWN_PLAYER_DEFAULT;
+    private static final int X_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 = 4;
+    private static final int Y_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 = 5;
+    private static final int X_INDEX_TRANSFER_POINT_HOTHOUSE = 12;
+    private static final int Y_INDEX_TRANSFER_POINT_HOTHOUSE = 5;
+    private static final int X_INDEX_TRANSFER_POINT_CHICKEN_COOP = 19;
+    private static final int Y_INDEX_TRANSFER_POINT_CHICKEN_COOP = 12;
+    private static final int X_INDEX_TRANSFER_POINT_COW_BARN = 4;
+    private static final int Y_INDEX_TRANSFER_POINT_COW_BARN = 13;
+    private static final int X_INDEX_TRANSFER_POINT_SEED_SHOP = 19;
+    private static final int Y_INDEX_TRANSFER_POINT_SEED_SHOP = 5;
     private static SceneFarm uniqueInstance;
 
     private boolean inSeedShopState;
@@ -928,19 +935,35 @@ public class SceneFarm extends Scene {
     transient private Bitmap tileSpriteAndShippingBinQ4;
 
     public void updateTilesBySeason(TimeManager.Season season) {
-        imageFarm = cropImageFarm(game.getContext().getResources(), season);
+        int idSceneFarmBySeason = -1;
+        if (game.getTimeManager().getSeason() == TimeManager.Season.SPRING) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_spring;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.SUMMER) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_summer;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.FALL) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_fall;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.WINTER) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_winter;
+        }
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), idSceneFarmBySeason);
 
         Tile[][] tiles = tileManager.getTiles();
         int rows = tiles.length;
         Log.e(TAG, "rows: " + rows);
         int columns = tiles[0].length;
         Log.e(TAG, "columns: " + columns);
+        int tileWidth = 64;
+        int tileHeight = 64;
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                int xInPixel = x * Tile.WIDTH;
-                int yInPixel = y * Tile.HEIGHT;
-                int widthInPixel = Tile.WIDTH;
-                int heightInPixel = Tile.HEIGHT;
+                int xInPixel = x * tileWidth;
+                int yInPixel = y * tileHeight;
+                int widthInPixel = tileWidth;
+                int heightInPixel = tileHeight;
+//                int xInPixel = x * Tile.WIDTH;
+//                int yInPixel = y * Tile.HEIGHT;
+//                int widthInPixel = Tile.WIDTH;
+//                int heightInPixel = Tile.HEIGHT;
                 Bitmap tileSprite = Bitmap.createBitmap(imageFarm, xInPixel, yInPixel, widthInPixel, heightInPixel);
                 Tile tile = tiles[y][x];
 
@@ -996,14 +1019,24 @@ public class SceneFarm extends Scene {
 
     public void reloadTileManager(Game game) {
         //rgbTileMapFarm is an image where each pixel represents a tile.
-        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_idyllic_aligned_doors);
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_aligned_doors);
 //        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm);
         int columns = rgbTileMapFarm.getWidth();            //Always need.
         int rows = rgbTileMapFarm.getHeight();              //Always need.
 
         Tile[][] tiles = tileManager.getTiles();
 
-        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_idyllic_aligned_doors);
+        int idSceneFarmBySeason = -1;
+        if (game.getTimeManager().getSeason() == TimeManager.Season.SPRING) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_spring;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.SUMMER) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_summer;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.FALL) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_fall;
+        } else if (game.getTimeManager().getSeason() == TimeManager.Season.WINTER) {
+            idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_winter;
+        }
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), idSceneFarmBySeason);
 //        imageFarm = cropImageFarm(
 //                game.getContext().getResources(),
 //                game.getTimeManager().getSeason());
@@ -1145,7 +1178,7 @@ public class SceneFarm extends Scene {
 
     private Tile[][] createAndInitTiles(Game game) {
         //rgbTileMapMyFarm is an image where each pixel represents a tile.
-        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_idyllic_aligned_doors);
+        Bitmap rgbTileMapFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tile_map_farm_aligned_doors);
         int columns = rgbTileMapFarm.getWidth();            //Always need.
         int rows = rgbTileMapFarm.getHeight();              //Always need.
 
@@ -1153,7 +1186,7 @@ public class SceneFarm extends Scene {
         Tile[][] tiles = new Tile[rows][columns];           //Always need.
         //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_town_idyllic_aligned_doors);
+        imageFarm = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_farm_aligned_doors_spring);
 //        imageFarm = cropImageFarm(
 //                game.getContext().getResources(),
 //                game.getTimeManager().getSeason());
@@ -1324,19 +1357,18 @@ public class SceneFarm extends Scene {
 
     private Map<String, Rect> createTransferPointsForFarm() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        transferPoints.put("HOUSE_LEVEL_01", new Rect((4 * Tile.WIDTH), (5 * Tile.HEIGHT),
-                (4 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("HOTHOUSE", new Rect((12 * Tile.WIDTH), (5 * Tile.HEIGHT),
-                (12 * Tile.WIDTH) + (1 * Tile.WIDTH), (5 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOUSE_LEVEL_01", new Rect((X_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 * Tile.HEIGHT),
+                (X_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 * Tile.WIDTH) + (1 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_HOUSE_LEVEL_01 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("HOTHOUSE", new Rect((X_INDEX_TRANSFER_POINT_HOTHOUSE * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_HOTHOUSE * Tile.HEIGHT),
+                (X_INDEX_TRANSFER_POINT_HOTHOUSE * Tile.WIDTH) + (1 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_HOTHOUSE * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
 //        transferPoints.put("SHEEP_PEN", new Rect((21 * Tile.WIDTH), (7 * Tile.HEIGHT),
 //                (21 * Tile.WIDTH) + (1 * Tile.WIDTH), (7 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("CHICKEN_COOP", new Rect((4 * Tile.WIDTH), (13 * Tile.HEIGHT),
-                (4 * Tile.WIDTH) + (1 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-        transferPoints.put("COW_BARN", new Rect((19 * Tile.WIDTH), (12 * Tile.HEIGHT),
-                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (12 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
-
-        transferPoints.put("SEEDS_SHOP", new Rect((19 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT),
-                (19 * Tile.WIDTH) + (2 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("CHICKEN_COOP", new Rect((X_INDEX_TRANSFER_POINT_CHICKEN_COOP * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_CHICKEN_COOP * Tile.HEIGHT),
+                (X_INDEX_TRANSFER_POINT_CHICKEN_COOP * Tile.WIDTH) + (2 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_CHICKEN_COOP * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("COW_BARN", new Rect((X_INDEX_TRANSFER_POINT_COW_BARN * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_COW_BARN * Tile.HEIGHT),
+                (X_INDEX_TRANSFER_POINT_COW_BARN * Tile.WIDTH) + (1 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_COW_BARN * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
+        transferPoints.put("SEEDS_SHOP", new Rect((X_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT),
+                (X_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.WIDTH) + (2 * Tile.WIDTH), (Y_INDEX_TRANSFER_POINT_SEED_SHOP * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
     }
 

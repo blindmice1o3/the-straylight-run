@@ -15,10 +15,10 @@
     <string name="text_menu">MENU</string>
     <string name="text_a">A</string>
     <string name="text_b">B</string>
-    <string name="text_spring">PRIMAVERA</string>
-    <string name="text_summer">VERANO</string>
-    <string name="text_fall">OTONO</string>
-    <string name="text_winter">INVIERNO</string>
+    <string name="text_spring">primavera</string>
+    <string name="text_summer">verano</string>
+    <string name="text_fall">otono</string>
+    <string name="text_winter">invierno</string>
     <string name="text_quest_log">Registro De Misiones</string>
     <string name="text_backpack">Mochila</string>
     <string name="text_bug_catching_net">Red Para Atrapar Insectos</string>

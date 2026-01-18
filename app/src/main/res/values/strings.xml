@@ -23,10 +23,10 @@
     <string name="text_b">B</string>
 
     <!-- TimeManager -->
-    <string name="text_spring">SPRING</string>
-    <string name="text_summer">SUMMER</string>
-    <string name="text_fall">FALL</string>
-    <string name="text_winter">WINTER</string>
+    <string name="text_spring">spring</string>
+    <string name="text_summer">summer</string>
+    <string name="text_fall">fall</string>
+    <string name="text_winter">winter</string>
 
     <!-- fragment_video_view.xml, fragment_notes_viewer.xml, and dialogfragment_ide -->
     <string name="text_x">x</string>
