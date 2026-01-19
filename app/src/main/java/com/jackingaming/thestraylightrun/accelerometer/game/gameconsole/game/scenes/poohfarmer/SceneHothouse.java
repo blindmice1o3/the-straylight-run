@@ -88,6 +88,14 @@ public class SceneHothouse extends Scene {
     public void startNewDay() {
         Log.e(TAG, "startNewDay()");
 
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof AimlessWalker) {
+                if (((AimlessWalker) e).getType() == AimlessWalker.Type.CHICK) {
+                    ((AimlessWalker) e).incrementAgeInDays();
+                }
+            }
+        }
+
         for (GrowableTile growableTile : growableTiles) {
             growableTile.startNewDay();
         }

@@ -80,6 +80,18 @@ public class SceneHouseLevel01 extends Scene {
         return uniqueInstance;
     }
 
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof AimlessWalker) {
+                if (((AimlessWalker) e).getType() == AimlessWalker.Type.CHICK) {
+                    ((AimlessWalker) e).incrementAgeInDays();
+                }
+            }
+        }
+    }
+
     @Override
     public void init(Game game) {
         this.game = game;

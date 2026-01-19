@@ -127,12 +127,18 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "startNewDay()");
         newDay = true;
 
-        if (game.getTimeManager().getSeason() == TimeManager.Season.WINTER) {
-            return;
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof AimlessWalker) {
+                if (((AimlessWalker) e).getType() == AimlessWalker.Type.CHICK) {
+                    ((AimlessWalker) e).incrementAgeInDays();
+                }
+            }
         }
 
-        for (GrowableTile growableTile : growableTiles) {
-            growableTile.startNewDay();
+        if (game.getTimeManager().getSeason() != TimeManager.Season.WINTER) {
+            for (GrowableTile growableTile : growableTiles) {
+                growableTile.startNewDay();
+            }
         }
     }
 
@@ -443,10 +449,10 @@ public class SceneFarm extends Scene {
         dialogueStates.add(new AIDialogue02(game, robotDialogQuest00));
         dialogueStateManager = new DialogueStateManager(dialogueStates);
 
-        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
-            setupForRunFour();
-        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
             setupForRunThree();
+        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
+            setupForRunFour();
         }
 
         Log.e(TAG, "init() END");
@@ -941,6 +947,8 @@ public class SceneFarm extends Scene {
     public void changeToNewSeason() {
         updateTilesBySeason();
         removeAllNonSeasonalPlants();
+        // TODO: change seed shop's inventory based on season.
+//        seedShopDialogFragment.changeToNewSeason();
     }
 
     private void removeAllNonSeasonalPlants() {

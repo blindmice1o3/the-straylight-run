@@ -71,6 +71,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneCowBarn;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.StateManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.statsdisplayer.StatsDisplayerFragment;
@@ -248,13 +249,12 @@ public class Game {
     public void startNewDay() {
         timeManager.startNewDay();
 
-        // TODO: implement startNewDay().
+        SceneHouseLevel01.getInstance().startNewDay();
         SceneFarm.getInstance().startNewDay();
-//        SceneFarm.getInstance().startNewDay(); //SEED_SHOP
+        SceneHothouse.getInstance().startNewDay();
         SceneChickenCoop.getInstance().startNewDay();
         SceneCowBarn.getInstance().startNewDay();
 //        SceneSheepPen.getInstance().startNewDay();
-        SceneHothouse.getInstance().startNewDay();
     }
 
     public boolean addItemToBackpack(Item item) {

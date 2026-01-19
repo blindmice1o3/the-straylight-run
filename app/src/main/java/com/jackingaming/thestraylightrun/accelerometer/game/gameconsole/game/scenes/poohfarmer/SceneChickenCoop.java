@@ -122,6 +122,18 @@ public class SceneChickenCoop extends Scene {
 
         ///////////////////////////////////////////////////////////////////////////////
 
+        // Incrementing ageInDays for chick should happen before hatching-egg-to-chick.
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof AimlessWalker) {
+                if (((AimlessWalker) e).getType() == AimlessWalker.Type.CHICK) {
+                    ((AimlessWalker) e).incrementAgeInDays();
+                }
+            }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////
+
+        // Hatching egg to chick should happen after incrementing-ageInDays-for-chick.
         if (!EggIncubatorTile.isAvailableToIncubate()) {
             AimlessWalker chickJustHatched = EggIncubatorTile.startNewDay(
                     tileManager,

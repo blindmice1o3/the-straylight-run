@@ -139,6 +139,14 @@ public class SceneCowBarn extends Scene {
                 Log.e(TAG, "cheeseJustProcessed == null");
             }
         }
+
+        for (Entity e : entityManager.getEntities()) {
+            if (e instanceof AimlessWalker) {
+                if (((AimlessWalker) e).getType() == AimlessWalker.Type.CHICK) {
+                    ((AimlessWalker) e).incrementAgeInDays();
+                }
+            }
+        }
     }
 
     private void generateMilkToRandomWalkableTile() {

@@ -20,6 +20,7 @@ public class AimlessWalker extends Creature {
     public static final String TAG = AimlessWalker.class.getSimpleName();
     private static final long DEFAULT_MOVEMENT_DURATION = 1000L;
     private static final long RUNNING_MOVEMENT_DURATION = 500L;
+    private static final int AGE_IN_DAYS_REQUIRED_TO_BECOME_CHICKEN = 3;
 
     public enum Type {CHICK, CHICKEN, SHEEP, COW;}
 
@@ -32,6 +33,16 @@ public class AimlessWalker extends Creature {
     private State state;
     private Random random;
     private int ageInDays;
+
+    public void incrementAgeInDays() {
+        ageInDays++;
+
+        if (ageInDays == AGE_IN_DAYS_REQUIRED_TO_BECOME_CHICKEN) {
+            type = Type.CHICKEN;
+            aimlessWalkerAnimationManager.setType(type);
+            aimlessWalkerAnimationManager.init(game);
+        }
+    }
 
     public AimlessWalker(Type type, int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);

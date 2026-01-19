@@ -235,4 +235,8 @@ public class AimlessWalkerAnimationManager
         }
         return null;
     }
+
+    public void setType(AimlessWalker.Type type) {
+        this.type = type;
+    }
 }
