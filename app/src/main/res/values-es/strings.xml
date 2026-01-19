@@ -104,6 +104,9 @@
         <item>¡Hola! Los productos misteriosos que has cosechado son muy lejanos. De un lugar tan lejano como el espacio exterior. Probablemente puedas lograr la paz mundial con lo que cultivas.</item>
     </string-array>
 
+    <!-- SignPostTile chicken coop -->
+    <string name="text_egg_incubator">Coloca un huevo en la incubadora durante 3 días para obtener un pollo.</string>
+
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">
         <item>proporcione [nombre] y [descripción] para su semilla.</item>

@@ -1,6 +1,5 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,16 +7,14 @@ import android.graphics.Rect;
 import android.util.Log;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.EntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.SeedGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.AimlessWalker;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
@@ -36,8 +33,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.EggIncubatorTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FeedingStallTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.FodderStashTile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.SignPostTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
-import com.jackingaming.thestraylightrun.accelerometer.game.sounds.SoundManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -311,7 +308,28 @@ public class SceneChickenCoop extends Scene {
                     } else {
                         Log.d(TAG, "tileCurrentlyFacing != null");
 
-                        if (tileCurrentlyFacing instanceof FodderStashTile) {
+                        if (tileCurrentlyFacing instanceof SignPostTile) {
+                            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_sign_post);
+                            String textToShow = game.getContext().getString(R.string.text_egg_incubator);
+                            game.getStateManager().pushTextboxState(
+                                    portrait,
+                                    textToShow,
+                                    new TypeWriterDialogFragment.DismissListener() {
+                                        @Override
+                                        public void onDismiss() {
+                                            Log.e(TAG, "TextboxState SignPostTile onDismiss()");
+                                        }
+                                    },
+                                    new TypeWriterTextView.TextCompletionListener() {
+                                        @Override
+                                        public void onAnimationFinish() {
+                                            Log.e(TAG, "TextboxState SignPostTile onAnimationFinish()");
+
+                                            game.getStateManager().getTextboxState().setTextboxAnimationFinished(true);
+                                        }
+                                    }
+                            );
+                        } else if (tileCurrentlyFacing instanceof FodderStashTile) {
                             Log.d(TAG, "tileCurrentlyFacing instanceof FodderStashTile");
 
                             Fodder fodderToBeCarried = ((FodderStashTile) tileCurrentlyFacing).generateFodder();
@@ -459,7 +477,7 @@ public class SceneChickenCoop extends Scene {
                 game.getContext().getResources(), R.raw.tile_chicken_coop
         );
         Tile[][] chickenCoop = TileManagerLoader.convertStringToTiles(chickenCoopLoadedAsString);
-        Bitmap imageChickenCoop = cropImageChickenCoop(game.getContext().getResources());
+        Bitmap imageChickenCoop = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_chicken_coop_with_sign_post);
 
         // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in chicken coop.
@@ -485,8 +503,12 @@ public class SceneChickenCoop extends Scene {
                 //(SignPostTile)
                 else if (tile.getId().equals("a")) {
                     Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-                    tile.init(game, x, y, tileSprite);
-                    tile.setWalkable(false);
+
+                    SignPostTile signPostTile = new SignPostTile(SignPostTile.TAG);
+                    signPostTile.init(game, x, y, tileSprite);
+                    signPostTile.setWalkable(false);
+
+                    chickenCoop[y][x] = signPostTile;
                 }
                 //EggIncubatorTile
                 else if (tile.getId().equals("g")) {
@@ -594,21 +616,6 @@ public class SceneChickenCoop extends Scene {
         }
 
         return chickenCoop;
-    }
-
-    private Bitmap cropImageChickenCoop(Resources resources) {
-        Log.d(TAG, "SceneChickenCoop.cropImageChickenCoop(Resources resources)");
-
-        Bitmap chickenCoopEmpty = BitmapFactory.decodeResource(resources, R.drawable.scene_chicken_coop);
-//        Bitmap indoorsFarmHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_farm_indoors);
-//        Bitmap chickenCoopEmpty = null;
-//
-//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//        chickenCoopEmpty = Bitmap.createBitmap(indoorsFarmHM2, 78, 603, 240, 256);
-//        //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//        Log.d(TAG, "Bitmap chickenCoopEmpty's (width, height): " + chickenCoopEmpty.getWidth() + ", " + chickenCoopEmpty.getHeight());
-
-        return chickenCoopEmpty;
     }
 
     private Map<String, Rect> createTransferPointsForChickenCoop() {

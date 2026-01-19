@@ -156,6 +156,9 @@
     <string name="text_seed_description">seed\'s description</string>
     <string name="text_message_greeting_default">hello! welcome to my shop!</string>
 
+    <!-- SignPostTile chicken coop -->
+    <string name="text_egg_incubator">Put an egg in the egg incubator for 3 days to get a chicken.</string>
+
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">
         <item>provide [name] and [description] for your seed.</item>
