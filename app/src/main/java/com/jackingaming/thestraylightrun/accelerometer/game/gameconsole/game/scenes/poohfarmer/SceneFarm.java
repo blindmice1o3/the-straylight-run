@@ -127,6 +127,10 @@ public class SceneFarm extends Scene {
         Log.e(TAG, "startNewDay()");
         newDay = true;
 
+        if (game.getTimeManager().getSeason() == TimeManager.Season.WINTER) {
+            return;
+        }
+
         for (GrowableTile growableTile : growableTiles) {
             growableTile.startNewDay();
         }
@@ -934,7 +938,81 @@ public class SceneFarm extends Scene {
     transient private Bitmap tileSpriteAndShippingBinQ3;
     transient private Bitmap tileSpriteAndShippingBinQ4;
 
-    public void updateTilesBySeason(TimeManager.Season season) {
+    public void changeToNewSeason() {
+        updateTilesBySeason();
+        removeAllNonSeasonalPlants();
+    }
+
+    private void removeAllNonSeasonalPlants() {
+        for (GrowableTile growableTile : growableTiles) {
+            String idSeed = growableTile.getIdSeed();
+
+            if (idSeed == null) {
+                continue;
+            }
+
+            switch (game.getTimeManager().getSeason()) {
+                case SPRING:
+                    if (idSeed.equals(game.getContext().getString(R.string.text_seed_banana)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_guava)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_longan)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_papaya)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_mystery)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_tomato)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_onion)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_bitter_melon)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_strawberry))) {
+                        // allowed to grow during SPRING.
+                    } else {
+                        growableTile.changeToUntilled();
+                    }
+                    break;
+                case SUMMER:
+                    if (idSeed.equals(game.getContext().getString(R.string.text_seed_banana)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_guava)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_longan)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_papaya)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_mystery)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_tomato)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_carrot)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_radish)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_corn)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_lemongrass))) {
+                        // allowed to grow during SUMMER.
+                    } else {
+                        growableTile.changeToUntilled();
+                    }
+                    break;
+                case FALL:
+                    if (idSeed.equals(game.getContext().getString(R.string.text_seed_banana)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_guava)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_longan)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_papaya)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_mystery)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_tomato)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_garlic)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_peanut)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_eggplant))) {
+                        // allowed to grow during FALL.
+                    } else {
+                        growableTile.changeToUntilled();
+                    }
+                    break;
+                case WINTER:
+                    if (idSeed.equals(game.getContext().getString(R.string.text_seed_banana)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_guava)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_longan)) ||
+                            idSeed.equals(game.getContext().getString(R.string.text_seed_papaya))) {
+                        // allowed to survive during WINTER.
+                    } else {
+                        growableTile.changeToUntilled();
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void updateTilesBySeason() {
         int idSceneFarmBySeason = -1;
         if (game.getTimeManager().getSeason() == TimeManager.Season.SPRING) {
             idSceneFarmBySeason = R.drawable.scene_farm_aligned_doors_spring;

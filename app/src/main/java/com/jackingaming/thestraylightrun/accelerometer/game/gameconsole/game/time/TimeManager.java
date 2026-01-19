@@ -249,7 +249,7 @@ public class TimeManager
         }
         season = Season.values()[indexNextSeason];
 
-        SceneFarm.getInstance().updateTilesBySeason(season);
+        SceneFarm.getInstance().changeToNewSeason();
     }
 
     private void incrementYear() {

@@ -155,6 +155,9 @@ public class GrowableTile extends Tile {
         state = State.UNTILLED;
         watered = false;
         idSeed = null;
+        if (entity != null) {
+            entity.setActive(false);
+        }
         entity = null;
 
         updateImage();
@@ -183,12 +186,16 @@ public class GrowableTile extends Tile {
         updateImage();
     }
 
+    public boolean isWatered() {
+        return watered;
+    }
+
     public State getState() {
         return state;
     }
 
-    public boolean isWatered() {
-        return watered;
+    public String getIdSeed() {
+        return idSeed;
     }
 
     public Entity getEntity() {
