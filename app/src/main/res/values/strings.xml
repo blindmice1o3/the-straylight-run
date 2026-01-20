@@ -159,6 +159,9 @@
     <!-- SignPostTile chicken coop -->
     <string name="text_egg_incubator">Put an egg in the egg incubator for 3 days to get a chicken.</string>
 
+    <!-- SignPostTile cow barn -->
+    <string name="text_cheese_maker">Put a milk in the cheese maker for 3 days to get a cheese.</string>
+
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">
         <item>provide [name] and [description] for your seed.</item>

@@ -105,7 +105,10 @@
     </string-array>
 
     <!-- SignPostTile chicken coop -->
-    <string name="text_egg_incubator">Coloca un huevo en la incubadora durante 3 días para obtener un pollo.</string>
+    <string name="text_egg_incubator">Introduce un huevo en la incubadora durante 3 días para obtener un pollo.</string>
+
+    <!-- SignPostTile cow barn -->
+    <string name="text_cheese_maker">Introduce la leche en la máquina de hacer queso durante 3 días para obtener queso.</string>
 
     <!-- RunOne -->
     <string-array name="run_one_dialogue_array">
