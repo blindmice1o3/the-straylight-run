@@ -947,8 +947,8 @@ public class SceneFarm extends Scene {
     public void changeToNewSeason() {
         updateTilesBySeason();
         removeAllNonSeasonalPlants();
-        // TODO: change seed shop's inventory based on season.
-//        seedShopDialogFragment.changeToNewSeason();
+
+        seedShopDialogFragment.changeToNewSeason();
     }
 
     private void removeAllNonSeasonalPlants() {

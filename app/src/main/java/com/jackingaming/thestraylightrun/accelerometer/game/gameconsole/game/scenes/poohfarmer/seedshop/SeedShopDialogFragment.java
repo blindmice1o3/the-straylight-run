@@ -26,10 +26,28 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BananaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BitterMelonSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CarrotSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CornSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.EggplantSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GarlicSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GuavaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LemongrassSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LonganSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.MysterySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.OnionSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PapayaSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PeanutSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.RadishSeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.StrawberrySeed;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.TomatoSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
@@ -61,6 +79,86 @@ public class SeedShopDialogFragment extends DialogFragment {
     private SeedListener seedListener;
     private boolean progressToNextDailyLoopTask;
 
+    public void changeToNewSeason() {
+        seedShopInventory.clear();
+
+        switch (game.getTimeManager().getSeason()) {
+            case SPRING:
+                seedShopInventory.add(new OnionSeed());
+                seedShopInventory.add(new BitterMelonSeed());
+                seedShopInventory.add(new StrawberrySeed());
+                seedShopInventory.add(new MysterySeed());
+                seedShopInventory.add(new TomatoSeed());
+                seedShopInventory.add(new BananaSeed());
+                seedShopInventory.add(new GuavaSeed());
+                seedShopInventory.add(new LonganSeed());
+                seedShopInventory.add(new PapayaSeed());
+                break;
+            case SUMMER:
+                seedShopInventory.add(new CarrotSeed());
+                seedShopInventory.add(new RadishSeed());
+                seedShopInventory.add(new CornSeed());
+                seedShopInventory.add(new LemongrassSeed());
+                seedShopInventory.add(new MysterySeed());
+                seedShopInventory.add(new TomatoSeed());
+                seedShopInventory.add(new BananaSeed());
+                seedShopInventory.add(new GuavaSeed());
+                seedShopInventory.add(new LonganSeed());
+                seedShopInventory.add(new PapayaSeed());
+                break;
+            case FALL:
+                seedShopInventory.add(new GarlicSeed());
+                seedShopInventory.add(new PeanutSeed());
+                seedShopInventory.add(new EggplantSeed());
+                seedShopInventory.add(new MysterySeed());
+                seedShopInventory.add(new TomatoSeed());
+                seedShopInventory.add(new BananaSeed());
+                seedShopInventory.add(new GuavaSeed());
+                seedShopInventory.add(new LonganSeed());
+                seedShopInventory.add(new PapayaSeed());
+                break;
+            case WINTER:
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new GrowingPot(
+                        new TillGrowableIndoorTileCommand(null)
+                ));
+                seedShopInventory.add(new HoneyPot());
+                seedShopInventory.add(new BugCatchingNet(
+                        new BounceEntityCommand(null)
+                ));
+                break;
+        }
+        for (Item item : seedShopInventory) {
+            item.init(game);
+        }
+    }
+
     public void reload(Game game, List<Item> seedShopInventory) {
         this.game = game;
 
@@ -76,37 +174,66 @@ public class SeedShopDialogFragment extends DialogFragment {
 
     public SeedShopDialogFragment() {
         seedShopInventory = new ArrayList<Item>();
-        seedShopInventory.add(new BugCatchingNet(
-                new BounceEntityCommand(null)
-        ));
-        seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet(
-                new BounceEntityCommand(null)
-        ));
-        seedShopInventory.add(new BugCatchingNet(
-                new BounceEntityCommand(null)
-        ));
-        seedShopInventory.add(new BugCatchingNet(
-                new BounceEntityCommand(null)
-        ));
-        seedShopInventory.add(new HoneyPot());
-        seedShopInventory.add(new BugCatchingNet(
-                new BounceEntityCommand(null)
-        ));
     }
 
     public void init(Game game) {
         Log.e(TAG, "init()");
         this.game = game;
 
-        runOne = new RunOne(game);
-
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            seedShopInventory.add(new OnionSeed());
+            seedShopInventory.add(new BitterMelonSeed());
+            seedShopInventory.add(new StrawberrySeed());
+            seedShopInventory.add(new MysterySeed());
+            seedShopInventory.add(new TomatoSeed());
+            seedShopInventory.add(new BananaSeed());
+            seedShopInventory.add(new GuavaSeed());
+            seedShopInventory.add(new LonganSeed());
+            seedShopInventory.add(new PapayaSeed());
+        } else {
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+            seedShopInventory.add(new HoneyPot());
+            seedShopInventory.add(new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            ));
+        }
         for (Item item : seedShopInventory) {
             item.init(game);
         }
 
         String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
         seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
+        runOne = new RunOne(game);
     }
 
     private void performTrade(Item itemToTrade, Player player) {
