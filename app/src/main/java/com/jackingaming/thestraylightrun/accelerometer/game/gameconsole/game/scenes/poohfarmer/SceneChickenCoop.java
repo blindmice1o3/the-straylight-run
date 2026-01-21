@@ -81,6 +81,10 @@ public class SceneChickenCoop extends Scene {
         return uniqueInstance;
     }
 
+    public static void setInstance(SceneChickenCoop sceneChickenCoop) {
+        uniqueInstance = sceneChickenCoop;
+    }
+
     public void startNewDay() {
         Log.d(TAG, "startNewDay()");
 

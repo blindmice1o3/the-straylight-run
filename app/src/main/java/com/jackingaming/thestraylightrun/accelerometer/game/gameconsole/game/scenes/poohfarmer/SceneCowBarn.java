@@ -81,6 +81,10 @@ public class SceneCowBarn extends Scene {
         return uniqueInstance;
     }
 
+    public static void setInstance(SceneCowBarn sceneCowBarn) {
+        uniqueInstance = sceneCowBarn;
+    }
+
     public void startNewDay() {
         Log.e(TAG, "startNewDay()");
 

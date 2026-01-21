@@ -80,6 +80,10 @@ public class SceneHouseLevel01 extends Scene {
         return uniqueInstance;
     }
 
+    public static void setInstance(SceneHouseLevel01 sceneHouseLevel01) {
+        uniqueInstance = sceneHouseLevel01;
+    }
+
     public void startNewDay() {
         Log.e(TAG, "startNewDay()");
 

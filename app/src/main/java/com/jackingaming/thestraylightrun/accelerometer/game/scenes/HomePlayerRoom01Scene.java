@@ -17,6 +17,12 @@ import com.jackingaming.thestraylightrun.accelerometer.game.GameCamera;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.FCVDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.GameConsoleFragment;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneChickenCoop;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneCowBarn;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
 import com.jackingaming.thestraylightrun.accelerometer.game.notes.topics.NotesViewerFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.Entity;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.entities.controllables.Player;
@@ -497,6 +503,13 @@ public class HomePlayerRoom01Scene extends Scene {
                                                         gameListener.incrementDailyLoop();
                                                         //////////////////////////////////
                                                     }
+
+                                                    SceneChickenCoop.setInstance(null);
+                                                    SceneCowBarn.setInstance(null);
+                                                    SceneFarm.setInstance(null);
+                                                    SceneHothouse.setInstance(null);
+                                                    SceneHouseLevel01.setInstance(null);
+                                                    com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player.getInstance().setDirection(Creature.Direction.DOWN);
 
                                                     unpause();
 
