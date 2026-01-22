@@ -180,7 +180,15 @@ public class SeedShopDialogFragment extends DialogFragment {
         Log.e(TAG, "init()");
         this.game = game;
 
+        String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
+        seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
+        runOne = new RunOne(game);
+
         if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            //////////////////////////
+            game.loadFromFileRunOne();
+            //////////////////////////
+
             seedShopInventory.add(new OnionSeed());
             seedShopInventory.add(new BitterMelonSeed());
             seedShopInventory.add(new StrawberrySeed());
@@ -230,10 +238,6 @@ public class SeedShopDialogFragment extends DialogFragment {
         for (Item item : seedShopInventory) {
             item.init(game);
         }
-
-        String[] dialogueArray = game.getContext().getResources().getStringArray(R.array.seed_shop_dialogue_array);
-        seedShopOwnerQuest00 = new SeedShopOwnerQuest00(game, dialogueArray);
-        runOne = new RunOne(game);
     }
 
     private void performTrade(Item itemToTrade, Player player) {

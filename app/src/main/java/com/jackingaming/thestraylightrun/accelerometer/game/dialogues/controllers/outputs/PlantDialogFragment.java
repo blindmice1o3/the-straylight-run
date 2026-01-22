@@ -1,7 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Plant;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 
 import java.io.Serializable;
 
@@ -31,7 +31,7 @@ public class PlantDialogFragment extends DialogFragment {
     private Plant plant;
     private DismissListener dismissListener;
 
-    private TextView tvDiseaseStatus, tvHealth, tvAgeInDays, tvColor;
+    private TextView tvHealth, tvName, tvDescription;
 
     public static PlantDialogFragment newInstance(Plant plant, DismissListener dismissListener) {
         PlantDialogFragment fragment = new PlantDialogFragment();
@@ -71,32 +71,18 @@ public class PlantDialogFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "onViewCreated()");
 
-        tvDiseaseStatus = view.findViewById(R.id.tv_disease_status);
-        tvDiseaseStatus.append(
-                Boolean.toString(plant.isDiseased())
-        );
-        if (plant.isDiseased()) {
-            tvDiseaseStatus.setBackgroundColor(Color.RED);
-        }
-
         tvHealth = view.findViewById(R.id.tv_health);
-        tvHealth.append(
-                Integer.toString(
-                        plant.getHealth()
-                )
-        );
+        tvHealth.append(": " + plant.getHealth());
 
-        tvAgeInDays = view.findViewById(R.id.tv_age_in_days);
-        tvAgeInDays.append(
-                Integer.toString(
-                        plant.getAgeInDays()
-                )
-        );
-
-        tvColor = view.findViewById(R.id.tv_color);
-        tvColor.append(
-                plant.getColor().toString().toLowerCase()
-        );
+        tvName = view.findViewById(R.id.tv_name_via_player);
+        tvDescription = view.findViewById(R.id.tv_description_via_player);
+        if (plant.getType().equals(getResources().getString(R.string.text_seed_mystery))) {
+            tvName.append(": " + SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedName());
+            tvDescription.append(": " + SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedDescription());
+        } else {
+            tvName.setVisibility(View.GONE);
+            tvDescription.setVisibility(View.GONE);
+        }
     }
 
     @Override

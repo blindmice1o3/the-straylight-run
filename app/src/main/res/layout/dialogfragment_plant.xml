@@ -5,26 +5,22 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_disease_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="is diseased: " />
-
-    <TextView
         android:id="@+id/tv_health"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="health: " />
+        android:text="@string/text_health" />
+
 
     <TextView
-        android:id="@+id/tv_age_in_days"
+        android:id="@+id/tv_name_via_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="days: " />
+        android:text="@string/text_name" />
 
     <TextView
-        android:id="@+id/tv_color"
+        android:id="@+id/tv_description_via_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="color: " />
+        android:text="@string/text_description" />
+
 </LinearLayout>

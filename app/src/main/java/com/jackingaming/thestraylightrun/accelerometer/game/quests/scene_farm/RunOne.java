@@ -222,6 +222,10 @@ public class RunOne
 
                 if (checkIfMetRequirements()) {
                     Log.e(TAG, "!!!REQUIREMENTS MET!!!");
+                    ////////////////////////
+                    game.saveToFileRunOne();
+                    ////////////////////////
+
                     game.getViewportListener().addAndShowParticleExplosionView(null);
                     dispenseRewards();
 
@@ -262,8 +266,16 @@ public class RunOne
         SceneFarm.getInstance().getSeedShopDialogFragment().setSeedListener(null);
     }
 
+    public String getSeedName() {
+        return seedName;
+    }
+
     public void setSeedName(String seedName) {
         this.seedName = seedName;
+    }
+
+    public String getSeedDescription() {
+        return seedDescription;
     }
 
     public void setSeedDescription(String seedDescription) {

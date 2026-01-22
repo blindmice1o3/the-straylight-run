@@ -156,6 +156,11 @@
     <string name="text_seed_description">seed\'s description</string>
     <string name="text_message_greeting_default">hello! welcome to my shop!</string>
 
+    <!-- PlantDialogFragment -->
+    <string name="text_health">health</string>
+    <string name="text_name">name</string>
+    <string name="text_description">description</string>
+
     <!-- SignPostTile chicken coop -->
     <string name="text_egg_incubator">Put an egg in the egg incubator for 3 days to get a chicken.</string>
 

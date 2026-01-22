@@ -645,6 +645,10 @@ public class Plant extends Entity
         }
     }
 
+    public String getType() {
+        return type;
+    }
+
     public int getHealth() {
         return health;
     }

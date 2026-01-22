@@ -535,8 +535,48 @@ public class Game {
         task.get(); // Blocks
     }
 
+    private String savedFileRunOneFileName = "savedFileRunOne" + getClass().getSimpleName() + ".ser";
+
+    public void saveToFileRunOne() {
+        Log.e(TAG, "saveToFileRunOne() START fileName: " + savedFileRunOneFileName);
+        try (FileOutputStream fs = context.openFileOutput(savedFileRunOneFileName, Context.MODE_PRIVATE);
+             ObjectOutputStream os = new ObjectOutputStream(fs)) {
+            String seedName = SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedName();
+            os.writeObject(seedName);
+            String seedDescription = SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedDescription();
+            os.writeObject(seedDescription);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "saveToFileRunOne() FINISHED.");
+    }
+
+    public void loadFromFileRunOne() {
+        Log.d(TAG, "loadFromFileRunOne() START fileName: " + savedFileRunOneFileName);
+        try (FileInputStream fi = context.openFileInput(savedFileRunOneFileName);
+             ObjectInputStream os = new ObjectInputStream(fi)) {
+            String seedName = (String) os.readObject();
+            SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().setSeedName(
+                    seedName
+            );
+            String seedDescription = (String) os.readObject();
+            SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().setSeedDescription(
+                    seedDescription
+            );
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "loadFromFileRunOne() FINISHED.");
+    }
+
     private void saveToFile(String fileName) {
-        Log.e(TAG, getClass().getSimpleName() + ".saveToFile(String fileName) START fileName: " + fileName);
+        Log.e(TAG, "saveToFile(String fileName) START fileName: " + fileName);
         try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
             // MUST save form before exit() (otherwise it'll load formBeforeThisScene).
@@ -593,11 +633,11 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, getClass().getSimpleName() + ".saveToFile(String fileName) FINISHED.");
+        Log.d(TAG, "saveToFile(String fileName) FINISHED.");
     }
 
     private void loadFromFile(String fileName) {
-        Log.d(TAG, getClass().getSimpleName() + ".loadFromFile(String fileName) START fileName: " + fileName);
+        Log.d(TAG, "loadFromFile(String fileName) START fileName: " + fileName);
         try (FileInputStream fi = context.openFileInput(fileName);
              ObjectInputStream os = new ObjectInputStream(fi)) {
             Form form = (Form) os.readObject();
@@ -722,7 +762,7 @@ public class Game {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, getClass().getSimpleName() + ".loadFromFile(String fileName) FINISHED.");
+        Log.d(TAG, "loadFromFile(String fileName) FINISHED.");
     }
 
     public void update(long elapsed) {
