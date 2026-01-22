@@ -29,7 +29,7 @@ public class PlantInspectioner200 extends Item
 
     @Override
     protected void initImage() {
-        image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.ic_menu_find);
+        image = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.item_plant_inspectioner_200);
     }
 
     @Override

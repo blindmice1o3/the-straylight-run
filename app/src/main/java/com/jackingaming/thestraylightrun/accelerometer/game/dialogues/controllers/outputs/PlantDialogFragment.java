@@ -72,13 +72,27 @@ public class PlantDialogFragment extends DialogFragment {
         Log.e(TAG, "onViewCreated()");
 
         tvHealth = view.findViewById(R.id.tv_health);
-        tvHealth.append(": " + plant.getHealth());
+        String textHealth = getResources().getString(R.string.text_health);
+        tvHealth.setText(textHealth + ": " + plant.getHealth());
 
         tvName = view.findViewById(R.id.tv_name_via_player);
         tvDescription = view.findViewById(R.id.tv_description_via_player);
+        String textName = getResources().getString(R.string.text_name);
+        String textDescription = getResources().getString(R.string.text_description);
+        String seedName = SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedName();
+        String seedDescription = SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedDescription();
         if (plant.getType().equals(getResources().getString(R.string.text_seed_mystery))) {
-            tvName.append(": " + SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedName());
-            tvDescription.append(": " + SceneFarm.getInstance().getSeedShopDialogFragment().getRunOne().getSeedDescription());
+            if (seedName != null) {
+                tvName.setText(textName + ": " + seedName);
+            } else {
+                tvName.setVisibility(View.GONE);
+            }
+
+            if (seedDescription != null) {
+                tvDescription.setText(textDescription + ": " + seedDescription);
+            } else {
+                tvDescription.setVisibility(View.GONE);
+            }
         } else {
             tvName.setVisibility(View.GONE);
             tvDescription.setVisibility(View.GONE);

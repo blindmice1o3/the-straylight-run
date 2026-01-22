@@ -7,20 +7,17 @@
     <TextView
         android:id="@+id/tv_health"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_health" />
+        android:layout_height="wrap_content" />
 
 
     <TextView
         android:id="@+id/tv_name_via_player"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_name" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/tv_description_via_player"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_description" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
