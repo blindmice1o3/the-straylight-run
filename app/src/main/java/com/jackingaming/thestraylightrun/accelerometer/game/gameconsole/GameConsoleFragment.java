@@ -32,11 +32,16 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.Type
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.GameCamera;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Creature;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneChickenCoop;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneCowBarn;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHouseLevel01;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.GameState;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.gamepad.GamePadFragment;
@@ -211,6 +216,25 @@ public class GameConsoleFragment extends Fragment
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause()");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop()");
+
+        resetForNewRun();
+    }
+
+    public static void resetForNewRun() {
+        Log.e(TAG, "resetForNewRun()");
+
+        SceneChickenCoop.setInstance(null);
+        SceneCowBarn.setInstance(null);
+        SceneFarm.setInstance(null);
+        SceneHothouse.setInstance(null);
+        SceneHouseLevel01.setInstance(null);
+        com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player.getInstance().setDirection(Creature.Direction.DOWN);
     }
 
     @Override
