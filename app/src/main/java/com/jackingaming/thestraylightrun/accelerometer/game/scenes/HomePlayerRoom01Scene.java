@@ -213,6 +213,7 @@ public class HomePlayerRoom01Scene extends Scene {
                 isTransferPointCooldownComplete = true;
             }
         }, TARGET_TRANSFER_POINT_COOLDOWN);
+        countdownTimer.init();
     }
 
     private Entity.CollisionListener generateCollisionListenerForPlayer() {

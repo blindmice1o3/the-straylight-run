@@ -14,13 +14,11 @@ import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 
 public class Player extends Creature {
     private static Player uniqueInstance;
-    private Form form;
+    transient private Form form;
     private QuestManager questManager;
 
     private Player(int xSpawn, int ySpawn) {
         super(xSpawn, ySpawn);
-        form = new PoohForm();
-//        form = new MotherForm(MotherForm.DAUGHTER);
         questManager = new QuestManager();
     }
 
@@ -67,6 +65,8 @@ public class Player extends Creature {
     @Override
     public void init(Game game) {
         super.init(game);
+        form = new PoohForm();
+//        form = new MotherForm(MotherForm.DAUGHTER);
         form.init(game);
 
         game.setItemInButtonHolderListener(new Game.ItemInButtonHolderListener() {

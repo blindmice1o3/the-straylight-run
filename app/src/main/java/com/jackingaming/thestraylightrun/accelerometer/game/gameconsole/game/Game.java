@@ -38,8 +38,8 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.Entity;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Form;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.PoohForm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
@@ -515,7 +515,7 @@ public class Game {
         loadFromFile(savedFileViaOSFileName);
     }
 
-    private String savedFileViaUserInputFileName = "savedFileViaUserInput" + gameTitle + ".ser";
+    private String savedFileViaUserInputFileName = "savedFileViaUserInput" + "PoohFarmer" + ".ser";
 
     public void saveViaUserInput() {
         saveToFile(savedFileViaUserInputFileName);
@@ -580,7 +580,7 @@ public class Game {
         try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
             // MUST save form before exit() (otherwise it'll load formBeforeThisScene).
-            os.writeObject(Player.getInstance().getForm());
+//            os.writeObject(Player.getInstance().getForm());
             // Record player's xLastKnown and yLastKnown for the current scene.
             sceneManager.getCurrentScene().exit();
 
@@ -640,8 +640,8 @@ public class Game {
         Log.d(TAG, "loadFromFile(String fileName) START fileName: " + fileName);
         try (FileInputStream fi = context.openFileInput(fileName);
              ObjectInputStream os = new ObjectInputStream(fi)) {
-            Form form = (Form) os.readObject();
-            form.init(this);
+//            Form form = (Form) os.readObject();
+//            form.init(this);
 
             timeManager = (TimeManager) os.readObject();
             timeManager.init(this, statsChangeListener);
@@ -661,7 +661,7 @@ public class Game {
             }
             sceneManager.reload(this);
             stateManager.reload(this);
-            Player.getInstance().setForm(form);
+            Player.getInstance().setForm(new PoohForm());
             currency = os.readFloat();
             statsChangeListener.onCurrencyChange(currency);
 

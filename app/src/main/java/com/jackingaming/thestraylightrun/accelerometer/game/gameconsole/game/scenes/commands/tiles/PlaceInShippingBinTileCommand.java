@@ -9,7 +9,7 @@ public class PlaceInShippingBinTileCommand
         implements TileCommand {
     public static final String TAG = PlaceInShippingBinTileCommand.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private Tile tile;
     private Creature creatureHarvester;
 

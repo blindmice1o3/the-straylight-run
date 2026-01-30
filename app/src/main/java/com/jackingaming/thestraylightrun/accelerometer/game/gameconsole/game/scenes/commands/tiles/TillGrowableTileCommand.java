@@ -12,7 +12,7 @@ public class TillGrowableTileCommand
         implements TileCommand {
     public static final String TAG = TillGrowableTileCommand.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private Tile tile;
 
     public TillGrowableTileCommand(Tile tile) {

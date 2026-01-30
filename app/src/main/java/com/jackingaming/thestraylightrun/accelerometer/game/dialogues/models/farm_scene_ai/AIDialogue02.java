@@ -23,7 +23,7 @@ public class AIDialogue02
     private LabScene labScene;
     private Bitmap portraitOfSpeaker;
 
-    private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
+    transient private com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game;
     private Quest robotDialogQuest00;
 
     public AIDialogue02(com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game game, Quest robotDialogQuest00) {

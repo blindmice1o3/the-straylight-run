@@ -12,7 +12,7 @@ public class WaterGrowableTileCommand
         implements TileCommand {
     public static final String TAG = WaterGrowableTileCommand.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private Tile tile;
 
     public WaterGrowableTileCommand(Tile tile) {

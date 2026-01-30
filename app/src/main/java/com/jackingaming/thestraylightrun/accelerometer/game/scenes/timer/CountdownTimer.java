@@ -6,7 +6,10 @@ import android.animation.ObjectAnimator;
 import android.os.Handler;
 import android.os.Looper;
 
-public class CountdownTimer {
+import java.io.Serializable;
+
+public class CountdownTimer
+        implements Serializable {
     public static final String TAG = CountdownTimer.class.getSimpleName();
 
     public interface CountdownListener {
@@ -14,12 +17,16 @@ public class CountdownTimer {
     }
 
     private CountdownListener countdownListener;
+    private long targetCountdownTimer;
 
-    private ObjectAnimator objectAnimator;
+    transient private ObjectAnimator objectAnimator;
 
     public CountdownTimer(CountdownListener countdownListener, long targetCountdownTimer) {
         this.countdownListener = countdownListener;
+        this.targetCountdownTimer = targetCountdownTimer;
+    }
 
+    public void init() {
         objectAnimator = new ObjectAnimator();
         objectAnimator.setPropertyName("elapsed");
         objectAnimator.setFloatValues(targetCountdownTimer, 0L);

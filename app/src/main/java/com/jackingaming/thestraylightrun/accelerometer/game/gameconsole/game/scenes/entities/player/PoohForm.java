@@ -55,6 +55,7 @@ public class PoohForm
                 isTransferPointCooldownComplete = true;
             }
         }, TARGET_TRANSFER_POINT_COOLDOWN);
+        countdownTimer.init();
     }
 
     @Override

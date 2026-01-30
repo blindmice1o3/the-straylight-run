@@ -13,7 +13,7 @@ public class HarvestGrowableTileCommand
         implements TileCommand {
     public static final String TAG = HarvestGrowableTileCommand.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private Tile tile;
     private Creature creatureHarvester;
 

@@ -12,7 +12,7 @@ public class SeedGrowableTileCommand
         implements TileCommand {
     public static final String TAG = SeedGrowableTileCommand.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private Tile tile;
     private String idSeed;
 
