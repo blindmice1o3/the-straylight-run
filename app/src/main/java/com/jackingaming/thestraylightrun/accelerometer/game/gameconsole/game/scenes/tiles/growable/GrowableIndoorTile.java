@@ -2,10 +2,9 @@ package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sc
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 
 import java.util.HashMap;
 
@@ -26,63 +25,12 @@ public class GrowableIndoorTile extends GrowableTile {
         super(id, entityListener);
     }
 
-    public static Bitmap cropGrowableTableTile(Resources resources, GrowableTile.State state,
-                                               boolean isWatered) {
-        Log.e(TAG, "cropGrowableTableTile(Resources, GrowableTile.State, boolean)... (state: " + state + "), (isWatered: " + isWatered + ").");
-
-        Bitmap spriteSheetPlantsHothouseHM2 = null;
-        Bitmap spriteTableTile = null;
-
-        //SELECT SPRITE_SHEET
-        if (isWatered) {
-            spriteSheetPlantsHothouseHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_hothouse_plants1);
-        } else {
-            spriteSheetPlantsHothouseHM2 = BitmapFactory.decodeResource(resources, R.drawable.hm2_hothouse_plants2);
-        }
-
-        Bitmap spriteSheetItemsAndTiles = BitmapFactory.decodeResource(resources, R.drawable.items_and_tiles);
-
-        //CROP SPRITE
-        switch (state) {
-            case UNTILLED:
-                spriteTableTile = null;
-                break;
-            case TILLED:
-            case OCCUPIED:
-                if (isWatered) {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1354, 375, 242, 241);
-                } else {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1352, 680, 242, 239);
-                }
-//                if (isWatered) {
-//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 120, 120, 16, 16);
-//                } else {
-//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 24, 56, 16, 16);
-//                }
-                break;
-            case SEEDED:
-                if (isWatered) {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1047, 376, 242, 241);
-                } else {
-                    spriteTableTile = Bitmap.createBitmap(spriteSheetItemsAndTiles, 1045, 681, 242, 238);
-                }
-//                if (isWatered) {
-//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 8, 120, 16, 16);
-//                } else {
-//                    spriteTableTile = Bitmap.createBitmap(spriteSheetPlantsHothouseHM2, 56, 120, 16, 16);
-//                }
-                break;
-        }
-
-        return spriteTableTile;
-    }
-
     @Override
     protected void initImageMaps(Resources resources) {
-        Bitmap unwateredTilled = cropGrowableTableTile(resources, State.TILLED, false);
-        Bitmap unwateredSeeded = cropGrowableTableTile(resources, State.SEEDED, false);
-        Bitmap wateredTilled = cropGrowableTableTile(resources, State.TILLED, true);
-        Bitmap wateredSeeded = cropGrowableTableTile(resources, State.SEEDED, true);
+        Bitmap unwateredTilled = Assets.unwateredTilledIndoor;
+        Bitmap unwateredSeeded = Assets.unwateredSeededIndoor;
+        Bitmap wateredTilled = Assets.wateredTilledIndoor;
+        Bitmap wateredSeeded = Assets.wateredSeededIndoor;
 
         imageUnwateredViaState = new HashMap<>();
         imageUnwateredViaState.put(State.UNTILLED, image);

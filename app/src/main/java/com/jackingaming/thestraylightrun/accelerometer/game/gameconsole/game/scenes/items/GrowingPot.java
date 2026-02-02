@@ -1,6 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items;
 
 import com.jackingaming.thestraylightrun.R;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableIndoorTile;
@@ -37,8 +38,7 @@ public class GrowingPot extends Item
 
     @Override
     protected void initImage() {
-        image = GrowableIndoorTile.cropGrowableTableTile(game.getContext().getResources(),
-                GrowableTile.State.TILLED, false);
+        image = Assets.unwateredTilledIndoor;
     }
 
     @Override

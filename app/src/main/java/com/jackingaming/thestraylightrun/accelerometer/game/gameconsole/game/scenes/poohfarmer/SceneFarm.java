@@ -453,12 +453,20 @@ public class SceneFarm extends Scene {
             setupForRunThree();
         } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
             setupForRunFour();
+        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            setupForRunFive();
         }
 
         Log.e(TAG, "init() END");
     }
 
-    public void setupForRunFour() {
+    private void setupForRunFive() {
+        Log.d(TAG, "setupForRunFive()");
+
+        SceneHothouse.getInstance().init(game);
+    }
+
+    private void setupForRunFour() {
         Log.d(TAG, "setupForRunFour()");
 
         aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.SHEEP,
@@ -595,7 +603,7 @@ public class SceneFarm extends Scene {
         aimlessWalker6.changeToWalk();
     }
 
-    public void setupForRunThree() {
+    private void setupForRunThree() {
         Log.d(TAG, "setupForRunThree()");
 
         int numberOfMysteryProductReady = 0;

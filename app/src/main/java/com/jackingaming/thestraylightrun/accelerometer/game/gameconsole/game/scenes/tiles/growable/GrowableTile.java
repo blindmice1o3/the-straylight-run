@@ -116,15 +116,15 @@ public class GrowableTile extends Tile {
     protected void initImageMaps(Resources resources) {
         imageUnwateredViaState = new HashMap<>();
         imageUnwateredViaState.put(State.UNTILLED, image);
-        imageUnwateredViaState.put(State.TILLED, Assets.unwateredTilled);
-        imageUnwateredViaState.put(State.SEEDED, Assets.unwateredSeeded);
-        imageUnwateredViaState.put(State.OCCUPIED, Assets.unwateredTilled);
+        imageUnwateredViaState.put(State.TILLED, Assets.unwateredTilledOutdoor);
+        imageUnwateredViaState.put(State.SEEDED, Assets.unwateredSeededOutdoor);
+        imageUnwateredViaState.put(State.OCCUPIED, Assets.unwateredTilledOutdoor);
 
         imageWateredViaState = new HashMap<>();
         imageWateredViaState.put(State.UNTILLED, image);
-        imageWateredViaState.put(State.TILLED, Assets.wateredTilled);
-        imageWateredViaState.put(State.SEEDED, Assets.wateredSeeded);
-        imageWateredViaState.put(State.OCCUPIED, Assets.wateredTilled);
+        imageWateredViaState.put(State.TILLED, Assets.wateredTilledOutdoor);
+        imageWateredViaState.put(State.SEEDED, Assets.wateredSeededOutdoor);
+        imageWateredViaState.put(State.OCCUPIED, Assets.wateredTilledOutdoor);
     }
 
     protected void updateImage() {

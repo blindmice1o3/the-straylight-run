@@ -11,7 +11,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.Type
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.InputManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneHothouse;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFive;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunFour;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunThree;
@@ -213,8 +212,6 @@ public class TextboxState
     TypeWriterDialogFragment typeWriterDialogFragment;
 
     private void giveRunFiveQuest() {
-        SceneHothouse.getInstance().init(game);
-
         boolean wasQuestAcceptedRunFive =
                 Player.getInstance().getQuestManager().addQuest(
                         runFive

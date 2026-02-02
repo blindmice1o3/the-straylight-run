@@ -11,21 +11,26 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class Assets {
     public static final String TAG = Assets.class.getSimpleName();
 
-    public static Bitmap unwateredTilled, wateredTilled;
-    public static Bitmap unwateredSeeded, wateredSeeded;
+    public static Bitmap unwateredTilledOutdoor, wateredTilledOutdoor;
+    public static Bitmap unwateredSeededOutdoor, wateredSeededOutdoor;
+
+    public static Bitmap unwateredTilledIndoor, wateredTilledIndoor;
+    public static Bitmap unwateredSeededIndoor, wateredSeededIndoor;
+
     public static Bitmap shippingBinQuadrantTopLeft, shippingBinQuadrantTopRight,
             shippingBinQuadrantBottomLeft, shippingBinQuadrantBottomRight;
 
     public static void init(Resources resources) {
         Bitmap spriteSheetCropsAndItems = BitmapFactory.decodeResource(resources, R.drawable.items_and_tiles);
-        unwateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 58, 55, 277, 272);
-        unwateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 712, 56, 275, 271);
-        wateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 378, 56, 274, 271);
-        wateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 1032, 56, 274, 271);
-//        unwateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 59, 53, 280, 275);
-//        unwateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 698, 53, 280, 275);
-//        wateredTilled = Bitmap.createBitmap(spriteSheetCropsAndItems, 378, 53, 280, 275);
-//        wateredSeeded = Bitmap.createBitmap(spriteSheetCropsAndItems, 1032, 53, 280, 275);
+        unwateredTilledOutdoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 58, 55, 277, 272);
+        unwateredSeededOutdoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 712, 56, 275, 271);
+        wateredTilledOutdoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 378, 56, 274, 271);
+        wateredSeededOutdoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 1032, 56, 274, 271);
+
+        unwateredTilledIndoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 1352, 680, 242, 239);
+        unwateredSeededIndoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 1045, 681, 242, 238);
+        wateredTilledIndoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 1354, 375, 242, 241);
+        wateredSeededIndoor = Bitmap.createBitmap(spriteSheetCropsAndItems, 1047, 376, 242, 241);
 
         shippingBinQuadrantTopLeft = cropImageShippingBinTile(resources, ShippingBinTile.Quadrant.TOP_LEFT);
         shippingBinQuadrantTopRight = cropImageShippingBinTile(resources, ShippingBinTile.Quadrant.TOP_RIGHT);
