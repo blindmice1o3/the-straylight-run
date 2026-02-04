@@ -23,12 +23,9 @@ import java.util.List;
 public class TankFragment extends Fragment {
     public static final String TAG = TankFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private List objectsInGame;
@@ -45,7 +42,6 @@ public class TankFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment TankFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TankFragment newInstance(String param1, String param2) {
         TankFragment fragment = new TankFragment();
         Bundle args = new Bundle();
@@ -112,8 +108,7 @@ public class TankFragment extends Fragment {
                 }
             }
 
-            // render game objects
-            // TODO:
+            // TODO: render game objects.
 
             // set-up for next iteration
             timePrevious = timeNow;

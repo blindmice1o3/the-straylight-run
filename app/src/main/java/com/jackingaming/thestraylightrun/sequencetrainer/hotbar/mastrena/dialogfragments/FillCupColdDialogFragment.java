@@ -82,7 +82,7 @@ public class FillCupColdDialogFragment extends DialogFragment {
         ImageView ivCupCold = view.findViewById(R.id.iv_cup_cold);
         AppCompatSeekBar seekBar = view.findViewById(R.id.seekbar);
 
-        // TODO: find out cup size (via tag)... calculate seekBar's MIN using cup size...
+        // find out cup size (via tag)... calculate seekBar's MIN using cup size...
         Log.e(TAG, "!!!!! cupCold.getTag() (should be cup size): " + cupCold.getTag());
 
         Milk.Type type = null;

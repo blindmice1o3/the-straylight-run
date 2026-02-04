@@ -645,7 +645,6 @@ public class SceneChickenCoop extends Scene {
 
     private List<Entity> createEntitiesForChickenCoop() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
                 (3 * Tile.WIDTH),
                 (6 * Tile.HEIGHT));
@@ -661,7 +660,6 @@ public class SceneChickenCoop extends Scene {
 
     private List<Item> createItemsForChickenCoop() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

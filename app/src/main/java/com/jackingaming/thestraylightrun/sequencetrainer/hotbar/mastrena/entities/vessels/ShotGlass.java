@@ -54,7 +54,7 @@ public class ShotGlass extends ClickableAndDraggableImageView
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing content of shot glass.
+        // Open dialog listing content of shot glass.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

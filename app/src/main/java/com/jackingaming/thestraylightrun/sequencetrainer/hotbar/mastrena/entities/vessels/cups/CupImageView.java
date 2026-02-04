@@ -102,7 +102,7 @@ public abstract class CupImageView extends ClickableAndDraggableImageView
                     );
                     invalidate();
 
-                    // TODO: shotOnTop
+                    // shotOnTop
                     if (milk != null) {
                         Log.d(TAG, "milk != null... setting shotOnTop to true.");
                         shotOnTop = true;
@@ -380,7 +380,7 @@ public abstract class CupImageView extends ClickableAndDraggableImageView
             List<EspressoShot> shotsToTransferIn = (List<EspressoShot>) content.get("shots");
             shots.addAll(shotsToTransferIn);
 
-            // TODO: shotOnTop
+            // shotOnTop
             if (milk != null) {
                 Log.d(TAG, "milk != null... setting shotOnTop to true.");
                 shotOnTop = true;

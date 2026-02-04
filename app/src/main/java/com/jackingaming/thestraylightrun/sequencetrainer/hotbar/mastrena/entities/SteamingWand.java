@@ -38,7 +38,7 @@ public class SteamingWand extends ClickableAndDraggableImageView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing details of steaming wand.
+        // Open dialog listing details of steaming wand.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

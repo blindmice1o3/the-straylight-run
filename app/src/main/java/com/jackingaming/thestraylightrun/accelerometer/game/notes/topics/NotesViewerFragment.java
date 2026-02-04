@@ -41,12 +41,9 @@ public class NotesViewerFragment extends Fragment
 
     // ref: https://stackoverflow.com/questions/71579104/zoom-in-and-zoom-out-android-imageview
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_NOTE_TYPE = "note_type";
     private static final String ARG_RUN = "run";
 
-    // TODO: Rename and change types of parameters
     private NoteType noteType;
     private Game.Run run;
 
@@ -72,7 +69,6 @@ public class NotesViewerFragment extends Fragment
      * @param noteType Parameter 1.
      * @return A new instance of fragment NotesViewerFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NotesViewerFragment newInstance(NoteType noteType, Game.Run run) {
         NotesViewerFragment fragment = new NotesViewerFragment();
         Bundle args = new Bundle();

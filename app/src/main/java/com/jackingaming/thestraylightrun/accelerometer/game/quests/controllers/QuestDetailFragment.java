@@ -23,11 +23,8 @@ import java.io.Serializable;
 public class QuestDetailFragment extends Fragment
         implements Serializable {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_QUEST = "quest";
 
-    // TODO: Rename and change types of parameters
     private Quest quest;
 
     public QuestDetailFragment() {
@@ -40,7 +37,6 @@ public class QuestDetailFragment extends Fragment
      *
      * @return A new instance of fragment QuestDetailFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static QuestDetailFragment newInstance(Quest quest) {
         QuestDetailFragment fragment = new QuestDetailFragment();
         Bundle args = new Bundle();

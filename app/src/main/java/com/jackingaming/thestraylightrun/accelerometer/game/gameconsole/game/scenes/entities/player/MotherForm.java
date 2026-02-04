@@ -84,7 +84,7 @@ public class MotherForm
 
     @Override
     public void interpretInput() {
-        // TODO: testing.
+        Log.d(TAG,"interpretInput()");
     }
 
     @Override
@@ -97,7 +97,6 @@ public class MotherForm
     @Override
     public void respondToTransferPointCollision(String key) {
         Log.e(TAG, getClass().getSimpleName() + ".respondToTransferPointCollision(String key) key: " + key);
-        // TODO: change scene.
         game.getSceneManager().changeScene(key);
     }
 

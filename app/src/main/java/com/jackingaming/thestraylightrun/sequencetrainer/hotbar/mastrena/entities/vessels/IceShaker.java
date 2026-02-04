@@ -69,7 +69,7 @@ public class IceShaker extends ClickableAndDraggableImageView
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing content of ice shaker.
+        // Open dialog listing content of ice shaker.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

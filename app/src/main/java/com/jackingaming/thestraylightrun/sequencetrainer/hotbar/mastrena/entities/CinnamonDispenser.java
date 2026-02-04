@@ -26,7 +26,7 @@ public class CinnamonDispenser extends ClickableAndDraggableImageView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing content of cinnamon dispenser.
+        // Open dialog listing content of cinnamon dispenser.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

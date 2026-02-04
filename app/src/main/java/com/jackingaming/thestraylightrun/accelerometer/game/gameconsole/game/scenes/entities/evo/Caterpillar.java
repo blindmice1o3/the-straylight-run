@@ -453,7 +453,7 @@ public class Caterpillar extends Creature
     @Override
     public void die() {
         Log.d(TAG, getClass().getSimpleName() + ".die()");
-        // TODO: drop items, reward exp points, etc.
+        // Drop items, reward exp points, etc.
         Item honeyPot = new HoneyPot();
         int widthOfHoneyPot = Tile.WIDTH / 2;
         int heightOfHoneyPot = Tile.HEIGHT / 2;

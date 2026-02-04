@@ -71,8 +71,6 @@ public class GameFragment extends Fragment
         GameView.SurfaceCreatedListener {
     public static final String TAG = GameFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_REPLACE_FRAGMENT_LISTENER = "replaceFragmentListener";
@@ -83,7 +81,6 @@ public class GameFragment extends Fragment
 
     private ReplaceFragmentListener replaceFragmentListener;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -117,7 +114,6 @@ public class GameFragment extends Fragment
      * @param param2 Parameter 2.
      * @return A new instance of fragment GameFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GameFragment newInstance(String param1, String param2,
                                            ReplaceFragmentListener replaceFragmentListener) {
         GameFragment fragment = new GameFragment();
@@ -579,7 +575,6 @@ public class GameFragment extends Fragment
 
         game.init(soundManager, gameListener);
 
-//        // TODO: ModelToViewMapper
 //        List<Entity> entitiesToAdd = game.getSceneCurrent().getEntities();
 //        instantiateImageViewForEntities(entitiesToAdd);
 //        addImageViewOfEntityToFrameLayout(game.getWidthSpriteDst(), game.getHeightSpriteDst());
@@ -688,7 +683,6 @@ public class GameFragment extends Fragment
     }
 
     private void addImageViewOfEntityToFrameLayout(int widthSpriteDst, int heightSpriteDst) {
-        // TODO: View
         for (Entity e : imageViewViaEntity.keySet()) {
             ImageView ivToAdd = imageViewViaEntity.get(e);
             frameLayout.addView(ivToAdd, new FrameLayout.LayoutParams(widthSpriteDst, heightSpriteDst));

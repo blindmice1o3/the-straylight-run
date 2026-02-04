@@ -26,7 +26,7 @@ public class CaramelDrizzleBottle extends ClickableAndDraggableImageView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing content of caramel drizzle bottle.
+        // Open dialog listing content of caramel drizzle bottle.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

@@ -57,7 +57,7 @@ public class LabelPrinter extends ClickableAndDraggableTextView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing details of label printer.
+        // Open dialog listing details of label printer.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

@@ -233,7 +233,6 @@ public class SeedShopDialogFragment extends DialogFragment {
             @Override
             public void onItemClick(View view, int position) {
                 Log.d(TAG, "ItemRecyclerViewAdapterSeedShop.ItemClickListener.onItemClick(View view, int position): " + seedShopInventory.get(position));
-                // TODO: buy/sell transactions.
                 Item itemToTrade = seedShopInventory.get(position);
                 performTrade(itemToTrade, Player.getInstance());
             }

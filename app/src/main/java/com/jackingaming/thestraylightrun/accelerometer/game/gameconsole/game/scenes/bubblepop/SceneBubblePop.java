@@ -164,7 +164,6 @@ public class SceneBubblePop extends Scene {
 
     private Map<String, Rect> createTransferPointsForBubblePop() {
         Map<String, Rect> transferPoints = new HashMap<String, Rect>();
-        // TODO: Insert scene specific transfer points here.
 //        transferPoints.put("FARM", new Rect((6 * Tile.WIDTH), (13 * Tile.HEIGHT),
 //                (6 * Tile.WIDTH) + (3 * Tile.WIDTH), (13 * Tile.HEIGHT) + (1 * Tile.HEIGHT)));
         return transferPoints;
@@ -173,7 +172,6 @@ public class SceneBubblePop extends Scene {
     private List<Entity> createEntitiesForBubblePop() {
         List<Entity> entitiesForBubblePop = new ArrayList<>();
 
-        // TODO: Insert scene specific entities here.
         Bubblun bubblun = new Bubblun(3 * Tile.WIDTH, 3 * Tile.HEIGHT);
         entitiesForBubblePop.add(bubblun);
         Monsta monsta = new Monsta(7 * Tile.WIDTH, 3 * Tile.HEIGHT);
@@ -184,7 +182,6 @@ public class SceneBubblePop extends Scene {
 
     private List<Item> createItemsForBubblePop() {
         List<Item> itemsForBubblePop = new ArrayList<>();
-        // TODO: Insert scene specific items here.
         return itemsForBubblePop;
     }
 }

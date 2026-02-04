@@ -6,7 +6,6 @@
     android:layout_margin="8dp"
     tools:context=".accelerometer.game.gameconsole.viewport.ViewportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.viewport.MySurfaceView
         android:id="@+id/mysurfaceview_game_console_fragment"
         android:layout_width="match_parent"

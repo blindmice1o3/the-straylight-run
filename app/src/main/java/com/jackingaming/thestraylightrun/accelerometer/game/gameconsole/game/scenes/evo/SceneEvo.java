@@ -127,7 +127,7 @@ public class SceneEvo extends Scene {
 //                        e.setActive(false);
 //                        ((Kelp)e).die();
 
-                        // TODO: pass text and location (x, y, width, height) to textbox.
+                        // Pass text and location (x, y, width, height) to textbox.
 //                        String text = "Two four six eight ... eight six four two";
 //                        float xPlayerInGame = Player.getInstance().getX();
 //                        float yPlayerInGame = Player.getInstance().getY();
@@ -337,7 +337,6 @@ public class SceneEvo extends Scene {
 
     private List<Item> createItemsForEvo() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 

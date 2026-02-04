@@ -142,22 +142,22 @@ public class BubblunStateManager extends StateManager {
 
     @Override
     public boolean respondToEntityCollision(Entity e) {
-        // TODO:
+        Log.d(TAG, "respondToEntityCollision()");
         return true;
     }
 
     @Override
     public void respondToItemCollisionViaClick(Item i) {
-        // TODO:
+        Log.d(TAG, "respondToItemCollisionViaClick()");
     }
 
     @Override
     public void respondToItemCollisionViaMove(Item i) {
-        // TODO:
+        Log.d(TAG, "respondToItemCollisionViaMove()");
     }
 
     @Override
     public void respondToTransferPointCollision(String key) {
-        // TODO:
+        Log.d(TAG, "respondToTransferPointCollision()");
     }
 }

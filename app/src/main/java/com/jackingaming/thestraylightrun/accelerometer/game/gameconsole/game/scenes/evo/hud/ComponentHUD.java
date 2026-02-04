@@ -129,7 +129,7 @@ public class ComponentHUD
                 break;
             case TEXT:
                 textPaint.setColor(Color.WHITE);
-                // TODO: draw StaticLayout.
+                // Draw StaticLayout.
                 // BACKGROUND PANEL
                 canvas.drawRect(rectStaticLayoutBackgroundPanel, paintStaticLayoutBackgroundPanel);
 

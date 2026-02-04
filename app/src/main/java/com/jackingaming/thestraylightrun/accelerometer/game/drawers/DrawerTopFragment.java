@@ -24,8 +24,6 @@ import java.io.Serializable;
 public class DrawerTopFragment extends Fragment {
     public static final String TAG = DrawerTopFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_RUN_SELECTION_LISTENER = "run_selection_listener";
@@ -40,7 +38,6 @@ public class DrawerTopFragment extends Fragment {
 
     private TextView tvRunOne, tvRunTwo, tvRunThree, tvRunFour, tvRunFive;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -56,7 +53,6 @@ public class DrawerTopFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment DrawerTopFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static DrawerTopFragment newInstance(String param1, String param2,
                                                 SelectionListener runSelectionListener) {
         Log.e(TAG, "newInstance()");

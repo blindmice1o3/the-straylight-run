@@ -97,7 +97,7 @@ public class Kelp extends Entity
     @Override
     public void die() {
         Log.d(TAG, getClass().getSimpleName() + ".die()");
-        // TODO: drop items, reward exp points, etc.
+        // Drop items, reward exp points, etc.
         Item meat = new Meat();
         int widthOfMeat = Tile.WIDTH / 2;
         int heightOfMeat = Tile.HEIGHT / 2;

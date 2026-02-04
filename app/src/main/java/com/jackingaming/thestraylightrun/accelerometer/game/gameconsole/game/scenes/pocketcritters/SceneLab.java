@@ -133,13 +133,11 @@ public class SceneLab extends Scene {
 
     private List<Entity> createEntitiesForLab() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         return entities;
     }
 
     private List<Item> createItemsForLab() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

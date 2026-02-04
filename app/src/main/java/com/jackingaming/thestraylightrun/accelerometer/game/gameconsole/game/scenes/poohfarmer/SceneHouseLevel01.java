@@ -332,7 +332,6 @@ public class SceneHouseLevel01 extends Scene {
         Tile[][] houseLevel01 = TileManagerLoader.convertStringToTiles(houseLevel01LoadedAsString);
         Bitmap imageHouseLevel01 = cropImageHouseLevel01(game.getContext().getResources());
 
-        // TODO: init all tiles (assign image) in houseLevel01.
         // Initialize the tiles (provide image and define walkable)
         // Assign image and init() all the tiles in houseLevel01.
         for (int y = 0; y < houseLevel01.length; y++) {
@@ -397,13 +396,11 @@ public class SceneHouseLevel01 extends Scene {
 
     private List<Entity> createEntitiesForHouseLevel01() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         return entities;
     }
 
     private List<Item> createItemsForHouseLevel01() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

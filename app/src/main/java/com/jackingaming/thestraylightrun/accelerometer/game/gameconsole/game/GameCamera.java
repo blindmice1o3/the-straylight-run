@@ -154,9 +154,6 @@ public class GameCamera
         return collisionBounds;
     }
 
-    // TODO: [updateShaking] GameCamera on successful viewport-entity collision (bring in DeadCow).
-
-
     public float convertInGameXPositionToScreenXPosition(float xInGame) {
         return (xInGame - x) * widthPixelToViewportRatio;
     }

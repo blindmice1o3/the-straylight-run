@@ -68,7 +68,6 @@ public class MainViewportFragment extends Fragment {
      *
      * @return A new instance of fragment MainViewportFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MainViewportFragment newInstance(
             Class classMain, IDEFragment.Mode mode) {
         MainViewportFragment fragment = new MainViewportFragment();

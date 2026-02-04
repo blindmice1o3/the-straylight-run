@@ -803,7 +803,7 @@ public class Game {
             Log.e(TAG, "doClickIcon(View): " + StatsDisplayerFragment.TAG_TIME_ICON);
         } else if (tagOfIcon.equals(StatsDisplayerFragment.TAG_QUEST_ICON)) {
             Log.e(TAG, "doClickIcon(View): " + StatsDisplayerFragment.TAG_QUEST_ICON);
-            // TODO: show QuestDisplayer dialog.
+            // Show QuestDisplayer dialog.
             List<Quest> quests = Player.getInstance().getQuestManager().getQuests();
 
             if (!quests.isEmpty()) {

@@ -7,7 +7,6 @@
     android:background="@drawable/shape_sink"
     tools:context=".sequencetrainer.hotbar.sink.SinkFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

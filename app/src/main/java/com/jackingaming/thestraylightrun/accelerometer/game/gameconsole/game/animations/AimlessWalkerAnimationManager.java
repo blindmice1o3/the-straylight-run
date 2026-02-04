@@ -198,8 +198,6 @@ public class AimlessWalkerAnimationManager
     }
 
     public Bitmap getCurrentFrame(Creature.Direction direction, AimlessWalker.State state, float xMove, float yMove) {
-        // TODO:
-
 //        switch (state) {
 //            case OFF:
 //                return walkAnimationsBaby.get(Creature.Direction.DOWN).getCurrentFrame();

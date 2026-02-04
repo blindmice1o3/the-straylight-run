@@ -107,7 +107,6 @@ public class ScenePong extends Scene {
 
     private List<Item> createItemsForPong() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

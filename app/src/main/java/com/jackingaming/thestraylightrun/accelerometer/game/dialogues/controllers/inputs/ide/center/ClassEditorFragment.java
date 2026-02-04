@@ -50,13 +50,10 @@ public class ClassEditorFragment extends Fragment {
     public static final String IDENTIFIER_COMMENT_MULTI_LINE_END = "*/";
     public static final String IDENTIFIER_COMMENT_TODO = "todo";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLASS_VP2_ADAPTER = "classVP2Adapter";
     private static final String ARG_CLASS = "class";
     private static final String ARG_MODE = "mode";
 
-    // TODO: Rename and change types of parameters
     private ClassVP2Adapter adapter;
     private Class classToEdit;
     private LinearLayout linearLayoutParent;
@@ -74,7 +71,6 @@ public class ClassEditorFragment extends Fragment {
      * @param classToEdit Class.
      * @return A new instance of fragment ClassEditorFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit, IDEFragment.Mode mode) {
         ClassEditorFragment fragment = new ClassEditorFragment();
         Bundle args = new Bundle();

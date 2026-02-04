@@ -99,7 +99,7 @@ public class PoohForm
 
     @Override
     public void interpretInput() {
-        // TODO: testing.
+        Log.d(TAG, "interpretInput()");
     }
 
     @Override

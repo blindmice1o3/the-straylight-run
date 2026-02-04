@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".accelerometer.game.drawers.DrawerEndFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:id="@+id/right_drawer"
         android:layout_width="match_parent"

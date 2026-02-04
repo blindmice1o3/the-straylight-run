@@ -184,10 +184,7 @@ public class SceneFarm extends Scene {
             if (tileRandom.isWalkable()) {
                 if (tileRandom instanceof GrowableTile) {
                     if (((GrowableTile) tileRandom).getEntity() == null) {
-                        // unoccupied.
-                        // TODO: load Item.
-
-
+                        // Unoccupied.
                         Item itemToAdd = new GrowingPot(
                                 new TillGrowableIndoorTileCommand(null)
                         );
@@ -1462,7 +1459,6 @@ public class SceneFarm extends Scene {
 
     private List<Entity> createEntitiesForFarm() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         robot = new Robot((X_INDEX_SPAWN_ROBOT * Tile.WIDTH),
                 (Y_INDEX_SPAWN_ROBOT * Tile.HEIGHT));
         entities.add(robot);
@@ -1527,7 +1523,6 @@ public class SceneFarm extends Scene {
 
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         milkOnGround = new Milk();
         milkOnGround.setPosition(
                 ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),

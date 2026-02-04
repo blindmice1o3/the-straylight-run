@@ -312,7 +312,7 @@ public class LabelPrinterFragment extends Fragment {
                                     // initialize drinkComponents for drink
                                     drinkToAdd.getDrinkComponentsBySize(sizeToAdd);
 
-                                    // TODO: handle customizations.
+                                    // handle customizations.
                                     int counter = 0;
                                     String textCustomizationForLabel = "";
                                     for (String customization : customizations) {
@@ -488,7 +488,7 @@ public class LabelPrinterFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
+                        // Handle error.
 //                        Log.e(TAG, "onErrorResponse(VolleyError)" + error);
                     }
                 }

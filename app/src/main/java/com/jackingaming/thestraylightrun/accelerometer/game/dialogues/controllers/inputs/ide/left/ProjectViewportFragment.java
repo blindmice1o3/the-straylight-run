@@ -801,7 +801,6 @@ public class ProjectViewportFragment extends Fragment {
      *
      * @return A new instance of fragment ProjectViewportFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ProjectViewportFragment newInstance(Game.Run run) {
         ProjectViewportFragment fragment = new ProjectViewportFragment();
         Bundle args = new Bundle();
@@ -944,7 +943,7 @@ public class ProjectViewportFragment extends Fragment {
                 EditTextDialogFragment editTextDialogFragment = EditTextDialogFragment.newInstance(new EditTextDialogFragment.EnterListener() {
                     @Override
                     public void onDismiss() {
-                        // TODO:
+                        Log.e(TAG, "EditTextDialogFragment.EnterListener.onDismiss()");
                     }
 
                     @Override

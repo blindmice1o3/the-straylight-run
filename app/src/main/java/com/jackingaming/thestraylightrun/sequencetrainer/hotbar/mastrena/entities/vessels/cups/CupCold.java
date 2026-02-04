@@ -53,7 +53,7 @@ public class CupCold extends CupImageView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing content of cup.
+        // Open dialog listing content of cup.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 
@@ -194,7 +194,7 @@ public class CupCold extends CupImageView {
                 } else if (label.equals(ShotGlass.DRAG_LABEL)) {
                     Log.d(TAG, "label.equals(ShotGlass.DRAG_LABEL)");
 
-                    // TODO: shotOnTop
+                    // shotOnTop
                     if (milk != null) {
                         Log.d(TAG, "milk != null... setting shotOnTop to true.");
                         shotOnTop = true;

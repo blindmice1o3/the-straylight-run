@@ -257,7 +257,6 @@ public class Game {
     }
 
     public void save(Context context, String fileName) {
-        // TODO: Save to local db, file, or in-memory list.
         Log.e(TAG, "save(Context context, String fileName) START fileName: " + fileName);
         try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
@@ -274,7 +273,6 @@ public class Game {
     }
 
     public void load(Context context, String fileName) {
-        // TODO: Load from local db, file, or in-memory list.
         Log.d(TAG, "load(Context context, String fileName) START fileName: " + fileName);
         try (FileInputStream fi = context.openFileInput(fileName);
              ObjectInputStream os = new ObjectInputStream(fi)) {

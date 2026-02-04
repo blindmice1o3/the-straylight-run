@@ -131,7 +131,7 @@ public class ComputerDialogFragment extends DialogFragment
             @Override
             public void onItemClick(View view, int position) {
                 Log.d(TAG, "ComputerDialogFragment ItemRecyclerViewAdapterSeedShop.ItemClickListener.onItemClick(View view, int position): " + seedShopInventory.get(position));
-                // TODO: buy/sell transactions.
+                // buy/sell transactions.
                 Item itemToTrade = seedShopInventory.get(position);
                 performTrade(itemToTrade, Player.getInstance());
             }

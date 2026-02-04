@@ -195,13 +195,11 @@ public class SceneHome02 extends Scene {
 
     public List<Entity> createEntitiesForHome02() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         return entities;
     }
 
     public List<Item> createItemsForHome02() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

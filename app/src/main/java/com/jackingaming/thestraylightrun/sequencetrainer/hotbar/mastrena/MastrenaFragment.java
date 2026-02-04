@@ -948,7 +948,7 @@ public class MastrenaFragment extends Fragment {
                             // Display a message containing the dragged data.
                             Toast.makeText(getContext(), "Dragged data is " + dragData, Toast.LENGTH_SHORT).show();
 
-                            // TODO: use dragData to determine instantiation of CupCold/CupHot.
+                            // Use dragData to determine instantiation of CupCold/CupHot.
                             // Set ImageView's background and tag according to dragData.
                             int resId = -1;
                             CupCold.CupColdListener cupColdListener = new CupCold.CupColdListener() {

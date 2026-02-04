@@ -26,7 +26,7 @@ public class SpriteEspressoShot extends ClickableAndDraggableImageView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing details of espresso shot.
+        // Open dialog listing details of espresso shot.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

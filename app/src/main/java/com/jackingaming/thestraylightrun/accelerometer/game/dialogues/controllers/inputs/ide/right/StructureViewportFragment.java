@@ -36,7 +36,6 @@ public class StructureViewportFragment extends Fragment {
      * @param classToDisplay Class.
      * @return A new instance of fragment StructureViewportFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static StructureViewportFragment newInstance(Class classToDisplay) {
         StructureViewportFragment fragment = new StructureViewportFragment();
         Bundle args = new Bundle();

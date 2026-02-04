@@ -640,7 +640,6 @@ public class SceneCowBarn extends Scene {
 
     private List<Entity> createEntitiesForCowBarn() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
                 (3 * Tile.WIDTH),
                 (6 * Tile.HEIGHT));
@@ -656,7 +655,6 @@ public class SceneCowBarn extends Scene {
 
     private List<Item> createItemsForCowBarn() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

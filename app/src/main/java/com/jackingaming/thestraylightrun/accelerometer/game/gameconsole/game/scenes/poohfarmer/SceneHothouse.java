@@ -320,7 +320,6 @@ public class SceneHothouse extends Scene {
 
                     itemManager.removeItem(itemCurrentlyFacing);
 
-                    // TODO: push new state onto stateStack.
                     game.getStateManager().pushGrowSystemPartsDisplayerState(
                             growSystemPartsDataCarrier
                     );
@@ -563,13 +562,11 @@ public class SceneHothouse extends Scene {
 
     private List<Entity> createEntitiesForHothouse() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         return entities;
     }
 
     private List<Item> createItemsForHothouse() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

@@ -30,7 +30,7 @@ public class DrinkLabel extends ClickableAndDraggableTextView {
 
     @Override
     protected void doClick(MotionEvent event) {
-        // TODO: open dialog listing details of drink label.
+        // Open dialog listing details of drink label.
         listenerShowDialog.showSpriteDetailsDialogFragment(this);
     }
 

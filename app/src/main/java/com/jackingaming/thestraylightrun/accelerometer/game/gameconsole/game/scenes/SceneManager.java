@@ -189,7 +189,6 @@ public class SceneManager
             } else if (idOfCollidedTransferPoint.equals("COW_BARN")) {
                 push(SceneCowBarn.getInstance());
             } else if (idOfCollidedTransferPoint.equals("SEEDS_SHOP")) {
-                // TODO:
                 Log.d(TAG, getClass().getSimpleName() + ".changeScene() inSeedShopState: " + ((SceneFarm) getCurrentScene()).isInSeedShopState());
                 if (!((SceneFarm) getCurrentScene()).isInSeedShopState()) {
                     ((SceneFarm) getCurrentScene()).showSeedShopFragment();

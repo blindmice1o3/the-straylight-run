@@ -39,7 +39,6 @@ public class ClassViewerFragment extends Fragment {
      * @param myClass Class.
      * @return A new instance of fragment ClassViewerFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ClassViewerFragment newInstance(Class myClass) {
         ClassViewerFragment fragment = new ClassViewerFragment();
         Bundle args = new Bundle();

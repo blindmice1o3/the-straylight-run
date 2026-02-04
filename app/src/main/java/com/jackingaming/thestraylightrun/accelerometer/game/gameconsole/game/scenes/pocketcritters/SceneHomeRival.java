@@ -133,13 +133,11 @@ public class SceneHomeRival extends Scene {
 
     private List<Entity> createEntitiesForHomeRival() {
         List<Entity> entities = new ArrayList<Entity>();
-        // TODO: Insert scene specific entities here.
         return entities;
     }
 
     private List<Item> createItemsForHomeRival() {
         List<Item> items = new ArrayList<Item>();
-        // TODO: Insert scene specific items here.
         return items;
     }
 }

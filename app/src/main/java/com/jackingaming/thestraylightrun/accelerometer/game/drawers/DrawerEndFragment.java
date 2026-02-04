@@ -25,8 +25,6 @@ import java.io.Serializable;
 public class DrawerEndFragment extends Fragment {
     public static final String TAG = DrawerEndFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_DRAWER_END_LISTENER = "drawerEndListener";
@@ -42,7 +40,6 @@ public class DrawerEndFragment extends Fragment {
     private LinearLayout rightDrawer;
     private Button buttonSave, buttonLoad;
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -58,7 +55,6 @@ public class DrawerEndFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment DrawerEndFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static DrawerEndFragment newInstance(String param1, String param2,
                                                 DrawerEndListener drawerEndListener) {
         Log.e(TAG, "newInstance()");

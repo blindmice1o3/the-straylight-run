@@ -69,8 +69,6 @@ public class BottomDrawerDialogFragment extends BottomSheetDialogFragment {
             @Override
             public void onAnimationFinish() {
                 Log.e(TAG, "onAnimationFinish()");
-
-                // TODO:
             }
         });
     }
