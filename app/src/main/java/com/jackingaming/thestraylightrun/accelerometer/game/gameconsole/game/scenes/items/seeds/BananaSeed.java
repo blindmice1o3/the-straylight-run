@@ -4,7 +4,7 @@ import com.jackingaming.thestraylightrun.R;
 
 public class BananaSeed extends Seed {
     public static final String TAG = BananaSeed.class.getSimpleName();
-    private static final float PRICE_DEFAULT = 9000f;
+    private static final float PRICE_DEFAULT = 300f;
 
     @Override
     protected void initName() {

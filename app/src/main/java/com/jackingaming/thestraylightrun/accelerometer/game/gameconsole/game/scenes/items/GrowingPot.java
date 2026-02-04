@@ -10,8 +10,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 public class GrowingPot extends Item
         implements TileCommandOwner {
     public static final String TAG = GrowingPot.class.getSimpleName();
-
-    private static final float PRICE_DEFAULT = -1f;
+    private static final float PRICE_DEFAULT = 15f;
 
     private TileCommand tileCommand;
 

@@ -225,6 +225,8 @@ public class TimeManager
                 eventTime.setIsActive(false);
             }
         }
+
+        game.changeMusicToBreathOfDippy();
     }
 
     private void setAllEventTimeObjectsToActive() {

@@ -50,6 +50,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.TomatoSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneFarm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.time.TimeManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.scene_farm.RunOne;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.seed_shop_dialog_fragment.SeedShopOwnerQuest00;
@@ -87,35 +88,17 @@ public class SeedShopDialogFragment extends DialogFragment {
                 seedShopInventory.add(new OnionSeed());
                 seedShopInventory.add(new BitterMelonSeed());
                 seedShopInventory.add(new StrawberrySeed());
-                seedShopInventory.add(new MysterySeed());
-                seedShopInventory.add(new TomatoSeed());
-                seedShopInventory.add(new BananaSeed());
-                seedShopInventory.add(new GuavaSeed());
-                seedShopInventory.add(new LonganSeed());
-                seedShopInventory.add(new PapayaSeed());
                 break;
             case SUMMER:
                 seedShopInventory.add(new CarrotSeed());
                 seedShopInventory.add(new RadishSeed());
                 seedShopInventory.add(new CornSeed());
                 seedShopInventory.add(new LemongrassSeed());
-                seedShopInventory.add(new MysterySeed());
-                seedShopInventory.add(new TomatoSeed());
-                seedShopInventory.add(new BananaSeed());
-                seedShopInventory.add(new GuavaSeed());
-                seedShopInventory.add(new LonganSeed());
-                seedShopInventory.add(new PapayaSeed());
                 break;
             case FALL:
                 seedShopInventory.add(new GarlicSeed());
                 seedShopInventory.add(new PeanutSeed());
                 seedShopInventory.add(new EggplantSeed());
-                seedShopInventory.add(new MysterySeed());
-                seedShopInventory.add(new TomatoSeed());
-                seedShopInventory.add(new BananaSeed());
-                seedShopInventory.add(new GuavaSeed());
-                seedShopInventory.add(new LonganSeed());
-                seedShopInventory.add(new PapayaSeed());
                 break;
             case WINTER:
                 seedShopInventory.add(new GrowingPot(
@@ -133,27 +116,21 @@ public class SeedShopDialogFragment extends DialogFragment {
                 seedShopInventory.add(new GrowingPot(
                         new TillGrowableIndoorTileCommand(null)
                 ));
-                seedShopInventory.add(new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                ));
-                seedShopInventory.add(new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                ));
-                seedShopInventory.add(new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                ));
-                seedShopInventory.add(new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                ));
-                seedShopInventory.add(new GrowingPot(
-                        new TillGrowableIndoorTileCommand(null)
-                ));
-                seedShopInventory.add(new HoneyPot());
-                seedShopInventory.add(new BugCatchingNet(
-                        new BounceEntityCommand(null)
-                ));
                 break;
         }
+
+        if (game.getTimeManager().getSeason() != TimeManager.Season.WINTER) {
+            seedShopInventory.add(new MysterySeed());
+            seedShopInventory.add(new TomatoSeed());
+            seedShopInventory.add(new BananaSeed());
+            seedShopInventory.add(new GuavaSeed());
+            seedShopInventory.add(new LonganSeed());
+            seedShopInventory.add(new PapayaSeed());
+            seedShopInventory.add(new GrowingPot(
+                    new TillGrowableIndoorTileCommand(null)
+            ));
+        }
+
         for (Item item : seedShopInventory) {
             item.init(game);
         }
@@ -189,15 +166,7 @@ public class SeedShopDialogFragment extends DialogFragment {
             game.loadFromFileRunOne();
             //////////////////////////
 
-            seedShopInventory.add(new OnionSeed());
-            seedShopInventory.add(new BitterMelonSeed());
-            seedShopInventory.add(new StrawberrySeed());
-            seedShopInventory.add(new MysterySeed());
-            seedShopInventory.add(new TomatoSeed());
-            seedShopInventory.add(new BananaSeed());
-            seedShopInventory.add(new GuavaSeed());
-            seedShopInventory.add(new LonganSeed());
-            seedShopInventory.add(new PapayaSeed());
+            changeToNewSeason();
         } else {
             seedShopInventory.add(new BugCatchingNet(
                     new BounceEntityCommand(null)
@@ -234,9 +203,10 @@ public class SeedShopDialogFragment extends DialogFragment {
             seedShopInventory.add(new BugCatchingNet(
                     new BounceEntityCommand(null)
             ));
-        }
-        for (Item item : seedShopInventory) {
-            item.init(game);
+
+            for (Item item : seedShopInventory) {
+                item.init(game);
+            }
         }
     }
 
