@@ -220,6 +220,7 @@ public class RunFive
                 }
             };
 
+            SceneHothouse.getInstance().init(game);
             SceneHothouse.getInstance().registerWaterChangeListenerForAllGrowableTile(
                     indoorWaterChangeListener
             );

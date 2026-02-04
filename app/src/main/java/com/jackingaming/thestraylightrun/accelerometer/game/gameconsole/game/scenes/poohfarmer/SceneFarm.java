@@ -453,17 +453,9 @@ public class SceneFarm extends Scene {
             setupForRunThree();
         } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
             setupForRunFour();
-        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
-            setupForRunFive();
         }
 
         Log.e(TAG, "init() END");
-    }
-
-    private void setupForRunFive() {
-        Log.d(TAG, "setupForRunFive()");
-
-        SceneHothouse.getInstance().init(game);
     }
 
     private void setupForRunFour() {
