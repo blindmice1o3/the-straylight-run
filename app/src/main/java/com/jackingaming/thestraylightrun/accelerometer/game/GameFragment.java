@@ -332,6 +332,27 @@ public class GameFragment extends Fragment
                                     break;
                                 case FIVE:
                                     game.setRun(Game.Run.FIVE);
+
+                                    switch (game.getDailyLoop()) {
+                                        case TELEVISION:
+                                            break;
+                                        case NOTES_TOPIC:
+                                            game.incrementDailyLoop();
+                                            game.incrementDailyLoop();
+                                            game.incrementDailyLoop();
+                                            break;
+                                        case GROUP_CHAT:
+                                            game.incrementDailyLoop();
+                                            game.incrementDailyLoop();
+                                            break;
+                                        case COMPUTER:
+                                            game.incrementDailyLoop();
+                                            break;
+                                        case GAME_CONSOLE:
+                                            break;
+                                        case SLEEP_SAVE:
+                                            break;
+                                    }
                                     break;
                             }
                         }
