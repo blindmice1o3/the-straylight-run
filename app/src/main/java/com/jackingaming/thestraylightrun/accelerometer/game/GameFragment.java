@@ -224,9 +224,13 @@ public class GameFragment extends Fragment
                             gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER ||
                             gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE ||
                             gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
-                        drawerStartFragment.startMessageQueue(
-                                gameListener.getRun()
-                        );
+                        if (game.getRun() != Game.Run.FIVE) {
+                            drawerStartFragment.startMessageQueue(
+                                    gameListener.getRun()
+                            );
+                        } else {
+                            Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT startMessageQueue()");
+                        }
                     }
                 } else {
                     Log.e(TAG, "drawer END opened");

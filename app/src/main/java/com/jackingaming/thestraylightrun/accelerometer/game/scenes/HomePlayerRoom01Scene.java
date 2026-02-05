@@ -294,7 +294,6 @@ public class HomePlayerRoom01Scene extends Scene {
                         String id = ((UniqueSolidTile) tiles[xIndex2][yIndex2]).getId();
                         if (id.equals(UniqueSolidTile.TELEVISION)) {
                             Log.e(TAG, "unique solid tile: TELEVISION");
-
                             //////////////////////////
                             if (!isTransferPointCooldownComplete || gameListener.isStartDrawerOpen()) {
                                 return false;
@@ -376,9 +375,19 @@ public class HomePlayerRoom01Scene extends Scene {
                                                 @Override
                                                 public void onDismiss() {
                                                     if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
-                                                        //////////////////////////////////
-                                                        gameListener.incrementDailyLoop();
-                                                        //////////////////////////////////
+                                                        if (gameListener.getRun() != Game.Run.FIVE) {
+                                                            //////////////////////////////////
+                                                            gameListener.incrementDailyLoop();
+                                                            //////////////////////////////////
+                                                        } else {
+                                                            Log.e(TAG, "gameListener.getRun() == Game.Run.FIVE incrementDailyLoop() all the way to GAME_CONSOLE");
+                                                            //////////////////////////////////
+                                                            gameListener.incrementDailyLoop();
+                                                            gameListener.incrementDailyLoop();
+                                                            gameListener.incrementDailyLoop();
+                                                            gameListener.incrementDailyLoop();
+                                                            //////////////////////////////////
+                                                        }
                                                     }
 
                                                     unpause();
@@ -394,6 +403,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.COMPUTER)) {
                             Log.e(TAG, "unique solid tile: COMPUTER");
+                            if (gameListener.getRun() == Game.Run.FIVE) {
+                                Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT show IDEFragment");
+                                return false;
+                            }
+
                             if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION ||
                                     gameListener.getDailyLoop() == Game.DailyLoop.NOTES_TOPIC ||
                                     gameListener.getDailyLoop() == Game.DailyLoop.GROUP_CHAT) {
@@ -514,6 +528,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
+                            if (gameListener.getRun() == Game.Run.FIVE) {
+                                Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT show NotesViewerFragment");
+                                return false;
+                            }
+
                             if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
                                 return false;
                             }
@@ -579,7 +598,11 @@ public class HomePlayerRoom01Scene extends Scene {
                             //////////////////////////
 
                             //////////////////////////////////
-                            gameListener.incrementRun();
+                            if (gameListener.getRun() != Game.Run.FIVE) {
+                                gameListener.incrementRun();
+                            } else {
+                                Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT incrementRun()");
+                            }
                             gameListener.incrementDailyLoop();
                             //////////////////////////////////
                             return false;
