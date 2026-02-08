@@ -308,7 +308,7 @@ public class WorldScene extends Scene {
                         pause();
 
                         Fragment fragment = IDEFragment.newInstance(IDEFragment.Mode.LONG_PRESS_REVEALS,
-                                gameListener.getRun());
+                                gameListener.getCurrentRun());
                         String tag = IDEFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment = FCVDialogFragment.newInstance(fragment, tag,
@@ -340,7 +340,7 @@ public class WorldScene extends Scene {
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Pooh Farmer";
                         Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                gameListener.getRun(), null);
+                                gameListener.getCurrentRun(), null);
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =
@@ -397,7 +397,7 @@ public class WorldScene extends Scene {
                         // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                         String gameTitle = "Bubble Pop";
                         Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                gameListener.getRun(), null);
+                                gameListener.getCurrentRun(), null);
                         String tag = GameConsoleFragment.TAG;
                         boolean canceledOnTouchOutside = false;
                         DialogFragment dialogFragment =

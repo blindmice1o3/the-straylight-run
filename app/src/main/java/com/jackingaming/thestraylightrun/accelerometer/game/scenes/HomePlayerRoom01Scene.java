@@ -306,7 +306,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             pause();
 
                             String videoByRun = null;
-                            switch (gameListener.getRun()) {
+                            switch (gameListener.getCurrentRun()) {
                                 case ONE:
                                     videoByRun = VIDEO_RUN_ONE_PART_1;
                                     break;
@@ -332,7 +332,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                         public void onCompletion(MediaPlayer mediaPlayer) {
                                             Log.i(TAG, "finished playback part1!");
 
-                                            if (gameListener.getRun() == Game.Run.ONE) {
+                                            if (gameListener.getCurrentRun() == Game.Run.ONE) {
                                                 Log.i(TAG, "gameListener.getRun() == Game.Run.ONE - showing second video (commercial) and then third video (part2)");
 
                                                 VideoViewFragment videoViewFragmentCommercial = VideoViewFragment.newInstance(VIDEO_RUN_ONE_COMMERCIAL, new OnCompletionListenerDTO(new MediaPlayer.OnCompletionListener() {
@@ -375,7 +375,7 @@ public class HomePlayerRoom01Scene extends Scene {
                                                 @Override
                                                 public void onDismiss() {
                                                     if (gameListener.getDailyLoop() == Game.DailyLoop.TELEVISION) {
-                                                        if (gameListener.getRun() != Game.Run.FIVE) {
+                                                        if (gameListener.getCurrentRun() != Game.Run.FIVE) {
                                                             //////////////////////////////////
                                                             gameListener.incrementDailyLoop();
                                                             //////////////////////////////////
@@ -403,7 +403,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.COMPUTER)) {
                             Log.e(TAG, "unique solid tile: COMPUTER");
-                            if (gameListener.getRun() == Game.Run.FIVE) {
+                            if (gameListener.getCurrentRun() == Game.Run.FIVE) {
                                 Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT show IDEFragment");
                                 return false;
                             }
@@ -426,7 +426,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             pause();
 
                             Fragment fragment = IDEFragment.newInstance(IDEFragment.Mode.LONG_PRESS_REVEALS,
-                                    gameListener.getRun());
+                                    gameListener.getCurrentRun());
                             String tag = IDEFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             dialogFragmentContainingIDEFragment = FCVDialogFragment.newInstance(fragment, tag,
@@ -477,7 +477,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             // Other options: Pocket Critters, Pooh Farmer, Evo, Pong, Frogger
                             String gameTitle = "Pooh Farmer";
                             Fragment fragment = GameConsoleFragment.newInstance(gameTitle,
-                                    gameListener.getRun(), new GameConsoleFragment.SoundChangeListener() {
+                                    gameListener.getCurrentRun(), new GameConsoleFragment.SoundChangeListener() {
                                         @Override
                                         public void onChangeToTranceBattle() {
                                             soundManager.changeBackgroundMusicToTranceBattle();
@@ -528,7 +528,7 @@ public class HomePlayerRoom01Scene extends Scene {
                             return false;
                         } else if (id.equals(UniqueSolidTile.TABLE)) {
                             Log.e(TAG, "unique solid tile: TABLE");
-                            if (gameListener.getRun() == Game.Run.FIVE) {
+                            if (gameListener.getCurrentRun() == Game.Run.FIVE) {
                                 Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT show NotesViewerFragment");
                                 return false;
                             }
@@ -550,7 +550,7 @@ public class HomePlayerRoom01Scene extends Scene {
 
                             Fragment fragment = NotesViewerFragment.newInstance(
                                     NotesViewerFragment.NoteType.TOPICS,
-                                    gameListener.getRun());
+                                    gameListener.getCurrentRun());
                             String tag = NotesViewerFragment.TAG;
                             boolean canceledOnTouchOutside = false;
                             dialogFragmentContainingNotesViewerFragment = FCVDialogFragment.newInstance(fragment, tag,
@@ -598,8 +598,9 @@ public class HomePlayerRoom01Scene extends Scene {
                             //////////////////////////
 
                             //////////////////////////////////
-                            if (gameListener.getRun() != Game.Run.FIVE) {
-                                gameListener.incrementRun();
+                            if (gameListener.getCurrentRun() != Game.Run.FIVE) {
+                                gameListener.incrementCurrentRun();
+                                gameListener.changeRunColorToUnlocked(gameListener.getCurrentRun());
                             } else {
                                 Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT incrementRun()");
                             }

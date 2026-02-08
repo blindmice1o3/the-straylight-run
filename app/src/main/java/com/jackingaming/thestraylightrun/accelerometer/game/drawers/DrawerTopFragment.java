@@ -1,5 +1,6 @@
 package com.jackingaming.thestraylightrun.accelerometer.game.drawers;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,10 @@ public class DrawerTopFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String ARG_RUN_SELECTION_LISTENER = "run_selection_listener";
+    private static final int COLOR_TEXT_LOCKED = Color.LTGRAY;
+    private static final int COLOR_BACKGROUND_LOCKED = Color.DKGRAY;
+    private static final int COLOR_TEXT_UNLOCKED = Color.YELLOW;
+    private static final int COLOR_BACKGROUND_UNLOCKED = Color.BLUE;
 
     public interface SelectionListener extends Serializable {
         void onRunSelected(Game.Run run);
@@ -140,5 +145,67 @@ public class DrawerTopFragment extends Fragment {
                 selectionListener.onCloseDrawerTop();
             }
         });
+
+        changeAllRunColorToLocked();
+        changeRunColorToUnlocked(Game.Run.ONE);
+    }
+
+    public void changeAllRunColorToLocked() {
+        tvRunOne.setTextColor(COLOR_TEXT_LOCKED);
+        tvRunOne.setBackgroundColor(COLOR_BACKGROUND_LOCKED);
+        tvRunTwo.setTextColor(COLOR_TEXT_LOCKED);
+        tvRunTwo.setBackgroundColor(COLOR_BACKGROUND_LOCKED);
+        tvRunThree.setTextColor(COLOR_TEXT_LOCKED);
+        tvRunThree.setBackgroundColor(COLOR_BACKGROUND_LOCKED);
+        tvRunFour.setTextColor(COLOR_TEXT_LOCKED);
+        tvRunFour.setBackgroundColor(COLOR_BACKGROUND_LOCKED);
+        tvRunFive.setTextColor(COLOR_TEXT_LOCKED);
+        tvRunFive.setBackgroundColor(COLOR_BACKGROUND_LOCKED);
+    }
+
+    public void changeRunColorToUnlocked(Game.Run run) {
+        // change PREVIOUS runs' color to be compatible with game.load(Context, String).
+        switch (run) {
+            case ONE:
+                tvRunOne.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunOne.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                break;
+            case TWO:
+                tvRunOne.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunOne.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunTwo.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunTwo.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                break;
+            case THREE:
+                tvRunOne.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunOne.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunTwo.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunTwo.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunThree.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunThree.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                break;
+            case FOUR:
+                tvRunOne.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunOne.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunTwo.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunTwo.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunThree.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunThree.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunFour.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunFour.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                break;
+            case FIVE:
+                tvRunOne.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunOne.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunTwo.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunTwo.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunThree.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunThree.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunFour.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunFour.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                tvRunFive.setTextColor(COLOR_TEXT_UNLOCKED);
+                tvRunFive.setBackgroundColor(COLOR_BACKGROUND_UNLOCKED);
+                break;
+        }
     }
 }

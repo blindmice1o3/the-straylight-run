@@ -224,9 +224,9 @@ public class GameFragment extends Fragment
                             gameListener.getDailyLoop() == Game.DailyLoop.COMPUTER ||
                             gameListener.getDailyLoop() == Game.DailyLoop.GAME_CONSOLE ||
                             gameListener.getDailyLoop() == Game.DailyLoop.SLEEP_SAVE) {
-                        if (game.getRun() != Game.Run.FIVE) {
+                        if (game.getCurrentRun() != Game.Run.FIVE) {
                             drawerStartFragment.startMessageQueue(
-                                    gameListener.getRun()
+                                    gameListener.getCurrentRun()
                             );
                         } else {
                             Log.e(TAG, "game.getRun() == Game.Run.FIVE do NOT startMessageQueue()");
@@ -319,19 +319,19 @@ public class GameFragment extends Fragment
                         public void onRunSelected(Game.Run run) {
                             switch (run) {
                                 case ONE:
-                                    game.setRun(Game.Run.ONE);
+                                    game.setCurrentRun(Game.Run.ONE);
                                     break;
                                 case TWO:
-                                    game.setRun(Game.Run.TWO);
+                                    game.setCurrentRun(Game.Run.TWO);
                                     break;
                                 case THREE:
-                                    game.setRun(Game.Run.THREE);
+                                    game.setCurrentRun(Game.Run.THREE);
                                     break;
                                 case FOUR:
-                                    game.setRun(Game.Run.FOUR);
+                                    game.setCurrentRun(Game.Run.FOUR);
                                     break;
                                 case FIVE:
-                                    game.setRun(Game.Run.FIVE);
+                                    game.setCurrentRun(Game.Run.FIVE);
 
                                     switch (game.getDailyLoop()) {
                                         case TELEVISION:
@@ -553,13 +553,23 @@ public class GameFragment extends Fragment
             }
 
             @Override
-            public Game.Run getRun() {
-                return game.getRun();
+            public Game.Run getCurrentRun() {
+                return game.getCurrentRun();
             }
 
             @Override
-            public void incrementRun() {
-                game.incrementRun();
+            public void incrementCurrentRun() {
+                game.incrementCurrentRun();
+            }
+
+            @Override
+            public void changeAllRunColorToLocked() {
+                drawerTopFragment.changeAllRunColorToLocked();
+            }
+
+            @Override
+            public void changeRunColorToUnlocked(Game.Run highestRun) {
+                drawerTopFragment.changeRunColorToUnlocked(highestRun);
             }
 
             @Override

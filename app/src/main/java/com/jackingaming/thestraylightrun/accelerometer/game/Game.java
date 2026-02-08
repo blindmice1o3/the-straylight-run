@@ -36,34 +36,37 @@ public class Game {
 
     public enum Run {ONE, TWO, THREE, FOUR, FIVE;}
 
-    private Run run = Run.ONE;
+    private Run currentRun = Run.ONE;
+    private Run highestRun = Run.ONE;
 
-    public Run getRun() {
-        return run;
+    public Run getCurrentRun() {
+        return currentRun;
     }
 
-    public void setRun(Run run) {
-        this.run = run;
+    public void setCurrentRun(Run currentRun) {
+        this.currentRun = currentRun;
     }
 
-    public void incrementRun() {
-        switch (run) {
+    public void incrementCurrentRun() {
+        switch (currentRun) {
             case ONE:
-                run = Run.TWO;
+                currentRun = Run.TWO;
                 break;
             case TWO:
-                run = Run.THREE;
+                currentRun = Run.THREE;
                 break;
             case THREE:
-                run = Run.FOUR;
+                currentRun = Run.FOUR;
                 break;
             case FOUR:
-                run = Run.FIVE;
+                currentRun = Run.FIVE;
                 break;
             case FIVE:
                 // Intentionally blank.
                 break;
         }
+
+        highestRun = currentRun;
     }
 
     public enum DailyLoop {
@@ -126,9 +129,13 @@ public class Game {
 
         void removeImageViewOfEntityFromFrameLayout();
 
-        Run getRun();
+        Run getCurrentRun();
 
-        void incrementRun();
+        void incrementCurrentRun();
+
+        void changeAllRunColorToLocked();
+
+        void changeRunColorToUnlocked(Run highestRun);
 
         DailyLoop getDailyLoop();
 
@@ -260,7 +267,8 @@ public class Game {
         Log.e(TAG, "save(Context context, String fileName) START fileName: " + fileName);
         try (FileOutputStream fs = context.openFileOutput(fileName, Context.MODE_PRIVATE);
              ObjectOutputStream os = new ObjectOutputStream(fs)) {
-            os.writeObject(run);
+            os.writeObject(currentRun);
+            os.writeObject(highestRun);
             os.writeObject(dailyLoop);
             os.writeFloat(HomePlayerRoom01Scene.getInstance().getPlayer().getXPos());
             os.writeFloat(HomePlayerRoom01Scene.getInstance().getPlayer().getYPos());
@@ -276,7 +284,8 @@ public class Game {
         Log.d(TAG, "load(Context context, String fileName) START fileName: " + fileName);
         try (FileInputStream fi = context.openFileInput(fileName);
              ObjectInputStream os = new ObjectInputStream(fi)) {
-            run = (Run) os.readObject();
+            currentRun = (Run) os.readObject();
+            highestRun = (Run) os.readObject();
             dailyLoop = (DailyLoop) os.readObject();
             HomePlayerRoom01Scene.getInstance().getPlayer().setXPos(
                     os.readFloat()
@@ -284,6 +293,9 @@ public class Game {
             HomePlayerRoom01Scene.getInstance().getPlayer().setYPos(
                     os.readFloat()
             );
+
+            gameListener.changeAllRunColorToLocked();
+            gameListener.changeRunColorToUnlocked(highestRun);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
