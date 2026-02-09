@@ -35,8 +35,6 @@ public class DrawerTopFragment extends Fragment {
 
     public interface SelectionListener extends Serializable {
         void onRunSelected(Game.Run run);
-
-        void onCloseDrawerTop();
     }
 
     private SelectionListener selectionListener;
@@ -114,35 +112,30 @@ public class DrawerTopFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 selectionListener.onRunSelected(Game.Run.ONE);
-                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectionListener.onRunSelected(Game.Run.TWO);
-                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunThree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectionListener.onRunSelected(Game.Run.THREE);
-                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunFour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectionListener.onRunSelected(Game.Run.FOUR);
-                selectionListener.onCloseDrawerTop();
             }
         });
         tvRunFive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectionListener.onRunSelected(Game.Run.FIVE);
-                selectionListener.onCloseDrawerTop();
             }
         });
 

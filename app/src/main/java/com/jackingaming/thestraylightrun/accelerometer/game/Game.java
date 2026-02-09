@@ -47,6 +47,10 @@ public class Game {
         this.currentRun = currentRun;
     }
 
+    public Run getHighestRun() {
+        return highestRun;
+    }
+
     public void incrementCurrentRun() {
         switch (currentRun) {
             case ONE:

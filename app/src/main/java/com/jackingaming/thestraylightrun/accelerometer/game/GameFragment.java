@@ -317,22 +317,48 @@ public class GameFragment extends Fragment
                     new DrawerTopFragment.SelectionListener() {
                         @Override
                         public void onRunSelected(Game.Run run) {
+                            Game.Run highestRun = game.getHighestRun();
                             switch (run) {
                                 case ONE:
                                     game.setCurrentRun(Game.Run.ONE);
+                                    appBarLayout.setExpanded(false);
                                     break;
                                 case TWO:
+                                    if (highestRun == Game.Run.ONE) {
+                                        return;
+                                    }
+
                                     game.setCurrentRun(Game.Run.TWO);
+                                    appBarLayout.setExpanded(false);
                                     break;
                                 case THREE:
+                                    if (highestRun == Game.Run.ONE ||
+                                            highestRun == Game.Run.TWO) {
+                                        return;
+                                    }
+
                                     game.setCurrentRun(Game.Run.THREE);
+                                    appBarLayout.setExpanded(false);
                                     break;
                                 case FOUR:
+                                    if (highestRun == Game.Run.ONE ||
+                                            highestRun == Game.Run.TWO ||
+                                            highestRun == Game.Run.THREE) {
+                                        return;
+                                    }
+
                                     game.setCurrentRun(Game.Run.FOUR);
+                                    appBarLayout.setExpanded(false);
                                     break;
                                 case FIVE:
-                                    game.setCurrentRun(Game.Run.FIVE);
+                                    if (highestRun == Game.Run.ONE ||
+                                            highestRun == Game.Run.TWO ||
+                                            highestRun == Game.Run.THREE ||
+                                            highestRun == Game.Run.FOUR) {
+                                        return;
+                                    }
 
+                                    game.setCurrentRun(Game.Run.FIVE);
                                     switch (game.getDailyLoop()) {
                                         case TELEVISION:
                                             break;
@@ -353,13 +379,9 @@ public class GameFragment extends Fragment
                                         case SLEEP_SAVE:
                                             break;
                                     }
+                                    appBarLayout.setExpanded(false);
                                     break;
                             }
-                        }
-
-                        @Override
-                        public void onCloseDrawerTop() {
-                            appBarLayout.setExpanded(false);
                         }
                     });
             getChildFragmentManager().beginTransaction()
