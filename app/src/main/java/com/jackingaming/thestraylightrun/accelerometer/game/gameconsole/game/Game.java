@@ -675,12 +675,21 @@ public class Game {
             backpack = (List<ItemStackable>) os.readObject();
             for (ItemStackable stackable : backpack) {
                 stackable.getItem().init(this);
+
+                if (stackable.getItem() instanceof Scissors) {
+                    ((RemoveEntityCommand) (((Scissors) stackable.getItem()).getEntityCommand())).setGame(this);
+                }
             }
             boolean hasItemInButtonHolderA = os.readBoolean();
             Log.e(TAG, "hasItemInButtonHolderA: " + hasItemInButtonHolderA);
             if (hasItemInButtonHolderA) {
                 itemStoredInButtonHolderA = (Item) os.readObject();
                 itemStoredInButtonHolderA.init(this);
+
+                if (itemStoredInButtonHolderA instanceof Scissors) {
+                    ((RemoveEntityCommand) (((Scissors) itemStoredInButtonHolderA).getEntityCommand())).setGame(this);
+                }
+
                 statsChangeListener.onButtonHolderAChange(itemStoredInButtonHolderA);
             } else {
                 itemStoredInButtonHolderA = null;
@@ -692,6 +701,11 @@ public class Game {
             if (hasItemInButtonHolderB) {
                 itemStoredInButtonHolderB = (Item) os.readObject();
                 itemStoredInButtonHolderB.init(this);
+
+                if (itemStoredInButtonHolderB instanceof Scissors) {
+                    ((RemoveEntityCommand) (((Scissors) itemStoredInButtonHolderB).getEntityCommand())).setGame(this);
+                }
+
                 statsChangeListener.onButtonHolderBChange(
                         itemStoredInButtonHolderB
                 );

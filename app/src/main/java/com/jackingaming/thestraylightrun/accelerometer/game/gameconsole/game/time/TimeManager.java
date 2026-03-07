@@ -96,7 +96,6 @@ public class TimeManager
         year = 1;
         season = Season.SPRING;
         day = 1;
-
         resetInGameClock();
 
         isPaused = false;

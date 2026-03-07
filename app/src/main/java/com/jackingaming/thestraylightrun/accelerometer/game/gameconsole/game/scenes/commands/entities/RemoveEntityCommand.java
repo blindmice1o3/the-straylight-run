@@ -54,4 +54,8 @@ public class RemoveEntityCommand
         Log.e(TAG, "entity is NOT Plant... entity's class: " + entity.getClass().getSimpleName());
         return false;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
