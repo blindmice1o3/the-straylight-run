@@ -45,6 +45,7 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     private static final String ID_VIDEO_HOST_RUN_TWO = "vid_20250913_161759550_run_two_post_compression_10_rotated";
     private static final String ID_VIDEO_HOST_RUN_THREE = "vid_20250917_180111542_run_three_post_compression_10_rotated";
     private static final String ID_VIDEO_HOST_RUN_FOUR = "vid_20250918_173333392_run_four_post_compression_10_rotated";
+    private static final String ID_VIDEO_HOST_RUN_FIVE = "pxl_20250429_193429506";
     private static final String ID_VIDEO_FULL_SCREEN_NOT_BAD_NOT_BAD_BURGERS = "vid_not_bad_not_bad_burger_2025_06_10";
     private static final String ID_VIDEO_FULL_SCREEN_PRIMITIVE_VS_OBJECT_TYPE = "vid_primitive_vs_object_type_2025_08_11";
 //    private static final String ID_VIDEO_FULL_SCREEN = "vid_20230603_145112";
@@ -200,17 +201,17 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
         frameLayoutParent = view.findViewById(R.id.framelayout_parent);
 
         // roadmap
-        ivRoadmap = new ImageView(getContext());
-        ivRoadmap.setScaleType(ImageView.ScaleType.FIT_XY);
-        ivRoadmap.setImageResource(
-                R.drawable.nwt_run_four_slide_1_0of6_list_roadmap
-        );
-        FrameLayout.LayoutParams layoutParamsRoadmap = new FrameLayout.LayoutParams(
-                414, // Width
-                203  // Height
-        );
-        layoutParamsRoadmap.setMargins(32, 32, 0, 0);
-        frameLayoutParent.addView(ivRoadmap, layoutParamsRoadmap);
+//        ivRoadmap = new ImageView(getContext());
+//        ivRoadmap.setScaleType(ImageView.ScaleType.FIT_XY);
+//        ivRoadmap.setImageResource(
+//                R.drawable.nwt_run_four_slide_1_0of6_list_roadmap
+//        );
+//        FrameLayout.LayoutParams layoutParamsRoadmap = new FrameLayout.LayoutParams(
+//                414, // Width
+//                203  // Height
+//        );
+//        layoutParamsRoadmap.setMargins(32, 32, 0, 0);
+//        frameLayoutParent.addView(ivRoadmap, layoutParamsRoadmap);
 
         frameLayoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,114 +219,122 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
 //                List listOfResources = (List) resourceIDs.get(0);
 
                 if (indexList == 0) {
+                    // mom transplanting
                     // list of string
                     Log.e(TAG, "indexList == 0");
 
                     ivListOfString = new ImageView(getContext());
                     ivListOfString.setScaleType(ImageView.ScaleType.FIT_XY);
                     ivListOfString.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
+                            R.drawable.nwt_run_five_slide_1_1of3_mom_transplanting
+//                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
                     );
                     FrameLayout.LayoutParams layoutParamsListOfString = new FrameLayout.LayoutParams(
-                            768, // Width
-                            512  // Height
+                            576,
+                            765
+//                            768, // Width
+//                            512  // Height
                     );
-                    layoutParamsListOfString.setMargins(32, 267, 0, 0);
+                    layoutParamsListOfString.setMargins(96, 160, 0, 0);
                     frameLayoutParent.addView(ivListOfString, layoutParamsListOfString);
                     indexList++;
                 } else if (indexList == 1) {
+                    // Mother's Day.
                     // declaring a list
                     Log.e(TAG, "indexList == 1");
 
-                    frameLayoutParent.removeView(ivListOfString);
-                    ivListOfString = new ImageView(getContext());
-                    ivListOfString.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivListOfString.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
-                    );
-                    FrameLayout.LayoutParams layoutParamsListOfString = new FrameLayout.LayoutParams(
-                            384, // Width
-                            256  // Height
-                    );
-                    layoutParamsListOfString.setMargins(478, 32, 0, 0);
-                    frameLayoutParent.addView(ivListOfString, layoutParamsListOfString);
+//                    frameLayoutParent.removeView(ivListOfString);
+//                    ivListOfString = new ImageView(getContext());
+//                    ivListOfString.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    ivListOfString.setImageResource(
+//                            R.drawable.nwt_run_four_slide_1_1of6_list_of_string
+//                    );
+//                    FrameLayout.LayoutParams layoutParamsListOfString = new FrameLayout.LayoutParams(
+//                            384, // Width
+//                            256  // Height
+//                    );
+//                    layoutParamsListOfString.setMargins(478, 32, 0, 0);
+//                    frameLayoutParent.addView(ivListOfString, layoutParamsListOfString);
 
                     ivDeclaringList = new ImageView(getContext());
                     ivDeclaringList.setScaleType(ImageView.ScaleType.FIT_XY);
                     ivDeclaringList.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_2of6_list_declaring_a_list
+                            R.drawable.nwt_run_five_slide_1_2of3_mothers_day
+//                            R.drawable.nwt_run_four_slide_1_2of6_list_declaring_a_list
                     );
                     FrameLayout.LayoutParams layoutParamsDeclaringList = new FrameLayout.LayoutParams(
-                            668, // Width
-                            64  // Height
+                            665, // Width
+                            133  // Height
                     );
-                    layoutParamsDeclaringList.setMargins(32, 320, 0, 0);
+                    layoutParamsDeclaringList.setMargins(64, 64, 0, 0);
                     frameLayoutParent.addView(ivDeclaringList, layoutParamsDeclaringList);
                     indexList++;
                 } else if (indexList == 2) {
+                    // Every day.
                     // adding items
                     Log.e(TAG, "indexList == 2");
 
                     ivAddingItems = new ImageView(getContext());
                     ivAddingItems.setScaleType(ImageView.ScaleType.FIT_XY);
                     ivAddingItems.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_3of6_list_adding_items
+                            R.drawable.nwt_run_five_slide_1_3of3_every_day
+//                            R.drawable.nwt_run_four_slide_1_3of6_list_adding_items
                     );
                     FrameLayout.LayoutParams layoutParamsDeclaringList = new FrameLayout.LayoutParams(
-                            323, // Width
-                            113  // Height
+                            665, // Width
+                            133  // Height
                     );
-                    layoutParamsDeclaringList.setMargins(32, 416, 0, 0);
+                    layoutParamsDeclaringList.setMargins(64, 888, 0, 0);
                     frameLayoutParent.addView(ivAddingItems, layoutParamsDeclaringList);
                     indexList++;
                 } else if (indexList == 3) {
                     // accessing items
-                    Log.e(TAG, "indexList == 3");
-
-                    ivAccessingItems = new ImageView(getContext());
-                    ivAccessingItems.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivAccessingItems.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_4of6_list_accessing_items
-                    );
-                    FrameLayout.LayoutParams layoutParamsAccessingItems = new FrameLayout.LayoutParams(
-                            458, // Width
-                            64  // Height
-                    );
-                    layoutParamsAccessingItems.setMargins(32, 561, 0, 0);
-                    frameLayoutParent.addView(ivAccessingItems, layoutParamsAccessingItems);
-                    indexList++;
+//                    Log.e(TAG, "indexList == 3");
+//
+//                    ivAccessingItems = new ImageView(getContext());
+//                    ivAccessingItems.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    ivAccessingItems.setImageResource(
+//                            R.drawable.nwt_run_four_slide_1_4of6_list_accessing_items
+//                    );
+//                    FrameLayout.LayoutParams layoutParamsAccessingItems = new FrameLayout.LayoutParams(
+//                            458, // Width
+//                            64  // Height
+//                    );
+//                    layoutParamsAccessingItems.setMargins(32, 561, 0, 0);
+//                    frameLayoutParent.addView(ivAccessingItems, layoutParamsAccessingItems);
+//                    indexList++;
                 } else if (indexList == 4) {
                     // looping through a list
-                    Log.e(TAG, "indexList == 4");
-
-                    ivLoopingThroughList = new ImageView(getContext());
-                    ivLoopingThroughList.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivLoopingThroughList.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_5of6_list_looping_through_a_list
-                    );
-                    FrameLayout.LayoutParams layoutParamsLoopingThroughList = new FrameLayout.LayoutParams(
-                            558, // Width
-                            112  // Height
-                    );
-                    layoutParamsLoopingThroughList.setMargins(32, 657, 0, 0);
-                    frameLayoutParent.addView(ivLoopingThroughList, layoutParamsLoopingThroughList);
-                    indexList++;
+//                    Log.e(TAG, "indexList == 4");
+//
+//                    ivLoopingThroughList = new ImageView(getContext());
+//                    ivLoopingThroughList.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    ivLoopingThroughList.setImageResource(
+//                            R.drawable.nwt_run_four_slide_1_5of6_list_looping_through_a_list
+//                    );
+//                    FrameLayout.LayoutParams layoutParamsLoopingThroughList = new FrameLayout.LayoutParams(
+//                            558, // Width
+//                            112  // Height
+//                    );
+//                    layoutParamsLoopingThroughList.setMargins(32, 657, 0, 0);
+//                    frameLayoutParent.addView(ivLoopingThroughList, layoutParamsLoopingThroughList);
+//                    indexList++;
                 } else if (indexList == 5) {
                     // modifying a list
-                    Log.e(TAG, "indexList == 5");
-
-                    ivModifyingList = new ImageView(getContext());
-                    ivModifyingList.setScaleType(ImageView.ScaleType.FIT_XY);
-                    ivModifyingList.setImageResource(
-                            R.drawable.nwt_run_four_slide_1_6of6_list_modifying_a_list
-                    );
-                    FrameLayout.LayoutParams layoutParamsModifyingList = new FrameLayout.LayoutParams(
-                            396, // Width
-                            78  // Height
-                    );
-                    layoutParamsModifyingList.setMargins(32, 801, 0, 0);
-                    frameLayoutParent.addView(ivModifyingList, layoutParamsModifyingList);
-                    indexList++;
+//                    Log.e(TAG, "indexList == 5");
+//
+//                    ivModifyingList = new ImageView(getContext());
+//                    ivModifyingList.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    ivModifyingList.setImageResource(
+//                            R.drawable.nwt_run_four_slide_1_6of6_list_modifying_a_list
+//                    );
+//                    FrameLayout.LayoutParams layoutParamsModifyingList = new FrameLayout.LayoutParams(
+//                            396, // Width
+//                            78  // Height
+//                    );
+//                    layoutParamsModifyingList.setMargins(32, 801, 0, 0);
+//                    frameLayoutParent.addView(ivModifyingList, layoutParamsModifyingList);
+//                    indexList++;
                 } else if (indexList == 6) {
                     Log.e(TAG, "indexList == 6");
                 } else if (indexList == 7) {
@@ -742,7 +751,10 @@ public class NextWeekTonightEpisodesGeneratorFragment extends Fragment
     private void initializePlayer() {
         Log.i(TAG, "initializePlayer()");
 
-        Uri videoUri = getMedia(ID_VIDEO_HOST_RUN_ONE_PART_ONE);
+        Uri videoUri = getMedia(
+                ID_VIDEO_HOST_RUN_FIVE
+//                ID_VIDEO_HOST_RUN_ONE_PART_ONE
+        );
         videoViewHost.setVideoURI(videoUri);
         // Skipping to 1 shows the first frame of the video.
         videoViewHost.seekTo(1);
