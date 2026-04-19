@@ -52,7 +52,7 @@ public class HomePlayerRoom01Scene extends Scene {
     private static final String VIDEO_RUN_TWO = "vid_20250913_161759550_run_two_post_rotated_90_compressed";
     private static final String VIDEO_RUN_THREE = "vid_20250917_180111542_run_three_post_rotated_90_compressed";
     private static final String VIDEO_RUN_FOUR = "vid_20250918_173333392_run_four_post_rotated_90_compressed";
-    private static final String VIDEO_RUN_FIVE = "pxl_20250429_193429506";
+    private static final String VIDEO_RUN_FIVE = "vid_20260413_014627440_run_five_post_rotated_90_compressed";
     private static final long TARGET_TRANSFER_POINT_COOLDOWN = 2500L;
 
     private static HomePlayerRoom01Scene instance;
