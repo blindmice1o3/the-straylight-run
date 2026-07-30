@@ -8,7 +8,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Gam
 public class GameState
         implements State {
 
-    private Game game;
+    transient private Game game;
 
     public GameState() {
 

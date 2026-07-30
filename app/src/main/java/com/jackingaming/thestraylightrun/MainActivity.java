@@ -1,11 +1,9 @@
 package com.jackingaming.thestraylightrun;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +11,26 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.GameFragment;
-import com.jackingaming.thestraylightrun.accelerometer.redandgreen.AccelerometerFragment;
 import com.jackingaming.thestraylightrun.nextweektonight.NextWeekTonightEpisodesGeneratorFragment;
-import com.jackingaming.thestraylightrun.nextweektonight.OnCompletionListenerDTO;
-import com.jackingaming.thestraylightrun.nextweektonight.VideoViewFragment;
 import com.jackingaming.thestraylightrun.sandbox.SandboxFragment;
 import com.jackingaming.thestraylightrun.sandbox.particleexplosion.ParticleExplosionFragment;
 import com.jackingaming.thestraylightrun.sequencetrainer.SequenceTrainerFragment;
 import com.jackingaming.thestraylightrun.spritesheetclipselector.controllers.SpriteSheetClipSelectorFragment;
 
 public class MainActivity extends AppCompatActivity {
+    public String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d(TAG, "onCreate() start");
+
+        Thread.setDefaultUncaughtExceptionHandler(
+                (thread, throwable) -> {
+                    Log.e("CRASH", "Uncaught exception", throwable);
+                });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,9 +38,22 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.fcv_main, AccelerometerFragment.newInstance(null, null), null)
+                    .add(R.id.fcv_main,
+                            GameFragment.newInstance(null, null,
+                                    new GameFragment.ReplaceFragmentListener() {
+                                        @Override
+                                        public void onReplaceFragment(Fragment newFragment) {
+                                            replaceFragmentInContainerUsingCardFlipAnimations(
+                                                    newFragment
+                                            );
+                                        }
+                                    }),
+//                            AccelerometerFragment.newInstance(null, null),
+                            null)
                     .commit();
         }
+
+        Log.d(TAG, "onCreate() end");
     }
 
     @Override

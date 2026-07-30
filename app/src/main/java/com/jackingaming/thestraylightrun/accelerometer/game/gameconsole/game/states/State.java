@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
 
-public interface State {
+import java.io.Serializable;
+
+public interface State extends Serializable {
     void reload(Game game);
 
     void init(Game game);

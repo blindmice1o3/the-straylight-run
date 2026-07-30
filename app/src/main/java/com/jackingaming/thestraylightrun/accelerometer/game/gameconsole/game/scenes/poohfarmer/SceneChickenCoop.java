@@ -58,10 +58,8 @@ public class SceneChickenCoop extends Scene {
 
     private SceneChickenCoop() {
         super();
-        List<Entity> entitiesForChickenCoop = createEntitiesForChickenCoop();
-        entityManager.loadEntities(entitiesForChickenCoop);
-        List<Item> itemsForChickenCoop = createItemsForChickenCoop();
-        itemManager.loadItems(itemsForChickenCoop);
+        feedingStallTiles = new ArrayList<>();
+        eggIncubatorTiles = new ArrayList<>();
 
         shippingBinIncomeListener = new ShippingBinTile.IncomeListener() {
             @Override
@@ -69,9 +67,6 @@ public class SceneChickenCoop extends Scene {
                 game.incrementCurrency(amountToIncrement);
             }
         };
-
-        feedingStallTiles = new ArrayList<>();
-        eggIncubatorTiles = new ArrayList<>();
     }
 
     public static SceneChickenCoop getInstance() {
@@ -183,9 +178,109 @@ public class SceneChickenCoop extends Scene {
         }
     }
 
+    public void reload(Game game) {
+        this.game = game;
+
+        tileManager.reload(game);
+        Map<String, Rect> transferPointsForChickenCoop = createTransferPointsForChickenCoop();
+        tileManager.loadTransferPoints(transferPointsForChickenCoop);
+        reloadTileManager(game);
+
+        for (FeedingStallTile feedingStallTile : feedingStallTiles) {
+            feedingStallTile.reload(game);
+        }
+        Log.e(TAG, "feedingStallTiles.size() is " + feedingStallTiles.size());
+        for (EggIncubatorTile eggIncubatorTile : eggIncubatorTiles) {
+            eggIncubatorTile.reload(game,
+                    eggIncubatorTiles.get(0), eggIncubatorTiles.get(1));
+        }
+
+        entityManager.init(game);
+        itemManager.init(game);
+    }
+
+    public Egg getEggIncubatingIntoChick() {
+        return EggIncubatorTile.getEggToIncubateIntoChick();
+    }
+
+    public void setEggIncubatingIntoChick(Egg eggToIncubateIntoChick) {
+        EggIncubatorTile.setEggToIncubateIntoChick(eggToIncubateIntoChick);
+    }
+
+    public int getDaysIncubated() {
+        return EggIncubatorTile.getDaysIncubated();
+    }
+
+    public void setDaysIncubated(int daysIncubated) {
+        EggIncubatorTile.setDaysIncubated(daysIncubated);
+    }
+
+    private void reloadTileManager(Game game) {
+        Tile[][] chickenCoop = tileManager.getTiles();
+        Bitmap imageChickenCoop = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_chicken_coop_with_sign_post);
+
+        for (int y = 0; y < chickenCoop.length; y++) {
+            for (int x = 0; x < chickenCoop[0].length; x++) {
+                int xInPixel = x * TILE_WIDTH;
+                int yInPixel = y * TILE_HEIGHT;
+                int widthInPixel = TILE_WIDTH;
+                int heightInPixel = TILE_HEIGHT;
+
+                Tile tile = chickenCoop[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                //ShippingBinTile
+                if (tile.getId().equals("c")) {
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ1;
+                } else if (tile.getId().equals("d")) {
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
+
+                    Bitmap tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ2;
+                } else if (tile.getId().equals("e")) {
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ3;
+                } else if (tile.getId().equals("f")) {
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
+
+                    Bitmap tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ4;
+                }
+
+                tile.init(game, x, y, tileSprite);
+            }
+        }
+    }
+
     @Override
     public void init(Game game) {
         this.game = game;
+
+        List<Entity> entitiesForChickenCoop = createEntitiesForChickenCoop();
+        entityManager.loadEntities(entitiesForChickenCoop);
+        List<Item> itemsForChickenCoop = createItemsForChickenCoop();
+        itemManager.loadItems(itemsForChickenCoop);
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -198,8 +293,10 @@ public class SceneChickenCoop extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        aimlessWalker1.changeToWalk();
-        aimlessWalker2.changeToWalk();
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            aimlessWalker1.changeToWalk();
+            aimlessWalker2.changeToWalk();
+        }
     }
 
     @Override
@@ -250,10 +347,10 @@ public class SceneChickenCoop extends Scene {
                                     Log.d(TAG, "EggIncubatorTile.isAvailableToIncubate()");
 
                                     EggIncubatorTile eggIncubatorTile = (EggIncubatorTile) tileCurrentlyFacing;
-                                    Egg eggToIncubateIntoChicken = (Egg) player.getCarryable();
+                                    Egg eggToIncubateIntoChick = (Egg) player.getCarryable();
 
                                     ////////////////////////////////////////////////////////////////
-                                    eggIncubatorTile.startIncubatingEggIntoChicken(eggToIncubateIntoChicken,
+                                    eggIncubatorTile.startIncubatingEggIntoChick(eggToIncubateIntoChick,
                                             eggIncubatorTiles.get(0), eggIncubatorTiles.get(1));
                                     player.removeCarryable();
                                     ////////////////////////////////////////////////////////////////
@@ -505,21 +602,18 @@ public class SceneChickenCoop extends Scene {
                 int heightInPixel = TILE_HEIGHT;
 
                 Tile tile = chickenCoop[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
                 //(GenericWalkableTile)
                 if (tile.getId().equals("0")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                 }
                 //(GenericSolidTile)
                 else if (tile.getId().equals("1")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
                 //(SignPostTile)
                 else if (tile.getId().equals("a")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-
                     SignPostTile signPostTile = new SignPostTile(SignPostTile.TAG);
                     signPostTile.init(game, x, y, tileSprite);
                     signPostTile.setWalkable(false);
@@ -528,8 +622,6 @@ public class SceneChickenCoop extends Scene {
                 }
                 //EggIncubatorTile
                 else if (tile.getId().equals("g")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-
                     EggIncubatorTile eggIncubatorTile = new EggIncubatorTile(EggIncubatorTile.TAG);
                     eggIncubatorTile.init(game, x, y, tileSprite);
                     eggIncubatorTile.setWalkable(false);
@@ -540,8 +632,6 @@ public class SceneChickenCoop extends Scene {
                 }
                 //FodderStashTile
                 else if (tile.getId().equals("h")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-
                     Tile tileFodderStash = new FodderStashTile(FodderStashTile.TAG);
                     tileFodderStash.init(game, x, y, tileSprite);
                     tileFodderStash.setWalkable(false);
@@ -550,8 +640,6 @@ public class SceneChickenCoop extends Scene {
                 }
                 //FeedingStallTile
                 else if (tile.getId().equals("i")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
-
                     FeedingStallTile tileFeedingStall = new FeedingStallTile(FeedingStallTile.TAG);
                     tileFeedingStall.init(game, x, y, tileSprite);
                     tileFeedingStall.setWalkable(false);
@@ -563,14 +651,13 @@ public class SceneChickenCoop extends Scene {
                 //ShippingBinTile
                 else if (tile.getId().equals("c")) {
                     Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                     Bitmap tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ1, 0, 0, null);
 
-                    Tile shippingBinTileTopLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileTopLeft = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_LEFT,
                             shippingBinIncomeListener);
                     shippingBinTileTopLeft.init(game, x, y, tileSpriteAndShippingBinQ1);
@@ -578,14 +665,13 @@ public class SceneChickenCoop extends Scene {
                     chickenCoop[y][x] = shippingBinTileTopLeft;
                 } else if (tile.getId().equals("d")) {
                     Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                     Bitmap tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ2, 0, 0, null);
 
-                    Tile shippingBinTileTopRight = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileTopRight = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_RIGHT,
                             shippingBinIncomeListener);
                     shippingBinTileTopRight.init(game, x, y, tileSpriteAndShippingBinQ2);
@@ -593,14 +679,13 @@ public class SceneChickenCoop extends Scene {
                     chickenCoop[y][x] = shippingBinTileTopRight;
                 } else if (tile.getId().equals("e")) {
                     Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                     Bitmap tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ3, 0, 0, null);
 
-                    Tile shippingBinTileBottomLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileBottomLeft = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_LEFT,
                             shippingBinIncomeListener);
                     shippingBinTileBottomLeft.init(game, x, y, tileSpriteAndShippingBinQ3);
@@ -608,14 +693,13 @@ public class SceneChickenCoop extends Scene {
                     chickenCoop[y][x] = shippingBinTileBottomLeft;
                 } else if (tile.getId().equals("f")) {
                     Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
-                    Bitmap tileSprite = Bitmap.createBitmap(imageChickenCoop, xInPixel, yInPixel, widthInPixel, heightInPixel);
 
                     Bitmap tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ4, 0, 0, null);
 
-                    Tile shippingBinTileBottomRight = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileBottomRight = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_RIGHT,
                             shippingBinIncomeListener);
                     shippingBinTileBottomRight.init(game, x, y, tileSpriteAndShippingBinQ4);
@@ -645,15 +729,18 @@ public class SceneChickenCoop extends Scene {
 
     private List<Entity> createEntitiesForChickenCoop() {
         List<Entity> entities = new ArrayList<Entity>();
-        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
-                (3 * Tile.WIDTH),
-                (6 * Tile.HEIGHT));
-        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
-                (4 * Tile.WIDTH),
-                (6 * Tile.HEIGHT));
 
-        entities.add(aimlessWalker1);
-        entities.add(aimlessWalker2);
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                    (3 * Tile.WIDTH),
+                    (6 * Tile.HEIGHT));
+            aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.CHICKEN,
+                    (4 * Tile.WIDTH),
+                    (6 * Tile.HEIGHT));
+
+            entities.add(aimlessWalker1);
+            entities.add(aimlessWalker2);
+        }
 
         return entities;
     }

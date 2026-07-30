@@ -58,10 +58,8 @@ public class SceneCowBarn extends Scene {
 
     private SceneCowBarn() {
         super();
-        List<Entity> entitiesForCowBarn = createEntitiesForCowBarn();
-        entityManager.loadEntities(entitiesForCowBarn);
-        List<Item> itemsForCowBarn = createItemsForCowBarn();
-        itemManager.loadItems(itemsForCowBarn);
+        feedingStallTiles = new ArrayList<>();
+        cheeseMakerTiles = new ArrayList<>();
 
         shippingBinIncomeListener = new ShippingBinTile.IncomeListener() {
             @Override
@@ -69,9 +67,6 @@ public class SceneCowBarn extends Scene {
                 game.incrementCurrency(amountToIncrement);
             }
         };
-
-        feedingStallTiles = new ArrayList<>();
-        cheeseMakerTiles = new ArrayList<>();
     }
 
     public static SceneCowBarn getInstance() {
@@ -126,19 +121,17 @@ public class SceneCowBarn extends Scene {
 
         ///////////////////////////////////////////////////////////////////////////////
 
-        if (!CheeseMakerTile.isAvailableToProcess()) {
-            Cheese cheeseJustProcessed = CheeseMakerTile.startNewDay(
-                    tileManager,
-                    cheeseMakerTiles.get(0),
-                    cheeseMakerTiles.get(1)
-            );
-            if (cheeseJustProcessed != null) {
-                Log.d(TAG, "cheeseJustProcessed != null");
+        Cheese cheeseJustProcessed = CheeseMakerTile.startNewDay(
+                tileManager,
+                cheeseMakerTiles.get(0),
+                cheeseMakerTiles.get(1)
+        );
+        if (cheeseJustProcessed != null) {
+            Log.d(TAG, "cheeseJustProcessed != null");
 
-                itemManager.addItem(cheeseJustProcessed);
-            } else {
-                Log.e(TAG, "cheeseJustProcessed == null");
-            }
+            itemManager.addItem(cheeseJustProcessed);
+        } else {
+            Log.e(TAG, "cheeseJustProcessed == null");
         }
 
         for (Entity e : entityManager.getEntities()) {
@@ -178,9 +171,109 @@ public class SceneCowBarn extends Scene {
         }
     }
 
+    public void reload(Game game) {
+        this.game = game;
+
+        tileManager.reload(game);
+        Map<String, Rect> transferPointsForCowBarn = createTransferPointsForCowBarn();
+        tileManager.loadTransferPoints(transferPointsForCowBarn);
+        reloadTileManager(game);
+
+        for (FeedingStallTile feedingStallTile : feedingStallTiles) {
+            feedingStallTile.reload(game);
+        }
+        Log.e(TAG, "feedingStallTiles.size() is " + feedingStallTiles.size());
+        for (CheeseMakerTile cheeseMakerTile : cheeseMakerTiles) {
+            cheeseMakerTile.reload(game,
+                    cheeseMakerTiles.get(0), cheeseMakerTiles.get(1));
+        }
+
+        entityManager.init(game);
+        itemManager.init(game);
+    }
+
+    public Milk getMilkToProcessIntoCheese() {
+        return CheeseMakerTile.getMilkToProcessIntoCheese();
+    }
+
+    public void setMilkToProcessIntoCheese(Milk milkToProcessIntoCheese) {
+        CheeseMakerTile.setMilkToProcessIntoCheese(milkToProcessIntoCheese);
+    }
+
+    public int getDaysProcessed() {
+        return CheeseMakerTile.getDaysProcessed();
+    }
+
+    public void setDaysProcessed(int daysProcess) {
+        CheeseMakerTile.setDaysProcessed(daysProcess);
+    }
+
+    private void reloadTileManager(Game game) {
+        Tile[][] cowBarn = tileManager.getTiles();
+        Bitmap imageCowBarn = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_cow_barn_with_sign_post);
+
+        for (int y = 0; y < cowBarn.length; y++) {
+            for (int x = 0; x < cowBarn[0].length; x++) {
+                int xInPixel = x * TILE_WIDTH;
+                int yInPixel = y * TILE_HEIGHT;
+                int widthInPixel = TILE_WIDTH;
+                int heightInPixel = TILE_HEIGHT;
+
+                Tile tile = cowBarn[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageCowBarn, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                //ShippingBinTile
+                if (tile.getId().equals("c")) {
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ1;
+                } else if (tile.getId().equals("d")) {
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
+
+                    Bitmap tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ2;
+                } else if (tile.getId().equals("e")) {
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ3;
+                } else if (tile.getId().equals("f")) {
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
+
+                    Bitmap tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ4;
+                }
+
+                tile.init(game, x, y, tileSprite);
+            }
+        }
+    }
+
     @Override
     public void init(Game game) {
         this.game = game;
+
+        List<Entity> entitiesForCowBarn = createEntitiesForCowBarn();
+        entityManager.loadEntities(entitiesForCowBarn);
+        List<Item> itemsForCowBarn = createItemsForCowBarn();
+        itemManager.loadItems(itemsForCowBarn);
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -193,8 +286,10 @@ public class SceneCowBarn extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        aimlessWalker1.changeToWalk();
-        aimlessWalker2.changeToWalk();
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            aimlessWalker1.changeToWalk();
+            aimlessWalker2.changeToWalk();
+        }
     }
 
     @Override
@@ -241,8 +336,8 @@ public class SceneCowBarn extends Scene {
 
                         if (tileCurrentlyFacing instanceof CheeseMakerTile) {
                             if (player.getCarryable() instanceof Milk) {
-                                if (CheeseMakerTile.isAvailableToProcess()) {
-                                    Log.d(TAG, "CheeseMakerTile.isAvailableToProcess()");
+                                if (CheeseMakerTile.getMilkToProcessIntoCheese() == null) {
+                                    Log.d(TAG, "CheeseMakerTile.getMilkToProcessIntoCheese() == null");
 
                                     CheeseMakerTile cheeseMakerTile = (CheeseMakerTile) tileCurrentlyFacing;
                                     Milk milkToProcessIntoCheese = (Milk) player.getCarryable();
@@ -253,7 +348,7 @@ public class SceneCowBarn extends Scene {
                                     player.removeCarryable();
                                     ////////////////////////////////////////////////////////////////
                                 } else {
-                                    Log.e(TAG, "!CheeseMakerTile.isAvailableToProcess()");
+                                    Log.e(TAG, "CheeseMakerTile.getMilkToProcessIntoCheese() != null");
                                 }
                             } else {
                                 Log.e(TAG, "player.getCarryable() NOT instanceof Milk");
@@ -320,8 +415,8 @@ public class SceneCowBarn extends Scene {
                         Log.d(TAG, "tileCurrentlyFacing != null");
 
                         if (tileCurrentlyFacing instanceof SignPostTile) {
-                            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_sign_post);
                             String textToShow = game.getContext().getString(R.string.text_cheese_maker);
+                            Bitmap portrait = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.dialogue_image_sign_post);
                             game.getStateManager().pushTextboxState(
                                     portrait,
                                     textToShow,
@@ -565,7 +660,7 @@ public class SceneCowBarn extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ1, 0, 0, null);
 
-                    Tile shippingBinTileTopLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileTopLeft = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_LEFT,
                             shippingBinIncomeListener);
                     shippingBinTileTopLeft.init(game, x, y, tileSpriteAndShippingBinQ1);
@@ -580,7 +675,7 @@ public class SceneCowBarn extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ2, 0, 0, null);
 
-                    Tile shippingBinTileTopRight = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileTopRight = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_RIGHT,
                             shippingBinIncomeListener);
                     shippingBinTileTopRight.init(game, x, y, tileSpriteAndShippingBinQ2);
@@ -595,7 +690,7 @@ public class SceneCowBarn extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ3, 0, 0, null);
 
-                    Tile shippingBinTileBottomLeft = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileBottomLeft = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_LEFT,
                             shippingBinIncomeListener);
                     shippingBinTileBottomLeft.init(game, x, y, tileSpriteAndShippingBinQ3);
@@ -610,7 +705,7 @@ public class SceneCowBarn extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ4, 0, 0, null);
 
-                    Tile shippingBinTileBottomRight = new ShippingBinTile(ShippingBinTile.TAG,
+                    Tile shippingBinTileBottomRight = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_RIGHT,
                             shippingBinIncomeListener);
                     shippingBinTileBottomRight.init(game, x, y, tileSpriteAndShippingBinQ4);
@@ -640,15 +735,18 @@ public class SceneCowBarn extends Scene {
 
     private List<Entity> createEntitiesForCowBarn() {
         List<Entity> entities = new ArrayList<Entity>();
-        aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
-                (3 * Tile.WIDTH),
-                (6 * Tile.HEIGHT));
-        aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.COW,
-                (4 * Tile.WIDTH),
-                (6 * Tile.HEIGHT));
 
-        entities.add(aimlessWalker1);
-        entities.add(aimlessWalker2);
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            aimlessWalker1 = new AimlessWalker(AimlessWalker.Type.COW,
+                    (3 * Tile.WIDTH),
+                    (6 * Tile.HEIGHT));
+            aimlessWalker2 = new AimlessWalker(AimlessWalker.Type.COW,
+                    (4 * Tile.WIDTH),
+                    (6 * Tile.HEIGHT));
+
+            entities.add(aimlessWalker1);
+            entities.add(aimlessWalker2);
+        }
 
         return entities;
     }

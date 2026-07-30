@@ -301,16 +301,7 @@ public class SceneFarm extends Scene {
             }
         }, 5, 0, true);
 
-        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
-            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
-                @Override
-                public void executeTimedEvent() {
-                    for (int i = 0; i < 6; i++) {
-                        addGrowingPotToRandomTile();
-                    }
-                }
-            }, 7, 0, false);
-        } else if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+        if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
@@ -325,6 +316,14 @@ public class SceneFarm extends Scene {
                     removeSwarmOfCaterpillar();
                 }
             }, 9, 0, false);
+            game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
+                @Override
+                public void executeTimedEvent() {
+                    for (int i = 0; i < 6; i++) {
+                        addGrowingPotToRandomTile();
+                    }
+                }
+            }, 10, 0, false);
             game.getTimeManager().registerTimeManagerListener(new TimeManager.TimeManagerListener() {
                 @Override
                 public void executeTimedEvent() {
@@ -350,43 +349,43 @@ public class SceneFarm extends Scene {
         tileManager.init(game); // updates tileManager's reference to the new game.
 
         // Set up GrowableTile in front of player's house with a [plant].
-        Tile tileInitializedForHarvesting1 = tilesForFarm[15][11];
-        if (tileInitializedForHarvesting1 instanceof GrowableTile) {
-            String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
-            ((GrowableTile) tileInitializedForHarvesting1).changeToSeeded(mysterySeed);
-            ((GrowableTile) tileInitializedForHarvesting1).germinateSeed();
-        }
-        Tile tileInitializedForHarvesting2 = tilesForFarm[15][12];
-        if (tileInitializedForHarvesting2 instanceof GrowableTile) {
-            String papayaSeed = game.getContext().getString(R.string.text_seed_papaya);
-            ((GrowableTile) tileInitializedForHarvesting2).changeToSeeded(papayaSeed);
-            ((GrowableTile) tileInitializedForHarvesting2).germinateSeed();
-        }
-        Tile tileInitializedForHarvesting3 = tilesForFarm[15][13];
-        if (tileInitializedForHarvesting3 instanceof GrowableTile) {
-            String eggplantSeed = game.getContext().getString(R.string.text_seed_eggplant);
-            ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(eggplantSeed);
-            ((GrowableTile) tileInitializedForHarvesting3).germinateSeed();
-        }
-        // Fix bug (having a QUANTITY_REQUIRED of 0) for
-        // quest RunThree (its listener is never called).
-        if (Plant.numberOfDiseasedPlant == 0) {
-            int xIndex = 14;
-            while (Plant.numberOfDiseasedPlant == 0) {
-                if (xIndex > tilesForFarm[15].length - 1) {
-                    Log.e(TAG, "xIndex > tilesForFarm[17].length!!!");
-                    break;
-                }
-
-                Tile tileInitializingForHarvestingBugFix = tilesForFarm[15][xIndex];
-                if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
-                    String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
-                    ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(mysterySeed);
-                    ((GrowableTile) tileInitializingForHarvestingBugFix).germinateSeed();
-                }
-                xIndex++;
-            }
-        }
+//        Tile tileInitializedForHarvesting1 = tilesForFarm[15][11];
+//        if (tileInitializedForHarvesting1 instanceof GrowableTile) {
+//            String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
+//            ((GrowableTile) tileInitializedForHarvesting1).changeToSeeded(mysterySeed);
+//            ((GrowableTile) tileInitializedForHarvesting1).germinateSeed();
+//        }
+//        Tile tileInitializedForHarvesting2 = tilesForFarm[15][12];
+//        if (tileInitializedForHarvesting2 instanceof GrowableTile) {
+//            String papayaSeed = game.getContext().getString(R.string.text_seed_papaya);
+//            ((GrowableTile) tileInitializedForHarvesting2).changeToSeeded(papayaSeed);
+//            ((GrowableTile) tileInitializedForHarvesting2).germinateSeed();
+//        }
+//        Tile tileInitializedForHarvesting3 = tilesForFarm[15][13];
+//        if (tileInitializedForHarvesting3 instanceof GrowableTile) {
+//            String eggplantSeed = game.getContext().getString(R.string.text_seed_eggplant);
+//            ((GrowableTile) tileInitializedForHarvesting3).changeToSeeded(eggplantSeed);
+//            ((GrowableTile) tileInitializedForHarvesting3).germinateSeed();
+//        }
+//        // Fix bug (having a QUANTITY_REQUIRED of 0) for
+//        // quest RunThree (its listener is never called).
+//        if (Plant.numberOfDiseasedPlant == 0) {
+//            int xIndex = 14;
+//            while (Plant.numberOfDiseasedPlant == 0) {
+//                if (xIndex > tilesForFarm[15].length - 1) {
+//                    Log.e(TAG, "xIndex > tilesForFarm[17].length!!!");
+//                    break;
+//                }
+//
+//                Tile tileInitializingForHarvestingBugFix = tilesForFarm[15][xIndex];
+//                if (tileInitializingForHarvestingBugFix instanceof GrowableTile) {
+//                    String mysterySeed = game.getContext().getString(R.string.text_seed_mystery);
+//                    ((GrowableTile) tileInitializingForHarvestingBugFix).changeToSeeded(mysterySeed);
+//                    ((GrowableTile) tileInitializingForHarvestingBugFix).germinateSeed();
+//                }
+//                xIndex++;
+//            }
+//        }
 
 
         for (int y = 0; y < tilesForFarm.length; y++) {
@@ -402,29 +401,29 @@ public class SceneFarm extends Scene {
         entityManager.init(game);
         itemManager.init(game);
 
-        // Age the [plant] so it's almost harvestable
-        // (has to be done after Entity.init(), which sets ageInDays to 0).
-        if (tileInitializedForHarvesting1 instanceof GrowableTile) {
-            Plant plant1 = (Plant) ((GrowableTile) tileInitializedForHarvesting1).getEntity();
-            Plant plant2 = (Plant) ((GrowableTile) tileInitializedForHarvesting2).getEntity();
-            Plant plant3 = (Plant) ((GrowableTile) tileInitializedForHarvesting3).getEntity();
-            for (int i = 0; i < 6; i++) {
-                Log.e(TAG, "incrementing age: " + i);
-                plant1.incrementAgeInDays();
-                plant2.incrementAgeInDays();
-                plant3.incrementAgeInDays();
-            }
-
-            int xIndexBugFix = 14;
-            while (tilesForFarm[15][xIndexBugFix] instanceof GrowableTile &&
-                    ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity() != null) {
-                Plant plantBugFix = (Plant) ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity();
-                for (int i = 0; i < 6; i++) {
-                    plantBugFix.incrementAgeInDays();
-                }
-                xIndexBugFix++;
-            }
-        }
+//        // Age the [plant] so it's almost harvestable
+//        // (has to be done after Entity.init(), which sets ageInDays to 0).
+//        if (tileInitializedForHarvesting1 instanceof GrowableTile) {
+//            Plant plant1 = (Plant) ((GrowableTile) tileInitializedForHarvesting1).getEntity();
+//            Plant plant2 = (Plant) ((GrowableTile) tileInitializedForHarvesting2).getEntity();
+//            Plant plant3 = (Plant) ((GrowableTile) tileInitializedForHarvesting3).getEntity();
+//            for (int i = 0; i < 6; i++) {
+//                Log.e(TAG, "incrementing age: " + i);
+//                plant1.incrementAgeInDays();
+//                plant2.incrementAgeInDays();
+//                plant3.incrementAgeInDays();
+//            }
+//
+//            int xIndexBugFix = 14;
+//            while (tilesForFarm[15][xIndexBugFix] instanceof GrowableTile &&
+//                    ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity() != null) {
+//                Plant plantBugFix = (Plant) ((GrowableTile) tilesForFarm[15][xIndexBugFix]).getEntity();
+//                for (int i = 0; i < 6; i++) {
+//                    plantBugFix.incrementAgeInDays();
+//                }
+//                xIndexBugFix++;
+//            }
+//        }
 
         Log.e(TAG, "BEFORE seedShipDialogFragment.init()");
         seedShopDialogFragment = new SeedShopDialogFragment();
@@ -1517,31 +1516,9 @@ public class SceneFarm extends Scene {
     }
 
     private GrowSystemPart growSystemPart1, growSystemPart2, growSystemPart3, growSystemPart4, growSystemPart5, growSystemPart6;
-    private Milk milkOnGround;
-    private Egg eggOnGround;
-    private Fodder fodderOnGround;
 
     private List<Item> createItemsForFarm() {
         List<Item> items = new ArrayList<Item>();
-        milkOnGround = new Milk();
-        milkOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 4) * Tile.HEIGHT)
-        );
-        eggOnGround = new Egg();
-        eggOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 5) * Tile.HEIGHT)
-        );
-        fodderOnGround = new Fodder();
-        fodderOnGround.setPosition(
-                ((X_INDEX_SPAWN_ROBOT + 2) * Tile.WIDTH),
-                ((Y_INDEX_SPAWN_ROBOT + 6) * Tile.HEIGHT)
-        );
-        items.add(eggOnGround);
-        items.add(milkOnGround);
-        items.add(fodderOnGround);
-
         return items;
     }
 

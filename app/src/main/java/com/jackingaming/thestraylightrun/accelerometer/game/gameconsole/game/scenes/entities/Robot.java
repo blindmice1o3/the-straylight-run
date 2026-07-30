@@ -15,7 +15,6 @@ import com.jackingaming.thestraylightrun.MainActivity;
 import com.jackingaming.thestraylightrun.R;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.RobotDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.TileSelectorDialogFragment;
-import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.IDEFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TileSelectorView;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
@@ -522,10 +521,10 @@ public class Robot extends Creature {
                 );
             }
 
-            @Override
-            public void onIDEButtonClick(View view, RobotDialogFragment robotDialogFragment) {
-                showIDEDialogFragment(robotDialogFragment);
-            }
+//            @Override
+//            public void onIDEButtonClick(View view, RobotDialogFragment robotDialogFragment) {
+//                showIDEDialogFragment(robotDialogFragment);
+//            }
         }, new RobotDialogFragment.DismissListener() {
             @Override
             public void onDismiss() {
@@ -536,19 +535,19 @@ public class Robot extends Creature {
         return robotDialogFragment;
     }
 
-    private void showIDEDialogFragment(RobotDialogFragment robotDialogFragment) {
-        IDEFragment ideFragment = IDEFragment.newInstance(IDEFragment.Mode.KEYBOARD_TRAINER,
-                com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE);
-
-        if (listener != null) {
-            listener.onOpenIDEDialogFragment();
-        }
-
+//    private void showIDEDialogFragment(RobotDialogFragment robotDialogFragment) {
+//        IDEFragment ideFragment = IDEFragment.newInstance(IDEFragment.Mode.KEYBOARD_TRAINER,
+//                com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE);
+//
+//        if (listener != null) {
+//            listener.onOpenIDEDialogFragment();
+//        }
+//
 //        ideDialogFragment.show(
 //                ((MainActivity) game.getContext()).getSupportFragmentManager(),
 //                IDEDialogFragment.TAG
 //        );
-    }
+//    }
 
     private void doNextCommand() {
         Log.e(TAG, "doNextCommand" +

@@ -17,7 +17,7 @@ import java.util.Map;
 public class GrowableTile extends Tile {
     public static final String TAG = GrowableTile.class.getSimpleName();
 
-    public interface OutdoorWaterChangeListener {
+    public interface OutdoorWaterChangeListener extends Serializable {
         void changeToWateredOccupied();
     }
 
@@ -27,7 +27,7 @@ public class GrowableTile extends Tile {
         this.outdoorWaterChangeListener = outdoorWaterChangeListener;
     }
 
-    public interface StateChangeListener {
+    public interface StateChangeListener extends Serializable {
         void changeToTilled();
     }
 

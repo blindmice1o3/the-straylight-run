@@ -128,6 +128,8 @@ public class GameFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate() start");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -137,6 +139,8 @@ public class GameFragment extends Fragment
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         imageViewViaEntity = new HashMap<>();
+
+        Log.d(TAG, "onCreate() end");
     }
 
     @Override
@@ -492,6 +496,8 @@ public class GameFragment extends Fragment
 
     @Override
     public void onSurfaceCreated(Game game) {
+        Log.d(TAG, "onSurfaceCreated() start");
+
         this.game = game;
 
         gameListener = new Game.GameListener() {
@@ -635,6 +641,8 @@ public class GameFragment extends Fragment
 //        List<Entity> entitiesToAdd = game.getSceneCurrent().getEntities();
 //        instantiateImageViewForEntities(entitiesToAdd);
 //        addImageViewOfEntityToFrameLayout(game.getWidthSpriteDst(), game.getHeightSpriteDst());
+
+        Log.d(TAG, "onSurfaceCreated() end");
     }
 
     private void instantiateParticleExplosionViewForPlayer(List<Entity> entitiesToAdd, Game game,

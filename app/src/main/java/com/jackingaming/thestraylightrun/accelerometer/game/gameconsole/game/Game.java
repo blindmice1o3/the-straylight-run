@@ -33,7 +33,6 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenPlantDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.OpenRobotDialogEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.RemoveEntityCommand;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.WaterGrowableTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.CollidingOrbit;
@@ -41,30 +40,16 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.PoohForm;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Egg;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.ItemStackable;
+import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Milk;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.PlantInspectioner200;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.RobotReprogrammer4000;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Scissors;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Shovel;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.WateringCan;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BananaSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BitterMelonSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CarrotSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.CornSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.EggplantSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GarlicSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.GuavaSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LemongrassSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.LonganSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.MysterySeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.OnionSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PapayaSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.PeanutSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.RadishSeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.StrawberrySeed;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.TomatoSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.SceneHome02;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.pocketcritters.computer.ComputerDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.poohfarmer.SceneChickenCoop;
@@ -318,93 +303,59 @@ public class Game {
 
 
         backpack = new ArrayList<ItemStackable>();
-        Item growingPot = new GrowingPot(
-                new TillGrowableIndoorTileCommand(null)
-        );
-        growingPot.init(this);
-        Item shovel = new Shovel(
-                new TillGrowableTileCommand(null)
-        );
-        shovel.init(this);
-        Item wateringCan = new WateringCan(
-                new WaterGrowableTileCommand(null)
-        );
-        wateringCan.init(this);
-        Item bugCatchingNet = new BugCatchingNet(
-                new BounceEntityCommand(null)
-        );
-        bugCatchingNet.init(this);
-        Item robotReprogrammer4000 = new RobotReprogrammer4000(
-                new OpenRobotDialogEntityCommand(null)
-        );
-        robotReprogrammer4000.init(this);
-        Item plantInspectioner200 = new PlantInspectioner200(
-                new OpenPlantDialogEntityCommand(null)
-        );
-        plantInspectioner200.init(this);
-        scissors = new Scissors(
-                new RemoveEntityCommand(this, null)
-        );
-        scissors.init(this);
-        Item bananaSeed = new BananaSeed();
-        bananaSeed.init(this);
-        Item bitterMelonSeed = new BitterMelonSeed();
-        bitterMelonSeed.init(this);
-        Item carrotSeed = new CarrotSeed();
-        carrotSeed.init(this);
-        Item cornSeed = new CornSeed();
-        cornSeed.init(this);
-        Item eggplantSeed = new EggplantSeed();
-        eggplantSeed.init(this);
-        Item garlicSeed = new GarlicSeed();
-        garlicSeed.init(this);
-        Item guavaSeed = new GuavaSeed();
-        guavaSeed.init(this);
-        Item lemongrassSeed = new LemongrassSeed();
-        lemongrassSeed.init(this);
-        Item longanSeed = new LonganSeed();
-        longanSeed.init(this);
-        Item mysterySeed = new MysterySeed();
-        mysterySeed.init(this);
-        Item onionSeed = new OnionSeed();
-        onionSeed.init(this);
-        Item papayaSeed = new PapayaSeed();
-        papayaSeed.init(this);
-        Item peanutSeed = new PeanutSeed();
-        peanutSeed.init(this);
-        Item radishSeed = new RadishSeed();
-        radishSeed.init(this);
-        Item strawberrySeed = new StrawberrySeed();
-        strawberrySeed.init(this);
-        Item tomatoSeed = new TomatoSeed();
-        tomatoSeed.init(this);
 
-        addItemToBackpack(growingPot);
-        addItemToBackpack(shovel);
-        addItemToBackpack(wateringCan);
-        addItemToBackpack(bugCatchingNet);
-        addItemToBackpack(robotReprogrammer4000);
-        addItemToBackpack(plantInspectioner200);
-        addItemToBackpack(scissors);
-        addItemToBackpack(bananaSeed);
-        addItemToBackpack(bitterMelonSeed);
-        addItemToBackpack(carrotSeed);
-        addItemToBackpack(cornSeed);
-        addItemToBackpack(eggplantSeed);
-        addItemToBackpack(garlicSeed);
-        addItemToBackpack(guavaSeed);
-        addItemToBackpack(lemongrassSeed);
-        addItemToBackpack(longanSeed);
-        addItemToBackpack(mysterySeed);
-        addItemToBackpack(onionSeed);
-        addItemToBackpack(papayaSeed);
-        addItemToBackpack(peanutSeed);
-        addItemToBackpack(radishSeed);
-        addItemToBackpack(strawberrySeed);
-        addItemToBackpack(tomatoSeed);
+        if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.ONE) {
+            Item robotReprogrammer4000 = new RobotReprogrammer4000(
+                    new OpenRobotDialogEntityCommand(null)
+            );
+            robotReprogrammer4000.init(this);
+            addItemToBackpack(robotReprogrammer4000);
+        } else if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.TWO ||
+                run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.THREE) {
+            Item robotReprogrammer4000 = new RobotReprogrammer4000(
+                    new OpenRobotDialogEntityCommand(null)
+            );
+            robotReprogrammer4000.init(this);
+            addItemToBackpack(robotReprogrammer4000);
+
+            Item shovel = new Shovel(
+                    new TillGrowableTileCommand(null)
+            );
+            shovel.init(this);
+            addItemToBackpack(shovel);
+
+            Item mysterySeed = new MysterySeed();
+            mysterySeed.init(this);
+            addItemToBackpack(mysterySeed);
+
+            Item wateringCan = new WateringCan(
+                    new WaterGrowableTileCommand(null)
+            );
+            wateringCan.init(this);
+            addItemToBackpack(wateringCan);
+        } else if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FOUR) {
+            // Intentionally blank.
+        } else if (run == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+            Item robotReprogrammer4000 = new RobotReprogrammer4000(
+                    new OpenRobotDialogEntityCommand(null)
+            );
+            robotReprogrammer4000.init(this);
+            addItemToBackpack(robotReprogrammer4000);
+
+            Item plantInspectioner200 = new PlantInspectioner200(
+                    new OpenPlantDialogEntityCommand(null)
+            );
+            plantInspectioner200.init(this);
+            addItemToBackpack(plantInspectioner200);
+
+            Item bugCatchingNet = new BugCatchingNet(
+                    new BounceEntityCommand(null)
+            );
+            bugCatchingNet.init(this);
+            addItemToBackpack(bugCatchingNet);
+        }
 
         backpackWithoutItemsDisplayingInButtonHolders = new ArrayList<ItemStackable>();
-
         itemStoredInButtonHolderA = null;
         itemStoredInButtonHolderB = null;
         buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.A;
@@ -590,7 +541,44 @@ public class Game {
             Log.e(TAG, "BEFORE sceneManager");
             os.writeObject(sceneManager);
             Log.e(TAG, "AFTER sceneManager");
+
+            Log.e(TAG, "BEFORE hasEggIncubatingIntoChick");
+            boolean hasEggIncubatingIntoChick = SceneChickenCoop.getInstance().getEggIncubatingIntoChick() != null;
+            os.writeBoolean(hasEggIncubatingIntoChick);
+            Log.e(TAG, "AFTER hasEggIncubatingIntoChick");
+
+            if (hasEggIncubatingIntoChick) {
+                Log.e(TAG, "BEFORE daysIncubated");
+                int daysIncubated = SceneChickenCoop.getInstance().getDaysIncubated();
+                os.writeInt(daysIncubated);
+                Log.e(TAG, "AFTER daysIncubated");
+
+                Log.e(TAG, "BEFORE eggIncubatingIntoChick");
+                Egg eggIncubatingIntoChick = SceneChickenCoop.getInstance().getEggIncubatingIntoChick();
+                os.writeObject(eggIncubatingIntoChick);
+                Log.e(TAG, "AFTER eggIncubatingIntoChick");
+            }
+
+            Log.e(TAG, "BEFORE hasMilkToProcessIntoCheese");
+            boolean hasMilkToProcessIntoCheese = SceneCowBarn.getInstance().getMilkToProcessIntoCheese() != null;
+            os.writeBoolean(hasMilkToProcessIntoCheese);
+            Log.e(TAG, "AFTER hasMilkToProcessIntoCheese");
+
+            if (hasMilkToProcessIntoCheese) {
+                Log.e(TAG, "BEFORE daysProcessed");
+                int daysProcessed = SceneCowBarn.getInstance().getDaysProcessed();
+                os.writeInt(daysProcessed);
+                Log.e(TAG, "AFTER daysProcessed");
+
+                Log.e(TAG, "BEFORE milkToProcessIntoCheese");
+                Milk milkToProcessIntoCheese = SceneCowBarn.getInstance().getMilkToProcessIntoCheese();
+                os.writeObject(milkToProcessIntoCheese);
+                Log.e(TAG, "AFTER milkToProcessIntoCheese");
+            }
+
+            Log.e(TAG, "BEFORE currency");
             os.writeFloat(currency);
+            Log.e(TAG, "AFTER currency");
 
             Log.e(TAG, "BEFORE backpack");
             os.writeObject(backpack);
@@ -647,6 +635,7 @@ public class Game {
             timeManager.init(this, statsChangeListener);
 
             sceneManager = (SceneManager) os.readObject();
+
             Log.e(TAG, "loadFromFile(): BEFORE GameConsoleFragment loading.");
             GameConsoleFragment gameConsoleFragment = (GameConsoleFragment) ((MainActivity) context).getSupportFragmentManager().findFragmentByTag(GameConsoleFragment.TAG);
             Log.e(TAG, "loadFromFile(): AFTER GameConsoleFragment loading.");
@@ -659,9 +648,32 @@ public class Game {
             } else {
                 Log.e(TAG, "gameConsoleFragment == null");
             }
+
+            Log.e(TAG, "sceneManager.getCurrentScene()'s class name: " + sceneManager.getCurrentScene().getClass().getSimpleName());
+
+            boolean hasEggIncubatingIntoChick = os.readBoolean();
+            if (hasEggIncubatingIntoChick) {
+                int daysIncubating = os.readInt();
+                SceneChickenCoop.getInstance().setDaysIncubated(daysIncubating);
+
+                Egg eggToBeHatchedIntoChick = (Egg) os.readObject();
+                SceneChickenCoop.getInstance().setEggIncubatingIntoChick(eggToBeHatchedIntoChick);
+            }
+
+            boolean hasMilkToProcessIntoCheese = os.readBoolean();
+            if (hasMilkToProcessIntoCheese) {
+                int daysProcessing = os.readInt();
+                SceneCowBarn.getInstance().setDaysProcessed(daysProcessing);
+
+                Milk milkToProcessIntoCheese = (Milk) os.readObject();
+                SceneCowBarn.getInstance().setMilkToProcessIntoCheese(milkToProcessIntoCheese);
+            }
+
             sceneManager.reload(this);
             stateManager.reload(this);
             Player.getInstance().setForm(new PoohForm());
+            Player.getInstance().getForm().init(this);
+
             currency = os.readFloat();
             statsChangeListener.onCurrencyChange(currency);
 
@@ -717,7 +729,9 @@ public class Game {
             int ordinalValueOfButtonHolderCurrentlySelected = os.readInt();
             buttonHolderCurrentlySelected = StatsDisplayerFragment.ButtonHolder.values()[ordinalValueOfButtonHolderCurrentlySelected];
             /////////////////////////////////////////////////////
+            Log.e(TAG, "BEFORE refreshBackpackWithoutItemsDisplayingInButtonHolders();");
             refreshBackpackWithoutItemsDisplayingInButtonHolders();
+            Log.e(TAG, "AFTER refreshBackpackWithoutItemsDisplayingInButtonHolders();");
             /////////////////////////////////////////////////////
             if (itemStoredInButtonHolderA instanceof BugCatchingNet ||
                     itemStoredInButtonHolderB instanceof BugCatchingNet) {
@@ -755,9 +769,12 @@ public class Game {
             }
 
             paused = os.readBoolean();
+
             if (holder != null) {
                 Canvas canvas = holder.lockCanvas();
+                Log.e(TAG, "BEFORE sceneManager.getCurrentScene() " + sceneManager.getCurrentScene().getClass().getSimpleName());
                 sceneManager.getCurrentScene().drawCurrentFrame(canvas);
+                Log.e(TAG, "AFTER sceneManager.getCurrentScene() " + sceneManager.getCurrentScene().getClass().getSimpleName());
                 holder.unlockCanvasAndPost(canvas);
             }
 
@@ -766,8 +783,14 @@ public class Game {
                 showBackpackDialog();
             }
 //            inSeedShopDialogState = os.readBoolean();
+            Log.e(TAG, "before Player.getInstance().init(this)");
             Player.getInstance().init(this);
+            Log.e(TAG, "after Player.getInstance().init(this)");
+            Log.e(TAG, "before sceneManager.getCurrentScene().enter(null)");
+            sceneManager.getCurrentScene().setGame(this);
             sceneManager.getCurrentScene().enter(null);
+            Log.e(TAG, "after sceneManager.getCurrentScene().enter(null)");
+
             Log.e(TAG, "loadFromFile() end.");
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -13,7 +13,10 @@
         android:background="@color/white"
         android:elevation="8dp"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingStart="16dp"
+        android:paddingTop="42dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <Button
             android:id="@+id/button_save"

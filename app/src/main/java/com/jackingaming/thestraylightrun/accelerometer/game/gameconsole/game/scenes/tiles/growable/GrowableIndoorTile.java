@@ -6,12 +6,13 @@ import android.util.Log;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Assets;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 public class GrowableIndoorTile extends GrowableTile {
     public static final String TAG = GrowableIndoorTile.class.getSimpleName();
 
-    public interface IndoorWaterChangeListener {
+    public interface IndoorWaterChangeListener extends Serializable {
         void changeToWateredSeeded();
     }
 

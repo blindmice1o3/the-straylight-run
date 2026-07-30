@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom01Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.HomePlayerRoom02Scene;
-import com.jackingaming.thestraylightrun.accelerometer.game.scenes.LabScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.Scene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.TitleScreenScene;
 import com.jackingaming.thestraylightrun.accelerometer.game.scenes.WorldScene;
@@ -170,7 +169,11 @@ public class Game {
 //    private UpdateableSprite ball;
 
     public void resetTransferPointCooldown() {
-        ((HomePlayerRoom01Scene) sceneCurrent).resetTransferPointCooldown();
+        if (sceneCurrent instanceof HomePlayerRoom01Scene) {
+            ((HomePlayerRoom01Scene) sceneCurrent).resetTransferPointCooldown();
+        } else {
+            Log.d(TAG, "sceneCurrent is a " + sceneCurrent.getClass().getSimpleName());
+        }
     }
 
     public void resetGroupChatState() {
@@ -185,6 +188,8 @@ public class Game {
 
     public Game(SurfaceHolder holder, Resources resources, Handler handler,
                 int widthSurfaceView, int heightSurfaceView) {
+        Log.d(TAG, "Game() start");
+
         this.holder = holder;
         this.resources = resources;
         this.handler = handler;
@@ -199,9 +204,12 @@ public class Game {
         /////////////////////////////////////////////////////////////////////////////////
 //        ball = new UpdateableSprite(widthSurfaceView, heightSurfaceView);
         /////////////////////////////////////////////////////////////////////////////////
+        Log.d(TAG, "Game() end");
     }
 
     public void changeScene(Scene sceneNext) {
+        Log.d(TAG, "changeScene() start");
+
         Scene sceneLeaving = sceneCurrent;
         List<Object> args = sceneLeaving.exit();
 
@@ -212,38 +220,40 @@ public class Game {
 
         sceneNext.enter(args);
         sceneCurrent = sceneNext;
+
+        Log.d(TAG, "changeScene() end");
     }
 
     public void init(SoundManager soundManager, GameListener gameListener) {
+        Log.d(TAG, "init() start");
+
         this.soundManager = soundManager;
         this.gameListener = gameListener;
 
         // SCENES
 
-        WorldScene.getInstance().init(resources, handler, soundManager,
-                gameListener, gameCamera,
-                widthSurfaceView, heightSurfaceView,
-                widthSpriteDst, heightSpriteDst);
+//        WorldScene.getInstance().init(resources, handler, soundManager,
+//                gameListener, gameCamera,
+//                widthSurfaceView, heightSurfaceView,
+//                widthSpriteDst, heightSpriteDst);
         TitleScreenScene.getInstance().init(
-                WorldScene.getInstance().getPlayer(),
                 resources, handler, soundManager,
                 gameListener, gameCamera,
                 widthSurfaceView, heightSurfaceView,
                 widthSpriteDst, heightSpriteDst);
-        LabScene.getInstance().init(
-                WorldScene.getInstance().getPlayer(),
-                resources, handler, soundManager,
-                gameListener, gameCamera,
-                widthSurfaceView, heightSurfaceView,
-                widthSpriteDst, heightSpriteDst);
-        HomePlayerRoom02Scene.getInstance().init(
-                WorldScene.getInstance().getPlayer(),
-                resources, handler, soundManager,
-                gameListener, gameCamera,
-                widthSurfaceView, heightSurfaceView,
-                widthSpriteDst, heightSpriteDst);
+//        LabScene.getInstance().init(
+//                WorldScene.getInstance().getPlayer(),
+//                resources, handler, soundManager,
+//                gameListener, gameCamera,
+//                widthSurfaceView, heightSurfaceView,
+//                widthSpriteDst, heightSpriteDst);
+//        HomePlayerRoom02Scene.getInstance().init(
+//                WorldScene.getInstance().getPlayer(),
+//                resources, handler, soundManager,
+//                gameListener, gameCamera,
+//                widthSurfaceView, heightSurfaceView,
+//                widthSpriteDst, heightSpriteDst);
         HomePlayerRoom01Scene.getInstance().init(
-                WorldScene.getInstance().getPlayer(),
                 resources, handler, soundManager,
                 gameListener, gameCamera,
                 widthSurfaceView, heightSurfaceView,
@@ -259,6 +269,8 @@ public class Game {
 //        Bitmap ballImage = BitmapFactory.decodeResource(resources, R.drawable.ic_coins_l);
 //        ball.init(ballImage);
         /////////////////////////////////////////////////////////////////////////////////
+
+        Log.d(TAG, "init() end");
     }
 
     private String savedFileViaUserInputFileName = "savedFileViaUserInput" + GAME_TITLE + ".ser";

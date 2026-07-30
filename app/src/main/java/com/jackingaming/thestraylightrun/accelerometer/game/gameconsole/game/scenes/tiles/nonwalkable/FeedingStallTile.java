@@ -13,16 +13,21 @@ public class FeedingStallTile extends Tile {
     public static final String TAG = FeedingStallTile.class.getSimpleName();
 
     private boolean occupied;
-    private Bitmap imageDefaultBackground;
+    transient private Bitmap imageDefaultBackground;
 
     public FeedingStallTile(String id) {
         super(id);
     }
 
-    public void startNewDay() {
-        Log.e(TAG, "startNewDay()");
+    public void reload(Game game) {
+        this.game = game;
 
-        resetFodder();
+        if (occupied) {
+            Fodder fodder = new Fodder();
+            fodder.init(game);
+
+            acceptFodder(fodder);
+        }
     }
 
     @Override
@@ -45,6 +50,12 @@ public class FeedingStallTile extends Tile {
         canvas.drawBitmap(imageFodder, srcRect, dstRect, null);
 
         image = tileSpriteAndFodder;
+    }
+
+    public void startNewDay() {
+        Log.e(TAG, "startNewDay()");
+
+        resetFodder();
     }
 
     public void resetFodder() {

@@ -10,10 +10,12 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.TileManager;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
+import java.io.Serializable;
+
 public abstract class Creature extends Entity {
     public static final String TAG = Creature.class.getSimpleName();
 
-    public interface PlaceInShippingBinListener {
+    public interface PlaceInShippingBinListener extends Serializable {
         void sellableAdded(Sellable sellableAdded);
     }
 

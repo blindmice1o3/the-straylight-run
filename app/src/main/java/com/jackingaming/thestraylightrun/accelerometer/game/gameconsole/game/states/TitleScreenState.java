@@ -13,8 +13,8 @@ public class TitleScreenState
         implements State {
     public static final String TAG = TitleScreenState.class.getSimpleName();
 
-    private Game game;
-    private Bitmap imageTitleScreen;
+    transient private Game game;
+    transient private Bitmap imageTitleScreen;
 
     public TitleScreenState() {
 

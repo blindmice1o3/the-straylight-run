@@ -35,6 +35,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.growable.GrowableTile;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.nonwalkable.twobytwo.ShippingBinTile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +44,7 @@ import java.util.Map;
 public class SceneHothouse extends Scene {
     public static final String TAG = SceneHothouse.class.getSimpleName();
 
-    public interface LootListener {
+    public interface LootListener extends Serializable {
         void onLootDropped();
     }
 
@@ -60,16 +61,11 @@ public class SceneHothouse extends Scene {
 
     private static SceneHothouse uniqueInstance;
 
-    private List<GrowableTile> growableTiles;
     private ShippingBinTile.IncomeListener shippingBinIncomeListener;
+    private List<GrowableTile> growableTiles;
 
     private SceneHothouse() {
         super();
-        List<Entity> entitiesForHothouse = createEntitiesForHothouse();
-        entityManager.loadEntities(entitiesForHothouse);
-        List<Item> itemsForHothouse = createItemsForHothouse();
-        itemManager.loadItems(itemsForHothouse);
-
         growableTiles = new ArrayList<>();
 
         shippingBinIncomeListener = new ShippingBinTile.IncomeListener() {
@@ -107,9 +103,84 @@ public class SceneHothouse extends Scene {
         uniqueInstance = sceneHothouse;
     }
 
+    public void reload(Game game) {
+        this.game = game;
+
+        tileManager.reload(game);
+        Map<String, Rect> transferPointsForHothouse = createTransferPointsForHothouse();
+        tileManager.loadTransferPoints(transferPointsForHothouse);
+        reloadTileManager(game);
+
+        entityManager.init(game);
+        itemManager.init(game);
+    }
+
+    private void reloadTileManager(Game game) {
+        Tile[][] hothouse = tileManager.getTiles();
+        Bitmap imageHothouse = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_hot_house);
+
+        for (int y = 0; y < hothouse.length; y++) {
+            for (int x = 0; x < hothouse[0].length; x++) {
+                int xInPixel = x * (Tile.WIDTH * 4);
+                int yInPixel = y * (Tile.HEIGHT * 4);
+                int widthInPixel = (Tile.WIDTH * 4);
+                int heightInPixel = (Tile.HEIGHT * 4);
+
+                Tile tile = hothouse[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageHothouse, xInPixel, yInPixel, widthInPixel, heightInPixel);
+
+                //ShippingBinTile
+                if (tile.getId().equals("c")) {
+                    Bitmap shippingBinQ1 = Assets.shippingBinQuadrantTopLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ1 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ1);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ1, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ1;
+                } else if (tile.getId().equals("d")) {
+                    Bitmap shippingBinQ2 = Assets.shippingBinQuadrantTopRight;
+
+                    Bitmap tileSpriteAndShippingBinQ2 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ2);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ2, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ2;
+                } else if (tile.getId().equals("e")) {
+                    Bitmap shippingBinQ3 = Assets.shippingBinQuadrantBottomLeft;
+
+                    Bitmap tileSpriteAndShippingBinQ3 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ3);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ3, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ3;
+                } else if (tile.getId().equals("f")) {
+                    Bitmap shippingBinQ4 = Assets.shippingBinQuadrantBottomRight;
+
+                    Bitmap tileSpriteAndShippingBinQ4 = Bitmap.createBitmap(tileSprite.getWidth(), tileSprite.getHeight(), Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(tileSpriteAndShippingBinQ4);
+                    canvas.drawBitmap(tileSprite, 0, 0, null);
+                    canvas.drawBitmap(shippingBinQ4, 0, 0, null);
+
+                    tileSprite = tileSpriteAndShippingBinQ4;
+                }
+
+                tile.init(game, x, y, tileSprite);
+            }
+        }
+    }
+
     @Override
     public void init(Game game) {
         this.game = game;
+
+        List<Entity> entitiesForHothouse = createEntitiesForHothouse();
+        entityManager.loadEntities(entitiesForHothouse);
+        List<Item> itemsForHothouse = createItemsForHothouse();
+        itemManager.loadItems(itemsForHothouse);
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -477,7 +548,7 @@ public class SceneHothouse extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ1, 0, 0, null);
 
-                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                    hothouse[y][x] = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_LEFT,
                             shippingBinIncomeListener);
                     hothouse[y][x].init(game, x, y, tileSpriteAndShippingBinQ1);
@@ -491,7 +562,7 @@ public class SceneHothouse extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ2, 0, 0, null);
 
-                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                    hothouse[y][x] = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.TOP_RIGHT,
                             shippingBinIncomeListener);
                     hothouse[y][x].init(game, x, y, tileSpriteAndShippingBinQ2);
@@ -505,7 +576,7 @@ public class SceneHothouse extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ3, 0, 0, null);
 
-                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                    hothouse[y][x] = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_LEFT,
                             shippingBinIncomeListener);
                     hothouse[y][x].init(game, x, y, tileSpriteAndShippingBinQ3);
@@ -519,7 +590,7 @@ public class SceneHothouse extends Scene {
                     canvas.drawBitmap(tileSprite, 0, 0, null);
                     canvas.drawBitmap(shippingBinQ4, 0, 0, null);
 
-                    hothouse[y][x] = new ShippingBinTile(ShippingBinTile.TAG,
+                    hothouse[y][x] = new ShippingBinTile(tile.getId(),
                             ShippingBinTile.Quadrant.BOTTOM_RIGHT,
                             shippingBinIncomeListener);
                     hothouse[y][x].init(game, x, y, tileSpriteAndShippingBinQ4);

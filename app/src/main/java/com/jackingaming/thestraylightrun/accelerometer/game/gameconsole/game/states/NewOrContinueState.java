@@ -16,7 +16,7 @@ public class NewOrContinueState
     public static final String TAG = NewOrContinueState.class.getSimpleName();
     private static final int TEXT_PADDING = 16;
 
-    private Game game;
+    transient private Game game;
 
     private String textNew;
     private String textLoad;

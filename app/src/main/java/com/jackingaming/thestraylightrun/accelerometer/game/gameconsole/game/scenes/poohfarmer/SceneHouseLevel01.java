@@ -46,10 +46,6 @@ public class SceneHouseLevel01 extends Scene {
 
     private SceneHouseLevel01() {
         super();
-        List<Entity> entitiesForHouseLevel01 = createEntitiesForHouseLevel01();
-        entityManager.loadEntities(entitiesForHouseLevel01);
-        List<Item> itemsForHouseLevel01 = createItemsForHouseLevel01();
-        itemManager.loadItems(itemsForHouseLevel01);
         leftHouseToday = true; // started game in SceneFarm.
         slept = false;
     }
@@ -96,9 +92,44 @@ public class SceneHouseLevel01 extends Scene {
         }
     }
 
+    public void reload(Game game) {
+        this.game = game;
+
+        tileManager.reload(game);
+        Map<String, Rect> transferPointsForHouseLevel01 = createTransferPointsForHouseLevel01();
+        tileManager.loadTransferPoints(transferPointsForHouseLevel01);
+        reloadTileManager(game);
+
+        entityManager.init(game);
+        itemManager.init(game);
+    }
+
+    private void reloadTileManager(Game game) {
+        Tile[][] houseLevel01 = tileManager.getTiles();
+        Bitmap imageHouseLevel01 = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.scene_house_level_01);
+
+        for (int y = 0; y < houseLevel01.length; y++) {
+            for (int x = 0; x < houseLevel01[0].length; x++) {
+                int xInPixel = x * (Tile.WIDTH * 4);
+                int yInPixel = y * (Tile.HEIGHT * 4);
+                int widthInPixel = (Tile.WIDTH * 4);
+                int heightInPixel = (Tile.HEIGHT * 4);
+
+                Tile tile = houseLevel01[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
+                tile.init(game, x, y, tileSprite);
+            }
+        }
+    }
+
     @Override
     public void init(Game game) {
         this.game = game;
+
+        List<Entity> entitiesForHouseLevel01 = createEntitiesForHouseLevel01();
+        entityManager.loadEntities(entitiesForHouseLevel01);
+        List<Item> itemsForHouseLevel01 = createItemsForHouseLevel01();
+        itemManager.loadItems(itemsForHouseLevel01);
 
         // For scenes loaded from external file, the [create] and [init] steps in TileManager
         // are combined (unlike EntityManager and ItemManager).
@@ -342,20 +373,18 @@ public class SceneHouseLevel01 extends Scene {
                 int heightInPixel = (Tile.HEIGHT * 4);
 
                 Tile tile = houseLevel01[y][x];
+                Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
                 //GenericWalkableTile
                 if (tile.getId().equals("0")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                 }
                 //GenericSolidTile
                 else if (tile.getId().equals("1")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     tile.init(game, x, y, tileSprite);
                     tile.setWalkable(false);
                 }
                 //BedTile
                 else if (tile.getId().equals("b")) {
-                    Bitmap tileSprite = Bitmap.createBitmap(imageHouseLevel01, xInPixel, yInPixel, widthInPixel, heightInPixel);
                     houseLevel01[y][x] = new BedTile(BedTile.TAG);
                     houseLevel01[y][x].init(game, x, y, tileSprite);
                     houseLevel01[y][x].setWalkable(false);

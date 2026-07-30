@@ -20,10 +20,10 @@ public class TextboxState
         implements State {
     public static final String TAG = TextboxState.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
 
     private boolean isTextShown = false;
-    private Bitmap imageForDialogue;
+    transient private Bitmap imageForDialogue;
     private String textToShow;
     private TypeWriterDialogFragment.DismissListener dismissListener;
     private TypeWriterTextView.TextCompletionListener textCompletionListener;

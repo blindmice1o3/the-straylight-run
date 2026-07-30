@@ -10,6 +10,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sce
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.tiles.Tile;
+import com.jackingaming.thestraylightrun.accelerometer.game.quests.Quest;
 import com.jackingaming.thestraylightrun.accelerometer.game.quests.QuestManager;
 
 public class Player extends Creature {
@@ -99,6 +100,10 @@ public class Player extends Creature {
                 }
             }
         });
+
+        for (Quest quest : questManager.getQuests()) {
+            quest.reload(game);
+        }
     }
 
     @Override
@@ -110,7 +115,14 @@ public class Player extends Creature {
     public void draw(Canvas canvas, Paint paintLightingColorFilter) {
         super.draw(canvas, paintLightingColorFilter);
 
-        form.draw(canvas, paintLightingColorFilter);
+//        if (form == null) {
+//            form = new PoohForm();
+//            form.init(game);
+//        }
+
+        if (form != null) {
+            form.draw(canvas, paintLightingColorFilter);
+        }
     }
 
     @Override

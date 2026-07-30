@@ -16,12 +16,28 @@ public class CheeseMakerTile extends Tile {
     public static final int DAYS_REQUIRED_TO_PROCESS = 3;
 
     private static int daysProcessed;
-    private static boolean availableToProcess = true;
     private static Milk milkToProcessIntoCheese;
-    private Bitmap imageWithoutMilk;
+    transient private Bitmap imageWithoutMilk;
 
     public CheeseMakerTile(String id) {
         super(id);
+    }
+
+    public void reload(Game game,
+                       CheeseMakerTile tileTopLeft, CheeseMakerTile tileTopRight) {
+        Log.e(TAG, "reload(Game, CheeseMakerTile, CheeseMakerTile)");
+
+        this.game = game;
+
+        if (milkToProcessIntoCheese != null) {
+            Log.e(TAG, "milkToProcessIntoCheese != null");
+            milkToProcessIntoCheese.init(game);
+
+            changeImageToOccupied(milkToProcessIntoCheese,
+                    tileTopLeft, tileTopRight);
+        } else {
+            Log.e(TAG, "milkToProcessIntoCheese == null");
+        }
     }
 
     @Override
@@ -36,8 +52,8 @@ public class CheeseMakerTile extends Tile {
                                      CheeseMakerTile tileTopRight) {
         Log.d(TAG, "startNewDay()");
 
-        if (!availableToProcess) {
-            Log.d(TAG, "!availableToProcess");
+        if (milkToProcessIntoCheese != null) {
+            Log.d(TAG, "milkToProcessIntoCheese != null");
 
             daysProcessed++;
 
@@ -50,7 +66,7 @@ public class CheeseMakerTile extends Tile {
             }
         }
 
-        Log.e(TAG, "availableToProcess: returning null.");
+        Log.e(TAG, "returning null.");
 
         return null;
     }
@@ -59,9 +75,8 @@ public class CheeseMakerTile extends Tile {
                                                 CheeseMakerTile tileTopLeft,
                                                 CheeseMakerTile tileTopRight) {
         Tile[][] tiles = tileManager.getTiles();
-        boolean lookingForRandomWalkableTile = true;
 
-        while (lookingForRandomWalkableTile) {
+        while (true) {
             int xRandom = (int) (Math.random() * tiles[0].length);
             int yRandom = (int) (Math.random() * tiles.length);
 
@@ -69,17 +84,12 @@ public class CheeseMakerTile extends Tile {
             Log.e(TAG, "yRandom: " + yRandom);
 
             if (tiles[yRandom][xRandom].isWalkable()) {
-                ///////////////////////////////
-                lookingForRandomWalkableTile = false;
-                ///////////////////////////////
-
                 Cheese cheeseJustProcessed = milkToProcessIntoCheese.process(
                         (xRandom * Tile.WIDTH),
                         (yRandom * Tile.HEIGHT)
                 );
 
                 daysProcessed = 0;
-                availableToProcess = true;
                 milkToProcessIntoCheese = null;
                 tileTopLeft.setImage(
                         tileTopLeft.getImageWithoutMilk()
@@ -91,16 +101,9 @@ public class CheeseMakerTile extends Tile {
                 return cheeseJustProcessed;
             }
         }
-
-        return null;
     }
 
-    public void startProcessingMilkIntoCheese(Milk milkToProcessIntoCheese, CheeseMakerTile tileTopLeft, CheeseMakerTile tileTopRight) {
-        Log.d(TAG, "startProcessingMilkIntoCheese()");
-
-        availableToProcess = false;
-        this.milkToProcessIntoCheese = milkToProcessIntoCheese;
-
+    public void changeImageToOccupied(Milk milkToProcessIntoCheese, CheeseMakerTile tileTopLeft, CheeseMakerTile tileTopRight) {
         Bitmap imageMilk = milkToProcessIntoCheese.getImage();
 
         Bitmap tileTopLeftNoMilk = tileTopLeft.getImage();
@@ -122,11 +125,33 @@ public class CheeseMakerTile extends Tile {
         tileTopRight.setImage(tileTopRightYesMilk);
     }
 
-    public static boolean isAvailableToProcess() {
-        return availableToProcess;
+    public void startProcessingMilkIntoCheese(Milk milkToProcessIntoCheese,
+                                              CheeseMakerTile tileTopLeft, CheeseMakerTile tileTopRight) {
+        Log.d(TAG, "startProcessingMilkIntoCheese(Milk, CheeseMakerTile, CheeseMakerTile)");
+
+        this.milkToProcessIntoCheese = milkToProcessIntoCheese;
+
+        changeImageToOccupied(milkToProcessIntoCheese,
+                tileTopLeft, tileTopRight);
     }
 
     public Bitmap getImageWithoutMilk() {
         return imageWithoutMilk;
+    }
+
+    public static Milk getMilkToProcessIntoCheese() {
+        return milkToProcessIntoCheese;
+    }
+
+    public static void setMilkToProcessIntoCheese(Milk milkToProcessIntoCheese) {
+        CheeseMakerTile.milkToProcessIntoCheese = milkToProcessIntoCheese;
+    }
+
+    public static int getDaysProcessed() {
+        return daysProcessed;
+    }
+
+    public static void setDaysProcessed(int daysProcessed) {
+        CheeseMakerTile.daysProcessed = daysProcessed;
     }
 }

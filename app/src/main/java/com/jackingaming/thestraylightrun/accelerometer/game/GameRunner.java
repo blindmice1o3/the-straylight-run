@@ -1,5 +1,7 @@
 package com.jackingaming.thestraylightrun.accelerometer.game;
 
+import android.util.Log;
+
 public class GameRunner extends Thread {
     public static final String TAG = GameRunner.class.getSimpleName();
 
@@ -13,20 +15,28 @@ public class GameRunner extends Thread {
     @Override
     public void run() {
         // Game loop.
-        long lastTime = System.currentTimeMillis();
+        long lastTime = System.nanoTime();
+
         while (running) {
-            // Draw stuff.
-            long now = System.currentTimeMillis();
-            long elapsed = now - lastTime;
+            try {
+                long now = System.nanoTime();
+                long elapsedMillis = (now - lastTime) / 1_000_000L;
 
-            // Update game only if elapsed time is less than 1/10th of second.
-            // Otherwise, too much time had passed.
-            if (elapsed < 100) {
-                game.update(elapsed);
+                elapsedMillis = Math.min(elapsedMillis, 100);
+
+                game.update(elapsedMillis);
                 game.draw();
-            }
 
-            lastTime = now;
+                lastTime = now;
+
+                Thread.sleep(16);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                running = false;
+            } catch (Throwable t) {
+                Log.e(TAG, "Unhandled exception", t);
+                running = false;
+            }
         }
     }
 

@@ -26,7 +26,6 @@ public class TitleScreenScene extends Scene {
     private Handler handler;
     private SoundManager soundManager;
     private Game.GameListener gameListener;
-    private Player player;
     private GameCamera gameCamera;
     private int widthSurfaceView, heightSurfaceView;
     private int widthSpriteDst, heightSpriteDst;
@@ -45,11 +44,10 @@ public class TitleScreenScene extends Scene {
         return instance;
     }
 
-    public void init(Player player, Resources resources, Handler handler, SoundManager soundManager,
+    public void init(Resources resources, Handler handler, SoundManager soundManager,
                      Game.GameListener gameListener, GameCamera gameCamera,
                      int widthSurfaceView, int heightSurfaceView,
                      int widthSpriteDst, int heightSpriteDst) {
-        this.player = player;
         this.resources = resources;
         this.handler = handler;
         this.soundManager = soundManager;

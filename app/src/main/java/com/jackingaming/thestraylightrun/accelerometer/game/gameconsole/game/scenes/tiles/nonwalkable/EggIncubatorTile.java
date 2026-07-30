@@ -17,11 +17,28 @@ public class EggIncubatorTile extends Tile {
 
     private static int daysIncubated;
     private static boolean availableToIncubate = true;
-    private static Egg eggToIncubateIntoChicken;
-    private Bitmap imageWithoutEgg;
+    private static Egg eggToIncubateIntoChick;
+    transient private Bitmap imageWithoutEgg;
 
     public EggIncubatorTile(String id) {
         super(id);
+    }
+
+    public void reload(Game game,
+                       EggIncubatorTile tileTopLeft, EggIncubatorTile tileTopRight) {
+        Log.e(TAG, "reload(Game, EggIncubatorTile, EggIncubatorTile)");
+
+        this.game = game;
+
+        if (eggToIncubateIntoChick != null) {
+            Log.e(TAG, "eggToIncubateIntoChick != null");
+            eggToIncubateIntoChick.init(game);
+
+            changeImageToOccupied(eggToIncubateIntoChick,
+                    tileTopLeft, tileTopRight);
+        } else {
+            Log.e(TAG, "eggToIncubateIntoChick == null");
+        }
     }
 
     @Override
@@ -42,7 +59,7 @@ public class EggIncubatorTile extends Tile {
             daysIncubated++;
 
             if (daysIncubated >= DAYS_REQUIRED_TO_HATCH) {
-                return hatchEggIntoChicken(
+                return hatchEggIntoChick(
                         tileManager,
                         tileTopLeft,
                         tileTopRight
@@ -55,9 +72,9 @@ public class EggIncubatorTile extends Tile {
         return null;
     }
 
-    private static AimlessWalker hatchEggIntoChicken(TileManager tileManager,
-                                                     EggIncubatorTile tileTopLeft,
-                                                     EggIncubatorTile tileTopRight) {
+    private static AimlessWalker hatchEggIntoChick(TileManager tileManager,
+                                                   EggIncubatorTile tileTopLeft,
+                                                   EggIncubatorTile tileTopRight) {
         Tile[][] tiles = tileManager.getTiles();
         boolean lookingForRandomWalkableTile = true;
 
@@ -73,14 +90,14 @@ public class EggIncubatorTile extends Tile {
                 lookingForRandomWalkableTile = false;
                 ///////////////////////////////
 
-                AimlessWalker chickJustHatched = eggToIncubateIntoChicken.hatch(
+                AimlessWalker chickJustHatched = eggToIncubateIntoChick.hatch(
                         (xRandom * Tile.WIDTH),
                         (yRandom * Tile.HEIGHT)
                 );
 
                 daysIncubated = 0;
                 availableToIncubate = true;
-                eggToIncubateIntoChicken = null;
+                eggToIncubateIntoChick = null;
                 tileTopLeft.setImage(
                         tileTopLeft.getImageWithoutEgg()
                 );
@@ -95,13 +112,9 @@ public class EggIncubatorTile extends Tile {
         return null;
     }
 
-    public void startIncubatingEggIntoChicken(Egg eggToIncubateIntoChicken, EggIncubatorTile tileTopLeft, EggIncubatorTile tileTopRight) {
-        Log.d(TAG, "startIncubatingEggIntoChicken()");
-
-        availableToIncubate = false;
-        this.eggToIncubateIntoChicken = eggToIncubateIntoChicken;
-
-        Bitmap imageEgg = eggToIncubateIntoChicken.getImage();
+    public void changeImageToOccupied(Egg eggToBeDrawnOntoTile,
+                                      EggIncubatorTile tileTopLeft, EggIncubatorTile tileTopRight) {
+        Bitmap imageEgg = eggToBeDrawnOntoTile.getImage();
 
         Bitmap tileTopLeftNoEgg = tileTopLeft.getImage();
         Bitmap tileTopLeftYesEgg = Bitmap.createBitmap(tileTopLeftNoEgg.getWidth(), tileTopLeftNoEgg.getHeight(), Bitmap.Config.ARGB_8888);
@@ -122,11 +135,41 @@ public class EggIncubatorTile extends Tile {
         tileTopRight.setImage(tileTopRightYesEgg);
     }
 
+    public void startIncubatingEggIntoChick(Egg eggToIncubateIntoChick, EggIncubatorTile tileTopLeft, EggIncubatorTile tileTopRight) {
+        Log.d(TAG, "startIncubatingEggIntoChick()");
+
+        availableToIncubate = false;
+        this.eggToIncubateIntoChick = eggToIncubateIntoChick;
+
+        changeImageToOccupied(eggToIncubateIntoChick,
+                tileTopLeft, tileTopRight);
+    }
+
     public static boolean isAvailableToIncubate() {
         return availableToIncubate;
     }
 
     public Bitmap getImageWithoutEgg() {
         return imageWithoutEgg;
+    }
+
+    public static Egg getEggToIncubateIntoChick() {
+        return eggToIncubateIntoChick;
+    }
+
+    public static void setEggToIncubateIntoChick(Egg eggToIncubateIntoChick) {
+        EggIncubatorTile.eggToIncubateIntoChick = eggToIncubateIntoChick;
+
+        if (eggToIncubateIntoChick != null) {
+            availableToIncubate = false;
+        }
+    }
+
+    public static int getDaysIncubated() {
+        return daysIncubated;
+    }
+
+    public static void setDaysIncubated(int daysIncubated) {
+        EggIncubatorTile.daysIncubated = daysIncubated;
     }
 }

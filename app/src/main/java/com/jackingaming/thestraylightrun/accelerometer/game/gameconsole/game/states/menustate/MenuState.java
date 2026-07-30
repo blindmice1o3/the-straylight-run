@@ -21,7 +21,7 @@ public class MenuState extends MenuStateImpl {
 
     public enum MenuItem {CHANGE_SKIN, TEAM, BACKPACK, LOAD, SAVE, OPTION, EXIT;}
 
-    private Game game;
+    transient private Game game;
     private int indexMenu;
 
     private Bitmap menuBackgroundImage;

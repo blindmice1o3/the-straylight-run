@@ -12,7 +12,7 @@ public class GrowSystemPartsDisplayerState
         implements State {
     public static final String TAG = GrowSystemPartsDisplayerState.class.getSimpleName();
 
-    private Game game;
+    transient private Game game;
     private GrowSystemPartsDisplayerFragment growSystemPartsDisplayerFragment;
     private GrowSystemPartsDataCarrier growSystemPartsDataCarrier;
     private boolean isAnimationStart;

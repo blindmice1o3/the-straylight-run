@@ -15,7 +15,6 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="colorControlActivated">@color/orange</item>
         <item name="colorControlHighlight">@color/amber</item>
-
     </style>
 
     <style name="AppBottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">

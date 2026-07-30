@@ -25,12 +25,17 @@ public class ClassVP2Adapter extends FragmentStateAdapter
     private Map<Class, Fragment> fragmentsByClass;
 
     private IDEFragment.Mode mode;
+    private ClassEditorFragment.TodoListener todoListener;
 
-    public ClassVP2Adapter(@NonNull Fragment fragment, List<Class> classes, IDEFragment.Mode mode) {
+    public ClassVP2Adapter(@NonNull Fragment fragment,
+                           List<Class> classes,
+                           IDEFragment.Mode mode,
+                           ClassEditorFragment.TodoListener todoListener) {
         super(fragment);
         this.fragment = fragment;
         this.classes = classes;
         this.mode = mode;
+        this.todoListener = todoListener;
         fragmentsByClass = new HashMap<>();
     }
 
@@ -38,7 +43,7 @@ public class ClassVP2Adapter extends FragmentStateAdapter
     @Override
     public Fragment createFragment(int position) {
         Fragment fragmentToUse = ClassEditorFragment.newInstance(
-                this, classes.get(position), mode
+                this, classes.get(position), mode, todoListener
         );
 
         fragmentsByClass.put(

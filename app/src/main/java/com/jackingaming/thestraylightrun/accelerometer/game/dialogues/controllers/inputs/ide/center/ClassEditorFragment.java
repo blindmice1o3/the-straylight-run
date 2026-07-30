@@ -35,6 +35,7 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.inputs.ide.right.Method;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypingPracticeView;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -50,9 +51,16 @@ public class ClassEditorFragment extends Fragment {
     public static final String IDENTIFIER_COMMENT_MULTI_LINE_END = "*/";
     public static final String IDENTIFIER_COMMENT_TODO = "todo";
 
+    public interface TodoListener extends Serializable {
+        void todoWasLongClicked();
+    }
+
+    private TodoListener todoListener;
+
     private static final String ARG_CLASS_VP2_ADAPTER = "classVP2Adapter";
     private static final String ARG_CLASS = "class";
     private static final String ARG_MODE = "mode";
+    private static final String ARG_TODO_LISTENER = "todoListener";
 
     private ClassVP2Adapter adapter;
     private Class classToEdit;
@@ -71,12 +79,16 @@ public class ClassEditorFragment extends Fragment {
      * @param classToEdit Class.
      * @return A new instance of fragment ClassEditorFragment.
      */
-    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter, Class classToEdit, IDEFragment.Mode mode) {
+    public static ClassEditorFragment newInstance(ClassVP2Adapter adapter,
+                                                  Class classToEdit,
+                                                  IDEFragment.Mode mode,
+                                                  TodoListener todoListener) {
         ClassEditorFragment fragment = new ClassEditorFragment();
         Bundle args = new Bundle();
         args.putSerializable(ARG_CLASS_VP2_ADAPTER, adapter);
         args.putSerializable(ARG_CLASS, classToEdit);
         args.putSerializable(ARG_MODE, mode);
+        args.putSerializable(ARG_TODO_LISTENER, todoListener);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,6 +100,7 @@ public class ClassEditorFragment extends Fragment {
             adapter = (ClassVP2Adapter) getArguments().getSerializable(ARG_CLASS_VP2_ADAPTER);
             classToEdit = (Class) getArguments().getSerializable(ARG_CLASS);
             mode = (IDEFragment.Mode) getArguments().getSerializable(ARG_MODE);
+            todoListener = (TodoListener) getArguments().getSerializable(ARG_TODO_LISTENER);
 
             layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -1471,6 +1484,8 @@ public class ClassEditorFragment extends Fragment {
                     anim.setRepeatMode(Animation.REVERSE);
                     anim.setRepeatCount(Animation.INFINITE);
                     tvAnswer.startAnimation(anim);
+
+                    todoListener.todoWasLongClicked();
 
                     return true;
                 }

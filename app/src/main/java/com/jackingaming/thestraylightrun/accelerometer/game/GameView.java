@@ -38,7 +38,7 @@ public class GameView extends SurfaceView
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        Log.e(TAG, "surfaceCreated()");
+        Log.e(TAG, "surfaceCreated() start");
 
         game = new Game(surfaceHolder, getResources(), new Handler(),
                 getWidth(), getHeight());
@@ -46,6 +46,8 @@ public class GameView extends SurfaceView
 
         runner = new GameRunner(game);
         runner.start();
+
+        Log.e(TAG, "surfaceCreated() end");
     }
 
     @Override

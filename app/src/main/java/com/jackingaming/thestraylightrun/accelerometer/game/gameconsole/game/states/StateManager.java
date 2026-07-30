@@ -11,10 +11,12 @@ import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.sta
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.MenuStateImpl;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.states.menustate.evo.MenuStateImplEvo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StateManager {
+public class StateManager
+        implements Serializable {
     transient private Game game;
 
     private TitleScreenState titleScreenState;

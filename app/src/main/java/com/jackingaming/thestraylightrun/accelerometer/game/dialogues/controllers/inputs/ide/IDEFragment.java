@@ -88,7 +88,7 @@ public class IDEFragment extends Fragment
 
         projectViewportFragment = ProjectViewportFragment.newInstance(run);
         mainViewportFragment = MainViewportFragment.newInstance(
-                projectViewportFragment.getClassMain(), mode
+                projectViewportFragment.getClassMain(), mode, run
         );
         structureViewportFragment = StructureViewportFragment.newInstance(null);
 

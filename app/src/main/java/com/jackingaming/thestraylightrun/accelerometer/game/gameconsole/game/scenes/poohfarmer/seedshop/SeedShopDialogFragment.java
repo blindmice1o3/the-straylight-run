@@ -25,12 +25,9 @@ import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controller
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.controllers.outputs.TypeWriterDialogFragment;
 import com.jackingaming.thestraylightrun.accelerometer.game.dialogues.views.TypeWriterTextView;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.Game;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.entities.BounceEntityCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.commands.tiles.TillGrowableIndoorTileCommand;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.entities.player.Player;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.BugCatchingNet;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.GrowingPot;
-import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.HoneyPot;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.Item;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BananaSeed;
 import com.jackingaming.thestraylightrun.accelerometer.game.gameconsole.game.scenes.items.seeds.BitterMelonSeed;
@@ -165,49 +162,8 @@ public class SeedShopDialogFragment extends DialogFragment {
             //////////////////////////
             game.loadFromFileRunOne();
             //////////////////////////
-
-            changeToNewSeason();
-        } else {
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-            seedShopInventory.add(new HoneyPot());
-            seedShopInventory.add(new BugCatchingNet(
-                    new BounceEntityCommand(null)
-            ));
-
-            for (Item item : seedShopInventory) {
-                item.init(game);
-            }
         }
+        changeToNewSeason();
     }
 
     private void performTrade(Item itemToTrade, Player player) {
@@ -215,8 +171,8 @@ public class SeedShopDialogFragment extends DialogFragment {
         if (priceOfItemToTrade > 0) {
             if (player.canAffordToBuy(priceOfItemToTrade)) {
                 player.buyItem(itemToTrade);
-                seedShopInventory.remove(itemToTrade);
-                itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
+//                seedShopInventory.remove(itemToTrade);
+//                itemRecyclerViewAdapterSeedShop.notifyDataSetChanged();
             } else {
                 Toast.makeText(game.getContext(), getClass().getSimpleName() + ".performTrade(Item, Player) player can NOT afford to buy [" + itemToTrade.getName() + "] for [" + priceOfItemToTrade + "].", Toast.LENGTH_LONG).show();
             }
@@ -234,7 +190,10 @@ public class SeedShopDialogFragment extends DialogFragment {
             public void onItemClick(View view, int position) {
                 Log.d(TAG, "ItemRecyclerViewAdapterSeedShop.ItemClickListener.onItemClick(View view, int position): " + seedShopInventory.get(position));
                 Item itemToTrade = seedShopInventory.get(position);
-                performTrade(itemToTrade, Player.getInstance());
+
+                if (game.getRun() == com.jackingaming.thestraylightrun.accelerometer.game.Game.Run.FIVE) {
+                    performTrade(itemToTrade, Player.getInstance());
+                }
             }
         };
         itemRecyclerViewAdapterSeedShop.setClickListener(itemClickListener);
